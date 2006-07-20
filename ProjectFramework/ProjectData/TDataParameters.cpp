@@ -1,0 +1,503 @@
+// TDataParameters.cpp
+//
+// A class defining the parameters of a data file.
+//       filename, filetype, reference frame, coordinate system
+//
+// Patterns:
+//
+// 
+// Copyright 2000 CERN EST/SU. All rights reserved.
+//////////////////////////////////////////////////////////////////////
+
+
+
+//For ROOT//////////////////////////////////////////////////////
+//#include	"TROOT.h"
+//
+// other forward declarations
+#include  "TDataParameters.h"
+#include  "TAReferenceFrame.h"
+#include  "TGeodeticRefFrame.h"
+#include  "TModifiedLocalAstronomicalRF.h"
+#include  "T3DLocalRefFrame.h"
+////////////////////////////////////////////////////////////////
+
+
+//ClassImp(TDataParameters)
+
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+TDataParameters::TDataParameters()
+{// default constructor
+	fRefFrame =0;
+	fLSO.origin = 0;
+	fRefFrameEnum = TDataParameters::kUndefined;
+	fCoordUnit = TDataParameters::kNotDefined;
+	fCoordSys = TCoordSysFactory::k3DCartesian;
+	fAngleUnits =TAngle::kGons;
+	fLengthUnits =TLength::kMetres ;
+	fAnglePrecision = TObservationFormat::k10Microgons;
+	fLengthPrecision = TObservationFormat::k10Micrometres;
+	fCoordPrecision = TPointFormat::kMillimetre;
+	fPointNameWidth=7;
+}
+
+
+TDataParameters::TDataParameters(const TDataParameters& original )
+{	// copy constructor
+	*this = original;
+}
+
+
+TDataParameters::~TDataParameters()
+{
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// Member Functions
+//////////////////////////////////////////////////////////////////////
+TDataParameters&  TDataParameters::operator=(const TDataParameters& rhs )
+{//Copy Assignment operator
+
+	if (this != &rhs)
+	{
+		fRefFrame = rhs.fRefFrame;
+		fRefFrameEnum = rhs.getRefFrameEnumerator();
+		fCoordUnit= rhs.fCoordUnit;
+		fLSO = rhs.getLocalSystemOrigin();
+		fCoordSys = rhs.getCoordinateSystem();
+		fAngleUnits = rhs.getAngleUnits();
+		fLengthUnits = rhs.getLengthUnits();
+		fAnglePrecision = rhs.getAnglePrecision(); 
+		fLengthPrecision = rhs.getLengthPrecision();
+		fCoordPrecision = rhs.getCoordPrecision();
+		fPointNameWidth=rhs.fPointNameWidth;
+		
+	}
+	return *this;
+}
+
+
+bool  TDataParameters::operator==(const TDataParameters& rhs )
+{//Equivalence operator
+	return	fRefFrameEnum == rhs.getRefFrameEnumerator() && 
+		fCoordUnit == rhs.fCoordUnit &&
+		getLocalSystemOrigin().gisement == rhs.getLocalSystemOrigin().gisement &&
+		getLocalSystemOrigin().slope == rhs.getLocalSystemOrigin().slope &&
+		getLocalSystemOrigin().origin == rhs.getLocalSystemOrigin().origin &&
+		fCoordSys == rhs.getCoordinateSystem() &&
+		fAngleUnits == rhs.getAngleUnits() && 
+		fLengthUnits == rhs.getLengthUnits() && 
+		fAnglePrecision == rhs.getAnglePrecision() && 
+		fLengthPrecision == rhs.getLengthPrecision() && 
+		fCoordPrecision == rhs.getCoordPrecision() &&
+		fPointNameWidth==rhs.fPointNameWidth;
+}
+
+
+bool  TDataParameters::defined()  const  
+{ 
+	// returns "true" if the parameters are defined
+
+	bool retVal = true;
+
+	if(fRefFrameEnum == kUndefined || fCoordUnit == kNotDefined)
+	{
+		retVal = false;
+	}
+
+	return retVal; 
+}
+
+
+bool	TDataParameters::isOriginExpected() const
+{
+	bool retVal = false;
+
+//	if(fRefFrameEnum == TDataParameters::kMLA1985Machine)
+	if(fRefFrameEnum == TDataParameters::kMLA2000Machine || fRefFrameEnum == TDataParameters::kMLA1985Machine)
+	{
+		retVal = true;
+	}
+	
+	return retVal;
+}
+
+
+
+////////////////////////////////////////////////////////////////////////
+//function set
+////////////////////////////////////////////////////////////////////////
+
+bool  TDataParameters::setRefFrame(TDataParameters::ERefFrame rf)
+{//! set the reference system identifier
+	// returns "true" if the parameters are set correctly
+	bool retVal = true;
+	
+	if( rf != kUndefined && fRefFrame == 0)
+	{
+		fRefFrameEnum = rf;
+		
+		if(	fRefFrameEnum != TDataParameters::kCGRF && fRefFrameEnum != TDataParameters::kWGS84 && 
+			fRefFrameEnum != TDataParameters::kROMA40)
+		{//set automatically metric
+			setUnits(TDataParameters::kMetric );
+		}
+	}
+	else
+	{
+		retVal = false;
+	}
+
+	return retVal;
+}
+
+	
+bool TDataParameters::setCoordSys(const TCoordSysFactory::ECoordSys& idNum)
+{//!set the coordinate system
+	bool retVal = true;
+
+	if( idNum != TCoordSysFactory::k2DCartesian )
+	{
+		fCoordSys = idNum;
+	}
+	else
+	{
+		retVal = false;
+	}
+
+	return retVal;
+}
+
+
+bool  TDataParameters::setUnits( const TDataParameters::ECoordUnit& units )
+{//! set the coordinate units
+	// returns "true" if the parameters are set correctly
+	bool  retVal = true;
+
+	fCoordUnit= units;
+
+	if(	fRefFrameEnum == TDataParameters::kCGRF || fRefFrameEnum == TDataParameters::kWGS84 || 
+		fRefFrameEnum == TDataParameters::kROMA40)
+	{
+		if ( units == kDMS )
+		{
+			fAngleUnits = TAngle::kDMS;  
+			setCoordSys(TCoordSysFactory::kGeodetic);
+		}
+		else if (units == kGons )
+		{
+			fAngleUnits = TAngle::kGons;  
+			setCoordSys(TCoordSysFactory::kGeodetic);
+		}
+		else if (units == kMetric )
+		{
+			fAngleUnits = TAngle::kGons;  
+			//setCoordSys(TCoordSysFactory::kGeodetic);
+		}
+		else
+		{
+			retVal = false;
+		}
+	}
+	else
+	{//only metric system with this referance frame
+		if (units == kMetric )
+		{
+			fAngleUnits = TAngle::kGons;  
+		}
+		else
+		{
+			fCoordUnit = kNotDefined;
+			retVal = false;
+		}
+	}
+	return  retVal;
+}
+
+
+bool  TDataParameters::setAngUnits( const TAngle::EUnits& un)
+{//! set the angle units
+	// returns "true" if the parameters are set correctly
+	bool  retVal = true;
+
+	if ( un > 0  &&  un < 4 )
+	{
+		fAngleUnits = un;  
+	}
+	else
+	{
+		retVal = false;
+	}
+
+	return  retVal;
+}
+
+
+bool  TDataParameters::setLenUnits( const TLength::EUnits& un)
+{//! set the length units
+	// returns "true" if the parameters are set correctly
+	bool  retVal = true;
+
+	if ( un > 0  &&  un < 3 )
+	{
+		fLengthUnits = un;  
+	}
+	else
+	{
+		retVal = false;
+	}
+
+	return  retVal;
+}
+
+//! set the coordinate precision 
+void  TDataParameters::setCoordPrecision( const TPointFormat::ECoordPrecision precision )  
+{
+	fCoordPrecision = precision; 
+	return; 
+}
+
+//! set angle precision 
+void  TDataParameters::setAnglePrecision(const TObservationFormat::EAnglePrecision precision )  
+{
+	fAnglePrecision = precision; 
+	return; 
+}
+
+//! set length precision 
+void  TDataParameters::setLengthPrecision(const TObservationFormat::ELengthPrecision precision )  
+{
+	fLengthPrecision = precision; 
+	return; 
+}
+
+
+//! set point name's width precision 
+void  TDataParameters::setPointNameWidth(const int width )  
+{
+	fPointNameWidth = width; 
+	return; 
+}
+
+
+bool	TDataParameters::setLocalSystemOrigin(const struct LocalSystemOrigin LSO)
+{
+	bool res = false;
+
+	if( ( fRefFrameEnum == TDataParameters::kMLA2000Machine || fRefFrameEnum == TDataParameters::kMLA1985Machine )
+		&& LSO.origin != 0
+		&& fRefFrame == 0)
+	{
+		fLSO = LSO;
+		res = true;
+	}
+
+	return res;
+}
+
+
+
+//////////////////////////////////////////////////////////////////////
+//get Functions
+//////////////////////////////////////////////////////////////////////
+TAReferenceFrame*  TDataParameters::getRefFrame()
+{//! get the reference system identifier
+
+	
+		switch (fRefFrameEnum)
+		{
+			case TDataParameters::kCCS:
+				//CERN XYZ (kCCS)
+				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+				break;
+
+			case TDataParameters::kCernXYHg00Machine:
+				//CERN XYHg LHC (kCernXYHg00Machine)
+				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCernXYHg00Machine));
+				break;
+
+			case TDataParameters::kCernXYHg85Machine:
+				//CERN XYHg LHC (kCernXYHg85Machine)
+				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCernXYHg85Machine));
+				break;
+
+			case TDataParameters::kCERNXYHsSphereSPS:
+				//CERN XYHs SPS (kCERNXYHsSphereSPS)
+				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCERNXYHsSphereSPS));
+				break;
+
+			case TDataParameters::kCernXYHg85:
+				//CERN XYHg topo (kCernXYHg85Topo) kCernXYHg85
+				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCernXYHg85));
+				break;
+
+			case TDataParameters::kCernX0Y0He:
+				//CERN X0Y0He MapTransfert (kCernX0Y0He)
+				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCernX0Y0He));
+				break;
+
+/*			case TDataParameters::kMLA1985Machine:
+				//CERN Local Astronomical (kCG1985Machine)
+				{
+					if (fRefFrame == 0)
+					{
+						if(fLSO.origin != 0)
+						{
+							TSpatialPosition* originPointer = fLSO.origin;
+							TSpatialPosition origin (*originPointer);
+							TAngle gis = fLSO.gisement;
+							TAngle slope = fLSO.slope;
+
+							TFreeVector falseOrigin (0,0,0, TCoordSysFactory::k3DCartesian);
+
+							TModifiedLocalAstronomicalRF* MLA = new TModifiedLocalAstronomicalRF("mla", TRefSystemFactory::kCG1985Machine, origin,falseOrigin, gis, slope);
+							fRefFrame = MLA;
+						}
+						else
+						{
+							fRefFrame =  0;
+						}
+					}
+					
+				}
+				break;*/
+
+			case TDataParameters::kMLA2000Machine:
+				//CERN Local Astronomical (kCG2000Machine)
+				{
+					fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(fLSO, TRefSystemFactory::kCG2000Machine));
+				}
+				break;
+
+			case TDataParameters::kMLA1985Machine:
+				//CERN Local Astronomical (kCG1985Machine)
+				{
+					fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(fLSO, TRefSystemFactory::kCG1985Machine));
+				}
+				break;
+
+
+			case TDataParameters::kROMA40:
+				//ROMA40
+				{
+				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kROMA40));
+				}
+				break;
+
+			case TDataParameters::kWGS84:
+				//ROMA40
+				{
+				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84));
+				}
+				break;
+
+			case TDataParameters::kCGRF:
+				//ROMA40
+				{
+				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
+				}
+				break;
+
+			case TDataParameters::kCernLGatP0:
+				//ROMA40
+				{
+				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kLGp0));
+				}
+				break;
+
+			case kLocalRefFrame:
+				{
+					fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame());
+				}
+				break;
+
+			case TDataParameters::kUndefined:
+				{
+					fRefFrame =   0;
+				}
+				break;
+
+			default:
+				//Default Value CERN XYZ (kCCS)
+				{
+					fRefFrame =   0;
+				}
+				break;
+		}
+	
+	
+	return fRefFrame;
+}
+
+
+TDataParameters::ERefFrame TDataParameters::getRefFrameEnumerator() const 
+{//! get the reference system identifier
+	return fRefFrameEnum;
+}
+
+TCoordSysFactory::ECoordSys  TDataParameters::getCoordinateSystem()  const
+{//! get the coordinate system for the RefSystem data
+	return fCoordSys;
+}
+		
+
+TAngle::EUnits  TDataParameters::getAngleUnits() const
+{//! get the angle units
+	return fAngleUnits;
+}
+	
+
+TLength::EUnits  TDataParameters::getLengthUnits() const
+{//! get the length units
+	return fLengthUnits;
+}
+	
+
+TObservationFormat::EAnglePrecision  TDataParameters::getAnglePrecision() const
+{//! get the angle precision
+	return fAnglePrecision;
+}
+
+ 
+TObservationFormat::ELengthPrecision  TDataParameters::getLengthPrecision() const
+{//! get the length precision
+	return fLengthPrecision;
+}
+
+
+
+TPointFormat::ECoordPrecision  TDataParameters::getCoordPrecision() const
+{//! get the coord precision 
+	return fCoordPrecision;
+}
+
+
+int  TDataParameters::getPointNameWidth() const
+{//! get the coord precision 
+	return fPointNameWidth;
+}
+
+
+LocalSystemOrigin TDataParameters::getLocalSystemOrigin() const
+{
+	return fLSO;
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//end
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
