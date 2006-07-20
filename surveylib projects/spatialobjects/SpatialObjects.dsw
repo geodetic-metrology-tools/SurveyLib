@@ -1,0 +1,293 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "AffineTransformations"=".\AffineTransformations\AffineTransformations.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU Source] SurveyLib|SurveyLib>SurveyLib\SurveyLib Projects\SpatialObjects\AffineTransformations
+    .\affinetransformations
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "AffineTransformationsTest"=".\AffineTransformationsTest\AffineTransformationsTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\AffineTransformationsTest
+    .\affinetransformationstest
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "GeoidModelTest"=".\GeoidModelTest\GeoidModelTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SpatialObjects\GeoidModelTest
+    .\geoidmodeltest
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "MathematicalConcepts"=".\MathematicalConcepts\MathematicalConcepts.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU Source] SurveyLib|SurveyLib>SurveyLib\SurveyLib Projects\SpatialObjects\MathematicalConcepts
+    .\mathematicalconcepts
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "MathematicalConceptsTest"=".\MathematicalConceptsTest\MathematicalConceptsTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\MathematicalConceptsTest
+    .\mathematicalconceptstest
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "RefFrameTransformations"=".\RefFrameTransformations\RefFrameTransformations.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SpatialObjects\RefFrameTransformations
+    .\refframetransformations
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "RefFrameTransformationsTest"=".\RefFrameTransformationsTest\RefFrameTransformationsTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SpatialObjects\RefFrameTransformationsTest
+    .\refframetransformationstest
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ReferenceSurfaces"=".\ReferenceSurfaces\ReferenceSurfaces.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SpatialObjects\ReferenceSurfaces
+    .\referencesurfaces
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ShortestPath"=".\ShortestPath\ShortestPath.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SpatialObjects\ShortestPath
+    .\shortestpath
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ShortestPathTest"=".\ShortestPathTest\ShortestPathTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SpatialObjects\ShortestPathTest
+    .\shortestpathtest
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "SpatialObjTest"=".\SpatialObjTest\SpatialObjTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SpatialObjects\SpatialObjTest
+    .\spatialobjtest
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "SpatialObjects"=".\SpatialObjects\SpatialObjects.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SurveyLib Projects\SpatialObjects\SpatialObjs
+    .\spatialobjects
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "SpatialObjectsLibrary"=".\SpatialObjectsLibrary\SpatialObjectsLibrary.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU Source] SurveyLib|SurveyLib>SurveyLib\SurveyLib Projects\SpatialObjects\SpatialObjectsLibrary
+    .\spatialobjectslibrary
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "SpatialObjs"=".\spatialobjs\SpatialObjs.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SurveyLib Projects\SpatialObjects\SpatialObjs
+    .\spatialobjs
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "SpatialObjsTest"=".\spatialobjstest\SpatialObjsTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU Source] SurveyLib|SurveyLib>SurveyLib\SurveyLib Projects\SpatialObjects\SpatialObjsTest
+    .\spatialobjstest
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "SpatialSystems"=".\SpatialSystems\SpatialSystems.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SpatialSystems
+    .\spatialsystems
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "SpatialSystemsTest"=".\SpatialSystemsTest\SpatialSystemsTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SpatialSystemsTest
+    .\spatialsystemstest
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib\SpatialObjects
+    .
+    end source code control
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

@@ -1,0 +1,38 @@
+////////////////////////////////////////////////////////////////////
+// TEssaiLibrary
+/////////////////////////////////////////////////////////////////////
+
+#ifndef SU_ESSAIS
+#define SU_ESSAIS
+
+#if _MSC_VER >= 1000
+#pragma once
+#endif // _MSC_VER >= 1000
+
+////////////////////////////////////////////////////////////////
+// Forward declarations
+#include	<iostream>
+using namespace std;
+#include  "cstructs.h"
+// typedefs
+////////////////////////////////////////////////////////////////
+
+
+//Class definition
+class  TEssaisLibrary //: public TObject  
+{
+public:
+
+		TEssaisLibrary();
+
+		virtual  ~TEssaisLibrary();
+
+		void	InverseMatrix();
+		
+
+private:
+
+		Mmn		fMatrix;
+};
+
+#endif // SU_ESSAIS

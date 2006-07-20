@@ -1,0 +1,130 @@
+// TPositionVector.h
+//
+/** 3D Vector used as a free vector only affected by rotations and scaling
+//
+// Patterns:
+//
+// 
+// Copyright 2002 CERN EST/SU. All rights reserved.
+*/
+//////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef SU_POS_VECTOR
+#define SU_POS_VECTOR
+
+
+#if _MSC_VER >= 1000
+#pragma once
+#endif // _MSC_VER >= 1000
+
+
+////////////////////////////////////////////////////////////////
+// Forward declarations
+//
+#include  <iostream>
+using namespace std;
+//
+#include "TACoordSysVector.h"
+#include "TFreeVector.h"
+#include "TDouble.h"
+#include "TLength.h"
+//
+//#include  "**classname**.h"
+// typedefs
+//
+//
+////////////////////////////////////////////////////////////////
+
+/*! \ingroup spatialobjects
+	@{*/
+
+//! 3D Vector used as a free vector
+class  TPositionVector : public TACoordSysVector//: public TObject  
+
+{
+public:
+
+	/*!\name Constructors and Destructors */
+	//@{
+		//!Default Constructor 
+		TPositionVector(TCoordSysFactory::ECoordSys);
+	
+		//!Constructor taking 3 TLength
+		//TPositionVector(const TLength&, const TLength&, const TLength&);
+
+		//!Constructor taking 3 double
+		TPositionVector(const double&, const double&, const double&,TCoordSysFactory::ECoordSys);
+
+		//!Copy Constructor 
+		TPositionVector( const TPositionVector&);
+
+		//!Destructor
+		virtual  ~TPositionVector();
+	//@}
+
+		
+	/*!\name operator Functions */
+	//@{
+		
+		//!add a PositionVector  and FreeVector, return a PositionVector
+		TPositionVector operator+(const TFreeVector& );
+
+		//!add a PositionVector  and FreeVector, replace this
+		TPositionVector& operator+=(const TFreeVector& );
+
+		//!substract two TPositionVector objects and return a FreeVector
+		TFreeVector operator-(const TPositionVector& );
+		
+		//!Multiple a TPositionVector object by a TDouble object
+		TPositionVector operator*(const TDouble&);
+
+		//!Multiple a TPositionVector object by a double 
+		TPositionVector operator*(const double&);
+
+		//!Copy Assignment Operator 
+		TPositionVector& operator=(const TPositionVector& );
+	//@}
+
+	/*!\name member Functions */
+	//@{
+		//!Give the distance between this and a second position vector
+		TLength dist(const TPositionVector& ) const;
+
+		//!get the H value of a TPositionVector if is defined
+		TLength getH() const;
+
+		//!get the lambda value of a TPositionVector if is defined
+		TAngle getLambdaEllipsoid() const;
+
+		//!get the phi value of a TPositionVector if is defined
+		TAngle getPhiEllipsoid() const;
+
+		//!set the H coordinate of a vector in a specific Coordinate System return true if X is defined
+		bool setH(const TLength&);
+
+		//!set the Lambda coordinate of a vector in a geodetic Coordinate System return true if X is defined
+		bool setLambdaEllipsoid(const TAngle&);
+
+		//!set the Phi coordinate of a vector in a geodetic Coordinate System return true if X is defined
+		bool setPhiEllipsoid(const TAngle&);
+	//@}
+	
+	
+private:
+
+		//!Default Constructor 
+		TPositionVector();
+						
+	//ClassDef(TPositionVector, 1)
+};
+/*@}*/
+
+//////////////////////////////////////////////////////////////////////
+// Inline Definitions 
+//////////////////////////////////////////////////////////////////////
+
+
+
+#endif // SU_POS_VECTOR
