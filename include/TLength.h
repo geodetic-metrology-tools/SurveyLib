@@ -57,6 +57,7 @@ public:
 	TLength();
 	//! constructor taking a given length value in metres
 	explicit  TLength(LengthValue);
+	//TLength(LengthValue);
 	//! copy constructor
 	TLength(const TLength&);
 	//! Destructor

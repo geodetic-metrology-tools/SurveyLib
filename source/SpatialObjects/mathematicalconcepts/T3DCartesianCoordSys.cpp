@@ -22,17 +22,23 @@
 
 TLength T3DCartesianCoordSys::getX(const TACoordSysVector* vec) const
 {//get the X coordinate of a position vector or a free vector
-return this->TACoordinateSystem::getX(vec, 0);
+	TLength retVal;
+	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 2));
+	return retVal;
 }
 
 TLength T3DCartesianCoordSys::getY(const TACoordSysVector* vec) const
 {//get the Y coordinate of a position vector or a free vector
-return this->TACoordinateSystem::getX(vec, 1);
+	TLength retVal;
+	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 2));
+	return retVal;
 }
 
 TLength T3DCartesianCoordSys::getZ(const TACoordSysVector* vec) const
 {//get the Z coordinate of a position vector or a free vector
-return this->TACoordinateSystem::getX(vec, 2);
+	TLength retVal;
+	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 2));
+	return retVal;
 }
 
 bool T3DCartesianCoordSys::setX(TACoordSysVector* vec, const TLength& len)

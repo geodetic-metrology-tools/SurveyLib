@@ -19,18 +19,32 @@
 	
 	TAngle TGeodeticCoordSys::getPhiEllipsoid(const TPositionVector* vec) const
 	{//get the Phi coordinate of a position vector
-	return this->TACoordinateSystem::getX(vec, 0);
+		TAngle retVal;
+		retVal.setRadiansValue(this->TACoordinateSystem::getX(vec, 1));
+		return retVal;
 	}
-
+	// Error Message: c:\Workspace\SuSource\SurveyLib\source\SpatialObjects\mathematicalconcepts\TGeodeticCoordSys.cpp(22): error C2664: 'TAngle::TAngle(const TAngle &)' : cannot convert parameter 1 from 'double' to 'const TAngle &'
+	/* Method Called:
+	TLength TACoordinateSystem::getX(const TACoordSysVector*) const
+	{//get the X coordinate of a position vector or a free vector, default def: \return TLength Null
+	TLength null;
+	null.setStatus(TVNumericValue::kNull);
+	return null;
+	}
+	*/
 
 	TAngle TGeodeticCoordSys::getLambdaEllipsoid(const TPositionVector* vec) const
 	{//get the Lambda coordinate of a position vector 
-	return this->TACoordinateSystem::getX(vec, 1);
+		TAngle retVal;
+		retVal.setRadiansValue(this->TACoordinateSystem::getX(vec, 1));
+		return retVal;
 	}
 
 	TLength TGeodeticCoordSys::getH(const TPositionVector* vec) const
 	{//get the H coordinate of a position vector
-	return this->TACoordinateSystem::getX(vec, 2);
+		TLength retVal;
+		retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 2));
+		return retVal;
 	}
 
 

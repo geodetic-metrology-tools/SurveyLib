@@ -74,6 +74,7 @@ public:
 	TAngle();
 	/*! Explicit constructor taking an angle value in radians */
 	explicit  TAngle(AngleValue);
+	//TAngle(AngleValue);
 	/*! Destructor */
 	virtual	~TAngle();
 	/*! Copy contructor */

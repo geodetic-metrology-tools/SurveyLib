@@ -140,7 +140,7 @@ string	TSpatialPointName::getName() const
 		if (fClassification.length() <6) s.resize(6,'_');
 		if (fElement.length() <6) 
 		{
-			for (int i=0; i<(6-fElement.length());i++)
+			for (unsigned int i=0; i<(6-fElement.length());i++)
 			s = (s+'_');
 		}
 		s+=fElement;

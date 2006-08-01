@@ -158,7 +158,7 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 		string cgrfTransformation = "no";
 		TTransformWrapper transfoWithCGRF;
 
-		for (int i = 0; i < size(); i++)
+		for (unsigned int i = 0; i < size(); i++)
 		{
 			if (from == C[i].first)
 				start = i;
@@ -171,7 +171,7 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 			transfoWithCGRF.setTransformation(from.getFrame()->getRFTransfo2CGRF());
 			TRefFrameWrapper rffrom(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
 
-			for (int i = 0; i < size(); i++)
+			for (unsigned int i = 0; i < size(); i++)
 			{
 				if (rffrom == C[i].first)
 					start = i;
@@ -196,7 +196,7 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 			
 			TRefFrameWrapper rfto(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
 
-			for (int i = 0; i < size(); i++)
+			for (unsigned int i = 0; i < size(); i++)
 			{
 				if (rfto == C[i].first)
 					end = i;
@@ -245,7 +245,7 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 int TGraph::insert(const TRefFrameWrapper& RF)
 {// insert a RF throught a reference frame wrapper
-	for (int i = 0; i < size(); i++)
+	for (unsigned int i = 0; i < size(); i++)
 	{
 		if (RF == C[i].first)
 			return i;

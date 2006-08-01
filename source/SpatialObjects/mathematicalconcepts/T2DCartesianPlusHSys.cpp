@@ -22,18 +22,24 @@
 
 TLength T2DCartesianPlusHSys::getX(const TACoordSysVector* vec) const
 {//get the X coordinate of a position vector or a free vector
-return this->TACoordinateSystem::getX(vec, 0);
+	TLength retVal;
+	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 2));
+	return retVal;
 }
 
 TLength T2DCartesianPlusHSys::getY(const TACoordSysVector* vec) const
 {//get the Y coordinate of a position vector or a free vector
-return this->TACoordinateSystem::getX(vec, 1);
+	TLength retVal;
+	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 2));
+	return retVal;
 }
 
 
 TLength T2DCartesianPlusHSys::getH(const TPositionVector* vec) const
 {//get the H coordinate of a position vector
-return this->TACoordinateSystem::getX(vec, 2);
+	TLength retVal;
+	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 2));
+	return retVal;
 }
 
 bool T2DCartesianPlusHSys::setX(TACoordSysVector* vec, const TLength& len)

@@ -31,23 +31,22 @@ template <class T>
 class DynamicPriorityQueue
 {
 public:
-	typedef vector<T>::size_type Size;
-	typedef vector<T>::difference_type index;
-
+	typename typedef vector<T>::size_type Size;
+	typename typedef vector<T>::difference_type index;
 	
 	// constructor
 	DynamicPriorityQueue(vector<T>& trans)
-		: Indices (trans.size()), c(trans.size()), first(trans.begin()), csize(trans.size())
+		: Indices(trans.size()), c(trans.size()), first(&*trans.begin()), csize(trans.size())
 	{
 		index i;
 
 		//stores pointers and generate heap
-		for (i=0; i<csize; i++)
+		for (i=0; i<(signed)csize; i++)
 			c[i] = &trans[i];
 		make_heap(c.begin(), c.end(), comp);
 
 		// constructs index array
-		for (i=0; i<csize; i++)
+		for (i=0; i<(signed)csize; i++)
 		{
 			Indices[c[i] - first] = i;
 		}
@@ -73,7 +72,7 @@ public:
 	{
 		index idx = Indices[at];
 		// value still present in the queue?
-		assert(idx < csize);
+		assert(idx < (signed)csize);
 
 		if (*c[idx] != trans)
 			if (comp(&trans, c[idx]))
@@ -168,19 +167,19 @@ private:
 	{
 		index Successor = (idx+1)*2-1;
 
-		if (csize != 0 && Successor < csize-1 && comp(c[Successor], c[Successor+1]))
+		if ((signed)csize != 0 && Successor < (signed)csize-1 && comp(c[Successor], c[Successor+1]))
 			++Successor;
 
 		T* temp = c[idx];
 
-		while(Successor < csize && comp(temp, c[Successor]))
+		while(Successor < (signed)csize && comp(temp, c[Successor]))
 		{
 			c[idx] = c[Successor];
 			Indices[c[idx]-first] = idx;
 			idx = Successor;
 			Successor = (idx+1)*2-1;
 
-			if(Successor < csize-1 && comp(c[Successor], c[Successor+1]))
+			if(Successor < (signed)csize-1 && comp(c[Successor], c[Successor+1]))
 				++Successor;
 		}
 

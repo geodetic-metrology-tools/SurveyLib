@@ -71,7 +71,7 @@ public:
 			/*! Display of the TGraph structure */
 			friend ostream& operator <<(ostream& os, TGraph& graph)
 			{//dislay of vertices with successors
-				for (int i = 0; i < graph.size(); ++i)
+				for (unsigned int i = 0; i < graph.size(); ++i)
 				{
 					os << graph[i].first.getName() << " <";
 
