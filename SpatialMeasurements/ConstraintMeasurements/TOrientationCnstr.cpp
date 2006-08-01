@@ -125,8 +125,9 @@ TAngle TOrientationCnstr::getCnstrBearing() const
 }
 
 
-TSpatialPointName TOrientationCnstr::getPoint() const
+string TOrientationCnstr::getPoint() const
 {
+	// Previous return value: TSpatialPointName
 	return fRefPoint.getName();
 }
 

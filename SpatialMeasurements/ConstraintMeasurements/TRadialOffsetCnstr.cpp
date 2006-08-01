@@ -124,8 +124,9 @@ TLength TRadialOffsetCnstr::getCnstrSigma() const
 	return fConstraintWidth;
 }
 
-TSpatialPointName TRadialOffsetCnstr::getPoint() const
+string TRadialOffsetCnstr::getPoint() const
 {
+	// Previous return value: TSpatialPointName
 	return fPoint.getName();
 }
 

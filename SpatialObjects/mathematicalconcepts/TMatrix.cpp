@@ -51,11 +51,13 @@ TMatrix::TMatrix()
 }
 
 TMatrix::TMatrix(const TDouble& value)
-{//Constructor return the matrice (1,1) with (1,1)=value
+{//Constructor return the matrice (1,1) with (1,1)=value ..... 
 	fNbRows = 1;
 	fNbCols = 1;
 	fError = "";
-	fMatrix = new double [value.getValue()];
+	//unsigned int bob = 5; (unsigned int) value.getValue()
+	fMatrix = new double [1];
+	*fMatrix = value.getValue();
 	setStatus( TANumericValue::kKnown );
 }
 
