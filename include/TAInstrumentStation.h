@@ -86,21 +86,10 @@ protected:
 #endif
 
 /*@}*/
-
-
-
-
-
-
-
-
 //#include "TWorkingPoints.h"
 //#include "TVParentMeasTreeNode.h"
 //#include "TASpatialPtListener.h"
 //#include "TVStationListener.h"
-
-
-
 
 /*!@name Typedefs*/
 	//@{

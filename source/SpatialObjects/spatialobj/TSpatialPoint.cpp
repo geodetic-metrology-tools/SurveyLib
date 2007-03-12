@@ -56,7 +56,6 @@ TSpatialPoint::TSpatialPoint( const string& ptName ) : fPtListeners(),fPointDist
 	fXSet = 0;
 	fYSet = 0;
 	fZSet = 0;
-
 }
 
 
@@ -373,8 +372,6 @@ void  TSpatialPoint::setDist( const double& id)
 		{
 			flistener->distChanged(*fName);
 		} 
-	
-
 }
 
 
@@ -420,7 +417,6 @@ void TSpatialPoint::sendDisactivatedToAll()
 		(*iter)->pointDisactivated();
 		iter++;
 	}*/
-
 }
 
 
@@ -428,7 +424,6 @@ void TSpatialPoint::activate()
 {// reactivates the point
 
 	//no reaction if fUsedInCalc
-
 	if (!fUsedInCalc)
 		sendActivatedToAll();
 }
@@ -447,12 +442,10 @@ void TSpatialPoint::sendActivatedToAll()
 
 }
 
-
 int TSpatialPoint::equationsCount() const
 {// returns the point's equations count
 	return fEqCount;
 }
-
 
 void TSpatialPoint::updateEqCount(int eqCountUpdate)
 {// updates the point's equation count

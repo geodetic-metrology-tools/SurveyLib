@@ -82,7 +82,7 @@ public:
 		/*!Gets the constraint's bearing */
 		TAngle							getCnstrBearing() const;
 		/*!Gets the constraint's point name*/
-		string							getPoint() const;
+		TSpatialPointName				getPoint() const;
 		/*!Gets the constraint's name */
 		string							getName() const;
 

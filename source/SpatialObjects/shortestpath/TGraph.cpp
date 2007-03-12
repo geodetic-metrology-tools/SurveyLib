@@ -157,13 +157,34 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 
 		string cgrfTransformation = "no";
 		TTransformWrapper transfoWithCGRF;
+		
+
+	/*	
+		vector<RefFrame>::iterator refFrameIterator;
+
+		{
+			int i = 0;
+			for(refFrameIterator = C.begin(); 
+				refFrameIterator != C.end();
+				refFrameIterator++)
+			{
+				if (from == (*refFrameIterator).first)
+				{
+					start = i;
+				}
+				++i;
+			}
+		}
+		//Should output 1 4 8
+	*/	
 
 		for (unsigned int i = 0; i < size(); i++)
 		{
 			if (from == C[i].first)
 				start = i;
+			
 		}
-	
+
 		if (start == -1)
 		{
 			cgrfTransformation = "before";
@@ -176,13 +197,12 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 				if (rffrom == C[i].first)
 					start = i;
 			}
-
 		}
 
 
 		path(tr, pr,transform, start);
 
-		for (i = 0; i < size(); i++)
+		for (unsigned int i = 0; i < size(); i++)
 		{
 			if (to == C[i].first)
 				end = i;

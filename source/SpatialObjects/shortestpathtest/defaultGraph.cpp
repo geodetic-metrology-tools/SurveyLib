@@ -16,7 +16,6 @@ using namespace std;
 
 #include "THelmertRefFrameTRansform.h"
 
-
 #include "TGeodeticRefFrame.h"
 #include "TReferenceEllipsoid.h"
 
@@ -27,6 +26,8 @@ using namespace std;
 
 #include "TSpatialPoint.h"
 #include "TSpatialPointName.h"
+
+#include <iostream>
 //#include "TXYHg2XYHeTransformation.h"
 
 
@@ -411,7 +412,9 @@ void main()
 	TRefSystemFactory::getRefSystemFactory()->deleteRefSystemFactory();
 	TCoordSysFactory::getCoordSysFactoryPtr()->deleteCoordSysFactory();
 //	delete localRF;
-
+	int i = 0;
+	cin >> i;
+	
 	return;
 
 }

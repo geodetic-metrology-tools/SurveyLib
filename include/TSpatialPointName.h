@@ -33,7 +33,7 @@ public:
 		//! Enumerator for naming convention
 		enum ENameType{kName, kDBName};
 	//@}
-	
+
 
 	/*!@name Constructors/Destructor*/
 	//@{

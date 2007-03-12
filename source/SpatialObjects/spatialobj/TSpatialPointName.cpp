@@ -122,7 +122,7 @@ void	TSpatialPointName::setName( const string &name )
 		fElement = "";
 		fClassification = "";
 	}
-			
+		
 	return;
 }
 	

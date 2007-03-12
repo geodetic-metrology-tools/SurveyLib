@@ -42,9 +42,6 @@ public:
 	enum  EPointStatus {kActive, kInactive,  kBad, kNew};
 	/*!@name Constructors and Destructor*/
 	//@{
-		
-	
-	
 		/*!Default constructor */
 		TSpatialPoint();
 		
@@ -88,7 +85,7 @@ public:
 		void setPosition( TSpatialPosition* sp, int column, bool isNull);
 		void isPointNew();
 		
-	//	virtual  void 	 doNothing();
+		//	virtual  void 	 doNothing();
 		/*!Gets the point's position 
 		\param rf a pointer to the reference frame in which the position has to be returned */
 		virtual  TSpatialPosition  getPosition( TAReferenceFrame* rf) const;
@@ -104,7 +101,7 @@ public:
 		//virtual	 void  setName( const string& name, const string& element, const string& classifier );
 		/*!Returns the point's name */
 		virtual  TSpatialPointName  getName()  const;
-	
+		
 		/*!Sets the point's distance (for file from geode)
 		\param id the point's distance as a double*/
 		virtual  void  setDist( const double& id);

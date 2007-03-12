@@ -33,9 +33,6 @@ TACoordSysVector::TACoordSysVector(): TANumericValue()
 	fCoordSys = 0;
 }
 
-
-
-
 //////////////////////////////////////////////////////////////////////
 // Member Public Functions
 //////////////////////////////////////////////////////////////////////
@@ -64,7 +61,6 @@ TLength TACoordSysVector::getZ()const
 {//!get the Z coordinate of a vector in a specific Coordinate System
 	return fCoordSys->getZ(this);
 }
-
 
 bool TACoordSysVector::setX(const TLength& xc)
 {//!set the X coordinate of a vector in a specific Coordinate System return true if X is defined
@@ -98,7 +94,6 @@ void TACoordSysVector::setCoordSys(const TCoordSysFactory::ECoordSys en )
 return;
 }
 
-
 T3DMatrix TACoordSysVector::transposed() const
 {//!return the tranposed column vector as a 3D matrix
 	T3DMatrix result = T3DMatrix(this->getCoordSys());
@@ -108,8 +103,6 @@ T3DMatrix TACoordSysVector::transposed() const
 	}
 	return result;
 }
-
-
 
 //////////////////////////////////////////////////////////////////////
 // Member Protected Functions

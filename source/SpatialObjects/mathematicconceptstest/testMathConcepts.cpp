@@ -14,6 +14,7 @@ using namespace std;
 #include "TColumnVector.h"
 #include "TDouble.h"
 #include "TCoordSysFactory.h"
+#include <iostream>
 
 
 /*** overloaded iterator to produce a matrix output ***/
@@ -510,7 +511,7 @@ void main()
 	cout<<"mx1:[("<<mx1(0,0)<<","<<mx1(0,1)<<","<<mx1(0,2)<<","<<mx1(0,3)<<"),("<<mx1(1,0)<<","<<mx1(1,1)<<","<<mx1(1,2)<<","<<mx1(1,3)<<"),("<<mx1(2,0)<<","<<mx1(2,1)<<","<<mx1(2,2)<<","<<mx1(2,3)<<"),("<<mx1(3,0)<<","<<mx1(3,1)<<","<<mx1(3,2)<<","<<mx1(3,3)<<")], status:"<<mx1.getStatus()<<endl;
 	TMatrix mx9;
 	mx9.setDimensions(4,4);
-	mx9 = mx4.inverseSym();
+	//mx9 = mx4.inverseSym();
 	cout<<"mx9:[("<<mx9(0,0)<<","<<mx9(0,1)<<","<<mx9(0,2)<<","<<mx9(0,3)<<"),("<<mx9(1,0)<<","<<mx9(1,1)<<","<<mx9(1,2)<<","<<mx9(1,3)<<"),("<<mx9(2,0)<<","<<mx9(2,1)<<","<<mx9(2,2)<<","<<mx9(2,3)<<"),("<<mx9(3,0)<<","<<mx9(3,1)<<","<<mx9(3,2)<<","<<mx9(3,3)<<")], status:"<<mx1.getStatus()<<endl;
 	mx1 = mx9 * mx1;
 	cout<<"mx1:[("<<mx1(0,0)<<","<<mx1(0,1)<<","<<mx1(0,2)<<","<<mx1(0,3)<<"),("<<mx1(1,0)<<","<<mx1(1,1)<<","<<mx1(1,2)<<","<<mx1(1,3)<<"),("<<mx1(2,0)<<","<<mx1(2,1)<<","<<mx1(2,2)<<","<<mx1(2,3)<<"),("<<mx1(3,0)<<","<<mx1(3,1)<<","<<mx1(3,2)<<","<<mx1(3,3)<<")], status:"<<mx1.getStatus()<<endl;
@@ -1142,7 +1143,8 @@ void main()
 
 	angTest = angTest - 8 * TAngle::pi();
 	cout<<"angTest : "<< angTest.getRadiansValue()<<endl;
-
+	int i;
+	cin >> i;
 	return;
 
 }

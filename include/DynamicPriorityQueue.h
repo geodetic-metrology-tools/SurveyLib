@@ -38,15 +38,17 @@ public:
 	DynamicPriorityQueue(vector<T>& trans)
 		: Indices(trans.size()), c(trans.size()), first(&*trans.begin()), csize(trans.size())
 	{
-		index i;
+		//index i;
+
+		unsigned int i;
 
 		//stores pointers and generate heap
-		for (i=0; i<(signed)csize; i++)
+		for (i=0; i<csize; i++)
 			c[i] = &trans[i];
 		make_heap(c.begin(), c.end(), comp);
 
 		// constructs index array
-		for (i=0; i<(signed)csize; i++)
+		for (i=0; i<csize; i++)
 		{
 			Indices[c[i] - first] = i;
 		}
