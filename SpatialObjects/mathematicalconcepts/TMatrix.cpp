@@ -55,7 +55,6 @@ TMatrix::TMatrix(const TDouble& value)
 	fNbRows = 1;
 	fNbCols = 1;
 	fError = "";
-	//unsigned int bob = 5; (unsigned int) value.getValue()
 	fMatrix = new double [1];
 	*fMatrix = value.getValue();
 	setStatus( TANumericValue::kKnown );

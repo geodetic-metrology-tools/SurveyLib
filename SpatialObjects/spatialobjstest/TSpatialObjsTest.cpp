@@ -8,6 +8,7 @@ using namespace std;*/
 
 #include  "TSpatialLine.h"
 #include  "TSpatialPlane.h"
+#include <iostream>
 
 
 void main()
@@ -178,6 +179,8 @@ void main()
 
 	cout<<"line5==line6 : "<<(line5==line6)<<endl;
 	cout<<"line5==line3 : "<<(line5==line3)<<endl;
+	int i;
+	cin >> i;
 
 
 

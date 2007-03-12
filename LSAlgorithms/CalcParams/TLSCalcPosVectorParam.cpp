@@ -263,7 +263,7 @@ TLength		TLSCalcPosVectorParam::getErrorEllMajorAxis() const
 	double vxy = getXCoVar().getMMetresValue();
 	double sx2 = pow(getXSigma().getMMetresValue(), 2) ;
 	double sy2 = pow(getYSigma().getMMetresValue(), 2) ;
-	double gdAxe = (1/sqrt((double)2)) * sqrt( sx2 + sy2 + sqrt( pow((sy2 - sx2), 2) + (4 * vxy * vxy) ) );
+	double gdAxe = (1.0/sqrt(2.0)) * sqrt( sx2 + sy2 + sqrt( pow((sy2 - sx2), 2) + (4.0 * vxy * vxy) ) );
 	
 	TLength res;
 	res.setMMetresValue(gdAxe);
@@ -276,7 +276,7 @@ TLength		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
 	double vxy = getXCoVar().getMMetresValue();
 	double sx2 = pow(getXSigma().getMMetresValue(), 2) ;
 	double sy2 = pow(getYSigma().getMMetresValue(), 2) ;
-	double ptAxe = (1/sqrt((double)2)) * sqrt( sx2 + sy2 - sqrt( pow((sy2 - sx2), 2) + (4 * vxy *vxy) ) );
+	double ptAxe = (1.0/sqrt(2.0)) * sqrt( sx2 + sy2 - sqrt( pow((sy2 - sx2), 2) + (4.0 * vxy *vxy) ) );
 	
 	TLength res;
 	res.setMMetresValue(ptAxe);
