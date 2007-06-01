@@ -28,11 +28,12 @@ Designed to be easiliy usable with matrix functions of the NagC math library
 //using namespace std;
 //
 class  TColumnVector;
-class TDouble;
+class  TDouble;
 #include	<nag.h>
 #include	<nagf06.h>
 #include	<nagf03.h>
 #include	<nagf04.h>
+#include	<nag_stdlib.h>
 #include	<list>
 #include	<valarray>
 
@@ -150,17 +151,17 @@ public:
 
 		/*!\return the matrice's number of columns*/
 		virtual int			numCols() const;
-
+		
 		/*!Inverts this matrix (the matrix is overwritten by its inverse)*/
 		virtual  bool		invert();
 
 		/*!\return the inverse of this matrix*/
-		virtual TMatrix			inverse();
-
+		virtual TMatrix		inverse();
+			
 		/*!clear a matrice
 		\return a matrice (i,j)=0, status kNull*/
 		void clear();
-
+			
 		/*! Returns the error message */
 		string	getError() const { return fError; }
 
@@ -181,6 +182,7 @@ private:
 	int				fNbCols; /*!< number of columns */
 	string			fError; /*!< errors generated from nagc functions */
 };
+
 /*@}*/
 
 //////////////////////////////////////////////////////////////////////

@@ -84,7 +84,6 @@ TMatrix::TMatrix(int nRows,int nCols):fNbRows(nRows), fNbCols(nCols)
 
 TMatrix::TMatrix( const  TMatrix& source ):fNbRows(source.fNbRows), fNbCols(source.fNbCols)
 {//!Copy constructor
-
 	//dimensioning of the matrix
 	fMatrix = new double [fNbRows * fNbCols];
 
@@ -196,7 +195,7 @@ return *this;
 }
 
 
-TMatrix TMatrix::operator *(const TMatrix& right) const
+TMatrix TMatrix::operator*(const TMatrix& right) const
 {//returns the product of this matrix and a second one
 	TMatrix resultat (numRows(), right.numCols());
 	resultat.setStatus(TVNumericValue::kNull);
@@ -216,7 +215,6 @@ TMatrix& TMatrix::operator *=(const TMatrix& right)
 *this=(*this)*right;
 return *this;
 }
-
 
 TColumnVector TMatrix::operator*(const TColumnVector& right) const
 {//returns the product of this matrix by a column vector
@@ -412,7 +410,7 @@ bool TMatrix::invert()
 			//Computation of the inverse
 			nag_real_lu_solve_mult_rhs(fNbCols, fNbCols, copyMat->getFirstEltAdr(), fNbCols, pivot, rhs.getFirstEltAdr(),
 				fNbCols, &fail);
-
+			
 			// possible errors: input unconsistency
 			if ((fail.code == NE_INT_ARG_LT) || (fail.code == NE_2_INT_ARG_LT)) {
 				fError += fail.message + '\n';
@@ -455,7 +453,7 @@ TMatrix TMatrix::inverse()
 		return copy;
 	}
 }
-	
+
 
 void TMatrix::clear()
 {//return a matrice (i,j)=0, status kNull

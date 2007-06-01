@@ -1,7 +1,8 @@
 /* C Functions file
  */
 
-
+#ifndef SPATIALOBJCFNS_H
+#define SPATIALOBSCFNS_H
 #include <string>
 //#include <windows.h>
 
@@ -50,12 +51,11 @@ extern "C" {  // only need to export C interface if
 
 
 	/// return coordinates as X,Y,h of a point at H metres on the vertical of another point
-	SU_DECLSPEC int DLLAPI descenteVert(double x, double y, double h, double H,
+	SU_DECLSPEC int DLLAPI descenteVert(double x, double y, double h, double deltaH,
 							double* xt, double* yt, double* ht);
 	
-
 
 #ifdef __cplusplus
 }
 #endif
-
+#endif;

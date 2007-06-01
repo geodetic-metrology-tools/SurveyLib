@@ -10,11 +10,11 @@
 #endif*/
 
 
-#ifdef SU_MAKEDLL
+//#ifdef SU_MAKEDLL
    #define  SU_DECLSPEC  __declspec(dllexport)
-#else
-   #define  SU_DECLSPEC  __declspec(dllimport)
-#endif
+//#else
+  // #define  SU_DECLSPEC  __declspec(dllimport)
+//#endif
 
 
 #define DLLAPI __cdecl

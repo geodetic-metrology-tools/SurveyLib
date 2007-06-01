@@ -20,7 +20,7 @@
 	TAngle TGeodeticCoordSys::getPhiEllipsoid(const TPositionVector* vec) const
 	{//get the Phi coordinate of a position vector
 		TAngle retVal;
-		retVal.setRadiansValue(this->TACoordinateSystem::getX(vec, 1));
+		retVal.setRadiansValue(this->TACoordinateSystem::getX(vec, 0));
 		return retVal;
 	}
 	// Error Message: c:\Workspace\SuSource\SurveyLib\source\SpatialObjects\mathematicalconcepts\TGeodeticCoordSys.cpp(22): error C2664: 'TAngle::TAngle(const TAngle &)' : cannot convert parameter 1 from 'double' to 'const TAngle &'

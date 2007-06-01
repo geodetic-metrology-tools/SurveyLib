@@ -23,14 +23,14 @@
 TLength T2DCartesianPlusHSys::getX(const TACoordSysVector* vec) const
 {//get the X coordinate of a position vector or a free vector
 	TLength retVal;
-	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 2));
+	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 0));
 	return retVal;
 }
 
 TLength T2DCartesianPlusHSys::getY(const TACoordSysVector* vec) const
 {//get the Y coordinate of a position vector or a free vector
 	TLength retVal;
-	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 2));
+	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 1));
 	return retVal;
 }
 

@@ -69,13 +69,13 @@ public:
 	/**@name Member Functions */
 	//@{
 		/// Returns the geoidal undulation (geoidal height) at the given Point's position	
-		virtual  TLength  getN( const TSpatialPosition& ) const;
+		//virtual  TLength  getN( const TSpatialPosition& ) const;
 		
 		/// Returns the deflection of the vertical in the prime vertical at the given Point's position	
-		virtual  TAngle  getEta( const TSpatialPosition& ) const;
+		//virtual  TAngle  getEta( const TSpatialPosition& ) const;
 		
 		/// Returns the deflection of the vertical in the meridian at the given Point's position	
-		virtual  TAngle  getXi( const TSpatialPosition& ) const;
+		//virtual  TAngle  getXi( const TSpatialPosition& ) const;
 		
 		/// Returns the Laplace correction at the given Point's position	
 		virtual  TAngle  getDAlpha( const TSpatialPosition& ) const;
@@ -117,7 +117,7 @@ private:
 	/**@name Private Functions */
 	//@{
 		/*!used to interpolate N*/
-		double splineInterpolation(const TMatrix& mat, const TSpatialPosition& spos) const;
+	//	double splineInterpolation(const TMatrix& mat, const TSpatialPosition& spos) const;
 	//@}
 	
 	/**@name Member Attributes */
