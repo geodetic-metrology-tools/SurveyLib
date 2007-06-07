@@ -396,16 +396,16 @@ int DLLAPI descenteVert(double x, double y, double h, double deltaH, double* xt,
 	TPositionVector res = newPoint.getCoordinates(TCoordSysFactory::k2DPlusH);
 	double hres = res.getH().getMetresValue();
 
-	if((h + deltaH>= hres - 0.000005) && (h + deltaH<= hres + 0.000005))
-	{
+	//if((h + deltaH>= hres - 0.000005) && (h + deltaH<= hres + 0.000005))
+	//{
 		*xt = res.getX().getMetresValue();
 		*yt = res.getY().getMetresValue();
 		*ht = h + deltaH;
 		return 1;
-	}
-	else
-	{
-		return 0;
-	}
+	//}
+	//else
+	//{
+		//return 0;
+	//}
 }
 
