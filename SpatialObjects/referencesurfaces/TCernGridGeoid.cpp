@@ -64,7 +64,7 @@ TCernGridGeoid::~TCernGridGeoid()
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //MEMBER FUNCTIONS
 ///////////////////////////////////////////////////////////////////////////////////////////////
-/*
+
 TLength TCernGridGeoid::getN ( const TSpatialPosition& sp) const
 {
 	// deep copy of TSpatialPosition
@@ -207,7 +207,7 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 	
 }
 
-*/
+
 TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 {
 	// deep copy of TSpatialPosition
@@ -306,7 +306,7 @@ void TCernGridGeoid::setGeoidId(const TRefSystemFactory::EGeoid geoidId)
 //////////////////////////////////////////////////////////////////////
 // Private Member Functions
 //////////////////////////////////////////////////////////////////////
-/*
+
 double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialPosition& spos) const
 {
 
@@ -439,7 +439,7 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 				c(j,2) = matrix(K[i],L[j]);
 			}
 			/*for(j=0; j<4; j++)
-				cout << c(j,0) << " " << c(j,1) << " " << c(j,2) << endl;
+				cout << c(j,0) << " " << c(j,1) << " " << c(j,2) << endl;*/
 
 			cout << endl;
 
@@ -463,7 +463,7 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 		/*for(i=0; i<4; i++)
 			cout << Q(i,0) << " " << Q(i,1) << " " << Q(i,2) << endl;
 
-		cout << endl;
+		cout << endl;*/
 
 		t = -y[K[1]];
 
@@ -503,7 +503,7 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 			/*for(i=1; i<=4; i++)
 				cout << Q(i,1) << " " << Q(i,2) << " " << Q(i,3) << endl;
 
-			cout << endl;
+			cout << endl;*/
 
 
 
@@ -553,7 +553,7 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 
 	return N;
 }
-*/
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 //END
 ////////////////////////////////////////////////////////////////////////////////////////////
