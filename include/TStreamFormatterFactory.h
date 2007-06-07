@@ -42,7 +42,7 @@ public:
 
 		/// Get a new formatter of a given type
 		//TAStreamFormatter *getFormatter( TAStreamFormatter::ETextFormat, QTextStream* );
-		TAStreamFormatter *getFormatter( TAStreamFormatter::ETextFormat);
+		TAStreamFormatter *getFormatter( TLGCDataSet* ds, TAStreamFormatter::ETextFormat, string seperator);
 		TAStreamFormatter *getFormatter( TAStreamFormatter::ETextFormat, const string&);
 		TAStreamFormatter *getFormatter( TAStreamFormatter::ETextFormat, TAStreamFormatter::EIOType, const char*);
 

@@ -116,6 +116,10 @@ public:
 		//!set coordinate precision
 		void	setCoordPrecision(const TPointFormat::ECoordPrecision precision);
 
+		//! set angle, length and coordinate precisions, based on the integer arguement
+		void	setPrecision(int precision);
+
+
 		//!set the point name's width
 		void	setPointNameWidth(const int);
 

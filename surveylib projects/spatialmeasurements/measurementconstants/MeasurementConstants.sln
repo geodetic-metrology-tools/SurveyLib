@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MeasurementConstants", "MeasurementConstants.vcproj", "{C35B9116-5D7E-48A9-AD57-D793567E5337}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Insure = Insure
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{C35B9116-5D7E-48A9-AD57-D793567E5337}.Debug.ActiveCfg = Debug|Win32
+		{C35B9116-5D7E-48A9-AD57-D793567E5337}.Debug.Build.0 = Debug|Win32
+		{C35B9116-5D7E-48A9-AD57-D793567E5337}.Insure.ActiveCfg = Insure|Win32
+		{C35B9116-5D7E-48A9-AD57-D793567E5337}.Insure.Build.0 = Insure|Win32
+		{C35B9116-5D7E-48A9-AD57-D793567E5337}.Release.ActiveCfg = Release|Win32
+		{C35B9116-5D7E-48A9-AD57-D793567E5337}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

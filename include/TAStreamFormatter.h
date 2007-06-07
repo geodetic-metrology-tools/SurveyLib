@@ -67,7 +67,7 @@ public:
 	/**@name Constants */
 	//@{
 	enum	EIOType		{kWrite, kRead};
-	enum	ETextFormat {kNull, kFreeFormat};
+	enum	ETextFormat {kNull, kFreeFormat, separatorFormat, columnFormat};
 	//enum	Encoding	{C, /*lt_LN.bit8,*/ fr_FR, fr_CH};
 	//@}
 

@@ -908,6 +908,7 @@ return (*fIOStream).width();
 int TAStreamFormatter::width(int w)
 {//sets the field width to w and returns the previous field width
 return (*fIOStream).width(w);
+//	return 0;
 }
 
 
