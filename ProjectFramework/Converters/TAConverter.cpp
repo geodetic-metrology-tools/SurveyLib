@@ -120,8 +120,10 @@ void	TAConverter::setStream(TAStreamFormatter* stream)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PROTECTED MEMBER FUNCTIONS
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void	TAConverter::writeString(const int width, const string data)
 {
+	//(*fStream)<<" ";
 	fStream->width(width);
 	(*fStream)<<right<<data;
 	return;
@@ -130,10 +132,13 @@ void	TAConverter::writeString(const int width, const string data)
 
 void	TAConverter::writeStringSep(const int width, const string data)
 {
+	//writeString(1, "");
 	writeString(width, data);
 	(*fStream)<<fSeparator;
 	return;
 }
+
+//void	TAConverter::writeStringNoSpaceSep(const int width, const string 
 
 
 void	TAConverter::writeStringLeft(const int width, const string data)
@@ -191,10 +196,6 @@ void	TAConverter::writeAngle(const int width, const int pres, const TAngle::EUni
 	(*fStream)<<(data);
 	return;
 }
-
-
-
-
 
 void	TAConverter::readP100Comment(string comments)
 {

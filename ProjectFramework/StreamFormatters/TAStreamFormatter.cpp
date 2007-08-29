@@ -71,6 +71,8 @@ TAStreamFormatter::TAStreamFormatter(TDataParameters& dp)
 	setLengthUnits(dp.getLengthUnits());
 	setCoordSys(dp.getCoordinateSystem());
 	fRefFrame = 0;
+	fLineGap = true;
+	fNonSpaceSeparator = "";
 }
 
 
@@ -88,6 +90,8 @@ TAStreamFormatter::TAStreamFormatter(const string& input, TDataParameters& dp)
 	setLengthUnits(dp.getLengthUnits());
 	setCoordSys(dp.getCoordinateSystem());
 	fRefFrame = 0;
+	fLineGap = true;
+	fNonSpaceSeparator = "";
 }
 
 
@@ -126,6 +130,8 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds)
 	setLengthUnits(ds.getLengthUnits());
 	setCoordSys(ds.getCoordinateSystem());
 	fRefFrame = 0;
+	fLineGap = true;
+	fNonSpaceSeparator = "";
 }
 
 
@@ -167,6 +173,8 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds, TPointFormat& pf
 	setLengthUnits(ds.getLengthUnits());
 	setCoordSys(ds.getCoordinateSystem());
 	fRefFrame = 0;
+	fLineGap = true;
+	fNonSpaceSeparator = "";
 }
 
 
@@ -187,6 +195,7 @@ TAStreamFormatter::TAStreamFormatter(const EIOType io, TADataSet& ds, const TPoi
 		fObservationFormat = obsFor;
 		setPrecisionFormat(fPointFormat.getCoordPrecision());
 		setWidthFormat(fPointFormat.getCoordWidth());
+
 	}
 	
 
@@ -209,6 +218,8 @@ TAStreamFormatter::TAStreamFormatter(const EIOType io, TADataSet& ds, const TPoi
 	setLengthUnits(ds.getLengthUnits());
 	setCoordSys(ds.getCoordinateSystem());
 	fRefFrame = 0;
+	fLineGap = true;
+	fNonSpaceSeparator = "";
 }
 
 
@@ -340,8 +351,6 @@ TSpatialPositionFilter*	TAStreamFormatter::setPosFilter(const TCoordSysFactory::
 	return oldPos;
 
 }
-
-
 
 int	TAStreamFormatter::setWidthFormat(const int width)
 {/*!set a width for stream*/
@@ -899,13 +908,13 @@ void TAStreamFormatter::reset()
 }
 
 
-int TAStreamFormatter::width() const
+ int TAStreamFormatter::width() const
 {//Returns the field width
 return (*fIOStream).width();
 }
 
 
-int TAStreamFormatter::width(int w)
+ int  TAStreamFormatter::width(int w)
 {//sets the field width to w and returns the previous field width
 return (*fIOStream).width(w);
 //	return 0;
@@ -1177,7 +1186,6 @@ void TAStreamFormatter::setSeparator(const string& sep)
 {//returns the string used to separate fields
 	return;
 }
-
 //////////////////////////////////////////////////////////////////////
 // End 
 //////////////////////////////////////////////////////////////////////
@@ -1188,3 +1196,56 @@ string TAStreamFormatter::getString()
 {string s;
 s=fSStream->str();
 return s;}
+
+
+void TAStreamFormatter::setDataSpacing()
+{
+	if (fLineGap)
+	 (*fIOStream)<<endl;
+	
+}
+		
+void TAStreamFormatter::setNoGapBetweenData()
+{
+	fLineGap = false;
+}
+
+void TAStreamFormatter::setGapBetweenData()
+{
+	fLineGap = true;
+}
+
+void	TAStreamFormatter::writeString(const int width, const string data)
+{
+	//(*fStream)<<" ";
+
+	this->width(width);
+	(*this)<<right<<data;
+	(*this)<<getSeparator();
+	return;
+
+}
+
+void	TAStreamFormatter::writeStringLeft(const int width, const string data)
+{
+	this->width(width);
+	(*this)<<left<<data<<right<<fSeparator;
+	return;
+}
+
+void	TAStreamFormatter::writeDouble(const int width, const int pres, const double data)
+{
+	this->width(width);
+	this->precision(pres);
+	(*this)<<right<<data<<fSeparator;
+	return;
+}
+
+void	TAStreamFormatter::writeInteger(const int width, const int data)
+{
+	this->width(width);
+	(*this)<<right<<data;
+	return;
+}
+
+
