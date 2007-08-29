@@ -67,7 +67,7 @@ public:
 	/**@name Constants */
 	//@{
 	enum	EIOType		{kWrite, kRead};
-	enum	ETextFormat {kNull, kFreeFormat, separatorFormat, columnFormat};
+	enum	ETextFormat {kNull, kFreeFormat, kSeparatorFormat, kColumnFormat};
 	//enum	Encoding	{C, /*lt_LN.bit8,*/ fr_FR, fr_CH};
 	//@}
 
@@ -260,9 +260,22 @@ public:
 		virtual	TAStreamFormatter	&operator<<(void*); 
 		virtual	TAStreamFormatter	&operator<<(TSFFUNC);
 	//@}
- 
+ 		/*!write a string
+		\param int : width used to write the string
+		\param string : string to write*/
+		void	writeString(const int width, const string data);
+		void	writeStringLeft(const int width, const string data);
 
-	
+		/*!write a double and
+		\param int : width used to write the double
+		\param int : precision used to write the double
+		\param double : double to write*/
+		void	writeDouble(const int width, const int pres, const double data);
+
+		void	writeInteger(const int width, const int data);
+		//void	writeLength(const int width, const int pres, const TLength::EUnits, const TLength data);
+		//void	writeAngle(const int width, const int pres, const TAngle::EUnits, const TAngle data);
+
 	//!member functions
     fstream*	device() const;
 
@@ -285,8 +298,8 @@ public:
     void				unsetf( int bits );
 	void				reset();
 
-    int					width()	const;
-    int					width(int);
+    virtual int			width()	const;
+    virtual int			width(int);
     int					fill()	const;
     int					fill(int);
     int					precision()	const;
@@ -328,6 +341,16 @@ public:
 	iostream&				getIOStream() {return	*fIOStream;}
 
 
+	/*!@ set the format for the spacing between the data*/
+	void TAStreamFormatter::setDataSpacing();
+		
+	/*!@ set no space between the data*/
+	void TAStreamFormatter::setNoGapBetweenData();
+
+	/*!@ set a space between the data*/
+	void TAStreamFormatter::setGapBetweenData();
+
+
 protected:
 	static TAngleFilter *getAngleFilter( TAngle::EUnits );
 	static TLengthFilter *getLengthFilter( TLength::EUnits );
@@ -353,10 +376,12 @@ protected:
 	int										fWidth;
 	int										fPrecision;
 
+	string									fNonSpaceSeparator;
+	string									fSeparator;
 
 private:
 
-
+	bool									fLineGap;
 
 	//ClassDef(TAStreamFormatter, 1)
 };
@@ -374,5 +399,10 @@ extern TAStreamFormatter &ws( TAStreamFormatter &s );	// eat whitespace on input
 extern TAStreamFormatter &reset( TAStreamFormatter &s );	// set default flags
 extern TAStreamFormatter &left( TAStreamFormatter &s );
 extern TAStreamFormatter &right( TAStreamFormatter &s );
+
+
+
+
+
 
 #endif // !defined(SU_A_TEXT_STREAM_FORMATTER)

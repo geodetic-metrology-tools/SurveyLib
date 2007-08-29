@@ -25,6 +25,7 @@
 class  TAStreamFormatter;
 //
 #include  "TAStreamFormatter.h"
+#include  "TADataSet.h"
 // typedefs
 ////////////////////////////////////////////////////////////////
 
@@ -42,7 +43,7 @@ public:
 
 		/// Get a new formatter of a given type
 		//TAStreamFormatter *getFormatter( TAStreamFormatter::ETextFormat, QTextStream* );
-		TAStreamFormatter *getFormatter( TLGCDataSet* ds, TAStreamFormatter::ETextFormat, string seperator);
+		TAStreamFormatter *getFormatter( TADataSet* ds, TAStreamFormatter::ETextFormat, string seperator);
 		TAStreamFormatter *getFormatter( TAStreamFormatter::ETextFormat, const string&);
 		TAStreamFormatter *getFormatter( TAStreamFormatter::ETextFormat, TAStreamFormatter::EIOType, const char*);
 

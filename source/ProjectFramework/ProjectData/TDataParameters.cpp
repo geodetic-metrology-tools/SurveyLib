@@ -20,6 +20,7 @@
 #include  "TGeodeticRefFrame.h"
 #include  "TModifiedLocalAstronomicalRF.h"
 #include  "T3DLocalRefFrame.h"
+
 ////////////////////////////////////////////////////////////////
 
 
@@ -31,6 +32,12 @@
 //////////////////////////////////////////////////////////////////////
 TDataParameters::TDataParameters()
 {// default constructor
+	/*
+	punchSeparator = ";";
+	resultsSeparator = ";";
+	resultsFileFormat = TAStreamFormatter::kColumnFormat;
+	punchFileFormat = TAStreamFormatter::kColumnFormat;
+	*/
 	fRefFrame =0;
 	fLSO.origin = 0;
 	fRefFrameEnum = TDataParameters::kUndefined;
@@ -530,9 +537,48 @@ LocalSystemOrigin TDataParameters::getLocalSystemOrigin() const
 {
 	return fLSO;
 }
+/*
+void TDataParameters::setResultsFileFormat(TAStreamFormatter::ETextFormat resFileFrmt)
+{
+	resultsFileFormat = resFileFrmt;
+}
 
 
+TAStreamFormatter::ETextFormat TDataParameters::getResultsFileFormat()
+{
+	return resultsFileFormat;
+}
 
+void TDataParameters::setPunchFileFormat(TAStreamFormatter::ETextFormat puncFileFrmt)
+{
+	punchFileFormat = puncFileFrmt;
+}
+
+TAStreamFormatter::ETextFormat TDataParameters::getPunchFileFormat()
+{
+	return punchFileFormat;
+}
+
+void TDataParameters::setPunchSeparator(string seperator)
+{
+	punchSeparator = seperator;
+}
+
+void TDataParameters::setResultsSeparator(string seperator)
+{
+	resultsSeparator = seperator;
+}
+
+string TDataParameters::getResultsSeparator()
+{
+	return resultsSeparator;
+}
+
+string TDataParameters::getPunchSeparator()
+{
+	return punchSeparator;
+}
+*/
 /////////////////////////////////////////////////////////////////////////////
 //end
 /////////////////////////////////////////////////////////////////////////////

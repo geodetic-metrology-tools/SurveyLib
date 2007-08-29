@@ -82,13 +82,12 @@ protected:
 		\param double : double to write*/
 		void	writeDoubleSep(const int width, const int pres, const double data);
 
-		void	writeInteger(const int width, const int data);
 		void	writeLength(const int width, const int pres, const TLength::EUnits, const TLength data);
 		void	writeAngle(const int width, const int pres, const TAngle::EUnits, const TAngle data);
 
-
+		void	writeInteger(const int width, const int data);
 		void	readP100Comment(string comments);
-		
+
 	//@}
 	
 	/*!@name Protected functions : access to attributs */
@@ -146,13 +145,14 @@ protected:
 		/*! default Constructor*/
 		TAConverter();
 	//@}
+		/*!pointer to a TAStreamFormatter object*/
+		TAStreamFormatter*				fStream;
 
 private:
 
 	/*!@name Private Attribute*/
 	//@{
-		/*!pointer to a TAStreamFormatter object*/
-		TAStreamFormatter*				fStream;
+
 
 		/*!Width used for observation I/O*/
 		int								fNameWidth;

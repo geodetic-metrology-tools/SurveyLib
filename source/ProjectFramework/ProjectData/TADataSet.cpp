@@ -42,22 +42,40 @@
 
 TADataSet::TADataSet() 
 {// default constructor
-	fSaved = false;
+	fSaved = true;
+	fPunchSeparator = "";
+	fResultsSeparator = "   ";
+	fResultsFileFormat = TAStreamFormatter::kColumnFormat;
+	fPunchFileFormat = TAStreamFormatter::kColumnFormat;
+	fLineSpacing = true;
+	fFormatType = "COL";
 }
 
 
 
 TADataSet::TADataSet(const TFileParameters& fp, const TDataParameters& dp)
 {
+	fPunchSeparator = "";
+	fResultsSeparator = "   ";
+	fResultsFileFormat = TAStreamFormatter::kColumnFormat;
+	fPunchFileFormat = TAStreamFormatter::kColumnFormat;
+	fLineSpacing = true;
 	fSaved = false;
 	fFileParams = fp;
 	fDataParams = dp;
+	fFormatType = "COL";
 }
 
 TADataSet::TADataSet(const TDataParameters& dp)
 {
+	fPunchSeparator = "";
+	fResultsSeparator = "   ";
+	fResultsFileFormat = TAStreamFormatter::kColumnFormat;
+	fPunchFileFormat = TAStreamFormatter::kColumnFormat;
+	fLineSpacing = true;
 	fSaved = false;
 	fDataParams = dp;
+	fFormatType = "COL";
 }
 
 TADataSet::TADataSet( const  TADataSet& original )
@@ -65,6 +83,7 @@ TADataSet::TADataSet( const  TADataSet& original )
 	fSaved = original.fSaved;
 	fFileParams = original.fFileParams;
 	fDataParams = original.fDataParams;
+	fFormatType = "COL";
 }
 
 
@@ -349,7 +368,71 @@ bool  TADataSet::isFileParamsDefined()  const
 	return fFileParams.defined();
 }
 
+void TADataSet::setResultsFileFormat(TAStreamFormatter::ETextFormat resFileFrmt)
+{
+	fResultsFileFormat = resFileFrmt;
+}
 
+
+TAStreamFormatter::ETextFormat TADataSet::getResultsFileFormat()
+{
+	return fResultsFileFormat;
+}
+
+void TADataSet::setPunchFileFormat(TAStreamFormatter::ETextFormat puncFileFrmt)
+{
+	fPunchFileFormat = puncFileFrmt;
+}
+
+TAStreamFormatter::ETextFormat TADataSet::getPunchFileFormat()
+{
+	return fPunchFileFormat;
+}
+
+void TADataSet::setPunchSeparator(string seperator)
+{
+	fPunchSeparator = seperator;
+}
+
+void TADataSet::setResultsSeparator(string seperator)
+{
+	fResultsSeparator = seperator;
+}
+
+string TADataSet::getResultsSeparator()
+{
+	return fResultsSeparator;
+}
+
+string TADataSet::getPunchSeparator()
+{
+	return fPunchSeparator;
+}
+
+bool TADataSet::isSpaceBetweenData()
+{
+	return fLineSpacing;
+}
+
+void TADataSet::setSpaceBetweenData()
+{
+	fLineSpacing = true;
+}
+
+void TADataSet::setNoSpaceBetweenData()
+{
+	fLineSpacing = false;
+}
+
+string TADataSet::getFormatType()
+{
+	return fFormatType;
+}
+
+void TADataSet::setFormatType(string fmtType)
+{
+	fFormatType = fmtType;
+}
 
 
 //////////////////////////////////////////////////////////////////////////

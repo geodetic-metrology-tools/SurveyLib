@@ -49,6 +49,7 @@ TSeparatedFormatTStream::TSeparatedFormatTStream(TDataParameters& dp) : TAStream
 {
 		fSeparator ="   ";
 		fNoObsToRead = false;
+		
 }
 
 
@@ -335,6 +336,25 @@ int TSeparatedFormatTStream::ajustAnglePrecTo100MicroGons(const TObservationForm
 	}
 
 	return i;
+}
+
+int	TSeparatedFormatTStream::width() const
+{
+	return (*fIOStream).width();
+	//return 0;
+}
+
+int	TSeparatedFormatTStream::width(int w)
+{
+	return (*fIOStream).width(0);
+	//return 0;
+}
+
+int	TSeparatedFormatTStream::setWidthFormat(const int width)
+{
+	int oldWidth = fWidth;
+	fWidth = 0;
+	return oldWidth;
 }
 
 

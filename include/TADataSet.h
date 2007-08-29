@@ -185,7 +185,46 @@ public:
 		bool  isFileParamsDefined()  const;
 	//@}
 
+	/*!@output stream format access methods*/
+	//@{
+	
+		/*!@ set results file format*/
+		virtual void setResultsFileFormat(TAStreamFormatter::ETextFormat resFileFrmt);
 
+		/*!@ get results file format*/
+		virtual TAStreamFormatter::ETextFormat getResultsFileFormat();
+
+		/*!@ set punch file format*/
+		virtual void setPunchFileFormat(TAStreamFormatter::ETextFormat puncFileFrmt);
+
+		/*!@ get punch file format*/
+		virtual TAStreamFormatter::ETextFormat getPunchFileFormat();
+
+		/*!@ set punch seperator*/
+		virtual void setPunchSeparator(string);
+
+		/*!@ set results seperator*/
+		virtual void setResultsSeparator(string);
+
+		/*!@ get results seperator*/
+		virtual string getResultsSeparator();
+
+		/*!@ get punch seperator*/
+		virtual string getPunchSeparator();
+
+		/*!@ get the format for the spacing between the data*/
+		bool TADataSet::isSpaceBetweenData();
+		
+		/*!@ set no space between the data*/
+		void TADataSet::setNoSpaceBetweenData();
+
+		/*!@ set a space between the data*/
+		void TADataSet::setSpaceBetweenData();
+
+		void TADataSet::setFormatType(string fmtType);
+
+		string TADataSet::getFormatType();
+	//@}
 
 
 
@@ -193,6 +232,8 @@ private:
 
 	/*!name Private Attributs*/
 	//@{
+		bool						fLineSpacing;
+
 		//!TFileParameters
 		TFileParameters				fFileParams;
 
@@ -201,7 +242,17 @@ private:
 
 		//!saved status : bool
 		bool						fSaved;
+
+		string						fFormatType;
 	//@}
+
+	TAStreamFormatter::ETextFormat fPunchFileFormat;
+
+	TAStreamFormatter::ETextFormat fResultsFileFormat;
+
+	string fPunchSeparator;
+
+	string fResultsSeparator;
 
 	//ClassDef(TADataSet, 1)
 };

@@ -101,7 +101,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\..\..\..\..\lib\SurveyLib.dll"
+				OutputFile=".\..\..\..\..\..\..\JSurveyLib.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ProgramDatabaseFile=".\Release/SurveyLib.pdb"
@@ -236,6 +236,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\SpatialObjects\SpatialObjects\SpatialObjFns.cpp">
+			</File>
+			<File
+				RelativePath=".\SpatialObjJFns.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\source\SpatialObjects\SpatialObjects\test.def">
 				<FileConfiguration
 					Name="Release|Win32"
@@ -252,16 +264,19 @@
 				RelativePath="..\..\..\include\SpatialObjCFns.h">
 			</File>
 			<File
+				RelativePath="..\..\..\include\SpatialObjFns.h">
+			</File>
+			<File
+				RelativePath=".\SpatialObjJFns.h">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\include\TGlobalDefs.h">
-			</File>
-			<File
-				RelativePath="..\..\..\include\TTANumericValue.h">
-			</File>
-			<File
-				RelativePath="..\..\..\include\TTLength.h">
-			</File>
-			<File
-				RelativePath="..\..\..\include\TTVNumericValue.h">
 			</File>
 		</Filter>
 		<Filter

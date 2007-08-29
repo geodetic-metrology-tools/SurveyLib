@@ -40,6 +40,7 @@ class		TAReferenceFrame;
 #include	"TLength.h"
 #include	"TPointFormat.h"
 #include	"TObservationFormat.h"
+#include	"TAStreamFormatter.h"
 
 // typedefs
 //
@@ -78,8 +79,6 @@ public:
 		virtual  ~TDataParameters();
 
 	//@}
-
-
 	/*!@name member functions */
 	//@{
 		//! copy assignment operator
@@ -156,7 +155,33 @@ public:
 		struct LocalSystemOrigin				getLocalSystemOrigin() const;
 			
 	//@}
+	/*!@output stream format access methods*/
+	//@{
+/*
+		virtual void setResultsFileFormat(TAStreamFormatter::ETextFormat resFileFrmt);
 
+
+		virtual TAStreamFormatter::ETextFormat getResultsFileFormat();
+
+
+		virtual void setPunchFileFormat(TAStreamFormatter::ETextFormat puncFileFrmt);
+
+
+		virtual TAStreamFormatter::ETextFormat getPunchFileFormat();
+
+
+		virtual void setPunchSeparator(string);
+
+
+		virtual void setResultsSeparator(string);
+
+
+		virtual string getResultsSeparator();
+
+
+		virtual string getPunchSeparator();
+		*/
+	//@}
 
 private:
 
@@ -175,6 +200,10 @@ private:
 
 	int											fPointNameWidth;
 
+	TAStreamFormatter::ETextFormat punchFileFormat;
+	TAStreamFormatter::ETextFormat resultsFileFormat;
+	string punchSeparator;
+	string resultsSeparator;
 	//ClassDef(TDataParameters, 1)
 };
 

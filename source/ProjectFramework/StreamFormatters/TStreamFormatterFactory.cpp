@@ -17,6 +17,8 @@
 //
 // Other forward declarations
 #include  "TFreeFormatTStream.h"
+#include  "TSeparatedFormatTStream.h"
+#include  "TFixedColFormatTStream.h"
 #include  "TAStreamFormatter.h"
 #include  "TStreamFormatterFactory.h"
 //
@@ -63,35 +65,48 @@ TStreamFormatterFactory *TStreamFormatterFactory::instance()
 }
 
 
-TAStreamFormatter *TStreamFormatterFactory::getFormatter(TLGCDataSet* ds, TAStreamFormatter::ETextFormat format, string seperator) 
+TAStreamFormatter *TStreamFormatterFactory::getFormatter(TADataSet* ds, TAStreamFormatter::ETextFormat format, string seperator) 
 {	// Function to obtain a pointer instance of the requested text stream formatter
 	
+	int coordWidth = ds->getCoordPrecision()+6;
+
+	int obsPrecision = ds->getLengthPrecision();
+	if(obsPrecision < (ds->getAnglePrecision()))
+	{
+		obsPrecision = ds->getAnglePrecision();
+	}
+	int obsWidth = obsPrecision + 5;
+	int coordWidthRes=7;
+	int obsWidthRes=7;
+
+	TPointFormat pointFormat (ds->getPointNameWidth(), coordWidth, ds->getCoordPrecision(),coordWidthRes,ds->getCoordPrecision(),0, TSpatialStatus::kCala);
+	TObservationFormat obsFormat (ds->getPointNameWidth(), obsWidth, ds->getLengthPrecision(), ds->getAnglePrecision(), obsWidthRes, ds->getLengthPrecision(), ds->getAnglePrecision(), 0);
+
 	TAStreamFormatter *formatter = 0;
 
 	switch( format )
 	{
 	case TAStreamFormatter::kFreeFormat:
-		formatter = new TFreeFormatTStream();
+		//formatter = new TFreeFormatTStream();
 		break;
 
-	case TAStreamFormatter::separatorFormat
-			int obsWidth = obsPrecision + 5;
-			int coordWidthRes=7;
-			int obsWidthRes=7;
-
-			TPointFormat pointFormat (ds->getPointNameWidth(), coordWidth, ds->getCoordPrecision(),coordWidthRes,ds->getCoordPrecision(),0, TSpatialStatus::kCala);
-			TObservationFormat obsFormat (ds->getPointNameWidth(), obsWidth, ds->getLengthPrecision(), ds->getAnglePrecision(), obsWidthRes, ds->getLengthPrecision(), ds->getAnglePrecision(), 0);
-
+	case TAStreamFormatter::kSeparatorFormat:
 			formatter = new TSeparatedFormatTStream(TAStreamFormatter::kWrite, *ds, pointFormat, obsFormat);
+			break;
 
-	case TAStreamFormatter::columnFormat
-			return new TFixedColFormatTStream(TAStreamFormatter::kWrite, *ds);
+	case TAStreamFormatter::kColumnFormat:
+			formatter = new TFixedColFormatTStream(TAStreamFormatter::kWrite, *ds, pointFormat, obsFormat);
+			break;
 
 	default:
 		// undefined angle filter requested
 		assert( formatter != 0 );
 		break;
 	}
+	formatter->setSeparator(seperator);
+	
+	if (!ds->isSpaceBetweenData())
+		formatter->setNoGapBetweenData();
 
 	return formatter;
 }
@@ -105,7 +120,7 @@ TAStreamFormatter *TStreamFormatterFactory::getFormatter( TAStreamFormatter::ETe
 	switch( format )
 	{
 	case TAStreamFormatter::kFreeFormat:
-		formatter = new TFreeFormatTStream(str);
+		//formatter = new TFreeFormatTStream(str);
 		break;
 
 	default:

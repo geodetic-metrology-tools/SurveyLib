@@ -24,6 +24,7 @@
 // Forward declarations
 //
 #include  <string>
+#include <iostream>
 using namespace std;
 //
 class TWPSFilter;
@@ -124,6 +125,12 @@ public:
 	
 	int	 ajustAnglePrecTo100MicroGons(const TObservationFormat::EAnglePrecision angle);
 
+	// overloaded functions to supress gaps
+	//using TAStreamFormatter::width;
+	virtual int			width() const;
+	virtual int			width(int);
+	virtual int			setWidthFormat(const int width);
+
 private:
 
 
@@ -131,7 +138,7 @@ private:
 	TWTWFilter*		fWTWFilter;*/
 
 	string			fLineBuf;
-	string			fSeparator;
+	
 
 	bool			fNoObsToRead;
 
