@@ -441,7 +441,7 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 			/*for(j=0; j<4; j++)
 				cout << c(j,0) << " " << c(j,1) << " " << c(j,2) << endl;*/
 
-			cout << endl;
+			//cout << endl;
 
 
 			t = -x[L[1]];
@@ -460,10 +460,10 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 			
 		}
 
-		/*for(i=0; i<4; i++)
-			cout << Q(i,0) << " " << Q(i,1) << " " << Q(i,2) << endl;
+		//for(i=0; i<4; i++)
+		//	cout << Q(i,0) << " " << Q(i,1) << " " << Q(i,2) << endl;
 
-		cout << endl;*/
+		//cout << endl;
 
 		t = -y[K[1]];
 
@@ -500,10 +500,10 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 			}
 
 
-			/*for(i=1; i<=4; i++)
-				cout << Q(i,1) << " " << Q(i,2) << " " << Q(i,3) << endl;
+			//for(i=1; i<=4; i++)
+			//	cout << Q(i,1) << " " << Q(i,2) << " " << Q(i,3) << endl;
 
-			cout << endl;*/
+			//cout << endl;
 
 
 
