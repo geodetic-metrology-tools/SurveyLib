@@ -1,6 +1,6 @@
 //  TADataSet.h
 //
-/*! A spatial point data set for geodetic transformation programs.  
+/*! An abstract data set for computation programs with input files.  
   
     Patterns:
   
@@ -230,7 +230,7 @@ public:
 
 private:
 
-	/*!name Private Attributs*/
+	/*!name Private Attributes*/
 	//@{
 		bool						fLineSpacing;
 

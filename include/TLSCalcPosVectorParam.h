@@ -163,6 +163,9 @@ public:
 		/*! Sets the estimated value of the position vector */
 		void	setEstimatedValueVector(TPositionVector pv) {fEstimatedValue = pv; return;}
 
+		/*! Sets the estimated value of the position vector */
+		void	resetEstimatedValueVector() {fEstimatedValue = fProvisionalValue; return;}
+
 		/*! Sets the correction value */
 		void	setCorrection(TFreeVector corr);
 
