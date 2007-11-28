@@ -68,6 +68,19 @@ TLSCalcPosVectorParam& TLSCalcPosVectorParam::operator =(const TLSCalcPosVectorP
 }
 */
 
+
+// re-initialises the parameters alterred during or after a least squares calculation
+void	TLSCalcPosVectorParam::reInitialise()
+{
+	TFreeVector zeroVec(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian);
+	fCorrection = zeroVec;
+	fEstimatedValue = fProvisionalValue;
+	fEstimatedPrecision = zeroVec;
+	fCovariance = zeroVec;
+
+	return;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 // PUBLIC ACCESS METHODS
 ///////////////////////////////////////////////////////////////////////////

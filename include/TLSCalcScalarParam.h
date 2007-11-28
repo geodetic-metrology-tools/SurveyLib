@@ -24,57 +24,60 @@ class TLSCalcScalarParam : public TALSCalcParameter
 public:
 	/*!@name Constructors / destructor */
 	//@{
-	/*! Default constructor */
-	TLSCalcScalarParam();
-	/*! Constructor
-	/param stores provisional value for the scale */
-	TLSCalcScalarParam(TScalar pos, ELSStatus status, string name);
-	/*! Copy constructor */
-	TLSCalcScalarParam(const TLSCalcScalarParam& source);
-	/*! Destructor */
-	virtual ~TLSCalcScalarParam();
+		/*! Default constructor */
+		TLSCalcScalarParam();
+		/*! Constructor
+		/param stores provisional value for the scale */
+		TLSCalcScalarParam(TScalar pos, ELSStatus status, string name);
+		/*! Copy constructor */
+		TLSCalcScalarParam(const TLSCalcScalarParam& source);
+		/*! Destructor */
+		virtual ~TLSCalcScalarParam();
 	//@}
 
 
 	/*!@name Access methods */
 	//@{
-	/*! Returns the provisional value of the scale */
-	TScalar	getProvisionalValue() const;
-	/*! Returns the correction value */
-	TScalar		getCorrection() const;
-	/*! Returns the estimated value for the scale */
-	TScalar	getEstimatedValue() const;
-	/*! Returns the estimated precision for the scale */
-	TScalar		getEstimatedPrecision() const;
-	/*! Returns the covariance element for the scale */
-	TScalar		getEstimatedCovariance() const;
-	/*! Returns the status of the scale for calculation */
-	TALSCalcParameter::ELSStatus	getStatus() const;
-	/*!Returns the status (Cala, Vxy....)*/
-	TSpatialStatus::ESpatialStatus	getGlobalStatus() const;
-	void resetValues();
+		/*! Returns the provisional value of the scale */
+		TScalar	getProvisionalValue() const;
+		/*! Returns the correction value */
+		TScalar		getCorrection() const;
+		/*! Returns the estimated value for the scale */
+		TScalar	getEstimatedValue() const;
+		/*! Returns the estimated precision for the scale */
+		TScalar		getEstimatedPrecision() const;
+		/*! Returns the covariance element for the scale */
+		TScalar		getEstimatedCovariance() const;
+		/*! Returns the status of the scale for calculation */
+		TALSCalcParameter::ELSStatus	getStatus() const;
+		/*!Returns the status (Cala, Vxy....)*/
+		TSpatialStatus::ESpatialStatus	getGlobalStatus() const;
+		void resetValues();
 	//@}
 
 	/*!@name Settings */
 	//@{
-	/*! Sets the provisional value of the scale */
-	void	setProvisionalValue(TScalar pv);
-	/*! Sets the estimated value of the scale */
-	void	setEstimatedValue(TScalar ev);
-	/*! Sets the correction value */
-	void	setCorrection(TScalar corr);
-	/*! Sets the estimated precision after calculation */
-	void	setEstimatedPrecision(TScalar ep);
-	/*! Sets the covariance after calculation */
-	void	setEstimatedCovariance(TScalar cov);
-	/*! Sets the status of the scale */
-	void	setStatus(ELSStatus stat);
-	
-	/*! Sets the position vector parameter's unknown index */
-	
-	UEOIndices		setUIndex(UEOIndices ui);
-	MatrixIndex		getScalarIndex();
+		/*! Sets the provisional value of the scale */
+		void	setProvisionalValue(TScalar pv);
+		/*! Sets the estimated value of the scale */
+		void	setEstimatedValue(TScalar ev);
+		/*! Sets the correction value */
+		void	setCorrection(TScalar corr);
+		/*! Sets the estimated precision after calculation */
+		void	setEstimatedPrecision(TScalar ep);
+		/*! Sets the covariance after calculation */
+		void	setEstimatedCovariance(TScalar cov);
+		/*! Sets the status of the scale */
+		void	setStatus(ELSStatus stat);
+		
+		/*! Sets the position vector parameter's unknown index */
+		
+		UEOIndices		setUIndex(UEOIndices ui);
+		MatrixIndex		getScalarIndex();
 
+		/*! re-initialises the parameters alterred during or after
+			a least squares calculation */
+		void	reInitialise();
 	//@}
 
 	

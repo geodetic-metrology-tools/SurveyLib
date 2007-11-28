@@ -23,7 +23,7 @@ fProvisionalValue(lobs),TALSCalcParameter(name) {
 
 	fCorrection = TLength(0.0);
 	fEstimatedValue = fProvisionalValue;
-	fEstimatedPrecision = fProvisionalValue;
+	fEstimatedPrecision = TLength(0.0);
 	fIndex = 0;
 	fStatus = els;
 }
@@ -52,6 +52,16 @@ TLSCalcLengthParam& TLSCalcLengthParam::operator =(const TLSCalcLengthParam& rig
 	// not implemented
 }
 */
+
+// re-initialises the parameters alterred during or after a least squares calculation
+void	TLSCalcLengthParam::reInitialise()
+{
+	fCorrection = TLength(0.0);
+	fEstimatedValue = fProvisionalValue;
+	fEstimatedPrecision = TLength(0.0);
+
+	return;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // PUBLIC ACCESS METHODS

@@ -20,46 +20,49 @@ class TLSCalcLengthParam : public TALSCalcParameter
 public:
 	/*!@name Constructors / Destructor */
 	//@{
-	/*! Default Constructor */
-	TLSCalcLengthParam();
-	/*! Constructor
-	\param lobs observed value of the length parameter
-	\param ecs status of the observed length (kFixed / kVariable) */
-	TLSCalcLengthParam(TLength lobs,TALSCalcParameter::ELSStatus els,string name);
-	/*! Copy constructor */
-	TLSCalcLengthParam(const TLSCalcLengthParam& source);
-	/*! Destructor */
-	virtual ~TLSCalcLengthParam();
+		/*! Default Constructor */
+		TLSCalcLengthParam();
+		/*! Constructor
+		\param lobs observed value of the length parameter
+		\param ecs status of the observed length (kFixed / kVariable) */
+		TLSCalcLengthParam(TLength lobs,TALSCalcParameter::ELSStatus els,string name);
+		/*! Copy constructor */
+		TLSCalcLengthParam(const TLSCalcLengthParam& source);
+		/*! Destructor */
+		virtual ~TLSCalcLengthParam();
 	//@}
 
 	/*!@name Access methods */
 	//@{
-	/*! Returns the provisional value of the parameter */
-	TLength		getProvisionalValue() const;
-	/*! Returns the correction to be brought on the provisional value */
-	TLength		getCorrection() const;
-	/*! Returns the estimated value of the parameter after correction */
-	TLength		getEstimatedValue() const;
-	/*! Returns the estimated precision of the parameter after calculation */
-	TLength		getEstimatedPrecision() const;
-	/*! Returns the LSCalc status of the parameter for calculation */
-	TALSCalcParameter::ELSStatus	getStatus() const;
-	/*! Returns the index of the parameter's unknown index */
-	MatrixIndex	getIndex() const;
+		/*! Returns the provisional value of the parameter */
+		TLength		getProvisionalValue() const;
+		/*! Returns the correction to be brought on the provisional value */
+		TLength		getCorrection() const;
+		/*! Returns the estimated value of the parameter after correction */
+		TLength		getEstimatedValue() const;
+		/*! Returns the estimated precision of the parameter after calculation */
+		TLength		getEstimatedPrecision() const;
+		/*! Returns the LSCalc status of the parameter for calculation */
+		TALSCalcParameter::ELSStatus	getStatus() const;
+		/*! Returns the index of the parameter's unknown index */
+		MatrixIndex	getIndex() const;
 	//@}
 
 	/*!@name Settings */
 	//@{
-	/*! Sets the provisional value */
-	void		setProvisionalValue(TLength pv);
-	/*! Sets the correction's value */
-	void		setCorrection(TLength corr);
-	/*! Sets the estimated precision */
-	void		setEstimatedPrecision(TLength ep);
-	/*! Sets the status od the parameter */
-	void		setStatus(TALSCalcParameter::ELSStatus lsStat);
-	/*! Sets the unknown index for calculation */
-	UEOIndices		setUIndex(UEOIndices ui);
+		/*! Sets the provisional value */
+		void		setProvisionalValue(TLength pv);
+		/*! Sets the correction's value */
+		void		setCorrection(TLength corr);
+		/*! Sets the estimated precision */
+		void		setEstimatedPrecision(TLength ep);
+		/*! Sets the status od the parameter */
+		void		setStatus(TALSCalcParameter::ELSStatus lsStat);
+		/*! Sets the unknown index for calculation */
+		UEOIndices		setUIndex(UEOIndices ui);
+		/*! re-initialises the parameters alterred during or after
+			a least squares calculation */
+		void	reInitialise();
 	//@}
 
 	

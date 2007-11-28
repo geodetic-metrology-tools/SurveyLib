@@ -81,6 +81,19 @@ TLSCalcOrientationParam& TLSCalcOrientationParam::operator=(const TLSCalcOrienta
 	return *this;
 }
 
+// re-initialises the parameters alterred during or after a least squares calculation
+void	TLSCalcOrientationParam::reInitialise()
+{
+	fCorrection.omega = TAngle(0.0);
+	fCorrection.phi = TAngle(0.0);
+	fCorrection.kappa = TAngle(0.0);
+	fEstimatedValue = fProvisionalValue;
+	fEstimatedPrecision.omega = TAngle(0.0);
+	fEstimatedPrecision.phi = TAngle(0.0);
+	fEstimatedPrecision.kappa = TAngle(0.0);
+
+	return;
+}
 
 
 ////////////////////////////////////////////////////////////////////////////

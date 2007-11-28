@@ -23,65 +23,68 @@ class TLSCalcFreeVectorParam : public TALSCalcParameter
 public:
 	/*!@name Constructors / destructor */
 	//@{
-	/*! Default constructor */
-	TLSCalcFreeVectorParam();
-	/*! Constructor
-	\param spobs provisional value for the spatial point */
-	TLSCalcFreeVectorParam(TFreeVector pos,struct LSParaStatus status,string name);
-	/*! Copy constructor */
-	TLSCalcFreeVectorParam(const TLSCalcFreeVectorParam& source);
-	/*! Destructor */
-	virtual ~TLSCalcFreeVectorParam();
-	int size();
+		/*! Default constructor */
+		TLSCalcFreeVectorParam();
+		/*! Constructor
+		\param spobs provisional value for the spatial point */
+		TLSCalcFreeVectorParam(TFreeVector pos,struct LSParaStatus status,string name);
+		/*! Copy constructor */
+		TLSCalcFreeVectorParam(const TLSCalcFreeVectorParam& source);
+		/*! Destructor */
+		virtual ~TLSCalcFreeVectorParam();
+		int size();
 	
 	//@}
 
 
 	/*!@name Access methods */
 	//@{
-	/*! Returns the provisional value of the position vector */
-	TFreeVector	getProvisionalValue() const;
-	/*! Returns the correction value */
-	TFreeVector		getCorrection() const;
-	/*! Returns the estimated value for the position */
-	TFreeVector	getEstimatedValue() const;
-	/*! Returns the estimated precision for the position */
-	TFreeVector		getEstimatedPrecision() const;
-	/*! Returns the covariance element for the position */
-	TFreeVector		getEstimatedCovariance() const;
-	/*! Returns the status of the X-position for calculation */
-	TALSCalcParameter::ELSStatus	getXStatus() const;
-	/*! Returns the status of the Y-position for calculation */
-	TALSCalcParameter::ELSStatus	getYStatus() const;
-	/*! Returns the status of the Z-position for calculation */
-	TALSCalcParameter::ELSStatus	getZStatus() const;
-	/*! Returns the unknown index of the X-position  */
-	MatrixIndex			getXIndex() const;
-	/*! Returns the unknown index of the Y-position  */
-	MatrixIndex			getYIndex() const;
-	/*! Returns the unknown index of the Z-position  */
-	MatrixIndex			getZIndex() const;
-	/*!Retutns the status (Cala, Vxy....)*/
-	TSpatialStatus::ESpatialStatus	getGlobalStatus() const;
+		/*! Returns the provisional value of the position vector */
+		TFreeVector	getProvisionalValue() const;
+		/*! Returns the correction value */
+		TFreeVector		getCorrection() const;
+		/*! Returns the estimated value for the position */
+		TFreeVector	getEstimatedValue() const;
+		/*! Returns the estimated precision for the position */
+		TFreeVector		getEstimatedPrecision() const;
+		/*! Returns the covariance element for the position */
+		TFreeVector		getEstimatedCovariance() const;
+		/*! Returns the status of the X-position for calculation */
+		TALSCalcParameter::ELSStatus	getXStatus() const;
+		/*! Returns the status of the Y-position for calculation */
+		TALSCalcParameter::ELSStatus	getYStatus() const;
+		/*! Returns the status of the Z-position for calculation */
+		TALSCalcParameter::ELSStatus	getZStatus() const;
+		/*! Returns the unknown index of the X-position  */
+		MatrixIndex			getXIndex() const;
+		/*! Returns the unknown index of the Y-position  */
+		MatrixIndex			getYIndex() const;
+		/*! Returns the unknown index of the Z-position  */
+		MatrixIndex			getZIndex() const;
+		/*!Retutns the status (Cala, Vxy....)*/
+		TSpatialStatus::ESpatialStatus	getGlobalStatus() const;
 	//@}
 
 	/*!@name Settings */
 	//@{
-	void	resetValues();
-	/*! Sets the provisional value of the position vector */
-	void	setProvisionalValue(TFreeVector pv);
-	/*! Sets the estimated value of the position vector */
-	void	setEstimatedValueVector(TFreeVector pv);
-	/*! Sets the correction value */
-	void	setCorrection(TFreeVector corr);
-	/*! Sets the estimated precision after calculation */
-	void	setEstimatedPrecision(TFreeVector ep);
-	/*! Sets the covariance after calculation */
-	void	setEstimatedCovariance(TFreeVector cov);
-	/*! Sets the status of the vector */
-	void	setStatus(struct LSParaStatus stat);
-	/*! Sets the position vector parameter's unknown index */
-	UEOIndices		setUIndex(UEOIndices ui);
+		void	resetValues();
+		/*! Sets the provisional value of the position vector */
+		void	setProvisionalValue(TFreeVector pv);
+		/*! Sets the estimated value of the position vector */
+		void	setEstimatedValueVector(TFreeVector pv);
+		/*! Sets the correction value */
+		void	setCorrection(TFreeVector corr);
+		/*! Sets the estimated precision after calculation */
+		void	setEstimatedPrecision(TFreeVector ep);
+		/*! Sets the covariance after calculation */
+		void	setEstimatedCovariance(TFreeVector cov);
+		/*! Sets the status of the vector */
+		void	setStatus(struct LSParaStatus stat);
+		/*! Sets the position vector parameter's unknown index */
+		UEOIndices		setUIndex(UEOIndices ui);
+		/*! re-initialises the parameters alterred during or after
+			a least squares calculation */
+		void	reInitialise();
 	//@}
 
 	
