@@ -57,6 +57,17 @@ TLSCalcScalarParam& TLSCalcScalarParam::operator =(const TLSCalcScalarParam& rig
 }
 */
 
+// re-initialises the parameters alterred during or after a least squares calculation
+void	TLSCalcScalarParam::reInitialise()
+{
+	fCorrection = 0.0; /*,TCoordSysFactory::k3DCartesian*/
+	fEstimatedValue = fProvisionalValue;
+	fEstimatedPrecision = 0.0; /*,TCoordSysFactory::k3DCartesian*/
+	fCovariance = 0.0; /*,TCoordSysFactory::k3DCartesian*/
+
+	return;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 // PUBLIC ACCESS METHODS
 ///////////////////////////////////////////////////////////////////////////
