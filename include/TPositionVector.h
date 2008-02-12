@@ -40,7 +40,7 @@ using namespace std;
 /*! \ingroup spatialobjects
 	@{*/
 
-//! 3D Vector used as a free vector
+//! 3D Vector used as a position vector
 class  TPositionVector : public TACoordSysVector//: public TObject  
 
 {
@@ -67,6 +67,8 @@ public:
 		
 	/*!\name operator Functions */
 	//@{
+		//!Equivalence Operator 
+		bool operator==( const TPositionVector& ) const;
 		
 		//!add a PositionVector  and FreeVector, return a PositionVector
 		TPositionVector operator+(const TFreeVector& );

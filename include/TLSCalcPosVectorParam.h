@@ -38,6 +38,16 @@ public:
 		virtual ~TLSCalcPosVectorParam();
 	//@}
 
+	/*!@name public member functions */
+	//@{
+		/*! Copy assignment operator */
+		TLSCalcPosVectorParam&	operator=(const TLSCalcPosVectorParam& right);
+
+		//! equivalence operator
+		bool	operator==(const TLSCalcPosVectorParam& ) const;
+
+	//@}
+			
 
 	/*!@name Access methods : Facade*/
 	//@{
@@ -83,14 +93,14 @@ public:
 		/*!Return the estimated Z sigma*/
 		TLength				getZSigma() const {return fEstimatedPrecision.getZ();}
 
-		/*!Return the estimated X covariance*/
-		TLength				getXCoVar() const {return fCovariance.getX();}
+		/*!Return the estimated XY covariance*/
+		TLength				getXYCovar() const {return fCovariance.getX();}
 
-		/*!Return the estimated Y covariance*/
-		TLength				getYCoVar() const {return fCovariance.getY();}
+		/*!Return the estimated YZ covariance*/
+		TLength				getYZCovar() const {return fCovariance.getY();}
 
-		/*!Return the estimated Z covariance*/
-		TLength				getZCoVar() const {return fCovariance.getZ();}
+		/*!Return the estimated XZ covariance*/
+		TLength				getXZCovar() const {return fCovariance.getZ();}
 
 		/*!Return the estimated X variance (mm2)*/
 		TDouble				getXVar() const {return TDouble (pow(getXSigma().getMMetresValue(), 2) );}
@@ -149,7 +159,7 @@ public:
 
 //		int					getId() const {return getName().getId();}
 
-		/*!Retutns the status (Cala, Vxy....)*/
+		/*!Returns the status (Cala, Vxy....)*/
 		TSpatialStatus::ESpatialStatus	getGlobalStatus() const;
 
 		string				getPosVecStatus() const;
@@ -193,9 +203,6 @@ protected:
 
 
 private:
-
-	/*! Copy assignment operator */
-	TLSCalcPosVectorParam&	operator=(const TLSCalcPosVectorParam& right);
 
 	TPositionVector			fProvisionalValue; /*!< position's provisional value */
 	TFreeVector				fCorrection; /*!< position's correction after calculation  */

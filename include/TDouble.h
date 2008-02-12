@@ -2,28 +2,11 @@
 /*!
 The TDouble class represents a real numerical value in double precision.
 
-The angle may be set with a numerival value in radians, gons or 
-DMS (sexagesimal), likewise the value may be obtained in any of 
-these units.
- 
-Angular values are normalised to ensure they lie be between
--2Pi and 2Pi radians (or the equivalent for other angular units).
-
-The class also provides access to a number of different constants
-through static member functions:
-
-    -Multiples of Pi;
-	-Factors for conversion between angle units.
-
-A set of algebraic operators for angles enable angles to be added,
-subtracted, and scaled. Trigonometrical operators enable the sine,
-cosine and tangent of the angle value to be obtained, and static 
-member functions provide ArcSine, ArcCosine, and ArcTangent operators.
  
 Patterns:
 
  
-Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
+Copyright 1999-2007, Mark Jones, CERN TS/SU. All rights reserved.
 */
 /////////////////////////////////////////////////////////
 

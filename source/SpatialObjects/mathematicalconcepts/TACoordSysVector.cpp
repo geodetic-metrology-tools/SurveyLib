@@ -33,6 +33,26 @@ TACoordSysVector::TACoordSysVector(): TANumericValue()
 	fCoordSys = 0;
 }
 
+
+//Equivalence Operator 
+bool TACoordSysVector::operator==( const TACoordSysVector& right)
+{
+	bool equal = false;
+
+	if(fVector[0] == right.fVector[0] 
+		&& fVector[1] == right.fVector[1] 
+		&& fVector[2] == right.fVector[2]
+		&& fCoordSys == right.fCoordSys
+			&& getStatus() == right.getStatus()
+		) 
+	{
+		equal = true;
+	}
+
+	return equal;
+}
+
+
 //////////////////////////////////////////////////////////////////////
 // Member Public Functions
 //////////////////////////////////////////////////////////////////////

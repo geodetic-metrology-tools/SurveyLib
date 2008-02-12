@@ -54,6 +54,8 @@ public:
 	
 	/**@name Member Public Functions */
 	//@{
+		//!Equivalence Operator 
+		bool operator==( const TACoordSysVector& ) const;
 
 		/*!test if two object have the same coordinate system
 		\return false if it s wrong*/

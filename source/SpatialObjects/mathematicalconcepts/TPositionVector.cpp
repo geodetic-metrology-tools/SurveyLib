@@ -74,6 +74,13 @@ TPositionVector::~TPositionVector()
 // operator Functions 
 //////////////////////////////////////////////////////////////////////
 
+//Equivalence Operator 
+bool TPositionVector::operator==( const TPositionVector& right)
+{
+	return TACoordSysVector::operator ==(right);
+}
+
+
 TPositionVector TPositionVector::operator+(const TFreeVector& second)
 {//!add a PositionVector  and FreeVector, return a PositionVector
 	TPositionVector resultat (getCoordSys());

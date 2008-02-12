@@ -54,7 +54,7 @@ public:
 	/*!@name Public member functions*/
 		//@{
 
-			void	writeName(const LSPosVecConstIter pt, int width);
+			void	writeName(LSPosVecConstIter pt, int width);
 
 			void	writeName(string ptName, int width);
 

@@ -63,6 +63,9 @@ public:
 
 	/*!\name operator Functions */
 	//@{
+		//!Equivalence Operator 
+		bool operator==( const TFreeVector& ) const;
+		
 		//!Add two FreeVector
 		virtual TFreeVector operator+(const TFreeVector&);
 	
@@ -83,7 +86,6 @@ public:
 
 		//!Copy Assignment Operator 
 		TFreeVector& operator=( const TFreeVector& );
-
 	//@}
 
 		/*!\name member function*/
