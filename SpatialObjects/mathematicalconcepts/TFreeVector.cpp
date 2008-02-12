@@ -77,6 +77,12 @@ TFreeVector::~TFreeVector()
 // operator Functions 
 //////////////////////////////////////////////////////////////////////
 
+//Equivalence Operator 
+bool TFreeVector::operator==( const TFreeVector& right)
+{
+	return TACoordSysVector::operator ==(right);
+}
+
 
 TFreeVector TFreeVector::operator+( const TFreeVector& second)
 {//!Add two FreeVector
@@ -164,6 +170,7 @@ TFreeVector&  TFreeVector::operator=( const TFreeVector& right)
 	setCoordSys(right.getCoordSys());
 	return *this;
 }
+
 
 //////////////////////////////////////////////////////////////////////
 // Member Functions

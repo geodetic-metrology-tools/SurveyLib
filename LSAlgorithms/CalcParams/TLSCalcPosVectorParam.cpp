@@ -60,13 +60,47 @@ TLSCalcPosVectorParam::~TLSCalcPosVectorParam()
 {// Destructor
 }
 
-/*
-// Copy assignement operator
-TLSCalcPosVectorParam& TLSCalcPosVectorParam::operator =(const TLSCalcPosVectorParam& right) {
 
-	//not implemented
+// Copy assignement operator
+TLSCalcPosVectorParam& TLSCalcPosVectorParam::operator =(const TLSCalcPosVectorParam& right) 
+{
+	if (this != &right)
+	{
+		fProvisionalValue = right.fProvisionalValue; 
+		fCorrection = right.fCorrection; 
+		fEstimatedValue = right.fEstimatedValue; 
+		fEstimatedPrecision = right.fEstimatedPrecision;
+		fCovariance = right.fCovariance;
+		fStatus = right.fStatus;
+		for (int i=0;i<3;i++)
+			fPosVectorIndices[i] = right.fPosVectorIndices[i]; 
+	}
+
+	return *this;
 }
-*/
+
+
+// equivalence operator
+bool	TLSCalcPosVectorParam::operator==(const TLSCalcPosVectorParam& right) const
+{
+	bool equal = false;
+
+	if(fProvisionalValue == right.fProvisionalValue 
+		&& fCorrection == right.fCorrection 
+		&& fEstimatedValue == right.fEstimatedValue
+		&& fEstimatedPrecision == right.fEstimatedPrecision
+		&& fCovariance == right.fCovariance
+		&& fStatus.first == right.fStatus.first
+		&& fStatus.second == right.fStatus.second
+		&& fStatus.third == right.fStatus.third
+		&& fPosVectorIndices == right.fPosVectorIndices
+		) 
+	{
+		equal = true;
+	}
+
+	return equal;
+}
 
 
 // re-initialises the parameters alterred during or after a least squares calculation
@@ -273,7 +307,7 @@ TLength		TLSCalcPosVectorParam::getNEstValue(const TRefSystemFactory::EGeoid	geo
 
 TLength		TLSCalcPosVectorParam::getErrorEllMajorAxis() const
 {
-	double vxy = getXCoVar().getMMetresValue();
+	double vxy = getXYCovar().getMMetresValue();
 	double sx2 = pow(getXSigma().getMMetresValue(), 2) ;
 	double sy2 = pow(getYSigma().getMMetresValue(), 2) ;
 	double gdAxe = (1.0/sqrt(2.0)) * sqrt( sx2 + sy2 + sqrt( pow((sy2 - sx2), 2) + (4.0 * vxy * vxy) ) );
@@ -286,7 +320,7 @@ TLength		TLSCalcPosVectorParam::getErrorEllMajorAxis() const
 	
 TLength		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
 {
-	double vxy = getXCoVar().getMMetresValue();
+	double vxy = getXYCovar().getMMetresValue();
 	double sx2 = pow(getXSigma().getMMetresValue(), 2) ;
 	double sy2 = pow(getYSigma().getMMetresValue(), 2) ;
 	double ptAxe = (1.0/sqrt(2.0)) * sqrt( sx2 + sy2 - sqrt( pow((sy2 - sx2), 2) + (4.0 * vxy *vxy) ) );
@@ -299,7 +333,7 @@ TLength		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
 	
 TAngle		TLSCalcPosVectorParam::getErrorEllGis() const
 {
-	double vxy = getXCoVar().getMMetresValue();
+	double vxy = getXYCovar().getMMetresValue();
 	double sx2 = pow(getXSigma().getMMetresValue(), 2) ;
 	double sy2 = pow(getYSigma().getMMetresValue(), 2) ;
 	TAngle gis (( 0.5) * TAngle::aTan2(2*vxy , (sy2 - sx2) ) );
