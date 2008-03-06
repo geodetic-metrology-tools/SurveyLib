@@ -15,6 +15,8 @@
 #include	"T3DMatrix.h"
 #include	"TScalar.h"
 #include	"TANumericValue.h"
+#include	"TDouble.h"
+
 ////////////////////////////////////////////////////////////////
 
 
@@ -35,7 +37,13 @@ TScalar::TScalar(): fValue(0.0)
 
 
 TScalar::TScalar(ScalarValue	value): fValue(value)
-{	// constructor taking a given length value in metres
+{	// constructor taking a given scalar value
+	setStatus( TANumericValue::kKnown );
+}
+
+TScalar::TScalar(TDouble&	value)
+{	// constructor taking a given scalar value as a TDouble
+	fValue = value.getValue();
 	setStatus( TANumericValue::kKnown );
 }
 
@@ -85,6 +93,15 @@ bool TScalar::operator==(const TScalar& right) const
 bool TScalar::operator<(const TScalar& right) const
 {//comparaison between two TScalar objects
 	if ( getValue() < right.getValue())
+		return true;
+	else
+		return false;
+}
+
+
+bool TScalar::operator>(const TScalar& right) const
+{//comparaison between two TScalar objects
+	if ( getValue() > right.getValue())
 		return true;
 	else
 		return false;

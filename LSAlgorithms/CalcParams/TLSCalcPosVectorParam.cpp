@@ -93,7 +93,9 @@ bool	TLSCalcPosVectorParam::operator==(const TLSCalcPosVectorParam& right) const
 		&& fStatus.first == right.fStatus.first
 		&& fStatus.second == right.fStatus.second
 		&& fStatus.third == right.fStatus.third
-		&& fPosVectorIndices == right.fPosVectorIndices
+		&& fPosVectorIndices[0] == right.fPosVectorIndices[0]
+		&& fPosVectorIndices[1] == right.fPosVectorIndices[1]
+		&& fPosVectorIndices[2] == right.fPosVectorIndices[2]
 		) 
 	{
 		equal = true;
