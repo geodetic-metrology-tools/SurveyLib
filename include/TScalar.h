@@ -26,6 +26,7 @@ Copyright 1999-2007, Mark Jones, CERN TS/SU. All rights reserved.
 
 class T3DMatrix;
 class TFreeVector;
+class TDouble;
 
 #include "TANumericValue.h"
 #include "TAngle.h"
@@ -54,6 +55,8 @@ public:
 	TScalar();
 	//! constructor taking a given Scalar value
 	TScalar(double ScalarValue);
+	//! constructor taking a given Scalar value
+	TScalar(TDouble& ScalarValue);
 	//! copy constructor
 	TScalar(const TScalar&);
 	//! Destructor
@@ -83,6 +86,13 @@ public:
 	the second object, else return false
 	*/
 	virtual bool operator<(const TScalar&) const;
+
+	/*!Greater than operator, comparaison between two TScalar objects
+	\param TScalar&, TLength object
+	\return true if the value of the first object is greater than the value of
+	the second object, else return false
+	*/
+	virtual bool operator>(const TScalar&) const;
 
 	//!add two TScalar objects
 	TScalar operator+(const TScalar &);

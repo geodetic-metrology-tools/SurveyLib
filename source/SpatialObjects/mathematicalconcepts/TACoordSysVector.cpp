@@ -35,7 +35,7 @@ TACoordSysVector::TACoordSysVector(): TANumericValue()
 
 
 //Equivalence Operator 
-bool TACoordSysVector::operator==( const TACoordSysVector& right)
+bool TACoordSysVector::operator==( const TACoordSysVector& right) const
 {
 	bool equal = false;
 

@@ -44,6 +44,7 @@ class		TDataParameters;
 
 #include	"TAngle.h"
 #include	"TLength.h"
+#include	"TScalar.h"
 #include	"TSpatialPosition.h"
 #include	"TAReferenceFrame.h"
 #include	"TPointFormat.h"
@@ -220,6 +221,9 @@ public:
 
 		/*!Output TDouble object*/
 		virtual TAStreamFormatter&	operator<<(const TDouble&);
+		
+		/*!Output TScalar object*/
+		virtual TAStreamFormatter&	operator<<(const TScalar&);
 		
 		/*!Output TObservationFormat*/
 		virtual	 TAStreamFormatter& operator<<(TObservationFormat& obsFormat);

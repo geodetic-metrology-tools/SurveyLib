@@ -75,7 +75,7 @@ TPositionVector::~TPositionVector()
 //////////////////////////////////////////////////////////////////////
 
 //Equivalence Operator 
-bool TPositionVector::operator==( const TPositionVector& right)
+bool TPositionVector::operator==( const TPositionVector& right) const
 {
 	return TACoordSysVector::operator ==(right);
 }

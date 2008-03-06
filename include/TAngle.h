@@ -119,6 +119,8 @@ public:
 	AngleValue getRadiansValue() const;
 	/*! Gets the angle value in gons */
 	AngleValue getGonsValue() const;
+	/*! Gets the angle value in CC (100 microgons) */
+	AngleValue getCCValue() const;
 	/*! Gets part of the angle value in degs */
 	Degrees	getDegreesValue() const;
 	/*! Gets part of the angle value in min */
@@ -231,6 +233,12 @@ inline AngleValue	TAngle::getGonsValue() const
 		{gValue=gValue+2.0*kPi;}
 	}
 	return (gValue * kRadiansToGons);
+}
+
+
+inline AngleValue	TAngle::getCCValue() const
+{	// get the CC (100 microgons) angular value for the angle
+	return (fValue * kRadiansToGons * 10000);
 }
 
 

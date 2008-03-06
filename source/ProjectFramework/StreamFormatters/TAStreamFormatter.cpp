@@ -538,9 +538,25 @@ TAStreamFormatter&	TAStreamFormatter::operator<<(const TPositionVector& pos)
 
 
 TAStreamFormatter  &TAStreamFormatter::operator<<( const TDouble& db )
-{//output a spatial point name to the text stream	
+{//output a double object to the text stream	
 
-	// extract the name of the point as a single string and output to the text stream
+	// extract the double object as a double value and output to the text stream
+	this->width(fWidth);
+	this->precision(fPrecision);
+	(*this)<<right;
+	if(db.getStatus() != TVNumericValue::kNull)
+	{
+		double d = db.getValue();
+		(*this)<<d;
+	}
+
+	return *this;
+}
+
+TAStreamFormatter  &TAStreamFormatter::operator<<( const TScalar& db )
+{//output a scalar object to the text stream	
+
+	// extract the scalar object as a double value and output to the text stream
 	this->width(fWidth);
 	this->precision(fPrecision);
 	(*this)<<right;

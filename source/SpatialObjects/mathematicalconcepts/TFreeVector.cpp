@@ -78,7 +78,7 @@ TFreeVector::~TFreeVector()
 //////////////////////////////////////////////////////////////////////
 
 //Equivalence Operator 
-bool TFreeVector::operator==( const TFreeVector& right)
+bool TFreeVector::operator==( const TFreeVector& right) const
 {
 	return TACoordSysVector::operator ==(right);
 }

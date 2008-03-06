@@ -53,7 +53,7 @@ public:
 	//! Default Constructor
 	TDouble();
 	//! constructor taking a given double value
-	explicit  TDouble(double DoubleValue);
+	TDouble(double DoubleValue);
 	//! copy constructor
 	TDouble(const TDouble&);
 	//! Destructor
