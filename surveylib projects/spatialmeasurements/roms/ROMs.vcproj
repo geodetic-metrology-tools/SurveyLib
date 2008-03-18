@@ -135,7 +135,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\..\..\..\lib\SpatialMeasurements\ROMs.lib"
+				OutputFile=".\..\..\..\debuglib\SpatialMeasurements\ROMs.lib"
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
