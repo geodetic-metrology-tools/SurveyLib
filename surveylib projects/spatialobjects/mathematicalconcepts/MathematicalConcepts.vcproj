@@ -87,7 +87,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\..\..\..\lib\SpatialObjects\MathematicalConcepts.lib"
+				OutputFile=".\..\..\..\debuglib\SpatialObjects\MathematicalConcepts.lib"
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -758,18 +758,6 @@
 				RelativePath="..\..\..\include\TVNumericValue.h">
 			</File>
 		</Filter>
-		<File
-			RelativePath="F:\software\nagc\include\nag.h">
-		</File>
-		<File
-			RelativePath="F:\software\nagc\include\nagf03.h">
-		</File>
-		<File
-			RelativePath="F:\software\nagc\include\nagf04.h">
-		</File>
-		<File
-			RelativePath="F:\software\nagc\include\nagf06.h">
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
