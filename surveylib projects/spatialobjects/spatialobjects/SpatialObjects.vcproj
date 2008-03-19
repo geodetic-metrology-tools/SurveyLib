@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="SpatialObjects"
+	Name="SpatialObjectsDLL"
 	SccProjectName="&lt;[SU source] SurveyLib|SurveyLib&gt;SurveyLib\SurveyLib Projects\SpatialObjects\SpatialObjs"
 	SccLocalPath=".">
 	<Platforms>
@@ -23,7 +23,7 @@
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SPATIALOBJECTS_EXPORTS;SU_MAKEDLL"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\Debug/SpatialObjects.pch"
@@ -101,7 +101,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\..\..\..\..\..\..\JSurveyLib.dll"
+				OutputFile=".\..\..\..\..\lib\SurveyLib.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ProgramDatabaseFile=".\Release/SurveyLib.pdb"
@@ -236,18 +236,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\SpatialObjects\SpatialObjects\SpatialObjFns.cpp">
-			</File>
-			<File
-				RelativePath=".\SpatialObjJFns.cpp">
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCLCompilerTool"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\source\SpatialObjects\SpatialObjects\test.def">
 				<FileConfiguration
 					Name="Release|Win32"
@@ -264,19 +252,16 @@
 				RelativePath="..\..\..\include\SpatialObjCFns.h">
 			</File>
 			<File
-				RelativePath="..\..\..\include\SpatialObjFns.h">
-			</File>
-			<File
-				RelativePath=".\SpatialObjJFns.h">
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\include\TGlobalDefs.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\TTANumericValue.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\TTLength.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\TTVNumericValue.h">
 			</File>
 		</Filter>
 		<Filter
@@ -284,7 +269,7 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 		</Filter>
 		<File
-			RelativePath="..\..\..\..\lib\nagc.lib">
+			RelativePath="H:\software\nagc\dll\nagc.lib">
 		</File>
 		<File
 			RelativePath="..\..\..\..\lib\SpatialObjectsLibrary.lib">
