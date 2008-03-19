@@ -37,6 +37,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile=".\..\..\..\..\lib\LSAlgorithmsLibrary.lib"
+				AdditionalLibraryDirectories=""
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -87,6 +88,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile=".\..\..\..\..\lib\LSAlgorithmsLibrary.lib"
+				AdditionalLibraryDirectories=""
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -171,10 +173,10 @@
 			Filter="h;hpp;hxx;hm;inl;fi;fd">
 		</Filter>
 		<File
-			RelativePath="..\..\..\lib\LSAlgorithms\CalcElements.lib">
+			RelativePath="..\..\..\lib\lsalgorithms\CalcElements.lib">
 		</File>
 		<File
-			RelativePath="..\..\..\lib\LSAlgorithms\CalcParams.lib">
+			RelativePath="..\..\..\lib\lsalgorithms\CalcParams.lib">
 		</File>
 	</Files>
 	<Globals>

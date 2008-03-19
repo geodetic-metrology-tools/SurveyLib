@@ -137,7 +137,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\..\..\..\lib\SpatialObjects\AffineTransformations.lib"
+				OutputFile=".\..\..\..\debuglib\SpatialObjects\AffineTransformations.lib"
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>

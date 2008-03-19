@@ -136,6 +136,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile=".\..\..\..\..\lib\SpatialMeasurementsLibrary.lib"
+				AdditionalLibraryDirectories=""
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -171,19 +172,19 @@
 			Filter="h;hpp;hxx;hm;inl;fi;fd">
 		</Filter>
 		<File
-			RelativePath="..\..\..\lib\SpatialMeasurements\ConstraintMeasurements.lib">
+			RelativePath="..\..\..\lib\spatialmeasurements\ConstraintMeasurements.lib">
 		</File>
 		<File
-			RelativePath="..\..\..\lib\SpatialMeasurements\InstrumentStations.lib">
+			RelativePath="..\..\..\lib\spatialmeasurements\InstrumentStations.lib">
 		</File>
 		<File
-			RelativePath="..\..\..\lib\SpatialMeasurements\MeasurementConstants.lib">
+			RelativePath="..\..\..\lib\spatialmeasurements\MeasurementConstants.lib">
 		</File>
 		<File
-			RelativePath="..\..\..\lib\SpatialMeasurements\Measurements.lib">
+			RelativePath="..\..\..\lib\spatialmeasurements\Measurements.lib">
 		</File>
 		<File
-			RelativePath="..\..\..\lib\SpatialMeasurements\ROMs.lib">
+			RelativePath="..\..\..\lib\spatialmeasurements\ROMs.lib">
 		</File>
 	</Files>
 	<Globals>
