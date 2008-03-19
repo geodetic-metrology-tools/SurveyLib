@@ -137,7 +137,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\..\..\..\lib\SpatialObjects\SpatialObjs.lib"
+				OutputFile=".\..\..\..\debuglib\SpatialObjects\SpatialObjs.lib"
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
