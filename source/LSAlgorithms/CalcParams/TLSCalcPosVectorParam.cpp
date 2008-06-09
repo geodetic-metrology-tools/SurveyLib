@@ -66,6 +66,7 @@ TLSCalcPosVectorParam& TLSCalcPosVectorParam::operator =(const TLSCalcPosVectorP
 {
 	if (this != &right)
 	{
+		this->setName( right.getName() );
 		fProvisionalValue = right.fProvisionalValue; 
 		fCorrection = right.fCorrection; 
 		fEstimatedValue = right.fEstimatedValue; 
@@ -85,7 +86,8 @@ bool	TLSCalcPosVectorParam::operator==(const TLSCalcPosVectorParam& right) const
 {
 	bool equal = false;
 
-	if(fProvisionalValue == right.fProvisionalValue 
+	if( this->getName() == right.getName()
+		&& fProvisionalValue == right.fProvisionalValue 
 		&& fCorrection == right.fCorrection 
 		&& fEstimatedValue == right.fEstimatedValue
 		&& fEstimatedPrecision == right.fEstimatedPrecision

@@ -75,14 +75,8 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 		delete fMisclosureVector;
 	
 		//debug
-/*		cout << "Before 1rst design mtrx dim" << endl;
-		cout << "Number of doubles to be allocated : " << endl;
-		cout << equations << " * " << unknowns << " = " << equations*unknowns << endl; */
 		fFirstDesignMtrx = new TMatrix(equations, unknowns);
-		//fFirstDesignMtrx = new TMatrix(5837, 5837);
 		*fFirstDesignMtrx = 0.0;
-		//debug
-//		cout << "After 1rst design mtrx dim" << endl;
 
 	
 		fSecondDesignMtrx = new TMatrix(equations, observations /*+ cnstrObs*/);
@@ -94,13 +88,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 		fWeightMtrx = new TMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
 		*fWeightMtrx = 0.0;
 	}
-
-	/***DEBUG***/
-/*	cout << "\nMatrices dimensioned : \n";
-	cout << "unk : " << unknowns << '\n';
-	cout << "obs : " << observations << '\n';
-	cout << "eqn : " << equations << '\n'; */
-
+	return;
 }
 
 
@@ -249,12 +237,6 @@ bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, double c
 ////////////////////////////////////////////////////////////////////////////////
 //ACCESS METHOD FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
-/*double TLSInputMatrices::getS0APrioriScaleFactor() const
-{//gets the scale factor for the S0 a priori
-	return fS0APrioriScaleFactor;
-}*/
-
-
 const TMatrix& TLSInputMatrices::getFirstDgnMtrx() const
 {//returns a reference to the first dgn matrix
 	return *fFirstDesignMtrx;

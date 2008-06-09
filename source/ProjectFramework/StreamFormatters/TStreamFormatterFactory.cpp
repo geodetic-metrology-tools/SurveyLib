@@ -67,20 +67,20 @@ TStreamFormatterFactory *TStreamFormatterFactory::instance()
 
 TAStreamFormatter *TStreamFormatterFactory::getFormatter(TADataSet* ds, TAStreamFormatter::ETextFormat format, string seperator) 
 {	// Function to obtain a pointer instance of the requested text stream formatter
-	
-	int coordWidth = ds->getCoordPrecision()+6;
+	int nameWidth = max(ds->getPointNameWidth(), 10);
+	int coordWidth = max(ds->getCoordPrecision()+7, 10);
+	int coordWidthRes= max(coordWidth-6, 7);
 
 	int obsPrecision = ds->getLengthPrecision();
 	if(obsPrecision < (ds->getAnglePrecision()))
 	{
 		obsPrecision = ds->getAnglePrecision();
 	}
-	int obsWidth = obsPrecision + 5;
-	int coordWidthRes=7;
-	int obsWidthRes=7;
+	int obsWidth = max(obsPrecision + 6, 7);
+	int obsWidthRes= max(obsWidth-5, 7);
 
-	TPointFormat pointFormat (ds->getPointNameWidth(), coordWidth, ds->getCoordPrecision(),coordWidthRes,ds->getCoordPrecision(),0, TSpatialStatus::kCala);
-	TObservationFormat obsFormat (ds->getPointNameWidth(), obsWidth, ds->getLengthPrecision(), ds->getAnglePrecision(), obsWidthRes, ds->getLengthPrecision(), ds->getAnglePrecision(), 0);
+	TPointFormat pointFormat (nameWidth, coordWidth, ds->getCoordPrecision(),coordWidthRes,ds->getCoordPrecision(),0, TSpatialStatus::kCala);
+	TObservationFormat obsFormat (nameWidth, obsWidth, ds->getLengthPrecision(), ds->getAnglePrecision(), obsWidthRes, ds->getLengthPrecision(), ds->getAnglePrecision(), 0);
 
 	TAStreamFormatter *formatter = 0;
 

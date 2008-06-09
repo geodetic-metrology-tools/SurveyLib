@@ -2,7 +2,7 @@
 // TAConverter
 /*!
 Write Observations for an output LGC file
-and sends the appropriate messages
+and send the appropriate messages
 
 Patterns:
 

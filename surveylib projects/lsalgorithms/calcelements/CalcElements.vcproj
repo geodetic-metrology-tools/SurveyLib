@@ -80,7 +80,7 @@
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"/>
+				DebugInformationFormat="1"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -313,6 +313,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TLSResultsMatrices.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\UEOIndices.h">
 			</File>
 		</Filter>
 	</Files>

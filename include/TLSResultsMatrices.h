@@ -32,22 +32,21 @@ public:
 
 	/*!@name Constructors / Destructor*/
 	//@{
-	//!Default constructor
-	TLSResultsMatrices();
-	//!Constructor
-	/*!The passed pointers are stored. The pointed to matrices musn't be deleted
-	@param solut a pointer to the solution vector
-	@param solut a pointer to the residuals vector
-	@param sigm2 the estimated square of the sigma zero
-	@param unkcov a pointer to the unknowns covariance matrix */
-	TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, double sigm2, TMatrix* unkcov);
+	TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations);
 
-	TLSResultsMatrices::TLSResultsMatrices(int solut, int resid, int unkcov);
-	
 	//!Constructor
 	/*!@param ueoi an object holding the number of unknowns, equations and observations,
 	thus enabling the dimensioning of the matrices (set to zero)*/
 	TLSResultsMatrices(UEOIndices ueoi);
+
+	//!Constructor
+	/*	!@param ueoi an object holding the number of unknowns, equations and observations,
+		thus enabling the dimensioning of the matrices (set to zero)
+		!@param numConstraints indicates the number of constraints added for a free network
+		calculation
+	*/
+	TLSResultsMatrices(UEOIndices ueoi, int numConstraints);
+
 	//!Destructor
 	virtual ~TLSResultsMatrices();
 	//@}
@@ -99,6 +98,19 @@ public:
 	TColumnVector	computeVarObs(const TMatrix& A);
 
 private:
+	//mj2008
+	//!Default constructor
+	TLSResultsMatrices();
+	//!Constructor
+	/*!The passed pointers are stored. The pointed to matrices musn't be deleted
+	@param solut a pointer to the solution vector
+	@param solut a pointer to the residuals vector
+	@param sigm2 the estimated square of the sigma zero
+	@param unkcov a pointer to the unknowns covariance matrix */
+	TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, double sigm2, TMatrix* unkcov);
+	TLSResultsMatrices::TLSResultsMatrices(int solut, int resid, int unkcov);
+	//mj
+	
 
 
 	TColumnVector*	fSolutionVctr; /*!< vector (u x 1) containing the calculated parameters */

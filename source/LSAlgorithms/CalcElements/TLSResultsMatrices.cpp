@@ -31,6 +31,16 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 }
 
 
+TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi, int numConstraints)
+{// constructor dimensioning the matrices
+	fSolutionVctr = new TColumnVector(ueoi.UIndex);
+	fResidualsVctr = new TColumnVector(ueoi.OIndex);
+	fSigmaZero2 = 0.0;
+	fUnknownsCovarianceMtrx = new TMatrix(ueoi.UIndex + numConstraints, ueoi.UIndex + numConstraints);
+	fS0APosterioriVariances = false;
+}
+
+
 TLSResultsMatrices::TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, 
 									   double sigm2, TMatrix* unkcov)
 {// constructor setting the results
@@ -43,6 +53,16 @@ TLSResultsMatrices::TLSResultsMatrices(TColumnVector* solut, TColumnVector* resi
 	fS0APosterioriVariances = false;
 }
 
+
+TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations)
+{// constructor creating the results matrices with the input dimensions
+
+	fSolutionVctr = new TColumnVector (numUnknowns);
+	fResidualsVctr = new TColumnVector (numEquations);
+	fSigmaZero2 = 0.0;
+	fUnknownsCovarianceMtrx = new TMatrix(numUnknowns,numUnknowns);
+	fS0APosterioriVariances = false;
+}
 
 
 TLSResultsMatrices::TLSResultsMatrices(int solut, int resid, 

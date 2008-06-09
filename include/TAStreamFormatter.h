@@ -8,7 +8,7 @@
 	Maintains a reference to the C++ Standard Library 
 	the decorator pattern.
 	
-	Copyright 2002, CERN, EST/SU. All rights reserved.
+    Copyright 2002-2008, M. Jones  CERN, TS/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 
@@ -313,6 +313,10 @@ public:
 	string				getError() const;
 	void				setError(const string);
 
+	string				getWarning() const;
+	void				initWarning();
+	void				addWarning(const string);
+
 	/*! for files which have no observations' values to read */
 	virtual void  setNoObsToRead();
 	virtual bool hasNoObsToRead() const;
@@ -367,6 +371,7 @@ protected:
 	const char*								fName;
 	EIOType									fIOType;
 	string									fError;
+	string									fWarning;
 
 	TAngle::EUnits							fAngles;
 	TAngleFilter*							fAngFilter;

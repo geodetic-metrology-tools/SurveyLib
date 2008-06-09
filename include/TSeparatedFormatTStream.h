@@ -1,12 +1,14 @@
 // TSeparatedFormatTStream.h
 //
 //
-// Concrete class defining the old LGC file syntax,
-//
-// Patterns:
-// A concrete decorator class of a QTextStream.
-// 
-// Copyright 1999,2000 CERN, EST/SU. All rights reserved.
+/*! 
+ Concrete class defining a separated stream text stream formatter
+
+ Patterns:
+ A concrete decorator class of a TAStreamFormatter.
+ 
+ Copyright 1999-2008 M.Jones, CERN, EST/SU. All rights reserved.
+*/
 //////////////////////////////////////////////////////////////////////
 
 

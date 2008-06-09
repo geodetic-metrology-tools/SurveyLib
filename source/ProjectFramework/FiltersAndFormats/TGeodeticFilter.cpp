@@ -156,24 +156,11 @@ void	TGeodeticFilter::output(TAStreamFormatter& oStream, const TSpatialPosition&
 {	// function to put x-, y-, and z-coordinates to a Stream object.
 	// Gets the coordinate values from a TSpatialPosition object
 
-	//get the width from the text stream's TPointFormat
-	int width;
-	width = oStream.getPointFormat()->getCoordWidth();
-
 	// sets the stream's width and precision and outputs the coordinates
 	TPositionVector pv (TCoordSysFactory::kGeodetic);
 	pv=position.getCoordinates(TCoordSysFactory::kGeodetic);
 	
-/*	if (pv.getStatus()!= TANumericValue::kNull)
-	{
-		string sep =oStream.getSeparator();
-		oStream <<pv.getPhiEllipsoid()<<sep<<pv.getLambdaEllipsoid()<<sep<<pv.getH();
-	}
-	else{
-		for (int i=0; i<=3*width; i++)
-			oStream << " ";
-	}*/
-	output( oStream,  pv);
+	this->output( oStream,  pv);
 
 	return;
 }
@@ -268,14 +255,11 @@ void	TGeodeticFilter::output(TAStreamFormatter& oStream, const TPositionVector& 
 {	// function to put x-, y-, and z-coordinates to a Stream object.
 	// Gets the coordinate values from a TPositionVector object
 
-	//get the width from the text stream's TPointFormat
-	int width;
-	width = oStream.getPointFormat()->getCoordWidth();
+	string sep =oStream.getSeparator();
 
 	// sets the stream's width and precision and outputs the coordinates
 	if (pv.getStatus()!= TANumericValue::kNull)
 	{
-		string sep =oStream.getSeparator();
 		int precision = oStream.getPrecisionFormat();
 
 		if(	oStream.getAngleUnits() == TAngle::kDMS && 
@@ -286,17 +270,24 @@ void	TGeodeticFilter::output(TAStreamFormatter& oStream, const TPositionVector& 
 		else if (	oStream.getAngleUnits() == TAngle::kGons && 
 					oStream.getCoordSys() == TCoordSysFactory::kGeodetic)
 		{
-			oStream.setPrecisionFormat(precision +5);
+			oStream.setPrecisionFormat(precision + 5);
 		}
 
-		oStream<<pv.getPhiEllipsoid()<<sep<<pv.getLambdaEllipsoid()<<sep;
+		oStream<<pv.getPhiEllipsoid()<<sep<<pv.getLambdaEllipsoid() << sep;
 		
 		oStream.setPrecisionFormat(precision);
-		oStream<<pv.getH();
+		oStream<<pv.getH() << sep;
 	}
-	else{
-		for (int i=0; i<=3*width; i++)
-			oStream << " ";
+	else
+	{
+		// get the width from the text stream's TPointFormat
+		int width= oStream.getPointFormat()->getCoordWidth();
+
+		for (int i=0; i<3; i++)
+		{
+			oStream.width(width);
+			oStream << " " << sep;
+		}
 	}
 
 	return;

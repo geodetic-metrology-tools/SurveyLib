@@ -147,25 +147,12 @@ void	T3DCartesianFilter::output(TAStreamFormatter& oStream, const TSpatialPositi
 {	// function to put x-, y-, and z-coordinates to a stream object.
 	// Gets the coordinate values from a TSpatialPosition object
 	
-	
-	// get the width from the text stream's TPointFormat
-	int width;
-	width = oStream.getPointFormat()->getCoordWidth();
-
 	//outputs the coordinates
 	TPositionVector pv (TCoordSysFactory::k3DCartesian);
 	pv=position.getCoordinates(TCoordSysFactory::k3DCartesian);
 	
-	if (pv.getStatus()!= TANumericValue::kNull)
-	{
-		string sep =oStream.getSeparator();
-		oStream<<pv.getX()<<sep<<pv.getY()<<sep<<pv.getZ();
-	}
-	else
-	{
-		for (int i=0; i<=3*width; i++)
-			oStream << " ";
-	}
+	this->output( oStream,  pv);
+
 	return;
 }
 
@@ -250,22 +237,25 @@ void	T3DCartesianFilter::output(TAStreamFormatter& oStream, const TPositionVecto
 {	// function to put x-, y-, and z-coordinates to a stream object.
 	// Gets the coordinate values from a TPositionVector object
 	
-	
-	// get the width from the text stream's TPointFormat
-	int width;
-	width = oStream.getWidthFormat();
+	string sep =oStream.getSeparator();
 
 	//outputs the coordinates
 	if (pv.getStatus()!= TANumericValue::kNull)
 	{
-		string sep =oStream.getSeparator();
-		oStream<<pv.getX()<<sep<<pv.getY()<<sep<<pv.getZ();
+		oStream<<pv.getX()<<sep<<pv.getY()<<sep<<pv.getZ()<<sep;
 	}
 	else
 	{
-		for (int i=0; i<=3*width; i++)
-			oStream << " ";
+		// get the width from the text stream's TPointFormat
+		int width= oStream.getPointFormat()->getCoordWidth();
+
+		for (int i=0; i<3; i++)
+		{
+			oStream.width(width);
+			oStream << " " << sep;
+		}
 	}
+
 	return;
 }
 
