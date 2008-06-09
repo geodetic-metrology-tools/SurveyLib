@@ -43,8 +43,8 @@
 TADataSet::TADataSet() 
 {// default constructor
 	fSaved = true;
-	fPunchSeparator = "";
-	fResultsSeparator = "   ";
+	fPunchSeparator = " ";
+	fResultsSeparator = " ";
 	fResultsFileFormat = TAStreamFormatter::kColumnFormat;
 	fPunchFileFormat = TAStreamFormatter::kColumnFormat;
 	fLineSpacing = true;

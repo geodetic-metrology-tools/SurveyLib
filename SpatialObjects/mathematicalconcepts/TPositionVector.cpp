@@ -59,8 +59,8 @@ TPositionVector::TPositionVector(  const TPositionVector& original )
 	{
 		setX(i, original.getX(i));
 	}
-setCoordSys(original.getCoordSys());
-setStatus(original.getStatus());
+	setCoordSys(original.getCoordSys());
+	setStatus(original.getStatus());
 }
 
 

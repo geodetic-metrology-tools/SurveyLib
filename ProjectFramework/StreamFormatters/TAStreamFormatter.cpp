@@ -9,7 +9,7 @@
 // the decorator pattern.
 // 
 //
-// Copyright 2002, CERN, EST/SU. All rights reserved.
+// Copyright 2002-2008, M. Jones  CERN, TS/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////
@@ -73,6 +73,7 @@ TAStreamFormatter::TAStreamFormatter(TDataParameters& dp)
 	fRefFrame = 0;
 	fLineGap = true;
 	fNonSpaceSeparator = "";
+	fSeparator = "";
 }
 
 
@@ -92,6 +93,7 @@ TAStreamFormatter::TAStreamFormatter(const string& input, TDataParameters& dp)
 	fRefFrame = 0;
 	fLineGap = true;
 	fNonSpaceSeparator = "";
+	fSeparator = "";
 }
 
 
@@ -132,6 +134,7 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds)
 	fRefFrame = 0;
 	fLineGap = true;
 	fNonSpaceSeparator = "";
+	fSeparator = "";
 }
 
 
@@ -175,6 +178,7 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds, TPointFormat& pf
 	fRefFrame = 0;
 	fLineGap = true;
 	fNonSpaceSeparator = "";
+	fSeparator = "";
 }
 
 
@@ -220,6 +224,7 @@ TAStreamFormatter::TAStreamFormatter(const EIOType io, TADataSet& ds, const TPoi
 	fRefFrame = 0;
 	fLineGap = true;
 	fNonSpaceSeparator = "";
+	fSeparator = "";
 }
 
 
@@ -976,7 +981,29 @@ string	TAStreamFormatter::getError() const
 
 void TAStreamFormatter::setError(const string error)
 {
-	fError= error;
+	fError = error;
+	return;
+}
+
+
+string	TAStreamFormatter::getWarning() const
+{
+	return fWarning;
+}
+
+
+void	TAStreamFormatter::initWarning()
+{
+	fWarning = "";
+	return;
+}
+
+
+void TAStreamFormatter::addWarning(const string warning)
+{
+	if (fWarning != "")
+		fWarning += "\n                    ";
+	fWarning += warning;
 	return;
 }
 
@@ -1192,14 +1219,13 @@ TSpatialPositionFilter *TAStreamFormatter::getPositionFilter(TCoordSysFactory::E
 
 string TAStreamFormatter::getSeparator() const
 {//returns the string used to separate fields
-	string defaultSep;
-	defaultSep = "";
-	return defaultSep;
+	return fSeparator;
 }
 
 
 void TAStreamFormatter::setSeparator(const string& sep)
-{//returns the string used to separate fields
+{//sets the string used to separate fields
+	fSeparator = sep;
 	return;
 }
 //////////////////////////////////////////////////////////////////////
@@ -1236,8 +1262,8 @@ void	TAStreamFormatter::writeString(const int width, const string data)
 	//(*fStream)<<" ";
 
 	this->width(width);
-	(*this)<<right<<data;
-	(*this)<<getSeparator();
+	(*this) << right << data;
+	(*this) << getSeparator();
 	return;
 
 }
@@ -1245,7 +1271,7 @@ void	TAStreamFormatter::writeString(const int width, const string data)
 void	TAStreamFormatter::writeStringLeft(const int width, const string data)
 {
 	this->width(width);
-	(*this)<<left<<data<<right<<fSeparator;
+	(*this) << left << data << right << getSeparator();
 	return;
 }
 
@@ -1253,14 +1279,14 @@ void	TAStreamFormatter::writeDouble(const int width, const int pres, const doubl
 {
 	this->width(width);
 	this->precision(pres);
-	(*this)<<right<<data<<fSeparator;
+	(*this) << right << data << getSeparator();
 	return;
 }
 
 void	TAStreamFormatter::writeInteger(const int width, const int data)
 {
 	this->width(width);
-	(*this)<<right<<data;
+	(*this) << right << data << getSeparator();
 	return;
 }
 

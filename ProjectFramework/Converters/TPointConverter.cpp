@@ -78,7 +78,7 @@ void	TPointConverter::writeName(LSPosVecConstIter pt, int width)
 
 	//Write point name
 	stream->width(width);
-	(*stream)<<left<<(pt->getName())<<right;
+	(*stream)<<left<<(pt->getName())<<right << this->getSeparator();
 	return;
 }
 
@@ -89,7 +89,7 @@ void	TPointConverter::writeName(string ptName, int width)
 
 	//Write point name
 	stream->width(width);
-	(*stream)<<left<<(ptName)<<right;
+	(*stream)<<left<<(ptName)<<right << this->getSeparator();
 	return;
 }
 
@@ -110,9 +110,8 @@ void	TPointConverter::writeXYZandH(LSPosVecConstIter pt)
 	//write H if point's refrence frame is CCS
 	if(!isInLocalSystem())
 	{
-		(*stream)<<(separator);
 		stream->width(coordWidth);
-		(*stream)<<(pt->getHEstValue(fRefFrame));
+		(*stream)<<(pt->getHEstValue(fRefFrame)) << separator;
 	}
 
 	return;
@@ -143,7 +142,7 @@ void	TPointConverter::writeXYZandH(	const int width,
 	//write H if point's refrence frame is CCS
 	if(!isInLocalSystem())
 	{
-		(*stream)<<(pt->getHEstValue(fRefFrame));
+		(*stream)<<(pt->getHEstValue(fRefFrame)) << separator;
 	}
 
 	return;
@@ -188,10 +187,15 @@ void	TPointConverter::writeXYH(	const int width,
 	(*stream)<<pt->getYEstValue()<<separator;
 
 	//write H if point's refrence frame is CCS
-	if(!isInLocalSystem())
-	{(*stream)<<(pt->getHEstValue(fRefFrame));}
+	if(!isInLocalSystem()) 
+	{ 
+		(*stream)<<(pt->getHEstValue(fRefFrame))<<separator; 
+	}
 	else
-	{writeString(width, " ");}
+	{
+		writeString(width, " ");
+		(*stream) << separator; 
+	}
 	return;
 }
 
@@ -218,7 +222,7 @@ void	TPointConverter::writeXYZ(	const int width,
 	(*stream)<<pt->getYEstValue()<<separator;
 
 	//write Z
-	{(*stream)<<pt->getZEstValue();}
+	(*stream)<<pt->getZEstValue() << separator;
 	return;
 }
 
@@ -242,7 +246,7 @@ void	TPointConverter::writeXYZ(	const int width,
 	(*stream)<<pt.getY()<<separator;
 
 	//write Z
-	{(*stream)<<pt.getZ();}
+	(*stream)<<pt.getZ() << separator;
 	return;
 }
 
@@ -267,10 +271,10 @@ void	TPointConverter::write3Coordinates(	const int width,
 
 	//write Z
 	if(pt.getCoordSys() == TCoordSysFactory::k3DCartesian)
-	{(*stream)<<pt.getZ();}
+		(*stream)<<pt.getZ() << separator;
 	
 	if(pt.getCoordSys() == TCoordSysFactory::k2DPlusH)
-	{(*stream)<<pt.getH();}
+		(*stream)<<pt.getH() << separator;
 
 	return;
 }
@@ -319,23 +323,30 @@ void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus
 
 	//write X
 	if(status == TSpatialStatus::kVx || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVxz)
-		{(*stream)<<(Xparam)<<(separator);	}
-		else
-		{writeString(width, Dparam);
-			(*stream)<<(separator);}
+		(*stream)<<(Xparam);	
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
+
 
 	//write Y
 	if(status == TSpatialStatus::kVy || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVyz)
-		{(*stream)<<(Yparam)<<(separator);}
-		else
-		{writeString(width, Dparam);
-			(*stream)<<(separator);}
+		(*stream)<<(Yparam);
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
+
 
 	//write Z
 	if(status == TSpatialStatus::kVz || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxz  || status == TSpatialStatus::kVyz)
-		{(*stream)<<(Zparam);}
-		else
-		{writeString(width, Dparam);}
+		(*stream)<<(Zparam);
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
+
 	return;
 }
 
@@ -357,23 +368,30 @@ void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus
 
 	//write X
 	if(status == TSpatialStatus::kVx || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVxz)
-		{(*stream)<<(Xparam)<<(separator);	}
-		else
-		{writeString(width, Dparam);
-			(*stream)<<(separator);}
+		(*stream)<<(Xparam);	
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
+
 
 	//write Y
 	if(status == TSpatialStatus::kVy || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVyz)
-		{(*stream)<<(Yparam)<<(separator);}
-		else
-		{writeString(width, Dparam);
-			(*stream)<<(separator);}
+		(*stream)<<(Yparam);
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
+
 
 	//write Z
 	if(status == TSpatialStatus::kVz || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxz  || status == TSpatialStatus::kVyz)
-		{(*stream)<<(Zparam);}
-		else
-		{writeString(width, Dparam);}
+		(*stream)<<(Zparam);
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
+
 	return;
 }
 

@@ -1,11 +1,11 @@
 // TSeparatedFormatTStream.cpp
 //
-// Concrete class defining the old LGC file syntax,
+// Concrete class defining a separated stream text stream formatter
 //
 // Patterns:
-// A concrete decorator class of a QTextStream.
+// A concrete decorator class of a TAStreamFormatter.
 // 
-// Copyright 1999,2000 CERN, EST/SU. All rights reserved.
+// Copyright 1999-2008 M.Jones, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 
@@ -49,16 +49,13 @@ TSeparatedFormatTStream::TSeparatedFormatTStream(TDataParameters& dp) : TAStream
 {
 		fSeparator ="   ";
 		fNoObsToRead = false;
-		
 }
 
 
 TSeparatedFormatTStream::TSeparatedFormatTStream(const string& str, TDataParameters& dp) : TAStreamFormatter (str, dp)
 {
-
 		fSeparator ="   ";
 		fNoObsToRead = false;
-
 }
 
 
@@ -66,7 +63,6 @@ TSeparatedFormatTStream::TSeparatedFormatTStream(TAStreamFormatter::EIOType io, 
 {
 		fSeparator ="   ";
 		fNoObsToRead = false;
-	
 }
 
 TSeparatedFormatTStream::TSeparatedFormatTStream(TAStreamFormatter::EIOType io, TADataSet& ds, TPointFormat& pf) : TAStreamFormatter (io, ds, pf)
@@ -99,7 +95,21 @@ TAStreamFormatter  &TSeparatedFormatTStream::operator>>( TSpatialPoint &point )
 	
 	TSpatialPointName  name;
 	TSpatialPosition*	position = new TSpatialPosition(fRefFrame);
+	double dist=-1;
+	int id=-1;
+	string comment="";
+	string comeol="";
+	string comdb="";
+
 	
+	// make sure that the spatial position object was created ok
+	// if not (position = 0), set an error message and return
+	if( position == 0 )
+	{
+		this->setError("Failed to create Spatial Position object");
+		return *this;
+	}
+
 	this->skipCommentLines();
 
 	// get the point name
@@ -111,49 +121,59 @@ TAStreamFormatter  &TSeparatedFormatTStream::operator>>( TSpatialPoint &point )
 		this->TAStreamFormatter::operator>>(*position);
 	}
 	
-	double dist=-1;
-	int id=-1;
-	string comment="";
-	string comeol="";
-	string comdb="";
-	//crashes here !?!?!
-
 	this->skipWhiteSpace();
 
 	if(this->getError() == "" && !this->atEndCom() && this->peek()=='$')
-	{
-		
+	{	
 		this->TAStreamFormatter::readChar();//read the char $
 
-		if(this->getError() == "" && this->peek() != ' ')
-		{//read distance just after $
-			this->TAStreamFormatter::operator>>(dist);
-			
+		//if no error encountered and the next character is not a blank
+		// read the cumulative distance for the point
+		if(this->getError() == "")
+		{
+			// see if the next character is a blank
+			if( this->peek() != ' ' )
+				//read distance just after $
+				this->TAStreamFormatter::operator>>(dist);
+			else
+				// set warning that the cumulative distance is missing
+				this->addWarning("Point Cumulative Distance value missing");
+
+			// if there is a problem reading the cumulative distance set a warning message
 			if (this->fail() == true)
-				this->setError("Failed Reading dist value.");
+			{
+				this->addWarning("Failed to read Cumulative Distance value");
+				// clear the failbit
+				this->clear();
+			}	
 		}
-				
+		
+		// read the point dB ID
 		if (this->getError() == "")
 		{	
 			this->skipWhiteSpace();
 			this->TAStreamFormatter::operator>>(id);
 			if (this->fail() == true)
-				this->setError("Failed Reading ID value.");
+			{
+				this->addWarning("Failed to read database ID");
+				// clear the failbit
+				this->clear();
+			}
 		}
 	
-		while(!this->atEndCom() && this->getError() == "" && !(this->TAStreamFormatter::peek()=='\n') && !(this->TAStreamFormatter::peek()=='%'))
+		while(!this->atEndCom() && this->getError() == "" && !(this->TAStreamFormatter::peek()=='\n') 
+				&& !(this->TAStreamFormatter::peek()=='%' || this->peek()=='#'))
 		{//read data base comments until the end of line or an end line comments
 			
 			this->TAStreamFormatter::operator>>(comment);
 			comdb += comment+ " ";
-			if (this->fail() == true)
-				this->setError("Failed reading comment 1 at " + comdb);
 
 			this->skipWhiteSpace();
 		}
 	
 	}
 
+	// read any additional comments at the end of the line
 	if(this->getError() == "" && (this->peek()=='%' || this->peek()=='#'))
 	{
 		
@@ -164,14 +184,11 @@ TAStreamFormatter  &TSeparatedFormatTStream::operator>>( TSpatialPoint &point )
 			this->TAStreamFormatter::operator>>(comment);
 			comeol += comment+ " ";
 					
-			if (this->fail() == true)
-				this->setError("Failed reading comment 2.");
-
 			this->skipWhiteSpace();
 		}
 	}
 
-	if (this->getError() == "")
+	//if (this->getError() == "")
 	{
 		name.setId(id);
 		name.setComment(comdb);
@@ -181,10 +198,10 @@ TAStreamFormatter  &TSeparatedFormatTStream::operator>>( TSpatialPoint &point )
 		point.setDist(dist);
 		point.setEOLComment(comeol);
 	}
-	else
+	/*else
 	{
 		delete position;
-	}
+	}*/
 
 	return *this;
 

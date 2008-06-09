@@ -148,29 +148,14 @@ void	T2DPlusHFilter::input(TAStreamFormatter& iStream, TSpatialPosition& positio
 
 void	T2DPlusHFilter::output(TAStreamFormatter& oStream, const TSpatialPosition& position) const
 {/*!Get coordinates from a TSpatialPosition object
-	and put the values in a TAStreamFormatter object
+	and output the values in a TAStreamFormatter object
 */
 	
-	// get the width from the text stream's TPointFormat
-	int width;
-	width = oStream.getPointFormat()->getCoordWidth();
-
-
 	//outputs the coordinates
 	TPositionVector pv (TCoordSysFactory::k2DPlusH);
 	pv=position.getCoordinates(TCoordSysFactory::k2DPlusH);
 	
-	if (pv.getStatus()!= TANumericValue::kNull)
-	{	
-		string sep =oStream.getSeparator();
-		oStream<<pv.getX()<<sep<<pv.getY()<<sep<<pv.getH();
-	
-	}
-	else
-	{
-		for (int i=0; i<=3*width; i++)
-			oStream << " ";
-	}
+	this->output( oStream,  pv);
 
 	return;
 }
@@ -257,24 +242,27 @@ void	T2DPlusHFilter::output(TAStreamFormatter& oStream, const TPositionVector& p
 {/*!Get coordinates from a TPositionVector object
 	and put the values in a TAStreamFormatter object
 */
-	
-	// get the width from the text stream's TPointFormat
-	int width;
-	width = oStream.getPointFormat()->getCoordWidth();
 
+	string sep =oStream.getSeparator();
 
 	//outputs the coordinates
 	if (pv.getStatus()!= TANumericValue::kNull)
 	{	
-		string sep =oStream.getSeparator();
-		oStream<<pv.getX()<<sep<<pv.getY()<<sep<<pv.getH();
+		oStream<<pv.getX()<<sep<<pv.getY()<<sep<<pv.getH() << sep;
 	
 	}
 	else
 	{
-		for (int i=0; i<=3*width; i++)
-			oStream << " ";
+		// get the width from the text stream's TPointFormat
+		int width= oStream.getPointFormat()->getCoordWidth();
+
+		for (int i=0; i<3; i++)
+		{
+			oStream.width(width);
+			oStream << " " << sep;
+		}
 	}
+
 	return;
 }
 

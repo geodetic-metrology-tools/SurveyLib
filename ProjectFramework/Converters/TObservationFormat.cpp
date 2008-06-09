@@ -38,18 +38,18 @@ TObservationFormat::TObservationFormat(){
 	fNameWidth = 10;
 	fObsWidth = 12;
 	fObsResidualWidth = 8;
-	fLengthPrecision = kMillimetre;
-	fAnglePrecision = kMilligons;
+	fLengthPrecision = k10Micrometres;
+	fAnglePrecision = k100Microgons;
 	fLengthResidualPrecision = k10Micrometres;
-	fAngleResidualPrecision = k10Microgons;
+	fAngleResidualPrecision = k100Microgons;
 	fShowSign = false;
 
 }
 //////////////
 // constructor
 //////////////
-TObservationFormat::TObservationFormat(int nameWidth, int obsWidth, ELengthPrecision lengthPrecision, 
-									   EAnglePrecision anglePrecision,
+TObservationFormat::TObservationFormat(int nameWidth, 
+									   int obsWidth, ELengthPrecision lengthPrecision, EAnglePrecision anglePrecision,
 									   int obsResWidth, ELengthPrecision lengthResPrec, EAnglePrecision angleResPrec, 
 									   bool showSign):
 fNameWidth(nameWidth), fObsWidth(obsWidth), 
