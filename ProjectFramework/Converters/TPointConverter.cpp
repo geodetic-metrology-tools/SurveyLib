@@ -40,9 +40,9 @@ TAConverter(stream)
 	TAReferenceFrame* pointRefFrame = stream->getReferenceFrame();
 	TAReferenceFrame* ccsRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
 	if(pointRefFrame == ccsRefFrame)
-	{
 		fLocalSys = false;
-	}
+	else
+		fLocalSys = true;
 }
 
 TPointConverter::~TPointConverter()
