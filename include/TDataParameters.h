@@ -60,7 +60,7 @@ public:
 		/*! Enumerator for Reference Frames */
 		enum  ERefFrame {kUndefined, kMLA2000Machine, kMLA1985Machine, kCCS,  kCernX0Y0He, kCernXYHg00Machine, 
 			kCernXYHg85, kCernXYHg85Machine, kCERNXYHsSphereSPS, kLocalRefFrame, kCernLGatP0, kCGRF,
-			kWGS84, kROMA40};
+			kWGS84, kROMA40, kITRF97};
 
 		enum  ECoordUnit {kNotDefined, kMetric, kGons, kDMS};
 

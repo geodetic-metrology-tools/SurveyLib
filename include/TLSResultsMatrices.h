@@ -32,7 +32,7 @@ public:
 
 	/*!@name Constructors / Destructor*/
 	//@{
-	TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations);
+	TLSResultsMatrices(int numUnknowns, int numEquations);
 
 	//!Constructor
 	/*!@param ueoi an object holding the number of unknowns, equations and observations,
@@ -108,7 +108,7 @@ private:
 	@param sigm2 the estimated square of the sigma zero
 	@param unkcov a pointer to the unknowns covariance matrix */
 	TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, double sigm2, TMatrix* unkcov);
-	TLSResultsMatrices::TLSResultsMatrices(int solut, int resid, int unkcov);
+	TLSResultsMatrices(int solut, int resid, int unkcov);
 	//mj
 	
 

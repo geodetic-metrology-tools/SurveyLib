@@ -83,12 +83,12 @@ public:
 									kROMA2WGS, kWGS2CGRF, kXYHe2CCS, kX0Y0He2XYHe,
 									kXYHg2XYHe, kXYHg2XYHe00Topo, kXYHg2XYHe00Machine, 
 									kXYHg2XYHe85, kXYHg2XYHe85Machine, kXYHsSphereSPS2CCS,
-									kCCS2CGRFSphere,
+									kCCS2CGRFSphere, 
 									kCGRF2CCS, kLGp02LAp0, kCGRF2LGp0, kCCS2LAp0,
 									kWGS2ROMA, kCGRF2WGS, kCCS2XYHe, kXYHe2X0Y0He,
 									kXYHe2XYHg, kXYHe00Topo2XYHg, kXYHe00Machine2XYHg, 
 									kXYHe852XYHg, kXYHe85Machine2XYHg, kCCS2XYHsSphereSPS,
-									kCGRFSphere2CCS,};
+									kCGRFSphere2CCS, kITRF972CGRF, kCGRF2ITRF97};
 	//@}
 	
 

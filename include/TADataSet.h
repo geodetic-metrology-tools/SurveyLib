@@ -244,15 +244,15 @@ private:
 		bool						fSaved;
 
 		string						fFormatType;
+
+		TAStreamFormatter::ETextFormat fPunchFileFormat;
+
+		TAStreamFormatter::ETextFormat fResultsFileFormat;
+
+		string fPunchSeparator;
+
+		string fResultsSeparator;
 	//@}
-
-	TAStreamFormatter::ETextFormat fPunchFileFormat;
-
-	TAStreamFormatter::ETextFormat fResultsFileFormat;
-
-	string fPunchSeparator;
-
-	string fResultsSeparator;
 
 	//ClassDef(TADataSet, 1)
 };

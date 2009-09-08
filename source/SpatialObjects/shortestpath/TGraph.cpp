@@ -89,6 +89,9 @@ void	TGraph::init()
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kWGS2CGRF),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCGRF2WGS));
 
+	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972CGRF),
+			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCGRF2ITRF97));
+	
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kXYHe2CCS),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCCS2XYHe));
 
@@ -116,10 +119,6 @@ void	TGraph::init()
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCCS2CGRFSphere),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCGRFSphere2CCS));
 
-
-	// RF : to be deleted later(when transformations between ITRF97 and other geodetic RF will be defined)
-	insert( TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kITRF97));
-	
 	return;
 }
 

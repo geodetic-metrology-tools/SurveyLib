@@ -149,7 +149,7 @@ bool  TDataParameters::setRefFrame(TDataParameters::ERefFrame rf)
 		fRefFrameEnum = rf;
 		
 		if(	fRefFrameEnum != TDataParameters::kCGRF && fRefFrameEnum != TDataParameters::kWGS84 && 
-			fRefFrameEnum != TDataParameters::kROMA40)
+			fRefFrameEnum != TDataParameters::kROMA40 && fRefFrameEnum != TDataParameters::kITRF97)
 		{//set automatically metric
 			setUnits(TDataParameters::kMetric );
 		}
@@ -188,7 +188,7 @@ bool  TDataParameters::setUnits( const TDataParameters::ECoordUnit& units )
 	fCoordUnit= units;
 
 	if(	fRefFrameEnum == TDataParameters::kCGRF || fRefFrameEnum == TDataParameters::kWGS84 || 
-		fRefFrameEnum == TDataParameters::kROMA40)
+		fRefFrameEnum == TDataParameters::kROMA40 || fRefFrameEnum != TDataParameters::kITRF97)
 	{
 		if ( units == kDMS )
 		{
@@ -439,21 +439,28 @@ TAReferenceFrame*  TDataParameters::getRefFrame()
 				break;
 
 			case TDataParameters::kWGS84:
-				//ROMA40
+				//WGS84
 				{
 				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84));
 				}
 				break;
 
+			case TDataParameters::kITRF97:
+				//CGRF
+				{
+				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kITRF97));
+				}
+				break;
+
 			case TDataParameters::kCGRF:
-				//ROMA40
+				//CGRF
 				{
 				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
 				}
 				break;
 
 			case TDataParameters::kCernLGatP0:
-				//ROMA40
+				//LGp0
 				{
 				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kLGp0));
 				}

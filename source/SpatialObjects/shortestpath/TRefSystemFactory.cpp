@@ -133,9 +133,9 @@ void	TRefSystemFactory::init()
 	fCGRFSphere = pCGRFs;
 
 		// ITRF97
-	TGeodeticRefFrame* pITRF = new TGeodeticRefFrame(itrf, pGRS80);
-	pITRF->setRefFrameId(kITRF97);
-	fRefFrameList.push_back(pITRF);
+	TGeodeticRefFrame* pITRF97 = new TGeodeticRefFrame(itrf, pGRS80);
+	pITRF97->setRefFrameId(kITRF97);
+	fRefFrameList.push_back(pITRF97);
 
 		// WGS84
 	TGeodeticRefFrame* pWGS = new TGeodeticRefFrame(wgs, pWGSEll);
@@ -470,42 +470,42 @@ void	TRefSystemFactory::init()
 	/////////////////////////////////////////////////////////////////////
 	// Definition of the CERN projection list (included in ref frame list)
 
-			// CERN XYHs projection: XY system = CCS, Hs = height above SPS sphere (projection of the xy point on the sphere)
+	// CERN XYHs projection: XY system = CCS, Hs = height above SPS sphere (projection of the xy point on the sphere)
 	TXYHeProjection* pCernXYHs = new TXYHeProjection( "CERN XYHs", pSphere, pCCS);
 	pCernXYHs->setRefFrameId(kCERNXYHsSphereSPS);
 	fRefFrameList.push_back(pCernXYHs);
 
-		// CERN XYHe projection: XY system = CCS, He = height above ellipsoid (projection of the xy point on the ellipsoid)
+	// CERN XYHe projection: XY system = CCS, He = height above ellipsoid (projection of the xy point on the ellipsoid)
 	TXYHeProjection* pCernXYHe = new TXYHeProjection( "CERN XYHe", pGRS80, pCCS);
 	pCernXYHe->setRefFrameId(kCernXYHe);
 	fRefFrameList.push_back(pCernXYHe);
 
-		// CERN X0Y0He projection: X0Y0 = projection of XY on the ellipsoid's level (h=0)
+	// CERN X0Y0He projection: X0Y0 = projection of XY on the ellipsoid's level (h=0)
 	TX0Y0HeProjection* pCernX0Y0He = new TX0Y0HeProjection( "CERN X0Y0He", pCernXYHe);
 	pCernX0Y0He->setRefFrameId(kCernX0Y0He);
 	fRefFrameList.push_back(pCernX0Y0He);
 
-		// CERN XYHg projection CG2000: XY system = CCS, Hg = height above geoid CG2000 (projection of the xy point on the geoid)
+	// CERN XYHg projection CG2000: XY system = CCS, Hg = height above geoid CG2000 (projection of the xy point on the geoid)
 	TXYHgProjection* pCernXYHg00 = new TXYHgProjection( "CERN XYHg2000", pCG2000 , pCernXYHe);
 	pCernXYHg00->setRefFrameId(kCernXYHg00);
 	fRefFrameList.push_back(pCernXYHg00);
 
-		// CERN XYHg projection CG2000Topo :XY system = CCS, Hg = height above geoid CG2000Topo (projection of the xy point on the geoid)
+	// CERN XYHg projection CG2000Topo :XY system = CCS, Hg = height above geoid CG2000Topo (projection of the xy point on the geoid)
 	TXYHgProjection* pCernXYHg00Topo = new TXYHgProjection( "CERN XYHg2000Topo", pCG2000Topo , pCernXYHe);
 	pCernXYHg00Topo->setRefFrameId(kCernXYHg00Topo);
 	fRefFrameList.push_back(pCernXYHg00Topo);
 	
-		// CERN XYHg projection CG2000Machine: XY system = CCS, Hg = height above geoid CG2000Machine (projection of the xy point on the geoid)
+	// CERN XYHg projection CG2000Machine: XY system = CCS, Hg = height above geoid CG2000Machine (projection of the xy point on the geoid)
 	TXYHgProjection* pCernXYHg00Machine = new TXYHgProjection( "CERN XYHg2000Machine", pCG2000Machine , pCernXYHe);
 	pCernXYHg00Machine->setRefFrameId(kCernXYHg00Machine);
 	fRefFrameList.push_back(pCernXYHg00Machine);
 
-		// CERN XYHg projection CG1985: XY system = CCS, Hg = height above geoid CG1985 (projection of the xy point on the geoid)
+	// CERN XYHg projection CG1985: XY system = CCS, Hg = height above geoid CG1985 (projection of the xy point on the geoid)
 	TXYHgProjection* pCernXYHg85 = new TXYHgProjection( "CERN XYHg1985", pCG1985 , pCernXYHe);
 	pCernXYHg85->setRefFrameId(kCernXYHg85);
 	fRefFrameList.push_back(pCernXYHg85);
 
-		// CERN XYHg projection CG1985Machine: XY system = CCS, Hg = height above geoid CG1985Machine (projection of the xy point on the geoid)
+	// CERN XYHg projection CG1985Machine: XY system = CCS, Hg = height above geoid CG1985Machine (projection of the xy point on the geoid)
 	TXYHgProjection* pCernXYHg85Machine = new TXYHgProjection( "CERN XYHg1985Machine", pCG1985Machine , pCernXYHe);
 	pCernXYHg85Machine->setRefFrameId(kCernXYHg85Machine);
 	fRefFrameList.push_back(pCernXYHg85Machine);
@@ -516,17 +516,17 @@ void	TRefSystemFactory::init()
 	// Definition of the CERN's ref. frames transformations
 
 
-		// Transformation between CERN projection XYHs and CCS
+	// Transformation between CERN projection XYHs and CCS
 	TXYHs2MLATransformation* pXYHs2CCS = new TXYHs2MLATransformation(pCernXYHs);
 	pXYHs2CCS->setTransformId( kXYHsSphereSPS2CCS);
 	fTransformList.push_back(pXYHs2CCS);
-		//Inverse
+	//Inverse
 	TARefFrameTransformation* pCCS2XYHs = pXYHs2CCS->inverse(); //utilise new
 	pCCS2XYHs->setTransformId( kCCS2XYHsSphereSPS);
 	fTransformList.push_back(pCCS2XYHs);
 
 
-		// Transformation between CCS and CGRF
+	// Transformation between CCS and CGRF
 	/*Il est equivalent de mettre CG2000 ou CG1985 car les parametres du geoide au niveau de P0,
 	servant a definir la transformation sont equivalent*/
 	TMLA2GCTransformation* pCCS2CGRF = new TMLA2GCTransformation(pCCS, pCG1985Machine);
@@ -538,7 +538,7 @@ void	TRefSystemFactory::init()
 	fTransformList.push_back(pCGRF2CCS);
 
 
-		// Transformation between CCS and CGRFSphere
+	// Transformation between CCS and CGRFSphere
 	//rotation pour diriger les axes du CGRFs parallele a ceux du CGRF
 	TAngle rx, ry, rz;
 	rx.setGonsValue(-42.726243230216);
@@ -559,40 +559,40 @@ void	TRefSystemFactory::init()
 	fTransformList.push_back(pCGRFs2CCS);
 
 
-		// Transformation between LAp0 and LGp0
+	// Transformation between LAp0 and LGp0
 	TLA2LGTransformation* pLAp02LGp0 = new TLA2LGTransformation(pLAp0);
 	pLAp02LGp0->setTransformId(kLAp02LGp0);
 	fTransformList.push_back(pLAp02LGp0);
-		//Inverse
+	//Inverse
 	TARefFrameTransformation* pLGp02LAp0 = pLAp02LGp0->inverse(); //utilise new
 	pLGp02LAp0->setTransformId(kLGp02LAp0);
 	fTransformList.push_back(pLGp02LAp0);
 
 
-		//Transformation between LGp0 and CGRF
+	//Transformation between LGp0 and CGRF
 	TLG2GCTransformation* pLGp02CGRF = new TLG2GCTransformation(pLGp0);
 	pLGp02CGRF->setTransformId(kLGp02CGRF);
 	fTransformList.push_back(pLGp02CGRF);
-		//Inverse
+	//Inverse
 	TARefFrameTransformation* pCGRF2LGp0 = pLGp02CGRF->inverse(); //utilise new
 	pCGRF2LGp0->setTransformId(kCGRF2LGp0);
 	fTransformList.push_back(pCGRF2LGp0);
 
 
-		// Helmert Transformation between LAp0 and CCS
+	// Helmert Transformation between LAp0 and CCS
 	TRotation r(TRotationMatrix::kRzyx, 0, 0, -(kappa.getRadiansValue()));
 	TTranslation transl(falseOrigin.getX(), falseOrigin.getY(),	(falseOrigin.getZ()) );
 	TEnlargement enl(1.0);
 	THelmertRefFrameTransform* pLAp02CCS = new THelmertRefFrameTransform(pLAp0, pCCS, enl, r, transl);
 	pLAp02CCS->setTransformId(kLAp02CCS);
 	fTransformList.push_back(pLAp02CCS);
-		//Inverse
+	//Inverse
 	TARefFrameTransformation* pCCS2LAp0 = pLAp02CCS->inverse(); //utilise new
 	pCCS2LAp0->setTransformId(kCCS2LAp0);
 	fTransformList.push_back(pCCS2LAp0);
 
 	
-		// Helmert Transformation between ROMA40 and WGS84
+	// Helmert Transformation between ROMA40 and WGS84
 	TAngle om1, p1, k1;
 	om1.setDMSValue(0, 0, -1.822);
 	p1.setDMSValue(0, 0, 3.235);
@@ -610,7 +610,7 @@ void	TRefSystemFactory::init()
 	fTransformList.push_back(pWGS2ROMA);
 
 	
-		// Helmert Transformation between WGS84 and CGRF
+	// Helmert Transformation between WGS84 and CGRF
 	TAngle om2, p2, k2;
 	om2.setGonsValue(-0.0003314103458);
 	p2.setGonsValue(0.0022563667184);
@@ -628,57 +628,75 @@ void	TRefSystemFactory::init()
 	fTransformList.push_back(pCGRF2WGS);
 
 
-		// Transformation between CERN projection XYHe and CCS
+	// Helmert Transformation between ITRF97 (ep1998.5) and CGRF
+	TAngle om3, p3, k3;
+	om3.setGonsValue(399.999533213524);
+	p3.setGonsValue(0.001825157943);
+	k3.setGonsValue(0.000991054274);
+	TRotation r3(TRotationMatrix::kRzyx, om3.getRadiansValue(), p3.getRadiansValue(), k3.getRadiansValue());
+	TLength Tx3(76.3768280), Ty3(131.9389844), Tz3(-156.1229775);
+	TTranslation transl3(Tx3, Ty3, Tz3);
+	TEnlargement enl3(1.000000000000000);
+	THelmertRefFrameTransform* pITRF972CGRF = new THelmertRefFrameTransform(pITRF97, pCGRF, enl3, r3, transl3);
+	pITRF972CGRF->setTransformId(kITRF972CGRF);
+	fTransformList.push_back(pITRF972CGRF);
+	//Inverse
+	TARefFrameTransformation* pCGRF2ITRF97 = pITRF972CGRF->inverse(); //utilise new
+	pCGRF2ITRF97->setTransformId(kCGRF2ITRF97);
+	fTransformList.push_back(pCGRF2ITRF97);
+
+
+	// Transformation between CERN projection XYHe and CCS
 	TXYHe2MLATransformation* pXYHe2CCS = new TXYHe2MLATransformation(pCernXYHe);
 	pXYHe2CCS->setTransformId(kXYHe2CCS);
 	fTransformList.push_back(pXYHe2CCS);
-		//Inverse
+	//Inverse
 	TARefFrameTransformation* pCCS2XYHe = pXYHe2CCS->inverse(); //utilise new
 	pCCS2XYHe->setTransformId(kCCS2XYHe);
 	fTransformList.push_back(pCCS2XYHe);
 
 
-		// Transformation between CERN projection X0Y0He and CERN projection XYHe
+	// Transformation between CERN projection X0Y0He and CERN projection XYHe
 	TX0Y0He2XYHeTransformation* pX0Y0He2XYHe =  new TX0Y0He2XYHeTransformation(pCernX0Y0He) ;
 	pX0Y0He2XYHe->setTransformId(kX0Y0He2XYHe);
 	fTransformList.push_back(pX0Y0He2XYHe);
-		//Inverse
+	//Inverse
 	TARefFrameTransformation* pXYHe2X0Y0He =  pX0Y0He2XYHe->inverse(); //utilise new
 	pXYHe2X0Y0He->setTransformId(kXYHe2X0Y0He);
 	fTransformList.push_back(pXYHe2X0Y0He);
 
 
-		// Transformation between CERN projection XYHg (Geoid 2000) and XYHe
+	// Transformation between CERN projection XYHg (Geoid 2000) and XYHe
 	TXYHg2XYHeTransformation* pXYHg2XYHe = new TXYHg2XYHeTransformation(pCernXYHg00) ;
 	pXYHg2XYHe->setTransformId(kXYHg2XYHe);
 	fTransformList.push_back(pXYHg2XYHe);
-		//Inverse
+	//Inverse
 	TARefFrameTransformation* pXYHe2XYHg = pXYHg2XYHe->inverse(); //utilise new
 	pXYHe2XYHg->setTransformId(kXYHe2XYHg);
 	fTransformList.push_back(pXYHe2XYHg);
 
 
-		// Transformation between CERN projection XYHg (Geoid 2000Topo) and XYHe
+	// Transformation between CERN projection XYHg (Geoid 2000Topo) and XYHe
 	TXYHg2XYHeTransformation* pXYHg2XYHe00Topo = new TXYHg2XYHeTransformation(pCernXYHg00Topo) ;
 	pXYHg2XYHe00Topo->setTransformId(kXYHg2XYHe00Topo);
 	fTransformList.push_back(pXYHg2XYHe00Topo);
-		//Inverse
+	//Inverse
 	TARefFrameTransformation* pXYHe00Topo2XYHg = pXYHg2XYHe00Topo->inverse(); //utilise new
 	pXYHe00Topo2XYHg->setTransformId(kXYHe00Topo2XYHg);
 	fTransformList.push_back(pXYHe00Topo2XYHg);
 
 
-		// Transformation between CERN projection XYHg (Geoid 2000Machine) and XYHe 
+	// Transformation between CERN projection XYHg (Geoid 2000Machine) and XYHe 
 	TXYHg2XYHeTransformation* pXYHg2XYHe00Machine = new TXYHg2XYHeTransformation(pCernXYHg00Machine) ;
 	pXYHg2XYHe00Machine->setTransformId(kXYHg2XYHe00Machine);
 	fTransformList.push_back(pXYHg2XYHe00Machine);
-		//Inverse
+	//Inverse
 	TARefFrameTransformation* pXYHe00Machine2XYHg = pXYHg2XYHe00Machine->inverse(); //utilise new
 	pXYHe00Machine2XYHg->setTransformId(kXYHe00Machine2XYHg);
 	fTransformList.push_back(pXYHe00Machine2XYHg);
 
 
-		// Transformation between CERN projection XYHg (Geoid 1985) and XYHe
+	// Transformation between CERN projection XYHg (Geoid 1985) and XYHe
 	TXYHg2XYHeTransformation* pXYHg2XYHe85 = new TXYHg2XYHeTransformation(pCernXYHg85) ;
 	pXYHg2XYHe85->setTransformId(kXYHg2XYHe85);
 	fTransformList.push_back(pXYHg2XYHe85);
@@ -688,11 +706,11 @@ void	TRefSystemFactory::init()
 	fTransformList.push_back(pXYHe852XYHg);
 
 
-		// Transformation between CERN projection XYHg (Geoid 1985Machine) and XYHe
+	// Transformation between CERN projection XYHg (Geoid 1985Machine) and XYHe
 	TXYHg2XYHeTransformation* pXYHg2XYHe85Machine = new TXYHg2XYHeTransformation(pCernXYHg85Machine) ;
 	pXYHg2XYHe85Machine->setTransformId(kXYHg2XYHe85Machine);
 	fTransformList.push_back(pXYHg2XYHe85Machine);
-		//Inverse
+	//Inverse
 	TARefFrameTransformation* pXYHe85Machine2XYHg = pXYHg2XYHe85Machine->inverse(); //utilise new
 	pXYHe85Machine2XYHg->setTransformId(kXYHe85Machine2XYHg);
 	fTransformList.push_back(pXYHe85Machine2XYHg);
