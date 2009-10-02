@@ -59,6 +59,17 @@ TSeparatedFormatTStream::TSeparatedFormatTStream(const string& str, TDataParamet
 }
 
 
+/*!Constructors
+\param io: read or write
+\param fp: data file's parameters (name, path ...) 
+\param ds: data parameters (unit, precision, refernce system, coord sys...)*/ 
+TSeparatedFormatTStream::TSeparatedFormatTStream(EIOType io, TFileParameters& fp, TDataParameters& dp):
+TAStreamFormatter(io, fp, dp)
+{
+		fSeparator ="   ";
+		fNoObsToRead = false;
+}
+
 TSeparatedFormatTStream::TSeparatedFormatTStream(TAStreamFormatter::EIOType io, TADataSet& ds) : TAStreamFormatter (io, ds)
 {
 		fSeparator ="   ";
