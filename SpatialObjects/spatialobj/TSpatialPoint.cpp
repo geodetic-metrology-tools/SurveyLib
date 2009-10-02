@@ -34,7 +34,7 @@ TSpatialPoint::TSpatialPoint() : fPtListeners(),fPointDist(),fHeaderComment(), f
 	fUsedInCalc = true;
 	fEqCount = 0;
 	flistener = 0;
-	fPointStatus = TSpatialPoint::EPointStatus::kActive;
+	fPointStatus = TSpatialPoint::kActive;
 
 	fNameSet = 0;
 	fXSet = 0;
@@ -50,7 +50,7 @@ TSpatialPoint::TSpatialPoint( const string& ptName ) : fPtListeners(),fPointDist
 	fUsedInCalc = true;
 	fEqCount = 0;
 	flistener = 0;
-	fPointStatus = TSpatialPoint::EPointStatus::kActive;
+	fPointStatus = TSpatialPoint::kActive;
 
 	fNameSet = 0;
 	fXSet = 0;
@@ -67,7 +67,7 @@ TSpatialPoint::TSpatialPoint( const TSpatialPointName&  name, TSpatialPosition* 
 	fUsedInCalc = true;
 	fEqCount = 0;
 	flistener = 0;
-	fPointStatus = TSpatialPoint::EPointStatus::kActive;
+	fPointStatus = TSpatialPoint::kActive;
 //	updateNeededEquations();
 
 	fNameSet = 0;

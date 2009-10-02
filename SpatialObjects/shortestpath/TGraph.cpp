@@ -201,7 +201,8 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 
 		path(tr, pr,transform, start);
 
-		for (unsigned int i = 0; i < size(); i++)
+		unsigned int  i;
+		for (i = 0; i < size(); i++)
 		{
 			if (to == C[i].first)
 				end = i;

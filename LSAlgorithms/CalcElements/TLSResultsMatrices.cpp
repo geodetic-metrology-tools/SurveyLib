@@ -187,7 +187,8 @@ void TLSResultsMatrices::saveMatricesToFile(int nbIter) const
 	of << "* SOLUTION VECTOR *" << endl;
 	of << "*******************" << endl << endl;
 	
-	for (int i=0; i<fUnknownsCovarianceMtrx->numRows() ; i++)
+	int i;
+	for (i=0; i<fUnknownsCovarianceMtrx->numRows() ; i++)
 		of << (*fSolutionVctr)(i) <<  endl;
 	of << endl << endl;
 

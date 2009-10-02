@@ -325,7 +325,8 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of << "* FIRST DESIGN MATRIX *" << endl;
 	of << "***********************" << endl << endl;
 	
-	for (int i=0; i<fNbEqn ; i++){
+	int i;
+	for (i=0; i<fNbEqn ; i++){
 
 		for (int j=0; j<fNbUnk ; j++)
 			of << (*fFirstDesignMtrx)(i,j) << '\t';
