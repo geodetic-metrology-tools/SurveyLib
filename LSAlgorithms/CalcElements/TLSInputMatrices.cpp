@@ -65,7 +65,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	else{
 
 		fNbUnk = unknowns;
-		fNbObs = observations;
+		fNbObs = observations; // number of observations + constraint observations
 		fNbEqn = equations;
 		fNbCnstrObs = cnstrObs; 
 	
@@ -79,7 +79,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 		*fFirstDesignMtrx = 0.0;
 
 	
-		fSecondDesignMtrx = new TMatrix(equations, observations /*+ cnstrObs*/);
+		fSecondDesignMtrx = new TMatrix(equations, observations /*+ cnstrObs*/); 
 		*fSecondDesignMtrx = 0.0;
 	
 		fMisclosureVector = new TColumnVector(equations);
@@ -111,7 +111,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	{
 
 		fNbUnk = unknowns;
-		fNbObs = observations;
+		fNbObs = observations; // number of observations + constraint observations
 		fNbEqn = equations;
 		fNbCnstr = constraints;
 		fNbCnstrObs = nbCnstrObs;
