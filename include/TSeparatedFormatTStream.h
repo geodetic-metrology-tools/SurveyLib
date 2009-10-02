@@ -78,6 +78,13 @@ public:
 		//! Default Constructor
 		TSeparatedFormatTStream(TDataParameters&);
 		TSeparatedFormatTStream(const string&, TDataParameters&);
+
+		/*!Constructors
+		\param io: read or write
+		\param fp: data file's parameters (name, path ...) 
+		\param ds: data parameters (unit, precision, refernce system, coord sys...)*/ 
+		TSeparatedFormatTStream(TAStreamFormatter::EIOType, TFileParameters& fp, TDataParameters& dp);
+
 		TSeparatedFormatTStream(TAStreamFormatter::EIOType, TADataSet&);
 
 		TSeparatedFormatTStream(TAStreamFormatter::EIOType, TADataSet&, TPointFormat&);
