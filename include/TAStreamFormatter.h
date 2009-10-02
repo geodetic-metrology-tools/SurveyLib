@@ -40,6 +40,7 @@ class		TSpatialPositionFilter;
 class		TAStreamFormatter;
 class		TADataSet;
 class		TDataParameters;
+class		TFileParameters;
 
 
 #include	"TAngle.h"
@@ -76,28 +77,34 @@ public:
 	/*!@name constructor / destuctor*/
 	//@{
 	/*!Constructors
-	\param dp: data's paramaters (unit, precision, refernce system, coord sys...)*/ 
+	\param dp: data's parameters (unit, precision, refernce system, coord sys...)*/ 
 	TAStreamFormatter(TDataParameters&);
 	
 	/*!Constructors
 	\param str: string to read
-	\param dp: data's paramaters (unit, precision, refernce system, coord sys...)*/ 
+	\param dp: data's parameters (unit, precision, refernce system, coord sys...)*/ 
 	TAStreamFormatter(const string& str, TDataParameters& dp);
 	
 	/*!Constructors
 	\param io: read or write
-	\param ds: data and file's paramaters (name, unit, precision, refernce system, coord sys...)*/ 
+	\param fp: data file's parameters (name, path ...) 
+	\param ds: data parameters (unit, precision, refernce system, coord sys...)*/ 
+	TAStreamFormatter(EIOType io, TFileParameters& fp, TDataParameters& dp);
+
+	/*!Constructors
+	\param io: read or write
+	\param ds: data and file's parameters (name, unit, precision, refernce system, coord sys...)*/ 
 	TAStreamFormatter(EIOType io, TADataSet& ds);
 
 	/*!Constructors
 	\param io: read or write
-	\param ds: data and file's paramaters (name, unit, precision, refernce system, coord sys...) 
+	\param ds: data and file's parameters (name, unit, precision, refernce system, coord sys...) 
 	\param pf: TpointFormat's object use for write output*/
 	TAStreamFormatter(EIOType io, TADataSet& ds, TPointFormat& pf);
 
 	/*!Constructors
 	\param io: read or write
-	\param ds: data and file's paramaters (name, unit, precision, refernce system, coord sys...) 
+	\param ds: data and file's parameters (name, unit, precision, refernce system, coord sys...) 
 	\param pf: TPointFormat's object use for write output
 	\param pf: TObservationFormat's object use for write output*/
 	TAStreamFormatter(const EIOType io, TADataSet& ds, const TPointFormat& pf, const TObservationFormat& obsFor);
