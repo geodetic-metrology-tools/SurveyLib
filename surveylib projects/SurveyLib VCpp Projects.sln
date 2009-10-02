@@ -1,73 +1,42 @@
-Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LSAlgorithmsLibrary", "lsalgorithms\lsalgorithmslibrary\LSAlgorithmsLibrary.vcproj", "{D5EFACF0-3017-427D-91C0-C30CD9457F75}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LSAlgorithmsLibrary", "lsalgorithms\lsalgorithmslibrary\LSAlgorithmsLibrary.vcproj", "{D56B57AB-D5BB-44D0-AD23-E3C25D855AA5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProjectFrameworkLibrary", "projectframework\projectframeworklibrary\ProjectFrameworkLibrary.vcproj", "{E3FA5AEC-2E5C-4AE9-BCC3-EBCEA5300811}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProjectFrameworkLibrary", "projectframework\projectframeworklibrary\ProjectFrameworkLibrary.vcproj", "{78C670AA-AF10-4508-94D7-9FA0D8E2FD09}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpatialMeasurementsLibrary", "spatialmeasurements\SpatialMeasurementsLibrary\SpatialMeasurementsLibrary.vcproj", "{E7AA0DA9-8C41-4611-BD24-D7D94B8F1EDD}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpatialMeasurementsLibrary", "spatialmeasurements\SpatialMeasurementsLibrary\SpatialMeasurementsLibrary.vcproj", "{8798B04D-0237-4EFB-9F93-818CA6639FF5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpatialObjectsLibrary", "spatialobjects\spatialobjectslibrary\SpatialObjectsLibrary.vcproj", "{243DD1BC-7C33-477B-9B9A-2C6B52648452}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpatialObjectsLibrary", "spatialobjects\spatialobjectslibrary\SpatialObjectsLibrary.vcproj", "{A6BA25C2-D976-403E-BEDF-CBB51266A987}"
 EndProject
 Global
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 4
-		SccProjectUniqueName0 = lsalgorithms\\lsalgorithmslibrary\\LSAlgorithmsLibrary.vcproj
-		SccProjectName0 = <[SU\u0020Source]\u0020SurveyLib|SurveyLib>SurveyLib\\SurveyLib\u0020Projects\\LSAlgorithms\\LSAlgorithmsLibrary
-		SccLocalPath0 = lsalgorithms\\lsalgorithmslibrary
-		SccProvider0 = MSSCCI:StarTeam
-		SccProjectUniqueName1 = projectframework\\projectframeworklibrary\\ProjectFrameworkLibrary.vcproj
-		SccProjectName1 = <[SU\u0020Source]\u0020SurveyLib|SurveyLib>SurveyLib\\SurveyLib\u0020Projects\\ProjectFramework\\ProjectFrameworkLibrary
-		SccLocalPath1 = projectframework\\projectframeworklibrary
-		SccProvider1 = MSSCCI:StarTeam
-		SccProjectUniqueName2 = spatialmeasurements\\SpatialMeasurementsLibrary\\SpatialMeasurementsLibrary.vcproj
-		SccProjectName2 = <[SU\u0020Source]\u0020SurveyLib|SurveyLib>SurveyLib\\SurveyLib\u0020Projects\\SpatialMeasurements\\SpatialMeasurementsLibrary
-		SccLocalPath2 = spatialmeasurements\\SpatialMeasurementsLibrary
-		SccProvider2 = MSSCCI:StarTeam
-		SccProjectUniqueName3 = spatialobjects\\spatialobjectslibrary\\SpatialObjectsLibrary.vcproj
-		SccProjectName3 = <[SU\u0020Source]\u0020SurveyLib|SurveyLib>SurveyLib\\SurveyLib\u0020Projects\\SpatialObjects\\SpatialObjectsLibrary
-		SccLocalPath3 = spatialobjects\\spatialobjectslibrary
-		SccProvider3 = MSSCCI:StarTeam
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Insure|Win32 = Insure|Win32
+		Release|Win32 = Release|Win32
 	EndGlobalSection
-	GlobalSection(SolutionConfiguration) = preSolution
-		Debug = Debug
-		Insure = Insure
-		Release = Release
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D56B57AB-D5BB-44D0-AD23-E3C25D855AA5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D56B57AB-D5BB-44D0-AD23-E3C25D855AA5}.Debug|Win32.Build.0 = Debug|Win32
+		{D56B57AB-D5BB-44D0-AD23-E3C25D855AA5}.Insure|Win32.ActiveCfg = Insure|Win32
+		{D56B57AB-D5BB-44D0-AD23-E3C25D855AA5}.Release|Win32.ActiveCfg = Release|Win32
+		{D56B57AB-D5BB-44D0-AD23-E3C25D855AA5}.Release|Win32.Build.0 = Release|Win32
+		{78C670AA-AF10-4508-94D7-9FA0D8E2FD09}.Debug|Win32.ActiveCfg = Debug|Win32
+		{78C670AA-AF10-4508-94D7-9FA0D8E2FD09}.Debug|Win32.Build.0 = Debug|Win32
+		{78C670AA-AF10-4508-94D7-9FA0D8E2FD09}.Insure|Win32.ActiveCfg = Insure|Win32
+		{78C670AA-AF10-4508-94D7-9FA0D8E2FD09}.Release|Win32.ActiveCfg = Release|Win32
+		{78C670AA-AF10-4508-94D7-9FA0D8E2FD09}.Release|Win32.Build.0 = Release|Win32
+		{8798B04D-0237-4EFB-9F93-818CA6639FF5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8798B04D-0237-4EFB-9F93-818CA6639FF5}.Debug|Win32.Build.0 = Debug|Win32
+		{8798B04D-0237-4EFB-9F93-818CA6639FF5}.Insure|Win32.ActiveCfg = Insure|Win32
+		{8798B04D-0237-4EFB-9F93-818CA6639FF5}.Release|Win32.ActiveCfg = Release|Win32
+		{8798B04D-0237-4EFB-9F93-818CA6639FF5}.Release|Win32.Build.0 = Release|Win32
+		{A6BA25C2-D976-403E-BEDF-CBB51266A987}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A6BA25C2-D976-403E-BEDF-CBB51266A987}.Debug|Win32.Build.0 = Debug|Win32
+		{A6BA25C2-D976-403E-BEDF-CBB51266A987}.Insure|Win32.ActiveCfg = Insure|Win32
+		{A6BA25C2-D976-403E-BEDF-CBB51266A987}.Release|Win32.ActiveCfg = Release|Win32
+		{A6BA25C2-D976-403E-BEDF-CBB51266A987}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
-	GlobalSection(ProjectConfiguration) = postSolution
-		{D5EFACF0-3017-427D-91C0-C30CD9457F75}.Debug.ActiveCfg = Debug|Win32
-		{D5EFACF0-3017-427D-91C0-C30CD9457F75}.Debug.Build.0 = Debug|Win32
-		{D5EFACF0-3017-427D-91C0-C30CD9457F75}.Insure.ActiveCfg = Insure|Win32
-		{D5EFACF0-3017-427D-91C0-C30CD9457F75}.Insure.Build.0 = Insure|Win32
-		{D5EFACF0-3017-427D-91C0-C30CD9457F75}.Release.ActiveCfg = Release|Win32
-		{D5EFACF0-3017-427D-91C0-C30CD9457F75}.Release.Build.0 = Release|Win32
-		{E3FA5AEC-2E5C-4AE9-BCC3-EBCEA5300811}.Debug.ActiveCfg = Debug|Win32
-		{E3FA5AEC-2E5C-4AE9-BCC3-EBCEA5300811}.Debug.Build.0 = Debug|Win32
-		{E3FA5AEC-2E5C-4AE9-BCC3-EBCEA5300811}.Insure.ActiveCfg = Insure|Win32
-		{E3FA5AEC-2E5C-4AE9-BCC3-EBCEA5300811}.Insure.Build.0 = Insure|Win32
-		{E3FA5AEC-2E5C-4AE9-BCC3-EBCEA5300811}.Release.ActiveCfg = Release|Win32
-		{E3FA5AEC-2E5C-4AE9-BCC3-EBCEA5300811}.Release.Build.0 = Release|Win32
-		{E7AA0DA9-8C41-4611-BD24-D7D94B8F1EDD}.Debug.ActiveCfg = Debug|Win32
-		{E7AA0DA9-8C41-4611-BD24-D7D94B8F1EDD}.Debug.Build.0 = Debug|Win32
-		{E7AA0DA9-8C41-4611-BD24-D7D94B8F1EDD}.Insure.ActiveCfg = Insure|Win32
-		{E7AA0DA9-8C41-4611-BD24-D7D94B8F1EDD}.Insure.Build.0 = Insure|Win32
-		{E7AA0DA9-8C41-4611-BD24-D7D94B8F1EDD}.Release.ActiveCfg = Release|Win32
-		{E7AA0DA9-8C41-4611-BD24-D7D94B8F1EDD}.Release.Build.0 = Release|Win32
-		{243DD1BC-7C33-477B-9B9A-2C6B52648452}.Debug.ActiveCfg = Debug|Win32
-		{243DD1BC-7C33-477B-9B9A-2C6B52648452}.Debug.Build.0 = Debug|Win32
-		{243DD1BC-7C33-477B-9B9A-2C6B52648452}.Insure.ActiveCfg = Insure|Win32
-		{243DD1BC-7C33-477B-9B9A-2C6B52648452}.Insure.Build.0 = Insure|Win32
-		{243DD1BC-7C33-477B-9B9A-2C6B52648452}.Release.ActiveCfg = Release|Win32
-		{243DD1BC-7C33-477B-9B9A-2C6B52648452}.Release.Build.0 = Release|Win32
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-	EndGlobalSection
-	GlobalSection(ExtensibilityAddIns) = postSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

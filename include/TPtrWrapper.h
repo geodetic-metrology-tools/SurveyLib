@@ -89,14 +89,14 @@ bool operator<( const TPtrWrapper<T>& wrapper1, const TPtrWrapper<T>& wrapper2 )
 
 //Default constructor
 template <class T>
-TPtrWrapper<T>::TPtrWrapper<T>() : fPointer(0), fCount(0) 
+TPtrWrapper<T>::TPtrWrapper() : fPointer(0), fCount(0) 
 { 
 }
 
 
 //Constructor taking a pointer to the template object
 template <class T>
-TPtrWrapper<T>::TPtrWrapper<T>( T* pointer ) : fPointer( pointer ) 
+TPtrWrapper<T>::TPtrWrapper( T* pointer ) : fPointer( pointer ) 
 { 
 	fCount = new int(1);
 }
@@ -104,7 +104,7 @@ TPtrWrapper<T>::TPtrWrapper<T>( T* pointer ) : fPointer( pointer )
 
 //Copy constructor
 template <class T>
-TPtrWrapper<T>::TPtrWrapper<T>( TPtrWrapper<T>& source ) : fPointer(0), fCount(0)
+TPtrWrapper<T>::TPtrWrapper( TPtrWrapper<T>& source ) : fPointer(0), fCount(0)
 {
     fPointer = source.getPtr();
 	fCount = source.getCountPtr();
@@ -114,7 +114,7 @@ TPtrWrapper<T>::TPtrWrapper<T>( TPtrWrapper<T>& source ) : fPointer(0), fCount(0
 
 //Destructor
 template <class T>
-TPtrWrapper<T>::~TPtrWrapper<T>() 
+TPtrWrapper<T>::~TPtrWrapper() 
 { 
 	deletion(); 
 }

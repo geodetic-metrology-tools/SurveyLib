@@ -11,8 +11,9 @@
 // constructor
 //////////////
 THorAngleROM::THorAngleROM():
-TAUnreferencedROM(), fRefMeasAngle(0){
+TAUnreferencedROM() {
 
+	// TODO: removed fRefMeasAngle(0) from pre-constructor calls
 	fV0.setRadiansValue(0.0);
 	fV0Status = TAMeasurement::kVariable;
 
@@ -42,9 +43,10 @@ THorAngleROM::THorAngleROM(const THorAngleROM &source)
 // destructor
 /////////////
 THorAngleROM::~THorAngleROM(){
-	if (fRefMeasAngle != 0){
+	// TODO: commented this out
+	/*if (fRefMeasAngle != 0){
 		fRefMeasAngle = 0;
-	}
+	}*/
 
 
 }

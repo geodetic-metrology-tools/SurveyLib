@@ -139,7 +139,7 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
 	{
 		// round to 0.01 cc 
-		int temp = (splineInterpolation(fEtaMatrix, spos)) * 100;
+		int temp = (int) (splineInterpolation(fEtaMatrix, spos)) * 100;
 		if ( ( (splineInterpolation(fEtaMatrix, spos)) * 100 - temp ) >= 0.5)
 			temp += 1;
 
@@ -188,7 +188,7 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
 	{
 		// round to 0.01 cc 
-		int temp = (splineInterpolation(fXiMatrix, spos)) * 100;
+		int temp = (int) (splineInterpolation(fXiMatrix, spos)) * 100;
 		if ( ( (splineInterpolation(fXiMatrix, spos)) * 100 - temp ) >= 0.5)
 			temp += 1;
 
@@ -321,8 +321,9 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 
 
 	
+	int i;
 	// coordinates from the interpolated point
-	for(int i = 0; i<matrix.numRows(); i++)
+	for(i = 0; i<matrix.numRows(); i++)
 	{
 		y[i] = (i-1)-Yo;
 		absy[i] = fabs(y[i]);
@@ -432,7 +433,8 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 		// interpolation
 		for(i = 0; i < 4; i++)
 		{
-			for(int j = 0; j < 4; j++)
+			int j;
+			for(j = 0; j < 4; j++)
 			{
 				c(j,0) = x[L[j]]+Xo;
 				c(j,1) = y[K[i]]+Yo;
