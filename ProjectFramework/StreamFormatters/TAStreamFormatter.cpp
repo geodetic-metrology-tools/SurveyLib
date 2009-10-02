@@ -20,6 +20,7 @@
 
 
 #include	"TADataSet.h"
+#include	"TFileParameters.h"
 #include	"TDataParameters.h"
 
 #include	"TSpatialPositionFilter.h"
@@ -91,6 +92,50 @@ TAStreamFormatter::TAStreamFormatter(const string& input, TDataParameters& dp)
 	setLengthUnits(dp.getLengthUnits());
 	setCoordSys(dp.getCoordinateSystem());
 	fRefFrame = 0;
+	fLineGap = true;
+	fNonSpaceSeparator = "";
+	fSeparator = "";
+}
+
+
+/*!Constructors
+\param io: read or write
+\param fp: data file's parameters (name, path ...) 
+\param ds: data parameters (unit, precision, refernce system, coord sys...)*/ 
+TAStreamFormatter::TAStreamFormatter(EIOType io, TFileParameters& fp, TDataParameters& dp)
+{
+	init();
+	fName= fp.getFileName().c_str();
+	fSStream=0;
+	fIOType =io;
+	if (fIOType == kRead)
+	{// extraction of a file from a stream, reading of a stream
+		fFStream = new fstream(fName, ios_base::in);
+	}
+	else if(fIOType == kWrite)
+	{// insertion of a file into a stream, writing a stream
+		fFStream = new fstream(fName, ios_base::out);
+	}
+
+	if(fFStream->fail())
+	{
+		if(fIOType == kRead)
+		{
+			this->setError("No input file to open, check the path");
+		}
+		else
+		{
+			this->setError("No output file to open, check the path");
+		}
+		fFStream->clear();
+	}
+
+	fIOStream = fFStream;
+
+	setAngleUnits(dp.getAngleUnits());
+	setLengthUnits(dp.getLengthUnits());
+	setCoordSys(dp.getCoordinateSystem());
+	fRefFrame = dp.getRefFrame();
 	fLineGap = true;
 	fNonSpaceSeparator = "";
 	fSeparator = "";
