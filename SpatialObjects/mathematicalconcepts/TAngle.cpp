@@ -337,8 +337,8 @@ TAngle TAngle::operator+(const TAngle &angle)
 	status=this->testStatus(angle);
 	if (status!= kNull)
 	{
-		//resultat.setRadiansValue(this->getRadiansValue() + angle.getRadiansValue());
-		resultat.setGonsValue(this->getGonsValue() + angle.getGonsValue());
+		resultat.setRadiansValue(this->getRadiansValue() + angle.getRadiansValue());
+		//resultat.setGonsValue(this->getGonsValue() + angle.getGonsValue());
 	}
 	resultat.setStatus(status);
 	return resultat;
@@ -370,7 +370,8 @@ TAngle TAngle::operator-(const TAngle &angle)
 			resultat.setRadiansValue(this->getRadiansValue() - a.getRadiansValue());
 		}*/
 
-		resultat.setGonsValue(this->getGonsValue()-angle.getGonsValue());
+		resultat.setRadiansValue(this->getRadiansValue() - angle.getRadiansValue());
+		//resultat.setGonsValue(this->getGonsValue()-angle.getGonsValue());
 	}
 	resultat.setStatus(status);
 	return resultat;
