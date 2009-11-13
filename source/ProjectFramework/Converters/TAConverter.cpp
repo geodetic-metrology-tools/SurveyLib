@@ -204,6 +204,7 @@ void	TAConverter::readP100Comment(string comments)
 	fStream->readChar(); //read the char %
 
 	string comment = "";
+	fStream->skipWhiteSpace();
 	while(fStream->peek() != EOF && fStream->peek() != '\n')
 	{
 		fStream->TAStreamFormatter::operator>>(comment);

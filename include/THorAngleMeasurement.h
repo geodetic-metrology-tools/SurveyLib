@@ -62,7 +62,7 @@ public :
 	THorAngleMeasurement&		operator=(const THorAngleMeasurement& source);
 	//to be used carefully : shallow copy (see NetworkSurveyMeas)
 	/*! Equality operator */
-	virtual bool				operator==(const THorAngleMeasurement& right);
+	virtual bool				operator==(const THorAngleMeasurement& right) const;
 	//@}
 
 	/*! returns a pointer to this THorAngleMeasurement */

@@ -71,7 +71,7 @@ THorAngleMeasurement& THorAngleMeasurement::operator=(const THorAngleMeasurement
 ////////////////////////////
 // copy assignement operator
 ////////////////////////////
-bool THorAngleMeasurement::operator==(const THorAngleMeasurement& right){
+bool THorAngleMeasurement::operator==(const THorAngleMeasurement& right) const {
 
 	bool isEqualTo = false;
 	if ((fTargetPtName == (right.fTargetPtName)) &&
