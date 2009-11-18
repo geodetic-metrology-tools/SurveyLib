@@ -14,6 +14,7 @@
 // Forward declarations
 /////////////////////////////////////////////////////
 #include "TMatrix.h"
+#include "TSparseMatrix.h"
 #include "TColumnVector.h"
 #include <fstream>
 #include <sstream>
@@ -73,7 +74,8 @@ public:
 	virtual TColumnVector*		getResidualsVctr() const {return fResidualsVctr;}
 
 	/*!@return a pointer to the unknowns covariance matrix*/
-	virtual TMatrix*			getUnkCovarMtrx() const {return fUnknownsCovarianceMtrx;}
+	virtual TSparseMatrix*		getUnkCovarMtrx() const {return fUnknownsCovarianceMtrx;}
+	virtual void				setUnkCovarMtrx(TSparseMatrix* m) { fUnknownsCovarianceMtrx = m; }
 
 	/*!@return the boolean indicating if sigma zero should be applied or not */
 	virtual bool				S0APosterioriVariances() const {return fS0APosterioriVariances;}
@@ -87,15 +89,16 @@ public:
 	/*! sets the boolean */
 	virtual void			setS0APosterioriVariances(bool s0) {fS0APosterioriVariances = s0; return;}
 
-	/*! Calculates one observation i's variance a posteriori
-	\param A pointer to the first design matrix used to compute the variance */
-	double			computeS2APosteriori(const TMatrix& A, int i) const;
-
 	/*! Save the results matrices in a file */
 	void			saveMatricesToFile(int nbIter) const;
 
 	/*! compute and return a vector of observations variances */
-	TColumnVector	computeVarObs(const TMatrix& A);
+	TColumnVector	computeVarObs(const TSparseMatrix& A, const TSparseMatrix& ATransposed);
+
+	void*			getSymbolic() const { return symbolic; }
+	void			setSymbolic(void* s) { symbolic = s; }
+
+	TSparseMatrix*	getCholeskyFactor();
 
 private:
 	//mj2008
@@ -115,9 +118,10 @@ private:
 
 	TColumnVector*	fSolutionVctr; /*!< vector (u x 1) containing the calculated parameters */
 	TColumnVector*	fResidualsVctr; /*!< vector (o x 1) containing the calculated residues on observations */
-	TMatrix*		fUnknownsCovarianceMtrx; /*!< matrix (u x u) containing the variances and covariances for parameters */
+	TSparseMatrix*	fUnknownsCovarianceMtrx; /*!< matrix (u x u) containing the variances and covariances for parameters */
 	double			fSigmaZero2; /*!< calculated "average variance" on residues */
 	bool			fS0APosterioriVariances; /*!< indicates if the s0 a posteriori should be applied */
+	void*			symbolic;
 };
 
 /////////////////////

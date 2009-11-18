@@ -28,6 +28,7 @@
 // Forward declarations
 /////////////////////////////////////////////////////
 #include "TMatrix.h"
+#include "TSparseMatrix.h"
 #include "TColumnVector.h"
 #include <fstream>
 #include <sstream>
@@ -95,11 +96,11 @@ public:
 //		virtual double					getS0APrioriScaleFactor() const;
 
 		/*!@return a const reference to the first design matrix*/
-		virtual const TMatrix&			getFirstDgnMtrx() const;
+		const TSparseMatrix* getFirstDgnMtrxTransposed() const;
 		/*!@return a const reference to the second design matrix*/
-		virtual const TMatrix&			getSecondDgnMtrx() const;
+		const TSparseMatrix* getSecondDgnMtrx() const;
 		/*!@return a const reference to the weight design matrix*/
-		virtual const TMatrix&			getWeightMtrx() const;
+		const TSparseMatrix* getWeightMtrx() const;
 		/*!@return a const reference to the misclosure vector*/
 		virtual const TColumnVector&	getMisclosureVctr() const;
 		/*!@return a const reference to the constraint first design matrix*/
@@ -112,6 +113,14 @@ public:
 	//!Debug method
 	void						saveMatricesToFile(int nbIter) const;
 
+	void setNewRow();
+	void finishedFillingMatrices();
+
+	void setFirstDesignMatrix(TSparseMatrix* f) { firstDesignMatrix = f; };
+	TSparseMatrix* getFirstDesignMatrix() const { return firstDesignMatrix; };
+
+	void clearMatrices();
+
 
 private:
 
@@ -121,15 +130,26 @@ private:
 	int				fNbCnstrObs; /*!< number of constraint observations */
 	MatrixIndex		fNbCnstr;/*!<number of constraint*/
 
-	TMatrix*		fFirstDesignMtrx; /*!< matrix (e x u) for the parametric part of the model */
-	TMatrix*		fSecondDesignMtrx; /*!< matrix (e x o) for the conditional part of the model  */
-	TMatrix*		fWeightMtrx; /*!< matrix (o x o) for observations weights */
+	list<double>*	firstDesignMatrixTransposedValues; /*!< matrix (e x u) for the parametric part of the model */
+	list<int>*		firstDesignMatrixTransposedColPtr;
+	list<int>*		firstDesignMatrixTransposedRowInd;
+
+	list<double>*	secondDesignMatrixValues; /*!< matrix (e x o) for the conditional part of the model  */
+	list<int>*		secondDesignMatrixColPtr;
+	list<int>*		secondDesignMatrixRowInd;
+
+	list<double>*	weightMatrixValues; /*!< matrix (o x o) for observations weights */
+
 	TColumnVector*	fMisclosureVector; /*!< vector (e x u) for misclosure errors */
 //	double			fS0APrioriScaleFactor; /*!< indicates if there is a priori scale factor or not */
 
 	TMatrix*		fCnstrFirstDesignMtrx; /*!< matrix (o x 7 or less) for the parametric part of the model */
 	TColumnVector*	fCnstrMisclosureVector; /*!< vector for misclosure errors */
 
+	TSparseMatrix*	firstDesignMatrix;
+	TSparseMatrix*	firstDesignMatrixTransposed;
+	TSparseMatrix*	secondDesignMatrix;
+	TSparseMatrix*	weightMatrix;
 
 };
 

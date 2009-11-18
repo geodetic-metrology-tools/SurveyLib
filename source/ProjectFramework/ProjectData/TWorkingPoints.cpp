@@ -33,9 +33,9 @@ bool TWorkingPoints::addPoint(TSpatialPoint *sp){
 	
 	string empty("");
 	bool insert_ok = false;
-	
+
 	// check that the point is not already in the list
-	if( count(fWorkingPoints.begin(), fWorkingPoints.end(), *sp) == 0 )
+	if (fWorkingPoints.find(sp->getName().getName()) == fWorkingPoints.end())
 	{
 		if (((sp->getName()).getName()) == empty){
 			ostringstream oss;
@@ -44,7 +44,8 @@ bool TWorkingPoints::addPoint(TSpatialPoint *sp){
 			sp->setName(TSpatialPointName(oss.str()));
 		}
 		sp->setListener(this);
-		fWorkingPoints.push_back(*sp);
+		fWorkingPoints[sp->getName().getName()] = pointsList.size();
+		pointsList.push_back(*sp);
 			
 		insert_ok = true;
 	}
@@ -62,7 +63,7 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 	int origNumPoints = fWorkingPoints.size();
 	
 	// check that the point is not already in the list
-	if( count(fWorkingPoints.begin(), fWorkingPoints.end(), *sp) == 0 )
+	if (fWorkingPoints.find(sp->getName().getName()) == fWorkingPoints.end())
 	{
 
 		if (((sp->getName()).getName()) == empty){
@@ -74,13 +75,19 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 
 		sp->setListener(this);
 
-		PointIterator iter = fWorkingPoints.begin();
+		PointIterator iter = pointsList.begin();
 		for (int i=0; i < pos; i++)
 		{
 				iter++;
 		}
+		fWorkingPoints[sp->getName().getName()] = pos;
+		pointsList.insert(iter, *sp);
 
-		fWorkingPoints.insert(iter, *sp);
+		while (iter != pointsList.end())
+		{
+			fWorkingPoints[iter->getName().getName()]++;
+			iter++;
+		}
 			
 		insert_ok = true;
 	}
@@ -102,13 +109,19 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 			sp->setDuplicatePtName(oss.str());
 			sp->setListener(this);
 
-			PointIterator iter = fWorkingPoints.begin();
+			PointIterator iter = pointsList.begin();
 			for (int i=0; i < pos; i++)
 			{
 					iter++;
 			}
+			fWorkingPoints[sp->getName().getName()] = pos;
+			pointsList.insert(iter, *sp);
 
-			fWorkingPoints.insert(iter, *sp);
+			while (iter != pointsList.end())
+			{
+				fWorkingPoints[iter->getName().getName()]++;
+				iter++;
+			}
 				
 			insert_ok = true;
 		}
@@ -126,14 +139,15 @@ bool TWorkingPoints::deletePoint(PointIterator iter)
 	bool delete_ok;
 	int origNumPoints = fWorkingPoints.size();
 
-	if (iter == fWorkingPoints.end())
+	if (iter == pointsList.end())
 	{
 	 delete_ok = false;
 	}
 		
 	else
 	{
-	fWorkingPoints.erase(iter);
+	fWorkingPoints.erase(iter->getName().getName());
+		pointsList.erase(iter);
 	 delete_ok = true;
 	}
 	
@@ -156,7 +170,7 @@ int TWorkingPoints::numberOfPoints() const{
 /////////////////////////////////////////////////////////////////
 PointIterator TWorkingPoints::getPointsBeginIterator() {
 
-	return fWorkingPoints.begin();
+	return pointsList.begin();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -164,7 +178,7 @@ PointIterator TWorkingPoints::getPointsBeginIterator() {
 //////////////////////////////////////////////////////////////////////
 PointConstIter TWorkingPoints::getPointsBeginIterator() const{
 
-	return fWorkingPoints.begin();
+	return pointsList.begin();
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -172,7 +186,7 @@ PointConstIter TWorkingPoints::getPointsBeginIterator() const{
 ////////////////////////////////////////////////////////////////////
 PointIterator TWorkingPoints::getPointsEndIterator() {
 
-	return fWorkingPoints.end();
+	return pointsList.end();
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -180,7 +194,7 @@ PointIterator TWorkingPoints::getPointsEndIterator() {
 /////////////////////////////////////////////////////////////////////////
 PointConstIter TWorkingPoints::getPointsEndIterator() const{
 
-	return fWorkingPoints.end();
+	return pointsList.end();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -188,19 +202,12 @@ PointConstIter TWorkingPoints::getPointsEndIterator() const{
 ///////////////////////////////////////////////////////////////////
 PointIterator TWorkingPoints::getPoint(TSpatialPointName spn) {
 
-	PointIterator iter = fWorkingPoints.begin();
-	PointIterator iterEnd = fWorkingPoints.end();
-
-	bool notFound = true;
-
-	while (iter != iterEnd  &&  notFound){
-		if ((iter->getName()) == spn)
-			notFound = false;
-		else
-			iter ++;
+	hash_map<string, int>::iterator i = fWorkingPoints.find(spn.getName());
+	if (i == fWorkingPoints.end())
+	{
+		return pointsList.end();
 	}
-
-	return iter;
+	return pointsList.begin() + i->second;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -208,19 +215,12 @@ PointIterator TWorkingPoints::getPoint(TSpatialPointName spn) {
 ///////////////////////////////////////////////////////////////////
 PointConstIter TWorkingPoints::getPoint(TSpatialPointName spn) const{
 
-	PointConstIter iter = fWorkingPoints.begin();
-	PointConstIter iterEnd = fWorkingPoints.end();
-
-	bool notFound = true;
-
-	while (iter != iterEnd  &&  notFound){
-		if ((iter->getName()) == spn)
-			notFound = false;
-		else
-			iter ++;
+	hash_map<string, int>::const_iterator i = fWorkingPoints.find(spn.getName());
+	if (i == fWorkingPoints.end())
+	{
+		return pointsList.end();
 	}
-
-	return iter;
+	return pointsList.begin() + i->second;
 }
 
 void TWorkingPoints::headerChanged(TSpatialPointName name)

@@ -189,7 +189,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\bpetrov\LGC++\SurveyLib\include&quot;;&quot;C:\Documents and Settings\bpetrov\LGC++\SurveyLib\include\nagc&quot;"
+				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\bpetrov\LGC++\SurveyLib\include&quot;;&quot;C:\Documents and Settings\bpetrov\LGC++\SurveyLib\include\nagc&quot;;&quot;C:\Documents and Settings\bpetrov\LGC++\SEAL_Libraries\Taucs&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;SU_MAKEDLL"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"

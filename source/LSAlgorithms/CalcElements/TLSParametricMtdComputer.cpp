@@ -15,22 +15,19 @@
 //CONSTRUCTOR / DESTRUCTOR
 //////////////////////////////////////////////////////////
 TLSParametricMtdComputer::TLSParametricMtdComputer():
-fAtPA(0), fError("")/*, fS0PostUpLimit(0.0), fS0PostLoLimit(0.0), fSigmaZero2(0.0)*/
+fError("")/*, fS0PostUpLimit(0.0), fS0PostLoLimit(0.0), fSigmaZero2(0.0)*/
 {//default constructor
+	count = 1;
 }
 
 
 TLSParametricMtdComputer::~TLSParametricMtdComputer()
 {//destructor
-	if(fAtPA!=0)
-	{
-		delete fAtPA;
-	}
 }
 
 
 
-bool TLSParametricMtdComputer::computeResults(const TLSInputMatrices* im , TLSResultsMatrices* rm)
+bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsMatrices* rm)
 {
 	bool result;
 	int nbCnstr = im->getNbrConstraints();
@@ -59,7 +56,7 @@ bool TLSParametricMtdComputer::computeResults(const TLSInputMatrices* im , TLSRe
 ////////////////////////////////////////////////////////////////
 //COMPUTES THE RESULTS MATRICES
 ////////////////////////////////////////////////////////////////
-bool TLSParametricMtdComputer::computeResultsMtrs(const TLSInputMatrices* im, TLSResultsMatrices* rm)
+bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm)
 {
 	/* in this method, the solution is computed with a numeric equations solver method (nagc lib).
 	   The unknown variance-covariance matrix is thus not computed here. 
@@ -67,44 +64,65 @@ bool TLSParametricMtdComputer::computeResultsMtrs(const TLSInputMatrices* im, TL
 	   It is finally inverted outside the method, when there are no iterations left to 
 	   be performed (in TLSCalculation). */
 
-	const TMatrix& firstDM = im->getFirstDgnMtrx();
-	const TMatrix& weightM = im->getWeightMtrx();
+	const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
+	const TSparseMatrix* weightM = im->getWeightMtrx();
 	const TColumnVector& misclV = im->getMisclosureVctr();
-
-	int nbUnk = im->getNbrUnknowns();
-	int nbObs = im->getNbrObservations();
-	int nbCnstrObs = im->getNbrConstraintObs();
 	
-	//intermediate (AtPA) matrix
-	if (fAtPA == 0)
+    TSparseMatrix* firstDM = firstDMTransposed->transposed();
+	im->setFirstDesignMatrix(firstDM);
+	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply(*weightM);
+
+	TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular(*firstDM);
+	double* solutionVectorb = *aTransTimesW * misclV;
+	for (int i = 0; i < aTransTimesW->rowsCount(); i++)
 	{
-		fAtPA =  new TMatrix(nbUnk, nbUnk);
+		solutionVectorb[i] = -solutionVectorb[i];
 	}
-	else 
+	delete aTransTimesW;
+
+	int success = 0;
+	
+    /* I do this, because for some strange reason design matrix A has A LOT less non-zeros the first time -
+	   actually each time it has the same non-zero structure, except the first. */
+	if (count == 1)
 	{
-		*fAtPA = 0.0;
+		rm->setSymbolic(taucs_ccs_factor_llt_mf(*fAtPA));
+	}
+	else if (count == 2)
+	{
+		taucs_supernodal_factor_free(rm->getSymbolic());
+		rm->setSymbolic(taucs_ccs_factor_llt_symbolic(*fAtPA));
+		success = taucs_ccs_factor_llt_numeric(*fAtPA, rm->getSymbolic());
+	}
+	else
+	{
+		taucs_supernodal_factor_free_numeric(rm->getSymbolic());
+		taucs_ccs_factor_llt_numeric(*fAtPA, rm->getSymbolic());
+	}
+	count++;
+
+	if (rm->getSymbolic() == NULL || success == -1)
+	{
+		delete[] solutionVectorb;
+		// TODO: set some error
+		return false; // Matrix is not positive definite
 	}
 
-	// computation of normal equations matrix (not inverted yet)
-	*fAtPA = (firstDM.transposed() * weightM * firstDM);
+	delete fAtPA;
 
+	double* solution = new double[im->getNbrUnknowns()];
 
+    taucs_supernodal_solve_llt(rm->getSymbolic(), solution, solutionVectorb);
+	delete[] solutionVectorb;
 
-	//computation of the solution vector
-	TColumnVector* solution = rm->getSolutionVctr();
-	/**************************/
-	/*gets to here and crashes*/
-	/**************************/
-	*solution = 0.0;
-	// computes solution using a equations system solver (Nx = B)
-	*solution = firstDM.transposed() * weightM * misclV * -1.0;	
-	*solution = fAtPA->eqnSolve(*solution);
-
-	if (solution->isNull())
-	{// if eqnSolve method fails, an error message is generated
-		fError = fAtPA->getError();
-		return false;
+	TColumnVector* solutionVector = rm->getSolutionVctr();
+	*solutionVector = TColumnVector(im->getNbrUnknowns());
+	for (int i = 0; i < im->getNbrUnknowns(); i++)
+	{
+		(*solutionVector)(i) = solution[i];
 	}
+
+	delete[] solution;
 
 	return true;
 }
@@ -113,141 +131,141 @@ bool TLSParametricMtdComputer::computeResultsMtrs(const TLSInputMatrices* im, TL
 ////////////////////////////////////////////////////////////////
 //COMPUTES THE RESULTS MATRICES FOR FREE CALCULATION
 ////////////////////////////////////////////////////////////////
-bool TLSParametricMtdComputer::computeFreeResultsMtrs(const TLSInputMatrices* im, TLSResultsMatrices* rm){
+bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm){
 
 //	cout << "Entered computer\n";
 
-	const TMatrix& firstDM = im->getFirstDgnMtrx(); //A1
-	const TMatrix& weightM = im->getWeightMtrx();  //P
-	const TColumnVector& misclV = im->getMisclosureVctr(); //W1
+	//const TMatrix& firstDM = im->getFirstDgnMtrx(); //A1
+	//const TMatrix& weightM = im->getWeightMtrx();  //P
+	//const TColumnVector& misclV = im->getMisclosureVctr(); //W1
 
-	const TMatrix& cnstrFirstDM = im->getCnstrFirstDgnMtrx(); //A2
-	const TColumnVector& cnstrMisclV = im->getCnstrMisclosureVctr(); //W2      
+	//const TMatrix& cnstrFirstDM = im->getCnstrFirstDgnMtrx(); //A2
+	//const TColumnVector& cnstrMisclV = im->getCnstrMisclosureVctr(); //W2      
 
-	int nbUnk = im->getNbrUnknowns();
-	int nbObs = im->getNbrObservations();
-	int nbCnstr = im->getNbrConstraints();
-	int nbCnstrObs = im->getNbrConstraintObs();
+	//int nbUnk = im->getNbrUnknowns();
+	//int nbObs = im->getNbrObservations();
+	//int nbCnstr = im->getNbrConstraints();
+	//int nbCnstrObs = im->getNbrConstraintObs();
 
-	//intermediate N = (A1tPA1) matrix
-	TMatrix	N (nbUnk, nbUnk);
-	N = 0.0;
-	
-	N = firstDM.transposed() * weightM * firstDM;
+	////intermediate N = (A1tPA1) matrix
+	//TMatrix	N (nbUnk, nbUnk);
+	//N = 0.0;
+	//
+	//N = firstDM.transposed() * weightM * firstDM;
 
-	//intermediate Nbig
-	/*
-	Nbig = ( (N  , A2t)
-			 (A2, 0 ))
-	*/
-	TMatrix	Nbig (nbUnk + nbCnstr, nbUnk + nbCnstr);
-	Nbig = 0.0;
+	////intermediate Nbig
+	///*
+	//Nbig = ( (N  , A2t)
+	//		 (A2, 0 ))
+	//*/
+	//TMatrix	Nbig (nbUnk + nbCnstr, nbUnk + nbCnstr);
+	//Nbig = 0.0;
 
-	//insert N in Nbig
-	int i = 0;
-	while( i < nbUnk )
-	{
-		//insert N
-		int j = 0;
-		while(j < nbUnk)
-		{// modif
-			Nbig(i,j) = N(i,j);
-			j++;
-		}
+	////insert N in Nbig
+	//int i = 0;
+	//while( i < nbUnk )
+	//{
+	//	//insert N
+	//	int j = 0;
+	//	while(j < nbUnk)
+	//	{// modif
+	//		Nbig(i,j) = N(i,j);
+	//		j++;
+	//	}
 
-		
-		int J = 0;
-		while(j<nbUnk + nbCnstr)
-		{
-			Nbig(i,j) = cnstrFirstDM(J,i);//insert A2t
-			Nbig(j,i) = cnstrFirstDM(J,i);//insert A2
-			j++;
-			J++;
-		}
-		i++;
-	}
+	//	
+	//	int J = 0;
+	//	while(j<nbUnk + nbCnstr)
+	//	{
+	//		Nbig(i,j) = cnstrFirstDM(J,i);//insert A2t
+	//		Nbig(j,i) = cnstrFirstDM(J,i);//insert A2
+	//		j++;
+	//		J++;
+	//	}
+	//	i++;
+	//}
 
-	//inverse Nbig matrix
-	TMatrix NbigInv (nbUnk + nbCnstr, nbUnk + nbCnstr);
-	NbigInv = 0,0;
-	// NbigInv = intermediate matrix containing LU decomposition for solving of equation system
-	int n_pivot(NbigInv.numRows()-1); // pivot used in LU decomposition
-	int* pivot_i; // pivot used in LU decomposition
-	int* pivot_j; // pivot used in LU decomposition
+	////inverse Nbig matrix
+	//TMatrix NbigInv (nbUnk + nbCnstr, nbUnk + nbCnstr);
+	//NbigInv = 0,0;
+	//// NbigInv = intermediate matrix containing LU decomposition for solving of equation system
+	//int n_pivot(NbigInv.numRows()-1); // pivot used in LU decomposition
+	//int* pivot_i; // pivot used in LU decomposition
+	//int* pivot_j; // pivot used in LU decomposition
 
-	pivot_i = new int [n_pivot+1];
-	pivot_j = new int [n_pivot+1];
-	// LU decomposition
-	NbigInv = Nbig.dfact(&n_pivot,pivot_i,pivot_j);
-
-
-	
-	if (NbigInv.isNull())
-	{// if inverse method fails, an error message is generated
-		fError = NbigInv.getError();
-		return false;
-	}
-
-	//intermediate ColumnVector Cbig
-	/*
-	Cbig = ( (A1t*p*misclV)
-			 (cnstrMisclV ) )
-	*/
-	TColumnVector Cbig ( nbUnk + nbCnstr);
-	Cbig = 0.0;
-	TColumnVector C ( nbUnk);
-	C = 0.0;
-	C = firstDM.transposed() * weightM * misclV*(-1.0);
-
-	//insert C in Cbig
-	i = 0;
-	while( i < nbUnk )
-	{
-		Cbig(i) = C(i);
-		i++;
-	}
-
-	//insert cnstrMisclV in Nbig
-	i = nbUnk;
-	int I = 0;
-	while( i < (nbUnk + nbCnstr) )
-	{
-		Cbig(i) = cnstrMisclV(I);
-		i++;
-		I++;
-	}
+	//pivot_i = new int [n_pivot+1];
+	//pivot_j = new int [n_pivot+1];
+	//// LU decomposition
+	//NbigInv = Nbig.dfact(&n_pivot,pivot_i,pivot_j);
 
 
-	//computation of the solution vector
-	TColumnVector solutionBig (nbUnk + nbCnstr);
-	solutionBig = 0.0;
-	solutionBig = NbigInv.dfeqn(&Cbig,n_pivot,pivot_i,pivot_j);
+	//
+	//if (NbigInv.isNull())
+	//{// if inverse method fails, an error message is generated
+	//	fError = NbigInv.getError();
+	//	return false;
+	//}
 
-	delete[] pivot_i;
-	delete[] pivot_j;
+	////intermediate ColumnVector Cbig
+	///*
+	//Cbig = ( (A1t*p*misclV)
+	//		 (cnstrMisclV ) )
+	//*/
+	//TColumnVector Cbig ( nbUnk + nbCnstr);
+	//Cbig = 0.0;
+	//TColumnVector C ( nbUnk);
+	//C = 0.0;
+	//C = firstDM.transposed() * weightM * misclV*(-1.0);
+
+	////insert C in Cbig
+	//i = 0;
+	//while( i < nbUnk )
+	//{
+	//	Cbig(i) = C(i);
+	//	i++;
+	//}
+
+	////insert cnstrMisclV in Nbig
+	//i = nbUnk;
+	//int I = 0;
+	//while( i < (nbUnk + nbCnstr) )
+	//{
+	//	Cbig(i) = cnstrMisclV(I);
+	//	i++;
+	//	I++;
+	//}
 
 
-	if (solutionBig.isNull())
-	{// if dfeqn method fails, an error message is generated
-		fError = NbigInv.getError();
-		return false;
-	}
+	////computation of the solution vector
+	//TColumnVector solutionBig (nbUnk + nbCnstr);
+	//solutionBig = 0.0;
+	//solutionBig = NbigInv.dfeqn(&Cbig,n_pivot,pivot_i,pivot_j);
 
-	TColumnVector* solution = rm->getSolutionVctr();
-	(*solution) = 0.0;
-	// extraction of solution from solutionBig
-	i = 0;
-	while( i < nbUnk)
-	{
-		(*solution)(i) =  solutionBig(i);
-		i++;
-	}
+	//delete[] pivot_i;
+	//delete[] pivot_j;
 
-	if (fAtPA == 0)
-	{
-		fAtPA = new TMatrix (nbUnk + nbCnstr, nbUnk + nbCnstr);
-	}
-	*fAtPA = Nbig;
+
+	//if (solutionBig.isNull())
+	//{// if dfeqn method fails, an error message is generated
+	//	fError = NbigInv.getError();
+	//	return false;
+	//}
+
+	//TColumnVector* solution = rm->getSolutionVctr();
+	//(*solution) = 0.0;
+	//// extraction of solution from solutionBig
+	//i = 0;
+	//while( i < nbUnk)
+	//{
+	//	(*solution)(i) =  solutionBig(i);
+	//	i++;
+	//}
+
+	//if (fAtPA == 0)
+	//{
+	//	fAtPA = new TMatrix (nbUnk + nbCnstr, nbUnk + nbCnstr);
+	//}
+	//*fAtPA = Nbig;
 
 
 	return true;

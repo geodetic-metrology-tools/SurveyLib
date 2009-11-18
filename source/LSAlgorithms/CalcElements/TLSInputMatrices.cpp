@@ -16,9 +16,20 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////////
 TLSInputMatrices::TLSInputMatrices()
 {//Constructor
-	fFirstDesignMtrx = 0;
-	fSecondDesignMtrx = 0;
-	fWeightMtrx = 0;
+	firstDesignMatrixTransposedValues = new list<double>();
+	firstDesignMatrixTransposedColPtr = new list<int>();
+	firstDesignMatrixTransposedRowInd = new list<int>();
+
+	secondDesignMatrixValues = new list<double>();
+	secondDesignMatrixColPtr = new list<int>();
+	secondDesignMatrixRowInd = new list<int>();
+
+	weightMatrixValues = new list<double>();
+
+	firstDesignMatrixTransposed = NULL;
+	secondDesignMatrix = NULL;
+	weightMatrix = NULL;
+
 	fMisclosureVector = 0;
 	
 	fCnstrFirstDesignMtrx = 0;
@@ -36,9 +47,13 @@ TLSInputMatrices::TLSInputMatrices()
 
 TLSInputMatrices::~TLSInputMatrices()
 {//Destructor
-	delete fFirstDesignMtrx;
-	delete fSecondDesignMtrx;
-	delete fWeightMtrx;
+	delete firstDesignMatrixTransposedValues;
+	delete firstDesignMatrixTransposedColPtr;
+	delete firstDesignMatrixTransposedRowInd;
+	delete secondDesignMatrixValues;
+	delete secondDesignMatrixColPtr;
+	delete secondDesignMatrixRowInd;
+	delete weightMatrixValues;
 	delete fMisclosureVector;
 
 	delete fCnstrFirstDesignMtrx;
@@ -55,96 +70,25 @@ TLSInputMatrices::~TLSInputMatrices()
 void TLSInputMatrices::setDimensions(int unknowns, int equations, int observations,  int cnstrObs)
 {//sets the dimensions of the matrices
 
-	if ((fNbUnk == unknowns) && (fNbObs == observations) && (fNbEqn == equations)){
+	fNbUnk = unknowns;
+	fNbObs = observations; // number of observations + constraint observations
+	fNbEqn = equations;
+	fNbCnstrObs = cnstrObs;
 
-		*fFirstDesignMtrx = 0.0;	
-		*fSecondDesignMtrx = 0.0;
-		*fMisclosureVector = 0.0;
-		*fWeightMtrx = 0.0;
-	}
-	else{
-
-		fNbUnk = unknowns;
-		fNbObs = observations; // number of observations + constraint observations
-		fNbEqn = equations;
-		fNbCnstrObs = cnstrObs; 
-	
-		delete fFirstDesignMtrx;
-		delete fSecondDesignMtrx;
-		delete fWeightMtrx;
-		delete fMisclosureVector;
-	
-		//debug
-		fFirstDesignMtrx = new TMatrix(equations, unknowns);
-		*fFirstDesignMtrx = 0.0;
-
-	
-		fSecondDesignMtrx = new TMatrix(equations, observations /*+ cnstrObs*/); 
-		*fSecondDesignMtrx = 0.0;
-	
-		fMisclosureVector = new TColumnVector(equations);
-		*fMisclosureVector = 0.0;
-	
-		fWeightMtrx = new TMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
-		*fWeightMtrx = 0.0;
-	}
-	return;
+	fMisclosureVector = new TColumnVector(fNbObs);
 }
 
 
 void TLSInputMatrices::setDimensions(int unknowns, int equations, int observations, int nbCnstrObs, int constraints)
 {//sets the dimensions of the matrices
 
-	if ((fNbUnk == unknowns) && (fNbObs == observations) &&
-		(fNbEqn == equations) && (fNbCnstr == constraints))
-	{
-
-		*fFirstDesignMtrx = 0.0;	
-		*fSecondDesignMtrx = 0.0;
-		*fMisclosureVector = 0.0;
-		*fWeightMtrx = 0.0;
-
-		*fCnstrFirstDesignMtrx = 0.0;	
-		*fCnstrMisclosureVector = 0.0;
-	}
-	else
-	{
-
-		fNbUnk = unknowns;
-		fNbObs = observations; // number of observations + constraint observations
-		fNbEqn = equations;
-		fNbCnstr = constraints;
-		fNbCnstrObs = nbCnstrObs;
-
-		delete fFirstDesignMtrx;
-		delete fSecondDesignMtrx;
-		delete fWeightMtrx;
-		delete fMisclosureVector;
-		delete fCnstrFirstDesignMtrx;	
-		delete fCnstrMisclosureVector;
-
+	fNbUnk = unknowns;
+	fNbObs = observations; // number of observations + constraint observations
+	fNbEqn = equations;
+	fNbCnstr = constraints;
+	fNbCnstrObs = nbCnstrObs;
 	
-		fFirstDesignMtrx = new TMatrix(equations, unknowns);
-		*fFirstDesignMtrx = 0.0;
-	
-		fSecondDesignMtrx = new TMatrix(equations, observations /*+ nbCnstrObs*/);
-		*fSecondDesignMtrx = 0.0;
-	
-		fMisclosureVector = new TColumnVector(equations);
-		*fMisclosureVector = 0.0;
-	
-		fWeightMtrx = new TMatrix(observations /*+ nbCnstrObs*/, observations /*+ nbCnstrObs*/);
-		*fWeightMtrx = 0.0;
-
-		fCnstrFirstDesignMtrx = new TMatrix(constraints, unknowns);
-		*fFirstDesignMtrx = 0.0;
-
-		fCnstrMisclosureVector = new TColumnVector(constraints);
-		*fMisclosureVector = 0.0;
-
-	}
-
-	return;
+	fMisclosureVector = new TColumnVector(fNbObs);
 }
 
 
@@ -155,14 +99,35 @@ void TLSInputMatrices::setS0APrioriScaleFactor(double scalefac)
 	fS0APrioriScaleFactor = scalefac;
 }*/
 
+void TLSInputMatrices::clearMatrices()
+{
+	firstDesignMatrixTransposedValues->clear();
+	firstDesignMatrixTransposedRowInd->clear();
+	firstDesignMatrixTransposedColPtr->clear();
+	
+	secondDesignMatrixValues->clear();
+	secondDesignMatrixRowInd->clear();
+	secondDesignMatrixColPtr->clear();
+
+	weightMatrixValues->clear();
+
+	if (firstDesignMatrixTransposed != NULL)
+	{
+		delete firstDesignMatrixTransposed;
+		delete secondDesignMatrix;
+		delete weightMatrix;
+	}
+}
+
 
 bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, double coeff)
 {//sets an element of the first design matrix
 	bool successfullySet = true;
-	if (row<=fNbEqn && column <=fNbUnk)
-		(*fFirstDesignMtrx)(row, column) = (*fFirstDesignMtrx)(row, column) + coeff;
-	else
-		successfullySet = false;
+	if (coeff != 0)
+	{
+		firstDesignMatrixTransposedValues->push_back(coeff);
+		firstDesignMatrixTransposedRowInd->push_back(column);
+	}
 
 	return successfullySet;
 }
@@ -171,10 +136,11 @@ bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex column, double coeff)
 {//sets an element of the second design matrix
 	bool successfullySet = true;
-	if (row<=fNbEqn && column <=fNbObs)
-		(*fSecondDesignMtrx)(row, column) = (*fSecondDesignMtrx)(row, column) + coeff;
-	else
-		successfullySet = false;
+	if (coeff != 0)
+	{
+		secondDesignMatrixValues->push_back(coeff);
+		secondDesignMatrixRowInd->push_back(column);
+	}
 
 	return successfullySet;
 }
@@ -195,10 +161,10 @@ bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, double coeff)
 bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, double coeff)
 {//sets en element of the weight matrix
 	bool successfullySet = true;
-	if (row<=fNbObs && column <=fNbObs)
-		(*fWeightMtrx)(row, column) = (*fWeightMtrx)(row, column) + coeff;
-	else
-		successfullySet = false;
+	if (coeff != 0)
+	{
+		weightMatrixValues->push_back(coeff);
+	}
 
 	return successfullySet;
 }
@@ -233,27 +199,48 @@ bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, double c
 	return successfullySet;
 }
 
+void TLSInputMatrices::setNewRow()
+{
+	firstDesignMatrixTransposedColPtr->push_back(firstDesignMatrixTransposedValues->size());
+	secondDesignMatrixColPtr->push_back(secondDesignMatrixValues->size());
+}
+
+void TLSInputMatrices::finishedFillingMatrices()
+{	
+	firstDesignMatrixTransposed = new TSparseMatrix(fNbObs, fNbUnk, 
+		firstDesignMatrixTransposedValues->size(), firstDesignMatrixTransposedValues, 
+		firstDesignMatrixTransposedRowInd, firstDesignMatrixTransposedColPtr);
+	secondDesignMatrix = new TSparseMatrix(fNbUnk, fNbObs,
+		secondDesignMatrixValues->size(), secondDesignMatrixValues, 
+		secondDesignMatrixRowInd, secondDesignMatrixColPtr);
+	list<int>* rowinds = new list<int>();
+	for (int i = 0; i <= fNbObs; i++)
+	{
+		rowinds->push_back(i);
+	}
+	weightMatrix = new TSparseMatrix(fNbObs, fNbObs,
+		weightMatrixValues->size(), weightMatrixValues, 
+		rowinds, rowinds);
+	delete rowinds;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //ACCESS METHOD FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
-const TMatrix& TLSInputMatrices::getFirstDgnMtrx() const
+const TSparseMatrix* TLSInputMatrices::getFirstDgnMtrxTransposed() const
 {//returns a reference to the first dgn matrix
-	return *fFirstDesignMtrx;
+	return firstDesignMatrixTransposed;
 }
 
-
-const TMatrix& TLSInputMatrices::getSecondDgnMtrx() const
-{//returns a reference to the second dgn matrix
-	return *fSecondDesignMtrx;
-}
-
-
-const TMatrix& TLSInputMatrices::getWeightMtrx() const
+const TSparseMatrix* TLSInputMatrices::getSecondDgnMtrx() const
 {//returns a reference to the first dgn matrix
-	return *fWeightMtrx;
+	return secondDesignMatrix;
 }
 
+const TSparseMatrix* TLSInputMatrices::getWeightMtrx() const
+{
+	return weightMatrix;
+}
 
 const TColumnVector& TLSInputMatrices::getMisclosureVctr() const
 {// returns a reference to the misclosure vector
@@ -305,7 +292,8 @@ int TLSInputMatrices::getNbrConstraints() const
 ///////////////////////////////////////////////////////////////////////////////
 void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 
-	ostringstream oss;
+	// TODO: fix
+	/*ostringstream oss;
 	oss << "C:\\temp\\inputMatrices" << nbIter << ".txt";
 	string fileName = oss.str();
 
@@ -398,7 +386,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	}
 	of << endl << endl;
 
-	of.close();
+	of.close();*/
 }
 
 

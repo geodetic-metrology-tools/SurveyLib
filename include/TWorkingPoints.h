@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <sstream>
 using namespace std;
+using namespace stdext;
 
 
 #include "TSpatialPoint.h"
@@ -93,8 +94,9 @@ public:
 private:
 	
 	int						fLastPtNbr;
-	SpatialPointContainer	fWorkingPoints;
+	SpatialPointMap fWorkingPoints;
 	TPtListBroadcaster*	fBroadcaster;
+	SpatialPointContainer pointsList;
 
 	
 };

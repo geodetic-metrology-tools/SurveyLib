@@ -20,38 +20,34 @@ class TLSInputMatrices;
 class TLSResultsMatrices;
 using namespace std;
 
-#include "TALSComputer.h"
-
 //! Class for a least squares computer used when there are only observation equations
-class TLSParametricMtdComputer : public TALSComputer{
+class TLSParametricMtdComputer {
 
 public:
 
 	//!Constructor
 	TLSParametricMtdComputer();
 	//!Destructor
-	virtual ~TLSParametricMtdComputer();
+	~TLSParametricMtdComputer();
 
 
-	virtual bool computeResults(const TLSInputMatrices*, TLSResultsMatrices*);
+	bool computeResults(TLSInputMatrices*, TLSResultsMatrices*);
 
 	//!Computes the results matrices
 	/*!@param im a pointer to the LS input matrices*/
-	virtual bool computeResultsMtrs(const TLSInputMatrices*, TLSResultsMatrices*);
+	bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
 
 	//!Computes the results matrices for a free calculation
 	/*!\param im a pointer to the LS input matrices*/
-	virtual bool computeFreeResultsMtrs(const TLSInputMatrices*, TLSResultsMatrices*);
+	bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
 
 	/*! Access to eventual error */
 	string		getError() const { return fError; }
 
-	TMatrix*		getMatrixPtrAtPA() const {return fAtPA;} 
-
 private:
 
-	TMatrix*		fAtPA;	/*!< matrice des équations normales */
 	string			fError;		/*!< errors during calculation */
+	int				count;
 };
 
 #endif

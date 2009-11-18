@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="MathematicalConcepts"
 	ProjectGUID="{5537517A-65EA-4F23-B73F-7AFF7D013C70}"
+	RootNamespace="MathematicalConcepts"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -116,7 +117,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\bpetrov\LGC++\SurveyLib\include&quot;;&quot;C:\Documents and Settings\bpetrov\LGC++\SurveyLib\include\nagc&quot;"
+				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\bpetrov\LGC++\SurveyLib\include&quot;;&quot;C:\Documents and Settings\bpetrov\LGC++\SurveyLib\include\nagc&quot;;&quot;C:\Documents and Settings\bpetrov\LGC++\SEAL_Libraries\Taucs&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;SU_MAKEDLL"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -143,7 +144,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="libtaucs.lib"
 				OutputFile=".\..\..\..\debuglib\SpatialObjects\MathematicalConcepts.lib"
+				AdditionalLibraryDirectories="&quot;C:\Documents and Settings\bpetrov\LGC++\lib&quot;"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -903,6 +906,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="..\..\..\source\SpatialObjects\mathematicalconcepts\TSparseMatrix.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -986,6 +993,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TScalar.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\TSparseMatrix.h"
 				>
 			</File>
 			<File
