@@ -15,9 +15,7 @@
 
 #include <list>
 #include <string>
-#include <hash_map>
 using namespace std;
-using namespace stdext;
 
 //class TRoundOfMeasNetworkListnr;
 
@@ -239,9 +237,8 @@ protected:
 /*!@name Typedefs*/
 //@{
 	/*! Type of the container used to store points */
-	typedef hash_map<string, int> SpatialPointMap;
+	typedef list<TSpatialPoint> SpatialPointContainer;
 	/*! Type of an iterator pointing to an element of the container */
-	typedef vector<TSpatialPoint> SpatialPointContainer;
 	typedef SpatialPointContainer::iterator PointIterator;
 	/*! Type of a const iterator pointing to an element of the container */
 	typedef SpatialPointContainer::const_iterator PointConstIter;

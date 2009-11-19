@@ -9,6 +9,8 @@
 
 #include "TLSCalcPosVectorParam.h"
 #include "TAMeasurement.h"
+#include <hash_map>
+using namespace stdext;
 
 class TLSCalcWorkingPosVec {
 
@@ -62,10 +64,12 @@ public:
 
 		/*!reverse the list*/
 		void				reverse() {fLSPosVectorList.reverse();return;}
+
 	//@}
 
 private:
 
+	hash_map<string, LSPosVecIter> posVectorMap;
 	LSPosVecContainer	fLSPosVectorList; /*!< list of position vector parameters */
 	int					fLastElNbr;	/*!< last number of elements in the list */
 	bool				fListError; /*!< handling error attribute: false if no errors */

@@ -22,40 +22,28 @@ TLSCalcWorkingPosVec::~TLSCalcWorkingPosVec()
 ////////////////////////////////////////////////////////////////
 LSPosVecIter	TLSCalcWorkingPosVec::insert(LSPosVecIter it, TLSCalcPosVectorParam& posVec)
 {
+	hash_map<string, LSPosVecIter>::iterator iter = posVectorMap.find(posVec.getName());
 	LSPosVecIter lsPVIter;
 
 	if(!fListError)
 	{
-		// Checks if the observation is already in the container or not
-		bool notFound = true;
-
-		LSPosVecIter iterB = begin();
-		LSPosVecIter iterE = end();
-
-		while (iterB!=iterE && notFound)
-		{
-			if (posVec == *iterB)
-			{	
-				lsPVIter = iterB; 
-				notFound = false;
-			}
-			else
-			{
-				iterB++;
-			}
-		}
-		
 		// if the observation isn't in the container -> insert
-		if (notFound)
-		{	
+		if (iter == posVectorMap.end())
+		{
 			lsPVIter = fLSPosVectorList.insert(it, posVec);
+			posVectorMap[posVec.getName()] = lsPVIter;
+			fLastElNbr++;
+		}
+		else
+		{
+			lsPVIter = iter->second;
 		}
 	}
 	else
 	{
 		lsPVIter = end();
 	}
-		
+	
 	return lsPVIter; 
 }
 
@@ -64,28 +52,14 @@ LSPosVecIter	TLSCalcWorkingPosVec::push_back(TLSCalcPosVectorParam& posVec)
 {// Inserts a new TLSCalcPosVectorParam in the list, 
 	//if it is not done yet (tests first if the object is already in the list or not)
 
+	hash_map<string, LSPosVecIter>::iterator iter = posVectorMap.find(posVec.getName());
 	LSPosVecIter lsPVIter;
 
 	if(!fListError)
 	{
-		// Checks if the observation is already in the container or not
-		bool notFound = true;
-
-		LSPosVecIter iterB = begin();
-		LSPosVecIter iterE = end();
-
-		while (iterB!=iterE && notFound)
+		// if the observation isn't in the container -> insert
+		if (iter == posVectorMap.end())
 		{
-			if (posVec == *iterB) {	
-				lsPVIter = iterB; 
-				notFound = false;
-			}
-			else
-				iterB++;
-		}
-		
-		// if the observation isn't in the container -> addition at the end of the list
-		if (notFound) {	
 			fLSPosVectorList.push_back(posVec);
 			fLastElNbr++;
 			// Debugging for the case where the push_back method fails
@@ -101,6 +75,11 @@ LSPosVecIter	TLSCalcWorkingPosVec::push_back(TLSCalcPosVectorParam& posVec)
 				fListError = true;
 				lsPVIter = end();
 			}
+			posVectorMap[posVec.getName()] = lsPVIter;
+		}
+		else
+		{
+			lsPVIter = iter->second;
 		}
 	}
 	else
@@ -115,58 +94,40 @@ bool TLSCalcWorkingPosVec::erase(TLSCalcPosVectorParam& posVec)
 {// Erases the selected TLSCalcPosVectorParam and 
 	//deletes its corresponding pointer from the list if it exists
 
-	bool isErased = false;
+	hash_map<string, LSPosVecIter>::iterator iter = posVectorMap.find(posVec.getName());
 
-	LSPosVecIter iterB = begin();
-	LSPosVecIter iterE = end();
-
-	while (iterB!=iterE) {
-		if (posVec == *iterB ) {
-			fLSPosVectorList.erase(iterB);
-			isErased = true;
-			fLastElNbr--;
-			iterB = iterE; }
-		else
-			iterB++;
+	if (iter == posVectorMap.end())
+	{
+		return false;
 	}
+	fLSPosVectorList.erase(iter->second);
+	posVectorMap.erase(posVec.getName());
 		
-	return isErased;
+	return true;
 }
 	
 
 LSPosVecIter	TLSCalcWorkingPosVec::getPoint(const string name)
 {//returns an iterator on a point, given its Name
-	LSPosVecIter	iter = fLSPosVectorList.begin();
-	LSPosVecIter	iterEnd = fLSPosVectorList.end();
-
-	bool notFound = true;
-
-	while (iter != iterEnd  &&  notFound){
-		if ((iter->getName()) == name)
-			notFound = false;
-		else
-			iter ++;
+	hash_map<string, LSPosVecIter>::iterator iter = posVectorMap.find(name);
+	if (iter == posVectorMap.end())
+	{
+		return fLSPosVectorList.end();
 	}
 
-	return iter;
+	return iter->second;
 }
 
 
 LSPosVecConstIter	TLSCalcWorkingPosVec::getPoint(const string name) const
 {//returns a const iterator on a point, given its Name
-	LSPosVecConstIter	iter = fLSPosVectorList.begin();
-	LSPosVecConstIter	iterEnd = fLSPosVectorList.end();
-
-	bool notFound = true;
-
-	while (iter != iterEnd  &&  notFound){
-		if ((iter->getName()) == name)
-			notFound = false;
-		else
-			iter ++;
+	hash_map<string, LSPosVecIter>::const_iterator iter = posVectorMap.find(name);
+	if (iter == posVectorMap.end())
+	{
+		return fLSPosVectorList.end();
 	}
 
-	return iter;
+	return iter->second;
 }
 
 

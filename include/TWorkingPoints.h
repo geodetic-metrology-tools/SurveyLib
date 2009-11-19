@@ -14,6 +14,7 @@
 #include <list>
 #include <algorithm>
 #include <sstream>
+#include <hash_map>
 using namespace std;
 using namespace stdext;
 
@@ -94,9 +95,9 @@ public:
 private:
 	
 	int						fLastPtNbr;
-	SpatialPointMap fWorkingPoints;
+	hash_map<string, PointIterator> pointsMap;
 	TPtListBroadcaster*	fBroadcaster;
-	SpatialPointContainer pointsList;
+	SpatialPointContainer fWorkingPoints;
 
 	
 };
