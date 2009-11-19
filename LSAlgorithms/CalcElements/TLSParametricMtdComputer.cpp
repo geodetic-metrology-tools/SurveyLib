@@ -65,6 +65,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	   be performed (in TLSCalculation). */
 
 	const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
+	firstDMTransposed->writeMatrixFile("C:\\a.txt");
 	const TSparseMatrix* weightM = im->getWeightMtrx();
 	const TColumnVector& misclV = im->getMisclosureVctr();
 	
