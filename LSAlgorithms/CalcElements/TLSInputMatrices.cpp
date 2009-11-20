@@ -20,14 +20,14 @@ TLSInputMatrices::TLSInputMatrices()
 	firstDesignMatrixTransposedColPtr = new list<int>();
 	firstDesignMatrixTransposedRowInd = new list<int>();
 
-	secondDesignMatrixValues = new list<double>();
-	secondDesignMatrixColPtr = new list<int>();
-	secondDesignMatrixRowInd = new list<int>();
+	secondDesignMatrixTransposedValues = new list<double>();
+	secondDesignMatrixTransposedColPtr = new list<int>();
+	secondDesignMatrixTransposedRowInd = new list<int>();
 
 	weightMatrixValues = new list<double>();
 
 	firstDesignMatrixTransposed = NULL;
-	secondDesignMatrix = NULL;
+	secondDesignMatrixTransposed = NULL;
 	weightMatrix = NULL;
 
 	fMisclosureVector = 0;
@@ -50,9 +50,9 @@ TLSInputMatrices::~TLSInputMatrices()
 	delete firstDesignMatrixTransposedValues;
 	delete firstDesignMatrixTransposedColPtr;
 	delete firstDesignMatrixTransposedRowInd;
-	delete secondDesignMatrixValues;
-	delete secondDesignMatrixColPtr;
-	delete secondDesignMatrixRowInd;
+	delete secondDesignMatrixTransposedValues;
+	delete secondDesignMatrixTransposedColPtr;
+	delete secondDesignMatrixTransposedRowInd;
 	delete weightMatrixValues;
 	delete fMisclosureVector;
 
@@ -105,16 +105,16 @@ void TLSInputMatrices::clearMatrices()
 	firstDesignMatrixTransposedRowInd->clear();
 	firstDesignMatrixTransposedColPtr->clear();
 	
-	secondDesignMatrixValues->clear();
-	secondDesignMatrixRowInd->clear();
-	secondDesignMatrixColPtr->clear();
+	secondDesignMatrixTransposedValues->clear();
+	secondDesignMatrixTransposedRowInd->clear();
+	secondDesignMatrixTransposedColPtr->clear();
 
 	weightMatrixValues->clear();
 
 	if (firstDesignMatrixTransposed != NULL)
 	{
 		delete firstDesignMatrixTransposed;
-		delete secondDesignMatrix;
+		delete secondDesignMatrixTransposed;
 		delete weightMatrix;
 	}
 }
@@ -138,8 +138,8 @@ bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex colu
 	bool successfullySet = true;
 	if (coeff != 0)
 	{
-		secondDesignMatrixValues->push_back(coeff);
-		secondDesignMatrixRowInd->push_back(column);
+		secondDesignMatrixTransposedValues->push_back(coeff);
+		secondDesignMatrixTransposedRowInd->push_back(column);
 	}
 
 	return successfullySet;
@@ -202,7 +202,7 @@ bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, double c
 void TLSInputMatrices::setNewRow()
 {
 	firstDesignMatrixTransposedColPtr->push_back(firstDesignMatrixTransposedValues->size());
-	secondDesignMatrixColPtr->push_back(secondDesignMatrixValues->size());
+	secondDesignMatrixTransposedColPtr->push_back(secondDesignMatrixTransposedValues->size());
 }
 
 void TLSInputMatrices::finishedFillingMatrices()
@@ -210,9 +210,9 @@ void TLSInputMatrices::finishedFillingMatrices()
 	firstDesignMatrixTransposed = new TSparseMatrix(fNbObs, fNbUnk, 
 		firstDesignMatrixTransposedValues->size(), firstDesignMatrixTransposedValues, 
 		firstDesignMatrixTransposedRowInd, firstDesignMatrixTransposedColPtr);
-	secondDesignMatrix = new TSparseMatrix(fNbUnk, fNbObs,
-		secondDesignMatrixValues->size(), secondDesignMatrixValues, 
-		secondDesignMatrixRowInd, secondDesignMatrixColPtr);
+	secondDesignMatrixTransposed = new TSparseMatrix(fNbObs, fNbUnk,
+		secondDesignMatrixTransposedValues->size(), secondDesignMatrixTransposedValues, 
+		secondDesignMatrixTransposedRowInd, secondDesignMatrixTransposedColPtr);
 	list<int>* rowinds = new list<int>();
 	for (int i = 0; i <= fNbObs; i++)
 	{
@@ -232,9 +232,9 @@ const TSparseMatrix* TLSInputMatrices::getFirstDgnMtrxTransposed() const
 	return firstDesignMatrixTransposed;
 }
 
-const TSparseMatrix* TLSInputMatrices::getSecondDgnMtrx() const
+const TSparseMatrix* TLSInputMatrices::getSecondDgnMtrxTransposed() const
 {//returns a reference to the first dgn matrix
-	return secondDesignMatrix;
+	return secondDesignMatrixTransposed;
 }
 
 const TSparseMatrix* TLSInputMatrices::getWeightMtrx() const
