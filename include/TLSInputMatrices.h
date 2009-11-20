@@ -98,7 +98,7 @@ public:
 		/*!@return a const reference to the first design matrix*/
 		const TSparseMatrix* getFirstDgnMtrxTransposed() const;
 		/*!@return a const reference to the second design matrix*/
-		const TSparseMatrix* getSecondDgnMtrx() const;
+		const TSparseMatrix* getSecondDgnMtrxTransposed() const;
 		/*!@return a const reference to the weight design matrix*/
 		const TSparseMatrix* getWeightMtrx() const;
 		/*!@return a const reference to the misclosure vector*/
@@ -134,9 +134,9 @@ private:
 	list<int>*		firstDesignMatrixTransposedColPtr;
 	list<int>*		firstDesignMatrixTransposedRowInd;
 
-	list<double>*	secondDesignMatrixValues; /*!< matrix (e x o) for the conditional part of the model  */
-	list<int>*		secondDesignMatrixColPtr;
-	list<int>*		secondDesignMatrixRowInd;
+	list<double>*	secondDesignMatrixTransposedValues; /*!< matrix (e x o) for the conditional part of the model  */
+	list<int>*		secondDesignMatrixTransposedColPtr;
+	list<int>*		secondDesignMatrixTransposedRowInd;
 
 	list<double>*	weightMatrixValues; /*!< matrix (o x o) for observations weights */
 
@@ -148,7 +148,7 @@ private:
 
 	TSparseMatrix*	firstDesignMatrix;
 	TSparseMatrix*	firstDesignMatrixTransposed;
-	TSparseMatrix*	secondDesignMatrix;
+	TSparseMatrix*	secondDesignMatrixTransposed;
 	TSparseMatrix*	weightMatrix;
 
 };
