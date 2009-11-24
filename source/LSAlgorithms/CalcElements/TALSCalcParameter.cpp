@@ -28,7 +28,7 @@ TALSCalcParameter::~TALSCalcParameter() {
 }
 
 // Overloaded equality operator
-bool  TALSCalcParameter::operator==(const TALSCalcParameter& right) {
+bool  TALSCalcParameter::operator==(const TALSCalcParameter& right) const {
 
 	bool isEqualTo = false;
 

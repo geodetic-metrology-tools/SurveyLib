@@ -38,7 +38,7 @@ public:
 	TALSCalcParameter(const TALSCalcParameter& source);
 
 	/*! Overloaded equality operator */
-	virtual bool  operator==(const TALSCalcParameter& right);
+	virtual bool  operator==(const TALSCalcParameter& right) const;
 
 	/*! Returns the parameter's identifier as a string */
 	virtual string getName() const;
