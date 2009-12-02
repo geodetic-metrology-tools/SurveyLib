@@ -95,6 +95,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -119,7 +120,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="&quot;.\..\..\..\..\LGC++\include&quot;;.\..\..\..\..\SurveyLib\include;C:\root\include;.\..\..\..\..\SEAL_Libraries\nagc;.\..\..\..\..\SEAL_Libraries\GSL\include;.\..\..\..\..\SEAL_Libraries\Taucs"
+				AdditionalIncludeDirectories="&quot;.\..\..\..\..\LGC++\include&quot;;.\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc;.\..\..\..\..\SEAL_Libraries\GSL\include;.\..\..\..\..\SEAL_Libraries\Taucs"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -194,7 +195,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;.\..\..\..\..\LGC++\include&quot;;.\..\..\..\..\SurveyLib\include;C:\root\include;.\..\..\..\..\SEAL_Libraries\nagc;.\..\..\..\..\SEAL_Libraries\GSL\include;.\..\..\..\..\SEAL_Libraries\Taucs"
+				AdditionalIncludeDirectories="&quot;.\..\..\..\..\LGC++\include&quot;;.\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc;.\..\..\..\..\SEAL_Libraries\GSL\include;.\..\..\..\..\SEAL_Libraries\Taucs"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
