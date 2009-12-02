@@ -118,7 +118,7 @@
 				AdditionalIncludeDirectories=".\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc;.\..\..\..\..\SEAL_Libraries\Taucs"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="0"
+				RuntimeLibrary="3"
 				FloatingPointExceptions="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"

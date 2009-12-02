@@ -52,6 +52,8 @@ public:
 
 	void writeMatrixFile(char *) const;
 
+	static TSparseMatrix* deepCopy(TSparseMatrix* matrix);
+
 
 private:
 

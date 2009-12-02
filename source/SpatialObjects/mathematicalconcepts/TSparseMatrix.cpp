@@ -192,6 +192,29 @@ TSparseMatrix* TSparseMatrix::getCholeskyFactor(void* symbolic)
 	return L;
 }
 
+TSparseMatrix* TSparseMatrix::deepCopy(TSparseMatrix* matrix)
+{
+	taucs_ccs_matrix* m = taucs_ccs_create(matrix->rowsCount(), matrix->columnsCount(), matrix->colPointers()[matrix->columnsCount()], TAUCS_DOUBLE);
+
+	for (int i = 0; i <= matrix->columnsCount(); i++)
+	{
+		m->colptr[i] = matrix->colPointers()[i];
+	}
+	for (int i = 0; i < matrix->rowsCount(); i++)
+	{
+		m->rowind[i] = matrix->rowIndices()[i];
+	}
+	for (int i = 0; i < matrix->colPointers()[matrix->columnsCount()]; i++)
+	{
+		m->taucs_values[i] = matrix->values()[i];
+	}
+
+	TSparseMatrix* result = new TSparseMatrix(m);
+	result->lowerTriangular = matrix->isLowerTriangular();
+
+	return result;
+}
+
 TSparseMatrix* TSparseMatrix::invert_lower_triangular() const
 {
 	if (!(this->isLowerTriangular()))
