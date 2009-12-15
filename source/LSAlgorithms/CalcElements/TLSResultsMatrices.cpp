@@ -32,19 +32,8 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 }
 
 
-TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi, int numConstraints)
-{// constructor dimensioning the matrices
-	fSolutionVctr = new TColumnVector(ueoi.UIndex);
-	fResidualsVctr = new TColumnVector(ueoi.OIndex);
-	fSigmaZero2 = 0.0;
-	//fUnknownsCovarianceMtrx = new TMatrix(ueoi.UIndex + numConstraints, ueoi.UIndex + numConstraints);
-	fUnknownsCovarianceMtrx = NULL;
-	fS0APosterioriVariances = false;
-}
-
-
 TLSResultsMatrices::TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, 
-									   double sigm2, TMatrix* unkcov)
+									   double sigm2)
 {// constructor setting the results
 
 	cout<<sigm2<<endl<<endl;
@@ -68,18 +57,6 @@ TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations)
 	fS0APosterioriVariances = false;
 }
 
-
-TLSResultsMatrices::TLSResultsMatrices(int solut, int resid, 
-									   int unkcov)
-{// constructor setting the results
-
-	fSolutionVctr = new TColumnVector (solut);
-	fResidualsVctr = new TColumnVector (resid);
-	fSigmaZero2 = 0.0;
-	//fUnknownsCovarianceMtrx = new TMatrix(unkcov,unkcov);
-	fUnknownsCovarianceMtrx = NULL;
-	fS0APosterioriVariances = false;
-}
 
 TLSResultsMatrices::~TLSResultsMatrices()
 {// destructor

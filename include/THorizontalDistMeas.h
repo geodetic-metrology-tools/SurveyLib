@@ -17,92 +17,54 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
-
-
-/////////////////////////////////////////////////////
-// Forward declarations
-//
-
-//! 
-class THorizontalDistROM;
-
 #include "TAPointMeasurement.h"
+#include "PolarTarget.h"
 #include "TLength.h"
 #include "TDistConstants.h"
-/////////////////////////////////////////////////////
-
-/*! \ingroup spatialmeasurements
-	@{*/ 
 
 //! Class for a horizontal distance measurement
 class	THorizontalDistMeas : public TAPointMeasurement{
 
 public :
+	THorizontalDistMeas(int obsID, const TSpatialPoint* trgt, const PolarTarget* polarTarget, const TLength* obs,
+		const TLength* sigma, const TLength* ppmE, const TLength* tcs) : TAPointMeasurement(obsID, trgt)
+	{
+		observedValue = obs;
+		fSigmaAPriori = sigma;
+		target = polarTarget;
+		targetCenteringSigma = tcs;
+		ppm = ppmE;
+	}
 
-	/*!@name Constructors/Destructor */
-	//@{
-	/*! Default constructor */
-	THorizontalDistMeas();
-	/*! Constructor 
-	\param setupPtName the measurement's station's setup point's name
-	\param targetname  the measurement's target point's name
-	\param obsDist the observed horizontal distance as a TLength
-	\param sigma the observed angle's precision as a TAngle */
-	THorizontalDistMeas(/*TSpatialPointName setupPtName,*/ TSpatialPointName targetName, TLength obsDist, TLength sigma);
-	/*! Copy constructor */
-	THorizontalDistMeas(const THorizontalDistMeas &source);
-	/*! Destructor */
-	~THorizontalDistMeas();
-	//@}
+	~THorizontalDistMeas()
+	{
+		delete observedValue;
+		delete fSigmaAPriori;
+		delete targetCenteringSigma;
+		delete ppm;
+	}
 
-	/*! Copy assignment operator */
-	THorizontalDistMeas&		operator=(const THorizontalDistMeas& source);
-	//DANGER : shallow copy (see NetworkSurveyMeas)
+	const TLength* getTargetCenteringSigma() const { return targetCenteringSigma; }
 
-	/*!@name Member functions */
-	//@{
-	/*! return a string indicating this measurement is a hor. dist measurement */
-	virtual string				getMeasKind() const;
-	/*! return the observed distance's value as a TLength */
-	virtual TLength				getDistValue() const;
-	/*!return the observed distance's precision as a TLength */
-	virtual TLength				getSigma() const;
-	/*!return the observed distance's precision in ppm as a TLength */
-	virtual TLength				getSigmaPpm() const;
-	/*!@return the observed angle's constante (if there is one) as a TAngle instance*/
-	virtual TDistConstants		getMeasConst() const {return fMeasConstant; }
+	const TLength* getObservedValue() const { return observedValue; }
 
-	/*! sets the sigma a priori if it isn't done yet */
-	virtual void				ifNotDoneSetSigma(TLength sigma);
-	/*! sets the sigma a priori if it isn't done yet */
-	virtual void				ifNotDoneSetSigmaPpm(TLength sigma);
-	/*!Sets the measurement constant */
-	virtual void				ifNotDoneSetMeasConst(const TDistConstants& constant);
+	const TLength* getSigma() const { return fSigmaAPriori; }
 
-	//@}
+	const TLength* getPPM() const { return ppm; }
+
+	const PolarTarget* getTarget() const { return target; }
 
 private:
 
-	TLength							fObservedDist; /*!< observed distance */
-	TLength							fSigmaAPriori; /*!< error "a priori" on the observed distance*/
-	TLength							fSigmaPpm; /*!< error "a priori" on the observed distance in ppm*/
+	const TLength* observedValue; /*!< measured distance */
+	const TLength* fSigmaAPriori; /*!< estimated error on the angle measurement*/
+	const TLength* ppm; /*!< estimated error on the angle measurement*/
 
-	TDistConstants					fMeasConstant; /*!< measurement constant if there is one */
-
-//	TSpatialPointName				fStationPtName; /*< stationated point's name */
+	const PolarTarget* target;
+	const TLength* targetCenteringSigma;
 
 };
-/*@}*/
 
-	/*!@name Typedefs*/
-	//@{
-	/*!Type of the container used to store the horizontal distances */
-	typedef list< THorizontalDistMeas > HorDistContainer;
-	/*!Type of an iterator pointing to an element of the hor. dist. container */
-	typedef HorDistContainer::iterator HorDistMeasIterator;
-	/*!Type of a const iterator pointing to an element of the hor. dist. container */
-	typedef HorDistContainer::const_iterator HorDistMeasConstIter;
-	//@}
 
 #endif
 

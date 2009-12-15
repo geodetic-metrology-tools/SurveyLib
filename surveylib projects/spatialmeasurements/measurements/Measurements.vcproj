@@ -250,172 +250,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;f90;for;f;fpp"
 			>
 			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\T2DOffsetMeasurement.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TALineMeasurement.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TAMeasurement.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TAMeasurementListener.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TAObjectMeasurement.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TAPlaneMeasurement.cpp"
 				>
 				<FileConfiguration
 					Name="Insure|Win32"
@@ -481,39 +316,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TATargetlessMeas.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\THorAngleMeasurement.cpp"
 				>
 				<FileConfiguration
@@ -547,139 +349,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\THorizontalDistMeas.cpp"
+				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TOffsetToLineOrPlaneMeasurement.cpp"
 				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TOffsetToSpaLineMeasurement.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TOffsetToTheoPlaneMeasurement.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TOffsetToVerLineMeasurement.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TOffsetToVerPlaneMeasurement.cpp"
 				>
 				<FileConfiguration
 					Name="Insure|Win32"
@@ -778,105 +452,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TVMeasurementListener.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TWireToWireDistMeas.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TWPSMeasurement.cpp"
-				>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\source\SpatialMeasurements\Measurements\TZenithDistMeasurement.cpp"
 				>
 				<FileConfiguration
@@ -915,27 +490,11 @@
 			Filter="h;hpp;hxx;hm;inl;fi;fd"
 			>
 			<File
-				RelativePath="..\..\..\include\T2DOffsetMeasurement.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TALineMeasurement.h"
+				RelativePath="..\..\..\include\Polar3DMeasurement.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\TAMeasurement.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TAMeasurementListener.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TAObjectMeasurement.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TAPlaneMeasurement.h"
 				>
 			</File>
 			<File
@@ -955,19 +514,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\TOffsetToSpaLineMeasurement.h"
+				RelativePath="..\..\..\include\TOffsetToLineOrPlaneMeasurement.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\TOffsetToTheoPlaneMeasurement.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TOffsetToVerLineMeasurement.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TOffsetToVerPlaneMeasurement.h"
 				>
 			</File>
 			<File
@@ -976,18 +527,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TVerticalDistMeasurement.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TVMeasurementListener.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TWireToWireDistMeas.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TWPSMeasurement.h"
 				>
 			</File>
 			<File

@@ -44,9 +44,4 @@ string TALSCalcParameter::getName() const {
 	return fName;
 }
 
-// Sets the parameter's name
-void TALSCalcParameter::setName(string name) {
-
-	fName = name;
-}
 

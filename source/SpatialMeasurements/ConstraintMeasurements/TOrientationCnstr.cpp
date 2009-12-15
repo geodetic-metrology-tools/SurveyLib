@@ -34,7 +34,7 @@ fConstraintBearing(0.0), fRefPoint()
 }
 
 
-TOrientationCnstr::TOrientationCnstr(TSpatialPointName refPtName, TAngle cBearing):
+TOrientationCnstr::TOrientationCnstr(int obsID, TSpatialPointName refPtName, TAngle cBearing):
 fConstraintBearing(cBearing)
 {//Constructor
 	fRefPoint = refPtName;
@@ -42,6 +42,8 @@ fConstraintBearing(cBearing)
 	fIdentifier = 0;
 	fComment = ""; 
 	fHeaderComment = "";
+
+	observationID = obsID;
 }
 
 

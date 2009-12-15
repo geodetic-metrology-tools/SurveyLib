@@ -448,6 +448,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\ProjectFramework\ProjectData\TWorkingInstruments.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\ProjectFramework\ProjectData\TWorkingLines.cpp"
 				>
 				<FileConfiguration
@@ -545,6 +549,10 @@
 						BasicRuntimeChecks="3"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\ProjectFramework\ProjectData\TWorkingROMs.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\source\ProjectFramework\ProjectData\TWorkingStations.cpp"
@@ -645,6 +653,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\TWorkingInstruments.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\TWorkingLines.h"
 				>
 			</File>
@@ -654,6 +666,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TWorkingPoints.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\TWorkingROMs.h"
 				>
 			</File>
 			<File

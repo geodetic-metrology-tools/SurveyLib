@@ -87,6 +87,8 @@ protected:
 
 		void	writeInteger(const int width, const int data);
 		void	readP100Comment(string comments);
+		string	readOptional(const string& keyword);
+		bool	readOptionalExists(const string& keyword);
 
 	//@}
 	

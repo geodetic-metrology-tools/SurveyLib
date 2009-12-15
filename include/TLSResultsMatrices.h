@@ -40,13 +40,6 @@ public:
 	thus enabling the dimensioning of the matrices (set to zero)*/
 	TLSResultsMatrices(UEOIndices ueoi);
 
-	//!Constructor
-	/*	!@param ueoi an object holding the number of unknowns, equations and observations,
-		thus enabling the dimensioning of the matrices (set to zero)
-		!@param numConstraints indicates the number of constraints added for a free network
-		calculation
-	*/
-	TLSResultsMatrices(UEOIndices ueoi, int numConstraints);
 
 	//!Destructor
 	virtual ~TLSResultsMatrices();
@@ -110,8 +103,7 @@ private:
 	@param solut a pointer to the residuals vector
 	@param sigm2 the estimated square of the sigma zero
 	@param unkcov a pointer to the unknowns covariance matrix */
-	TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, double sigm2, TMatrix* unkcov);
-	TLSResultsMatrices(int solut, int resid, int unkcov);
+	TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, double sigm2);
 	//mj
 	
 

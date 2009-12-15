@@ -41,9 +41,9 @@ public:
 	virtual bool  operator==(const TALSCalcParameter& right) const;
 
 	/*! Returns the parameter's identifier as a string */
-	virtual string getName() const;
-	/*! Sets the parameter's identifier as a string */
-	virtual void setName(string name);
+	string getName() const;
+
+	void setName(string n) { fName = n; }
 
 
 private:

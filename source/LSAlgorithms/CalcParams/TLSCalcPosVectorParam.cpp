@@ -66,7 +66,6 @@ TLSCalcPosVectorParam& TLSCalcPosVectorParam::operator =(const TLSCalcPosVectorP
 {
 	if (this != &right)
 	{
-		this->setName( right.getName() );
 		fProvisionalValue = right.fProvisionalValue; 
 		fCorrection = right.fCorrection; 
 		fEstimatedValue = right.fEstimatedValue; 

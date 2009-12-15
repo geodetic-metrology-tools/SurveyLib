@@ -1098,7 +1098,7 @@ return;
 
 bool TAStreamFormatter::isOpen()
 {
-	if (fSStream=0)
+	if (fSStream==0)
 	{return	fFStream->is_open();}
 	else
 	{return false;}
@@ -1107,7 +1107,7 @@ bool TAStreamFormatter::isOpen()
 
 void TAStreamFormatter::close()
 {
-	if (fSStream=0)
+	if (fSStream==0)
 	{	fFStream->close();}
 return;
 }

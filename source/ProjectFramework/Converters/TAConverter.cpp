@@ -216,6 +216,49 @@ void	TAConverter::readP100Comment(string comments)
 }
 
 
+string TAConverter::readOptional(const string& keyword)
+{
+	fStream->skipWhiteSpace();
+
+	string word;
+
+	*fStream >> word;
+	
+	if (word != keyword)
+	{
+		for (unsigned i = 0; i < word.length(); i++)
+		{
+			fStream->unget();
+		}
+		return "";
+	}
+
+	fStream->skipWhiteSpace();
+	*fStream >> word;
+	return word;
+}
+
+bool TAConverter::readOptionalExists(const string& keyword)
+{
+	fStream->skipWhiteSpace();
+
+	string word;
+
+	*fStream >> word;
+	
+	if (word != keyword)
+	{
+		for (unsigned i = 0; i < word.length(); i++)
+		{
+			fStream->unget();
+		}
+		return false;
+	}
+
+	return true;
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //END
 ///////////////////////////////////////////////////////////////////////////////////////////////

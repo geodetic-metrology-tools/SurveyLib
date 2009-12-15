@@ -477,37 +477,37 @@ return (*this)=(*this)*factor;
 // trigonometric functions
 //////////////////////////////////////////////////////////////////////
 
-double TAngle::cosine()
+double TAngle::cosine() const
 {//cosine of the angle
 	return cos(this->getRadiansValue());
 }
 
 
-double TAngle::sine()
+double TAngle::sine() const
 {//sine of the angle
 	return sin(this->getRadiansValue());
 }
 
 
-double TAngle::tangent()
+double TAngle::tangent() const
 {//tangent of the angle
 	return tan(this->getRadiansValue());
 }
 
 
-double TAngle::cosineh()
+double TAngle::cosineh() const
 {//hyperbolic cosine of the angle
 	return cosh(this->getRadiansValue());
 }
 
 
-double TAngle::sineh()
+double TAngle::sineh() const
 {//hyperbolic sine of the angle
 	return sinh(this->getRadiansValue());
 }
 
 
-double TAngle::tangenth()
+double TAngle::tangenth() const
 {//hyperbolic tangent of the angle
 	return tanh(this->getRadiansValue());
 }

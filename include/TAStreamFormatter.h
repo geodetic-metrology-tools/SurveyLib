@@ -308,6 +308,7 @@ public:
     int					setf( int bits, int mask );
     void				unsetf( int bits );
 	void				reset();
+	TAStreamFormatter&	unget() { fIOStream->unget(); return (*this); }
 
     virtual int			width()	const;
     virtual int			width(int);

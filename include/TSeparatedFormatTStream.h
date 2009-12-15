@@ -44,7 +44,6 @@ class TDistMeasStation;
 class THorizontalDistMeas;
 class TVerticalDistROM;
 class TVerticalDistMeasurement;
-class TSpatialDistMeasurement;
 class TZenithDistMeasurement;
 class TOffsetToVerLineMeasurement;
 class T2DOffsetMeasurement;
@@ -61,6 +60,7 @@ class TWireToWireDistMeas;*/
 //#include "TWTWFilter.h"
 
 #include "TAStreamFormatter.h"
+#include "TSpatialDistMeasurement.h"
 // typedefs
 //
 //

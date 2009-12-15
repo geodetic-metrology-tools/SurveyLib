@@ -250,235 +250,24 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;f90;for;f;fpp"
 			>
 			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\TAFreeInstrumentStation.cpp"
+				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\EDM.cpp"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\TAInstrumentStation.cpp"
+				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\Scale.cpp"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\TDistMeasStation.cpp"
+				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\TAFreeInstrument.cpp"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\TLevelStation.cpp"
+				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\TAInstrument.cpp"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\TTheodoliteStation.cpp"
+				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\TTheodolite.cpp"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\TWPSStation.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\TWTWDistStation.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -486,31 +275,51 @@
 			Filter="h;hpp;hxx;hm;inl;fi;fd"
 			>
 			<File
-				RelativePath="..\..\..\include\TAFreeInstrumentStation.h"
+				RelativePath="..\..\..\include\EDM.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\TAInstrumentStation.h"
+				RelativePath="..\..\..\include\EDMStation.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\TDistMeasStation.h"
+				RelativePath="..\..\..\include\EDMTarget.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\TLevelStation.h"
+				RelativePath="..\..\..\include\GyroscopeStation.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\TTheodoliteStation.h"
+				RelativePath="..\..\..\include\PolarTarget.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\TWPSStation.h"
+				RelativePath="..\..\..\include\Scale.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\TWTWDistStation.h"
+				RelativePath="..\..\..\include\Station.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\TAFreeInstrument.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\TAInstrument.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\Target.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\TheodoliteStation.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\TTheodolite.h"
 				>
 			</File>
 		</Filter>

@@ -35,16 +35,11 @@ TSparseMatrix::TSparseMatrix(int columns, int rows, int nnz, list<double>* vals,
 TSparseMatrix::TSparseMatrix(const TSparseMatrix& other)
 {
 	matrix = other.matrix;
-	lowerTriangular = other.lowerTriangular;
 }
 
 TSparseMatrix::TSparseMatrix(taucs_ccs_matrix* m)
 {
 	matrix = m;
-	if (m->flags & TAUCS_LOWER)
-	{
-		lowerTriangular = true;
-	}
 }
 
 TSparseMatrix::~TSparseMatrix()
@@ -184,6 +179,31 @@ double* TSparseMatrix::operator *(const TColumnVector& right) const
 	return result;
 }
 
+double* TSparseMatrix::operator *(const double* right) const
+{
+	int i, j;
+
+	double* result = new double[matrix->m];
+	
+	for (i = 0; i < matrix->m; i++)
+	{
+		result[i] = 0;
+	}
+
+    for (i = 0; i < matrix->n; i++)
+	{
+		if (right[i] != 0)
+		{
+			for (j = matrix->colptr[i]; j < matrix->colptr[i + 1]; j++)
+			{
+				result[matrix->rowind[j]] += right[i] * matrix->taucs_values[j];
+			}
+		}
+	}
+
+	return result;
+}
+
 TSparseMatrix* TSparseMatrix::getCholeskyFactor(void* symbolic)
 {
 	TSparseMatrix *L = new TSparseMatrix(taucs_supernodal_factor_to_ccs(symbolic));
@@ -192,36 +212,122 @@ TSparseMatrix* TSparseMatrix::getCholeskyFactor(void* symbolic)
 	return L;
 }
 
-TSparseMatrix* TSparseMatrix::deepCopy(TSparseMatrix* matrix)
+TSparseMatrix* TSparseMatrix::invert_diagonal_matrix() const
 {
-	taucs_ccs_matrix* m = taucs_ccs_create(matrix->rowsCount(), matrix->columnsCount(), matrix->colPointers()[matrix->columnsCount()], TAUCS_DOUBLE);
-
-	for (int i = 0; i <= matrix->columnsCount(); i++)
+	taucs_ccs_matrix* inverse = taucs_ccs_create(matrix->m, matrix->n, matrix->colptr[matrix->n], matrix->flags);
+	for (int i = 0; i < matrix->colptr[matrix->n]; i++)
 	{
-		m->colptr[i] = matrix->colPointers()[i];
+		inverse->taucs_values[i] = 1 / matrix->taucs_values[i];
 	}
-	for (int i = 0; i < matrix->rowsCount(); i++)
-	{
-		m->rowind[i] = matrix->rowIndices()[i];
-	}
-	for (int i = 0; i < matrix->colPointers()[matrix->columnsCount()]; i++)
-	{
-		m->taucs_values[i] = matrix->values()[i];
-	}
-
-	TSparseMatrix* result = new TSparseMatrix(m);
-	result->lowerTriangular = matrix->isLowerTriangular();
-
-	return result;
+	return new TSparseMatrix(inverse);
 }
 
-TSparseMatrix* TSparseMatrix::invert_lower_triangular() const
+TSparseMatrix* TSparseMatrix::invert_lower_triangular_cholesky_decomposed() const
 {
-	if (!(this->isLowerTriangular()))
-	{
-		return NULL;
+	TSparseMatrix* transposed = this->transposed();
+	
+	Vector<double> results(matrix->colptr[matrix->n] * 4); // TODO: perhaps 4 times is too much?
+	Vector<int> rowInds(matrix->colptr[matrix->n] * 4);
+	int *colptr = new int[matrix->n + 1];
+
+	int i, j, k, l;
+	double sum = 0;
+
+	colptr[0] = 0;
+
+    for (i = 0; i < matrix->n; i++)
+    {
+        results.add(1.0 / matrix->taucs_values[matrix->colptr[i]]);
+        rowInds.add(i);
+
+        for (j = 0; j < i; j++)
+        {
+			int size = results.size();
+            for (k = colptr[j], l = transposed->colPointers()[i];
+                //k < size &&
+                rowInds[k] < i &&
+                l < transposed->colPointers()[i + 1] &&
+                transposed->rowIndices()[l] < i; )
+            {
+                if (rowInds[k] == transposed->rowIndices()[l])
+                {
+                    sum -= results[k] * transposed->values()[l];
+                    k++;
+                    l++;
+                }
+                else if (transposed->rowIndices()[l] < rowInds[k])
+                {
+                    l++;
+                }
+                else
+                {
+                    k++;
+                }
+            }
+
+            if (sum != 0)
+            {
+                rowInds.add(j);
+                results.add(sum / matrix->taucs_values[matrix->colptr[j]]);
+                sum = 0;
+            }
+        }
+        for (j = i + 1; j < matrix->n; j++)
+        {
+			int size = results.size();
+            for (k = colptr[i], l = transposed->colPointers()[j];
+                k < size &&
+                rowInds[k] < j &&
+                l < transposed->colPointers()[j + 1] &&
+                transposed->rowIndices()[l] < j; )
+            {
+                if (rowInds[k] == transposed->rowIndices()[l])
+                {
+                    sum -= results[k] * transposed->values()[l];
+                    k++;
+                    l++;
+                }
+                else if (transposed->rowIndices()[l] < rowInds[k])
+                {
+                    l++;
+                }
+                else
+                {
+                    k++;
+                }
+            }
+
+            if (sum != 0)
+            {
+                rowInds.add(j);
+                results.add(sum / matrix->taucs_values[matrix->colptr[j]]);
+                sum = 0;
+            }
+        }
+        colptr[i + 1] = results.size();
 	}
 	
+	delete transposed;
+
+	taucs_ccs_matrix *result = taucs_ccs_create(matrix->n, matrix->n, results.size(), TAUCS_DOUBLE | TAUCS_SYMMETRIC | TAUCS_LOWER);
+
+	for (i = 0; i <= matrix->n; i++)
+	{
+		result->colptr[i] = colptr[i];
+	}
+	for (i = 0; i < results.size(); i++)
+	{
+		result->rowind[i] = rowInds[i];
+		result->taucs_values[i] = results[i];
+	}
+
+	delete[] colptr;
+
+	return new TSparseMatrix(result);
+}
+
+TSparseMatrix* TSparseMatrix::invert_lower_triangular_cholesky_decomposed_returning_lower_triangular() const
+{
 	TSparseMatrix* transposed = this->transposed(); // TODO: isn't there another way?
 	
 	Vector<double> results(matrix->colptr[matrix->n] * 4); // TODO: perhaps 4 times is too much?
@@ -397,6 +503,61 @@ TSparseMatrix* TSparseMatrix::multiply_three_returning_lower_triangular(const TS
             for (l = second.colPointers()[third.rowIndices()[k]]; l < second.colPointers()[third.rowIndices()[k] + 1]; l++)
             {
 				for (j = matrix->colptr[second.rowIndices()[l] + 1] - 1; j >= matrix->colptr[second.rowIndices()[l]] && matrix->rowind[j] >= i; j--)
+				{
+					resultColumn[matrix->rowind[j]] += third.values()[k] * second.values()[l] * matrix->taucs_values[j];
+				}
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                results.add(resultColumn[k]);
+                rowInds.add(k);
+				resultColumn[k] = 0;
+            }
+        }
+		colptr[i + 1] = results.size();
+    }
+    result = taucs_ccs_create(matrix->m, third.columnsCount(), results.size(), TAUCS_DOUBLE | TAUCS_SYMMETRIC | TAUCS_LOWER);
+	for (i = 0; i <= third.columnsCount(); i++)
+	{
+		result->colptr[i] = colptr[i];
+	}
+	results.initIterator();
+	rowInds.initIterator();
+	for (i = 0; results.hasMore(); i++)
+	{
+        result->taucs_values[i] = results.nextElement();
+        result->rowind[i] = rowInds.nextElement();
+	}
+
+	delete[] colptr;
+	delete[] resultColumn;
+
+    return new TSparseMatrix(result);
+}
+
+TSparseMatrix* TSparseMatrix::multiply_three(const TSparseMatrix& second, const TSparseMatrix& third) const
+{
+	int *colptr = new int[second.columnsCount() + 1];
+	double *resultColumn = new double[matrix->m];
+	List<double> results;
+	List<int> rowInds;
+    int i, k, l, j;
+    taucs_ccs_matrix *result;
+    colptr[0] = 0;
+    for (i = 0; i < matrix->m; i++)
+    {
+		resultColumn[i] = 0;
+    }
+    for (i = 0; i < third.columnsCount(); i++)
+    {
+        for (k = third.colPointers()[i]; k < third.colPointers()[i + 1]; k++)
+        {
+            for (l = second.colPointers()[third.rowIndices()[k]]; l < second.colPointers()[third.rowIndices()[k] + 1]; l++)
+            {
+				for (j = matrix->colptr[second.rowIndices()[l]]; j < matrix->colptr[second.rowIndices()[l] + 1]; j++)
 				{
 					resultColumn[matrix->rowind[j]] += third.values()[k] * second.values()[l] * matrix->taucs_values[j];
 				}

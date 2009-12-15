@@ -39,58 +39,6 @@ using namespace std;
 //! Class for a vertical distance measurement
 class  TVerticalDistMeasurement : public TAPointMeasurement  
 {
-public:
-	//constants
-
-	/**@name Constructors and Destructors */
-	//@{
-	/*!Default constructor*/
-	TVerticalDistMeasurement();
-	/**Constructor
-	@param refName the measurement's reference point's name
-	@param tgfName the measurement's target point's name
-	@param obsDist the observed vertical distance as a TLength
-	@param sigma the observed dist's precision as a TLength*/
-	TVerticalDistMeasurement(/*TSpatialPointName refName,*/ TSpatialPointName tgName, TLength obsDist, TLength sigma);
-	/*! Copy Constructor */
-	TVerticalDistMeasurement(const  TVerticalDistMeasurement&);
-	/*! Destructor */
-	virtual  ~TVerticalDistMeasurement();
-	//@}
-
-	/*! Copy Assignment Operator */
-	TVerticalDistMeasurement& operator=( const TVerticalDistMeasurement& );
-
-	/**@return a string indicating this measurement is a vertical distance measurement*/
-	virtual string				getMeasKind() const;
-
-	/**@name Access methods*/
-	//@{
-	/**@return the measured vertical distance as a TLength*/
-	virtual TLength				getVDistValue() const;
-	/**@return the measured distance's sigma a priori*/
-	virtual TLength				getSigma() const;
-	/*!@return the observed angle's constante (if there is one) as a TAngle instance*/
-	virtual TDistConstants		getMeasConst() const {return fMeasConstant; }
-	//@}
-
-	///Sets the sigma a priori if it isn't done yet
-	virtual void				ifNotDoneSetSigma(TLength sigma);
-	/*!Sets the measurement constant */
-	virtual void				ifNotDoneSetMeasConst(const TDistConstants& constant);
-
-
-protected: 
-
-
-private:
-
-	TLength				fMeasuredDist; /*!< vertical measurement */
-	TLength				fSigmaAPriori; /*!< error on the vertical measurement */
-
-	TDistConstants		fMeasConstant; /*!< measurement constant if there is one */
-
-	
 };
 /*@}*/
 

@@ -26,18 +26,24 @@ public:
 	TSparseMatrix* transposed() const;
 
 	// General multiplication of sparse matrices.
-	TSparseMatrix* multiply(const TSparseMatrix& second) const;
 	double* operator *(const TColumnVector& right) const;
+	double* operator *(const double* right) const;
 	operator taucs_ccs_matrix*();
 	double operator ()(int row, int column);
 	
 	void multiply_by_number(double);
 
-	TSparseMatrix* invert_lower_triangular() const;
-	double* multiply_returning_diagonal(const TSparseMatrix& second) const;
-	double* multiply_three_returning_diagonal(const TSparseMatrix& second, const TSparseMatrix& third) const;
-	TSparseMatrix* multiply_three_returning_lower_triangular(const TSparseMatrix& second, const TSparseMatrix& third) const;
+	TSparseMatrix* invert_lower_triangular_cholesky_decomposed() const;
+	TSparseMatrix* invert_lower_triangular_cholesky_decomposed_returning_lower_triangular() const;
+	TSparseMatrix* invert_diagonal_matrix() const;
+
+	TSparseMatrix* multiply(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_returning_lower_triangular(const TSparseMatrix& second) const;
+	double* multiply_returning_diagonal(const TSparseMatrix& second) const;
+
+	TSparseMatrix* multiply_three(const TSparseMatrix& second, const TSparseMatrix& third) const;
+	TSparseMatrix* multiply_three_returning_lower_triangular(const TSparseMatrix& second, const TSparseMatrix& third) const;
+	double* multiply_three_returning_diagonal(const TSparseMatrix& second, const TSparseMatrix& third) const;
 
 	static TSparseMatrix* getCholeskyFactor(void* symbolic);
 
@@ -48,11 +54,7 @@ public:
 	const int* rowIndices() const { return matrix->rowind; }
 	const int* colPointers() const { return matrix->colptr; }
 
-	bool isLowerTriangular() const { return lowerTriangular; }
-
 	void writeMatrixFile(char *) const;
-
-	static TSparseMatrix* deepCopy(TSparseMatrix* matrix);
 
 
 private:
@@ -196,7 +198,6 @@ private:
 		bool iterHasMore;
 	};
 
-	bool lowerTriangular;
 	taucs_ccs_matrix *matrix;
 };
 

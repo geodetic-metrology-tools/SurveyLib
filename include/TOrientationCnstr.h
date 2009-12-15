@@ -54,7 +54,7 @@ public:
 		/*!@param cPtName the name of the constrained point
 		@param cWidth the width of the radial constraint
 		@param cBearing the bearing of the radial constraint*/
-		TOrientationCnstr(TSpatialPointName refPtName, TAngle cBearing);
+		TOrientationCnstr(int obsID, TSpatialPointName refPtName, TAngle cBearing);
 
 		/*! Copy Constructor */
 		TOrientationCnstr(const  TOrientationCnstr&);
@@ -118,6 +118,8 @@ public:
 		\param com the comment line as a string*/
 		virtual void				setHeaderComment(string com) { fHeaderComment = com; return;}
 
+		int getObservationID() const { return observationID; }
+
 
 
 private:
@@ -129,6 +131,8 @@ private:
 	int								fIdentifier; /*< identifier from geode */
 	string							fComment; /*< comment from geode*/
 	string							fHeaderComment; /*< head comment line (starting with % in input file)*/
+
+	int observationID;
 
 	//ClassDef(TOrientationCnstr, 1)
 };

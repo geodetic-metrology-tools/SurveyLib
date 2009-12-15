@@ -161,17 +161,17 @@ public:
 	/*!@name trigonometric functions */
 	//@{
 	/*! Calculates the cosine of the angle, for example: angle.Cos() = cos(angle) */
-	double cosine();
+	double cosine() const;
 	/*! Calculates the sine of the angle */
-	double sine();
+	double sine() const;
 	/*! Calculates the tangent of the angle */
-	double tangent();
+	double tangent() const;
 	/*! Calculates the hyperbolic cosine of the angle */
-	double cosineh();
+	double cosineh() const;
 	/*! Calculates the hyperbolic sine of the angle */
-	double sineh();
+	double sineh() const;
 	/*! Calculates the hyperbolic tangent of the angle */
-	double tangenth();
+	double tangenth() const;
 	/*! Calculates the arccosine of a double as a TAngle */
 	static TAngle aCos(const double);
 	/*! Calculates the arcsine of a double as a TAngle */

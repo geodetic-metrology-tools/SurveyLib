@@ -23,59 +23,63 @@
 /////////////////////////////////////////////////////
 // Forward declarations
 //
-#include "TAPlaneMeasurement.h"
+#include "TAPointMeasurement.h"
+#include "Scale.h"
+#include "TLength.h"
+#include "TAngle.h"
 /////////////////////////////////////////////////////
 
 /*! \ingroup spatialmeasurements
 	@{*/ 
 
 //! Class for a horizontal distance measurement
-class	TOffsetToTheoPlaneMeasurement : public TAPlaneMeasurement{
+class	TOffsetToTheoPlaneMeasurement : public TAPointMeasurement{
 
-public :
+public:
 
+	TOffsetToTheoPlaneMeasurement(int obsID, const TSpatialPoint* trgt, const Scale* s, const TAngle* angl, const TLength* obs,
+		const TLength* sigma, const TLength* ppmE, const TLength* scs) : TAPointMeasurement(obsID, trgt)
+	{
+		observedAngle = angl;
+		observedValue = obs;
+		fSigmaAPriori = sigma;
+		scale = s;
+		scaleCenteringSigma = scs;
+		ppm = ppmE;
+	}
 
+	~TOffsetToTheoPlaneMeasurement()
+	{
+		delete observedValue;
+		delete fSigmaAPriori;
+		delete scaleCenteringSigma;
+		delete ppm;
+	}
 
-	/*!@name Constructors/Destructor */
-	//@{
-		/*! Default constructor */
-		TOffsetToTheoPlaneMeasurement();
+	const TAngle* getObservedAngle() const { return observedAngle; }
 
-		/*! Constructor 
-		\param setupPtName the measurement's station's setup point's name
-		\param targetname  the measurement's target point's name
-		\param obsDist the observed distance as a TLength
-		\param sigma the observed distance's precision as a TLength*/
-		TOffsetToTheoPlaneMeasurement(const TSpatialPlaneName targetName, const TLength obsDist, const TLength sigma);
-	
-		/*! Copy constructor */
-		TOffsetToTheoPlaneMeasurement(const TOffsetToTheoPlaneMeasurement &source);
+	const TLength* getScaleCenteringSigma() const { return scaleCenteringSigma; }
 
-		/*! Destructor */
-		~TOffsetToTheoPlaneMeasurement();
-	//@}
+	const TLength* getObservedValue() const { return observedValue; }
 
-	/*!@Member functions */
-	//@{
-		/*! Copy assignment operator */
-		TOffsetToTheoPlaneMeasurement&	operator=(const TOffsetToTheoPlaneMeasurement& source);
-		//DANGER : shallow copy (see NetworkSurveyMeas)
+	const TLength* getSigma() const { return fSigmaAPriori; }
 
-		/*! return a string indicating this measurement is a TECTH measurement */
-		virtual string				getMeasKind() const;
+	const TLength* getPPM() const { return ppm; }
+
+	const Scale* getScale() const { return scale; }
+
+private:
+
+	const TAngle* observedAngle;
+	const TLength* observedValue; /*!< measured distance */
+	const TLength* fSigmaAPriori; /*!< estimated error on the angle measurement*/
+	const TLength* ppm; /*!< estimated error on the angle measurement*/
+
+	const Scale* scale;
+	const TLength* scaleCenteringSigma;
+
 
 };
-/*@}*/
-
-	/*!@name Typedefs*/
-	//@{
-	/*!Type of the container used to store the spatial distances */
-	typedef list< TOffsetToTheoPlaneMeasurement > OffsetToTheoPlaneContainer;
-	/*!Type of an iterator pointing to an element of the spatial dist. container */
-	typedef OffsetToTheoPlaneContainer::iterator OffsetToTheoPlaneMeasIterator;
-	/*!Type of an iterator pointing to an element of the spatial dist. container */
-	typedef OffsetToTheoPlaneContainer::const_iterator OffsetToTheoPlaneMeasConstIter;
-	//@}
 
 #endif
 

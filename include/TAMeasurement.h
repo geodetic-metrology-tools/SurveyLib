@@ -30,58 +30,48 @@ public:
 
 	/*!@name Enum Type Definition*/
 	//@{
-	enum ECalcStatus {kVariable, kFixed};
+	enum ECalcStatus { kVariable, kFixed };
 	//@}
 
 
 	/*!@return the identifier of the measurement*/
-	virtual int					getId() const { return fIdentifier;}
+	int					getId() const { return fIdentifier; }
 	/*!sets the identifier of the measurement
 	@param id an int*/
-	virtual void				setId(int id);
+	void				setId(int id);
 
 	/*!@return the comment of the measurement*/
-	virtual string				getComment() const { return fComment;}
+	string				getComment() const { return fComment; }
 	/*!sets the comment of the measurement
 	@param com a string*/
-	virtual void				setComment(string com) { fComment = com; return;}
+	void				setComment(string com) { fComment = com; }
 	
 	/*!@return the head comment of the measurement*/
-	virtual string				getHeaderComment() const { return fHeaderComment;}
+	string				getHeaderComment() const { return fHeaderComment; }
 	
 	/*!sets the head comment of the measurement
 	@param com the comment line as a string*/
-	virtual void				setHeaderComment(string com) { fHeaderComment = com; return;}
+	void				setHeaderComment(string com) { fHeaderComment = com; }
 
 	/*! Indicate if the id is frome Geode or not*/
-	virtual bool				isGeodeIdUsed() const { return fHasAGeodeId; }
+	bool				isGeodeIdUsed() const { return fHasAGeodeId; }
 
+	int	getObservationID() const { return observationID; }
+	
+	virtual bool operator ==(const TAMeasurement& right) const { return observationID == right.observationID; }
 
 protected:
 
-	/*!@name Constructors / Destructor*/
-	//@{
-	//!Default constructor
-	TAMeasurement();
-	/*! Copy constructor */
-	TAMeasurement(const TAMeasurement& source);
-	/*! Destructor */
-	~TAMeasurement();
-	//@}
+	TAMeasurement(int obsID) { observationID = obsID; }
 
-	
-	
-	
+	int observationID;
 	int								fIdentifier; /*< identifier from geode */
 	bool							fHasAGeodeId; /*< indicating if it use a Geode identifier or not */
 	string							fComment; /*< comment from geode*/
-	string							fHeaderComment; /*< head comment line (starting with % in input file)*/
-	
+	string							fHeaderComment; /*< head comment line (starting with % in input file)*/	
 
 };
 #endif
-
-/*@}*/
 
 
 

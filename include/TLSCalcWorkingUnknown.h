@@ -53,6 +53,13 @@ public:
 
 		return result;
 	}
+	
+	typename list<CalcParam>::iterator			push_back_unique(CalcParam& param)
+	{
+		paramsList.push_back(param);
+
+		return --(paramsList.end());
+	}
 
 	/*! Erases the selected CalcParam and deletes its corresponding pointer from the list */
 	bool										erase(CalcParam& param)

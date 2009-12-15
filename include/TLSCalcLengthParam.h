@@ -25,7 +25,7 @@ public:
 		/*! Constructor
 		\param lobs observed value of the length parameter
 		\param ecs status of the observed length (kFixed / kVariable) */
-		TLSCalcLengthParam(TLength lobs,TALSCalcParameter::ELSStatus els,string name);
+		TLSCalcLengthParam(TLength lobs,TALSCalcParameter::ELSStatus els, string name);
 		/*! Copy constructor */
 		TLSCalcLengthParam(const TLSCalcLengthParam& source);
 		/*! Destructor */
