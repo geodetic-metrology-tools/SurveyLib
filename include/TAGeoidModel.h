@@ -79,7 +79,7 @@ public:
 		virtual TAReferenceFrame* getCalcRefFrame() const {return 0;}
 
 		/*! Set the geoid identifier as an enum type*/
-		virtual void setGeoidId(const TRefSystemFactory::EGeoid geoidId) {return ;}
+		virtual void setGeoidId(const TRefSystemFactory::EGeoid geoidId) = 0;
 
 		/*! \Returns the geoid identifier*/
 		virtual TRefSystemFactory::EGeoid  getGeoidId() const{return TRefSystemFactory::kNoGeoid;}

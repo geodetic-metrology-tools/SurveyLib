@@ -39,6 +39,7 @@ using namespace std;
 //! Class for a vertical distance measurement
 class  TVerticalDistMeasurement : public TAPointMeasurement  
 {
+	TVerticalDistMeasurement() :TAPointMeasurement(1, NULL) { }
 };
 /*@}*/
 

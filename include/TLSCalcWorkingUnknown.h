@@ -36,7 +36,7 @@ public:
 	/*! Adds a new CalcParam at the end of the list, if it is not done yet (tests first if the object is
 	already in the list or not)
 	\returns an iterator to the CalcParam wether it was already inserted or just being inserted */
-	typename list<CalcParam>::iterator			push_back(CalcParam& param)
+	typename list<CalcParam>::iterator			push_back(const CalcParam& param)
 	{
 		hash_map<string, list<CalcParam>::iterator>::iterator iter = calcParamsMap.find(param.getName());
 		list<CalcParam>::iterator result;
@@ -54,7 +54,7 @@ public:
 		return result;
 	}
 	
-	typename list<CalcParam>::iterator			push_back_unique(CalcParam& param)
+	typename list<CalcParam>::iterator			push_back_unique(const CalcParam& param)
 	{
 		paramsList.push_back(param);
 
