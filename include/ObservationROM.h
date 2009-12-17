@@ -26,7 +26,7 @@
 #include "TSpatialDistMeasurement.h"
 #include "TZenithDistMeasurement.h"
 #include "Polar3DMeasurement.h"
-#include "ObservationROM.h"
+#include "TVerticalDistMeasurement.h"
 #include "PolarTarget.h"
 #include "EDMTarget.h"
 
@@ -65,6 +65,7 @@ typedef ObservationROM<THorizontalDistMeas> HorizontalDistanceROM;
 typedef ObservationROM<TSpatialDistMeasurement<PolarTarget> > SpatialDistanceROM;
 typedef ObservationROM<TZenithDistMeasurement> ZenithDistanceROM;
 typedef ObservationROM<Polar3DMeasurement> Polar3DROM;
+typedef ObservationROM<TVerticalDistMeasurement> VerticalDistanceROM;
 
 typedef list<TGyroOrientationROM> GyroOrieROMContainer;
 typedef GyroOrieROMContainer::iterator GyroOrieROMIterator;

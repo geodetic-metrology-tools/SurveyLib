@@ -1,6 +1,6 @@
 //
 // OffsetToTheodolitePlaneROM.h : header file
-/*! Class for a horizontal angle round of measurements
+/*!
 
     Patterns:
   
@@ -22,16 +22,13 @@
 using namespace std;
 
 #include "TOffsetToTheoPlaneMeasurement.h"
-#include "Scale.h"
 
-//! Class for a round of horizontal angle measurements
 class OffsetToTheodolitePlaneROM
 { 
 public:
 
-	OffsetToTheodolitePlaneROM(const Scale* scl, const TAngle* angle)
+	OffsetToTheodolitePlaneROM(const TAngle* angle)
 	{
-		scale = scl;
 		measuredAngle = angle;
 	}
 
@@ -48,13 +45,12 @@ public:
 		delete measuredAngle;
 	}
 
-	const list<const TOffsetToTheoPlaneMeasurement*>& getOffsetToTheodolitePlaneMeasurements() const { return offsetToTheodolitePlaneMeasurements; }
+	const list<const TOffsetToTheoPlaneMeasurement*>& getMeasurements() const { return offsetToTheodolitePlaneMeasurements; }
 
 	void addMeasurement(const TOffsetToTheoPlaneMeasurement* meas) { offsetToTheodolitePlaneMeasurements.push_back(meas); }
 
 private:
 
-	const Scale* scale;
 	const TAngle* measuredAngle;
 	list<const TOffsetToTheoPlaneMeasurement*> offsetToTheodolitePlaneMeasurements;
 

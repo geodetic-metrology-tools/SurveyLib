@@ -254,6 +254,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\Level.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\SpatialMeasurements\InstrumentStations\Scale.cpp"
 				>
 			</File>
@@ -287,7 +291,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\Gyroscope.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\GyroscopeStation.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\Level.h"
 				>
 			</File>
 			<File
@@ -296,6 +308,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\Scale.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\Staff.h"
 				>
 			</File>
 			<File

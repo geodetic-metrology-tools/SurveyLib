@@ -1,8 +1,8 @@
-// PolarTarget.h
+// Staff.h
 
 
-#ifndef SU_POLAR_TARGET
-#define SU_POLAR_TARGET
+#ifndef SU_STAFF
+#define SU_STAFF
 
 #if _MSC_VER >= 1000
 #pragma once
@@ -13,16 +13,14 @@
 #include "TLength.h"
 #include "TDistConstants.h"
 
-class PolarTarget : public Target
+class Staff : public Target
 {
 
 public:
 
-	PolarTarget(const string& tID, const TAngle* as, const TAngle* zds, const TLength* ds, const TLength* ppmS, const TDistConstants* dc, const TLength* dcs,
-		const TLength* tcs, const TLength* th, const TLength* ths, int dcun) : Target(tID, tcs, th, ths)
+	Staff(const string& tID, const TLength* ds, const TLength* ppmS, const TDistConstants* dc, const TLength* dcs,
+		const TLength* th, const TLength* ths, int dcun) : Target(tID, NULL, th, ths)
 	{
-		angleSigma = as;
-		zenithDistanceSigma = zds;
 		distanceSigma = ds;
 		ppm = ppmS;
 		distanceCorrection = dc;
@@ -30,19 +28,13 @@ public:
 		distanceCorrectionUnknownNumber = dcun;
 	}
 
-	~PolarTarget()
+	~Staff()
 	{
-        delete angleSigma;
-        delete zenithDistanceSigma;
         delete distanceSigma;
         delete ppm;
         delete distanceCorrection;
         delete distanceCorrectionSigma;
 	}
-
-	const TAngle* getAngleSigma() const { return angleSigma; }
-
-	const TAngle* getZenithDistanceSigma() const { return zenithDistanceSigma; }
 
 	const TLength* getDistanceSigma() const { return distanceSigma; }
 
@@ -54,10 +46,8 @@ public:
 
 	int getDistanceCorrectionUnknownNumber() const { return distanceCorrectionUnknownNumber; }
 
-private:
+private:  
 
-	const TAngle* angleSigma;
-	const TAngle* zenithDistanceSigma;
 	const TLength* distanceSigma;
 	const TLength* ppm;
 	const TDistConstants* distanceCorrection;
@@ -66,4 +56,4 @@ private:
 	int distanceCorrectionUnknownNumber;
 };
 
-#endif //SU_POLAR_TARGET
+#endif //SU_STAFF

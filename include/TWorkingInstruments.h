@@ -16,6 +16,8 @@
 #include "TTheodolite.h"
 #include "Scale.h"
 #include "EDM.h"
+#include "Gyroscope.h"
+#include "Level.h"
 
 #include <list>
 using namespace std;
@@ -28,6 +30,7 @@ class TWorkingInstruments
 {
 public:
 
+	// TODO: some error checking whether it exists
 	TTheodolite* getTheodoliteNamed(const string& name) { return theodolitesMap.find(name)->second; }
 
 	void addTheodolite(TTheodolite* theo)
@@ -51,6 +54,22 @@ public:
 		edmsList.push_back(edm);
 		edmsMap[edm->getInstrumentID()] = edm;
 	}
+	
+	Gyroscope* getGyroscopeNamed(const string& name) { return gyroscopesMap.find(name)->second; }
+
+	void addGyroscope(Gyroscope* gyro)
+	{
+		gyroscopesList.push_back(gyro);
+		gyroscopesMap[gyro->getInstrumentID()] = gyro;
+	}
+	
+	Level* getLevelNamed(const string& name) { return levelsMap.find(name)->second; }
+
+	void addLevel(Level* level)
+	{
+		levelsList.push_back(level);
+		levelsMap[level->getInstrumentID()] = level;
+	}
 
     const list<TTheodolite*>& getTheodolitesList() const { return theodolitesList; }
 
@@ -58,15 +77,23 @@ public:
 
     const list<EDM*>& getEDMsList() const { return edmsList; }
 
+    const list<Gyroscope*>& getGyroscopesList() const { return gyroscopesList; }
+
+    const list<Level*>& getLevelsList() const { return levelsList; }
+
 private :
 
 	list<TTheodolite*> theodolitesList;
 	list<Scale*> scalesList;
 	list<EDM*> edmsList;
+	list<Gyroscope*> gyroscopesList;
+	list<Level*> levelsList;
 
 	hash_map<string, TTheodolite*> theodolitesMap;
 	hash_map<string, Scale*> scalesMap;
 	hash_map<string, EDM*> edmsMap;
+	hash_map<string, Gyroscope*> gyroscopesMap;
+	hash_map<string, Level*> levelsMap;
 
 };
 

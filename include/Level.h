@@ -1,7 +1,7 @@
 // 
-// EDM.h : header file
+// Level.h : header file
 //
-// Class for an EDM
+// Class for an Level
 //
 //  Patterns:
 //  
@@ -10,8 +10,8 @@
 ////////////////////////////////////////////////////////////////////////
 
 
-#ifndef SU_EDM
-#define SU_EDM
+#ifndef SU_LEVEL
+#define SU_LEVEL
 
 #if _MSC_VER >= 1000
 #pragma once
@@ -22,29 +22,29 @@
 #include <hash_map>
 using namespace stdext;
 
-#include "TAInstrument.h"
-#include "EDMTarget.h"
+#include "TAFreeInstrument.h"
+#include "Staff.h"
 #include "TLength.h"
 
 //! Class for an EDM station
-class EDM : public TAInstrument
+class Level : public TAFreeInstrument
 {
 public:
 
-	EDM(const string& id, const TLength* ih, const TLength* sih, const TLength* sic);
+	Level(const string& id) : TAFreeInstrument(id, NULL) { }
 
-	~EDM();
+	~Level();
 
-	const EDMTarget* getDefaultTarget() const { return defaultTarget; }
-	const EDMTarget* getTargetNamed(const string& targetName) const { return targets.find(targetName)->second; }
+	const Staff* getDefaultStaff() const { return defaultStaff; }
+	const Staff* getStaffNamed(const string& staffName) const { return staffs.find(staffName)->second; }
 
-	void addTarget(const EDMTarget* target, bool def);
+	void addStaff(const Staff* staff, bool def);
 
 private:
 
-	const EDMTarget* defaultTarget;
+	const Staff* defaultStaff;
 
-	hash_map<string, const EDMTarget*> targets; // target name to target pairs
+	hash_map<string, const Staff*> staffs; // target name to target pairs
 
 };
 

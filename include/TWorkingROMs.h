@@ -37,11 +37,16 @@ public:
 
 	void addOffsetToSpatialLineROM(const OffsetToLineOrPlaneROM* rom) { offsetToSpatialLineROMs.push_back(rom); }
 
+	const list<const VerticalDistanceROM*>& getVerticalDistanceROMs() const { return verticalDistanceROMs; }
+
+	void addVerticalDistanceROM(const VerticalDistanceROM* rom) { verticalDistanceROMs.push_back(rom); }
+
 private :
 
 	list<const OffsetToLineOrPlaneROM*> offsetToVerticalPlaneROMs;
 	list<const OffsetToLineOrPlaneROM*> offsetToVerticalLineROMs;
 	list<const OffsetToLineOrPlaneROM*> offsetToSpatialLineROMs;
+	list<const VerticalDistanceROM*> verticalDistanceROMs;
 
 };
 
