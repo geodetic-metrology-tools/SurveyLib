@@ -266,6 +266,10 @@
 				RelativePath="..\..\..\include\TheodoliteStationROM.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\include\VerticalDistanceROM.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

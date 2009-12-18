@@ -9,8 +9,8 @@
 ////////////////////////////////////////////////////////////////////////
 
 
-#ifndef SU_OFFSET_LINE_ROM
-#define SU_OFFSET_LINE_ROM
+#ifndef SU_OBSERVATION_ROM
+#define SU_OBSERVATION_ROM
 
 #if _MSC_VER >= 1000
 #pragma once
@@ -65,7 +65,6 @@ typedef ObservationROM<THorizontalDistMeas> HorizontalDistanceROM;
 typedef ObservationROM<TSpatialDistMeasurement<PolarTarget> > SpatialDistanceROM;
 typedef ObservationROM<TZenithDistMeasurement> ZenithDistanceROM;
 typedef ObservationROM<Polar3DMeasurement> Polar3DROM;
-typedef ObservationROM<TVerticalDistMeasurement> VerticalDistanceROM;
 
 typedef list<TGyroOrientationROM> GyroOrieROMContainer;
 typedef GyroOrieROMContainer::iterator GyroOrieROMIterator;

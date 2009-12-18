@@ -19,6 +19,7 @@
 using namespace std;
 
 #include "ObservationROM.h"
+#include "VerticalDistanceROM.h"
 
 //!Class storing all the instruments
 class TWorkingROMs
