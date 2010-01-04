@@ -30,6 +30,7 @@ TLSInputMatrices::TLSInputMatrices()
 	secondDesignMatrixTransposed = NULL;
 	weightMatrix = NULL;
 	bTimesWInvTimesBTransInverted = NULL;
+	weightMatrixInverted = NULL;
 
 	fCnstrFirstDesignMtrxTransposed = NULL;
 
@@ -65,6 +66,21 @@ TLSInputMatrices::~TLSInputMatrices()
 	delete fCnstrFirstDesignMtrxTransposed;
 	delete fCnstrMisclosureVector;
 
+	if (constraintFirstDesignMatrixTransposedValues != NULL)
+	{
+		delete constraintFirstDesignMatrixTransposedValues;
+	}
+
+	if (constraintFirstDesignMatrixTransposedColPtr != NULL)
+	{
+		delete constraintFirstDesignMatrixTransposedColPtr;
+	}
+
+	if (constraintFirstDesignMatrixTransposedRowInd != NULL)
+	{
+		delete constraintFirstDesignMatrixTransposedRowInd;
+	}
+
 
 }
 
@@ -81,7 +97,15 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	fNbEqn = equations;
 	fNbCnstrObs = cnstrObs;
 
+	if (fMisclosureVector != NULL)
+	{
+		delete fMisclosureVector;
+	}
 	fMisclosureVector = new TColumnVector(fNbObs);
+
+	constraintFirstDesignMatrixTransposedValues = NULL;
+	constraintFirstDesignMatrixTransposedColPtr = NULL;
+	constraintFirstDesignMatrixTransposedRowInd = NULL;
 }
 
 
@@ -98,6 +122,10 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	constraintFirstDesignMatrixTransposedColPtr = new list<int>();
 	constraintFirstDesignMatrixTransposedRowInd = new list<int>();
 	
+	if (fMisclosureVector != NULL)
+	{
+		delete fMisclosureVector;
+	}
 	fMisclosureVector = new TColumnVector(fNbObs);
 }
 
@@ -116,21 +144,28 @@ void TLSInputMatrices::clearMatrices()
 		delete secondDesignMatrixTransposed;
 		delete firstDesignMatrixTransposed;
 		delete weightMatrix;
+	
+		firstDesignMatrixTransposed = NULL;
+		secondDesignMatrixTransposed = NULL;
+		weightMatrix = NULL;
 	}
 
 	if (fCnstrFirstDesignMtrxTransposed != NULL)
 	{
 		delete fCnstrFirstDesignMtrxTransposed;
+		fCnstrFirstDesignMtrxTransposed = NULL;
 	}
 
 	if (weightMatrixInverted != NULL)
 	{
 		delete weightMatrixInverted;
+		weightMatrixInverted = NULL;
 	}
 
 	if (bTimesWInvTimesBTransInverted != NULL)
 	{
 		delete bTimesWInvTimesBTransInverted;
+		bTimesWInvTimesBTransInverted = NULL;
 	}
 }
 
