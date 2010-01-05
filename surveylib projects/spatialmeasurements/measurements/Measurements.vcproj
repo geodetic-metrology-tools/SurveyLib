@@ -490,7 +490,7 @@
 			Filter="h;hpp;hxx;hm;inl;fi;fd"
 			>
 			<File
-				RelativePath="..\..\..\include\Polar3DMeasurement.h"
+				RelativePath="..\..\..\include\PolarMeasurement.h"
 				>
 			</File>
 			<File

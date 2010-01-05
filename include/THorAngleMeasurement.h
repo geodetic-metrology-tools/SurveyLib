@@ -18,7 +18,7 @@
 #endif // _MSC_VER >= 1000
 
 #include "TAPointMeasurement.h"
-#include "PolarTarget.h"
+#include "TheodoliteTarget.h"
 #include "TAngle.h"
 #include "TLength.h"
 
@@ -28,7 +28,7 @@ class THorAngleMeasurement : public TAPointMeasurement
 
 public:
 
-	THorAngleMeasurement(int obsID, const TSpatialPoint* trgt, const PolarTarget* polarTarget, const TAngle* obsAngle,
+	THorAngleMeasurement(int obsID, const TSpatialPoint* trgt, const TheodoliteTarget* polarTarget, const TAngle* obsAngle,
 		const TAngle* sigma, const TLength* tcs) : TAPointMeasurement(obsID, trgt)
 	{
 		observedValue = obsAngle;
@@ -50,14 +50,14 @@ public:
 
 	const TAngle* getSigma() const { return fSigmaAPriori; }
 
-	const PolarTarget* getTarget() const { return target; }
+	const TheodoliteTarget* getTarget() const { return target; }
 
 private:
 
 	const TAngle* observedValue; /*!< measured angle */
 	const TAngle* fSigmaAPriori; /*!< estimated error on the angle measurement*/
 
-	const PolarTarget* target;
+	const TheodoliteTarget* target;
 	const TLength* targetCenteringSigma;
 
 };

@@ -21,7 +21,7 @@ class TheodoliteStationROM
 {
 public:
 
-	TheodoliteStationROM(const PolarTarget* trgt, const TAngleConstants* c)
+	TheodoliteStationROM(const TheodoliteTarget* trgt, const TAngleConstants* c)
 	{
 		defaultTarget = trgt;
 		totalStationROMAngleConstant = c;
@@ -29,9 +29,9 @@ public:
 
 	~TheodoliteStationROM()
 	{
-		list<const Polar3DROM*>::iterator iterP3D = polar3DROMs.begin();
+		list<const PolarROM*>::iterator iterP3D = polarROMs.begin();
 
-		while (iterP3D != polar3DROMs.end())
+		while (iterP3D != polarROMs.end())
 		{
 			delete *iterP3D;
 			iterP3D++;
@@ -80,12 +80,12 @@ public:
 		delete totalStationROMAngleConstant;
 	}
 
-	const PolarTarget* getDefaultTarget() const { return defaultTarget; }
+	const TheodoliteTarget* getDefaultTarget() const { return defaultTarget; }
 
 	const TAngleConstants* getAngleConstant() const { return totalStationROMAngleConstant; }
 
-	const list<const Polar3DROM*>& getPolar3DROMs() const { return polar3DROMs; }
-	void addPolar3DROM(const Polar3DROM* rom) { polar3DROMs.push_back(rom); }
+	const list<const PolarROM*>& getPolarROMs() const { return polarROMs; }
+	void addPolarROM(const PolarROM* rom) { polarROMs.push_back(rom); }
 
 	const list<const HorizontalAngleROM*>& getHorizontalAngleROMs() const { return horizontalAngleROMs; }
 	void addHorizontalAngleROM(const HorizontalAngleROM* rom) { horizontalAngleROMs.push_back(rom); }
@@ -104,11 +104,11 @@ public:
 
 private:
 
-	const PolarTarget* defaultTarget;
+	const TheodoliteTarget* defaultTarget;
 	const TAngleConstants* totalStationROMAngleConstant;
 
 	list<const OffsetToTheodolitePlaneROM*> offsetToTheodolitePlaneROMs;
-	list<const Polar3DROM*> polar3DROMs;
+	list<const PolarROM*> polarROMs;
 	list<const HorizontalAngleROM*> horizontalAngleROMs;
 	list<const ZenithDistanceROM*> zenithDistanceROMs;
 	list<const SpatialDistanceROM*> spatialDistanceROMs;

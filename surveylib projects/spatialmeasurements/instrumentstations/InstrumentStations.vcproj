@@ -303,10 +303,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\PolarTarget.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\Scale.h"
 				>
 			</File>
@@ -332,6 +328,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TheodoliteStation.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\TheodoliteTarget.h"
 				>
 			</File>
 			<File

@@ -18,7 +18,7 @@
 #endif // _MSC_VER >= 1000
 
 #include "TAPointMeasurement.h"
-#include "PolarTarget.h"
+#include "TheodoliteTarget.h"
 #include "TLength.h"
 #include "TDistConstants.h"
 
@@ -26,7 +26,7 @@
 class	THorizontalDistMeas : public TAPointMeasurement{
 
 public :
-	THorizontalDistMeas(int obsID, const TSpatialPoint* trgt, const PolarTarget* polarTarget, const TLength* obs,
+	THorizontalDistMeas(int obsID, const TSpatialPoint* trgt, const TheodoliteTarget* polarTarget, const TLength* obs,
 		const TLength* sigma, const TLength* ppmE, const TLength* tcs) : TAPointMeasurement(obsID, trgt)
 	{
 		observedValue = obs;
@@ -52,7 +52,7 @@ public :
 
 	const TLength* getPPM() const { return ppm; }
 
-	const PolarTarget* getTarget() const { return target; }
+	const TheodoliteTarget* getTarget() const { return target; }
 
 private:
 
@@ -60,7 +60,7 @@ private:
 	const TLength* fSigmaAPriori; /*!< estimated error on the angle measurement*/
 	const TLength* ppm; /*!< estimated error on the angle measurement*/
 
-	const PolarTarget* target;
+	const TheodoliteTarget* target;
 	const TLength* targetCenteringSigma;
 
 };

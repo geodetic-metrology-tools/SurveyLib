@@ -1,8 +1,8 @@
-// PolarTarget.h
+// TheodoliteTarget.h
 
 
-#ifndef SU_POLAR_TARGET
-#define SU_POLAR_TARGET
+#ifndef SU_THEODOLITE_TARGET
+#define SU_THEODOLITE_TARGET
 
 #if _MSC_VER >= 1000
 #pragma once
@@ -13,12 +13,12 @@
 #include "TLength.h"
 #include "TDistConstants.h"
 
-class PolarTarget : public Target
+class TheodoliteTarget : public Target
 {
 
 public:
 
-	PolarTarget(const string& tID, const TAngle* as, const TAngle* zds, const TLength* ds, const TLength* ppmS, const TDistConstants* dc, const TLength* dcs,
+	TheodoliteTarget(const string& tID, const TAngle* as, const TAngle* zds, const TLength* ds, const TLength* ppmS, const TDistConstants* dc, const TLength* dcs,
 		const TLength* tcs, const TLength* th, const TLength* ths, int dcun) : Target(tID, tcs, th, ths)
 	{
 		angleSigma = as;
@@ -30,7 +30,7 @@ public:
 		distanceCorrectionUnknownNumber = dcun;
 	}
 
-	~PolarTarget()
+	~TheodoliteTarget()
 	{
         delete angleSigma;
         delete zenithDistanceSigma;
@@ -66,4 +66,4 @@ private:
 	int distanceCorrectionUnknownNumber;
 };
 
-#endif //SU_POLAR_TARGET
+#endif //SU_THEODOLITE_TARGET

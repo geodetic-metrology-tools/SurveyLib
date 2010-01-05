@@ -18,7 +18,7 @@
 #endif // _MSC_VER >= 1000
 
 #include "TAPointMeasurement.h"
-#include "PolarTarget.h"
+#include "TheodoliteTarget.h"
 #include "TLength.h"
 #include "TDistConstants.h"
 /////////////////////////////////////////////////////

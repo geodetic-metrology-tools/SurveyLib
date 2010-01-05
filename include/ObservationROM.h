@@ -25,9 +25,9 @@
 #include "THorizontalDistMeas.h"
 #include "TSpatialDistMeasurement.h"
 #include "TZenithDistMeasurement.h"
-#include "Polar3DMeasurement.h"
+#include "PolarMeasurement.h"
 #include "TVerticalDistMeasurement.h"
-#include "PolarTarget.h"
+#include "TheodoliteTarget.h"
 #include "EDMTarget.h"
 
 template <typename Observation>
@@ -62,9 +62,9 @@ typedef ObservationROM<TOffsetToLineOrPlaneMeasurement> OffsetToLineOrPlaneROM;
 typedef ObservationROM<THorAngleMeasurement> TGyroOrientationROM;
 typedef ObservationROM<THorAngleMeasurement> HorizontalAngleROM;
 typedef ObservationROM<THorizontalDistMeas> HorizontalDistanceROM;
-typedef ObservationROM<TSpatialDistMeasurement<PolarTarget> > SpatialDistanceROM;
+typedef ObservationROM<TSpatialDistMeasurement<TheodoliteTarget> > SpatialDistanceROM;
 typedef ObservationROM<TZenithDistMeasurement> ZenithDistanceROM;
-typedef ObservationROM<Polar3DMeasurement> Polar3DROM;
+typedef ObservationROM<PolarMeasurement> PolarROM;
 
 typedef list<TGyroOrientationROM> GyroOrieROMContainer;
 typedef GyroOrieROMContainer::iterator GyroOrieROMIterator;

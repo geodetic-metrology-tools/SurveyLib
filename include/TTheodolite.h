@@ -23,7 +23,7 @@
 using namespace stdext;
 
 #include "TAInstrument.h"
-#include "PolarTarget.h"
+#include "TheodoliteTarget.h"
 #include "TLength.h"
 #include "TAngleConstants.h"
 
@@ -38,18 +38,18 @@ public:
 	
 	const TAngleConstants* getAngleConst() const { return angleConstant; }
 
-	const PolarTarget* getDefaultTarget() const { return defaultTarget; }
-	const PolarTarget* getTargetNamed(const string& targetName) const { return targets.find(targetName)->second; }
+	const TheodoliteTarget* getDefaultTarget() const { return defaultTarget; }
+	const TheodoliteTarget* getTargetNamed(const string& targetName) const { return targets.find(targetName)->second; }
 
-	void addTarget(const PolarTarget* target, bool def);
+	void addTarget(const TheodoliteTarget* target, bool def);
 
 private:
 
-	const PolarTarget* defaultTarget;
+	const TheodoliteTarget* defaultTarget;
 
 	const TAngleConstants* angleConstant; // angle constant for horizontal angle measurements
 
-	hash_map<string, const PolarTarget*> targets; // target name to target pairs
+	hash_map<string, const TheodoliteTarget*> targets; // target name to target pairs
 
 };
 

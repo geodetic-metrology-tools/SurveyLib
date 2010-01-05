@@ -21,7 +21,7 @@ class TheodoliteStation : public Station
 public:
 
 	TheodoliteStation(const TSpatialPoint* sp, const TTheodolite* instr, const TLength* ih,
-		const TLength* ihs, bool ihVariable, const PolarTarget* trgt,
+		const TLength* ihs, bool ihVariable, const TheodoliteTarget* trgt,
 		const TLength* ics, bool r3D, int ihun) : Station(sp, ih, ihs, ihVariable, ics, ihun)
 	{
 		rot3D = r3D;
@@ -44,7 +44,7 @@ public:
 
 	bool getRot3D() const { return rot3D; }
 
-	const PolarTarget* getTarget() const { return defaultTarget; }
+	const TheodoliteTarget* getTarget() const { return defaultTarget; }
 
 	const list<TheodoliteStationROM*>& getTheodoliteStationROMs() const { return theodoliteStationROMs; }
 
@@ -56,7 +56,7 @@ private:
 
 	const TTheodolite* instrument;
 
-	const PolarTarget* defaultTarget;
+	const TheodoliteTarget* defaultTarget;
 
 	list<TheodoliteStationROM*> theodoliteStationROMs;
 };

@@ -16,7 +16,7 @@ TTheodolite::TTheodolite(const string& id, const TLength* ih, const TLength* sih
 
 TTheodolite::~TTheodolite()
 {
-	hash_map<string, const PolarTarget*>::iterator iter = targets.begin();
+	hash_map<string, const TheodoliteTarget*>::iterator iter = targets.begin();
 
 	while (iter != targets.end())
 	{
@@ -27,7 +27,7 @@ TTheodolite::~TTheodolite()
 	delete angleConstant;
 }
 
-void TTheodolite::addTarget(const PolarTarget* target, bool def)
+void TTheodolite::addTarget(const TheodoliteTarget* target, bool def)
 {
 	targets[target->getTargetID()] = target;
 	if (def)

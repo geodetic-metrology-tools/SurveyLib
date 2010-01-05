@@ -1,4 +1,4 @@
-// Polar3DMeasurement
+// PolarMeasurement
 /*!
 	Class for a polar 3D measurement
 
@@ -10,15 +10,15 @@
 
 
 
-#ifndef SU_POLAR_3D_MEASUREMENT
-#define SU_POLAR_3D_MEASUREMENT
+#ifndef SU_POLAR_MEASUREMENT
+#define SU_POLAR_MEASUREMENT
 
 #if _MSC_VER >= 1000
 #pragma once
 #endif // _MSC_VER >= 1000
 
 #include "TAPointMeasurement.h"
-#include "PolarTarget.h"
+#include "TheodoliteTarget.h"
 #include "TLength.h"
 #include "TAngle.h"
 #include "TDistConstants.h"
@@ -26,14 +26,14 @@
 #include "TZenithDistMeasurement.h"
 #include "TSpatialDistMeasurement.h"
 
-//! Class for a polar 3D measurement
-class	Polar3DMeasurement : public TAPointMeasurement{
+//! Class for a polar measurement
+class	PolarMeasurement : public TAPointMeasurement{
 
 public :
 	
-	Polar3DMeasurement(int obsID, const TSpatialPoint* sp, const TLength* tcs, const TAngle* oa, const TAngle* ozd,
+	PolarMeasurement(int obsID, const TSpatialPoint* sp, const TLength* tcs, const TAngle* oa, const TAngle* ozd,
 		const TLength* osd, const TAngle* as, const TAngle* zds, const TLength* sds, const TLength* p,
-		const PolarTarget* t, const TLength* th, const TLength* ths)
+		const TheodoliteTarget* t, const TLength* th, const TLength* ths)
 		: TAPointMeasurement(obsID, sp)
 	{
         targetCenteringSigma = tcs;
@@ -49,7 +49,7 @@ public :
         targetHeightSigma = ths;
 	}
 
-	~Polar3DMeasurement()
+	~PolarMeasurement()
 	{
 		delete targetCenteringSigma;
 		delete observedAngle;
@@ -78,7 +78,7 @@ public :
 
 	const TLength* getPPM() const { return ppm; }
 
-	const PolarTarget* getTarget() const { return target; }
+	const TheodoliteTarget* getTarget() const { return target; }
 
 	const TLength* getTargetHeight() const { return targetHeight; }
 
@@ -94,7 +94,7 @@ private:
 	const TAngle* zenithDistanceSigma;
 	const TLength* spatialDistanceSigma;
 	const TLength* ppm;
-	const PolarTarget* target;
+	const TheodoliteTarget* target;
 	const TLength* targetHeight;
 	const TLength* targetHeightSigma;
 
