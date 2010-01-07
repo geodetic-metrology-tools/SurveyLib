@@ -43,15 +43,17 @@ class  TVerticalDistMeasurement : public TAPointMeasurement
 public:
 
 	TVerticalDistMeasurement(int obsID, const TSpatialPoint* tg1, const TSpatialPoint* tg2,
-		const TLength* obsDist, const TLength* sigma, const TLength* ppmE,
+		const TLength* obsDist, const TLength* fsSigma, const TLength* fsPpmE, const TLength* sndSigma, const TLength* sndPpmE,
 		const TLength* fsTgH, const TLength* fsTgHS, const TLength* sndTgH, const TLength* sndTgHS,
 		const Staff* fS, const Staff* sS);
 
 	~TVerticalDistMeasurement();
 
 	const TLength* getObservedValue() const { return observedValue; }
-	const TLength* getSigma() const { return fSigmaAPriori; }
-	const TLength* getPPM() const { return ppm; }
+	const TLength* getFirstStaffSigma() const { return firstStaffSigma; }
+	const TLength* getFirstStaffPPM() const { return firstStaffPpm; }
+	const TLength* getSecondStaffSigma() const { return secondStaffSigma; }
+	const TLength* getSecondStaffPPM() const { return secondStaffPpm; }
 
 	const TLength* getFirstTargetHeight() const { return firstTargetHeight; }
 	const TLength* getFirstTargetHeightSigma() const { return firstTargetHeightSigma; }
@@ -67,9 +69,12 @@ public:
 private:
 
 	const TSpatialPoint* secondTargetPoint;
-	const TLength*	observedValue; /*!< vertical measurement */
-	const TLength*	fSigmaAPriori; /*!< error on the vertical measurement */
-	const TLength* ppm;
+	const TLength* observedValue; /*!< vertical measurement */
+
+	const TLength* firstStaffSigma; /*!< error on the vertical measurement */
+	const TLength* firstStaffPpm;
+	const TLength* secondStaffSigma; /*!< error on the vertical measurement */
+	const TLength* secondStaffPpm;
 	
 	const TLength* firstTargetHeight;
 	const TLength* firstTargetHeightSigma;

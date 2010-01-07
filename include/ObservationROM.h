@@ -61,7 +61,7 @@ typedef ObservationROM<TSpatialDistMeasurement<EDMTarget> > EDMSpatialDistanceRO
 typedef ObservationROM<TOffsetToLineOrPlaneMeasurement> OffsetToLineOrPlaneROM;
 typedef ObservationROM<THorAngleMeasurement> TGyroOrientationROM;
 typedef ObservationROM<THorAngleMeasurement> HorizontalAngleROM;
-typedef ObservationROM<THorizontalDistMeas> HorizontalDistanceROM;
+typedef ObservationROM<THorizontalDistMeas<TheodoliteTarget> > HorizontalDistanceROM;
 typedef ObservationROM<TSpatialDistMeasurement<TheodoliteTarget> > SpatialDistanceROM;
 typedef ObservationROM<TZenithDistMeasurement> ZenithDistanceROM;
 typedef ObservationROM<PolarMeasurement> PolarROM;

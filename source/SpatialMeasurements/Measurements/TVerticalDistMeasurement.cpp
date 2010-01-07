@@ -30,13 +30,18 @@
 // constructor setting the target and reference names, the measured dist and its precision
 //////////////////////////////////////////////////////////////////////////////////////////
 TVerticalDistMeasurement::TVerticalDistMeasurement(int obsID, const TSpatialPoint* tg1, const TSpatialPoint* tg2,
-		const TLength* obsDist, const TLength* sigma, const TLength* ppmE, const TLength* fsTgH, const TLength* fsTgHS,
-		const TLength* sndTgH, const TLength* sndTgHS, const Staff* fS, const Staff* sS)
+		const TLength* obsDist, const TLength* fsSigma, const TLength* fsPpmE, const TLength* sndSigma, const TLength* sndPpmE,
+		const TLength* fsTgH, const TLength* fsTgHS, const TLength* sndTgH, const TLength* sndTgHS,
+		const Staff* fS, const Staff* sS)
 		: TAPointMeasurement(obsID, tg1)
 {
 	secondTargetPoint = tg2;
 	observedValue = obsDist;
-	fSigmaAPriori = sigma;
+
+	firstStaffSigma = fsSigma;
+	firstStaffPpm = fsPpmE;
+	secondStaffSigma = sndSigma;
+	secondStaffPpm = sndPpmE;
 	
 	firstTargetHeight = fsTgH;
 	firstTargetHeightSigma = fsTgHS;
@@ -46,8 +51,6 @@ TVerticalDistMeasurement::TVerticalDistMeasurement(int obsID, const TSpatialPoin
 
 	firstStaff = fS;
 	secondStaff = sS;
-
-	ppm = ppmE;
 }
 
 /////////////
@@ -56,7 +59,10 @@ TVerticalDistMeasurement::TVerticalDistMeasurement(int obsID, const TSpatialPoin
 TVerticalDistMeasurement::~TVerticalDistMeasurement()
 {
 	delete observedValue;
-	delete fSigmaAPriori;
+	delete firstStaffSigma;
+	delete firstStaffPpm;
+	delete secondStaffSigma;
+	delete secondStaffPpm;
 	delete firstTargetHeight;
 	delete firstTargetHeightSigma;
 	delete secondTargetHeight;

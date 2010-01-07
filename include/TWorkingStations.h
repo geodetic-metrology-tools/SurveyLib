@@ -16,6 +16,7 @@
 #include "TheodoliteStation.h"
 #include "EDMStation.h"
 #include "GyroscopeStation.h"
+#include "LevelStation.h"
 
 #include <list>
 using namespace std;
@@ -37,11 +38,16 @@ public:
 
 	void addGyroscopeStation(GyroscopeStation* s) { gyroscopeStations.push_back(s); }
 
+	const list<LevelStation*>& getLevelStations() const { return levelStations; }
+
+	void addLevelStation(LevelStation* s) { levelStations.push_back(s); }
+
 private:
 
 	list<TheodoliteStation*> theodoliteStations;
 	list<EDMStation*> edmStations;
 	list<GyroscopeStation*> gyroscopeStations;
+	list<LevelStation*> levelStations;
 
 };
 

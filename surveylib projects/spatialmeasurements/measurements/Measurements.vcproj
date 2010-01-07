@@ -490,6 +490,10 @@
 			Filter="h;hpp;hxx;hm;inl;fi;fd"
 			>
 			<File
+				RelativePath="..\..\..\include\LevelMeasurement.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\PolarMeasurement.h"
 				>
 			</File>

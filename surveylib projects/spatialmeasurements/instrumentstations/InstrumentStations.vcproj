@@ -303,6 +303,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\LevelStation.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\Scale.h"
 				>
 			</File>
