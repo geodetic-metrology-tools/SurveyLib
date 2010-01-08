@@ -21,7 +21,6 @@
 #include "TSpatialDistMeasurement.h"
 #include "TOffsetToLineOrPlaneMeasurement.h"
 #include "THorAngleMeasurement.h"
-#include "THorAngleMeasurement.h"
 #include "THorizontalDistMeas.h"
 #include "TSpatialDistMeasurement.h"
 #include "TZenithDistMeasurement.h"

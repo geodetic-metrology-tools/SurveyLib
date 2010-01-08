@@ -19,14 +19,13 @@
 
 #include "TAPointMeasurement.h"
 #include "TLength.h"
-#include "TDistConstants.h"
 
 //! Class for a horizontal distance measurement
-template <typename Target>
+template <typename T>
 class	THorizontalDistMeas : public TAPointMeasurement{
 
 public :
-	THorizontalDistMeas(int obsID, const TSpatialPoint* trgt, const Target* t, const TLength* obs,
+	THorizontalDistMeas(int obsID, const TSpatialPoint* trgt, const T* t, const TLength* obs,
 		const TLength* sigma, const TLength* ppmE, const TLength* tcs) : TAPointMeasurement(obsID, trgt)
 	{
 		observedValue = obs;
@@ -52,7 +51,7 @@ public :
 
 	const TLength* getPPM() const { return ppm; }
 
-	const Target* getTarget() const { return target; }
+	const T* getTarget() const { return target; }
 
 private:
 
@@ -60,7 +59,7 @@ private:
 	const TLength* fSigmaAPriori; /*!< estimated error on the angle measurement*/
 	const TLength* ppm; /*!< estimated error on the angle measurement*/
 
-	const Target* target;
+	const T* target;
 	const TLength* targetCenteringSigma;
 
 };

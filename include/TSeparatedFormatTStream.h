@@ -41,7 +41,6 @@ class TLSCalcSpPoint;
 ///////class QTextStream;
 
 class TDistMeasStation;
-class THorizontalDistMeas;
 class TVerticalDistROM;
 class TVerticalDistMeasurement;
 class TZenithDistMeasurement;

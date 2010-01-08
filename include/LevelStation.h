@@ -13,6 +13,7 @@
 #include "Staff.h"
 #include "ObservationROM.h"
 #include "LevelMeasurement.h"
+#include "THorizontalDistMeas.h"
 
 #include <list>
 using namespace std;
