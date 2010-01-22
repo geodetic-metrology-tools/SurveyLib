@@ -366,6 +366,8 @@ public:
 	/*!@ set a space between the data*/
 	void TAStreamFormatter::setGapBetweenData();
 
+	TAStreamFormatter& seekg(streamoff off, ios_base::seekdir dir);
+
 
 protected:
 	static TAngleFilter *getAngleFilter( TAngle::EUnits );

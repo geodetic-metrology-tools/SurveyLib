@@ -226,10 +226,7 @@ string TAConverter::readOptional(const string& keyword)
 	
 	if (word != keyword)
 	{
-		for (unsigned i = 0; i < word.length(); i++)
-		{
-			fStream->unget();
-		}
+		fStream->seekg(-word.length(), ios_base::cur);
 		return "";
 	}
 
@@ -240,7 +237,7 @@ string TAConverter::readOptional(const string& keyword)
 
 bool TAConverter::readOptionalExists(const string& keyword)
 {
-	fStream->skipWhiteSpace();
+	//fStream->skipWhiteSpace();
 
 	string word;
 
@@ -248,10 +245,7 @@ bool TAConverter::readOptionalExists(const string& keyword)
 	
 	if (word != keyword)
 	{
-		for (unsigned i = 0; i < word.length(); i++)
-		{
-			fStream->unget();
-		}
+		fStream->seekg(-word.length(), ios_base::cur);
 		return false;
 	}
 

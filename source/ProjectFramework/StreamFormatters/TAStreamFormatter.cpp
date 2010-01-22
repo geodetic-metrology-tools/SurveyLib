@@ -799,6 +799,11 @@ bool TAStreamFormatter::atEndCom()
 return fIOStream->eof();
 }
 
+TAStreamFormatter& TAStreamFormatter::seekg(streamoff off, ios_base::seekdir dir)
+{
+	fIOStream->seekg(off, dir);
+	return *this;
+}
 
 string TAStreamFormatter::readLine() 
 {/*

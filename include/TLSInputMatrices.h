@@ -114,7 +114,7 @@ public:
 	void						saveMatricesToFile(int nbIter) const;
 
 	void setNewRow();
-	void setConstraintNewRow();
+	void setConstraintNewColumn();
 	void finishedFillingMatrices();
 
 	void setFirstDesignMatrix(TSparseMatrix* f) { firstDesignMatrix = f; };
@@ -143,9 +143,9 @@ private:
 	list<int>*		secondDesignMatrixTransposedColPtr;
 	list<int>*		secondDesignMatrixTransposedRowInd;
 
-	list<double>*	constraintFirstDesignMatrixTransposedValues; /*!< matrix (u x c) for the parametric part of the model  */
-	list<int>*		constraintFirstDesignMatrixTransposedColPtr;
-	list<int>*		constraintFirstDesignMatrixTransposedRowInd;
+	list<double>*	constraintFirstDesignMatrixValues; /*!< matrix (u x c) for the parametric part of the model  */
+	list<int>*		constraintFirstDesignMatrixColPtr;
+	list<int>*		constraintFirstDesignMatrixRowInd;
 
 	list<double>*	weightMatrixValues; /*!< matrix (o x o) for observations weights */
 
