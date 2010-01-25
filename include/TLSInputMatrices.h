@@ -104,7 +104,7 @@ public:
 		/*!@return a const reference to the misclosure vector*/
 		const TColumnVector&	getMisclosureVctr() const;
 		/*!@return a const reference to the constraint first design matrix*/
-		const TSparseMatrix*	getCnstrFirstDgnMtrxTransposed() const;
+		const TSparseMatrix*	getCnstrFirstDgnMtrx() const;
 		/*!@return a const reference to the constraint misclosure vector*/
 		const TColumnVector&	getCnstrMisclosureVctr() const;
 	//@}
@@ -152,7 +152,7 @@ private:
 	TColumnVector*	fMisclosureVector; /*!< vector (u) for misclosure errors */
 //	double			fS0APrioriScaleFactor; /*!< indicates if there is a priori scale factor or not */
 
-	TSparseMatrix*	fCnstrFirstDesignMtrxTransposed; /*!< matrix (u x c) for the parametric part of the model */
+	TSparseMatrix*	fCnstrFirstDesignMtrx; /*!< matrix (u x c) for the parametric part of the model */
 	TColumnVector*	fCnstrMisclosureVector; /*!< vector for misclosure errors */
 
 	TSparseMatrix*	firstDesignMatrix;

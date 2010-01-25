@@ -198,7 +198,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	{
 		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 		const TSparseMatrix* secondDMTransposed = im->getSecondDgnMtrxTransposed();
-		const TSparseMatrix* constraintFirstDMTransposed = im->getCnstrFirstDgnMtrxTransposed();
+		const TSparseMatrix* constraintFirstDM = im->getCnstrFirstDgnMtrx();
 		TSparseMatrix* weightMInversed = im->getWeightMtrx()->invert_diagonal_matrix();
 		im->setWeightMatrixInverted(weightMInversed);
 		const TColumnVector& misclV = im->getMisclosureVctr();
@@ -207,7 +207,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		TSparseMatrix* firstDM = firstDMTransposed->transposed();
 		im->setFirstDesignMatrix(firstDM);
 		TSparseMatrix* secondDM = secondDMTransposed->transposed();		
-		TSparseMatrix* constraintFirstDM = constraintFirstDMTransposed->transposed();
+		TSparseMatrix* constraintFirstDMTransposed = constraintFirstDM->transposed();
 		TSparseMatrix* bTimesWInvTimesBTrans =
 			secondDM->multiply_three_returning_lower_triangular(*weightMInversed, *secondDMTransposed);
         delete secondDM;
@@ -281,14 +281,14 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	else
 	{
 		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
-		const TSparseMatrix* constraintFirstDMTransposed = im->getCnstrFirstDgnMtrxTransposed();
+		const TSparseMatrix* constraintFirstDM = im->getCnstrFirstDgnMtrx();
 		const TSparseMatrix* weightM = im->getWeightMtrx();
 		const TColumnVector& misclV = im->getMisclosureVctr();
 		const TColumnVector& constraintMisclV = im->getCnstrMisclosureVctr();
 		
 		TSparseMatrix* firstDM = firstDMTransposed->transposed();
-		im->setFirstDesignMatrix(firstDM);	
-		TSparseMatrix* constraintFirstDM = constraintFirstDMTransposed->transposed();
+		im->setFirstDesignMatrix(firstDM);
+		TSparseMatrix* constraintFirstDMTransposed = constraintFirstDM->transposed();
 
 		TSparseMatrix* aTransW = firstDMTransposed->multiply(*weightM);
 
