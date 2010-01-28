@@ -49,6 +49,7 @@ const double	TAngle::kRadiansToGons = 200.0/kPi;
 const double	TAngle::kGonsToRadians = kPi/200.0;
 const double	TAngle::kRadiansToDecDegs = 180.0/kPi;
 const double	TAngle::kDecDegsToRadians = kPi/180.0;
+const double	TAngle::seuil = 0.00000000001;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -144,28 +145,17 @@ const double  TAngle::decDegsToRadsFactor()
 //////////////////////////////////////////////////////////////////////
 
 void TAngle::normaliseAngle()
-{   // normailse the angle value to lie between -2pi et +2pi
+{
 	//modification du 08/05/2003 pour le calcul les angles seront exprimes entre -pi et pi
 
-	double seuil = 0.00000000001;
-
-	if ( fValue> (kPi+seuil) ) 
+	while (fValue > kPi - seuil)
 	{
-	//	fValue = fmod(fValue, 2.0 * kPi);
-		while(fValue>kPi)
-		{fValue=fValue-2.0*kPi;}
+		fValue -= 2.0 * kPi;
 	}
-	else if ( fValue< (-1.0*kPi - seuil) ) 
+	while (fValue < -kPi + seuil)
 	{
-		//fValue = fmod(fValue, 2.0 * kPi);
-		while(fValue<-1.0*kPi)
-		{fValue=fValue+2.0*kPi;}
+		fValue += 2.0 * kPi;
 	}
-
-/*	fValue = fmod(fValue, 2.0 * kPi);*/
-
-	return;
-	
 }
 
 
@@ -477,37 +467,37 @@ return (*this)=(*this)*factor;
 // trigonometric functions
 //////////////////////////////////////////////////////////////////////
 
-double TAngle::cosine() const
+double TAngle::cosine()
 {//cosine of the angle
 	return cos(this->getRadiansValue());
 }
 
 
-double TAngle::sine() const
+double TAngle::sine()
 {//sine of the angle
 	return sin(this->getRadiansValue());
 }
 
 
-double TAngle::tangent() const
+double TAngle::tangent()
 {//tangent of the angle
 	return tan(this->getRadiansValue());
 }
 
 
-double TAngle::cosineh() const
+double TAngle::cosineh()
 {//hyperbolic cosine of the angle
 	return cosh(this->getRadiansValue());
 }
 
 
-double TAngle::sineh() const
+double TAngle::sineh()
 {//hyperbolic sine of the angle
 	return sinh(this->getRadiansValue());
 }
 
 
-double TAngle::tangenth() const
+double TAngle::tangenth()
 {//hyperbolic tangent of the angle
 	return tanh(this->getRadiansValue());
 }

@@ -161,17 +161,17 @@ public:
 	/*!@name trigonometric functions */
 	//@{
 	/*! Calculates the cosine of the angle, for example: angle.Cos() = cos(angle) */
-	double cosine() const;
+	double cosine();
 	/*! Calculates the sine of the angle */
-	double sine() const;
+	double sine();
 	/*! Calculates the tangent of the angle */
-	double tangent() const;
+	double tangent();
 	/*! Calculates the hyperbolic cosine of the angle */
-	double cosineh() const;
+	double cosineh();
 	/*! Calculates the hyperbolic sine of the angle */
-	double sineh() const;
+	double sineh();
 	/*! Calculates the hyperbolic tangent of the angle */
-	double tangenth() const;
+	double tangenth();
 	/*! Calculates the arccosine of a double as a TAngle */
 	static TAngle aCos(const double);
 	/*! Calculates the arcsine of a double as a TAngle */
@@ -194,6 +194,7 @@ private:
 	static const double	kGonsToRadians; /*!< convertion gon->rad factor */
 	static const double	kRadiansToDecDegs; /*!< convertion rad->deg factor */
 	static const double	kDecDegsToRadians; /*!< convertion deg->rad factor */
+	static const double	seuil;
 	//@}
 
 	/*! normalise the angle value to lie between -2Pi and +2Pi */
@@ -227,10 +228,17 @@ inline AngleValue	TAngle::getGonsValue() const
 	getRadiansValue() donne les angles entre -pi et pi
 	getGonsValue() donne les angles entre 0 et 2pi*/
 	AngleValue gValue = fValue;
-	if (gValue< 0.0) 
+	while (gValue < 0)
 	{
-		while(gValue<0.0)
-		{gValue=gValue+2.0*kPi;}
+		gValue += 2.0 * kPi;
+	}
+	while (gValue >= 2.0 * kPi - seuil)
+	{
+		gValue -= 2.0 * kPi;
+	}
+	if (gValue < 0)
+	{
+		gValue = 0;
 	}
 	return (gValue * kRadiansToGons);
 }
@@ -238,7 +246,7 @@ inline AngleValue	TAngle::getGonsValue() const
 
 inline AngleValue	TAngle::getCCValue() const
 {	// get the CC (100 microgons) angular value for the angle
-	return (fValue * kRadiansToGons * 10000);
+	return getGonsValue() * 10000;
 }
 
 
