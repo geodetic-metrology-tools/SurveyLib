@@ -14,10 +14,10 @@
 //#include	"TROOT.h"
 //
 // other forward declarations
-//#include  "TLength.h"
+#include  "TFreeVector.h"
 #include  "TVCoordinateSystem.h"
 #include  "TDouble.h"
-#include  "TFreeVector.h"
+#include  "TScalar.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -135,10 +135,27 @@ TFreeVector TFreeVector::operator*( const TDouble& factor)
 	TFreeVector resultat (getCoordSys());
 	TANumericValue::EStatus status = this->testStatus(factor);
 	if (status != kNull)
-		{	resultat.setX(0, factor.getValue()*getX(0)); 
-			resultat.setX(1, factor.getValue()*getX(1));
-			resultat.setX(2, factor.getValue()*getX(2));
-		}
+	{	
+		double scalar = factor.getValue();
+		resultat.setX( 0, scalar * getX(0) ); 
+		resultat.setX( 1, scalar * getX(1) );
+		resultat.setX( 2, scalar * getX(2) );
+	}
+	resultat.setStatus(status);
+	return resultat;
+}
+
+TFreeVector TFreeVector::operator*( const TScalar& factor)
+{//!Multiplication by a TDouble object
+	TFreeVector resultat (getCoordSys());
+	TANumericValue::EStatus status = this->testStatus(factor);
+	if (status != kNull)
+	{	
+		double scalar = factor.getValue();
+		resultat.setX( 0, scalar * getX(0) ); 
+		resultat.setX( 1, scalar * getX(1) );
+		resultat.setX( 2, scalar * getX(2) );
+	}
 	resultat.setStatus(status);
 	return resultat;
 }

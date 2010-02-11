@@ -292,12 +292,12 @@ void	TPointConverter::writeN( const int width,
 								 LSPosVecConstIter pt)
 {
 	TRefSystemFactory::EGeoid geoid;
+	if(fRefFrame ==	TRefSystemFactory::kCERNXYHsSphereSPS)
+	{geoid = TRefSystemFactory::kCGSphere;}
 	if(fRefFrame ==	TRefSystemFactory::kCernXYHg85Machine)
 	{geoid = TRefSystemFactory::kCG1985Machine;}
 	if(fRefFrame ==	TRefSystemFactory::kCernXYHg00Machine)
 	{geoid = TRefSystemFactory::kCG2000Machine;}
-	if(fRefFrame ==	TRefSystemFactory::kCERNXYHsSphereSPS)
-	{geoid = TRefSystemFactory::kCGSphere;}
 	writeLength(width, precision ,unit ,pt->getNEstValue(geoid) );
 	return;
 }

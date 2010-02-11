@@ -49,7 +49,7 @@ TTranslation::TTranslation(const TLength Tx, const TLength Ty, const TLength Tz)
 }
 
 
-TTranslation::TTranslation(TFreeVector vector) : fTranslationVector(TCoordSysFactory::k3DCartesian)
+TTranslation::TTranslation(const TFreeVector vector) : fTranslationVector(TCoordSysFactory::k3DCartesian)
 {
 	fTranslationVector = vector;
 	setStatus(kKnown);
@@ -59,16 +59,6 @@ TTranslation::TTranslation(TFreeVector vector) : fTranslationVector(TCoordSysFac
 TTranslation::TTranslation( const  TTranslation& original )
  : fTranslationVector(TCoordSysFactory::k3DCartesian)
 {	// copy constructor
-
-	/*for (int i=0;i<3;i++)
-	{
-		fTranslationVector[i] = original[i];
-	}
-	if (original.isNull()==true)
-		{setStatus(kNull);}
-	else
-		{setStatus(kKnown);}
-	*/	
 
 	*this = original;
 }
@@ -87,23 +77,15 @@ TTranslation&  TTranslation::operator=(const TTranslation& right)
 {	// Copy Assignment operator
 
 	if (this != &right)
-	{
-		
-		fTranslationVector = right.fTranslationVector;
-			
-	/*if (right.isNull()==true)
-		{setStatus(kNull);}
-	else
-		{setStatus(kKnown);}
-	*/
+	{		
+		fTranslationVector = right.fTranslationVector;			
 		setStatus(right.getStatus());
-
 	}
 	return *this;
 }
 
 
-TCompositeAffTransform TTranslation::operator*(const TAAffineTransformation& right)
+TCompositeAffTransform TTranslation::operator*( TAAffineTransformation& right)
 { 
 	TAAffineTransformation* trans = new TTranslation(*this);
 	TAffineTransformWrapper wrapper(trans);

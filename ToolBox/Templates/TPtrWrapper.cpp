@@ -1,10 +1,17 @@
 //!
-//! TPtrWrapper
+//! TPtrWrapper.cpp
 //!
-//! A templated pointer wrapper. The wrapper becomes the parent of the
-//! pointed to object and is responsible for deleting it. 
+//! A templated counter pointer. 
+//! A wrapper around the pointed to object that manages a count of it's copies.
+//! It is responsible for deleting the object being pointed to, and only does
+//! this when the last copy of the wrapper is being deleted. 
 //!
-//! Copyright 2002, CERN, EST/SU. All rights reserved.
+//! Only wrap pointers that have memory allocated using new.
+//!
+//! Don't put the same pointer in a second object also responsible fordeleting 
+//! it's children. The TPtrWrapper is responsible for deleting the pointed to object.
+//! 
+//! Copyright 2002-2010, CERN, SU, M/Jones. All rights reserved.
 //!////////////////////////////////////////////////////////////////////
 
 
@@ -22,23 +29,25 @@
 ////////////////////////////////////////////////////////////////
 
 
-//!Default constructor
-template <class T>
-TPtrWrapper<T>::TPtrWrapper<T>() : fPointer(0), fCount(0) 
+//Default constructor
+/*template <class T>
+TPtrWrapper<T>::TPtrWrapper() : fPointer(0), fCount(0) 
 { 
 }
+*/
 
-//!Constructor taking a pointer to the template object
+
+//Constructor taking a pointer to the template object
 template <class T>
-TPtrWrapper<T>::TPtrWrapper<T>( T* pointer ) : fPointer( pointer ) 
+TPtrWrapper<T>::TPtrWrapper( T* pointer ) : fPointer( pointer ) 
 { 
 	fCount = new int(1);
 }
 
 
-//!Copy constructor
+//Copy constructor
 template <class T>
-TPtrWrapper<T>::TPtrWrapper<T>( TPtrWrapper<T>& source ) : fPointer(0), fCount(0)
+TPtrWrapper<T>::TPtrWrapper( TPtrWrapper<T>& source ) : fPointer(0), fCount(0)
 {
     fPointer = source.getPtr();
 	fCount = source.getCountPtr();
@@ -46,14 +55,15 @@ TPtrWrapper<T>::TPtrWrapper<T>( TPtrWrapper<T>& source ) : fPointer(0), fCount(0
 }
 
 
-//!Destructor
+//Destructor
 template <class T>
-TPtrWrapper<T>::~TPtrWrapper<T>() 
+TPtrWrapper<T>::~TPtrWrapper() 
 { 
 	deletion(); 
 }
 
 
+//Assignment operator
 template <class T>
 TPtrWrapper<T>& TPtrWrapper<T>::operator= ( TPtrWrapper<T>& right ) 
 {
@@ -69,6 +79,7 @@ TPtrWrapper<T>& TPtrWrapper<T>::operator= ( TPtrWrapper<T>& right )
 }
 
 
+//Manages the changes necessary when a wrapper is deleted
 template <class T>
 void  TPtrWrapper<T>::deletion()
 {
@@ -85,7 +96,5 @@ void  TPtrWrapper<T>::deletion()
 
 	return;
 }
-
-
 
 

@@ -1,4 +1,4 @@
-//TGeodeticCoordSys.h 
+//TGeodeticCoordSys.cpp 
 //
 //Class for explain vector in a geodetic Coordinate system 
 //

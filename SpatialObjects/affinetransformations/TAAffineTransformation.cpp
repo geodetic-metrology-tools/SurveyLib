@@ -109,23 +109,3 @@ bool TAAffineTransformation::isNull()const
 	else
 		{return false;}
 }
-
-
-
-/*TVNumericValue::EStatus TAAffineTransformation::testStatus(TAAffineTransformation trans) const
-{// give the status returned by an operator using two TAAffineTransfoamtion objects
-	
-	if (fStatus==kNull || trans.getStatus()==kNull)
-	{
-		return kNull;
-	}
-	else if (fStatus==trans.getStatus())
-	{
-		return fStatus;
-	}
-	else
-	{
-		return kUnknown;
-	}
-			
-}*/

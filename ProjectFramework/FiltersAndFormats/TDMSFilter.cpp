@@ -161,21 +161,22 @@ void	TDMSFilter::output(TAStreamFormatter& oStream, const TAngle& angle)const
 	string sep =oStream.getSeparator();
 
 	
-	int width, precision;
-	precision = oStream.getPrecisionFormat(); //oStream.getPointFormat()->getCoordPrecision();
-	width =  3 + precision;//oStream.getPointFormat()->getCoordWidth();
+	int dWidth, mWidth, sWidth, precision;
+	precision = oStream.getPrecisionFormat() - 4; 
 	if (precision <=1)
 		precision = 0;
-
+	sWidth = precision + 5;
+	mWidth = 4;
+	dWidth = max(oStream.getWidthFormat()-(sWidth+mWidth), 5);
 		
-	oStream.width(3);
+	oStream.width(dWidth);
 	oStream.precision(0);
 	oStream<<right;
 	oStream<<(angle.getDegreesValue());
 	
 	oStream<<sep;
 
-	oStream.width(3);
+	oStream.width(mWidth);
 	oStream.precision(0);
 	oStream<<right;
 	oStream<< angle.getMinutesValue();
@@ -183,7 +184,7 @@ void	TDMSFilter::output(TAStreamFormatter& oStream, const TAngle& angle)const
 	oStream<<sep;
 
 	oStream.setf(ios::fixed,ios::floatfield);
-	oStream.width(width);
+	oStream.width(sWidth);
 	oStream.precision(precision);
 	oStream<<right;
 	oStream<< angle.getSecondsValue();
