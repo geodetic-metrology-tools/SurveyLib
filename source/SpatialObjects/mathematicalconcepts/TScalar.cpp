@@ -41,7 +41,7 @@ TScalar::TScalar(ScalarValue	value): fValue(value)
 	setStatus( TANumericValue::kKnown );
 }
 
-TScalar::TScalar(TDouble&	value)
+TScalar::TScalar( TScalar & value )
 {	// constructor taking a given scalar value as a TDouble
 	fValue = value.getValue();
 	setStatus( TANumericValue::kKnown );

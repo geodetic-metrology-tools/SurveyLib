@@ -62,7 +62,7 @@ TAStreamFormatter::TAStreamFormatter(TDataParameters& dp)
 	//INSURE
 	init();
 
-	fName = "defaultName";
+	fName = "default";
 	fFStream=0;
 
 	fSStream = new stringstream(ios_base::out);
@@ -82,7 +82,7 @@ TAStreamFormatter::TAStreamFormatter(const string& input, TDataParameters& dp)
 {//extraction of a string from a stream, reading of a stream
 	init();
 	
-	fName = "defaultName";
+	fName = "default";
 	fFStream=0;
 
 	fSStream = new stringstream(input, ios_base::in);
@@ -151,11 +151,11 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds)
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::in);
+		fFStream = new fstream(fName, ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::out);
+		fFStream = new fstream(fName, ios_base::out);
 	}
 
 	if(fFStream->fail())
@@ -191,11 +191,11 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds, TPointFormat& pf
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::in);
+		fFStream = new fstream(fName, ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::out);
+		fFStream = new fstream(fName, ios_base::out);
 		fPointFormat =pf;
 		setPrecisionFormat(fPointFormat.getCoordPrecision());
 		setWidthFormat(fPointFormat.getCoordWidth());
@@ -235,11 +235,11 @@ TAStreamFormatter::TAStreamFormatter(const EIOType io, TADataSet& ds, const TPoi
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::in);
+		fFStream = new fstream(fName, ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::out);
+		fFStream = new fstream(fName, ios_base::out);
 		fPointFormat =pf;
 		fObservationFormat = obsFor;
 		setPrecisionFormat(fPointFormat.getCoordPrecision());
@@ -292,7 +292,7 @@ void TAStreamFormatter::init()
 	fSStream = 0;//stringstream*
 	fFStream = 0;//fstream*
 	fIOStream = 0;//iostream*
-	fName =0;//const char*	
+	fName = "";	
 	fError="";//string	
 
 	fAngFilter =0;//TAngleFilter*
@@ -1098,7 +1098,7 @@ return;
 
 bool TAStreamFormatter::isOpen()
 {
-	if (fSStream=0)
+	if (fSStream==0)
 	{return	fFStream->is_open();}
 	else
 	{return false;}
@@ -1107,7 +1107,7 @@ bool TAStreamFormatter::isOpen()
 
 void TAStreamFormatter::close()
 {
-	if (fSStream=0)
+	if (fSStream==0)
 	{	fFStream->close();}
 return;
 }

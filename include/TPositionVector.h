@@ -29,6 +29,7 @@ using namespace std;
 #include "TACoordSysVector.h"
 #include "TFreeVector.h"
 #include "TDouble.h"
+#include "TScalar.h"
 #include "TLength.h"
 //
 //#include  "**classname**.h"
@@ -79,8 +80,11 @@ public:
 		//!substract two TPositionVector objects and return a FreeVector
 		TFreeVector operator-(const TPositionVector& );
 		
-		//!Multiple a TPositionVector object by a TDouble object
+		//!Multiply a TPositionVector object by a TDouble
 		TPositionVector operator*(const TDouble&);
+
+		//!Multiply a TPositionVector object by a TSCalar
+		TPositionVector operator*(const TScalar&);
 
 		//!Multiple a TPositionVector object by a double 
 		TPositionVector operator*(const double&);

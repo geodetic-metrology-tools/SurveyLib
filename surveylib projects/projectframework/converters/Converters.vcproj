@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="Converters"
 	ProjectGUID="{6E06A4BD-4D3A-4B44-83D0-F05AB4234EC3}"
+	RootNamespace="Converters"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>

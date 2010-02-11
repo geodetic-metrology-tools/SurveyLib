@@ -25,6 +25,75 @@
 
 #endif // _MSC_VER >= 1000
 
+#include  "TConstPtrWrapper.h"
+#include  "TAAffineTransformation.h"
+
+
+//! Wrapper class
+class  TAffineTransformWrapper : public TConstPtrWrapper<TAAffineTransformation>
+{
+public:
+		/// default constructeur
+		TAffineTransformWrapper();
+
+		/// Constructor taking a pointer to a transformation
+		TAffineTransformWrapper( const TAAffineTransformation* transformer );
+
+		/// Copy Constructor 
+		TAffineTransformWrapper( TAffineTransformWrapper & );
+
+		/// Copy Constructor 
+		TAffineTransformWrapper( const TAffineTransformWrapper & );
+
+		/// Destructor
+		virtual  ~TAffineTransformWrapper();
+
+
+		const TAAffineTransformation*  getTransformation()  const {this->getPtr();}
+
+		//TAAffineTransformation*  getTransformation()  {this->getPtr();}
+
+private:
+		//!Copy assignment operator
+		TAffineTransformWrapper& operator=( TAffineTransformWrapper & right );
+
+};
+
+//Default constructor
+//template <class T>
+TAffineTransformWrapper::TAffineTransformWrapper() 
+:TConstPtrWrapper<TAAffineTransformation>()
+{}
+
+//Constructor taking a pointer to the template object
+//template <class T>
+TAffineTransformWrapper::TAffineTransformWrapper( const TAAffineTransformation * transformer )
+:TConstPtrWrapper<TAAffineTransformation>(transformer)
+{ 
+}
+
+
+//Copy constructor
+//template <class T>
+TAffineTransformWrapper::TAffineTransformWrapper( TAffineTransformWrapper & original )
+:TConstPtrWrapper<TAAffineTransformation>(original)
+{
+}
+
+
+//Copy constructor
+//template <class T>
+TAffineTransformWrapper::TAffineTransformWrapper( const TAffineTransformWrapper & original )
+:TConstPtrWrapper<TAAffineTransformation>( original.getPtr() )
+{
+}
+
+
+//Destructor
+//template <class T>
+TAffineTransformWrapper::~TAffineTransformWrapper()
+{  
+}
 
 ////////////////////////////////////////////////////////////////
 // Forward declarations
@@ -34,7 +103,7 @@
 //
 
 
-class  TAAffineTransformation;
+//mclass  TAAffineTransformation;
 // typedefs
 //
 //
@@ -44,12 +113,12 @@ class  TAAffineTransformation;
 	@{*/
 
 //! Wrapper class
-class  TAffineTransformWrapper //: public TObject  
-{
-public:
+//mclass  TAffineTransformWrapper //: public TObject  
+//m{
+//mpublic:
 	/**@name Constructors and Destructors */
 	//@{
-		/// default constructeur
+/*		/// default constructeur
 		TAffineTransformWrapper();
 
 		/// Constructor taking a pointer to a transformation
@@ -61,11 +130,11 @@ public:
 		/// Destructor
 		virtual  ~TAffineTransformWrapper();
 	//@}
-
+*/
 
 	/**@name Member Functions */
 	//@{
-		/// Copy Assignment Operator 
+/*		/// Copy Assignment Operator 
 		TAffineTransformWrapper& operator=( const TAffineTransformWrapper& );
 
 		/// Equivalence Operator
@@ -88,10 +157,10 @@ private:
 
 private:
 
-	TAAffineTransformation*  fTransformer;	/*!< affine transformation */
+	TAAffineTransformation*  fTransformer;*/	/*!< affine transformation */
 
 	//ClassDef(TAffineTransformWrapper, 1)
-};
+//m};
 
 /*@}*/
 

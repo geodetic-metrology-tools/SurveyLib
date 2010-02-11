@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="ProjectFrameworkLibrary"
 	ProjectGUID="{78C670AA-AF10-4508-94D7-9FA0D8E2FD09}"
+	RootNamespace="ProjectFrameworkLibrary"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -213,6 +214,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile=".\..\..\..\..\lib\ProjectFrameworkLibrary.lib"
+				AdditionalLibraryDirectories=""
 				SuppressStartupBanner="true"
 			/>
 			<Tool

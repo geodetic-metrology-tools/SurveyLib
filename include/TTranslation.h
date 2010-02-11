@@ -61,11 +61,11 @@ public:
 		/// Copy Assignment Operator 
 		TTranslation& operator=( const TTranslation& );
 
-		/// operator + : T2 = T + T1
+		/// add two translation vectors : T2 = this + T1
 		TTranslation  operator+(const TTranslation&);
 
-		//! Multiplication by an affine transformation
-		TCompositeAffTransform operator*(const TAAffineTransformation&);
+		//! create a sequence of two tranformations: composite = AffTransf followed by this
+		TCompositeAffTransform operator+(const TAAffineTransformation&);
 
 		/// Return element i
 		double       operator[](int ) const;

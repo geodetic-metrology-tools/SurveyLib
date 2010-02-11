@@ -584,6 +584,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\ToolBox\Templates\TConstPtrWrapper.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\SpatialObjects\mathematicalconcepts\TCoordSysFactory.cpp"
 				>
 				<FileConfiguration
@@ -848,6 +852,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\ToolBox\Templates\TPtrWrapper.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\Source\SpatialObjects\MathematicalConcepts\TRotationMatrix.cpp"
 				>
 				<FileConfiguration
@@ -963,6 +971,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\TConstPtrWrapper.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\TCoordSysFactory.h"
 				>
 			</File>
@@ -992,6 +1004,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TPositionVector.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\TPtrWrapper.h"
 				>
 			</File>
 			<File

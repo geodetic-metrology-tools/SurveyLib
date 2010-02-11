@@ -1,12 +1,12 @@
 // TCompositeAffTransform.h
 //
 /** Class for transformations composed of multiple single transformations
-Wrapper of those transformations are kept in a list*/
+Wrappers around those transformations are kept in a list*/
 //
 // Patterns:
 // this class is close to the pattern Composite
 // 
-// Copyright 2000 CERN EST/SU. All rights reserved.
+// Copyright 2000-10 CERN SU, M.Jones. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 
@@ -26,9 +26,8 @@ Wrapper of those transformations are kept in a list*/
 #include <list>
 using namespace std;
 
-class  THelmertTransformation;
-#include  "TAffineTransformWrapper.h"
 #include  "TAAffineTransformation.h"
+#include  "TAffineTransformWrapper.h"
 // typedefs
 //
 //
@@ -43,7 +42,8 @@ class  TCompositeAffTransform : public TAAffineTransformation
 public:
 	//typedefs
 	typedef list<TAffineTransformWrapper> CompositeTransformationSet;
-	typedef CompositeTransformationSet::const_iterator CompositeIterator;
+	//typedef CompositeTransformationSet::iterator CompositeIterator;
+	typedef CompositeTransformationSet::const_iterator ConstCompositeIter;
 
 	/**@name Constructors and Destructors */
 	//@{
@@ -51,10 +51,10 @@ public:
 		TCompositeAffTransform();
 
 		/// Copy Constructor 
-		TCompositeAffTransform( const TCompositeAffTransform&);
+		TCompositeAffTransform( TCompositeAffTransform & );
 
-		//! Constructor taking a TAffineTransformWrapper
-		TCompositeAffTransform( const TAffineTransformWrapper );
+		//! Constructor taking a TAAffineTransformation
+		explicit TCompositeAffTransform( const TAAffineTransformation & );
 
 		/// Destructor
 		virtual  ~TCompositeAffTransform();
@@ -64,21 +64,14 @@ public:
 	/**@name Member Functions */
 	//@{
 		/// Copy Assignment Operator 
-		TCompositeAffTransform& operator=( const TCompositeAffTransform& );
+		TCompositeAffTransform & operator=( TCompositeAffTransform & );
 
-		//! Multiplication by a TAAffineTransformation
-		TCompositeAffTransform operator*( const TAAffineTransformation& );
-
+		//! add to the composite transformation by applying this transformation to an affine transformation
+		TCompositeAffTransform & operator()( const TAAffineTransformation & );
 	
 		// Return a pointer to a clone of this transformation
-		TAAffineTransformation*  clone() const;
+		TAAffineTransformation*  clone();
 
-		/// iterator begin
-		CompositeIterator		getCompositeBeginIterator() const {return fComposite.begin();}
-		
-		/// iterator end
-		CompositeIterator		getCompositeEndIterator() const {	return fComposite.end();}
-		
 		/// Transform a TPosition Vector
 		virtual bool transform( TPositionVector& ) const;
 
@@ -94,11 +87,24 @@ public:
 		/// Invert = Inverse but replace the transformation
 		void invert();
 
+		//! Append a TAAffineTransformation
+//		void append( const TAAffineTransformation& );
+	
+		//! Prepend a TAAffineTransformation
+//		void prepend( const TAAffineTransformation& );
+	
+		/// iterator begin
+		//CompositeIterator		getCompositeBeginIterator() {return fComposite.begin();}
+		ConstCompositeIter		getCompositeBeginIterator() const {return fComposite.begin();}
+		
+		/// iterator end
+		//CompositeIterator		getCompositeEndIterator() {	return fComposite.end();}
+		ConstCompositeIter		getCompositeEndIterator() const {	return fComposite.end();}
+		
 		/// return the composite set
-		CompositeTransformationSet getComposite() const;
+		//CompositeTransformationSet getComposite() const;
 
-		void	add(const TAAffineTransformation& trans) ;
-
+		//void	add(const TAAffineTransformation& trans) ;
 
 	//@}
 protected:
@@ -108,10 +114,6 @@ private:
 		
 		CompositeTransformationSet		fComposite; /*!< composite transformation */
 
-		// Private functions
-		
-		
-
 	//ClassDef(TCompositeAffTransform, 1)
 };
 /*@}*/
@@ -120,7 +122,17 @@ private:
 // Inline Definitions
 //////////////////////////////////////////////////////////////////////
 
-inline TCompositeAffTransform::CompositeTransformationSet TCompositeAffTransform::getComposite() const {return fComposite;}
+//inline TCompositeAffTransform::CompositeTransformationSet TCompositeAffTransform::getComposite() const {return fComposite;}
+
+/*
+// prepend a TAAffineTransformation
+TCompositeAffTransform &operator+( TAAffineTransformation& left, TCompositeAffTransform &right )
+{// prepend another affine transformation to the composition  right = left + right
+	
+	right.prepend(left);
+	return right;	
+
+}*/
 
 
 #endif // SU_COMPOSITE_AFFINE_TRANSFO

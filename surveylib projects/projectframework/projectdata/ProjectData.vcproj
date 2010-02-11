@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="ProjectData"
 	ProjectGUID="{67167DE0-205E-45B5-A9BA-CFC3CEE7BB43}"
+	RootNamespace="ProjectData"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>

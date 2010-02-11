@@ -72,7 +72,7 @@ public:
 
 
 		//! Multiplication by an affine transformation
-		TCompositeAffTransform operator*( const TAAffineTransformation& );
+		TCompositeAffTransform operator*(  TAAffineTransformation& );
 
 		/// Return element ri, cj of the Reflection matrix
 		double operator()(int row, int col) const;

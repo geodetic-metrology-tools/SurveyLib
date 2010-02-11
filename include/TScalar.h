@@ -56,7 +56,7 @@ public:
 	//! constructor taking a given Scalar value
 	TScalar(double ScalarValue);
 	//! constructor taking a given Scalar value
-	TScalar(TDouble& ScalarValue);
+	TScalar(TScalar& ScalarValue);
 	//! copy constructor
 	TScalar(const TScalar&);
 	//! Destructor

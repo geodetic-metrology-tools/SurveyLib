@@ -61,14 +61,13 @@ public:
 		/*! transform a spatial orientation */
 		virtual  bool  transform( TSpatialOrientation& ) const;
 
-
-		/*! Return a transformed position vector */
+		/*! transform a position vector */
 		virtual  bool  transform( TPositionVector& ) const;
 
-		/*! Return a transformed free vector */
+		/*! transform a free vector */
 		virtual  bool  transform( TFreeVector& ) const;
 
-		/*! Return a transformed Rotation Matrix */
+		/*! transform a Rotation Matrix */
 		virtual  bool  transform( TRotationMatrix& ) const;
 
 		/// Return a pointer to a clone of this reference frame
@@ -82,12 +81,6 @@ public:
 
 		/*! Checks the status */
 		virtual bool isNull() const;
-
-		//virtual TVNumericValue::EStatus testStatus(TAAffineTransformation) const;
-
-		//void setStatus(const ETransfoStatus);
-
-	
 	//@}
 
 

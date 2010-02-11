@@ -26,6 +26,7 @@
 #include <math.h>
 
 class TDouble;
+class TScalar;
 
 #include "TACoordSysVector.h"
 using namespace std;
@@ -80,6 +81,9 @@ public:
 
 		//!Multiplication by a TDouble object
 		TFreeVector operator*( const TDouble& );
+
+		//!Multiplication by a TScalar
+		TFreeVector operator*( const TScalar& );
 
 		//!Multiplication by a double 
 		TFreeVector operator*( const double& );
