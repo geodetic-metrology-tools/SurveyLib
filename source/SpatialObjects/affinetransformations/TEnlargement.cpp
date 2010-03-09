@@ -42,7 +42,7 @@ TEnlargement::TEnlargement()
 }
 
 
-TEnlargement::TEnlargement(double f)
+TEnlargement::TEnlargement(quad f)
 {	// constructor taking factor
 	fScaleFactor.setValue(f);
 	setStatus(kKnown);

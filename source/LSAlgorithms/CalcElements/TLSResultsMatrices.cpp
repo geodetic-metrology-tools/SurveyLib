@@ -18,6 +18,7 @@ TLSResultsMatrices::TLSResultsMatrices()
 	fSigmaZero2 = 0.0;
 	fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
+	L = NULL;
 }
 
 
@@ -29,20 +30,22 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 	//fUnknownsCovarianceMtrx = new TMatrix(ueoi.UIndex, ueoi.UIndex);
 	fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
+	L = NULL;
 }
 
 
 TLSResultsMatrices::TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, 
-									   double sigm2)
+									   quad sigm2)
 {// constructor setting the results
 
-	cout<<sigm2<<endl<<endl;
+	cout<<(double) sigm2<<endl<<endl;
 	fSolutionVctr = new TColumnVector (*solut);
 	fResidualsVctr = new TColumnVector (*resid);
 	fSigmaZero2 = sigm2;
 	//fUnknownsCovarianceMtrx = new TMatrix(*unkcov);
 	fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
+	L = NULL;
 }
 
 
@@ -55,6 +58,7 @@ TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations)
 	//fUnknownsCovarianceMtrx = new TMatrix(numUnknowns,numUnknowns);
 	fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
+	L = NULL;
 }
 
 
@@ -85,7 +89,7 @@ TLSResultsMatrices::~TLSResultsMatrices()
 TColumnVector	TLSResultsMatrices::computeVarObs(const TSparseMatrix& A, const TSparseMatrix& ATransposed) 
 {
 	int nobs = A.rowsCount(); //number of observations
-	double *result = A.multiply_three_returning_diagonal(*fUnknownsCovarianceMtrx, ATransposed);
+	quad *result = A.multiply_three_returning_diagonal(*fUnknownsCovarianceMtrx, ATransposed);
 	TColumnVector var(nobs);
 	for (int i = 0; i < nobs; i++)
 	{
@@ -97,11 +101,6 @@ TColumnVector	TLSResultsMatrices::computeVarObs(const TSparseMatrix& A, const TS
 	return var;
 }
 
-
-TSparseMatrix* TLSResultsMatrices::getCholeskyFactor()
-{
-	return TSparseMatrix::getCholeskyFactor(symbolic);
-}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

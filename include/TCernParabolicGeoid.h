@@ -68,9 +68,9 @@ public:
 
 		TCernParabolicGeoid();
 
-		//TCernParabolicGeoid( const string& name, const double a, const double b, const double ths);
+		//TCernParabolicGeoid( const string& name, const quad a, const quad b, const quad ths);
 
-		TCernParabolicGeoid( const string& name, const double a, const double b, const double ths,
+		TCernParabolicGeoid( const string& name, const quad a, const quad b, const quad ths,
 			TAReferenceFrame* def, TReferenceEllipsoid* ell, TAReferenceFrame* calc);
 
 		/// Destructor
@@ -118,16 +118,16 @@ public:
 private:
 
 	//constants
-	static const double scaleFactor;
-	static const double scaleFactorM;
+	static const quad scaleFactor;
+	static const quad scaleFactorM;
 	
 	
 	// member attributes
 	string  fName;
-	double  fA;
-	double  fB;
-	double  fThs;
-	double  costhc, cosazp, sinthc, sinazp;
+	quad  fA;
+	quad  fB;
+	quad  fThs;
+	quad  costhc, cosazp, sinthc, sinazp;
 
 	TAReferenceFrame*			fDefRFPtr;
 	TReferenceEllipsoid*		fDefEllPtr;

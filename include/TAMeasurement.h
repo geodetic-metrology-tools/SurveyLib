@@ -28,6 +28,8 @@ class TAMeasurement
 {
 public:
 
+	virtual ~TAMeasurement() { }
+
 	/*!@name Enum Type Definition*/
 	//@{
 	enum ECalcStatus { kVariable, kFixed };

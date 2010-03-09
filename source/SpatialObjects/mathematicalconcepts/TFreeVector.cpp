@@ -40,7 +40,7 @@ TFreeVector::TFreeVector(TCoordSysFactory::ECoordSys en)
 	setStatus(kNull);
 }
 
-TFreeVector::TFreeVector(const double& x, const double& y, const double&z, TCoordSysFactory::ECoordSys en)
+TFreeVector::TFreeVector(const quad& x, const quad& y, const quad&z, TCoordSysFactory::ECoordSys en)
 {
 	setX(0, x);
 	setX(1, y);
@@ -49,7 +49,7 @@ TFreeVector::TFreeVector(const double& x, const double& y, const double&z, TCoor
 	setStatus(kKnown);
 }
 
-/*TFreeVector::TFreeVector(const double& x, const double& y, const double&z)
+/*TFreeVector::TFreeVector(const quad& x, const quad& y, const quad&z)
 {
 	setX(0, x);
 	setX(1, y);
@@ -143,7 +143,7 @@ TFreeVector TFreeVector::operator*( const TDouble& factor)
 	return resultat;
 }
 
-TFreeVector TFreeVector::operator*( const double& factor)
+TFreeVector TFreeVector::operator*( const quad& factor)
 {//!Multiplication by a TDouble object
 	TFreeVector resultat (getCoordSys());
 	if (this->isNull() == false)
@@ -182,7 +182,7 @@ TLength TFreeVector::length() const
 	TLength length;
 	if(this->getStatus() != kNull)
 	{
-		length.setMetresValue(sqrt(pow((getX()).getMetresValue(),2)+pow((getY()).getMetresValue(),2)+pow((getZ()).getMetresValue(),2)));
+		length.setMetresValue(__sqrtq(__powq((getX()).getMetresValue(),2)+__powq((getY()).getMetresValue(),2)+__powq((getZ()).getMetresValue(),2)));
 		length.setStatus(this->getStatus());
 	}
 	else
@@ -200,7 +200,7 @@ TLength TFreeVector::getHorDist() const
 	TLength length;
 	if(this->getStatus() != kNull)
 	{
-		length.setMetresValue( sqrt( pow((getX()).getMetresValue(),2) + pow((getY()).getMetresValue(),2) ) );
+		length.setMetresValue( __sqrtq( __powq((getX()).getMetresValue(),2) + __powq((getY()).getMetresValue(),2) ) );
 		length.setStatus(this->getStatus());
 	}
 	else

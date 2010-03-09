@@ -68,10 +68,10 @@ public:
 		TCompositeAffTransform operator*(const TAAffineTransformation&);
 
 		/// Return element i
-		double       operator[](int ) const;
+		quad       operator[](int ) const;
 
 		/// Return element i
-		double&      operator[](int );
+		quad&      operator[](int );
 
 		/// Return the translation vector
 		TFreeVector   getVector() const;

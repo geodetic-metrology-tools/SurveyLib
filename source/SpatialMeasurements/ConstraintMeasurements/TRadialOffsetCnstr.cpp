@@ -217,7 +217,3 @@ void	TRadialOffsetCnstr::ifNotDoneSetName(string name)
 	}
 }
 */
-
-
-
-		

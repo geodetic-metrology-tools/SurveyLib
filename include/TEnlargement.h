@@ -48,8 +48,8 @@ public:
 		/// Default Constructor, factor initialized to 1 
 		TEnlargement();
 
-		/// Constructor taking a scale factor as a double
-		TEnlargement(double);
+		/// Constructor taking a scale factor as a quad
+		TEnlargement(quad);
 
 		/// Constructor taking a scale factor as a TDouble
 		TEnlargement(TDouble);

@@ -16,15 +16,15 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////////
 TLSInputMatrices::TLSInputMatrices()
 {//Constructor
-	firstDesignMatrixTransposedValues = new list<double>();
+	firstDesignMatrixTransposedValues = new list<quad>();
 	firstDesignMatrixTransposedColPtr = new list<int>();
 	firstDesignMatrixTransposedRowInd = new list<int>();
 
-	secondDesignMatrixTransposedValues = new list<double>();
+	secondDesignMatrixTransposedValues = new list<quad>();
 	secondDesignMatrixTransposedColPtr = new list<int>();
 	secondDesignMatrixTransposedRowInd = new list<int>();
 
-	weightMatrixValues = new list<double>();
+	weightMatrixValues = new list<quad>();
 
 	firstDesignMatrixTransposed = NULL;
 	secondDesignMatrixTransposed = NULL;
@@ -104,7 +104,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	fMisclosureVector = new TColumnVector(fNbObs);
 	fCnstrMisclosureVector = new TColumnVector(fNbCnstr);
 
-	constraintFirstDesignMatrixValues = new list<double>();
+	constraintFirstDesignMatrixValues = new list<quad>();
 	constraintFirstDesignMatrixColPtr = new list<int>();
 	constraintFirstDesignMatrixRowInd = new list<int>();
 }
@@ -112,7 +112,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 
 
 /*
-void TLSInputMatrices::setS0APrioriScaleFactor(double scalefac)
+void TLSInputMatrices::setS0APrioriScaleFactor(quad scalefac)
 {//sets the scale factor for the S0 a priori
 	fS0APrioriScaleFactor = scalefac;
 }*/
@@ -170,7 +170,7 @@ void TLSInputMatrices::clearMatrices()
 }
 
 
-bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex column, double coeff)
+bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex column, quad coeff)
 {//sets an element of the first design matrix
 	bool successfullySet = true;
 	if (coeff != 0)
@@ -183,7 +183,7 @@ bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex column, double coeff)
 }
 
 
-bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex column, double coeff)
+bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex column, quad coeff)
 {//sets an element of the second design matrix
 	bool successfullySet = true;
 	if (coeff != 0)
@@ -196,7 +196,7 @@ bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex column, double coeff)
 }
 
 
-bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, double coeff)
+bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, quad coeff)
 {//sets an element of the misclosure vector
 	bool successfullySet = true;
 	if (row <= fNbEqn)
@@ -208,7 +208,7 @@ bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, double coeff)
 }
 
 
-bool TLSInputMatrices::setWeightMtrxElement(double coeff)
+bool TLSInputMatrices::setWeightMtrxElement(quad coeff)
 {//sets en element of the weight matrix
 	bool successfullySet = true;
 	if (coeff != 0)
@@ -220,7 +220,7 @@ bool TLSInputMatrices::setWeightMtrxElement(double coeff)
 }
 
 
-bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, double coeff)
+bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, quad coeff)
 {//sets an element of the constraint first design matrix
 	bool successfullySet = true;
 	if (coeff != 0)
@@ -232,7 +232,7 @@ bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, double coeff
 }
 
 
-bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, double coeff)
+bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, quad coeff)
 {//sets an element of the constraint misclosure vector
 	bool successfullySet = true;
 	if (row <= fNbCnstr)

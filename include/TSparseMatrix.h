@@ -1,15 +1,11 @@
-#ifndef T_SPARSE_MATRIX_H
-#define T_SPARSE_MATRIX_H
+#ifndef SPARSE_MATRIX_H
+#define SPARSE_MATRIX_H
 
 #pragma once
 
+#include <list>
+
 #include "TColumnVector.h"
-
-#define TAUCS_CORE_DOUBLE
-
-extern "C" {
-#include <taucs.h>
-}
 
 using namespace std;
 
@@ -17,7 +13,7 @@ class TSparseMatrix
 {
 public:
 
-	TSparseMatrix(int columns, int rows, int nnz, list<double>* vals, list<int>* rowInds, list<int>* colPtr);
+	TSparseMatrix(int rows, int columns, int nnz, list<quad>* vals, list<int>* rowInds, list<int>* colPtr);
 	// this does a shallow copy on purpose! The result matrix should not be changed!
 	TSparseMatrix(const TSparseMatrix&);
 	~TSparseMatrix();
@@ -25,41 +21,103 @@ public:
 	// Sparse matrix transposition.
 	TSparseMatrix* transposed() const;
 
-	// General multiplication of sparse matrices.
-	double* operator *(const TColumnVector& right) const;
-	double* operator *(const double* right) const;
-	operator taucs_ccs_matrix*();
-	double operator ()(int row, int column);
+	quad* operator *(const quad* right) const;
+	quad* operator *(const TColumnVector& right) const;
+	quad operator ()(int row, int column) const;
 	
-	void multiply_by_number(double);
+	void multiply_by_number(quad);
 
+	TSparseMatrix* decompose_Cholesky() const;
+	TSparseMatrix* invert_diagonal_matrix() const;
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed() const;
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed_returning_lower_triangular() const;
-	TSparseMatrix* invert_diagonal_matrix() const;
+	quad* solve_eqn(const quad* b) const;
 
-	TSparseMatrix* multiply(const TSparseMatrix& second) const;
-	TSparseMatrix* multiply_returning_lower_triangular(const TSparseMatrix& second) const;
-	double* multiply_returning_diagonal(const TSparseMatrix& second) const;
+    TSparseMatrix* add(const TSparseMatrix& second) const;
 
-	TSparseMatrix* multiply_three(const TSparseMatrix& second, const TSparseMatrix& third) const;
-	TSparseMatrix* multiply_three_returning_lower_triangular(const TSparseMatrix& second, const TSparseMatrix& third) const;
-	double* multiply_three_returning_diagonal(const TSparseMatrix& second, const TSparseMatrix& third) const;
+	// General multiplication of sparse matrices.
+	TSparseMatrix* multiply_F(const TSparseMatrix& second) const;
+	TSparseMatrix* multiply_LM(const TSparseMatrix& second) const;
+	quad* multiply_returning_diagonal(const TSparseMatrix& second) const;
+	TSparseMatrix* multiply_returning_lower_triangular_F(const TSparseMatrix& second) const;
+	TSparseMatrix* multiply_returning_lower_triangular_LM(const TSparseMatrix& second) const;
 
-	static TSparseMatrix* getCholeskyFactor(void* symbolic);
+    TSparseMatrix* multiply_three_F(const TSparseMatrix& second, const TSparseMatrix& third) const;
+    TSparseMatrix* multiply_three_LM(const TSparseMatrix& second, const TSparseMatrix& third) const;
+	quad* multiply_three_returning_diagonal(const TSparseMatrix& second, const TSparseMatrix& third) const;
+	TSparseMatrix* multiply_three_returning_lower_triangular_F(const TSparseMatrix& second, const TSparseMatrix& third) const;
+	TSparseMatrix* multiply_three_returning_lower_triangular_LM(const TSparseMatrix& second, const TSparseMatrix& third) const;
 
-	int columnsCount() const { return matrix->n; }
-	int rowsCount() const { return matrix->m; }
+	inline int columnsCount() const { return matrix->n; }
+	inline int rowsCount() const { return matrix->m; }
 
-	const double* values() const { return matrix->taucs_values; }
-	const int* rowIndices() const { return matrix->rowind; }
-	const int* colPointers() const { return matrix->colptr; }
+	inline const quad* values() const { return matrix->values; }
+	inline const int* rowIndices() const { return matrix->rowind; }
+	inline const int* colPointers() const { return matrix->colptr; }
 
 	void writeMatrixFile(char *) const;
+	static TSparseMatrix* readMatrixFile(char *);
+
+	static TSparseMatrix* deepCopy(TSparseMatrix* matrix);
 
 
 private:
 
-	TSparseMatrix(taucs_ccs_matrix* m);
+	struct Matrix
+	{
+		Matrix(int rows, int columns, int nnz)
+		{
+			m = rows;
+			n = columns;
+
+			values = new quad[nnz];
+			colptr = new int[n + 1];
+			rowind = new int[nnz];
+		}
+
+        Matrix(int m, int n)
+        {
+            this->m = m;
+            this->n = n;
+
+            values = NULL;
+            colptr = new int[n + 1];
+        }
+
+        inline void setNNZ(int nnz)
+        {
+            values = new quad[nnz];
+            rowind = new int[nnz];
+        }
+
+        ~Matrix()
+        {
+            if (colptr != NULL)
+            {
+                delete[] colptr;
+            }
+
+            if (values != NULL)
+            {
+                delete[] values;
+                delete[] rowind;
+            }
+        }
+
+		int n; // columns
+		int m; // rows
+
+		int* colptr;
+		int* rowind;
+		quad* values;
+	};
+
+	inline TSparseMatrix(Matrix* m)
+	{
+		matrix = m;
+	}
+
+	Matrix* matrix;
 
 	template <typename T>
 	class Vector
@@ -72,7 +130,7 @@ private:
 			values = new T[allocated];
 		}
 
-		~Vector()
+		inline ~Vector()
 		{
 			delete[] values;
 		}
@@ -115,12 +173,12 @@ private:
 		int allocated;
 	};
 
-	// This should only be used by primitive types (int, float, double...)!
+	// This should only be used by primitive types (int, float, quad...)!
 	template <typename T>
 	class List
 	{
 	public:
-		List()
+		inline List()
 		{
 			head = tail = NULL;
 			count = 0;
@@ -197,8 +255,6 @@ private:
 		Node* iter;
 		bool iterHasMore;
 	};
-
-	taucs_ccs_matrix *matrix;
 };
 
-#endif // T_SPARSE_MATRIX_H
+#endif // SPARSE_MATRIX_H

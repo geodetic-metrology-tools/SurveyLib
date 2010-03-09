@@ -51,6 +51,8 @@ class  TSpatialPosition;
 class  TVRefFrameTransformation : public TVTransformation //: public TObject  
 {
 public:
+
+	virtual ~TVRefFrameTransformation() { }
 	/**@name Member Functions */
 	//@{
 		/// Return a pointer to a clone of this reference frame

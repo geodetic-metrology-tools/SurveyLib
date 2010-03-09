@@ -15,6 +15,9 @@ class  TVPtListListener
 
 	
 public:
+
+	virtual ~TVPtListListener() { }
+
 	virtual void headerChanged(PointIterator iter) = 0;
 	virtual void ptNameChanged(PointIterator iter)= 0;
 	virtual void positionChanged(PointIterator iter)= 0;

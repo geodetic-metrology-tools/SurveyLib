@@ -29,7 +29,7 @@ protected:
 		targetCenteringSigma = tcs;
 	}
 
-	~Target()
+	virtual ~Target()
 	{
 		delete targetHeight;
 		delete targetHeightSigma;

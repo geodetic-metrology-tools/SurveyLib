@@ -66,6 +66,8 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 	if (isCombinedCase)
 	{
+		// TODO: fix!
+		/*
 		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 		const TSparseMatrix* secondDMTransposed = im->getSecondDgnMtrxTransposed();
 		TSparseMatrix* weightMInversed = im->getWeightMtrx()->invert_diagonal_matrix();
@@ -75,7 +77,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 		TSparseMatrix* firstDM = firstDMTransposed->transposed();
 		im->setFirstDesignMatrix(firstDM);
 		TSparseMatrix* secondDM = secondDMTransposed->transposed();
-		TSparseMatrix* bTimesWInvTimesBTrans = secondDM->multiply_three_returning_lower_triangular(*weightMInversed, *secondDMTransposed);
+		TSparseMatrix* bTimesWInvTimesBTrans = secondDM->multiply_three_returning_lower_triangular_F(*weightMInversed, *secondDMTransposed);
         delete secondDM;
 
 		void* factor = taucs_ccs_factor_llt_mf(*bTimesWInvTimesBTrans);
@@ -86,31 +88,35 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 		delete temp;
 		im->setBTimesWInvTimesBTransInverted(bTimesWInvTimesBTransInverted);
 
-		TSparseMatrix* aTransTimesBTimesWInvTimesBTransInverted = firstDMTransposed->multiply(*bTimesWInvTimesBTransInverted);
+		TSparseMatrix* aTransTimesBTimesWInvTimesBTransInverted = firstDMTransposed->multiply_F(*bTimesWInvTimesBTransInverted);
 
-		TSparseMatrix* solutionMatrixA = aTransTimesBTimesWInvTimesBTransInverted->multiply_returning_lower_triangular(*firstDM);
+		TSparseMatrix* solutionMatrixA = aTransTimesBTimesWInvTimesBTransInverted->multiply_returning_lower_triangular_F(*firstDM);
 
-		double* solutionVectorb = *aTransTimesBTimesWInvTimesBTransInverted * misclV;
+		quad* solutionVectorb = *aTransTimesBTimesWInvTimesBTransInverted * misclV;
 		for (int i = 0; i < aTransTimesBTimesWInvTimesBTransInverted->rowsCount(); i++)
 		{
 			solutionVectorb[i] = -solutionVectorb[i];
 		}
 		delete aTransTimesBTimesWInvTimesBTransInverted;
 
-		factor = taucs_ccs_factor_llt_mf(*solutionMatrixA);
+		if (rm->getL() != NULL)
+		{
+			delete rm->getL();
+		}
+		TSparseMatrix* L = solutionMatrixA->decompose_Cholesky();
 		delete solutionMatrixA;
 
-		rm->setSymbolic(factor);
-		if (factor == NULL)
+		if (L == NULL)
 		{
 			delete[] solutionVectorb;
 			// TODO: set some error
 			return false; // Matrix is not positive definite
 		}
 
-		double* solution = new double[im->getNbrUnknowns()];
+		rm->setL(L);
 
-		taucs_supernodal_solve_llt(factor, solution, solutionVectorb);
+		quad* solution = L->solve_eqn(solutionVectorb);
+
 		delete[] solutionVectorb;
 
 		TColumnVector* solutionVector = rm->getSolutionVctr();
@@ -120,7 +126,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 			(*solutionVector)(i) = solution[i];
 		}
 
-		delete[] solution;
+		delete[] solution;*/
 	}
 	else
 	{
@@ -130,49 +136,34 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 		
 		TSparseMatrix* firstDM = firstDMTransposed->transposed();
 		im->setFirstDesignMatrix(firstDM);
-		TSparseMatrix* aTransTimesW = firstDMTransposed->multiply(*weightM);
+		TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
 
-		TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular(*firstDM);
-		double* solutionVectorb = *aTransTimesW * misclV;
+		TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
+		quad* solutionVectorb = *aTransTimesW * misclV;
 		for (int i = 0; i < aTransTimesW->rowsCount(); i++)
 		{
 			solutionVectorb[i] = -solutionVectorb[i];
 		}
 		delete aTransTimesW;
 
-		int success = 0;
-		
-		/* I do this, because for some strange reason design matrix A has A LOT less non-zeros the first time -
-		   actually each time it has the same non-zero structure, except the first. */
-		if (count == 1)
+		if (rm->getL() != NULL)
 		{
-			rm->setSymbolic(taucs_ccs_factor_llt_mf(*fAtPA));
+			delete rm->getL();
 		}
-		else if (count == 2)
-		{
-			taucs_supernodal_factor_free(rm->getSymbolic());
-			rm->setSymbolic(taucs_ccs_factor_llt_symbolic(*fAtPA));
-			success = taucs_ccs_factor_llt_numeric(*fAtPA, rm->getSymbolic());
-		}
-		else
-		{
-			taucs_supernodal_factor_free_numeric(rm->getSymbolic());
-			taucs_ccs_factor_llt_numeric(*fAtPA, rm->getSymbolic());
-		}
-		count++;
+		TSparseMatrix* L = fAtPA->decompose_Cholesky();
+		delete fAtPA;
 
-		if (rm->getSymbolic() == NULL || success == -1)
+		if (L == NULL)
 		{
 			delete[] solutionVectorb;
 			// TODO: set some error
 			return false; // Matrix is not positive definite
 		}
 
-		delete fAtPA;
+		rm->setL(L);
 
-		double* solution = new double[im->getNbrUnknowns()];
+		quad* solution = L->solve_eqn(solutionVectorb);
 
-		taucs_supernodal_solve_llt(rm->getSymbolic(), solution, solutionVectorb);
 		delete[] solutionVectorb;
 
 		TColumnVector* solutionVector = rm->getSolutionVctr();
@@ -194,7 +185,8 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 ////////////////////////////////////////////////////////////////
 bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm, bool isCombinedCase){
 
-	if (isCombinedCase)
+	// TODO: fix!
+	/*if (isCombinedCase)
 	{
 		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 		const TSparseMatrix* secondDMTransposed = im->getSecondDgnMtrxTransposed();
@@ -239,11 +231,11 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		factor = taucs_ccs_factor_llt_mf(*solutionMatrixA);
 		delete solutionMatrixA;
 
-		double* aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec =
+		quad* aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec =
 			*aTransTimesBTimesWInvTimesBTransInverted * misclV;
 		delete aTransTimesBTimesWInvTimesBTransInverted;
 
-		double* solutionVectorb = *cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted *
+		quad* solutionVectorb = *cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted *
 			aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec;
 		delete cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted;
 
@@ -252,7 +244,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 			solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
 		}
 
-		double* solution = new double[misclV.dimension()];
+		quad* solution = new quad[misclV.dimension()];
 		taucs_supernodal_solve_llt(factor, solution, solutionVectorb);
 		delete[] solutionVectorb;
 		taucs_supernodal_factor_free(factor);
@@ -309,10 +301,10 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		factor = taucs_ccs_factor_llt_mf(*solutionMatrixA);
 		delete solutionMatrixA;
 
-		double* aTransTimesWTimesATimesMiscVec = *aTransW * misclV;
+		quad* aTransTimesWTimesATimesMiscVec = *aTransW * misclV;
 		delete aTransW;
 
-		double* solutionVectorb = *cstrATimesATransTimesWTimesAInverted * aTransTimesWTimesATimesMiscVec;
+		quad* solutionVectorb = *cstrATimesATransTimesWTimesAInverted * aTransTimesWTimesATimesMiscVec;
 		delete cstrATimesATransTimesWTimesAInverted;
 
 		for (int i = 0; i < misclV.dimension(); i++)
@@ -320,7 +312,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 			solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
 		}
 
-		double* solution = new double[misclV.dimension()];
+		quad* solution = new quad[misclV.dimension()];
 		taucs_supernodal_solve_llt(factor, solution, solutionVectorb);
 		delete[] solutionVectorb;
 		taucs_supernodal_factor_free(factor);
@@ -345,7 +337,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		}
 
 		delete[] solution;
-	}
+	}*/
 
 	return true;
 }

@@ -69,19 +69,19 @@ void EDM::addTarget(const EDMTarget* target, bool def)
 	fReadyToActivateEqns += eqCount;
 //	fStationedPoint->updatePotentialEqCount(eqCount);
 
-/*	if (fReadyToActivateEqns >= 
+	if (fReadyToActivateEqns >= 
 //		(fStationedPoint->getVariableDimension()-fStationedPoint->getPotentialEqCount())){
 
 		fUsedInCalc = true;
 
 		activateReadyChildren();
-	}*/
+	}
 //}
 
 ///////////////////////////////////////////
 // activates the ready to activate children
 ///////////////////////////////////////////
-/*void TTheodolite::activateReadyChildren() {
+void TTheodolite::activateReadyChildren() {
 
 	HorAngROMIterator iter = fMadeAngleROMs.begin();
 	HorAngROMIterator iterEnd = fMadeAngleROMs.end();
@@ -93,11 +93,11 @@ void EDM::addTarget(const EDMTarget* target, bool def)
 		iter++;
 	}
 }
-*/		
+	
 ////////////////////////////////////////////////////////////////////////////
 // tells the children the station has a sufficient total number of equations
 ////////////////////////////////////////////////////////////////////////////
-/*void TTheodolite::sendEnoughTotalEqns() {
+void TTheodolite::sendEnoughTotalEqns() {
 
 	HorAngROMIterator iter = fMadeAngleROMs.begin();
 	HorAngROMIterator iterEnd = fMadeAngleROMs.end();
@@ -115,11 +115,11 @@ void EDM::addTarget(const EDMTarget* target, bool def)
 		iterL++;
 	}
 }
-*/
+
 //////////////////////////////////////////////////////////
 // tells the ROM children that the station is disactivated
 //////////////////////////////////////////////////////////
-/*void TTheodolite::sendDisactivatedToChildren() {
+void TTheodolite::sendDisactivatedToChildren() {
 	{
 
 		HorAngROMIterator iter = fMadeAngleROMs.begin();
@@ -143,11 +143,11 @@ void EDM::addTarget(const EDMTarget* target, bool def)
 	}
 
 }
-*/
+
 /////////////////////////////////////////////////////////
 // tells the ROM children that the station is Activated
 /////////////////////////////////////////////////////////
-/*void TTheodolite::sendActivatedToChildren() {
+void TTheodolite::sendActivatedToChildren() {
 	{
 		HorAngROMIterator iter = fMadeAngleROMs.begin();
 		HorAngROMIterator iterEnd = fMadeAngleROMs.end();

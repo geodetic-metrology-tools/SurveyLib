@@ -45,6 +45,9 @@ class  TVReferenceFrame;
 class /*SU_DECLSPEC*/ TVTransformation //: public TObject  
 {
 public:
+
+	virtual ~TVTransformation() { }
+
 	/**@name Member Functions */
 	//@{
 		//! transform a position vector

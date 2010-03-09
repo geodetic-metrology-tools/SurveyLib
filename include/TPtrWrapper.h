@@ -59,6 +59,10 @@ public:
 	//!Get the pointer
     T* getPtr() { return fPointer; };
 
+	template <class T> friend bool operator==( const TPtrWrapper<T>& wrapper1, const TPtrWrapper<T>& wrapper2 );
+
+	template <class T> friend bool operator<( const TPtrWrapper<T>& wrapper1, const TPtrWrapper<T>& wrapper2 );
+
 private:
 	//!Manages the changes necessary when a wrapper is deleted
 	void  deletion();
@@ -76,13 +80,13 @@ private:
 template <class T>
 bool operator==( const TPtrWrapper<T>& wrapper1, const TPtrWrapper<T>& wrapper2 ) 
 {
-    return *(wrapper1.getPtr())  ==  *(wrapper2.getPtr());
+    return *wrapper1.fPointer == *wrapper1.fPointer;
 }
 
 template <class T>
 bool operator<( const TPtrWrapper<T>& wrapper1, const TPtrWrapper<T>& wrapper2 ) 
 {
-    return *(wrapper1.getPtr())  <  *(wrapper2.getPtr());
+    return *wrapper1.fPointer < *wrapper2.fPointer;
 }
 
 

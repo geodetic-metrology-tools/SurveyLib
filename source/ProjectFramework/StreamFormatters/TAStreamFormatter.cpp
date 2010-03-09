@@ -588,15 +588,15 @@ TAStreamFormatter&	TAStreamFormatter::operator<<(const TPositionVector& pos)
 
 
 TAStreamFormatter  &TAStreamFormatter::operator<<( const TDouble& db )
-{//output a double object to the text stream	
+{//output a quad object to the text stream	
 
-	// extract the double object as a double value and output to the text stream
+	// extract the quad object as a quad value and output to the text stream
 	this->width(fWidth);
 	this->precision(fPrecision);
 	(*this)<<right;
 	if(db.getStatus() != TVNumericValue::kNull)
 	{
-		double d = db.getValue();
+		quad d = db.getValue();
 		(*this)<<d;
 	}
 
@@ -606,13 +606,13 @@ TAStreamFormatter  &TAStreamFormatter::operator<<( const TDouble& db )
 TAStreamFormatter  &TAStreamFormatter::operator<<( const TScalar& db )
 {//output a scalar object to the text stream	
 
-	// extract the scalar object as a double value and output to the text stream
+	// extract the scalar object as a quad value and output to the text stream
 	this->width(fWidth);
 	this->precision(fPrecision);
 	(*this)<<right;
 	if(db.getStatus() != TVNumericValue::kNull)
 	{
-		double d = db.getValue();
+		quad d = db.getValue();
 		(*this)<<d;
 	}
 
@@ -676,8 +676,8 @@ TAStreamFormatter &TAStreamFormatter::operator>>( float &f )
 {   (*fIOStream)>>( f ); return *this; }
 
 
-TAStreamFormatter &TAStreamFormatter::operator>>( double &d )
-{   (*fIOStream)>>( d ); return *this; }
+TAStreamFormatter &TAStreamFormatter::operator>>( quad &d )
+{   double f; (*fIOStream)>>( f ); d = f; return *this; }
 
 
 TAStreamFormatter &TAStreamFormatter::operator>>( char *s )
@@ -731,8 +731,8 @@ TAStreamFormatter &TAStreamFormatter::operator<<( float f )
 {   (*fIOStream)<<( f ); return *this; }
 
 
-TAStreamFormatter &TAStreamFormatter::operator<<( double d )
-{   (*fIOStream)<<( d ); return *this; }
+TAStreamFormatter &TAStreamFormatter::operator<<( quad d )
+{   (*fIOStream)<<( (double) d ); return *this; }
 
 
 TAStreamFormatter &TAStreamFormatter::operator<<( const char *s )
@@ -824,7 +824,7 @@ string TAStreamFormatter::readLine()
 
 ////////////////////////////////////
 
-	c[pos]=fIOStream->get();
+	c[pos]=(char) fIOStream->get();
 
 	if(c[pos]==EOF)
 	{//check if there is a line
@@ -836,7 +836,7 @@ string TAStreamFormatter::readLine()
 		{//read character by character
 			result +=c[pos];
 			pos++;
-			c[pos]=fIOStream->get();
+			c[pos]=(char) fIOStream->get();
 		}
 		//substract the last char (eof or \n)
 	}
@@ -883,7 +883,7 @@ inline string TAStreamFormatter::read()
 */
 
 char TAStreamFormatter::readChar()
-{return (*fIOStream).get();
+{return (char) (*fIOStream).get();
 }
 
 void TAStreamFormatter::skipWhiteSpace() 
@@ -898,7 +898,7 @@ void TAStreamFormatter::skipWhiteSpace()
 		//while (c!=EOF && isspace(c))
 		while(c==space && c!=EOF)
 		{
-			c=fIOStream->get();
+			c=(char) fIOStream->get();
 		}
 		fIOStream->putback(c);
 	}
@@ -914,7 +914,7 @@ TAStreamFormatter&	TAStreamFormatter::get(char& c)
 
 char	TAStreamFormatter::peek()
 {//reads and returns a character from the stream and puts it back
-return (*fIOStream).peek();
+return (char) (*fIOStream).peek();
 }
 
 
@@ -1325,7 +1325,7 @@ void	TAStreamFormatter::writeStringLeft(const int width, const string data)
 	return;
 }
 
-void	TAStreamFormatter::writeDouble(const int width, const int pres, const double data)
+void	TAStreamFormatter::writeDouble(const int width, const int pres, const quad data)
 {
 	this->width(width);
 	this->precision(pres);

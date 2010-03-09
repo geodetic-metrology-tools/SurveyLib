@@ -6,11 +6,12 @@
 #ifndef SU_UEOINDICES
 #define SU_UEOINDICES
 
+#include  "TVNumericValue.h"
 
 //matrix index type
 typedef int MatrixIndex;
 //matrix element type
-typedef double MatrixElmt;
+typedef quad MatrixElmt;
 
 
 //structure for unknowns, equations and observations indicies

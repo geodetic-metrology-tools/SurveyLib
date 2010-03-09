@@ -156,5 +156,3 @@ void	TOrientationCnstr::ifNotDoneSetName(string name)
 	if ( fName == "")
 		fName = name;
 }
-
-	

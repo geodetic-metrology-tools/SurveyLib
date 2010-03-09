@@ -104,7 +104,7 @@ return false;
 //////////////////////////////////////////////////////////////////////////////////
 
 
-bool TACoordinateSystem::setAllRotations( TRotationMatrix* mat, TRotationMatrix::ERotationType kR, double &om, double &p, double &k)
+bool TACoordinateSystem::setAllRotations( TRotationMatrix* mat, TRotationMatrix::ERotationType kR, quad &om, quad &p, quad &k)
 {//create a TRotationMatrix default def: return false
 	mat->setStatus(TVNumericValue::kNull);
 	return false;
@@ -140,19 +140,19 @@ return false;
 
 
 
-bool TACoordinateSystem::setElt(T3DMatrix* mx, const int i, const int j, const double value)
+bool TACoordinateSystem::setElt(T3DMatrix* mx, const int i, const int j, const quad value)
 {//set a element into a 3D matrix
 mx->setStatus(TVNumericValue::kNull);
 return false;
 }
 
 
-double TACoordinateSystem::getElt(const T3DMatrix* mx, const int i, const int j) const
+quad TACoordinateSystem::getElt(const T3DMatrix* mx, const int i, const int j) const
 {//get a element from a 3D matrix
 return 0;
 }
 
-double TACoordinateSystem::getElt(const TRotationMatrix* mx, const int i, const int j) const
+quad TACoordinateSystem::getElt(const TRotationMatrix* mx, const int i, const int j) const
 {//get a element from a rotation matrix
 return 0;
 }
@@ -180,13 +180,13 @@ TCoordSysFactory::ECoordSys TACoordinateSystem::getCoordSysId() const
 ////////////////////////////////////////////////////////////////
 
 
-double	TACoordinateSystem::getX(const TACoordSysVector* v, const int& i) const
+quad	TACoordinateSystem::getX(const TACoordSysVector* v, const int& i) const
 {//get the Xi coordinate of a vector in all Coordinate System
 return v->getX(i);
 }
 
 
-void	TACoordinateSystem::setX(TACoordSysVector* v, const int& i, const double& value)
+void	TACoordinateSystem::setX(TACoordSysVector* v, const int& i, const quad& value)
 {//!set the Xi coordinate of a vector in all Coordinate System
 v->setX(i, value);
 return;
@@ -196,13 +196,13 @@ return;
 // Member Protected Functions for Matrix
 ////////////////////////////////////////////////////////////////
 
-double	TACoordinateSystem::getC(const TACoordSysMatrix* mx, const int& i, const int& j) const
+quad	TACoordinateSystem::getC(const TACoordSysMatrix* mx, const int& i, const int& j) const
 {//get the (i,j) value of a matrix
 return mx->getC(i, j);
 }
 
 
-void	TACoordinateSystem::setC(TACoordSysMatrix* mx, const int& i, const int& j, double value)
+void	TACoordinateSystem::setC(TACoordSysMatrix* mx, const int& i, const int& j, quad value)
 {//set value to (i,j) of a matrix
 mx->setC(i, j, value);
 return;

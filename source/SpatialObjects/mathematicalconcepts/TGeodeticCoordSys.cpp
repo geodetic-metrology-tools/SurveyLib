@@ -23,7 +23,7 @@
 		retVal.setRadiansValue(this->TACoordinateSystem::getX(vec, 0));
 		return retVal;
 	}
-	// Error Message: c:\Workspace\SuSource\SurveyLib\source\SpatialObjects\mathematicalconcepts\TGeodeticCoordSys.cpp(22): error C2664: 'TAngle::TAngle(const TAngle &)' : cannot convert parameter 1 from 'double' to 'const TAngle &'
+	// Error Message: c:\Workspace\SuSource\SurveyLib\source\SpatialObjects\mathematicalconcepts\TGeodeticCoordSys.cpp(22): error C2664: 'TAngle::TAngle(const TAngle &)' : cannot convert parameter 1 from 'quad' to 'const TAngle &'
 	/* Method Called:
 	TLength TACoordinateSystem::getX(const TACoordSysVector*) const
 	{//get the X coordinate of a position vector or a free vector, default def: \return TLength Null
@@ -75,14 +75,14 @@
 
 
 
-bool TGeodeticCoordSys::setElt(T3DMatrix* mx, const int i, const int j, const double value)
+bool TGeodeticCoordSys::setElt(T3DMatrix* mx, const int i, const int j, const quad value)
 {//set a element into a 3D matrix
 setC(mx, i, j, value);
 return true;
 }
 
 
-double TGeodeticCoordSys::getElt(const T3DMatrix* mx, const int i, const int j) const
+quad TGeodeticCoordSys::getElt(const T3DMatrix* mx, const int i, const int j) const
 {//get a element from a 3D matrix
 return getC(mx, i, j);
 }

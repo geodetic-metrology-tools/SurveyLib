@@ -51,6 +51,8 @@ public:
 	
 	TANumericValue();
 
+	virtual ~TANumericValue() { }
+
 
 	/*!@name Member methods */
 	//@{

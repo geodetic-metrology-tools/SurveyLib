@@ -35,6 +35,8 @@ public:
 		return *targetPoint == *right.getTargetPoint();
 	}
 
+	virtual ~TAPointMeasurement() { }
+
 protected:
 
 	TAPointMeasurement(int obsID, const TSpatialPoint* tg) : TAMeasurement(obsID) { targetPoint = tg; }

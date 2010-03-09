@@ -42,6 +42,7 @@ class TAngleFilter //: public TObject
 {
 public:
 
+	virtual ~TAngleFilter() { }
 	/*!name Public Member Function*/
 	//@!{
 	/*!Get angle value from a TAStreamFormatter object

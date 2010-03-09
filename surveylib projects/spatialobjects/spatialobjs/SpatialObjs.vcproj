@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="SpatialObjs"
 	ProjectGUID="{67AB0724-79E5-4522-B9F5-C1583F7E0844}"
+	RootNamespace="SpatialObjs"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -115,19 +116,22 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Qoption,cpp,--extended_float_type"
 				Optimization="2"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories=".\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc;.\..\..\..\..\SEAL_Libraries\Taucs"
+				AdditionalIncludeDirectories=".\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="true"
 				EnableFunctionLevelLinking="false"
 				EnableEnhancedInstructionSet="2"
+				FloatingPointModel="0"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/SpatialObjs.pch"
 				AssemblerListingLocation=".\Release/"
@@ -195,11 +199,13 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Qoption,cpp,--extended_float_type -wd981 -wd383 -wd1418"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc;.\..\..\..\..\SEAL_Libraries\Taucs"
+				AdditionalIncludeDirectories=".\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				FloatingPointModel="0"
 				FloatingPointExceptions="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
@@ -209,7 +215,7 @@
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="1"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

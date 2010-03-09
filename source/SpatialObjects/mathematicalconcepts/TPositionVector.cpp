@@ -33,7 +33,7 @@ TPositionVector::TPositionVector(TCoordSysFactory::ECoordSys en)
 	setStatus(kNull); 
 }
 
-TPositionVector::TPositionVector(const double& x, const double& y, const double& z,TCoordSysFactory::ECoordSys en)
+TPositionVector::TPositionVector(const quad& x, const quad& y, const quad& z,TCoordSysFactory::ECoordSys en)
 {
 	setX(0, x);
 	setX(1, y);
@@ -42,7 +42,7 @@ TPositionVector::TPositionVector(const double& x, const double& y, const double&
 	setStatus(kKnown); 
 }
 
-/*TPositionVector::TPositionVector(const double& x, const double& y, const double&z)
+/*TPositionVector::TPositionVector(const quad& x, const quad& y, const quad&z)
 {
 	TLength X(x), Y(y),Z(z);
 	fPositionVector[0] = X;
@@ -135,8 +135,8 @@ TPositionVector TPositionVector::operator*( const TDouble& factor)
 }
 
 
-TPositionVector TPositionVector::operator*(const double& factor)
-{//!Multiplication by a double object
+TPositionVector TPositionVector::operator*(const quad& factor)
+{//!Multiplication by a quad object
 	TPositionVector resultat (getCoordSys());
 	if ( this->isNull()== false)
 		{

@@ -94,8 +94,8 @@ private:
 	//@}
 	
 	// constants
-	static const double precisionH;
-	static const double precisionPhi;
+	static const quad precisionH;
+	static const quad precisionPhi;
 
 	/**@name Private Functions*/
 	//@{

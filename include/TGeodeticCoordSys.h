@@ -62,10 +62,10 @@ public:
 	/*!\name Functions for Matrix*/
 	//@{
 	//!set a element into a 3D matrix
-	virtual	bool setElt(T3DMatrix*, const int, const int, const double);
+	virtual	bool setElt(T3DMatrix*, const int, const int, const quad);
 
 	//!get a element from a 3D matrix
-	virtual	double getElt(const T3DMatrix*, const int, const int) const;
+	virtual	quad getElt(const T3DMatrix*, const int, const int) const;
 	//@}
 
 private:

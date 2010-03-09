@@ -67,14 +67,14 @@ return true;
 
 
 
-bool T2DCartesianPlusHSys::setElt(T3DMatrix* mx, const int i, const int j, const double value)
+bool T2DCartesianPlusHSys::setElt(T3DMatrix* mx, const int i, const int j, const quad value)
 {//set a element into a 3D matrix
 setC(mx, i, j, value);
 return true;
 }
 
 
-double T2DCartesianPlusHSys::getElt(const T3DMatrix* mx, const int i, const int j) const
+quad T2DCartesianPlusHSys::getElt(const T3DMatrix* mx, const int i, const int j) const
 {//get a element from a 3D matrix
 return getC(mx, i, j);
 }

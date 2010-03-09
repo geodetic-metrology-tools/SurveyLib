@@ -44,7 +44,7 @@ void  erel()
 {
 /*	static NagError fail;
 	fail.print = false;
-	double wmax = nag_deviates_normal(Nag_UpperTail,0.1,&fail);
+	quad wmax = nag_deviates_normal(Nag_UpperTail,0.1,&fail);
 
 	cout << wmax << endl;*/
 

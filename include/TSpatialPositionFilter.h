@@ -49,6 +49,8 @@ public:
 
 	// constructors and destructors
 
+	virtual ~TSpatialPositionFilter() { }
+
 	//member functions
 	virtual void input( TAStreamFormatter &, TSpatialPosition & ) const = 0;
 	virtual void output( TAStreamFormatter &, const TSpatialPosition & ) const = 0;
