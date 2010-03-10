@@ -20,7 +20,7 @@
 // other forward declarations
 #include  "TAReferenceFrame.h"
 #include  "TSpatialOrientationError.h"
-#include  "math.h"
+#include  "mathimf.h"
 #include  "TAngle.h"
 //#include  "TReferenceEllipsoid.h"
 ////////////////////////////////////////////////////////////////

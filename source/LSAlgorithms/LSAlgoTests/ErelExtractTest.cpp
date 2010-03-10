@@ -35,7 +35,6 @@
 #include "TLGCFileWriter.h"
 
 #include "LSCalcDataSet.h"
-#include	<cmath>
 #include	<nag.h>
 #include	<nagg01.h>
 

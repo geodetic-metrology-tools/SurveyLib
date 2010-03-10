@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////
 // Forward declarations
 /////////////////////////////////////////////////////
+#include "TDouble.h"
 #include "TMatrix.h"
 #include "TSparseMatrix.h"
 #include "TColumnVector.h"
@@ -21,7 +22,6 @@
 //#include <iostream.h>
 #include "UEOIndices.h"
 
-#include "TDouble.h"
 
 using namespace std;
 
@@ -88,9 +88,6 @@ public:
 	/*! compute and return a vector of observations variances */
 	TColumnVector	computeVarObs(const TSparseMatrix& A, const TSparseMatrix& ATransposed);
 
-	void*			getSymbolic() const { return symbolic; }
-	void			setSymbolic(void* s) { symbolic = s; }
-
 	TSparseMatrix*  getL() const { return L; }
 	void			setL(TSparseMatrix* l) { L = l; }
 
@@ -114,7 +111,6 @@ private:
 	TSparseMatrix*	fUnknownsCovarianceMtrx; /*!< matrix (u x u) containing the variances and covariances for parameters */
 	quad			fSigmaZero2; /*!< calculated "average variance" on residues */
 	bool			fS0APosterioriVariances; /*!< indicates if the s0 a posteriori should be applied */
-	void*			symbolic;
 	TSparseMatrix*  L;
 };
 

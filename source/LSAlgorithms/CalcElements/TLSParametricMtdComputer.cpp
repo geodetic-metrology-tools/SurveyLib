@@ -4,10 +4,10 @@
 // using the parametric method (case where 2nd dgn mtrx = -I)
 //
 
-#include "TLSInputMatrices.h"
-#include "TLSResultsMatrices.h"
 
 #include "TLSParametricMtdComputer.h"
+#include "TLSResultsMatrices.h"
+#include "TLSInputMatrices.h"
 
 #include	<nag.h>
 #include	<nagg01.h>
@@ -135,14 +135,18 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 		const TColumnVector& misclV = im->getMisclosureVctr();
 		
 		TSparseMatrix* firstDM = firstDMTransposed->transposed();
+		firstDM->writeMatrixFile("C:\\A.txt");
 		im->setFirstDesignMatrix(firstDM);
 		TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
+		aTransTimesW->writeMatrixFile("C:\\AtP.txt");
 
 		TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
+		fAtPA->writeMatrixFile("C:\\AtPA.txt");
 		quad* solutionVectorb = *aTransTimesW * misclV;
 		for (int i = 0; i < aTransTimesW->rowsCount(); i++)
 		{
 			solutionVectorb[i] = -solutionVectorb[i];
+			printf("%.20e\n", (double) solutionVectorb[i]);
 		}
 		delete aTransTimesW;
 

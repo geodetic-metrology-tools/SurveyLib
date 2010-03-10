@@ -20,7 +20,7 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 
 ////////////////////////////////////////////////////////////////
 // Forward declarations
-#include "TAStreamFormatter.h"
+class	TAStreamFormatter;
 #include "TLSCalcPosVectorParam.h"
 
 // typedefs

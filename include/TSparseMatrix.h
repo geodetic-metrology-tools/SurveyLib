@@ -55,10 +55,10 @@ public:
 	inline const int* rowIndices() const { return matrix->rowind; }
 	inline const int* colPointers() const { return matrix->colptr; }
 
-	void writeMatrixFile(char *) const;
-	static TSparseMatrix* readMatrixFile(char *);
+	void writeMatrixFile(const char *) const;
+	static TSparseMatrix* readMatrixFile(const char *);
 
-	static TSparseMatrix* deepCopy(TSparseMatrix* matrix);
+	static TSparseMatrix* deepCopy(const TSparseMatrix* matrix);
 
 
 private:
@@ -75,10 +75,10 @@ private:
 			rowind = new int[nnz];
 		}
 
-        Matrix(int m, int n)
+        Matrix(int rows, int columns)
         {
-            this->m = m;
-            this->n = n;
+            m = rows;
+            n = columns;
 
             values = NULL;
             colptr = new int[n + 1];
@@ -123,7 +123,7 @@ private:
 	class Vector
 	{
 	public:
-		Vector(int initialSize)
+		inline Vector(int initialSize)
 		{
 			allocated = initialSize;
 			count = 0;

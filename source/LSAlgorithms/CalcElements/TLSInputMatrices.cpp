@@ -259,7 +259,7 @@ void TLSInputMatrices::setConstraintNewColumn()
 
 void TLSInputMatrices::finishedFillingMatrices()
 {	
-	firstDesignMatrixTransposed = new TSparseMatrix(fNbEqn, fNbUnk,
+	firstDesignMatrixTransposed = new TSparseMatrix(fNbUnk, fNbEqn,
 		firstDesignMatrixTransposedValues->size(), firstDesignMatrixTransposedValues, 
 		firstDesignMatrixTransposedRowInd, firstDesignMatrixTransposedColPtr);
 	
@@ -267,7 +267,7 @@ void TLSInputMatrices::finishedFillingMatrices()
 	firstDesignMatrixTransposedRowInd->clear();
 	firstDesignMatrixTransposedColPtr->clear();
 
-	secondDesignMatrixTransposed = new TSparseMatrix(fNbObs, fNbUnk,
+	secondDesignMatrixTransposed = new TSparseMatrix(fNbUnk, fNbObs,
 		secondDesignMatrixTransposedValues->size(), secondDesignMatrixTransposedValues, 
 		secondDesignMatrixTransposedRowInd, secondDesignMatrixTransposedColPtr);	
 	
@@ -293,7 +293,7 @@ void TLSInputMatrices::finishedFillingMatrices()
 			setConstraintNewColumn();
 		}
 
-		fCnstrFirstDesignMtrx = new TSparseMatrix(fNbUnk, fNbCnstr,
+		fCnstrFirstDesignMtrx = new TSparseMatrix(fNbCnstr, fNbUnk,
 			constraintFirstDesignMatrixValues->size(), constraintFirstDesignMatrixValues,
 			constraintFirstDesignMatrixRowInd, constraintFirstDesignMatrixColPtr);
 
