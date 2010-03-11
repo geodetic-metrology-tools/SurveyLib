@@ -550,7 +550,7 @@ void	TRefSystemFactory::init()
 	TLength txs (4381882.331989), tys (461505.530464), tzs (4598944.364158);
 	TTranslation transls(txs, tys, tzs);
 	//facteur d echelle
-	TEnlargement ks (1.0);
+	TScaleFactor ks (1.0);
 	THelmertRefFrameTransform* pCCS2CGRFs = new THelmertRefFrameTransform(pCCS, pCGRFs, ks, rs, transls);
 	pCCS2CGRFs->setTransformId(kCCS2CGRFSphere);
 	fTransformList.push_back(pCCS2CGRFs);
@@ -583,7 +583,7 @@ void	TRefSystemFactory::init()
 	// Helmert Transformation between LAp0 and CCS
 	TRotation r(TRotationMatrix::kRzyx, 0, 0, -(kappa.getRadiansValue()));
 	TTranslation transl(falseOrigin.getX(), falseOrigin.getY(),	(falseOrigin.getZ()) );
-	TEnlargement enl(1.0);
+	TScaleFactor enl(1.0);
 	THelmertRefFrameTransform* pLAp02CCS = new THelmertRefFrameTransform(pLAp0, pCCS, enl, r, transl);
 	pLAp02CCS->setTransformId(kLAp02CCS);
 	fTransformList.push_back(pLAp02CCS);
@@ -601,7 +601,7 @@ void	TRefSystemFactory::init()
 	TRotation r1(TRotationMatrix::kRzyx, om1.getRadiansValue(), p1.getRadiansValue(), k1.getRadiansValue());
 	TLength tx(-54.62), ty(-24.26), tz(17.75);
 	TTranslation transl1(tx, ty, tz);
-	TEnlargement enl1(1.0 - 0.00002801);
+	TScaleFactor enl1(1.0 - 0.00002801);
 	THelmertRefFrameTransform* pROMA2WGS = new THelmertRefFrameTransform(pROMA, pWGS, enl1, r1, transl1);
 	pROMA2WGS->setTransformId(kROMA2WGS);
 	fTransformList.push_back(pROMA2WGS);
@@ -619,7 +619,7 @@ void	TRefSystemFactory::init()
 	TRotation r2(TRotationMatrix::kRzyx, om2.getRadiansValue(), p2.getRadiansValue(), k2.getRadiansValue());
 	TLength Tx(114.1736041), Ty(114.1154332), Tz(-178.5526666);
 	TTranslation transl2(Tx, Ty, Tz);
-	TEnlargement enl2(0.999998644222261);
+	TScaleFactor enl2(0.999998644222261);
 	THelmertRefFrameTransform* pWGS2CGRF = new THelmertRefFrameTransform(pWGS, pCGRF, enl2, r2, transl2);
 	pWGS2CGRF->setTransformId(kWGS2CGRF);
 	fTransformList.push_back(pWGS2CGRF);
@@ -637,7 +637,7 @@ void	TRefSystemFactory::init()
 	TRotation r3(TRotationMatrix::kRzyx, om3.getRadiansValue(), p3.getRadiansValue(), k3.getRadiansValue());
 	TLength Tx3(76.3768280), Ty3(131.9389844), Tz3(-156.1229775);
 	TTranslation transl3(Tx3, Ty3, Tz3);
-	TEnlargement enl3(1.000000000000000);
+	TScaleFactor enl3(1.000000000000000);
 	THelmertRefFrameTransform* pITRF972CGRF = new THelmertRefFrameTransform(pITRF97, pCGRF, enl3, r3, transl3);
 	pITRF972CGRF->setTransformId(kITRF972CGRF);
 	fTransformList.push_back(pITRF972CGRF);

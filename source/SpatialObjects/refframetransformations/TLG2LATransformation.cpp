@@ -134,7 +134,7 @@ void TLG2LATransformation::setDestinationFrame( TGraphLocalAstronomicalRF* LA )
 
 bool  TLG2LATransformation::transform( TPositionVector& pv ) const
 {// transform a position vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(pv);
@@ -145,7 +145,7 @@ bool  TLG2LATransformation::transform( TPositionVector& pv ) const
 
 bool  TLG2LATransformation::transform( TFreeVector& fv ) const
 {// transform a free vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(fv);
@@ -156,7 +156,7 @@ bool  TLG2LATransformation::transform( TFreeVector& fv ) const
 
 bool  TLG2LATransformation::transform( TRotationMatrix& rmx ) const
 {// transform a Rotation Matrix
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(rmx);
@@ -193,7 +193,7 @@ void  TLG2LATransformation::initialise()
 	{
 		delete fTransform;
 	}
-	fTransform = new TCompositeAffTransform(p * (r3 * r2 * r1) * p * r4 * t);
+	fTransform = new TCompositeAffTransform( p( (r3 * r2 * r1)( p( r4( t ) ) ) ) );
 	fTransform->invert();//n utilise pas new
 
 	return;

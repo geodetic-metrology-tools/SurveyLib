@@ -15,14 +15,10 @@
 //#include	"TROOT.h"
 //
 // other forward declarations
-//#include  "TLength.h"
-#include  "TTranslation.h"
-#include  "TRotation.h"
-#include  "TReflection.h"
-#include  "THelmertTransformation.h"
-#include  "TEnlargement.h"
-
 #include  "TCompositeAffTransform.h"
+#include  "TPositionVector.h"
+#include  "TFreeVector.h"
+#include  "TRotationMatrix.h"
 
 ////////////////////////////////////////////////////////////////
 
@@ -39,22 +35,25 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-TCompositeAffTransform::TCompositeAffTransform() : fComposite(0)
+TCompositeAffTransform::TCompositeAffTransform()
 {	// default constructor
-	fStatus = kNull;
+	setStatus( TVNumericValue::kNull );
 }
 
 
-TCompositeAffTransform::TCompositeAffTransform(  const TCompositeAffTransform& original )
+TCompositeAffTransform::TCompositeAffTransform( const TCompositeAffTransform & original )
 {	// copy constructor
 	*this = original;
 }
 
 
-TCompositeAffTransform::TCompositeAffTransform( const TAffineTransformWrapper wrapper )
+// Constructor taking a TAAffineTransformation
+TCompositeAffTransform::TCompositeAffTransform( const TAAffineTransformation & transfn )
+: TAAffineTransformation()
 {
+	TAffineTransformWrapper wrapper( transfn.clone() );
 	fComposite.push_back(wrapper);
-	setStatus(wrapper.getTransformation()->getStatus());
+	setStatus(transfn.getStatus());
 }
 
 
@@ -62,26 +61,7 @@ TCompositeAffTransform::~TCompositeAffTransform()
 {//destructor
 	if(fComposite.size() != 0)
 	{
-//		fComposite.~list<TAffineTransformWrapper>();
 		fComposite.erase(fComposite.begin(), fComposite.end());
-
-		list<TAffineTransformWrapper>::iterator iter;// = fComposite.begin();
-		list<TAffineTransformWrapper>::iterator end = fComposite.end();
-//		int i = 0;
-//		while(i != end)
-/*		while((iter = fComposite.begin())  != end)
-		{
-			TVAffineTransformation* trans = iter->getTransformation();
-			TAffineTransformWrapper temp = *iter;
-			fComposite.pop_front();//.remove(iter);
-			cout<<"avant delete"<<endl;
-			//iter->~TAffineTransformWrapper();
-			cout<<"test1"<<endl;
-			//delete (trans);
-			//iter++;
-		}*/
-
-//	cout<<"test2"<<endl;
 	}
 }
 
@@ -91,7 +71,7 @@ TCompositeAffTransform::~TCompositeAffTransform()
 
 
 
-TCompositeAffTransform&  TCompositeAffTransform::operator=( const TCompositeAffTransform& right)
+TCompositeAffTransform&  TCompositeAffTransform::operator=( const TCompositeAffTransform& right )
 {	// Copy Assignment operator
 
 	if (this != &right)
@@ -102,8 +82,8 @@ TCompositeAffTransform&  TCompositeAffTransform::operator=( const TCompositeAffT
 			fComposite.erase(fComposite.begin(), fComposite.end());
 		}
 		//fComposite = right.getComposite();
-		TCompositeAffTransform::CompositeIterator  end = right.getCompositeEndIterator();
-		TCompositeAffTransform::CompositeIterator  beg = right.getCompositeBeginIterator();
+		TCompositeAffTransform::ConstCompositeIter  end = right.getCompositeEndIterator();
+		TCompositeAffTransform::ConstCompositeIter  beg = right.getCompositeBeginIterator();
 
 		while(beg != end)
 		{
@@ -117,41 +97,27 @@ TCompositeAffTransform&  TCompositeAffTransform::operator=( const TCompositeAffT
 }
 
 
-TAAffineTransformation*  TCompositeAffTransform::clone() const
+//////////////////////////////////////////////////////////////////////
+// Operator ()
+// add to the composite transformation by applying this transformation 
+// to an affine transformation
+//////////////////////////////////////////////////////////////////////
+TCompositeAffTransform & TCompositeAffTransform::operator() ( const TAAffineTransformation & right )
+{// Add another affine transformation to the composition  f = f(g())
+	
+	TAffineTransformWrapper wrapper( right.clone() );
+	this->fComposite.push_front( wrapper );
+	this->setStatus( this->testStatus(right) );
+	return *this;	
+	
+}
+
+
+TCompositeAffTransform *  TCompositeAffTransform::clone() const
 {// Return a pointer to a clone of this transformation
 	return new TCompositeAffTransform( *this );
 	
 }
-
-//////////////////////////////////////////////////////////////////////
-// Operator *
-//////////////////////////////////////////////////////////////////////
-TCompositeAffTransform TCompositeAffTransform::operator*( const TAAffineTransformation& right)
-{// Multiplication by affine transformation  C = P * right
-	
-/*	TVAffineTransformation*  trans = right.clone();
-	TAffineTransformWrapper wrapper(trans);
-	fComposite.push_front(wrapper);	
-	delete trans;
-	
-	if (right.getStatus() == kNull)
-	{setStatus(kNull);}*/
-
-	TCompositeAffTransform result;
-	result = *this;
-
-//	TVAffineTransformation*  trans = right.clone();
-//	TAffineTransformWrapper wrapper(trans);
-	result.add(right);	
-//	delete trans;
-	
-	if (right.getStatus() == kNull)
-	{setStatus(kNull);}
-	
-	return result;	
-	
-}
-
 
 
 bool  TCompositeAffTransform::transform(TPositionVector& pv) const
@@ -161,8 +127,8 @@ bool  TCompositeAffTransform::transform(TPositionVector& pv) const
 
 	if (isNull() == false)
 	{
-		CompositeIterator iter = fComposite.begin();
-		CompositeIterator iterEnd = fComposite.end();
+		ConstCompositeIter iter = fComposite.begin();
+		ConstCompositeIter iterEnd = fComposite.end();
 
 		if(iter!=iterEnd) { trans = true; }
 	
@@ -179,13 +145,12 @@ bool  TCompositeAffTransform::transform(TPositionVector& pv) const
 
 bool  TCompositeAffTransform::transform(TFreeVector& fv) const 
 {/// Return a transformed free vector
-	bool trans = true;
-
+	bool trans = false;
 
 	if (isNull() == false)
 	{
-		CompositeIterator iter = fComposite.begin();
-		CompositeIterator iterEnd = fComposite.end();
+		ConstCompositeIter iter = fComposite.begin();
+		ConstCompositeIter iterEnd = fComposite.end();
 
 
 		while (iter != iterEnd && trans != false)
@@ -201,12 +166,12 @@ bool  TCompositeAffTransform::transform(TFreeVector& fv) const
 
 bool  TCompositeAffTransform::transform(TRotationMatrix& rm) const
 {/// Return a transformed Rotation Matrix
-	bool trans = true;
+	bool trans = false;
 	
 	if (isNull() == false)
 	{
-		CompositeIterator iter = fComposite.begin();
-		CompositeIterator iterEnd = fComposite.end();
+		ConstCompositeIter iter = fComposite.begin();
+		ConstCompositeIter iterEnd = fComposite.end();
 
 		if(iter!=iterEnd) { trans = true; }
 
@@ -221,36 +186,127 @@ bool  TCompositeAffTransform::transform(TRotationMatrix& rm) const
 }
 
 
+TPositionVector &  TCompositeAffTransform::operator() ( TPositionVector & right ) const
+{// apply this transformation to a position vector 
+	if ( this->isNull() || right.isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	else
+	{
+		ConstCompositeIter iter = fComposite.begin();
+		ConstCompositeIter iterEnd = fComposite.end();
 
-TCompositeAffTransform TCompositeAffTransform::inverse()
-{/// Inverse
-	TCompositeAffTransform copy(*this);
-	copy.invert();
+		while (iter != iterEnd )
+		{
+			iter->getTransformation()->operator ()(right);
+			iter ++;
+		}
+	}
+	return right;
+}
+
+
+TFreeVector &  TCompositeAffTransform::operator() ( TFreeVector & right ) const
+{// apply this transformation to a free vector 
+	if ( this->isNull() || right.isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	else
+	{
+		ConstCompositeIter iter = fComposite.begin();
+		ConstCompositeIter iterEnd = fComposite.end();
+
+		while (iter != iterEnd )
+		{
+			iter->getTransformation()->operator ()(right);
+			iter ++;
+		}
+	}
+	return right;
+}
+
+
+TRotationMatrix &  TCompositeAffTransform::operator() ( TRotationMatrix & right ) const
+{// apply this transformation to a Rotation Matrix 
+	if ( this->isNull() || right.isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	else
+	{
+		ConstCompositeIter iter = fComposite.begin();
+		ConstCompositeIter iterEnd = fComposite.end();
+
+		while (iter != iterEnd )
+		{
+			iter->getTransformation()->operator ()(right);
+			iter ++;
+		}
+	}
+	return right;
+}
+
+
+
+TCompositeAffTransform * TCompositeAffTransform::inverse() const
+{/// Return the inverse of this transformation
+	TCompositeAffTransform * copy = new TCompositeAffTransform(*this);
+	copy->invert();
 	return copy;
 }
 
 
 void TCompositeAffTransform::invert()
-{/// Invert = Inverse but replace the transformation
+{/// Invert the transformation, replaces the current transformation parameters
 	
 	fComposite.reverse();
-	CompositeIterator iter = fComposite.begin();
-	CompositeIterator iterEnd = fComposite.end();
+	CompositeIterator iter = getCompositeBeginIterator();
+	CompositeIterator iterEnd = getCompositeEndIterator();
 	while (iter != iterEnd)
-	{	iter->getTransformation()->invert();
+	{	
+		iter->getTransformation()->invert();
 		iter ++;
 	}
 	return;
 }
 
 
-void TCompositeAffTransform::add(const TAAffineTransformation& right)
+/*// Append a TAAffineTransformation
+void TCompositeAffTransform::append( const TAAffineTransformation &transf )
+{
+	TAffineTransformWrapper wrapper( &transf );
+	this->fComposite.push_front( wrapper );
+	if (transf.getStatus() == kNull && this->getStatus() != kNull)
+	{
+		setStatus(kNull);
+	}
+	return;
+}
+*/
+
+// Prepend a TAAffineTransformation
+void TCompositeAffTransform::prepend( const TAAffineTransformation & transf )
+{
+	TAffineTransformWrapper wrapper( transf.clone() );
+	this->fComposite.push_back( wrapper );
+	if (transf.getStatus() == kNull && this->getStatus() != kNull)
+	{
+		setStatus(kNull);
+	}
+	return;
+}
+	
+
+/*void TCompositeAffTransform::add(const TAAffineTransformation& right)
 { 
 	TAffineTransformWrapper wrapper (&right);
 	fComposite.push_front(wrapper);
 	setStatus(right.getStatus());
 	return;
-}
+}*/
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////

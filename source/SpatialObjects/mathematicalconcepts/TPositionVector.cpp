@@ -126,9 +126,26 @@ TPositionVector TPositionVector::operator*( const TDouble& factor)
 	TANumericValue::EStatus status = this->testStatus(factor);
 	if ( status!= kNull)
 	{
-		resultat.setX(0, getX(0)*factor.getValue()); 
-		resultat.setX(1, getX(1)*factor.getValue());
-		resultat.setX(2, getX(2)*factor.getValue());
+		quad scalar = factor.getValue();
+		resultat.setX( 0, scalar * getX(0) ); 
+		resultat.setX( 1, scalar * getX(1) );
+		resultat.setX( 2, scalar * getX(2) );
+	}
+	resultat.setStatus(status);
+	return resultat;
+}
+
+
+TPositionVector TPositionVector::operator *( const TScalar& factor)
+{//!Multiplication by a TScalar
+	TPositionVector resultat (getCoordSys());
+	TANumericValue::EStatus status = this->testStatus(factor);
+	if ( status!= kNull)
+	{
+		quad scalar = factor.getValue();
+		resultat.setX( 0, scalar * getX(0) ); 
+		resultat.setX( 1, scalar * getX(1) );
+		resultat.setX( 2, scalar * getX(2) );
 	}
 	resultat.setStatus(status);
 	return resultat;
@@ -148,6 +165,19 @@ TPositionVector TPositionVector::operator*(const quad& factor)
 	return resultat;
 }
 
+
+TPositionVector & TPositionVector::operator *=( const TScalar& right)
+{//Multiply this vector by a TScalar
+	*this = (*this) * right;
+	return (*this);
+}
+
+
+TPositionVector & TPositionVector::operator *=( const quad& right)
+{//Multiply this vector by a TScalar
+	*this = (*this) * right;
+	return (*this);
+}
 
 
 TPositionVector&  TPositionVector::operator=( const TPositionVector& right)

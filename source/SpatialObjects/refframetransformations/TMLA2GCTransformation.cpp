@@ -137,7 +137,7 @@ void TMLA2GCTransformation::setGeoid( TAGeoidModel* geoid)
 
 bool  TMLA2GCTransformation::transform( TPositionVector& pv ) const
 {// transform a position vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(pv);
@@ -148,7 +148,7 @@ bool  TMLA2GCTransformation::transform( TPositionVector& pv ) const
 
 bool  TMLA2GCTransformation::transform( TFreeVector& fv ) const
 {// transform a free vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(fv);
@@ -160,7 +160,7 @@ bool  TMLA2GCTransformation::transform( TFreeVector& fv ) const
 
 bool  TMLA2GCTransformation::transform( TRotationMatrix& rmx ) const
 {// transform a Rotation Matrix
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(rmx);
@@ -221,7 +221,7 @@ void  TMLA2GCTransformation::initialise()
 	{
 		delete fTransform;
 	}
-	fTransform = new TCompositeAffTransform(t2 * r1 * r2 * r3 * p * (r6 * r5 * r4) * p * r7 * t1);
+	fTransform = new TCompositeAffTransform( t2( (r1 * r2 * r3 )( p( (r6 * r5 * r4)( p( r7( t1 ) ) ) ) ) ) );
 
 	return;
 }

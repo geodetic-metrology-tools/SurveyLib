@@ -42,22 +42,17 @@ TANumericValue::TANumericValue()
 
 
 
-TANumericValue::EStatus TANumericValue::testStatus(TANumericValue obj) const
+TVNumericValue::EStatus TANumericValue::testStatus( const TVNumericValue & obj ) const
 {   // Determines the status of a numerical value that should
     // be assigned when an operation is performed on this 
 	// numeric value and the given value.
 	
-	if (fStatus==kNull || obj.getStatus()==kNull)
+	if ( this->isNull() || obj.isNull() )
 	{
-		return kNull;
-	}
-	else if (fStatus==obj.getStatus())
-	{
-		return fStatus;
+		return TVNumericValue::kNull;
 	}
 	else
 	{
-		return kNull;
-	}
-			
+		return TVNumericValue::kKnown;
+	}	
 }

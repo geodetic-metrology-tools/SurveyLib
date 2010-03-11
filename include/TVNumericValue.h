@@ -5,7 +5,7 @@
 // Patterns:
 //
 // 
-// Copyright 2002 CERN EST/SU. All rights reserved.
+// Copyright 2002-10 CERN SU, M.Jones. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 
@@ -43,7 +43,6 @@ _Quad __floorq(_Quad x);
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
- class TANumericValue;
 //using namespace std;
 //
 //
@@ -61,14 +60,14 @@ class  TVNumericValue  //: public TObject
 public:
 	/**@name Constants */
 	//@{
-		enum  EStatus {kNull, kKnown};
+		enum  EStatus { kNull, kKnown };
 	//@}
 
-	virtual	EStatus	getStatus()const =0 ;
+	virtual	EStatus	getStatus() const = 0 ;
 
-	virtual void setStatus(EStatus)=0;
+	virtual void setStatus( EStatus ) = 0;
 
-	virtual bool isNull() const=0;
+	virtual bool isNull() const = 0;
 
 	virtual ~TVNumericValue() { }
 

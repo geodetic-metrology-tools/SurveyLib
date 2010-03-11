@@ -8,7 +8,7 @@ by an other affine transformation when possible.
 // Patterns:
 //
 // 
-// Copyright 2000 CERN EST/SU. All rights reserved.
+// Copyright 2000-2010 CERN SU, M.Jones. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 
@@ -24,17 +24,11 @@ by an other affine transformation when possible.
 
 ////////////////////////////////////////////////////////////////
 // Forward declarations
-//
-class  TEnlargement;
-class  TTranslation;
-class  TReflection;
-class  THelmertTransformation;
 class  TCompositeAffTransform;
-
-#include  "TAngle.h"
+//
+// typedefs
 #include  "TAAffineTransformation.h"
 #include  "TRotationMatrix.h"
-// typedefs
 //
 //
 ////////////////////////////////////////////////////////////////
@@ -69,62 +63,68 @@ public:
 
 	/**@name Member Functions */
 	//@{
+		using TVAffineTransformation::operator();
+		using TAAffineTransformation::operator();
+
 		//! Copy Assignment Operator 
-		TRotation& operator=( const TRotation& );
+		TRotation & operator = ( const TRotation& );
 
-		//! Return a pointer to a clone of this transformation
-		TAAffineTransformation*  clone() const;
-
+		//! Multiplication by another rotation
+		TRotation operator * ( const TRotation & );
+		
 		//! Return element ri, cj of the rotation matrix
 		quad operator()(int row, int col) const;
 
-		//! Return element ri, cj of the rotation matrix
-//insure		quad& operator()(int row, int col);
-
-
-		//! Multiplication by an affine transformation
-		TCompositeAffTransform operator*(const TAAffineTransformation&);
-
 		//! set the 3 rotations taking angles values in the order specified by the enumerator
-		void setAllRotations(TRotationMatrix::ERotationType kR, quad& omega,quad& phi,quad& kappa);
+		void setAllRotations(TRotationMatrix::ERotationType kR, quad omega, quad phi, quad kappa);
 
 		//! return the rotation matrix as TRotationMatrix
 		TRotationMatrix getRotationMatrix() const;
 
-		//! Transform a vector of position
-		virtual bool transform( TPositionVector& ) const;
+		//! calculate the angles from the matrix with the specified rotation order
+		struct Angles getAngles(TRotationMatrix::ERotationType kR);
+
+		//! Create a composite transformation by applying this transformation to an affine transformation
+		//virtual  TCompositeAffTransform operator() ( const TAAffineTransformation & ) const;// {return TAAffineTransformation::operator ()(trans);}
+
+		//! Return a pointer to a clone of this transformation
+		virtual  TRotation *  clone() const;
+
+		//! Transform a position vector
+		virtual  bool transform( TPositionVector & ) const;
 
 		//! Transform a free vector
-		virtual bool transform( TFreeVector& ) const;
+		virtual  bool transform( TFreeVector & ) const;
 
 		//! Transform a rotation matrix
-		virtual bool  transform( TRotationMatrix& ) const;
+		virtual  bool  transform( TRotationMatrix & ) const;
 
-		//! Return the inverse rotation
-		TRotation inverse();
+		//! apply this transformation to a position vector
+		virtual  TPositionVector &  operator() ( TPositionVector & ) const;
 
-		//! Invert the rotation
-		void invert();
+		//! apply this transformation to a free vector
+		virtual  TFreeVector &  operator() ( TFreeVector & ) const;
 
-		//] calculate the angles from the matrix with the specified rotation order
-		struct Angles getAngles(TRotationMatrix::ERotationType kR);
+		//! apply this transformation to a Rotation Matrix
+		virtual  TRotationMatrix &  operator() ( TRotationMatrix & ) const;
+
+		//! Return a pointer to the inverse of this transformation
+		virtual  TRotation *  inverse() const;
+
+		//! Invert the transformation, replaces the current transformation parameters
+		virtual  void invert();
 
 	//@}
 		
 
 private:
 
-		//! fill the matrix of rotation with the specified type
-		void fillRotationMatrix(TRotationMatrix::ERotationType kR, quad om, quad p, quad k);
+	//! fill the matrix of rotation with the specified type
+	void fillRotationMatrix(TRotationMatrix::ERotationType kR, quad om, quad p, quad k);
 
-		//! Member Attributs
-		TRotationMatrix		fRotationMatrix; /*!< rotation matrix */
+	//! Member Attributs
+	TRotationMatrix		fRotationMatrix; /*!< rotation matrix */
 	
-
-	
-		
-
-
 	//ClassDef(TRotation, 1)
 };
 /*@}*/

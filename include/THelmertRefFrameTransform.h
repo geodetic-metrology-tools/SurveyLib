@@ -32,7 +32,7 @@
 //using namespace std;
 //
 class  THelmertTransformation;
-class  TEnlargement;
+class  TScaleFactor;
 class  TRotation;
 class  TTranslation;
 class  TCompositeAffTransform;
@@ -65,7 +65,7 @@ public:
 		THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, THelmertTransformation* );
 
 		/// Constructor taking parameters of a THelmertTransformation
-		THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, const TEnlargement&, const TRotation&, const TTranslation&);
+		THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, const TScaleFactor&, const TRotation&, const TTranslation&);
 
 		/// Copy Constructor 
 		THelmertRefFrameTransform(const  THelmertRefFrameTransform&);

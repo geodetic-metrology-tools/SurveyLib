@@ -65,9 +65,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	   be performed (in TLSCalculation). */
 
 	if (isCombinedCase)
-	{
-		// TODO: fix!
-		/*
+	{		
 		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 		const TSparseMatrix* secondDMTransposed = im->getSecondDgnMtrxTransposed();
 		TSparseMatrix* weightMInversed = im->getWeightMtrx()->invert_diagonal_matrix();
@@ -80,10 +78,8 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 		TSparseMatrix* bTimesWInvTimesBTrans = secondDM->multiply_three_returning_lower_triangular_F(*weightMInversed, *secondDMTransposed);
         delete secondDM;
 
-		void* factor = taucs_ccs_factor_llt_mf(*bTimesWInvTimesBTrans);
+		TSparseMatrix* temp = bTimesWInvTimesBTrans->decompose_Cholesky();
 		delete bTimesWInvTimesBTrans;
-
-		TSparseMatrix* temp = TSparseMatrix::getCholeskyFactor(factor);
 		TSparseMatrix* bTimesWInvTimesBTransInverted = temp->invert_lower_triangular_cholesky_decomposed();
 		delete temp;
 		im->setBTimesWInvTimesBTransInverted(bTimesWInvTimesBTransInverted);
@@ -126,7 +122,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 			(*solutionVector)(i) = solution[i];
 		}
 
-		delete[] solution;*/
+		delete[] solution;
 	}
 	else
 	{
@@ -187,10 +183,9 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 ////////////////////////////////////////////////////////////////
 //COMPUTES THE RESULTS MATRICES FOR FREE CALCULATION
 ////////////////////////////////////////////////////////////////
-bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm, bool isCombinedCase){
-
-	// TODO: fix!
-	/*if (isCombinedCase)
+bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm, bool isCombinedCase)
+{
+	if (isCombinedCase)
 	{
 		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 		const TSparseMatrix* secondDMTransposed = im->getSecondDgnMtrxTransposed();
@@ -205,34 +200,31 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		TSparseMatrix* secondDM = secondDMTransposed->transposed();		
 		TSparseMatrix* constraintFirstDMTransposed = constraintFirstDM->transposed();
 		TSparseMatrix* bTimesWInvTimesBTrans =
-			secondDM->multiply_three_returning_lower_triangular(*weightMInversed, *secondDMTransposed);
+			secondDM->multiply_three_returning_lower_triangular_F(*weightMInversed, *secondDMTransposed);
         delete secondDM;
 
-		void* factor = taucs_ccs_factor_llt_mf(*bTimesWInvTimesBTrans);
+		TSparseMatrix* temp = bTimesWInvTimesBTrans->decompose_Cholesky();
 		delete bTimesWInvTimesBTrans;
-
-		TSparseMatrix* temp = TSparseMatrix::getCholeskyFactor(factor);
 		TSparseMatrix* bTimesWInvTimesBTransInverted = temp->invert_lower_triangular_cholesky_decomposed();
 		delete temp;
 		im->setBTimesWInvTimesBTransInverted(bTimesWInvTimesBTransInverted);
 
-		TSparseMatrix* aTransTimesBTimesWInvTimesBTransInverted = firstDMTransposed->multiply(*bTimesWInvTimesBTransInverted);
+		TSparseMatrix* aTransTimesBTimesWInvTimesBTransInverted = firstDMTransposed->multiply_F(*bTimesWInvTimesBTransInverted);
 
-		temp = aTransTimesBTimesWInvTimesBTransInverted->multiply_returning_lower_triangular(*firstDM);
-		factor = taucs_ccs_factor_llt_mf(*temp);
+		temp = aTransTimesBTimesWInvTimesBTransInverted->multiply_returning_lower_triangular_F(*firstDM);
+		TSparseMatrix* decomposed = temp->decompose_Cholesky();
 		delete temp;
 		
-		temp = TSparseMatrix::getCholeskyFactor(factor);
-		TSparseMatrix* aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted = temp->invert_lower_triangular_cholesky_decomposed();
-		delete temp;
+		TSparseMatrix* aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted = decomposed->invert_lower_triangular_cholesky_decomposed();
+		delete decomposed;
 
 		TSparseMatrix* cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted =
-			constraintFirstDM->multiply(*aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted);
+			constraintFirstDM->multiply_F(*aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted);
 		delete constraintFirstDM;
 
 		TSparseMatrix* solutionMatrixA = cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted->
-				multiply_returning_lower_triangular(*constraintFirstDMTransposed);
-		factor = taucs_ccs_factor_llt_mf(*solutionMatrixA);
+				multiply_returning_lower_triangular_F(*constraintFirstDMTransposed);
+		decomposed = solutionMatrixA->decompose_Cholesky();
 		delete solutionMatrixA;
 
 		quad* aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec =
@@ -248,10 +240,9 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 			solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
 		}
 
-		quad* solution = new quad[misclV.dimension()];
-		taucs_supernodal_solve_llt(factor, solution, solutionVectorb);
+		quad* solution = decomposed->solve_eqn(solutionVectorb);
+		delete decomposed;		
 		delete[] solutionVectorb;
-		taucs_supernodal_factor_free(factor);
 
 		solutionVectorb = *constraintFirstDMTransposed * solution;
 		delete[] solution;
@@ -286,23 +277,22 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		im->setFirstDesignMatrix(firstDM);
 		TSparseMatrix* constraintFirstDMTransposed = constraintFirstDM->transposed();
 
-		TSparseMatrix* aTransW = firstDMTransposed->multiply(*weightM);
+		TSparseMatrix* aTransW = firstDMTransposed->multiply_F(*weightM);
 
-		TSparseMatrix* temp = aTransW->multiply_returning_lower_triangular(*firstDM);
-		void* factor = taucs_ccs_factor_llt_mf(*temp);
+		TSparseMatrix* temp = aTransW->multiply_returning_lower_triangular_F(*firstDM);
+		TSparseMatrix* decomposed = temp->decompose_Cholesky();
 		delete temp;
 		
-		temp = TSparseMatrix::getCholeskyFactor(factor);
-		TSparseMatrix* aTransTimesWTimesAInverted = temp->invert_lower_triangular_cholesky_decomposed();
-		delete temp;
+		TSparseMatrix* aTransTimesWTimesAInverted = decomposed->invert_lower_triangular_cholesky_decomposed();
+		delete decomposed;
 
 		TSparseMatrix* cstrATimesATransTimesWTimesAInverted =
-			constraintFirstDM->multiply(*aTransTimesWTimesAInverted);
+			constraintFirstDM->multiply_F(*aTransTimesWTimesAInverted);
 		delete constraintFirstDM;
 
 		TSparseMatrix* solutionMatrixA = cstrATimesATransTimesWTimesAInverted->
-				multiply_returning_lower_triangular(*constraintFirstDMTransposed);
-		factor = taucs_ccs_factor_llt_mf(*solutionMatrixA);
+				multiply_returning_lower_triangular_F(*constraintFirstDMTransposed);
+		decomposed = solutionMatrixA->decompose_Cholesky();
 		delete solutionMatrixA;
 
 		quad* aTransTimesWTimesATimesMiscVec = *aTransW * misclV;
@@ -316,10 +306,9 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 			solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
 		}
 
-		quad* solution = new quad[misclV.dimension()];
-		taucs_supernodal_solve_llt(factor, solution, solutionVectorb);
+		quad* solution = decomposed->solve_eqn(solutionVectorb);
+		delete decomposed;
 		delete[] solutionVectorb;
-		taucs_supernodal_factor_free(factor);
 
 		solutionVectorb = *constraintFirstDMTransposed * solution;
 		delete[] solution;
@@ -341,7 +330,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		}
 
 		delete[] solution;
-	}*/
+	}
 
 	return true;
 }

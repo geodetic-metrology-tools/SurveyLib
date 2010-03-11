@@ -103,7 +103,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 	TReflection  p( TReflection::kYEqual0 );
 
 
-	TCompositeAffTransform* comp = new TCompositeAffTransform(r2 * p * r );
+	TCompositeAffTransform* comp = new TCompositeAffTransform( r2( p( r ) ) );
 
 	//transform orientation vector to LA
 	vector = unitVector.getElements(TCoordSysFactory::k3DCartesian);
@@ -290,7 +290,7 @@ void	TModifiedLocalAstronomicalRF::initialiseMLA(TSpatialPosition origin)
 	TReflection  p( TReflection::kYEqual0 );
 
 
-	TCompositeAffTransform* comp = new TCompositeAffTransform(r2 * p * r );
+	TCompositeAffTransform* comp = new TCompositeAffTransform( r2( p( r ) ) );
 
 	//transform orientation vector to LA
 	vector = unitVector.getElements(TCoordSysFactory::k3DCartesian);

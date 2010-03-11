@@ -77,7 +77,7 @@ return *this;
 }
 
 
-TRotationMatrix TRotationMatrix::operator*( const TRotationMatrix& right)
+TRotationMatrix TRotationMatrix::operator*( const TRotationMatrix& right) const
 {//R2=R*R1
 	TRotationMatrix resultat;
 	resultat.setStatus(TVNumericValue::kNull);
@@ -102,7 +102,7 @@ TRotationMatrix TRotationMatrix::operator*( const TRotationMatrix& right)
 }
 
 
-TFreeVector TRotationMatrix::operator*(const TFreeVector& fv)
+TFreeVector TRotationMatrix::operator*(const TFreeVector& fv) const
 {// V2=R*V1
 	TFreeVector resultat (fv.getCoordSys());
 	resultat.setStatus(TVNumericValue::kNull);
@@ -119,7 +119,7 @@ TFreeVector TRotationMatrix::operator*(const TFreeVector& fv)
 }
 
 
-TPositionVector TRotationMatrix::operator*(const TPositionVector& pv)
+TPositionVector TRotationMatrix::operator*(const TPositionVector& pv) const
 {// V2=R*V1
 	TPositionVector resultat (pv.getCoordSys());
 	resultat.setStatus(TVNumericValue::kNull);

@@ -7,7 +7,7 @@ by an other rotation or vector. Sub classes for rotations around each axis*/
 // Patterns:
 //
 // 
-// Copyright 2000 CERN EST/SU. All rights reserved.
+// Copyright 2000-2010 CERN SU, M.Jones. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 
@@ -16,15 +16,10 @@ by an other rotation or vector. Sub classes for rotations around each axis*/
 //#include	"TROOT.h"
 //
 // other forward declarations
-#include  "TLength.h"
-#include  "TTranslation.h"
 #include  "TRotation.h"
-#include  "TEnlargement.h"
-#include  "TReflection.h"
-#include  "THelmertTransformation.h"
-#include  "TCompositeAffTransform.h"
-#include  "TAffineTransformWrapper.h"
-#include  "TGraph.h"
+#include  "TPositionVector.h"
+#include  "TFreeVector.h"
+#include  "TRotationMatrix.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -38,7 +33,7 @@ by an other rotation or vector. Sub classes for rotations around each axis*/
 TRotation::TRotation()
 {	// default constructor
 
-	fStatus = kNull;
+	this->setStatus( TVNumericValue::kNull );
 	fRotationMatrix.identity();
 
 }
@@ -46,7 +41,7 @@ TRotation::TRotation()
 TRotation::TRotation( const TRotationMatrix matrix)
 {//Constructor taking the rotation matrix
 	fRotationMatrix = matrix;
-	setStatus(kKnown);
+	this->setStatus( TVNumericValue::kKnown );
 }
 
 
@@ -56,9 +51,7 @@ TRotation::TRotation( const TRotationMatrix matrix)
 TRotation::TRotation(TRotationMatrix::ERotationType kR, quad omega, quad phi, quad kappa)
 : fRotationMatrix(kR, omega, phi, kappa)
 {//Constructor taking the radians values of the angles in the specified order
-	
-	//fillRotationMatrix(kR, omega, phi, kappa);
-	setStatus(kKnown);
+	this->setStatus( TVNumericValue::kKnown );
 }
 
 
@@ -90,53 +83,47 @@ TRotation&  TRotation::operator=(const TRotation& right)
 }
 
 
-TAAffineTransformation*  TRotation::clone() const
+//! Multiplication by another scaling transformation
+TRotation TRotation::operator*( const TRotation & right )
+{
+	TRotation result( this->getRotationMatrix() * right.getRotationMatrix() );
+	result.setStatus( this->testStatus(right) );
+	return result;
+}
+
+
+quad TRotation::operator()(int i, int j) const
+{// return the ri, cj element with 0<=i,j<=2
+	return fRotationMatrix.getElt(i,j);
+}
+
+void TRotation::setAllRotations(TRotationMatrix::ERotationType kR, quad om, quad p, quad k)
+{// set the 3 rotations taking angles values in the order specified by the enumerator
+	fRotationMatrix.setAllRotations(kR,om,p,k);
+}
+
+
+Angles TRotation::getAngles(TRotationMatrix::ERotationType kR)
+{// calculate the angles from the matrix with the specified rotation order
+	Angles xyz;
+	xyz=fRotationMatrix.getAngles(kR);
+
+	return xyz;
+}
+
+
+TRotation *  TRotation::clone() const
 {// Return a pointer to a clone of this transformation
 	return new TRotation( *this );
 }
 
 
-quad TRotation::operator()(int i, int j) const
-{
-	// return the ri, cj element with 0<=i,j<=2
-	return fRotationMatrix.getElt(i,j);
-}
-
-/*insure
-quad& TRotation::operator()(int i, int j) 
-{
-	// return the ri, cj element with 0<=i,j<=2
-	quad* d = new quad (fRotationMatrix.getElt(i,j));
-	return *d;
-}*/
-
 //////////////////////////////////////////////////////////////////////
-// Composition
-//////////////////////////////////////////////////////////////////////
-TCompositeAffTransform TRotation::operator*(const TAAffineTransformation& right)
-{
-	TAAffineTransformation* trans = new TRotation(*this);
-	TAffineTransformWrapper wrapper(trans);//effectue une copie avec clone
-	TCompositeAffTransform result(wrapper);
-	delete trans;
-
-	return result * right;
-}
-
-
-void TRotation::setAllRotations(TRotationMatrix::ERotationType kR, quad &om, quad &p, quad &k)
-{
-	fRotationMatrix.setAllRotations(kR,om,p,k);
-}
-
-
-
-//////////////////////////////////////////////////////////////////////
-// Transforme
+// Transformation methods
 //////////////////////////////////////////////////////////////////////
 
 bool TRotation::transform(TPositionVector& pv) const
-{/// Rotate a vector of position
+{/// Transform a position vector
 
 	bool trans = false;
 
@@ -150,7 +137,7 @@ bool TRotation::transform(TPositionVector& pv) const
 		
 		
 bool TRotation::transform(TFreeVector& fv) const
-{/// Rotate a free vector
+{/// Transform a free vector
 	bool trans = false;
 
 	if (isNull()==false)
@@ -163,7 +150,7 @@ bool TRotation::transform(TFreeVector& fv) const
 
 
 bool  TRotation::transform(TRotationMatrix& rm) const 
-{
+{// Transform a rotation matrix
 
 	bool trans = false;
 
@@ -175,19 +162,59 @@ bool  TRotation::transform(TRotationMatrix& rm) const
 	return trans;
 }
 
-
-
 	
-TRotation TRotation::inverse()
-{/// Return the inverse rotation
-	TRotation  copy(*this);
-	copy.invert();
+TPositionVector &  TRotation::operator() ( TPositionVector & right ) const
+{// apply this transformation to a position vector
+	if ( this->isNull() || right.isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	else
+	{
+		right = fRotationMatrix * right;
+	}
+	return right;
+}
+
+
+TFreeVector &  TRotation::operator() ( TFreeVector & right ) const
+{// apply this transformation to a free vector
+	if ( this->isNull() || right.isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	else
+	{
+		right = fRotationMatrix * right;
+	}
+	return right;
+}
+
+
+TRotationMatrix &  TRotation::operator() ( TRotationMatrix & right ) const
+{// apply this transformation to a Rotation Matrix
+	if ( this->isNull() || right.isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	else
+	{
+		right = fRotationMatrix * right;
+	}
+	return right;
+}
+
+
+TRotation * TRotation::inverse() const
+{//Return a pointer to the inverse of this transformation
+	TRotation * copy = new TRotation(*this);
+	copy->invert();
 	return copy;
 }
 	
 	
 void TRotation::invert()
-{
+{// Invert the transformation, replaces the current transformation parameters
 	fRotationMatrix.invert();
 	return;
 }
@@ -202,15 +229,6 @@ void TRotation::fillRotationMatrix(TRotationMatrix::ERotationType kR, quad om, q
 	return;
 }
 
-
-
-Angles TRotation::getAngles(TRotationMatrix::ERotationType kR)
-{
-	Angles xyz;
-	xyz=fRotationMatrix.getAngles(kR);
-
-	return xyz;
-}
 
 //////////////////////////////////////////////////////////////////////
 //END

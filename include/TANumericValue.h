@@ -4,7 +4,7 @@
 The TANumericValue class implements the interface for a
 numerical value.
  
-It is a abstract base class (PABC) that should be inherited 
+It is a abstract base class (ABC) that should be inherited 
 by all numerical values. 
 
 The methods declared in the TVNumericValue for accessing, 
@@ -32,8 +32,8 @@ Copyright 2002 CERN EST/SU. All rights reserved.
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-#include  <iostream>
-using namespace std;
+//#include  <iostream>
+//using namespace std;
 //
 #include  "TVNumericValue.h"
 //
@@ -45,7 +45,7 @@ using namespace std;
 	@{*/
 
 //!  The TANumericValue class implements the interface for a numerical value.
-class  TANumericValue : public TVNumericValue//: public TObject  
+class  TANumericValue : virtual public TVNumericValue//: public TObject  
 {
 public:
 	
@@ -60,7 +60,7 @@ public:
 		virtual  bool  isNull() const { return ( kNull == fStatus ); }
 
 		/*! Returns the computational status of the numeric value */
-		virtual  EStatus  getStatus() const  { return fStatus; }
+		virtual  TVNumericValue::EStatus  getStatus() const  { return fStatus; }
 		
 		/*! Sets the computational status of the numeric value */
 		virtual  void  setStatus( EStatus status )  { fStatus = status; return; }
@@ -74,15 +74,15 @@ protected:
 		/*! Determines the status of a numerical value that should
             be assigned when an operation is performed on this 
 	        numeric value and the given value. */
-		virtual EStatus testStatus(TANumericValue) const;
+		virtual TVNumericValue::EStatus testStatus( const TVNumericValue& ) const;
 		
 		/*! Sets the status of a numeric value when a value has been set  */
-		virtual  void  valueSet()  { if( isNull() ) fStatus = kKnown; return; }
+		virtual  void  valueSet()  { fStatus = kKnown; return; }
 	//@}
 
 private:
 
-	EStatus  fStatus;  /*!< Computational status of the numerical value */
+	TVNumericValue::EStatus  fStatus;  /*!< Computational status of the numerical value */
 	
 	//ClassDef(TANumericValue, 1)
 };

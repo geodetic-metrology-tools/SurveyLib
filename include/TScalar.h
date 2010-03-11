@@ -54,9 +54,9 @@ public:
 	//! Default Constructor
 	TScalar();
 	//! constructor taking a given Scalar value
-	TScalar(quad ScalarValue);
+	TScalar(quad value);
 	//! constructor taking a given Scalar value
-	TScalar(TDouble& ScalarValue);
+	TScalar(TDouble& value);
 	//! copy constructor
 	TScalar(const TScalar&);
 	//! Destructor

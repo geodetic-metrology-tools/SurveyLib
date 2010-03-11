@@ -87,15 +87,15 @@ public:
 
 		/*!Operator * for a TRotationMatrix
 			\return a TRotationMatrix */
-		TRotationMatrix operator*( const TRotationMatrix& );
+		TRotationMatrix operator*( const TRotationMatrix& ) const;
 
 		/*!Operator * for a TFreeVector
 			\return a TFreeVector */
-		TFreeVector operator*(const TFreeVector& );
+		TFreeVector operator*(const TFreeVector& ) const;
 
 		/*!Operator * for a TPositionVector
 			\return a TPositionVector */
-		TPositionVector operator*(const TPositionVector& );
+		TPositionVector operator*(const TPositionVector& ) const;
 		//@}
 
 		

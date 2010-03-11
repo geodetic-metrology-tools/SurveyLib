@@ -44,6 +44,7 @@ class TModifiedLocalAstronomicalRF;
 #include  "TAngle.h"
 #include  "TLength.h"
 
+#include  "TCoordSysFactory.h"
 #include  "TRefSystemFactory.h"
 
 
