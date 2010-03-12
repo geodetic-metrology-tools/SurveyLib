@@ -120,7 +120,7 @@ public:
 	/*! Gets the angle value in gons */
 	AngleValue getGonsValue() const;
 	/*! Gets the angle value in CC (100 microgons) */
-	AngleValue getCCValue() const;
+	AngleValue getSignedCCValue() const;
 	/*! Gets part of the angle value in degs */
 	Degrees	getDegreesValue() const;
 	/*! Gets part of the angle value in min */
@@ -244,7 +244,7 @@ inline AngleValue	TAngle::getGonsValue() const
 }
 
 
-inline AngleValue	TAngle::getCCValue() const
+inline AngleValue	TAngle::getSignedCCValue() const
 {	// get the CC (100 microgons) angular value for the angle
 	return fValue * kRadiansToGons * 10000;
 }
