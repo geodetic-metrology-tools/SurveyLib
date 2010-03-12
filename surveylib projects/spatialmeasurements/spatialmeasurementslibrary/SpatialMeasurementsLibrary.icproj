@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="SpatialMeasurementsLibrary"
+	ProjectGUID="{87345217-AB1D-48A7-982F-0A5D1FD2A4BA}"
+	VCNestedProjectGUID="{8798B04D-0237-4EFB-9F93-818CA6639FF5}"
+	VCNestedProjectFileName="SpatialMeasurementsLibrary.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

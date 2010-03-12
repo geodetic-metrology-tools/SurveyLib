@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="SpatialObjsTest"
+	ProjectGUID="{46F2CB5B-AEBC-449F-BE75-BA31DF34F54A}"
+	VCNestedProjectGUID="{504F052E-F1C4-4F3D-8EF5-C69550F0973F}"
+	VCNestedProjectFileName="SpatialObjsTest.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

@@ -9,6 +9,7 @@
 
 #include "TLSCalcLengthParam.h"
 #include "TLSCalcOrientationParam.h"
+#include "TLSCalcFreeVectorParam.h"
 #include "TAMeasurement.h"
 
 #include <hash_map>
@@ -90,5 +91,6 @@ protected:
 
 typedef TLSCalcWorkingUnknown<TLSCalcLengthParam> TLSCalcWorkingLength;
 typedef TLSCalcWorkingUnknown<TLSCalcOrientationParam> TLSCalcWorkingOrientation;
+typedef TLSCalcWorkingUnknown<TLSCalcFreeVectorParam> TLSCalcWorkingFreeVec;
 
 #endif //SU_LS_WORK_UNKNOWN

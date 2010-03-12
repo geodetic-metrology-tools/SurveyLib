@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="LSAlgoTests"
+	ProjectGUID="{BD8A1445-05D8-4206-89F8-70B519B38F33}"
+	VCNestedProjectGUID="{53F86087-1B36-4029-8430-4C3BAD5F28AC}"
+	VCNestedProjectFileName="LSAlgoTests.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

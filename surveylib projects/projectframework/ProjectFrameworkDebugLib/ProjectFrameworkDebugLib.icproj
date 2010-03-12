@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="ProjectFrameworkDebugLib"
+	ProjectGUID="{452DA534-E19C-4B04-AA57-81592D462A17}"
+	VCNestedProjectGUID="{E1705803-D2C4-4190-91AD-7158D7FA0ED4}"
+	VCNestedProjectFileName="ProjectFrameworkDebugLib.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>
