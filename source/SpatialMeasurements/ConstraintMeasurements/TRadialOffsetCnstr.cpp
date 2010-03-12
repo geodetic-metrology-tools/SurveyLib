@@ -34,7 +34,7 @@ fConstraintBearing(0.0), fConstraintWidth(0.0), fPoint()
 }
 
 
-TRadialOffsetCnstr::TRadialOffsetCnstr(TSpatialPointName cPtName, TLength cWidth, TAngle cBearing):
+TRadialOffsetCnstr::TRadialOffsetCnstr(int obsID, TSpatialPointName cPtName, TLength cWidth, TAngle cBearing):
 fConstraintBearing(cBearing), fConstraintWidth(cWidth)
 {//Constructor
 	fPoint = cPtName;
@@ -42,6 +42,8 @@ fConstraintBearing(cBearing), fConstraintWidth(cWidth)
 	fIdentifier = 0;
 	fComment = ""; 
 	fHeaderComment = "";
+
+	observationID = obsID;
 }
 
 
@@ -215,7 +217,3 @@ void	TRadialOffsetCnstr::ifNotDoneSetName(string name)
 	}
 }
 */
-
-
-
-		

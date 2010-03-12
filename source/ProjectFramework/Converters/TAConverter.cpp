@@ -156,7 +156,7 @@ void	TAConverter::writeStringLeftSep(const int width, const string data)
 	return;
 }
 
-void	TAConverter::writeDouble(const int width, const int pres, const double data)
+void	TAConverter::writeDouble(const int width, const int pres, const quad data)
 {
 	fStream->width(width);
 	fStream->precision(pres);
@@ -165,7 +165,7 @@ void	TAConverter::writeDouble(const int width, const int pres, const double data
 }
 
 
-void	TAConverter::writeDoubleSep(const int width, const int pres, const double data)
+void	TAConverter::writeDoubleSep(const int width, const int pres, const quad data)
 {
 	writeDouble(width, pres, data);
 	(*fStream)<<fSeparator;
@@ -213,6 +213,47 @@ void	TAConverter::readP100Comment(string comments)
 	}	
 
 	return;
+}
+
+
+string TAConverter::readOptional(const string& keyword)
+{
+	fStream->skipWhiteSpace();
+
+	string word;
+
+	if (fStream->peek() != '\n')
+	{
+		*fStream >> word;
+		
+		if (word != keyword)
+		{
+			fStream->seekg(-word.length(), ios_base::cur);
+			return "";
+		}
+
+		fStream->skipWhiteSpace();
+		*fStream >> word;
+		return word;
+	}
+	return "";
+}
+
+bool TAConverter::readOptionalExists(const string& keyword)
+{
+	//fStream->skipWhiteSpace();
+
+	string word;
+
+	*fStream >> word;
+	
+	if (word != keyword)
+	{
+		fStream->seekg(-word.length(), ios_base::cur);
+		return false;
+	}
+
+	return true;
 }
 
 

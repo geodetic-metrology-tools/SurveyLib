@@ -31,15 +31,15 @@ public:
 	~TLSParametricMtdComputer();
 
 
-	bool computeResults(TLSInputMatrices*, TLSResultsMatrices*);
+	bool computeResults(TLSInputMatrices*, TLSResultsMatrices*, bool isCombinedCase);
 
 	//!Computes the results matrices
 	/*!@param im a pointer to the LS input matrices*/
-	bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
+	bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*, bool isCombinedCase);
 
 	//!Computes the results matrices for a free calculation
 	/*!\param im a pointer to the LS input matrices*/
-	bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
+	bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*, bool isCombinedCase);
 
 	/*! Access to eventual error */
 	string		getError() const { return fError; }

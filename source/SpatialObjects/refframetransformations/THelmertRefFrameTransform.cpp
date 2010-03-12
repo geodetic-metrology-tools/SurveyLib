@@ -53,15 +53,13 @@ THelmertRefFrameTransform::THelmertRefFrameTransform( TAReferenceFrame* from,
 													  THelmertTransformation* transform )
 	: fFrom(from), fTo(to), fTransform(0)
 {	// constructor taking pointers to the source and destination reference frames
-	TCompositeAffTransform temp;
-	(*transform)*temp;
-	fTransform = new TCompositeAffTransform(temp);
+	fTransform = new TCompositeAffTransform(*transform);
 }
 
 
 THelmertRefFrameTransform::THelmertRefFrameTransform( TAReferenceFrame* from, 
 													  TAReferenceFrame* to, 
-													  const TEnlargement& enlarg, const TRotation& rot, const TTranslation& transl)
+													  const TScaleFactor& enlarg, const TRotation& rot, const TTranslation& transl)
 	: fFrom(from), fTo(to), fTransform(0)
 {
 	//TTranslation temp(0,0,0);
@@ -137,7 +135,7 @@ TARefFrameTransformation*  THelmertRefFrameTransform::inverse() const
 
 bool  THelmertRefFrameTransform::transform( TPositionVector& pv ) const
 {// transform a position vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(pv);
@@ -148,7 +146,7 @@ bool  THelmertRefFrameTransform::transform( TPositionVector& pv ) const
 
 bool  THelmertRefFrameTransform::transform( TFreeVector& fv ) const
 {// transform a free vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(fv);
@@ -159,7 +157,7 @@ bool  THelmertRefFrameTransform::transform( TFreeVector& fv ) const
 
 bool  THelmertRefFrameTransform::transform( TRotationMatrix& rmx ) const
 {// transform a Rotation Matrix
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(rmx);
@@ -174,8 +172,7 @@ void THelmertRefFrameTransform::setTransform(THelmertTransformation* helmert)
 	{
 		delete fTransform;
 	}
-	TAffineTransformWrapper wrapper (helmert);
-	fTransform = new TCompositeAffTransform(wrapper);
+	fTransform = new TCompositeAffTransform(*helmert);
 }
 
 
@@ -185,8 +182,7 @@ void THelmertRefFrameTransform::setTransform( TCompositeAffTransform* composite 
 	{
 		delete fTransform;
 	}
-	TAffineTransformWrapper wrapper (composite);
-	fTransform = new TCompositeAffTransform(wrapper);
+	fTransform = new TCompositeAffTransform(*composite);
 	return;
 }
 

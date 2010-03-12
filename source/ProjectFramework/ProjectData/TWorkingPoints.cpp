@@ -169,9 +169,9 @@ PointConstIter TWorkingPoints::getPointsEndIterator() const{
 ///////////////////////////////////////////////////////////////////
 // returns an iterator on a point, given its TSpatialPointName
 ///////////////////////////////////////////////////////////////////
-PointIterator TWorkingPoints::getPoint(TSpatialPointName spn) {
+PointIterator TWorkingPoints::getPoint(string spn) {
 
-	hash_map<string, PointIterator>::iterator i = pointsMap.find(spn.getName());
+	hash_map<string, PointIterator>::iterator i = pointsMap.find(spn);
 	if (i == pointsMap.end())
 	{
 		return fWorkingPoints.end();
@@ -179,17 +179,25 @@ PointIterator TWorkingPoints::getPoint(TSpatialPointName spn) {
 	return i->second;
 }
 
+PointIterator TWorkingPoints::getPoint(TSpatialPointName spn) {
+	return getPoint(spn.getName());
+}
+
 ///////////////////////////////////////////////////////////////////
 // returns a const iterator on a point, given its TSpatialPointName
 ///////////////////////////////////////////////////////////////////
-PointConstIter TWorkingPoints::getPoint(TSpatialPointName spn) const{
+PointConstIter TWorkingPoints::getPoint(string spn) const{
 
-	hash_map<string, PointIterator>::const_iterator i = pointsMap.find(spn.getName());
+	hash_map<string, PointIterator>::const_iterator i = pointsMap.find(spn);
 	if (i == pointsMap.end())
 	{
 		return fWorkingPoints.end();
 	}
 	return i->second;
+}
+
+PointConstIter TWorkingPoints::getPoint(TSpatialPointName spn) const {
+	return getPoint(spn.getName());
 }
 
 void TWorkingPoints::headerChanged(TSpatialPointName name)

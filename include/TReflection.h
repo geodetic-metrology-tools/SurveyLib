@@ -6,7 +6,7 @@ Reflection by a plane x=0, y=0, z=0 or Reflection by the plane x=y, x=z or y=z*/
 // Patterns:
 //
 // 
-// Copyright 2000 CERN EST/SU. All rights reserved.
+// Copyright 2000-10 CERN SU, M.Jones. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 
@@ -23,15 +23,9 @@ Reflection by a plane x=0, y=0, z=0 or Reflection by the plane x=y, x=z or y=z*/
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-class  TLength;
-class  TTranslation;
-class  TRotation;
+// Typedefs
 #include  "TAAffineTransformation.h"
-
 #include  "T3DMatrix.h"
-#include  "TCompositeAffTransform.h"
-
-// ETypedefs
 //
 //
 ////////////////////////////////////////////////////////////////
@@ -64,62 +58,66 @@ public:
 
 	/**@name Member Functions */
 	//@{
-		/// Copy Assignment Operator 
+		using TVAffineTransformation::operator();
+		using TAAffineTransformation::operator();
+
+		//! Copy Assignment Operator 
 		TReflection& operator=( const TReflection& );
 
-		// Return a pointer to a clone of this transformation
-		TAAffineTransformation*  clone() const;
+		/*//! Return element ri, cj of the Reflection matrix
+		quad operator()(int row, int col) const;
 
-
-		//! Multiplication by an affine transformation
-		TCompositeAffTransform operator*(  TAAffineTransformation& );
-
-		/// Return element ri, cj of the Reflection matrix
-		double operator()(int row, int col) const;
-
-		/// Return element ri, cj of the Reflection matrix
-		double& operator()(int row, int col);
+		//! Return element ri, cj of the Reflection matrix
+		quad& operator()(int row, int col);*/
 
 		//! return the reflection matrix
 		T3DMatrix getReflectionMatrix() const { return fReflectionMatrix; }
 
-		/// set the EType of Reflection cf enum
+		//! set the EType of Reflection cf enum
 		void setType( EType );
 
-		/// get the EType of Reflection
+		//! get the EType of Reflection
 		TReflection::EType getType() const;
 		
-		/// Transform a TPosition Vector
-		virtual bool transform( TPositionVector& ) const;
+		//! Create a composite transformation by applying this transformation to an affine transformation
+		//virtual  TCompositeAffTransform operator() ( const TAAffineTransformation & ) const;
+
+		//! Return a pointer to a clone of this transformation
+		TAAffineTransformation*  clone() const;
+
+		//! Transform a TPosition Vector
+		virtual bool transform( TPositionVector & ) const;
 
 		/// Transform a TFreeVector
 		virtual bool transform( TFreeVector & ) const;
 
-		/// Transform a TRotationMatrix
-		virtual bool transform( TRotationMatrix& ) const;
+		//! Transform a TRotationMatrix
+		virtual bool transform( TRotationMatrix & ) const;
 
-		/// Inverse
-		TReflection inverse();
+		//! apply this transformation to a position vector
+		virtual  TPositionVector &  operator() ( TPositionVector & ) const;
 
-		/// Invert = Inverse but replace the transformation
+		//! apply this transformation to a free vector
+		virtual  TFreeVector &  operator() ( TFreeVector & ) const;
+
+		//! apply this transformation to a Rotation Matrix
+		virtual  TRotationMatrix &  operator() ( TRotationMatrix & ) const;
+
+		//! Return a pointer to the inverse of this transformation
+		TReflection * inverse() const;
+
+		//! Invert the transformation, replaces the current transformation parameters
 		void invert();
 	//@}
 
 
 private:
-		// private functions
+	// private functions
+		void fillMatrix(const TReflection::EType);
 
-			void fillMatrix(const TReflection::EType);
-
-	 	//Member Attributes
-		
-			TReflection::EType	fReflectionType; /*!< type of reflexion */
-
-			T3DMatrix			fReflectionMatrix; /*!< reflexion matrix */
-
-		
-
-
+ 	//Member Attributes
+		TReflection::EType	fReflectionType; /*!< type of reflexion */
+		T3DMatrix			fReflectionMatrix; /*!< reflexion matrix */
 
 	//ClassDef(TReflection, 1)
 };

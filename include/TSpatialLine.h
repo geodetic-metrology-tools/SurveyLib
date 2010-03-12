@@ -128,10 +128,10 @@ typedef SpatialLineContainer::const_iterator LineConstIter;
 */
 	//!Less than operator
 /*	virtual bool							operator<(const TSpatialLine& right) const;
-	/*!@name Typedefs*/
+	!@name Typedefs
 	//@{
 	//! Type of the container used for the broadcast list
-/*	typedef list< TVMeasurableEntityLstnr* > LineListnrContainer;
+	typedef list< TVMeasurableEntityLstnr* > LineListnrContainer;
 	//! Type of an iterator pointing to an element of the broadcast list
 	typedef LineListnrContainer::iterator LineListnrIterator;
 	//! Type of a const iterator pointing to an element of the broadcast list
@@ -139,30 +139,30 @@ typedef SpatialLineContainer::const_iterator LineConstIter;
 	//@}
 
 	//!Sets the end points using their names
-	/*!@param wp a pointer to the TWorkingPoints object*/
-/*	virtual bool							setEndPoints(TWorkingPoints* wp);
+	!@param wp a pointer to the TWorkingPoints object
+	virtual bool							setEndPoints(TWorkingPoints* wp);
 
-	/*!@name Active / Inactive related*/
+	!@name Active / Inactive related
 	//@{
 	//!Activates the line
-/*	virtual void							activate();
+	virtual void							activate();
 	//!Disactivates the line
 	virtual void							disactivate();
 	//!Tells all the conerned objects that the line is activated
 	virtual void							sendActivatedToAll();
 	//!Tells all the conerned objects that the line is disactivated
 	virtual void							sendDisactivatedToAll();
-	/*!@return a true boolean if the line is active*/
-/*	virtual bool							isActive() const;
+	!@return a true boolean if the line is active
+	virtual bool							isActive() const;
 	//@}
 
 
 	//!Update thw line's equation count
-	/*!@param eqCountUpdt the update to the equation count*/
-/*	virtual void							updateEqCount(int eqCountUpdt);
+	!@param eqCountUpdt the update to the equation count
+	virtual void							updateEqCount(int eqCountUpdt);
 	//!Adds a listener to the broadcast list
-	/*! mel a pointer to the listener to be added. The pointer will be copied into the broadcast list*/
-/*	virtual void							addListener(TVMeasurableEntityLstnr*  mel);
+	! mel a pointer to the listener to be added. The pointer will be copied into the broadcast list
+	virtual void							addListener(TVMeasurableEntityLstnr*  mel);
 
 	//inherited from TVSpatialPtListener
 	//!Reacts to the activation of one of the end points
@@ -170,6 +170,6 @@ typedef SpatialLineContainer::const_iterator LineConstIter;
 	//!Reacts to the disactivation of one of the end points
 	virtual void							pointDisactivated();
 	//!Reacts to the change of state of one of the end points (other than active/inactive)
-	/*!@param um an element of the point update messages enumeration*/
-/*	virtual void							pointUpdated(TVSpatialPtListener::EUpdateMessage um);
+	!@param um an element of the point update messages enumeration
+	virtual void							pointUpdated(TVSpatialPtListener::EUpdateMessage um);
 */

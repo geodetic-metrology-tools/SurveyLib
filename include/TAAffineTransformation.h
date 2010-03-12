@@ -41,7 +41,7 @@ class  TCompositeAffTransform;
 	@{*/
 
 //! Classe de base abstraite pour une transformation affine
-class  TAAffineTransformation : public TANumericValue, virtual public TVAffineTransformation
+class  TAAffineTransformation : public TANumericValue, public TVAffineTransformation
 {
 public:
 
@@ -58,11 +58,16 @@ public:
 
 	/**@name Member Functions */
 	//@{
+		using TVAffineTransformation::operator();
+
 		//! Create a composite transformation by applying this transformation to an affine transformation
-		virtual TCompositeAffTransform operator() ( const TAAffineTransformation & ) const;
+		virtual  TCompositeAffTransform & operator() ( TCompositeAffTransform & ) const;
+
+		//! Create a composite transformation by applying this transformation to an affine transformation
+		virtual  TCompositeAffTransform operator() ( const TAAffineTransformation & ) const;
 
 		//! Return a pointer to a clone of this transformation
-		virtual  TAAffineTransformation*  clone() const = 0;
+		//virtual  TAAffineTransformation*  clone() const = 0;
 		
 		//! transform a spatial position
 		virtual  bool  transform( TSpatialPosition & ) const;
@@ -101,10 +106,10 @@ public:
 		virtual  TRotationMatrix &  operator() ( TRotationMatrix & ) const = 0;
 
 		//! Return a pointer to the inverse of this transformation
-		virtual TVAffineTransformation * inverse() const = 0;
+		//virtual TVAffineTransformation * inverse() const = 0;
 
 		//! Invert the transformation, replaces the current transformation parameters
-		virtual void invert() = 0;
+		//virtual void invert() = 0;
 	//@}
 
 

@@ -16,7 +16,7 @@
 // Forward declarations
 //
 #include	<float.h>
-#include	<math.h>
+#include	<mathimf.h>
 //#include	<assert.h>
 class    TSpatialPoint;
 class    TReferenceEllipsoid;

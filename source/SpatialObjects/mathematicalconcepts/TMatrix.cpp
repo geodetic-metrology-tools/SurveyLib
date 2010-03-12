@@ -15,9 +15,9 @@ Designed to be easiliy usable with matrix functions of the NagC math library */
 //#include	"TROOT.h"
 //
 // other forward declarations
-#include "TColumnVector.h"
 #include "TDouble.h"
 #include  "TMatrix.h"
+#include "TColumnVector.h"
 
 //#include	"vecmatdefs.h"
 //#include	"errmesg.h"
@@ -224,8 +224,8 @@ TColumnVector TMatrix::operator*(const TColumnVector& right) const
 	status=this->testStatus(right);
 	if (status!=kNull && numCols() == right.dimension())
 	{
-		dgemv(NoTranspose, numRows(), numCols(), 1.0, getFirstEltAdr(), numCols(), right.getFirstEltAdr(), 
-		1, 0.0, resultat.getFirstEltAdr(), 1);
+		dgemv(NoTranspose, numRows(), numCols(), 1.0, getFirstEltAdr(), numCols(), (double *) right.getFirstEltAdr(), 
+		1, 0.0, (double *) resultat.getFirstEltAdr(), 1);
 		resultat.setStatus(status);
 	}
 	return resultat;	
@@ -298,7 +298,7 @@ TColumnVector TMatrix::eqnSolve(const TColumnVector& B)
 
 	//computation of the solution vector X
 	TColumnVector solution (numRows());
-	nag_real_lin_eqn(numRows(), thisCopy->getFirstEltAdr(), numCols(), B.getFirstEltAdr(), solution.getFirstEltAdr(), &fail);
+	nag_real_lin_eqn(numRows(), thisCopy->getFirstEltAdr(), numCols(), (double *) B.getFirstEltAdr(), (double *) solution.getFirstEltAdr(), &fail);
 
 	// Possible errors: input unconsistency, matrix singularity, or memory allocation failure
 	if ((fail.code == NE_INT_ARG_LT) || (fail.code == NE_2_INT_ARG_LT) || 
@@ -630,7 +630,7 @@ TColumnVector TMatrix::dfeqn(TColumnVector* B,int n_pivot,int* pivot_i,int* pivo
 			s21=-(*B)(i);
 			for (j=0;j<=im1;j++)
 			{
-				s21 += (*this)(i,j) * (*B)(j);
+				s21 += (*this)(i,j) * (double) (*B)(j);
 			}
 			(*B)(i) = -(*this)(i,i) * s21;
 		} //label 232
@@ -643,7 +643,7 @@ TColumnVector TMatrix::dfeqn(TColumnVector* B,int n_pivot,int* pivot_i,int* pivo
 			for (j=0;j<=i;j++)
 			{
 				nmjp1 = n-j;
-				s22 += (*this)(nmi,nmjp1) * (*B)(nmjp1);
+				s22 += (*this)(nmi,nmjp1) * (double) (*B)(nmjp1);
 			}
 			(*B)(nmi) = -s22;
 		} // label 242 (i-loop)
@@ -722,8 +722,8 @@ bool TMatrix::invertSym()
 
 		Mmn	mxr = matrix(istrt,iend ,jstrt ,jend, &errflg);
      
- 		/* allocate pointers to rows */
-/*		(double**) mxr.mat = new double* [fNbRows];
+ 		// allocate pointers to rows
+		(double**) mxr.mat = new double* [fNbRows];
 
 		while ( istrt <= iend)
 		{
@@ -853,11 +853,11 @@ TMatrix	TMatrix::aasen_inv2()
 	{	// INVERSION DE N
 		(*res) = invL->transposed() * (*invT) * (*invL);
 
-		/* Compute inverse of matrix N by swapping back any rows and columns which 
-		were changed to compute the L matrix. 
-		Simultaneously set N back to the original matrix */
+	//	 Compute inverse of matrix N by swapping back any rows and columns which 
+	//	were changed to compute the L matrix. 
+	//	Simultaneously set N back to the original matrix
 
-/*		for (i=n;i>=0;i--)
+		for (i=n;i>=0;i--)
 		{
 			if ((ii = vcswap[i])!=0)
 			{
@@ -894,8 +894,8 @@ TMatrix	TMatrix::aasen_inv2()
 	delete L,invL,T,invT;
 
 	return *res;
-}*/
-/*
+}
+
 void	TMatrix::aasen_dcmp2(TMatrix* N,TMatrix* L,TMatrix* T, valarray<double> *vcswap ) {
 // decomposes the N matrix
 
@@ -1005,10 +1005,10 @@ void	TMatrix::aasen_dcmp2(TMatrix* N,TMatrix* L,TMatrix* T, valarray<double> *vc
 	}
 
 	return;
-}*/
+}
 
 
-/*
+
 TMatrix TMatrix::dfinv(int* n_pivot,int* pivot_i,int* pivot_j)
 {// inversion of this matrix. Returns a matrix containing the invert (latter not affected)
  // It must be applied on the matrix returned by dfact(...)

@@ -3,15 +3,17 @@
 //
 /** Classe pour une transformation helmert X1 = Fact*R*X+T*/
 //
-// Copyright 2000, CERN EST/SU. All rights reserved.
+// Copyright 2000-2010 CERN SU, M.Jones. All rights reserved.
 /////////////////////////////////////////////////////////////////////////////
 
 //For ROOT//////////////////////////////////////////////////////
 //#include	"TROOT.h"
 //
 // other forward declarations
-
 #include  "THelmertTransformation.h"
+#include  "TPositionVector.h"
+#include  "TFreeVector.h"
+#include  "TRotationMatrix.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -23,37 +25,44 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-THelmertTransformation::THelmertTransformation():fEnlargement(1.0),fRotation(),fTranslation()
-{
-	fStatus = kNull;
+THelmertTransformation::THelmertTransformation()
+:fScaleFactor(1.0), fRotation(), fTranslation()
+{// default constructor
+	this->setStatus( TVNumericValue::kNull );
 }
 
-THelmertTransformation::THelmertTransformation( const TEnlargement& scale, const TRotation& rotate, const TTranslation& trans)
-{
-	fEnlargement = scale;
-	fRotation = rotate;
-	fTranslation = trans;
-	if (scale.getStatus() != kNull && rotate.getStatus() != kNull && trans.getStatus() != kNull)
-	{setStatus(kKnown);}
+THelmertTransformation::THelmertTransformation( const TScaleFactor& scale, const TRotation& rotate, const TTranslation& trans)
+:fScaleFactor(scale), fRotation(rotate), fTranslation(trans)
+{//Constructor
+	if (scale.getStatus() != TVNumericValue::kNull 
+		&& rotate.getStatus() != TVNumericValue::kNull 
+		&& trans.getStatus() != TVNumericValue::kNull)
+	{
+		setStatus(TVNumericValue::kKnown);
+	}
 	else
-	{setStatus(kNull);}
+	{
+		setStatus(TVNumericValue::kNull);
+	}
 }
 
 
-THelmertTransformation::THelmertTransformation( const TRotation& rotate, const TTranslation& trans):fEnlargement(1.0)
-{
-	fRotation = rotate;
-	fTranslation = trans;
-	if (rotate.getStatus() != kNull && trans.getStatus() != kNull)
-	{setStatus(kKnown);}
+THelmertTransformation::THelmertTransformation( const TRotation& rotate, const TTranslation& trans)
+:fScaleFactor(1.0), fRotation(rotate), fTranslation(trans)
+{// Constructor
+	if (rotate.getStatus() != TVNumericValue::kNull 
+		&& trans.getStatus() != TVNumericValue::kNull)
+	{
+		setStatus(TVNumericValue::kKnown);
+	}
 	else
-	{setStatus(kNull);}
-
+	{
+		setStatus(TVNumericValue::kNull);
+	}
 }
 
 THelmertTransformation::THelmertTransformation( const  THelmertTransformation& original )
 {	// copy constructor
-	
 
 	*this = original;
 }
@@ -68,87 +77,75 @@ THelmertTransformation::~THelmertTransformation()
 // Member Functions
 //////////////////////////////////////////////////////////////////////
 
-THelmertTransformation&  THelmertTransformation::operator=(const THelmertTransformation& right)
+THelmertTransformation &  THelmertTransformation::operator=(const THelmertTransformation & right)
 {	// Copy Assignment operator
 
 	if (this != &right)
 	{
-		fEnlargement = right.getEnlargement();
+		fScaleFactor = right.getScaleFactor();
 		fRotation = right.getRotation();
 		fTranslation = right.getTranslation();
 		setStatus(right.getStatus());
-
 	}
 	return *this;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Composition
-//////////////////////////////////////////////////////////////////////
-TCompositeAffTransform THelmertTransformation::operator*( const TAAffineTransformation& right )
-{
-	TAAffineTransformation* trans = new THelmertTransformation(*this);
-	TAffineTransformWrapper wrapper(trans);
-	TCompositeAffTransform result(wrapper);
-	delete trans;
 
-	return result * right;
+void THelmertTransformation::setTransformations(const TScaleFactor& scale, const TRotation& rotate, const TTranslation& trans)
+{ // Set all 3 transformations
+	fScaleFactor = scale;
+	fRotation = rotate;
+	fTranslation = trans;
+
+	if (scale.getStatus() != TVNumericValue::kNull 
+		&& rotate.getStatus() != TVNumericValue::kNull 
+		&& trans.getStatus() != TVNumericValue::kNull)
+	{
+		setStatus(TVNumericValue::kKnown);
+	}
+	else
+	{
+		setStatus(TVNumericValue::kNull);
+	}	
+	return;
 }
 
 
-
-TAAffineTransformation*  THelmertTransformation::clone() const
+THelmertTransformation*  THelmertTransformation::clone() const
 {// Return a pointer to a clone of this transformation
 	return new THelmertTransformation( *this );
 }
 
 
-void THelmertTransformation::setTransformations(const TEnlargement& scaling, const TRotation& rotate, const TTranslation& trans)
-{ 
-	fEnlargement = scaling;
-	fRotation = rotate;
-	fTranslation = trans;
-	return;
-}
-
-
-THelmertTransformation* THelmertTransformation::getTransformations() const
-{
-	return new THelmertTransformation(*this);
-}
-	
-
 //////////////////////////////////////////////////////////////////////
-// Transforme
+// Transformation methods
 //////////////////////////////////////////////////////////////////////
 bool  THelmertTransformation::transform(TPositionVector& pv) const
-{/// Return a transformed position vector
+{/// Transform a position vector
 	bool trans = false;
 	if (isNull()==false)
 	{	
-		trans = fRotation.transform(pv);
+		trans = rotation()->transform(pv);
 		if (trans == true)
-			trans = fEnlargement.transform(pv);
+			trans = scaleFactor()->transform(pv);
 		if (trans ==true)
-			trans = fTranslation.transform(pv);
-
+			trans = translation()->transform(pv);
 	}
 	return trans;
 }
 
 
 bool  THelmertTransformation::transform(TFreeVector& fv ) const 
-{/// Return a transformed free vector
+{/// Transform a free vector
 	bool trans = false;
 
 	if (isNull()==false)
 	{	
-		trans = fRotation.transform(fv);
+		trans = rotation()->transform(fv);
 		if (trans == true)
-			trans = fEnlargement.transform(fv);
+			trans = scaleFactor()->transform(fv);
 		if (trans ==true)
-			trans = fTranslation.transform(fv);
-
+			trans = translation()->transform(fv);
 	}
 	return trans;
 }
@@ -156,38 +153,77 @@ bool  THelmertTransformation::transform(TFreeVector& fv ) const
 
 
 bool  THelmertTransformation::transform(TRotationMatrix& rm) const
-{/// Return a transformed Rotation Matrix
+{/// Transform a Rotation Matrix
 	bool trans = false;
 
 	if (isNull()==false)
 	{	
-		trans = fRotation.transform(rm);
+		trans = rotation()->transform(rm);
 		if (trans == true)
-			trans = fEnlargement.transform(rm);
+			trans = scaleFactor()->transform(rm);
 		if (trans ==true)
-			trans = fTranslation.transform(rm);
-
+			trans = translation()->transform(rm);
 	}
 	return trans;
 }
 
 
+TPositionVector &  THelmertTransformation::operator() ( TPositionVector & right ) const
+{// apply this transformation to a position vector
+	if ( this->isNull() || right.isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	else
+	{
+		fTranslation( fScaleFactor( fRotation( right ) ) ); 
+	}
+	return right;
+}
 
 
-THelmertTransformation THelmertTransformation::inverse()
+TFreeVector &  THelmertTransformation::operator() ( TFreeVector & right ) const
+{// apply this transformation to a free vector
+	if ( this->isNull() || right.isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	else
+	{
+		fTranslation( fScaleFactor( fRotation( right ) ) ); 
+	}
+	return right;
+}
+
+
+TRotationMatrix &  THelmertTransformation::operator() ( TRotationMatrix & right ) const
+{// apply this transformation to a Rotation Matrix
+	if ( this->isNull() || right.isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	else
+	{
+		fTranslation( fScaleFactor( fRotation( right ) ) ); 
+	}
+	return right;
+}
+
+
+THelmertTransformation * THelmertTransformation::inverse() const
 {/// Return the inverse ht X = R~-1*(1/factor)(x-T);
-	THelmertTransformation inver(*this);
-	inver.invert();
+	THelmertTransformation * inver = new THelmertTransformation(*this);
+	inver->invert();
 	return inver;
 }
 
 
 void THelmertTransformation::invert()
 {/// Invert the transformation 
-	fEnlargement.invert();
+	fScaleFactor.invert();
 	fRotation.invert();
 	fTranslation.invert();
-	fTranslation=(fRotation.getRotationMatrix()*fTranslation.getVector())*fEnlargement.getFactor();
+	fTranslation=(fRotation.getRotationMatrix()*fTranslation.getVector())*fScaleFactor.getScaleFactor();
 	return;
 }
 

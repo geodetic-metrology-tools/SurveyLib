@@ -9,507 +9,10 @@ public:
 	V c;
 };
 
-int tuple_cmp(const void *a, const void *b);
-int binary_search(int arr[], int size, int value);
-
-TSparseMatrix::TSparseMatrix(int columns, int rows, int nnz, list<double>* vals, list<int>* rowInds, list<int>* colPtr)
-{
-	matrix = taucs_ccs_create(rows, columns, nnz, TAUCS_DOUBLE);
-	list<double>::const_iterator iter = vals->begin();
-	list<int>::const_iterator iterR = rowInds->begin();
-	list<int>::const_iterator iterC = colPtr->begin();
-	for (int i = 0; i < nnz; i++)
-	{
-		matrix->taucs_values[i] = *iter;
-		matrix->rowind[i] = *iterR;
-		iter++;
-		iterR++;
-	}
-	for (int i = 0; i <= columns; i++)
-	{
-		matrix->colptr[i] = *iterC;
-		iterC++;
-	}
-}
-
-TSparseMatrix::TSparseMatrix(const TSparseMatrix& other)
-{
-	matrix = other.matrix;
-	lowerTriangular = other.lowerTriangular;
-}
-
-TSparseMatrix::TSparseMatrix(taucs_ccs_matrix* m)
-{
-	matrix = m;
-	if (m->flags & TAUCS_LOWER)
-	{
-		lowerTriangular = true;
-	}
-}
-
-TSparseMatrix::~TSparseMatrix()
-{
-	taucs_ccs_free(matrix);
-}
-
-TSparseMatrix* TSparseMatrix::transposed() const
-{
-	int nnz = matrix->colptr[matrix->n];
-	taucs_ccs_matrix *result = taucs_ccs_create(matrix->n, matrix->m, nnz, TAUCS_DOUBLE);
-
-	int i;
-	Tuple<int, double, int> *t = new Tuple<int, double, int>[nnz];
-	for (i = 0; i < nnz; i++)
-	{
-		t[i].a = matrix->rowind[i];
-		t[i].b = matrix->taucs_values[i];
-		t[i].c = i;
-	}
-	qsort(t, nnz, sizeof(Tuple<int, double, int>), tuple_cmp);
-
-	int last = t[0].a;
-	int used = 1;
-	result->colptr[0] = 0;
-	for (i = 0; i < nnz; i++)
-	{
-		while (t[i].a != last)
-		{
-			result->colptr[used++] = i;
-			last++;
-		}
-		result->taucs_values[i] = t[i].b;
-		result->rowind[i] = binary_search(matrix->colptr, matrix->n + 1, t[i].c);
-	}
-	result->colptr[used] = nnz;
-
-	delete[] t;
-
-	return new TSparseMatrix(result);
-}
-
-TSparseMatrix::operator taucs_ccs_matrix*()
-{
-	return matrix;
-}
-
-TSparseMatrix* TSparseMatrix::multiply(const TSparseMatrix& second) const
-{
-	int secondColumns = second.columnsCount();
-	int *colptr = new int[secondColumns + 1];
-	double *resultColumn = new double[matrix->m];
-	List<double> results;
-	List<int> rowInds;
-    int i, k, l;
-    taucs_ccs_matrix *result;
-    colptr[0] = 0;
-    for (i = 0; i < matrix->m; i++)
-    {
-		resultColumn[i] = 0;
-    }
-    for (i = 0; i < secondColumns; i++)
-    {
-        for (k = second.colPointers()[i]; k < second.colPointers()[i + 1]; k++)
-        {
-            for (l = matrix->colptr[second.rowIndices()[k]]; l < matrix->colptr[second.rowIndices()[k] + 1]; l++)
-            {
-				resultColumn[matrix->rowind[l]] += second.values()[k] * matrix->taucs_values[l];
-            }
-        }
-        for (k = 0; k < matrix->m; k++)
-        {
-            if (resultColumn[k] != 0)
-            {
-                results.add(resultColumn[k]);
-                rowInds.add(k);
-				resultColumn[k] = 0;
-            }
-        }
-        colptr[i + 1] = results.size();
-    }
-    result = taucs_ccs_create(matrix->m, secondColumns, results.size(), TAUCS_DOUBLE);
-    for (i = 0; i <= secondColumns; i++)
-    {
-        result->colptr[i] = colptr[i];
-    }
-	results.initIterator();
-	rowInds.initIterator();
-	for (i = 0; results.hasMore(); i++)
-	{
-        result->taucs_values[i] = results.nextElement();
-        result->rowind[i] = rowInds.nextElement();
-	}
-
-	delete[] colptr;
-	delete[] resultColumn;
-
-    return new TSparseMatrix(result);
-}
-
-double TSparseMatrix::operator ()(int row, int column)
-{
-	int i = matrix->colptr[column];
-	while (matrix->rowind[i] < row && i < matrix->colptr[column + 1])
-	{
-		i++;
-	}
-	if (matrix->rowind[i] == row && i < matrix->colptr[column + 1])
-	{
-		return matrix->taucs_values[i];
-	}
-	return 0;
-}
-
-double* TSparseMatrix::operator *(const TColumnVector& right) const
-{
-	int i, j;
-
-	double* result = new double[matrix->m];
-	
-	for (i = 0; i < matrix->m; i++)
-	{
-		result[i] = 0;
-	}
-
-    for (i = 0; i < matrix->n; i++)
-	{
-		if (right(i) != 0)
-		{
-			for (j = matrix->colptr[i]; j < matrix->colptr[i + 1]; j++)
-			{
-				result[matrix->rowind[j]] += right(i) * matrix->taucs_values[j];
-			}
-		}
-	}
-
-	return result;
-}
-
-TSparseMatrix* TSparseMatrix::getCholeskyFactor(void* symbolic)
-{
-	TSparseMatrix *L = new TSparseMatrix(taucs_supernodal_factor_to_ccs(symbolic));
-	taucs_supernodal_factor_free(symbolic);
-
-	return L;
-}
-
-TSparseMatrix* TSparseMatrix::deepCopy(TSparseMatrix* matrix)
-{
-	taucs_ccs_matrix* m = taucs_ccs_create(matrix->rowsCount(), matrix->columnsCount(), matrix->colPointers()[matrix->columnsCount()], TAUCS_DOUBLE);
-
-	for (int i = 0; i <= matrix->columnsCount(); i++)
-	{
-		m->colptr[i] = matrix->colPointers()[i];
-	}
-	for (int i = 0; i < matrix->rowsCount(); i++)
-	{
-		m->rowind[i] = matrix->rowIndices()[i];
-	}
-	for (int i = 0; i < matrix->colPointers()[matrix->columnsCount()]; i++)
-	{
-		m->taucs_values[i] = matrix->values()[i];
-	}
-
-	TSparseMatrix* result = new TSparseMatrix(m);
-	result->lowerTriangular = matrix->isLowerTriangular();
-
-	return result;
-}
-
-TSparseMatrix* TSparseMatrix::invert_lower_triangular() const
-{
-	if (!(this->isLowerTriangular()))
-	{
-		return NULL;
-	}
-	
-	TSparseMatrix* transposed = this->transposed(); // TODO: isn't there another way?
-	
-	Vector<double> results(matrix->colptr[matrix->n] * 4); // TODO: perhaps 4 times is too much?
-	Vector<int> rowInds(matrix->colptr[matrix->n] * 4);
-	int *colptr = new int[matrix->n + 1];
-
-	int i, j, k, l;
-	double sum = 0;
-
-	colptr[0] = 0;
-
-    for (i = 0; i < matrix->n; i++)
-    {
-        results.add(1.0 / matrix->taucs_values[matrix->colptr[i]]);
-        rowInds.add(i);
-
-        for (j = i + 1; j < matrix->n; j++)
-        {
-			int size = results.size();
-            for (k = colptr[i], l = transposed->colPointers()[j];
-                k < size &&
-                rowInds[k] < j &&
-                l < transposed->colPointers()[j + 1] &&
-                transposed->rowIndices()[l] < j; )
-            {
-                if (rowInds[k] == transposed->rowIndices()[l])
-                {
-                    sum -= results[k] * transposed->values()[l];
-                    k++;
-                    l++;
-                }
-                else if (transposed->rowIndices()[l] < rowInds[k])
-                {
-                    l++;
-                }
-                else
-                {
-                    k++;
-                }
-            }
-
-            if (sum != 0)
-            {
-                rowInds.add(j);
-                results.add(sum / matrix->taucs_values[matrix->colptr[j]]);
-                sum = 0;
-            }
-        }
-        colptr[i + 1] = results.size();
-	}
-	
-	delete transposed;
-
-	taucs_ccs_matrix *result = taucs_ccs_create(matrix->n, matrix->n, results.size(), TAUCS_DOUBLE | TAUCS_SYMMETRIC | TAUCS_LOWER);
-
-	for (i = 0; i <= matrix->n; i++)
-	{
-		result->colptr[i] = colptr[i];
-	}
-	for (i = 0; i < results.size(); i++)
-	{
-		result->rowind[i] = rowInds[i];
-		result->taucs_values[i] = results[i];
-	}
-
-	delete[] colptr;
-
-	return new TSparseMatrix(result);
-}
-
-double* TSparseMatrix::multiply_returning_diagonal(const TSparseMatrix& second) const
-{
-	double* result = new double[second.columnsCount()];
-    int i, k, l, secondN = second.columnsCount() / 2;
-    for (i = 0; i < secondN; i++)
-    {
-		result[i] = 0;
-        for (k = second.colPointers()[i]; k < second.colPointers()[i + 1]; k++)
-        {
-			l = matrix->colptr[second.rowIndices()[k]];
-			while (matrix->rowind[l] < i && l < matrix->colptr[second.rowIndices()[k] + 1])
-			{
-				l++;
-			}
-			if (matrix->rowind[l] == i && l < matrix->colptr[second.rowIndices()[k] + 1])
-			{
-				result[i] += matrix->taucs_values[l] * second.values()[k];
-			}
-        }
-    }
-    for ( ; i < second.columnsCount(); i++)
-    {
-		result[i] = 0;
-        for (k = second.colPointers()[i]; k < second.colPointers()[i + 1]; k++)
-        {
-			l = matrix->colptr[second.rowIndices()[k] + 1] - 1;
-			while (matrix->rowind[l] > i && l >= matrix->colptr[second.rowIndices()[k]])
-			{
-				l--;
-			}
-			if (matrix->rowind[l] == i && l >= matrix->colptr[second.rowIndices()[k]])
-			{
-				result[i] += matrix->taucs_values[l] * second.values()[k];
-			}
-		}
-    }
-
-	return result;
-}
-
-double* TSparseMatrix::multiply_three_returning_diagonal(const TSparseMatrix& second, const TSparseMatrix& third) const
-{
-	double* result = new double[third.columnsCount()]; // TODO: is that correct?
-	int i, k, j, l, thirdN = third.columnsCount() / 2;
-    for (i = 0; i < thirdN; i++)
-    {
-		result[i] = 0;
-        for (k = third.colPointers()[i]; k < third.colPointers()[i + 1]; k++)
-        {
-            for (l = second.colPointers()[third.rowIndices()[k]]; l < second.colPointers()[third.rowIndices()[k] + 1]; l++)
-            {
-				j = matrix->colptr[second.rowIndices()[l]];
-				while (matrix->rowind[j] < i && j < matrix->colptr[second.rowIndices()[l] + 1])
-				{
-					j++;
-				}
-				if (matrix->rowind[j] == i && j < matrix->colptr[second.rowIndices()[l] + 1])
-				{
-					result[i] += third.values()[k] * second.values()[l] * matrix->taucs_values[j];
-				}
-            }
-		}
-	}
-    for ( ; i < third.columnsCount(); i++)
-    {
-		result[i] = 0;
-        for (k = third.colPointers()[i]; k < third.colPointers()[i + 1]; k++)
-        {
-            for (l = second.colPointers()[third.rowIndices()[k]]; l < second.colPointers()[third.rowIndices()[k] + 1]; l++)
-            {
-				j = matrix->colptr[second.rowIndices()[l] + 1] - 1;
-				while (matrix->rowind[j] > i && j >= matrix->colptr[second.rowIndices()[l]])
-				{
-					j--;
-				}
-				if (matrix->rowind[j] == i && j >= matrix->colptr[second.rowIndices()[l]])
-				{
-					result[i] += third.values()[k] * second.values()[l] * matrix->taucs_values[j];
-				}
-            }
-		}
-	}
-	return result;
-}
-
-TSparseMatrix* TSparseMatrix::multiply_three_returning_lower_triangular(const TSparseMatrix& second, const TSparseMatrix& third) const
-{
-	int *colptr = new int[second.columnsCount() + 1];
-	double *resultColumn = new double[matrix->m];
-	List<double> results;
-	List<int> rowInds;
-    int i, k, l, j;
-    taucs_ccs_matrix *result;
-    colptr[0] = 0;
-    for (i = 0; i < matrix->m; i++)
-    {
-		resultColumn[i] = 0;
-    }
-    for (i = 0; i < third.columnsCount(); i++)
-    {
-        for (k = third.colPointers()[i]; k < third.colPointers()[i + 1]; k++)
-        {
-            for (l = second.colPointers()[third.rowIndices()[k]]; l < second.colPointers()[third.rowIndices()[k] + 1]; l++)
-            {
-				for (j = matrix->colptr[second.rowIndices()[l] + 1] - 1; j >= matrix->colptr[second.rowIndices()[l]] && matrix->rowind[j] >= i; j--)
-				{
-					resultColumn[matrix->rowind[j]] += third.values()[k] * second.values()[l] * matrix->taucs_values[j];
-				}
-            }
-        }
-        for (k = 0; k < matrix->m; k++)
-        {
-            if (resultColumn[k] != 0)
-            {
-                results.add(resultColumn[k]);
-                rowInds.add(k);
-				resultColumn[k] = 0;
-            }
-        }
-		colptr[i + 1] = results.size();
-    }
-    result = taucs_ccs_create(matrix->m, third.columnsCount(), results.size(), TAUCS_DOUBLE | TAUCS_SYMMETRIC | TAUCS_LOWER);
-	for (i = 0; i <= third.columnsCount(); i++)
-	{
-		result->colptr[i] = colptr[i];
-	}
-	results.initIterator();
-	rowInds.initIterator();
-	for (i = 0; results.hasMore(); i++)
-	{
-        result->taucs_values[i] = results.nextElement();
-        result->rowind[i] = rowInds.nextElement();
-	}
-
-	delete[] colptr;
-	delete[] resultColumn;
-
-    return new TSparseMatrix(result);
-}
-
-TSparseMatrix* TSparseMatrix::multiply_returning_lower_triangular(const TSparseMatrix& second) const
-{
-	int secondCols = second.columnsCount();
-	int *colptr = new int[secondCols + 1];
-	double *resultColumn = new double[matrix->m];
-	List<double> results;
-	List<int> rowInds;
-    int i, k, l;
-    taucs_ccs_matrix *result;
-    colptr[0] = 0;
-    for (i = 0; i < matrix->m; i++)
-    {
-		resultColumn[i] = 0;
-    }
-    for (i = 0; i < secondCols; i++)
-    {
-        for (k = second.colPointers()[i]; k < second.colPointers()[i + 1]; k++)
-        {
-            for (l = matrix->colptr[second.rowIndices()[k] + 1] - 1; l >= matrix->colptr[second.rowIndices()[k]] && matrix->rowind[l] >= i; l--)
-            {
-				resultColumn[matrix->rowind[l]] += second.values()[k] * matrix->taucs_values[l];
-            }
-        }
-        for (k = 0; k < matrix->m; k++)
-        {
-            if (resultColumn[k] != 0)
-            {
-                results.add(resultColumn[k]);
-                rowInds.add(k);
-				resultColumn[k] = 0;
-            }
-        }
-        colptr[i + 1] = results.size();
-    }
-    result = taucs_ccs_create(matrix->m, secondCols, results.size(), TAUCS_DOUBLE | TAUCS_SYMMETRIC | TAUCS_LOWER);
-    for (i = 0; i <= secondCols; i++)
-    {
-        result->colptr[i] = colptr[i];
-    }
-	results.initIterator();
-	rowInds.initIterator();
-	for (i = 0; results.hasMore(); i++)
-	{
-        result->taucs_values[i] = results.nextElement();
-        result->rowind[i] = rowInds.nextElement();
-	}
-
-	delete[] colptr;
-	delete[] resultColumn;
-
-    return new TSparseMatrix(result);
-}
-
-void TSparseMatrix::multiply_by_number(double n)
-{
-	for (int i = 0; i < matrix->colptr[matrix->n]; i++)
-	{
-		matrix->taucs_values[i] *= n;
-	}
-}
-
-void TSparseMatrix::writeMatrixFile(char *filename) const
-{
-	FILE *f = fopen(filename, "wt");
-	for (int i = 0; i < matrix->n; i++)
-	{
-		for (int j = matrix->colptr[i]; j < matrix->colptr[i + 1]; j++)
-		{
-			fprintf(f, "%d %d %.20e\n", matrix->rowind[j] + 1, i + 1, matrix->taucs_values[j]);
-		}
-	}
-	fclose(f);
-}
-
 inline int tuple_cmp(const void *a, const void *b)
 {
-	Tuple<int, double, int> *ai = (Tuple<int, double, int> *) a;
-	Tuple<int, double, int> *bi = (Tuple<int, double, int> *) b;
+	Tuple<int, quad, int> *ai = (Tuple<int, quad, int> *) a;
+	Tuple<int, quad, int> *bi = (Tuple<int, quad, int> *) b;
 
 	if (ai->a > bi->a)
 	{
@@ -557,4 +60,1048 @@ inline int binary_search(int arr[], int size, int value)
 		midpoint = (low + high) / 2;
 	}
 	return low - 1;
+}
+
+TSparseMatrix::TSparseMatrix(int rows, int columns, int nnz, list<quad>* vals, list<int>* rowInds, list<int>* colPtr)
+{
+	matrix = new Matrix(rows, columns, nnz);
+	list<quad>::const_iterator iter = vals->begin();
+	list<int>::const_iterator iterR = rowInds->begin();
+	list<int>::const_iterator iterC = colPtr->begin();
+	for (int i = 0; i < nnz; i++)
+	{
+		matrix->values[i] = *iter;
+		matrix->rowind[i] = *iterR;
+		iter++;
+		iterR++;
+	}
+	for (int i = 0; i <= columns; i++)
+	{
+		matrix->colptr[i] = *iterC;
+		iterC++;
+	}
+}
+
+TSparseMatrix::TSparseMatrix(const TSparseMatrix& other)
+{
+	matrix = other.matrix;
+}
+
+TSparseMatrix::~TSparseMatrix()
+{
+	delete matrix;
+}
+
+TSparseMatrix* TSparseMatrix::transposed() const
+{
+	int nnz = matrix->colptr[matrix->n];
+	Matrix *result = new Matrix(matrix->n, matrix->m, nnz);
+
+	int i;
+	Tuple<int, quad, int> *t = new Tuple<int, quad, int>[nnz];
+	for (i = 0; i < nnz; i++)
+	{
+		t[i].a = matrix->rowind[i];
+		t[i].b = matrix->values[i];
+		t[i].c = i;
+	}
+	qsort(t, nnz, sizeof(Tuple<int, quad, int>), tuple_cmp);
+
+	int last = t[0].a;
+	int used = 1;
+	result->colptr[0] = 0;
+	for (i = 0; i < nnz; i++)
+	{
+		while (t[i].a != last)
+		{
+			result->colptr[used++] = i;
+			last++;
+		}
+		result->values[i] = t[i].b;
+		result->rowind[i] = binary_search(matrix->colptr, matrix->n + 1, t[i].c);
+	}
+	result->colptr[used] = nnz;
+
+	delete[] t;
+
+	return new TSparseMatrix(result);
+}
+
+TSparseMatrix* TSparseMatrix::multiply_F(const TSparseMatrix& second) const
+{
+    quad *resultColumn = new quad[matrix->m];
+    List<quad> results;
+    List<int> rowInds;
+    int i, k, l;
+    Matrix *result = new Matrix(matrix->m, second.matrix->n);
+    result->colptr[0] = 0;
+    for (i = 0; i < matrix->m; i++)
+    {
+        resultColumn[i] = 0;
+    }
+    for (i = 0; i < second.matrix->n; i++)
+    {
+        for (k = second.matrix->colptr[i]; k < second.matrix->colptr[i + 1]; k++)
+        {
+            for (l = matrix->colptr[second.matrix->rowind[k]]; l < matrix->colptr[second.matrix->rowind[k] + 1]; l++)
+            {
+                resultColumn[matrix->rowind[l]] += second.matrix->values[k] * matrix->values[l];
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                results.add(resultColumn[k]);
+                rowInds.add(k);
+                resultColumn[k] = 0;
+            }
+        }
+        result->colptr[i + 1] = results.size();
+    }
+    result->setNNZ(results.size());
+    results.initIterator();
+    rowInds.initIterator();
+    for (i = 0; results.hasMore(); i++)
+    {
+        result->values[i] = results.nextElement();
+        result->rowind[i] = rowInds.nextElement();
+    }
+
+    delete[] resultColumn;
+
+    return new TSparseMatrix(result);
+}
+
+TSparseMatrix* TSparseMatrix::multiply_LM(const TSparseMatrix& second) const
+{
+	quad *resultColumn = new quad[matrix->m];
+    int i, k, l;
+    Matrix *result;
+    int nnz = 0;
+    for (i = 0; i < matrix->m; i++)
+    {
+		resultColumn[i] = 0;
+    }
+    for (i = 0; i < second.matrix->n; i++)
+    {
+        for (k = second.matrix->colptr[i]; k < second.matrix->colptr[i + 1]; k++)
+        {
+            for (l = matrix->colptr[second.matrix->rowind[k]]; l < matrix->colptr[second.matrix->rowind[k] + 1]; l++)
+            {
+				resultColumn[matrix->rowind[l]] += second.matrix->values[k] * matrix->values[l];
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                nnz++;
+                resultColumn[k] = 0;
+            }
+        }
+    }
+    result = new Matrix(matrix->m, second.matrix->n, nnz);
+    int count = 0;
+    result->colptr[0] = 0;
+    for (i = 0; i < second.matrix->n; i++)
+    {
+        for (k = second.matrix->colptr[i]; k < second.matrix->colptr[i + 1]; k++)
+        {
+            for (l = matrix->colptr[second.matrix->rowind[k]]; l < matrix->colptr[second.matrix->rowind[k] + 1]; l++)
+            {
+				resultColumn[matrix->rowind[l]] += second.matrix->values[k] * matrix->values[l];
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                result->values[count] = resultColumn[k];
+                result->rowind[count++] = k;
+				resultColumn[k] = 0;
+            }
+        }
+        result->colptr[i + 1] = count;
+    }
+
+	delete[] resultColumn;
+
+    return new TSparseMatrix(result);
+}
+
+quad TSparseMatrix::operator ()(int row, int column) const
+{
+	int i = matrix->colptr[column];
+	while (matrix->rowind[i] < row && i < matrix->colptr[column + 1])
+	{
+		i++;
+	}
+	if (matrix->rowind[i] == row && i < matrix->colptr[column + 1])
+	{
+		return matrix->values[i];
+	}
+	return 0;
+}
+
+quad* TSparseMatrix::operator *(const quad* right) const
+{
+	int i, j;
+
+	quad* result = new quad[matrix->m];
+
+	for (i = 0; i < matrix->m; i++)
+	{
+		result[i] = 0;
+	}
+
+    for (i = 0; i < matrix->n; i++)
+	{
+		if (right[i] != 0)
+		{
+			for (j = matrix->colptr[i]; j < matrix->colptr[i + 1]; j++)
+			{
+				result[matrix->rowind[j]] += right[i] * matrix->values[j];
+			}
+		}
+	}
+
+	return result;
+}
+
+quad* TSparseMatrix::operator *(const TColumnVector& right) const
+{
+	int i, j;
+
+	quad* result = new quad[matrix->m];
+
+	for (i = 0; i < matrix->m; i++)
+	{
+		result[i] = 0;
+	}
+
+    for (i = 0; i < matrix->n; i++)
+	{
+		if (right(i) != 0)
+		{
+			for (j = matrix->colptr[i]; j < matrix->colptr[i + 1]; j++)
+			{
+				result[matrix->rowind[j]] += right(i) * matrix->values[j];
+			}
+		}
+	}
+
+	return result;
+}
+
+TSparseMatrix* TSparseMatrix::deepCopy(const TSparseMatrix* matrix)
+{
+	Matrix* m = new Matrix(matrix->matrix->m, matrix->matrix->n, matrix->matrix->colptr[matrix->matrix->n]);
+
+	for (int i = 0; i <= matrix->matrix->n; i++)
+	{
+		m->colptr[i] = matrix->matrix->colptr[i];
+	}
+	for (int i = 0; i < matrix->matrix->colptr[matrix->matrix->n]; i++)
+	{
+		m->values[i] = matrix->matrix->values[i];
+		m->rowind[i] = matrix->matrix->rowind[i];
+	}
+
+	return new TSparseMatrix(m);
+}
+
+TSparseMatrix* TSparseMatrix::decompose_Cholesky() const
+{
+	quad* resultColumn = new quad[matrix->n];
+	List<quad> results;
+	List<int> rowInds;
+
+	Matrix *result = new Matrix(matrix->n, matrix->n);
+
+	result->colptr[0] = 0;
+
+	for (int i = 0; i < matrix->n; i++)
+	{
+		resultColumn[i] = 0;
+	}
+
+	for (int i = 0; i < matrix->n; i++)
+	{
+		int column = 1;
+		int col = result->colptr[column];
+		rowInds.initIterator();
+		results.initIterator();
+
+		int count = 0;
+		while (column <= i && results.hasMore()) // going through all the computed columns
+		{
+			int rowInd = -1;
+			// finding the i -th row of the current column
+			while (results.hasMore() && count < col && (rowInd = rowInds.nextElement()) < i)
+			{
+				results.nextElement();
+				count++;
+			}
+
+			// if this element in the column is not zero
+			if (count < col && rowInd == i)
+			{
+				quad columnMainValue = results.nextElement();
+				resultColumn[i] -= columnMainValue * columnMainValue;
+				count++;
+
+				// we multiply each element of the rest of the column with the "main value" which is
+				// on the i -th row and then subtract that from the current row's sum
+				while (count < col && results.hasMore())
+				{
+					resultColumn[rowInds.nextElement()] -= results.nextElement() * columnMainValue;
+					count++;
+				}
+			}
+			else
+			{
+				if (results.hasMore() && count < col)
+				{
+					results.nextElement();
+					count++;
+					// TODO: probably a vector instead of a list here is better
+					while (count < col && results.hasMore())
+					{
+						results.nextElement();
+						rowInds.nextElement();
+						count++;
+					}
+				}
+			}
+			col = result->colptr[++column];
+		}
+
+		col = matrix->colptr[i];
+
+		resultColumn[i] += matrix->values[col];
+		if (resultColumn[i] < 0)
+		{
+			delete[] resultColumn;
+			return NULL;
+		}
+		resultColumn[i] = __sqrtq(resultColumn[i]);
+		rowInds.add(i);
+		results.add(resultColumn[i]);
+		col++;
+
+		for (int j = i + 1; j < matrix->n; j++)
+		{
+			quad val = resultColumn[j];
+			if (col < matrix->colptr[i + 1] && j == matrix->rowind[col])
+			{
+				val += matrix->values[col++];
+			}
+			if (val != 0)
+			{
+				rowInds.add(j);
+				results.add(val / resultColumn[i]);
+			}
+			resultColumn[j] = 0;
+		}
+		resultColumn[i] = 0;
+
+        result->colptr[i + 1] = results.size();
+	}
+
+	delete[] resultColumn;
+
+	result->setNNZ(results.size());
+
+	results.initIterator();
+	rowInds.initIterator();
+	for (int i = 0; results.hasMore(); i++)
+	{
+        result->values[i] = results.nextElement();
+        result->rowind[i] = rowInds.nextElement();
+	}
+
+	return new TSparseMatrix(result);
+}
+
+quad* TSparseMatrix::solve_eqn(const quad* b) const
+{
+	quad* result = new quad[matrix->m];
+
+	TSparseMatrix* LT = this->transposed(); // TODO: isn't there another way?
+
+	int k, col;
+	quad sum;
+	for (int i = 0; i < matrix->n; i++)
+	{
+		sum = b[i];
+		for (col = LT->matrix->colptr[i]; col < LT->matrix->colptr[i + 1] && LT->matrix->rowind[col] < i; col++)
+		{
+			sum -= LT->matrix->values[col] * result[LT->matrix->rowind[col]];
+		}
+		result[i] = sum / LT->matrix->values[col];
+	}
+	for (int i = matrix->n - 1; i >= 0; i--)
+	{
+		sum = result[i];
+		for (col = matrix->colptr[i + 1] - 1; col >= matrix->colptr[i] && matrix->rowind[col] > i; col--)
+		{
+			sum -= matrix->values[col] * result[matrix->rowind[col]];
+		}
+		result[i] = sum / matrix->values[col];
+	}
+
+	return result;
+}
+
+TSparseMatrix* TSparseMatrix::invert_diagonal_matrix() const
+{
+	Matrix* inverse = new Matrix(matrix->m, matrix->n, matrix->colptr[matrix->n]);
+	for (int i = 0; i < matrix->colptr[matrix->n]; i++)
+	{
+		inverse->values[i] = 1 / matrix->values[i];
+		inverse->rowind[i] = matrix->rowind[i];
+	}
+	for (int i = 0; i <= matrix->n; i++)
+	{
+		inverse->colptr[i] = matrix->colptr[i];
+	}
+	return new TSparseMatrix(inverse);
+}
+
+TSparseMatrix* TSparseMatrix::invert_lower_triangular_cholesky_decomposed() const
+{
+	TSparseMatrix* transposed = this->transposed();
+
+	Vector<quad> results(matrix->colptr[matrix->n] * 4); // TODO: perhaps 4 times is too much?
+	Vector<int> rowInds(matrix->colptr[matrix->n] * 4);
+
+	int i, j, k, l;
+	quad sum = 0;
+
+	Matrix *result = new Matrix(matrix->n, matrix->n);
+	result->colptr[0] = 0;
+
+    for (i = 0; i < matrix->n; i++)
+    {
+        results.add(1.0 / matrix->values[matrix->colptr[i]]);
+        rowInds.add(i);
+
+        for (j = 0; j < i; j++)
+        {
+			int size = results.size();
+            for (k = result->colptr[j], l = transposed->matrix->colptr[i];
+                //k < size &&
+                rowInds[k] < i &&
+                l < transposed->matrix->colptr[i + 1] &&
+                transposed->matrix->rowind[l] < i; )
+            {
+                if (rowInds[k] == transposed->matrix->rowind[l])
+                {
+                    sum -= results[k] * transposed->matrix->values[l];
+                    k++;
+                    l++;
+                }
+                else if (transposed->matrix->rowind[l] < rowInds[k])
+                {
+                    l++;
+                }
+                else
+                {
+                    k++;
+                }
+            }
+
+            if (sum != 0)
+            {
+                rowInds.add(j);
+                results.add(sum / matrix->values[matrix->colptr[j]]);
+                sum = 0;
+            }
+        }
+        for (j = i + 1; j < matrix->n; j++)
+        {
+			int size = results.size();
+            for (k = result->colptr[i], l = transposed->matrix->colptr[j];
+                k < size &&
+                rowInds[k] < j &&
+                l < transposed->matrix->colptr[j + 1] &&
+                transposed->matrix->rowind[l] < j; )
+            {
+                if (rowInds[k] == transposed->matrix->rowind[l])
+                {
+                    sum -= results[k] * transposed->matrix->values[l];
+                    k++;
+                    l++;
+                }
+                else if (transposed->matrix->rowind[l] < rowInds[k])
+                {
+                    l++;
+                }
+                else
+                {
+                    k++;
+                }
+            }
+
+            if (sum != 0)
+            {
+                rowInds.add(j);
+                results.add(sum / matrix->values[matrix->colptr[j]]);
+                sum = 0;
+            }
+        }
+        result->colptr[i + 1] = results.size();
+	}
+
+	result->setNNZ(results.size());
+
+	delete transposed;
+
+	for (i = 0; i < results.size(); i++)
+	{
+		result->rowind[i] = rowInds[i];
+		result->values[i] = results[i];
+	}
+
+	return new TSparseMatrix(result);
+}
+
+TSparseMatrix* TSparseMatrix::invert_lower_triangular_cholesky_decomposed_returning_lower_triangular() const
+{
+	TSparseMatrix* transposed = this->transposed(); // TODO: isn't there another way?
+
+	Vector<quad> results(matrix->colptr[matrix->n] * 4); // TODO: perhaps 4 times is too much?
+	Vector<int> rowInds(matrix->colptr[matrix->n] * 4);
+
+	int i, j, k, l;
+	quad sum = 0;
+
+	Matrix *result = new Matrix(matrix->n, matrix->n);
+	result->colptr[0] = 0;
+
+    for (i = 0; i < matrix->n; i++)
+    {
+        results.add(1.0 / matrix->values[matrix->colptr[i]]);
+        rowInds.add(i);
+
+        for (j = i + 1; j < matrix->n; j++)
+        {
+			int size = results.size();
+            for (k = result->colptr[i], l = transposed->matrix->colptr[j];
+                k < size &&
+                rowInds[k] < j &&
+                l < transposed->matrix->colptr[j + 1] &&
+                transposed->matrix->rowind[l] < j; )
+            {
+                if (rowInds[k] == transposed->matrix->rowind[l])
+                {
+                    sum -= results[k] * transposed->matrix->values[l];
+                    k++;
+                    l++;
+                }
+                else if (transposed->matrix->rowind[l] < rowInds[k])
+                {
+                    l++;
+                }
+                else
+                {
+                    k++;
+                }
+            }
+
+            if (sum != 0)
+            {
+                rowInds.add(j);
+                results.add(sum / matrix->values[matrix->colptr[j]]);
+                sum = 0;
+            }
+        }
+        result->colptr[i + 1] = results.size();
+	}
+
+	result->setNNZ(results.size());
+
+	delete transposed;
+
+	for (i = 0; i < results.size(); i++)
+	{
+		result->rowind[i] = rowInds[i];
+		result->values[i] = results[i];
+	}
+
+	return new TSparseMatrix(result);
+}
+
+quad* TSparseMatrix::multiply_returning_diagonal(const TSparseMatrix& second) const
+{
+	quad* result = new quad[second.matrix->n];
+    int i, k, l, secondN = second.matrix->n / 2;
+    for (i = 0; i < secondN; i++)
+    {
+		result[i] = 0;
+        for (k = second.matrix->colptr[i]; k < second.matrix->colptr[i + 1]; k++)
+        {
+			l = matrix->colptr[second.matrix->rowind[k]];
+			while (matrix->rowind[l] < i && l < matrix->colptr[second.matrix->rowind[k] + 1])
+			{
+				l++;
+			}
+			if (matrix->rowind[l] == i && l < matrix->colptr[second.matrix->rowind[k] + 1])
+			{
+				result[i] += matrix->values[l] * second.matrix->values[k];
+			}
+        }
+    }
+    for ( ; i < second.matrix->n; i++)
+    {
+		result[i] = 0;
+        for (k = second.matrix->colptr[i]; k < second.matrix->colptr[i + 1]; k++)
+        {
+			l = matrix->colptr[second.matrix->rowind[k] + 1] - 1;
+			while (matrix->rowind[l] > i && l >= matrix->colptr[second.matrix->rowind[k]])
+			{
+				l--;
+			}
+			if (matrix->rowind[l] == i && l >= matrix->colptr[second.matrix->rowind[k]])
+			{
+				result[i] += matrix->values[l] * second.matrix->values[k];
+			}
+		}
+    }
+
+	return result;
+}
+
+quad* TSparseMatrix::multiply_three_returning_diagonal(const TSparseMatrix& second, const TSparseMatrix& third) const
+{
+	quad* result = new quad[third.matrix->n]; // TODO: is that correct?
+	int i, k, j, l, thirdN = third.matrix->n / 2;
+    for (i = 0; i < thirdN; i++)
+    {
+		result[i] = 0;
+        for (k = third.matrix->colptr[i]; k < third.matrix->colptr[i + 1]; k++)
+        {
+            for (l = second.matrix->colptr[third.matrix->rowind[k]]; l < second.matrix->colptr[third.matrix->rowind[k] + 1]; l++)
+            {
+				j = matrix->colptr[second.matrix->rowind[l]];
+				while (matrix->rowind[j] < i && j < matrix->colptr[second.matrix->rowind[l] + 1])
+				{
+					j++;
+				}
+				if (matrix->rowind[j] == i && j < matrix->colptr[second.matrix->rowind[l] + 1])
+				{
+					result[i] += third.matrix->values[k] * second.matrix->values[l] * matrix->values[j];
+				}
+            }
+		}
+	}
+    for ( ; i < third.matrix->n; i++)
+    {
+		result[i] = 0;
+        for (k = third.matrix->colptr[i]; k < third.matrix->colptr[i + 1]; k++)
+        {
+            for (l = second.matrix->colptr[third.matrix->rowind[k]]; l < second.matrix->colptr[third.matrix->rowind[k] + 1]; l++)
+            {
+				j = matrix->colptr[second.matrix->rowind[l] + 1] - 1;
+				while (matrix->rowind[j] > i && j >= matrix->colptr[second.matrix->rowind[l]])
+				{
+					j--;
+				}
+				if (matrix->rowind[j] == i && j >= matrix->colptr[second.matrix->rowind[l]])
+				{
+					result[i] += third.matrix->values[k] * second.matrix->values[l] * matrix->values[j];
+				}
+            }
+		}
+	}
+	return result;
+}
+
+TSparseMatrix* TSparseMatrix::multiply_three_F(const TSparseMatrix& second, const TSparseMatrix& third) const
+{
+	quad *resultColumn = new quad[matrix->m];
+	List<quad> results;
+	List<int> rowInds;
+    int i, k, l, j;
+    Matrix *result = new Matrix(matrix->m, third.matrix->n);
+    result->colptr[0] = 0;
+    for (i = 0; i < matrix->m; i++)
+    {
+		resultColumn[i] = 0;
+    }
+    for (i = 0; i < third.matrix->n; i++)
+    {
+        for (k = third.matrix->colptr[i]; k < third.matrix->colptr[i + 1]; k++)
+        {
+            for (l = second.matrix->colptr[third.matrix->rowind[k]]; l < second.matrix->colptr[third.matrix->rowind[k] + 1]; l++)
+            {
+				for (j = matrix->colptr[second.matrix->rowind[l]]; j < matrix->colptr[second.matrix->rowind[l] + 1]; j++)
+				{
+					resultColumn[matrix->rowind[j]] += third.matrix->values[k] * second.matrix->values[l] * matrix->values[j];
+				}
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                results.add(resultColumn[k]);
+                rowInds.add(k);
+				resultColumn[k] = 0;
+            }
+        }
+		result->colptr[i + 1] = results.size();
+    }
+
+    result->setNNZ(results.size());
+	results.initIterator();
+	rowInds.initIterator();
+	for (i = 0; results.hasMore(); i++)
+	{
+        result->values[i] = results.nextElement();
+        result->rowind[i] = rowInds.nextElement();
+	}
+
+	delete[] resultColumn;
+
+    return new TSparseMatrix(result);
+}
+
+TSparseMatrix* TSparseMatrix::multiply_three_LM(const TSparseMatrix& second, const TSparseMatrix& third) const
+{
+	quad *resultColumn = new quad[matrix->m];
+    int i, k, l, j;
+    Matrix *result;
+    int nnz = 0;
+    for (i = 0; i < matrix->m; i++)
+    {
+		resultColumn[i] = 0;
+    }
+    for (i = 0; i < third.matrix->n; i++)
+    {
+        for (k = third.matrix->colptr[i]; k < third.matrix->colptr[i + 1]; k++)
+        {
+            for (l = second.matrix->colptr[third.matrix->rowind[k]]; l < second.matrix->colptr[third.matrix->rowind[k] + 1]; l++)
+            {
+				for (j = matrix->colptr[second.matrix->rowind[l]]; j < matrix->colptr[second.matrix->rowind[l] + 1]; j++)
+				{
+					resultColumn[matrix->rowind[j]] += third.matrix->values[k] * second.matrix->values[l] * matrix->values[j];
+				}
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                nnz++;
+				resultColumn[k] = 0;
+            }
+        }
+    }
+    result = new Matrix(matrix->m, third.matrix->n, nnz);
+    result->colptr[0] = 0;
+    int count = 0;
+    for (i = 0; i < third.matrix->n; i++)
+    {
+        for (k = third.matrix->colptr[i]; k < third.matrix->colptr[i + 1]; k++)
+        {
+            for (l = second.matrix->colptr[third.matrix->rowind[k]]; l < second.matrix->colptr[third.matrix->rowind[k] + 1]; l++)
+            {
+				for (j = matrix->colptr[second.matrix->rowind[l]]; j < matrix->colptr[second.matrix->rowind[l] + 1]; j++)
+				{
+					resultColumn[matrix->rowind[j]] += third.matrix->values[k] * second.matrix->values[l] * matrix->values[j];
+				}
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                result->values[count] = resultColumn[k];
+                result->rowind[count++] = k;
+				resultColumn[k] = 0;
+            }
+        }
+        result->colptr[i + 1] = count;
+    }
+
+	delete[] resultColumn;
+
+    return new TSparseMatrix(result);
+}
+
+TSparseMatrix* TSparseMatrix::multiply_three_returning_lower_triangular_F(const TSparseMatrix& second, const TSparseMatrix& third) const
+{
+    quad *resultColumn = new quad[matrix->m];
+    List<quad> results;
+    List<int> rowInds;
+    int i, k, l, j;
+    Matrix *result = new Matrix(matrix->m, third.matrix->n);
+    result->colptr[0] = 0;
+    for (i = 0; i < matrix->m; i++)
+    {
+        resultColumn[i] = 0;
+    }
+    for (i = 0; i < third.matrix->n; i++)
+    {
+        for (k = third.matrix->colptr[i]; k < third.matrix->colptr[i + 1]; k++)
+        {
+            for (l = second.matrix->colptr[third.matrix->rowind[k]]; l < second.matrix->colptr[third.matrix->rowind[k] + 1]; l++)
+            {
+                for (j = matrix->colptr[second.matrix->rowind[l] + 1] - 1; j >= matrix->colptr[second.matrix->rowind[l]] && matrix->rowind[j] >= i; j--)
+                {
+                    resultColumn[matrix->rowind[j]] += third.matrix->values[k] * second.matrix->values[l] * matrix->values[j];
+                }
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                results.add(resultColumn[k]);
+                rowInds.add(k);
+                resultColumn[k] = 0;
+            }
+        }
+        result->colptr[i + 1] = results.size();
+    }
+
+    result->setNNZ(results.size());
+    results.initIterator();
+    rowInds.initIterator();
+    for (i = 0; results.hasMore(); i++)
+    {
+        result->values[i] = results.nextElement();
+        result->rowind[i] = rowInds.nextElement();
+    }
+
+    delete[] resultColumn;
+
+    return new TSparseMatrix(result);
+}
+
+TSparseMatrix* TSparseMatrix::multiply_three_returning_lower_triangular_LM(const TSparseMatrix& second, const TSparseMatrix& third) const
+{
+	quad *resultColumn = new quad[matrix->m];
+    int i, k, l, j;
+    Matrix *result;
+    int nnz = 0;
+    for (i = 0; i < matrix->m; i++)
+    {
+		resultColumn[i] = 0;
+    }
+    for (i = 0; i < third.matrix->n; i++)
+    {
+        for (k = third.matrix->colptr[i]; k < third.matrix->colptr[i + 1]; k++)
+        {
+            for (l = second.matrix->colptr[third.matrix->rowind[k]]; l < second.matrix->colptr[third.matrix->rowind[k] + 1]; l++)
+            {
+				for (j = matrix->colptr[second.matrix->rowind[l] + 1] - 1; j >= matrix->colptr[second.matrix->rowind[l]] && matrix->rowind[j] >= i; j--)
+				{
+					resultColumn[matrix->rowind[j]] += third.matrix->values[k] * second.matrix->values[l] * matrix->values[j];
+				}
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                nnz++;
+				resultColumn[k] = 0;
+            }
+        }
+    }
+    result = new Matrix(matrix->m, third.matrix->n, nnz);
+    result->colptr[0] = 0;
+    int count = 0;
+    for (i = 0; i < third.matrix->n; i++)
+    {
+        for (k = third.matrix->colptr[i]; k < third.matrix->colptr[i + 1]; k++)
+        {
+            for (l = second.matrix->colptr[third.matrix->rowind[k]]; l < second.matrix->colptr[third.matrix->rowind[k] + 1]; l++)
+            {
+				for (j = matrix->colptr[second.matrix->rowind[l] + 1] - 1; j >= matrix->colptr[second.matrix->rowind[l]] && matrix->rowind[j] >= i; j--)
+				{
+					resultColumn[matrix->rowind[j]] += third.matrix->values[k] * second.matrix->values[l] * matrix->values[j];
+				}
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                result->values[count] = resultColumn[k];
+                result->rowind[count++] = k;
+				resultColumn[k] = 0;
+            }
+        }
+        result->colptr[i + 1] = count;
+    }
+
+	delete[] resultColumn;
+
+    return new TSparseMatrix(result);
+}
+
+TSparseMatrix* TSparseMatrix::multiply_returning_lower_triangular_F(const TSparseMatrix& second) const
+{
+    quad *resultColumn = new quad[matrix->m];
+    List<quad> results;
+    List<int> rowInds;
+    int i, k, l;
+    Matrix *result = new Matrix(matrix->m, second.matrix->n);
+    result->colptr[0] = 0;
+    for (i = 0; i < matrix->m; i++)
+    {
+        resultColumn[i] = 0;
+    }
+    for (i = 0; i < second.matrix->n; i++)
+    {
+        for (k = second.matrix->colptr[i]; k < second.matrix->colptr[i + 1]; k++)
+        {
+            for (l = matrix->colptr[second.matrix->rowind[k] + 1] - 1; l >= matrix->colptr[second.matrix->rowind[k]] && matrix->rowind[l] >= i; l--)
+            {
+                resultColumn[matrix->rowind[l]] += second.matrix->values[k] * matrix->values[l];
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                results.add(resultColumn[k]);
+                rowInds.add(k);
+                resultColumn[k] = 0;
+            }
+        }
+        result->colptr[i + 1] = results.size();
+    }
+
+    result->setNNZ(results.size());
+    results.initIterator();
+    rowInds.initIterator();
+    for (i = 0; results.hasMore(); i++)
+    {
+        result->values[i] = results.nextElement();
+        result->rowind[i] = rowInds.nextElement();
+    }
+
+    delete[] resultColumn;
+
+    return new TSparseMatrix(result);
+}
+
+TSparseMatrix* TSparseMatrix::multiply_returning_lower_triangular_LM(const TSparseMatrix& second) const
+{
+	quad *resultColumn = new quad[matrix->m];
+    int i, k, l;
+    Matrix *result;
+    int nnz = 0;
+    for (i = 0; i < matrix->m; i++)
+    {
+		resultColumn[i] = 0;
+    }
+    for (i = 0; i < second.matrix->n; i++)
+    {
+        for (k = second.matrix->colptr[i]; k < second.matrix->colptr[i + 1]; k++)
+        {
+            for (l = matrix->colptr[second.matrix->rowind[k] + 1] - 1; l >= matrix->colptr[second.matrix->rowind[k]] && matrix->rowind[l] >= i; l--)
+            {
+                resultColumn[matrix->rowind[l]] += second.matrix->values[k] * matrix->values[l];
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                nnz++;
+                resultColumn[k] = 0;
+            }
+        }
+    }
+    result = new Matrix(matrix->m, second.matrix->n, nnz);
+    result->colptr[0] = 0;
+    int count = 0;
+    for (i = 0; i < second.matrix->n; i++)
+    {
+        for (k = second.matrix->colptr[i]; k < second.matrix->colptr[i + 1]; k++)
+        {
+            for (l = matrix->colptr[second.matrix->rowind[k] + 1] - 1; l >= matrix->colptr[second.matrix->rowind[k]] && matrix->rowind[l] >= i; l--)
+            {
+                resultColumn[matrix->rowind[l]] += second.matrix->values[k] * matrix->values[l];
+            }
+        }
+        for (k = 0; k < matrix->m; k++)
+        {
+            if (resultColumn[k] != 0)
+            {
+                result->values[count] = resultColumn[k];
+                result->rowind[count++] = k;
+				resultColumn[k] = 0;
+            }
+        }
+        result->colptr[i + 1] = count;
+    }
+
+	delete[] resultColumn;
+
+    return new TSparseMatrix(result);
+}
+
+TSparseMatrix* TSparseMatrix::add(const TSparseMatrix& second) const
+{
+}
+
+void TSparseMatrix::multiply_by_number(quad n)
+{
+	for (int i = 0; i < matrix->colptr[matrix->n]; i++)
+	{
+		matrix->values[i] *= n;
+	}
+}
+
+void TSparseMatrix::writeMatrixFile(const char *filename) const
+{
+	FILE *f = fopen(filename, "wt");
+	fprintf(f, "%d %d %d\n", matrix->m, matrix->n, matrix->colptr[matrix->n]);
+	for (int i = 0; i < matrix->n; i++)
+	{
+		for (int j = matrix->colptr[i]; j < matrix->colptr[i + 1]; j++)
+		{
+			fprintf(f, "%d %d %.20e\n", matrix->rowind[j] + 1, i + 1, (double) matrix->values[j]);
+		}
+	}
+	fclose(f);
+}
+
+TSparseMatrix* TSparseMatrix::readMatrixFile(const char* filename)
+{
+	FILE *f = fopen(filename, "rt");
+
+	int row = 0, column = 0, nnz = 0;
+	fscanf(f, "%d %d %d\n", &row, &column, &nnz);
+	Matrix* matrix = new Matrix(row, column, nnz);
+
+	int count = 0;
+	int colptr = 1;
+	matrix->colptr[0] = 0;
+	int oldcol = 1;
+	while (!feof(f))
+	{
+		double temp;
+		fscanf(f, "%d %d %lf\n", &row, &column, &temp);
+
+		while (oldcol != column)
+		{
+			matrix->colptr[colptr++] = count;
+			oldcol++;
+		}
+
+		matrix->rowind[count] = row - 1;
+		matrix->values[count++] = temp;
+	}
+	matrix->colptr[colptr] = count;
+	fclose(f);
+
+	return new TSparseMatrix(matrix);
 }

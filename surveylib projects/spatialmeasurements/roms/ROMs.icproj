@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="ROMs"
+	ProjectGUID="{3A44FA3A-E57B-4999-854B-A905348844FF}"
+	VCNestedProjectGUID="{58945A29-5CCF-4976-B448-B12B56C829CD}"
+	VCNestedProjectFileName="ROMs.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

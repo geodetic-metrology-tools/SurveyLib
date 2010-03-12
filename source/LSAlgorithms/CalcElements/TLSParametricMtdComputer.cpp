@@ -4,10 +4,10 @@
 // using the parametric method (case where 2nd dgn mtrx = -I)
 //
 
-#include "TLSInputMatrices.h"
-#include "TLSResultsMatrices.h"
 
 #include "TLSParametricMtdComputer.h"
+#include "TLSResultsMatrices.h"
+#include "TLSInputMatrices.h"
 
 #include	<nag.h>
 #include	<nagg01.h>
@@ -27,7 +27,7 @@ TLSParametricMtdComputer::~TLSParametricMtdComputer()
 
 
 
-bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsMatrices* rm)
+bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsMatrices* rm, bool isCombinedCase)
 {
 	bool result;
 	int nbCnstr = im->getNbrConstraints();
@@ -35,11 +35,11 @@ bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsM
 	{
 		if(nbCnstr == 0)
 		{
-			result = computeResultsMtrs(im, rm);
+			result = computeResultsMtrs(im, rm, isCombinedCase);
 		}
 		else
 		{
-			result = computeFreeResultsMtrs( im, rm);
+			result = computeFreeResultsMtrs( im, rm, isCombinedCase);
 		}
 	}
 	else
@@ -56,7 +56,7 @@ bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsM
 ////////////////////////////////////////////////////////////////
 //COMPUTES THE RESULTS MATRICES
 ////////////////////////////////////////////////////////////////
-bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm)
+bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm, bool isCombinedCase)
 {
 	/* in this method, the solution is computed with a numeric equations solver method (nagc lib).
 	   The unknown variance-covariance matrix is thus not computed here. 
@@ -64,65 +64,117 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	   It is finally inverted outside the method, when there are no iterations left to 
 	   be performed (in TLSCalculation). */
 
-	const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
-	const TSparseMatrix* weightM = im->getWeightMtrx();
-	const TColumnVector& misclV = im->getMisclosureVctr();
-	
-    TSparseMatrix* firstDM = firstDMTransposed->transposed();
-	im->setFirstDesignMatrix(firstDM);
-	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply(*weightM);
+	if (isCombinedCase)
+	{		
+		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
+		const TSparseMatrix* secondDMTransposed = im->getSecondDgnMtrxTransposed();
+		TSparseMatrix* weightMInversed = im->getWeightMtrx()->invert_diagonal_matrix();
+		im->setWeightMatrixInverted(weightMInversed);
+		const TColumnVector& misclV = im->getMisclosureVctr();
+		
+		TSparseMatrix* firstDM = firstDMTransposed->transposed();
+		im->setFirstDesignMatrix(firstDM);
+		TSparseMatrix* secondDM = secondDMTransposed->transposed();
+		TSparseMatrix* bTimesWInvTimesBTrans = secondDM->multiply_three_returning_lower_triangular_F(*weightMInversed, *secondDMTransposed);
+        delete secondDM;
 
-	TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular(*firstDM);
-	double* solutionVectorb = *aTransTimesW * misclV;
-	for (int i = 0; i < aTransTimesW->rowsCount(); i++)
-	{
-		solutionVectorb[i] = -solutionVectorb[i];
-	}
-	delete aTransTimesW;
+		TSparseMatrix* temp = bTimesWInvTimesBTrans->decompose_Cholesky();
+		delete bTimesWInvTimesBTrans;
+		TSparseMatrix* bTimesWInvTimesBTransInverted = temp->invert_lower_triangular_cholesky_decomposed();
+		delete temp;
+		im->setBTimesWInvTimesBTransInverted(bTimesWInvTimesBTransInverted);
 
-	int success = 0;
-	
-    /* I do this, because for some strange reason design matrix A has A LOT less non-zeros the first time -
-	   actually each time it has the same non-zero structure, except the first. */
-	if (count == 1)
-	{
-		rm->setSymbolic(taucs_ccs_factor_llt_mf(*fAtPA));
-	}
-	else if (count == 2)
-	{
-		taucs_supernodal_factor_free(rm->getSymbolic());
-		rm->setSymbolic(taucs_ccs_factor_llt_symbolic(*fAtPA));
-		success = taucs_ccs_factor_llt_numeric(*fAtPA, rm->getSymbolic());
+		TSparseMatrix* aTransTimesBTimesWInvTimesBTransInverted = firstDMTransposed->multiply_F(*bTimesWInvTimesBTransInverted);
+
+		TSparseMatrix* solutionMatrixA = aTransTimesBTimesWInvTimesBTransInverted->multiply_returning_lower_triangular_F(*firstDM);
+
+		quad* solutionVectorb = *aTransTimesBTimesWInvTimesBTransInverted * misclV;
+		for (int i = 0; i < aTransTimesBTimesWInvTimesBTransInverted->rowsCount(); i++)
+		{
+			solutionVectorb[i] = -solutionVectorb[i];
+		}
+		delete aTransTimesBTimesWInvTimesBTransInverted;
+
+		if (rm->getL() != NULL)
+		{
+			delete rm->getL();
+		}
+		TSparseMatrix* L = solutionMatrixA->decompose_Cholesky();
+		delete solutionMatrixA;
+
+		if (L == NULL)
+		{
+			delete[] solutionVectorb;
+			// TODO: set some error
+			return false; // Matrix is not positive definite
+		}
+
+		rm->setL(L);
+
+		quad* solution = L->solve_eqn(solutionVectorb);
+
+		delete[] solutionVectorb;
+
+		TColumnVector* solutionVector = rm->getSolutionVctr();
+		*solutionVector = TColumnVector(im->getNbrUnknowns());
+		for (int i = 0; i < im->getNbrUnknowns(); i++)
+		{
+			(*solutionVector)(i) = solution[i];
+		}
+
+		delete[] solution;
 	}
 	else
 	{
-		taucs_supernodal_factor_free_numeric(rm->getSymbolic());
-		taucs_ccs_factor_llt_numeric(*fAtPA, rm->getSymbolic());
-	}
-	count++;
+		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
+		const TSparseMatrix* weightM = im->getWeightMtrx();
+		const TColumnVector& misclV = im->getMisclosureVctr();
+		
+		TSparseMatrix* firstDM = firstDMTransposed->transposed();
+		firstDM->writeMatrixFile("C:\\A.txt");
+		im->setFirstDesignMatrix(firstDM);
+		TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
+		aTransTimesW->writeMatrixFile("C:\\AtP.txt");
 
-	if (rm->getSymbolic() == NULL || success == -1)
-	{
+		TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
+		fAtPA->writeMatrixFile("C:\\AtPA.txt");
+		quad* solutionVectorb = *aTransTimesW * misclV;
+		for (int i = 0; i < aTransTimesW->rowsCount(); i++)
+		{
+			solutionVectorb[i] = -solutionVectorb[i];
+			printf("%.20e\n", (double) solutionVectorb[i]);
+		}
+		delete aTransTimesW;
+
+		if (rm->getL() != NULL)
+		{
+			delete rm->getL();
+		}
+		TSparseMatrix* L = fAtPA->decompose_Cholesky();
+		delete fAtPA;
+
+		if (L == NULL)
+		{
+			delete[] solutionVectorb;
+			// TODO: set some error
+			return false; // Matrix is not positive definite
+		}
+
+		rm->setL(L);
+
+		quad* solution = L->solve_eqn(solutionVectorb);
+
 		delete[] solutionVectorb;
-		// TODO: set some error
-		return false; // Matrix is not positive definite
+
+		TColumnVector* solutionVector = rm->getSolutionVctr();
+		*solutionVector = TColumnVector(im->getNbrUnknowns());
+		for (int i = 0; i < im->getNbrUnknowns(); i++)
+		{
+			(*solutionVector)(i) = solution[i];
+		}
+
+		delete[] solution;
 	}
-
-	delete fAtPA;
-
-	double* solution = new double[im->getNbrUnknowns()];
-
-    taucs_supernodal_solve_llt(rm->getSymbolic(), solution, solutionVectorb);
-	delete[] solutionVectorb;
-
-	TColumnVector* solutionVector = rm->getSolutionVctr();
-	*solutionVector = TColumnVector(im->getNbrUnknowns());
-	for (int i = 0; i < im->getNbrUnknowns(); i++)
-	{
-		(*solutionVector)(i) = solution[i];
-	}
-
-	delete[] solution;
 
 	return true;
 }
@@ -131,142 +183,154 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 ////////////////////////////////////////////////////////////////
 //COMPUTES THE RESULTS MATRICES FOR FREE CALCULATION
 ////////////////////////////////////////////////////////////////
-bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm){
+bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm, bool isCombinedCase)
+{
+	if (isCombinedCase)
+	{
+		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
+		const TSparseMatrix* secondDMTransposed = im->getSecondDgnMtrxTransposed();
+		const TSparseMatrix* constraintFirstDM = im->getCnstrFirstDgnMtrx();
+		TSparseMatrix* weightMInversed = im->getWeightMtrx()->invert_diagonal_matrix();
+		im->setWeightMatrixInverted(weightMInversed);
+		const TColumnVector& misclV = im->getMisclosureVctr();
+		const TColumnVector& constraintMisclV = im->getCnstrMisclosureVctr();
+		
+		TSparseMatrix* firstDM = firstDMTransposed->transposed();
+		im->setFirstDesignMatrix(firstDM);
+		TSparseMatrix* secondDM = secondDMTransposed->transposed();		
+		TSparseMatrix* constraintFirstDMTransposed = constraintFirstDM->transposed();
+		TSparseMatrix* bTimesWInvTimesBTrans =
+			secondDM->multiply_three_returning_lower_triangular_F(*weightMInversed, *secondDMTransposed);
+        delete secondDM;
 
-//	cout << "Entered computer\n";
+		TSparseMatrix* temp = bTimesWInvTimesBTrans->decompose_Cholesky();
+		delete bTimesWInvTimesBTrans;
+		TSparseMatrix* bTimesWInvTimesBTransInverted = temp->invert_lower_triangular_cholesky_decomposed();
+		delete temp;
+		im->setBTimesWInvTimesBTransInverted(bTimesWInvTimesBTransInverted);
 
-	//const TMatrix& firstDM = im->getFirstDgnMtrx(); //A1
-	//const TMatrix& weightM = im->getWeightMtrx();  //P
-	//const TColumnVector& misclV = im->getMisclosureVctr(); //W1
+		TSparseMatrix* aTransTimesBTimesWInvTimesBTransInverted = firstDMTransposed->multiply_F(*bTimesWInvTimesBTransInverted);
 
-	//const TMatrix& cnstrFirstDM = im->getCnstrFirstDgnMtrx(); //A2
-	//const TColumnVector& cnstrMisclV = im->getCnstrMisclosureVctr(); //W2      
+		temp = aTransTimesBTimesWInvTimesBTransInverted->multiply_returning_lower_triangular_F(*firstDM);
+		TSparseMatrix* decomposed = temp->decompose_Cholesky();
+		delete temp;
+		
+		TSparseMatrix* aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted = decomposed->invert_lower_triangular_cholesky_decomposed();
+		delete decomposed;
 
-	//int nbUnk = im->getNbrUnknowns();
-	//int nbObs = im->getNbrObservations();
-	//int nbCnstr = im->getNbrConstraints();
-	//int nbCnstrObs = im->getNbrConstraintObs();
+		TSparseMatrix* cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted =
+			constraintFirstDM->multiply_F(*aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted);
+		delete constraintFirstDM;
 
-	////intermediate N = (A1tPA1) matrix
-	//TMatrix	N (nbUnk, nbUnk);
-	//N = 0.0;
-	//
-	//N = firstDM.transposed() * weightM * firstDM;
+		TSparseMatrix* solutionMatrixA = cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted->
+				multiply_returning_lower_triangular_F(*constraintFirstDMTransposed);
+		decomposed = solutionMatrixA->decompose_Cholesky();
+		delete solutionMatrixA;
 
-	////intermediate Nbig
-	///*
-	//Nbig = ( (N  , A2t)
-	//		 (A2, 0 ))
-	//*/
-	//TMatrix	Nbig (nbUnk + nbCnstr, nbUnk + nbCnstr);
-	//Nbig = 0.0;
+		quad* aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec =
+			*aTransTimesBTimesWInvTimesBTransInverted * misclV;
+		delete aTransTimesBTimesWInvTimesBTransInverted;
 
-	////insert N in Nbig
-	//int i = 0;
-	//while( i < nbUnk )
-	//{
-	//	//insert N
-	//	int j = 0;
-	//	while(j < nbUnk)
-	//	{// modif
-	//		Nbig(i,j) = N(i,j);
-	//		j++;
-	//	}
+		quad* solutionVectorb = *cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted *
+			aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec;
+		delete cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted;
 
-	//	
-	//	int J = 0;
-	//	while(j<nbUnk + nbCnstr)
-	//	{
-	//		Nbig(i,j) = cnstrFirstDM(J,i);//insert A2t
-	//		Nbig(j,i) = cnstrFirstDM(J,i);//insert A2
-	//		j++;
-	//		J++;
-	//	}
-	//	i++;
-	//}
+		for (int i = 0; i < misclV.dimension(); i++)
+		{
+			solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
+		}
 
-	////inverse Nbig matrix
-	//TMatrix NbigInv (nbUnk + nbCnstr, nbUnk + nbCnstr);
-	//NbigInv = 0,0;
-	//// NbigInv = intermediate matrix containing LU decomposition for solving of equation system
-	//int n_pivot(NbigInv.numRows()-1); // pivot used in LU decomposition
-	//int* pivot_i; // pivot used in LU decomposition
-	//int* pivot_j; // pivot used in LU decomposition
+		quad* solution = decomposed->solve_eqn(solutionVectorb);
+		delete decomposed;		
+		delete[] solutionVectorb;
 
-	//pivot_i = new int [n_pivot+1];
-	//pivot_j = new int [n_pivot+1];
-	//// LU decomposition
-	//NbigInv = Nbig.dfact(&n_pivot,pivot_i,pivot_j);
+		solutionVectorb = *constraintFirstDMTransposed * solution;
+		delete[] solution;
+		
+		for (int i = 0; i < misclV.dimension(); i++)
+		{
+			solutionVectorb[i] = -solutionVectorb[i] - aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec[i];
+		}
+		delete[] aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec;
 
+		solution = *aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted * solutionVectorb;
+		delete[] solutionVectorb;
+		delete aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted;
 
-	//
-	//if (NbigInv.isNull())
-	//{// if inverse method fails, an error message is generated
-	//	fError = NbigInv.getError();
-	//	return false;
-	//}
+		TColumnVector* s = rm->getSolutionVctr();
+		for (int i = 0; i < misclV.dimension(); i++)
+		{
+			(*s)(i) = solution[i];
+		}
 
-	////intermediate ColumnVector Cbig
-	///*
-	//Cbig = ( (A1t*p*misclV)
-	//		 (cnstrMisclV ) )
-	//*/
-	//TColumnVector Cbig ( nbUnk + nbCnstr);
-	//Cbig = 0.0;
-	//TColumnVector C ( nbUnk);
-	//C = 0.0;
-	//C = firstDM.transposed() * weightM * misclV*(-1.0);
+		delete[] solution;
+	}
+	else
+	{
+		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
+		const TSparseMatrix* constraintFirstDM = im->getCnstrFirstDgnMtrx();
+		const TSparseMatrix* weightM = im->getWeightMtrx();
+		const TColumnVector& misclV = im->getMisclosureVctr();
+		const TColumnVector& constraintMisclV = im->getCnstrMisclosureVctr();
+		
+		TSparseMatrix* firstDM = firstDMTransposed->transposed();
+		im->setFirstDesignMatrix(firstDM);
+		TSparseMatrix* constraintFirstDMTransposed = constraintFirstDM->transposed();
 
-	////insert C in Cbig
-	//i = 0;
-	//while( i < nbUnk )
-	//{
-	//	Cbig(i) = C(i);
-	//	i++;
-	//}
+		TSparseMatrix* aTransW = firstDMTransposed->multiply_F(*weightM);
 
-	////insert cnstrMisclV in Nbig
-	//i = nbUnk;
-	//int I = 0;
-	//while( i < (nbUnk + nbCnstr) )
-	//{
-	//	Cbig(i) = cnstrMisclV(I);
-	//	i++;
-	//	I++;
-	//}
+		TSparseMatrix* temp = aTransW->multiply_returning_lower_triangular_F(*firstDM);
+		TSparseMatrix* decomposed = temp->decompose_Cholesky();
+		delete temp;
+		
+		TSparseMatrix* aTransTimesWTimesAInverted = decomposed->invert_lower_triangular_cholesky_decomposed();
+		delete decomposed;
 
+		TSparseMatrix* cstrATimesATransTimesWTimesAInverted =
+			constraintFirstDM->multiply_F(*aTransTimesWTimesAInverted);
+		delete constraintFirstDM;
 
-	////computation of the solution vector
-	//TColumnVector solutionBig (nbUnk + nbCnstr);
-	//solutionBig = 0.0;
-	//solutionBig = NbigInv.dfeqn(&Cbig,n_pivot,pivot_i,pivot_j);
+		TSparseMatrix* solutionMatrixA = cstrATimesATransTimesWTimesAInverted->
+				multiply_returning_lower_triangular_F(*constraintFirstDMTransposed);
+		decomposed = solutionMatrixA->decompose_Cholesky();
+		delete solutionMatrixA;
 
-	//delete[] pivot_i;
-	//delete[] pivot_j;
+		quad* aTransTimesWTimesATimesMiscVec = *aTransW * misclV;
+		delete aTransW;
 
+		quad* solutionVectorb = *cstrATimesATransTimesWTimesAInverted * aTransTimesWTimesATimesMiscVec;
+		delete cstrATimesATransTimesWTimesAInverted;
 
-	//if (solutionBig.isNull())
-	//{// if dfeqn method fails, an error message is generated
-	//	fError = NbigInv.getError();
-	//	return false;
-	//}
+		for (int i = 0; i < misclV.dimension(); i++)
+		{
+			solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
+		}
 
-	//TColumnVector* solution = rm->getSolutionVctr();
-	//(*solution) = 0.0;
-	//// extraction of solution from solutionBig
-	//i = 0;
-	//while( i < nbUnk)
-	//{
-	//	(*solution)(i) =  solutionBig(i);
-	//	i++;
-	//}
+		quad* solution = decomposed->solve_eqn(solutionVectorb);
+		delete decomposed;
+		delete[] solutionVectorb;
 
-	//if (fAtPA == 0)
-	//{
-	//	fAtPA = new TMatrix (nbUnk + nbCnstr, nbUnk + nbCnstr);
-	//}
-	//*fAtPA = Nbig;
+		solutionVectorb = *constraintFirstDMTransposed * solution;
+		delete[] solution;
+		
+		for (int i = 0; i < misclV.dimension(); i++)
+		{
+			solutionVectorb[i] = -solutionVectorb[i] - aTransTimesWTimesATimesMiscVec[i];
+		}
+		delete[] aTransTimesWTimesATimesMiscVec;
 
+		solution = *aTransTimesWTimesAInverted * solutionVectorb;
+		delete[] solutionVectorb;
+		delete aTransTimesWTimesAInverted;
+
+		TColumnVector* s = rm->getSolutionVctr();
+		for (int i = 0; i < misclV.dimension(); i++)
+		{
+			(*s)(i) = solution[i];
+		}
+
+		delete[] solution;
+	}
 
 	return true;
 }

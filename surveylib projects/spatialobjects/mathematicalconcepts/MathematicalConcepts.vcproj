@@ -43,19 +43,22 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Qoption,cpp,--extended_float_type"
 				Optimization="2"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories=".\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc;.\..\..\..\..\SEAL_Libraries\Taucs"
+				AdditionalIncludeDirectories=".\..\..\..\include;.\..\..\..\..\SEAL_Libraries\nagc;C:\Program Files\Intel\Compiler\11.1\054\Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="true"
 				EnableFunctionLevelLinking="false"
 				EnableEnhancedInstructionSet="2"
+				FloatingPointModel="0"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/MathematicalConcepts.pch"
 				AssemblerListingLocation=".\Release/"
@@ -123,11 +126,13 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Qoption,cpp,--extended_float_type -wd981 -wd383 -wd1418"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc;.\..\..\..\..\SEAL_Libraries\Taucs"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;SU_MAKEDLL"
+				AdditionalIncludeDirectories=".\..\..\..\include;.\..\..\..\..\SEAL_Libraries\nagc;C:\Program Files\Intel\Compiler\11.1\054\Include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				FloatingPointModel="0"
 				FloatingPointExceptions="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
@@ -137,7 +142,7 @@
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="1"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -253,6 +258,10 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
+			<File
+				RelativePath="..\..\..\source\SpatialObjects\mathematicalconcepts\Quad.cpp"
+				>
+			</File>
 			<File
 				RelativePath="..\..\..\source\SpatialObjects\mathematicalconcepts\T2DCartesianCoordSys.cpp"
 				>
@@ -584,10 +593,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\ToolBox\Templates\TConstPtrWrapper.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\source\SpatialObjects\mathematicalconcepts\TCoordSysFactory.cpp"
 				>
 				<FileConfiguration
@@ -852,10 +857,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\ToolBox\Templates\TPtrWrapper.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\Source\SpatialObjects\MathematicalConcepts\TRotationMatrix.cpp"
 				>
 				<FileConfiguration
@@ -931,6 +932,10 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
+				RelativePath="..\..\..\include\Quad.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\T2DCartesianCoordSys.h"
 				>
 			</File>
@@ -971,10 +976,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\TConstPtrWrapper.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\TCoordSysFactory.h"
 				>
 			</File>
@@ -1004,10 +1005,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TPositionVector.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TPtrWrapper.h"
 				>
 			</File>
 			<File

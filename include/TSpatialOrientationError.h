@@ -38,7 +38,7 @@ class  TVReferenceFrame;
 using namespace std;
 
 // typedefs
-typedef  double  Component;
+typedef  quad  Component;
 typedef  bool  CompKnown;
 //
 //

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="SpatialObjectsLibrary"
+	ProjectGUID="{EC4268A2-B7EB-478D-9E9B-27400AF9B7D6}"
+	VCNestedProjectGUID="{A6BA25C2-D976-403E-BEDF-CBB51266A987}"
+	VCNestedProjectFileName="SpatialObjectsLibrary.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

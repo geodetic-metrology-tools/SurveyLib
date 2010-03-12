@@ -74,16 +74,16 @@ protected:
 	/*!\name member protected functions*/
 	//@{
 	//!get the (i,j) value
-	double getC(const int& i, const int& j) const;
+	quad getC(const int& i, const int& j) const;
 
 	//!set value to (i,j)
-	void setC(const int& i, const int& j, double value);
+	void setC(const int& i, const int& j, quad value);
 	//@}
 
 
 private:
 	
-	double					mx[3][3]; /*!< élément of the 3*3 matrix */
+	quad					mx[3][3]; /*!< élément of the 3*3 matrix */
 	TVCoordinateSystem*		fCoordSys; /*!< coordinate system */
 		
 	

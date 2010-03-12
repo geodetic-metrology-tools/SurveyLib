@@ -28,6 +28,7 @@ using namespace std;
 #include "TLength.h"
 #include  "TAMeasurement.h"
 #include  "TDistConstants.h"
+#include  "Staff.h"
 // typedefs
 //
 //
@@ -40,68 +41,59 @@ using namespace std;
 class  TVerticalDistMeasurement : public TAPointMeasurement  
 {
 public:
-	//constants
 
-	/**@name Constructors and Destructors */
-	//@{
-	/*!Default constructor*/
-	TVerticalDistMeasurement();
-	/**Constructor
-	@param refName the measurement's reference point's name
-	@param tgfName the measurement's target point's name
-	@param obsDist the observed vertical distance as a TLength
-	@param sigma the observed dist's precision as a TLength*/
-	TVerticalDistMeasurement(/*TSpatialPointName refName,*/ TSpatialPointName tgName, TLength obsDist, TLength sigma);
-	/*! Copy Constructor */
-	TVerticalDistMeasurement(const  TVerticalDistMeasurement&);
-	/*! Destructor */
-	virtual  ~TVerticalDistMeasurement();
-	//@}
+	TVerticalDistMeasurement(int obsID, const TSpatialPoint* tg1, const TSpatialPoint* tg2,
+		const TLength* obsDist, const TLength* fsSigma, const TLength* fsPpmE, const TLength* sndSigma, const TLength* sndPpmE,
+		const TLength* fsTgH, const TLength* fsTgHS, const TLength* sndTgH, const TLength* sndTgHS,
+		const Staff* fS, const Staff* sS);
 
-	/*! Copy Assignment Operator */
-	TVerticalDistMeasurement& operator=( const TVerticalDistMeasurement& );
+	~TVerticalDistMeasurement();
 
-	/**@return a string indicating this measurement is a vertical distance measurement*/
-	virtual string				getMeasKind() const;
+	const TLength* getObservedValue() const { return observedValue; }
+	const TLength* getFirstStaffSigma() const { return firstStaffSigma; }
+	const TLength* getFirstStaffPPM() const { return firstStaffPpm; }
+	const TLength* getSecondStaffSigma() const { return secondStaffSigma; }
+	const TLength* getSecondStaffPPM() const { return secondStaffPpm; }
 
-	/**@name Access methods*/
-	//@{
-	/**@return the measured vertical distance as a TLength*/
-	virtual TLength				getVDistValue() const;
-	/**@return the measured distance's sigma a priori*/
-	virtual TLength				getSigma() const;
-	/*!@return the observed angle's constante (if there is one) as a TAngle instance*/
-	virtual TDistConstants		getMeasConst() const {return fMeasConstant; }
-	//@}
+	const TLength* getFirstTargetHeight() const { return firstTargetHeight; }
+	const TLength* getFirstTargetHeightSigma() const { return firstTargetHeightSigma; }
 
-	///Sets the sigma a priori if it isn't done yet
-	virtual void				ifNotDoneSetSigma(TLength sigma);
-	/*!Sets the measurement constant */
-	virtual void				ifNotDoneSetMeasConst(const TDistConstants& constant);
+	const TLength* getSecondTargetHeight() const { return secondTargetHeight; }
+	const TLength* getSecondTargetHeightSigma() const { return secondTargetHeightSigma; }
 
+	const Staff* getFirstStaff() const { return firstStaff; }
+	const Staff* getSecondStaff() const { return secondStaff; }
 
-protected: 
-
+	const TSpatialPoint* getSecondTargetPoint() const { return secondTargetPoint; }
 
 private:
 
-	TLength				fMeasuredDist; /*!< vertical measurement */
-	TLength				fSigmaAPriori; /*!< error on the vertical measurement */
+	const TSpatialPoint* secondTargetPoint;
+	const TLength* observedValue; /*!< vertical measurement */
 
-	TDistConstants		fMeasConstant; /*!< measurement constant if there is one */
-
+	const TLength* firstStaffSigma; /*!< error on the vertical measurement */
+	const TLength* firstStaffPpm;
+	const TLength* secondStaffSigma; /*!< error on the vertical measurement */
+	const TLength* secondStaffPpm;
 	
+	const TLength* firstTargetHeight;
+	const TLength* firstTargetHeightSigma;
+	
+	const TLength* secondTargetHeight;
+	const TLength* secondTargetHeightSigma;
+
+	const Staff* firstStaff;
+	const Staff* secondStaff;
 };
-/*@}*/
 
 
 /**@name Typedefs*/
 //@{
-/// Type of the container used to store the vertical dist measurements
+// Type of the container used to store the vertical dist measurements
 typedef list< TVerticalDistMeasurement > VertDistContainer;
-/// Type of the iterator pointing to an element of the vertical dists container
+// Type of the iterator pointing to an element of the vertical dists container
 typedef VertDistContainer::iterator VertDistMeasIterator;
-/// Type of the const iterator pointing to an element of the vertical dists container
+// Type of the const iterator pointing to an element of the vertical dists container
 typedef VertDistContainer::const_iterator VertDistMeasConstIter;
 //@}
 

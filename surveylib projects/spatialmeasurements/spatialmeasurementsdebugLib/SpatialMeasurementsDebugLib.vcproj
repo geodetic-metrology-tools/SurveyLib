@@ -182,10 +182,6 @@
 			RelativePath=".\ReadMe.txt"
 			>
 		</File>
-		<File
-			RelativePath="..\..\..\debuglib\spatialmeasurements\ROMs.lib"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

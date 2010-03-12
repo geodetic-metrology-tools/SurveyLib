@@ -9,6 +9,7 @@
 
 #include "TLSCalcLengthParam.h"
 #include "TLSCalcOrientationParam.h"
+#include "TLSCalcFreeVectorParam.h"
 #include "TAMeasurement.h"
 
 #include <hash_map>
@@ -36,7 +37,7 @@ public:
 	/*! Adds a new CalcParam at the end of the list, if it is not done yet (tests first if the object is
 	already in the list or not)
 	\returns an iterator to the CalcParam wether it was already inserted or just being inserted */
-	typename list<CalcParam>::iterator			push_back(CalcParam& param)
+	typename list<CalcParam>::iterator			push_back(const CalcParam& param)
 	{
 		hash_map<string, list<CalcParam>::iterator>::iterator iter = calcParamsMap.find(param.getName());
 		list<CalcParam>::iterator result;
@@ -52,6 +53,13 @@ public:
 		}
 
 		return result;
+	}
+	
+	typename list<CalcParam>::iterator			push_back_unique(const CalcParam& param)
+	{
+		paramsList.push_back(param);
+
+		return --(paramsList.end());
 	}
 
 	/*! Erases the selected CalcParam and deletes its corresponding pointer from the list */
@@ -83,5 +91,6 @@ protected:
 
 typedef TLSCalcWorkingUnknown<TLSCalcLengthParam> TLSCalcWorkingLength;
 typedef TLSCalcWorkingUnknown<TLSCalcOrientationParam> TLSCalcWorkingOrientation;
+typedef TLSCalcWorkingUnknown<TLSCalcFreeVectorParam> TLSCalcWorkingFreeVec;
 
 #endif //SU_LS_WORK_UNKNOWN

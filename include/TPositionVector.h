@@ -55,8 +55,8 @@ public:
 		//!Constructor taking 3 TLength
 		//TPositionVector(const TLength&, const TLength&, const TLength&);
 
-		//!Constructor taking 3 double
-		TPositionVector(const double&, const double&, const double&,TCoordSysFactory::ECoordSys);
+		//!Constructor taking 3 quad
+		TPositionVector(const quad&, const quad&, const quad&,TCoordSysFactory::ECoordSys);
 
 		//!Copy Constructor 
 		TPositionVector( const TPositionVector&);
@@ -86,8 +86,14 @@ public:
 		//!Multiply a TPositionVector object by a TSCalar
 		TPositionVector operator*(const TScalar&);
 
-		//!Multiple a TPositionVector object by a double 
-		TPositionVector operator*(const double&);
+		//!Multiply a TPositionVector object by a quad 
+		TPositionVector operator*(const quad&);
+
+		//!Multiply this vector by a TScalar
+		TPositionVector & operator *= ( const TScalar& );
+
+		//!Multiply this vector by a quad 
+		TPositionVector & operator *= ( const quad& );
 
 		//!Copy Assignment Operator 
 		TPositionVector& operator=(const TPositionVector& );

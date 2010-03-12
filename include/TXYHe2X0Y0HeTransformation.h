@@ -27,8 +27,8 @@
 //#include  <##classname##>
 //
 //using namespace system;
-#include  <cmath>
-#include  "TCompositeAffTransform.h"
+// #include  <cmath>
+//#include  "TCompositeAffTransform.h"
 #include  "TARefFrameTransformation.h"
 #include  "TXYHeProjection.h"
 #include  "TAReferenceFrame.h"

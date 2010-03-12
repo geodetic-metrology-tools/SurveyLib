@@ -17,14 +17,8 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
-/////////////////////////////////////////////////////
-// Forward declarations
-//
-#define  PrismNb  string
-
-class TSpatialDistROM;
-
 #include "TAPointMeasurement.h"
+#include "TheodoliteTarget.h"
 #include "TLength.h"
 #include "TDistConstants.h"
 /////////////////////////////////////////////////////
@@ -33,98 +27,59 @@ class TSpatialDistROM;
 	@{*/
 
 //! Class for a spatial distance measurement
+template<typename T>
 class	TSpatialDistMeasurement : public TAPointMeasurement{
 
 public :
-
-	/*!@name Constructors/Destructor */
-	//@{
-	/*! Default constructor */
-	TSpatialDistMeasurement();
-	/*! Constructor
-	\param targetname  the measurement target point's name
-	\param obsDist the observed horizontal distance as a TLength
-	\param sigma the observed distance's precision as a TLength
-	\param pn the prism number*/
-	TSpatialDistMeasurement(TSpatialPointName targetName, TLength obsDist, TLength sigma/*, PrismNb pn*/);
-	/*! Constructor
-	\param targetname  the measurement target point's name
-	\param obsDist the observed horizontal distance as a TLength
-	\param sigma the observed distance's precision as a TLength
-	\param height a TLength object representing the prism height, supposed to be fixed 
-	\param pn the prism number*/
-	TSpatialDistMeasurement(TSpatialPointName targetName, TLength obsDist, TLength sigma, TLength height, PrismNb pn);
-	/*! Copy constructor */
-	TSpatialDistMeasurement(const TSpatialDistMeasurement &source);
-	/*! Destructor */
-	~TSpatialDistMeasurement();
-	//@}
-
-	/*! Copy assignment operator */
-	TSpatialDistMeasurement&		operator=(const TSpatialDistMeasurement& source);
-	//DANGER : shallow copy (see NetworkSurveyMeas)
-
-	/*!@name Access Methods */
-	//@{
-	/*! return the observed distance's value as a TLength */
-	virtual TLength							getDistValue() const;
-	/*!return the observed distance's precision as a TLength */
-	virtual TLength							getSigma() const;
-	/*! return the target point's height value as a TLength instance */
-	virtual TLength							getPrismHeight() const;
-	/*! return the prism height status */
-	virtual ECalcStatus						getPrismHeightStatus() const;
-
-	/*! Return a string indicating this measurement is a spatial dist measurement */
-	virtual string							getMeasKind() const;
-	/*! return the prism number */
-	virtual PrismNb							getPrismNumber() const;
-	/*!return the observed distance's precision in ppm as a TLength */
-	virtual TLength							getSigmaPpm() const;
-	/*!@return the observed angle's constante (if there is one) as a TAngle instance*/
-	virtual TDistConstants					getMeasConst() const {return fMeasConstant; }
-	//@}
 	
-	/*!@name Set Methods */
-	//@{
-	/*! set the target point's height value as a TLength instance */
-	virtual void							setPrismHeight(TLength hp);
-	/*! set the prism height status */
-	virtual void							setPrismHeightStatus(ECalcStatus status);
-	/*! sets the sigma a priori if it isn't done yet */
-	virtual void							ifNotDoneSetSigma(TLength sigma);
-	/*! sets the sigma a priori if it isn't done yet */
-	virtual void							ifNotDoneSetSigmaPpm(TLength sigma);
-	/*!Sets the measurement constant */
-	virtual void							ifNotDoneSetMeasConst(const TDistConstants& constant);
-	//@}
+	TSpatialDistMeasurement(int obsID, const TSpatialPoint* trgt, const T* t, const TLength* obsValue,
+		const TLength* sigma, const TLength* ppmE, const TLength* th, const TLength* ths, const TLength* tcs) : TAPointMeasurement(obsID, trgt)
+	{
+		observedValue = obsValue;
+		fSigmaAPriori = sigma;
+		target = t;
+		targetHeight = th;
+		targetHeightSigma = ths;
+		targetCenteringSigma = tcs;
+		ppm = ppmE;
+	}
 
-protected:
+	~TSpatialDistMeasurement()
+	{
+		delete observedValue;
+		delete fSigmaAPriori;
+		delete targetHeight;
+		delete targetHeightSigma;
+		delete targetCenteringSigma;
+		delete ppm;
+	}
+
+	const TLength* getTargetCenteringSigma() const { return targetCenteringSigma; }
+
+	const TLength* getObservedValue() const { return observedValue; }
+
+	const TLength* getSigma() const { return fSigmaAPriori; }
+
+	const TLength* getPPM() const { return ppm; }
+
+	const T* getTarget() const { return target; }
+
+	const TLength* getTargetHeight() const { return targetHeight; }
+
+	const TLength* getTargetHeightSigma() const { return targetHeightSigma; }
 
 private:
 
-	TLength							fObservedDist; /*!< observed spatial distance */
-	TLength							fSigmaAPriori; /*!< distance's "a priori" error */
-	TLength							fSigmaPpm; /*!< error "a priori" on the observed distance in ppm*/
+	const TLength* observedValue; /*!< measured distance */
+	const TLength* fSigmaAPriori; /*!< estimated error on the distance measurement*/
+	const TLength* ppm;
 
-	TDistConstants					fMeasConstant; /*!< measurement constant if there is one */
-	TLength							fPrismHeight; /*!< prism height */
-	PrismNb							fPrismNumber; /*!< prism number */
-	ECalcStatus						fHeightStatus; /*!< prism height status : variable or fixed */
+	const T* target;
+	const TLength* targetCenteringSigma;
+	const TLength* targetHeight;
+	const TLength* targetHeightSigma;
 
 };
-/*@}*/
-
-
-	/*!@name Typedefs*/
-	//@{
-	/*!Type of the container used to store the spatial distances */
-	typedef list< TSpatialDistMeasurement > SpatialDistContainer;
-	/*!Type of an iterator pointing to an element of the spatial dist. container */
-	typedef SpatialDistContainer::iterator SpatialDistMeasIterator;
-	/*!Type of an iterator pointing to an element of the spatial dist. container */
-	typedef SpatialDistContainer::const_iterator SpatialDistMeasConstIter;
-	//@}
 	
 #endif
 

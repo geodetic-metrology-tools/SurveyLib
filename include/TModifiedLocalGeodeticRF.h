@@ -108,11 +108,11 @@ private:
 	TModifiedLocalGeodeticRF& operator=( const TModifiedLocalGeodeticRF& );
 	
 	// constants
-	static const double precisionH;
-	static const double precisionPhi;
+	static const quad precisionH;
+	static const quad precisionPhi;
 
 	//typedef
-	typedef struct {double phi; double lambda; double h;} TGeodeticCoords;
+	typedef struct {quad phi; quad lambda; quad h;} TGeodeticCoords;
 
 	
 

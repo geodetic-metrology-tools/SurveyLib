@@ -44,6 +44,8 @@ class TLengthFilter //: public TObject
 {
 public:
 
+	virtual ~TLengthFilter() { }
+
 	/*!name Public Member Function*/
 	//@!{
 	/*!Get angle value from a TAStreamFormatter object

@@ -24,6 +24,8 @@ using namespace std;
 class  TSpatialPosition;
 class  TAReferenceFrame;
 
+#include  "TVNumericValue.h"
+
 //#include  "TWorkingPoints.h"
 #include  "TSpatialPointName.h"
 #include  "TVSpatialPtListener.h"
@@ -103,11 +105,11 @@ public:
 		virtual  TSpatialPointName  getName()  const;
 		
 		/*!Sets the point's distance (for file from geode)
-		\param id the point's distance as a double*/
-		virtual  void  setDist( const double& id);
+		\param id the point's distance as a quad*/
+		virtual  void  setDist( const quad& id);
 
 		/*!Returns the point's distance */
-		virtual  double  getDist()  const {return fPointDist;};
+		virtual  quad  getDist()  const {return fPointDist;};
 	
 	
 		/*!Sets the point's header line of comment (for file from geode)
@@ -209,7 +211,7 @@ protected:
 	bool						fUsedInCalc; /*!< gives the state of the point whether it is used or not*/
 	TSpatialPointName*			fName; /*!< pointer to the point's TSpatialPointName*/
 
-	double						fPointDist; /*!< distance (from geode's DB point) for the point */
+	quad						fPointDist; /*!< distance (from geode's DB point) for the point */
 	
 	string						fHeaderComment; /*!<line of comments before the line of coordinate*/
 	string						fEOLComment;/*!<end of line comments*/

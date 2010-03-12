@@ -262,10 +262,6 @@
 			RelativePath="..\..\..\lib\spatialmeasurements\Measurements.lib"
 			>
 		</File>
-		<File
-			RelativePath="..\..\..\lib\spatialmeasurements\ROMs.lib"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

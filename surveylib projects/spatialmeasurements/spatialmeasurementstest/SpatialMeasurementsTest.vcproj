@@ -360,10 +360,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\lib\SpatialMeasurements\ROMs.lib"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\..\lib\SpatialObjectsLibrary.lib"
 			>
 		</File>

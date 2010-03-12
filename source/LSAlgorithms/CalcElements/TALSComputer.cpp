@@ -24,7 +24,7 @@ TALSComputer::~TALSComputer(){
 ////////////////////////////////////////
 // sets the sigma0 a priori scale factor
 ////////////////////////////////////////
-void TALSComputer::setS0APrioriScaleFactor(double scalefac){
+void TALSComputer::setS0APrioriScaleFactor(quad scalefac){
 
 	fS0APrioriScaleFactor = scalefac;
 }*/

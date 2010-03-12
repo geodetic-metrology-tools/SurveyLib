@@ -128,7 +128,7 @@ void TLA2LGTransformation::setDestinationFrame( TModifiedLocalGeodeticRF* LG )
 
 bool  TLA2LGTransformation::transform( TPositionVector& pv ) const
 {// transform a position vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(pv);
@@ -139,7 +139,7 @@ bool  TLA2LGTransformation::transform( TPositionVector& pv ) const
 
 bool  TLA2LGTransformation::transform( TFreeVector& fv ) const
 {// transform a free vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(fv);
@@ -150,7 +150,7 @@ bool  TLA2LGTransformation::transform( TFreeVector& fv ) const
 
 bool  TLA2LGTransformation::transform( TRotationMatrix& rmx ) const
 {// transform a Rotation Matrix
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(rmx);
@@ -187,7 +187,7 @@ void  TLA2LGTransformation::initialise()
 	{
 		delete fTransform;
 	}
-	fTransform = new TCompositeAffTransform(p * (r3 * r2 * r1) * p * r4 * t);
+	fTransform = new TCompositeAffTransform( p( (r3 * r2 * r1)( p( r4( t ) ) ) ) );
 
 	return;
 }

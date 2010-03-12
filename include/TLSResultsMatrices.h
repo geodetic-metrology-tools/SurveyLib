@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////
 // Forward declarations
 /////////////////////////////////////////////////////
+#include "TDouble.h"
 #include "TMatrix.h"
 #include "TSparseMatrix.h"
 #include "TColumnVector.h"
@@ -21,7 +22,6 @@
 //#include <iostream.h>
 #include "UEOIndices.h"
 
-#include "TDouble.h"
 
 using namespace std;
 
@@ -40,13 +40,6 @@ public:
 	thus enabling the dimensioning of the matrices (set to zero)*/
 	TLSResultsMatrices(UEOIndices ueoi);
 
-	//!Constructor
-	/*	!@param ueoi an object holding the number of unknowns, equations and observations,
-		thus enabling the dimensioning of the matrices (set to zero)
-		!@param numConstraints indicates the number of constraints added for a free network
-		calculation
-	*/
-	TLSResultsMatrices(UEOIndices ueoi, int numConstraints);
 
 	//!Destructor
 	virtual ~TLSResultsMatrices();
@@ -80,11 +73,11 @@ public:
 	/*!@return the boolean indicating if sigma zero should be applied or not */
 	virtual bool				S0APosterioriVariances() const {return fS0APosterioriVariances;}
 	/*!@return  the squared sigma zero */
-	virtual double				getSigmaZero2() const { return fSigmaZero2; }
+	virtual quad				getSigmaZero2() const { return fSigmaZero2; }
 	//@}
 
 	/*! sets the sigma zero */
-	virtual void			setSigmaZero2(double s);
+	virtual void			setSigmaZero2(quad s);
 
 	/*! sets the boolean */
 	virtual void			setS0APosterioriVariances(bool s0) {fS0APosterioriVariances = s0; return;}
@@ -95,10 +88,8 @@ public:
 	/*! compute and return a vector of observations variances */
 	TColumnVector	computeVarObs(const TSparseMatrix& A, const TSparseMatrix& ATransposed);
 
-	void*			getSymbolic() const { return symbolic; }
-	void			setSymbolic(void* s) { symbolic = s; }
-
-	TSparseMatrix*	getCholeskyFactor();
+	TSparseMatrix*  getL() const { return L; }
+	void			setL(TSparseMatrix* l) { L = l; }
 
 private:
 	//mj2008
@@ -110,8 +101,7 @@ private:
 	@param solut a pointer to the residuals vector
 	@param sigm2 the estimated square of the sigma zero
 	@param unkcov a pointer to the unknowns covariance matrix */
-	TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, double sigm2, TMatrix* unkcov);
-	TLSResultsMatrices(int solut, int resid, int unkcov);
+	TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, quad sigm2);
 	//mj
 	
 
@@ -119,16 +109,16 @@ private:
 	TColumnVector*	fSolutionVctr; /*!< vector (u x 1) containing the calculated parameters */
 	TColumnVector*	fResidualsVctr; /*!< vector (o x 1) containing the calculated residues on observations */
 	TSparseMatrix*	fUnknownsCovarianceMtrx; /*!< matrix (u x u) containing the variances and covariances for parameters */
-	double			fSigmaZero2; /*!< calculated "average variance" on residues */
+	quad			fSigmaZero2; /*!< calculated "average variance" on residues */
 	bool			fS0APosterioriVariances; /*!< indicates if the s0 a posteriori should be applied */
-	void*			symbolic;
+	TSparseMatrix*  L;
 };
 
 /////////////////////
 // Inline Definitions
 /////////////////////
-inline void TLSResultsMatrices::setSigmaZero2(double s){ fSigmaZero2 = s;}
+inline void TLSResultsMatrices::setSigmaZero2(quad s){ fSigmaZero2 = s;}
 
-//inline void TLSResultsMatrices::setResVariance(double rv) {fResidualVariance = new TDouble(rv);}
+//inline void TLSResultsMatrices::setResVariance(quad rv) {fResidualVariance = new TDouble(rv);}
 
 #endif

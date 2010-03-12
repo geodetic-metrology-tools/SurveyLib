@@ -25,50 +25,69 @@
 
 #endif // _MSC_VER >= 1000
 
-#include  "TConstPtrWrapper.h"
-#include  "TAAffineTransformation.h"
+#include  "TPtrWrapper.h"
+//#include  "TConstPtrWrapper.h"
+#include  "TVAffineTransformation.h"
 
 
 //! Wrapper class
-class  TAffineTransformWrapper : public TConstPtrWrapper<TAAffineTransformation>
+class  TAffineTransformWrapper : public TPtrWrapper<TVAffineTransformation>
 {
 public:
-		/// default constructeur
+/*		/// default constructeur
 		TAffineTransformWrapper();
 
 		/// Constructor taking a pointer to a transformation
-		TAffineTransformWrapper( const TAAffineTransformation* transformer );
-
-		/// Copy Constructor 
-		TAffineTransformWrapper( TAffineTransformWrapper & );
+		TAffineTransformWrapper( TVAffineTransformation* transformer );
 
 		/// Copy Constructor 
 		TAffineTransformWrapper( const TAffineTransformWrapper & );
 
 		/// Destructor
 		virtual  ~TAffineTransformWrapper();
+*/
 
-
-		const TAAffineTransformation*  getTransformation()  const {this->getPtr();}
-
-		//TAAffineTransformation*  getTransformation()  {this->getPtr();}
+		TVAffineTransformation*  getTransformation()  {return this->getPtr();}
+		const TVAffineTransformation*  getTransformation() const {return this->getPtr();}
 
 private:
 		//!Copy assignment operator
 		TAffineTransformWrapper& operator=( TAffineTransformWrapper & right );
 
-};
+//m};
+
+/*#include <list>
+using namespace std;
+	typedef list<TAffineTransformWrapper> CompositeTransformationSet;
+	typedef CompositeTransformationSet::iterator CompositeIterator;
+	typedef CompositeTransformationSet::const_iterator ConstCompositeIter;
+	typedef list<TAffineTransformWrapper> MySet;
+	typedef MySet::iterator MyIterator;
+	typedef MySet::const_iterator ConstMyIter;*/
+
+//////////////////////////////////////////////////////////////////////
+// Inline Definitions
+//////////////////////////////////////////////////////////////////////
+
+/*
+//////////////////////////////////////////////////////////////////////
+// Definitions and Initialisations
+//////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
 
 //Default constructor
 //template <class T>
 TAffineTransformWrapper::TAffineTransformWrapper() 
-:TConstPtrWrapper<TAAffineTransformation>()
+:TPtrWrapper<TVAffineTransformation>()
 {}
 
 //Constructor taking a pointer to the template object
 //template <class T>
-TAffineTransformWrapper::TAffineTransformWrapper( const TAAffineTransformation * transformer )
-:TConstPtrWrapper<TAAffineTransformation>(transformer)
+TAffineTransformWrapper::TAffineTransformWrapper( TVAffineTransformation * transformer )
+:TPtrWrapper<TVAffineTransformation>(transformer)
 { 
 }
 
@@ -76,16 +95,11 @@ TAffineTransformWrapper::TAffineTransformWrapper( const TAAffineTransformation *
 //Copy constructor
 //template <class T>
 TAffineTransformWrapper::TAffineTransformWrapper( TAffineTransformWrapper & original )
-:TConstPtrWrapper<TAAffineTransformation>(original)
+:TPtrWrapper<TVAffineTransformation>( original )
 {
-}
-
-
-//Copy constructor
-//template <class T>
-TAffineTransformWrapper::TAffineTransformWrapper( const TAffineTransformWrapper & original )
-:TConstPtrWrapper<TAAffineTransformation>( original.getPtr() )
-{
+	this->setPtr( original.getPtr() );
+	this->setCountPtr( original.getCountPtr() );
+	this->incrementCount();
 }
 
 
@@ -94,83 +108,5 @@ TAffineTransformWrapper::TAffineTransformWrapper( const TAffineTransformWrapper 
 TAffineTransformWrapper::~TAffineTransformWrapper()
 {  
 }
-
-////////////////////////////////////////////////////////////////
-// Forward declarations
-//
-//#include  <##classname##>
-//using namespace std;
-//
-
-
-//mclass  TAAffineTransformation;
-// typedefs
-//
-//
-////////////////////////////////////////////////////////////////
-
-/*! \ingroup spatialobjects
-	@{*/
-
-//! Wrapper class
-//mclass  TAffineTransformWrapper //: public TObject  
-//m{
-//mpublic:
-	/**@name Constructors and Destructors */
-	//@{
-/*		/// default constructeur
-		TAffineTransformWrapper();
-
-		/// Constructor taking a pointer to a transformation
-		TAffineTransformWrapper( const TAAffineTransformation* transformer);
-
-		/// Copy Constructor 
-		TAffineTransformWrapper( const TAffineTransformWrapper& );
-
-		/// Destructor
-		virtual  ~TAffineTransformWrapper();
-	//@}
 */
-
-	/**@name Member Functions */
-	//@{
-/*		/// Copy Assignment Operator 
-		TAffineTransformWrapper& operator=( const TAffineTransformWrapper& );
-
-		/// Equivalence Operator
-		bool operator==( const TAffineTransformWrapper& ) const;
-
-		/// Less Than Comparison Operator
-		bool operator<( const TAffineTransformWrapper& ) const;
-
-		/// Returns the transformation.
-		TAAffineTransformation*  getTransformation()  const;
-
-	//@}
-
-
-protected:
-
-
-private:
-
-
-private:
-
-	TAAffineTransformation*  fTransformer;*/	/*!< affine transformation */
-
-	//ClassDef(TAffineTransformWrapper, 1)
-//m};
-
-/*@}*/
-
-//////////////////////////////////////////////////////////////////////
-// Inline Definitions
-//////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
 #endif // SU_TRANSFORMATION_WRAPPER

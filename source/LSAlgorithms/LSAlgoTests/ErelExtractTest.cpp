@@ -35,7 +35,6 @@
 #include "TLGCFileWriter.h"
 
 #include "LSCalcDataSet.h"
-#include	<cmath>
 #include	<nag.h>
 #include	<nagg01.h>
 
@@ -44,7 +43,7 @@ void  erel()
 {
 /*	static NagError fail;
 	fail.print = false;
-	double wmax = nag_deviates_normal(Nag_UpperTail,0.1,&fail);
+	quad wmax = nag_deviates_normal(Nag_UpperTail,0.1,&fail);
 
 	cout << wmax << endl;*/
 

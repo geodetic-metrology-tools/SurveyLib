@@ -74,6 +74,12 @@ public:
 	/*!@return a cons iterator pointing to a point specified through its name*/
 	PointConstIter		getPoint(TSpatialPointName) const;
 
+	/*!@return an iterator pointing to a point specified through its name*/
+	PointIterator		getPoint(string);
+
+	/*!@return a cons iterator pointing to a point specified through its name*/
+	PointConstIter		getPoint(string) const;
+
 	/*!@initiates broadcaster if the header of a spatial point is changed*/
 	void headerChanged(TSpatialPointName name);
 	/*!@initiates broadcaster if the name of a spatial point is changed*/

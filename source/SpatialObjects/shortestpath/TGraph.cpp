@@ -6,7 +6,7 @@
 ////////////////
 // include files
 ////////////////
-#include <limits>
+// #include <limits>
 #include <iomanip>
 
 #include "TReferenceEllipsoid.h"
@@ -216,7 +216,7 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 			
 			TRefFrameWrapper rfto(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
 
-			for (unsigned int i = 0; i < size(); i++)
+			for (i = 0; i < size(); i++)
 			{
 				if (rfto == C[i].first)
 					end = i;
