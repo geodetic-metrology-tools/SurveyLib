@@ -6,7 +6,7 @@ Reflection by a plane x=0, y=0, z=0 or Reflection by the plane x=y, x=z or y=z*/
 // Patterns:
 //
 // 
-// Copyright 2000 CERN EST/SU. All rights reserved.
+// Copyright 2000-10 CERN SU, M.Jones. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 
@@ -15,15 +15,10 @@ Reflection by a plane x=0, y=0, z=0 or Reflection by the plane x=y, x=z or y=z*/
 //#include	"TROOT.h"
 //
 // other forward declarations
-#include  "TLength.h"
-#include  "TTranslation.h"
-#include  "TRotation.h"
-#include  "TEnlargement.h"
-#include  "THelmertTransformation.h"
-#include  "TAffineTransformWrapper.h"
-#include  "TGraph.h"
-
 #include  "TReflection.h"
+#include  "TPositionVector.h"
+#include  "TFreeVector.h"
+#include  "TRotationMatrix.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -42,27 +37,18 @@ Reflection by a plane x=0, y=0, z=0 or Reflection by the plane x=y, x=z or y=z*/
 TReflection::TReflection() : fReflectionMatrix(TCoordSysFactory::k3DCartesian)
 {	// default constructor
 	fReflectionType = kNull;
-	setStatus(TAAffineTransformation::kNull);
+	setStatus(TVNumericValue::kNull);
 }
 
 TReflection::TReflection(const TReflection::EType type) : fReflectionMatrix(TCoordSysFactory::k3DCartesian)
 {
 	fReflectionType = type;
-	setStatus(kKnown);
+	setStatus(TVNumericValue::kKnown);
 	fillMatrix(type);
 }
 
 TReflection::TReflection( const TReflection& original ) : fReflectionMatrix(TCoordSysFactory::k3DCartesian)
 {	// copy constructor
-	/*fReflectionType = original.getType();
-	fillMatrix(fReflectionType);
-	
-	if (original.isNull()==true)
-		{setStatus(TAAffineTransformation::kNull);}
-	else
-		{setStatus(TAAffineTransformation::kKnown);}
-	*/
-
 	*this = original;
 }
 
@@ -75,8 +61,6 @@ TReflection::~TReflection()
 // Member Functions
 //////////////////////////////////////////////////////////////////////
 
-
-
 TReflection&  TReflection::operator=( const TReflection& right)
 {	// Copy Assignment operator
 
@@ -86,7 +70,6 @@ TReflection&  TReflection::operator=( const TReflection& right)
 		fillMatrix(fReflectionType);
 		
 		setStatus(right.getStatus());
-
 	}
 	return *this;
 }
@@ -95,16 +78,6 @@ TReflection&  TReflection::operator=( const TReflection& right)
 TAAffineTransformation*  TReflection::clone() const
 {// Return a pointer to a clone of this transformation
 	return new TReflection( *this );
-}
-
-
-TCompositeAffTransform TReflection::operator*( const TAAffineTransformation& right)
-{
-	TAAffineTransformation* trans = new TReflection(*this);
-	TAffineTransformWrapper wrapper(trans);
-	TCompositeAffTransform result(wrapper);
-	delete trans;
-	return result * right;
 }
 
 
@@ -147,17 +120,57 @@ bool TReflection::transform(TRotationMatrix& rm) const
 }
 
 
-TReflection  TReflection::inverse()
-{/// Return the inverse transformation
-	/*TReflection inverse(*this);
-	return inverse;*/
-	return *this;
+TPositionVector &  TReflection::operator() ( TPositionVector & right ) const
+{// apply this transformation to a position vector
+	if ( this->isNull() || right.isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	else
+	{
+		right = fReflectionMatrix * right;
+	}
+	return right;
+}
+
+
+TFreeVector &  TReflection::operator() ( TFreeVector & right ) const
+{// apply this transformation to a free vector
+	if ( this->isNull() || right.isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	else
+	{
+		right = fReflectionMatrix * right;
+	}
+	return right;
+}
+
+
+
+TRotationMatrix &  TReflection::operator() ( TRotationMatrix & right ) const
+{// apply this transformation to a Rotation Matrix
+	if ( this->isNull() )
+	{
+		right.setStatus( TVNumericValue::kNull );
+	}
+	return right;
+}
+
+
+TReflection * TReflection::inverse() const
+{// Return a pointer to the inverse of this transformation
+	// the inverse of a reflection is the same reflection
+	TReflection * inverse = new TReflection(*this);
+	return inverse;
 }
 
 
 void TReflection::invert()
-{/// Change this transformation in the inverse
-	return ;
+{// Invert the transformation, replaces the current transformation parameters
+	// the inverse of a reflection is the same reflection
+	return;
 }
 
 

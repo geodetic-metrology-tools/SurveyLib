@@ -133,7 +133,7 @@ void TLG2GCTransformation::setDestinationFrame( TGeodeticRefFrame* GC )
 
 bool  TLG2GCTransformation::transform( TPositionVector& pv ) const
 {// transform a position vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(pv);
@@ -144,7 +144,7 @@ bool  TLG2GCTransformation::transform( TPositionVector& pv ) const
 
 bool  TLG2GCTransformation::transform( TFreeVector& fv ) const
 {// transform a free vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(fv);
@@ -155,7 +155,7 @@ bool  TLG2GCTransformation::transform( TFreeVector& fv ) const
 
 bool  TLG2GCTransformation::transform( TRotationMatrix& rmx ) const
 {// transform a Rotation Matrix
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(rmx);
@@ -200,7 +200,7 @@ void  TLG2GCTransformation::initialise()
 	{
 		delete fTransform;
 	}
-	fTransform = new TCompositeAffTransform(t * r1 * r2 * r3 * r * t2);
+	fTransform = new TCompositeAffTransform( t( (r1 * r2 * r3 * r)( t2 ) ) );
 	
 	return;
 }

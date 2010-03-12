@@ -67,7 +67,7 @@ void	TDMSFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 {	// function to get a sexagesimal angle from a QTextStream object
 	// and set the value in a TAngle object
 	int		degs, mins;
-	double	secs;
+	quad	secs;
 
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')

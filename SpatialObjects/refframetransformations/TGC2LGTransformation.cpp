@@ -133,7 +133,7 @@ void TGC2LGTransformation::setDestinationFrame( TModifiedLocalGeodeticRF* LG )
 
 bool TGC2LGTransformation::transform( TPositionVector& pv ) const
 {// transform a position vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(pv);
@@ -144,7 +144,7 @@ bool TGC2LGTransformation::transform( TPositionVector& pv ) const
 
 bool  TGC2LGTransformation::transform( TFreeVector& fv ) const
 {// transform a free vector
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(fv);
@@ -155,7 +155,7 @@ bool  TGC2LGTransformation::transform( TFreeVector& fv ) const
 
 bool  TGC2LGTransformation::transform( TRotationMatrix& rmx ) const
 {// transform a Rotation Matrix
-	bool result;
+	bool result = false;
 	  
 	if( isInitialised() )
 		  result = fTransform->transform(rmx);
@@ -200,16 +200,7 @@ void  TGC2LGTransformation::initialise()
 	{
 		delete fTransform;
 	}
-	fTransform = new TCompositeAffTransform(t * r1 * r2 * r3 * r * t2);
-	/*TCompositeAffTransform *temp = new TCompositeAffTransform();
-	temp->add(t);
-	temp->add(r1);
-	temp->add(r2 );
-	temp->add(r3 );
-	temp->add(r);
-	temp->add(t2);
-	//fTransform = new TCompositeAffTransform(temp);
-	fTransform = temp;*/
+	fTransform = new TCompositeAffTransform( t( (r1 * r2 * r3)( r( t2 ) ) ) );
 	fTransform->invert();//invert ne fait pas appelle a new
 
 	return;

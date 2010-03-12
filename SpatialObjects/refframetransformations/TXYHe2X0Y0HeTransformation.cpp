@@ -23,7 +23,7 @@
 //For ROOT//////////////////////////////////////////////////////
 //
 //#include  "TVReferenceFrame.h"
-#include  "TRotation.h"
+//#include  "TRotation.h"
 #include  "TReferenceEllipsoid.h"
 #include  "TAModifiedLocalAstronomicalRF.h"
 #include  "TXYHe2X0Y0HeTransformation.h"
@@ -101,13 +101,13 @@ TARefFrameTransformation*  TXYHe2X0Y0HeTransformation::inverse() const
 
 bool  TXYHe2X0Y0HeTransformation::transform(TPositionVector& pv) const
 {// Transformation of a position vector using the parameters of the two reference frames
-	double Dx, dx, Dy, dy, he, d, falseX, falseY;
+	quad Dx, dx, Dy, dy, he, d, falseX, falseY;
 
 	// distance from P0 in XY-plane
 	dx = pv.getX().getMetresValue() - fFrom->getMLARefFrame()->getFalseOrigin().getX().getMetresValue();
 	dy = pv.getY().getMetresValue() - fFrom->getMLARefFrame()->getFalseOrigin().getY().getMetresValue();
 	he = pv.getH().getMetresValue();
-	d = sqrt( (pow(dx,2)) + (pow(dy,2)) );
+	d = __sqrtq( (__powq(dx,2)) + (__powq(dy,2)) );
 
 	// bearing from P0 in the XY-plane
 	TAngle beta = TAngle::aTan2(dx,dy);
@@ -127,13 +127,13 @@ bool  TXYHe2X0Y0HeTransformation::transform(TPositionVector& pv) const
 	TAngle phiP0;
 	phiP0 = fFrom->getMLARefFrame()->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid(/*fEllipsoid, &falseOrigin*/);
 	
-	double nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
+	quad nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
 
-	double rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
-		*pow( (phiP0.cosine()) * (azimuth.cosine()) ,2 ) );
+	quad rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
+		*__powq( (phiP0.cosine()) * (azimuth.cosine()) ,2 ) );
 	
 	// scale factor
-	double k = rhoalpha / (rhoalpha + he);
+	quad k = rhoalpha / (rhoalpha + he);
 	
 	//Deltas to be added on X0 and Y0 coordinates, using the scale factor
  	Dx = k * dx;

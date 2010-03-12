@@ -17,7 +17,7 @@
 #include  "TAReferenceFrame.h"
 #include  "TReferenceEllipsoid.h"
 #include  "TSpatialPosition.h"
-#include  "math.h"
+#include  "mathimf.h"
 #include  "TLength.h"
 #include  "TAngle.h"
 ////////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ TSpatialPosition::TSpatialPosition( TAReferenceFrame* trf )
 
 
 TSpatialPosition::TSpatialPosition( TAReferenceFrame* trf,
-								   const double x, const double y, const double z,
+								   const quad x, const quad y, const quad z,
 								   TCoordSysFactory::ECoordSys cs )
 {//constructor
 	fX = new TPositionVector(x,y,z,cs);

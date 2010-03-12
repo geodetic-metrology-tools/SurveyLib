@@ -152,9 +152,9 @@ TAStreamFormatter *TStreamFormatterFactory::getFormatter( TAStreamFormatter::ETe
 
 	return formatter;
 }
-//////////////////////////*/
+//////////////////////////
 
-/*
+
 TAStreamFormatter *TStreamFormatterFactory::getFormatter( TAStreamFormatter::ETextFormat  format, QTextStream*  stream) 
 {	// Function to obtain a pointer instance of the requested text stream formatter
 	

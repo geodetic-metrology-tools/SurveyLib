@@ -62,7 +62,7 @@ TAStreamFormatter::TAStreamFormatter(TDataParameters& dp)
 	//INSURE
 	init();
 
-	fName = "default";
+	fName = "defaultName";
 	fFStream=0;
 
 	fSStream = new stringstream(ios_base::out);
@@ -82,7 +82,7 @@ TAStreamFormatter::TAStreamFormatter(const string& input, TDataParameters& dp)
 {//extraction of a string from a stream, reading of a stream
 	init();
 	
-	fName = "default";
+	fName = "defaultName";
 	fFStream=0;
 
 	fSStream = new stringstream(input, ios_base::in);
@@ -151,11 +151,11 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds)
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(fName, ios_base::in);
+		fFStream = new fstream(ds.getFileName().c_str(), ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(fName, ios_base::out);
+		fFStream = new fstream(ds.getFileName().c_str(), ios_base::out);
 	}
 
 	if(fFStream->fail())
@@ -191,11 +191,11 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds, TPointFormat& pf
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(fName, ios_base::in);
+		fFStream = new fstream(ds.getFileName().c_str(), ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(fName, ios_base::out);
+		fFStream = new fstream(ds.getFileName().c_str(), ios_base::out);
 		fPointFormat =pf;
 		setPrecisionFormat(fPointFormat.getCoordPrecision());
 		setWidthFormat(fPointFormat.getCoordWidth());
@@ -235,11 +235,11 @@ TAStreamFormatter::TAStreamFormatter(const EIOType io, TADataSet& ds, const TPoi
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(fName, ios_base::in);
+		fFStream = new fstream(ds.getFileName().c_str(), ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(fName, ios_base::out);
+		fFStream = new fstream(ds.getFileName().c_str(), ios_base::out);
 		fPointFormat =pf;
 		fObservationFormat = obsFor;
 		setPrecisionFormat(fPointFormat.getCoordPrecision());
@@ -292,7 +292,7 @@ void TAStreamFormatter::init()
 	fSStream = 0;//stringstream*
 	fFStream = 0;//fstream*
 	fIOStream = 0;//iostream*
-	fName = "";	
+	fName =0;//const char*	
 	fError="";//string	
 
 	fAngFilter =0;//TAngleFilter*
@@ -588,15 +588,15 @@ TAStreamFormatter&	TAStreamFormatter::operator<<(const TPositionVector& pos)
 
 
 TAStreamFormatter  &TAStreamFormatter::operator<<( const TDouble& db )
-{//output a double object to the text stream	
+{//output a quad object to the text stream	
 
-	// extract the double object as a double value and output to the text stream
+	// extract the quad object as a quad value and output to the text stream
 	this->width(fWidth);
 	this->precision(fPrecision);
 	(*this)<<right;
 	if(db.getStatus() != TVNumericValue::kNull)
 	{
-		double d = db.getValue();
+		quad d = db.getValue();
 		(*this)<<d;
 	}
 
@@ -606,13 +606,13 @@ TAStreamFormatter  &TAStreamFormatter::operator<<( const TDouble& db )
 TAStreamFormatter  &TAStreamFormatter::operator<<( const TScalar& db )
 {//output a scalar object to the text stream	
 
-	// extract the scalar object as a double value and output to the text stream
+	// extract the scalar object as a quad value and output to the text stream
 	this->width(fWidth);
 	this->precision(fPrecision);
 	(*this)<<right;
 	if(db.getStatus() != TVNumericValue::kNull)
 	{
-		double d = db.getValue();
+		quad d = db.getValue();
 		(*this)<<d;
 	}
 
@@ -676,8 +676,8 @@ TAStreamFormatter &TAStreamFormatter::operator>>( float &f )
 {   (*fIOStream)>>( f ); return *this; }
 
 
-TAStreamFormatter &TAStreamFormatter::operator>>( double &d )
-{   (*fIOStream)>>( d ); return *this; }
+TAStreamFormatter &TAStreamFormatter::operator>>( quad &d )
+{   double f; (*fIOStream)>>( f ); d = f; return *this; }
 
 
 TAStreamFormatter &TAStreamFormatter::operator>>( char *s )
@@ -731,8 +731,8 @@ TAStreamFormatter &TAStreamFormatter::operator<<( float f )
 {   (*fIOStream)<<( f ); return *this; }
 
 
-TAStreamFormatter &TAStreamFormatter::operator<<( double d )
-{   (*fIOStream)<<( d ); return *this; }
+TAStreamFormatter &TAStreamFormatter::operator<<( quad d )
+{   (*fIOStream)<<( (double) d ); return *this; }
 
 
 TAStreamFormatter &TAStreamFormatter::operator<<( const char *s )
@@ -799,6 +799,11 @@ bool TAStreamFormatter::atEndCom()
 return fIOStream->eof();
 }
 
+TAStreamFormatter& TAStreamFormatter::seekg(streamoff off, ios_base::seekdir dir)
+{
+	fIOStream->seekg(off, dir);
+	return *this;
+}
 
 string TAStreamFormatter::readLine() 
 {/*
@@ -819,7 +824,7 @@ string TAStreamFormatter::readLine()
 
 ////////////////////////////////////
 
-	c[pos]=fIOStream->get();
+	c[pos]=(char) fIOStream->get();
 
 	if(c[pos]==EOF)
 	{//check if there is a line
@@ -831,7 +836,7 @@ string TAStreamFormatter::readLine()
 		{//read character by character
 			result +=c[pos];
 			pos++;
-			c[pos]=fIOStream->get();
+			c[pos]=(char) fIOStream->get();
 		}
 		//substract the last char (eof or \n)
 	}
@@ -878,7 +883,7 @@ inline string TAStreamFormatter::read()
 */
 
 char TAStreamFormatter::readChar()
-{return (*fIOStream).get();
+{return (char) (*fIOStream).get();
 }
 
 void TAStreamFormatter::skipWhiteSpace() 
@@ -893,7 +898,7 @@ void TAStreamFormatter::skipWhiteSpace()
 		//while (c!=EOF && isspace(c))
 		while(c==space && c!=EOF)
 		{
-			c=fIOStream->get();
+			c=(char) fIOStream->get();
 		}
 		fIOStream->putback(c);
 	}
@@ -909,7 +914,7 @@ TAStreamFormatter&	TAStreamFormatter::get(char& c)
 
 char	TAStreamFormatter::peek()
 {//reads and returns a character from the stream and puts it back
-return (*fIOStream).peek();
+return (char) (*fIOStream).peek();
 }
 
 
@@ -1320,7 +1325,7 @@ void	TAStreamFormatter::writeStringLeft(const int width, const string data)
 	return;
 }
 
-void	TAStreamFormatter::writeDouble(const int width, const int pres, const double data)
+void	TAStreamFormatter::writeDouble(const int width, const int pres, const quad data)
 {
 	this->width(width);
 	this->precision(pres);

@@ -202,7 +202,7 @@ string  TFileParameters::getFileName()  const
 		bool qt = false;
 		while(path.peek() != EOF)
 		{
-			char a = path.get();
+			char a = (char) path.get();
 			if(a == c)
 			{
 				qt = true;

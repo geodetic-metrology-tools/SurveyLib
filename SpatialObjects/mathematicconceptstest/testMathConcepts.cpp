@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <limits>
+//#include <limits>
 using namespace std;
 
 #include "TANumericValue.h"
@@ -74,12 +74,12 @@ void main()
 	TAngle ang1, ang2, ang3, ang4, ang5, ang6, ang7;
 
 
-	double d1,d2;
+	quad d1,d2;
 
 	d1=0;
 	d2=10;
 	ang1=ang1.aTan2(d2,d1);
-//	ang2=ang2.atan2(d2,d1);
+//	ang2=ang2.__atan2q(d2,d1);
 	cout<<ang1.getGonsValue()<<endl<<endl;
 //	cout<<ang2.getGonsValue()<<endl<<endl;
 
@@ -620,8 +620,8 @@ void main()
 
 	
 	cout<<"test fonction mat rotation"<<endl;
-//	double a(TAngle::pi().getRadiansValue()),b(2),c(0);
-	double a(1),b(2),c(3);
+//	quad a(TAngle::pi().getRadiansValue()),b(2),c(0);
+	quad a(1),b(2),c(3);
 //	cout<<r2.setAllRotations(TRotationMatrix::kRzxy,a,b,c)<<endl;
 	r2.setAllRotations(TRotationMatrix::kRzxy,a,b,c);
 	r2.setStatus(TVNumericValue::kKnown);
@@ -1121,19 +1121,19 @@ void main()
 		Destructor Object #4; 0 Objects in Memory.*/
 
 
-/*	double c=0;
+/*	quad c=0;
 	TDouble C(c/c);
 	std::cout << "TDouble C : " << C.getValue() << std::endl;
 	std::cout << "Status  C : " << C.getStatus() << std::endl;
-	C=TDouble(numeric_limits<double>::max())*TDouble(2);
+	C=TDouble(numeric_limits<quad>::max())*TDouble(2);
 	std::cout << "TDouble C : " << C.getValue() << std::endl;
 	std::cout << "Status  C : " << C.getStatus() << std::endl;
-	C=TDouble(numeric_limits<double>::max())*TDouble(-2); 
+	C=TDouble(numeric_limits<quad>::max())*TDouble(-2); 
 	std::cout << "TDouble C : " << C.getValue() << std::endl;
 	std::cout << "Status  C : " << C.getStatus() << std::endl;
 
-	double d = numeric_limits<double>::max();
-	double e = 0;
+	quad d = numeric_limits<quad>::max();
+	quad e = 0;
 	std::cout << (d/e)<<endl;*/
 
 	//test modulo 2pi
