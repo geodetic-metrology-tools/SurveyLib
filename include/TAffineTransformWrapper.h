@@ -34,7 +34,7 @@
 class  TAffineTransformWrapper : public TPtrWrapper<TVAffineTransformation>
 {
 public:
-/*		/// default constructeur
+		/// default constructeur
 		TAffineTransformWrapper();
 
 		/// Constructor taking a pointer to a transformation
@@ -45,7 +45,6 @@ public:
 
 		/// Destructor
 		virtual  ~TAffineTransformWrapper();
-*/
 
 		TVAffineTransformation*  getTransformation()  {return this->getPtr();}
 		const TVAffineTransformation*  getTransformation() const {return this->getPtr();}
@@ -54,7 +53,7 @@ private:
 		//!Copy assignment operator
 		TAffineTransformWrapper& operator=( TAffineTransformWrapper & right );
 
-//m};
+};
 
 /*#include <list>
 using namespace std;

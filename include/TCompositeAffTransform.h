@@ -27,6 +27,7 @@ Wrappers around those transformations are kept in a list*/
 using namespace std;
 
 #include  "TAffineTransformWrapper.h"
+#include  "TAAffineTransformation.h"
 // typedefs
 //
 //
@@ -50,7 +51,7 @@ public:
 		TCompositeAffTransform();
 
 		/// Copy Constructor 
-		TCompositeAffTransform( TCompositeAffTransform & );
+		TCompositeAffTransform( const TCompositeAffTransform & );
 
 		//! Constructor taking a TAAffineTransformation
 		explicit TCompositeAffTransform( const TAAffineTransformation & );
@@ -66,7 +67,7 @@ public:
 		using TAAffineTransformation::operator();
 
 		/// Copy Assignment Operator 
-		TCompositeAffTransform & operator=( TCompositeAffTransform & );
+		TCompositeAffTransform& operator=( const TCompositeAffTransform& );
 
 		//! add to the composite transformation by applying this transformation to an affine transformation
 		virtual  TCompositeAffTransform & operator()( const TAAffineTransformation & );

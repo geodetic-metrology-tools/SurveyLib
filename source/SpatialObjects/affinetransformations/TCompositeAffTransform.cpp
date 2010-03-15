@@ -258,7 +258,7 @@ TCompositeAffTransform * TCompositeAffTransform::inverse() const
 }
 
 
-/*void TCompositeAffTransform::invert()
+void TCompositeAffTransform::invert()
 {/// Invert the transformation, replaces the current transformation parameters
 	
 	fComposite.reverse();
@@ -270,7 +270,7 @@ TCompositeAffTransform * TCompositeAffTransform::inverse() const
 		iter ++;
 	}
 	return;
-}*/
+}
 
 
 /*// Append a TAAffineTransformation
@@ -286,7 +286,7 @@ void TCompositeAffTransform::append( const TAAffineTransformation &transf )
 }
 
 
-/*// Append a TAAffineTransformation
+// Append a TAAffineTransformation
 void TCompositeAffTransform::append( const TAAffineTransformation &transf )
 {
 	TAffineTransformWrapper wrapper( &transf );

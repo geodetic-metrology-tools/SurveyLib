@@ -1,19 +1,15 @@
 #ifndef SPARSE_MATRIX_H
 #define SPARSE_MATRIX_H
 
-#pragma once
-
-#include <list>
-
 #include "TColumnVector.h"
 
-using namespace std;
+#define THRESHOLD 0.0000000001
 
 class TSparseMatrix
 {
 public:
 
-	TSparseMatrix(int rows, int columns, int nnz, list<quad>* vals, list<int>* rowInds, list<int>* colPtr);
+	TSparseMatrix(int rows, int columns, quad* vals, int* rowInds, int* colPtr);
 	// this does a shallow copy on purpose! The result matrix should not be changed!
 	TSparseMatrix(const TSparseMatrix&);
 	~TSparseMatrix();
@@ -24,10 +20,13 @@ public:
 	quad* operator *(const quad* right) const;
 	quad* operator *(const TColumnVector& right) const;
 	quad operator ()(int row, int column) const;
+
+	bool operator ==(const TSparseMatrix&) const;
+	bool operator !=(const TSparseMatrix&) const;
 	
 	void multiply_by_number(quad);
 
-	TSparseMatrix* decompose_Cholesky() const;
+	TSparseMatrix* cholesky_decompose_lower_triangular_returning_lower_triangular() const;
 	TSparseMatrix* invert_diagonal_matrix() const;
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed() const;
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed_returning_lower_triangular() const;
@@ -38,6 +37,7 @@ public:
 	// General multiplication of sparse matrices.
 	TSparseMatrix* multiply_F(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_LM(const TSparseMatrix& second) const;
+	TSparseMatrix* multiply_returning_unordered_F(const TSparseMatrix& second) const;
 	quad* multiply_returning_diagonal(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_returning_lower_triangular_F(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_returning_lower_triangular_LM(const TSparseMatrix& second) const;
@@ -75,6 +75,16 @@ private:
 			rowind = new int[nnz];
 		}
 
+		Matrix(int rows, int columns, quad* vs, int* cs, int* rs)
+		{
+			m = rows;
+			n = columns;
+
+			values = vs;
+			colptr = cs;
+			rowind = rs;
+		}
+
         Matrix(int rows, int columns)
         {
             m = rows;
@@ -94,12 +104,20 @@ private:
         {
             if (colptr != NULL)
             {
+				if (colptr == rowind)
+				{
+					rowind = NULL;
+				}
                 delete[] colptr;
             }
 
             if (values != NULL)
             {
                 delete[] values;
+            }
+
+            if (rowind != NULL)
+            {
                 delete[] rowind;
             }
         }
@@ -162,6 +180,11 @@ private:
 			return values[index];
 		}
 
+		inline T& operator[] (int index)
+		{
+			return values[index];
+		}
+
 		inline int size() const
 		{
 			return count;
@@ -171,89 +194,6 @@ private:
 		T *values;
 		int count;
 		int allocated;
-	};
-
-	// This should only be used by primitive types (int, float, quad...)!
-	template <typename T>
-	class List
-	{
-	public:
-		inline List()
-		{
-			head = tail = NULL;
-			count = 0;
-		}
-
-		~List()
-		{
-			while (head != tail)
-			{
-				Node* old = head;
-				head = head->next;
-				delete old;
-			}
-			if (head != NULL)
-			{
-				delete head;
-			}
-		}
-
-		void add(const T value)
-		{
-			if (head == NULL)
-			{
-				head = new Node();
-				head->elem = value;
-				tail = head;
-			}
-			else
-			{
-				tail->next = new Node();
-				tail->next->elem = value;
-				tail = tail->next;
-			}
-			count++;
-		}
-
-		inline int size() const
-		{
-			return count;
-		}
-
-		inline void initIterator()
-		{
-			iter = head;
-			iterHasMore = count != 0;
-		}
-
-		inline bool hasMore() const
-		{
-			return iterHasMore;
-		}
-
-		inline const T nextElement()
-		{
-			if (iter == tail)
-			{
-				iterHasMore = false;
-			}
-			T e = iter->elem;
-			iter = iter->next;
-			return e;
-		}
-
-	private:
-		struct Node
-		{
-			T elem;
-			Node *next;
-		};
-		Node* head;
-		Node* tail;
-		int count;
-
-		Node* iter;
-		bool iterHasMore;
 	};
 };
 

@@ -88,9 +88,8 @@ bool operator<( const TPtrWrapper<T>& wrapper1, const TPtrWrapper<T>& wrapper2 )
 TPtrWrapper<T>::TPtrWrapper() : fPointer(0), fCount(0) 
 { 
 }*/
-*/
 
-/*
+
 //Constructor taking a pointer to the template object
 template <class T>
 TPtrWrapper<T>::TPtrWrapper( T* pointer ) : fPointer( pointer ) 
@@ -152,7 +151,7 @@ void  TPtrWrapper<T>::deletion()
 
 	return;
 }
-*/
+
 
 
 #endif  //SU_POINTERWRAPPER
