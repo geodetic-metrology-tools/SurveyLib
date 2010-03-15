@@ -35,7 +35,7 @@ TLSInputMatrices::TLSInputMatrices()
 	fCnstrFirstDesignMtrx = NULL;
 
 	fMisclosureVector = NULL;
-	
+
 	fCnstrMisclosureVector = 0;
 
 	constraintFirstDesignMatrixValues = NULL;
@@ -85,7 +85,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	fNbObs = observations; // number of observations + constraint observations
 	fNbEqn = equations;
 	fNbCnstrObs = cnstrObs;
-	
+
 	clearMatrices();
 	fMisclosureVector = new TColumnVector(fNbObs);
 }
@@ -99,7 +99,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	fNbEqn = equations;
 	fNbCnstr = constraints;
 	fNbCnstrObs = nbCnstrObs;
-	
+
 	clearMatrices();
 	fMisclosureVector = new TColumnVector(fNbObs);
 	fCnstrMisclosureVector = new TColumnVector(fNbCnstr);
@@ -124,7 +124,7 @@ void TLSInputMatrices::clearMatrices()
 		delete secondDesignMatrixTransposed;
 		delete firstDesignMatrixTransposed;
 		delete weightMatrix;
-	
+
 		firstDesignMatrixTransposed = NULL;
 		secondDesignMatrixTransposed = NULL;
 		weightMatrix = NULL;
@@ -258,33 +258,85 @@ void TLSInputMatrices::setConstraintNewColumn()
 }
 
 void TLSInputMatrices::finishedFillingMatrices()
-{	
-	firstDesignMatrixTransposed = new TSparseMatrix(fNbUnk, fNbEqn,
-		firstDesignMatrixTransposedValues->size(), firstDesignMatrixTransposedValues, 
-		firstDesignMatrixTransposedRowInd, firstDesignMatrixTransposedColPtr);
-	
+{
+	quad* vals = new quad[firstDesignMatrixTransposedValues->size()];
+	int* cols = new int[firstDesignMatrixTransposedColPtr->size()];
+	int* rows = new int[firstDesignMatrixTransposedRowInd->size()];
+	list<quad>::const_iterator iter = firstDesignMatrixTransposedValues->begin();
+	list<int>::const_iterator iterRows = firstDesignMatrixTransposedRowInd->begin();
+	int i = 0;
+	while (iter != firstDesignMatrixTransposedValues->end())
+	{
+		rows[i] = *iterRows;
+		vals[i++] = *iter;
+
+		iter++;
+		iterRows++;
+	}
 	firstDesignMatrixTransposedValues->clear();
 	firstDesignMatrixTransposedRowInd->clear();
+
+	i = 0;
+	list<int>::const_iterator iterCols = firstDesignMatrixTransposedColPtr->begin();
+	while (iterCols != firstDesignMatrixTransposedColPtr->end())
+	{
+		cols[i++] = *iterCols;
+
+		iterCols++;
+	}
 	firstDesignMatrixTransposedColPtr->clear();
 
-	secondDesignMatrixTransposed = new TSparseMatrix(fNbUnk, fNbObs,
-		secondDesignMatrixTransposedValues->size(), secondDesignMatrixTransposedValues, 
-		secondDesignMatrixTransposedRowInd, secondDesignMatrixTransposedColPtr);	
-	
+	quad* vals2 = new quad[secondDesignMatrixTransposedValues->size()];
+	int* cols2 = new int[secondDesignMatrixTransposedColPtr->size()];
+	int* rows2 = new int[secondDesignMatrixTransposedRowInd->size()];
+
+	list<quad>::const_iterator iter2 = secondDesignMatrixTransposedValues->begin();
+	list<int>::const_iterator iterRows2 = secondDesignMatrixTransposedRowInd->begin();
+	i = 0;
+	while (iter2 != secondDesignMatrixTransposedValues->end())
+	{
+		rows2[i] = *iterRows2;
+		vals2[i++] = *iter2;
+
+		iter2++;
+		iterRows2++;
+	}
 	secondDesignMatrixTransposedValues->clear();
 	secondDesignMatrixTransposedRowInd->clear();
+
+	i = 0;
+	list<int>::const_iterator iterCols2 = secondDesignMatrixTransposedColPtr->begin();
+	while (iterCols2 != secondDesignMatrixTransposedColPtr->end())
+	{
+		cols2[i++] = *iterCols2;
+
+		iterCols2++;
+	}
 	secondDesignMatrixTransposedColPtr->clear();
 
-	list<int>* rowinds = new list<int>();
-	for (int i = 0; i <= fNbObs; i++)
+	firstDesignMatrixTransposed = new TSparseMatrix(fNbUnk, fNbEqn,
+		vals, rows, cols);
+	secondDesignMatrixTransposed = new TSparseMatrix(fNbUnk, fNbObs,
+		vals2, rows2, cols2);
+	int* rowinds = new int[fNbObs + 1];
+	for (i = 0; i <= fNbObs; i++)
 	{
-		rowinds->push_back(i);
+		rowinds[i] = i;
 	}
-	weightMatrix = new TSparseMatrix(fNbObs, fNbObs,
-		weightMatrixValues->size(), weightMatrixValues, 
-		rowinds, rowinds);
 
+	quad* vals3 = new quad[weightMatrixValues->size()];
+	list<quad>::const_iterator iter3 = weightMatrixValues->begin();
+	i = 0;
+	while (iter3 != weightMatrixValues->end())
+	{
+		vals3[i++] = *iter3;
+
+		iter3++;
+	}
 	weightMatrixValues->clear();
+
+	weightMatrix = new TSparseMatrix(fNbObs, fNbObs,
+		vals3, rowinds, rowinds);
 
 	if (fNbCnstr != 0)
 	{
@@ -293,16 +345,36 @@ void TLSInputMatrices::finishedFillingMatrices()
 			setConstraintNewColumn();
 		}
 
+        quad* vals4 = new quad[constraintFirstDesignMatrixValues->size()];
+        int* cols4 = new int[constraintFirstDesignMatrixColPtr->size()];
+        int* rows4 = new int[constraintFirstDesignMatrixRowInd->size()];
+        list<quad>::const_iterator iter4 = constraintFirstDesignMatrixValues->begin();
+        list<int>::const_iterator iterRows4 = constraintFirstDesignMatrixRowInd->begin();
+        int i = 0;
+        while (iter4 != constraintFirstDesignMatrixValues->end())
+        {
+            rows4[i] = *iterRows4;
+            vals4[i++] = *iter4;
+
+            iter4++;
+            iterRows4++;
+        }
+        constraintFirstDesignMatrixValues->clear();
+        constraintFirstDesignMatrixRowInd->clear();
+
+        i = 0;
+        list<int>::const_iterator iterCols4 = constraintFirstDesignMatrixColPtr->begin();
+        while (iterCols4 != constraintFirstDesignMatrixColPtr->end())
+        {
+            cols4[i++] = *iterCols4;
+
+            iterCols4++;
+        }
+        constraintFirstDesignMatrixColPtr->clear();
+
 		fCnstrFirstDesignMtrx = new TSparseMatrix(fNbCnstr, fNbUnk,
-			constraintFirstDesignMatrixValues->size(), constraintFirstDesignMatrixValues,
-			constraintFirstDesignMatrixRowInd, constraintFirstDesignMatrixColPtr);
-
-		constraintFirstDesignMatrixValues->clear();
-		constraintFirstDesignMatrixRowInd->clear();
-		constraintFirstDesignMatrixColPtr->clear();
+			vals4, rows4, cols4);
 	}
-
-	delete rowinds;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -393,7 +465,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of << "***********************" << endl;
 	of << "* FIRST DESIGN MATRIX *" << endl;
 	of << "***********************" << endl << endl;
-	
+
 	int i;
 	for (i=0; i<fNbEqn ; i++){
 
@@ -407,7 +479,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of << "*********************" << endl;
 	of << "* MISCLOSURE VECTOR *" << endl;
 	of << "*********************" << endl << endl;
-	
+
 	for (i=0; i<fNbObs ; i++)
 		of << (*fMisclosureVector)(i) << endl;
 	of << endl << endl;
@@ -418,7 +490,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 		of << "**********************************" << endl;
 		of << "* CONSTRAINT FIRST DESIGN MATRIX *" << endl;
 		of << "**********************************" << endl << endl;
-		
+
 		for (i=0; i<fNbCnstr ; i++){
 
 			for (int j=0; j<fNbUnk ; j++)
@@ -434,7 +506,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 		of << "********************************" << endl;
 		of << "* CONSTRAINT MISCLOSURE VECTOR *" << endl;
 		of << "********************************" << endl << endl;
-		
+
 		for (i=0; i<fNbCnstr ; i++)
 			of << (*fCnstrMisclosureVector)(i) << endl;
 		of << endl << endl;
@@ -444,7 +516,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of << "*****************" << endl;
 	of << "* WEIGHT MATRIX *" << endl;
 	of << "*****************" << endl << endl;
-	
+
 	for (i=0; i<fNbObs ; i++){
 
 		for (int j=0; j<fNbObs ; j++)
@@ -458,7 +530,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of << "************************" << endl;
 	of << "* SECOND DESIGN MATRIX *" << endl;
 	of << "************************" << endl << endl;
-	
+
 	for (i=0; i<fNbEqn ; i++){
 
 		for (int j=0; j<fNbObs ; j++)
