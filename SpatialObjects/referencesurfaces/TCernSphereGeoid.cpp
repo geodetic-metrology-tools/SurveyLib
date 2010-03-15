@@ -5,7 +5,6 @@
 
 #include "TCernSphereGeoid.h"
 
-#include <valarray>
 #include <vector>
 #include "mathimf.h"
 
