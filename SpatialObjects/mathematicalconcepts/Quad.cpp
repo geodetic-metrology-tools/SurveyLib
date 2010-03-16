@@ -257,7 +257,7 @@ Quad operator /(const Quad& first, _Quad second)
 Quad& Quad::operator +=(const Quad& second)
 {
 	value += second.value;
-	doubleValue += second.doubleValue;
+	doubleValue += (double) second.value;
 
 	return *this;
 }
@@ -265,7 +265,7 @@ Quad& Quad::operator +=(const Quad& second)
 Quad& Quad::operator -=(const Quad& second)
 {
 	value -= second.value;
-	doubleValue -= second.doubleValue;
+	doubleValue -= (double) second.value;
 
 	return *this;
 }
@@ -273,7 +273,7 @@ Quad& Quad::operator -=(const Quad& second)
 Quad& Quad::operator *=(const Quad& second)
 {
 	value *= second.value;
-	doubleValue *= second.doubleValue;
+	doubleValue *= (double) second.value;
 
 	return *this;
 }
@@ -281,7 +281,103 @@ Quad& Quad::operator *=(const Quad& second)
 Quad& Quad::operator /=(const Quad& second)
 {
 	value /= second.value;
-	doubleValue /= second.doubleValue;
+	doubleValue /= (double) second.value;
+
+	return *this;
+}
+
+Quad& Quad::operator +=(double second)
+{
+	value += second;
+	doubleValue += second;
+
+	return *this;
+}
+
+Quad& Quad::operator -=(double second)
+{
+	value -= second;
+	doubleValue -= second;
+
+	return *this;
+}
+
+Quad& Quad::operator *=(double second)
+{
+	value *= second;
+	doubleValue *= second;
+
+	return *this;
+}
+
+Quad& Quad::operator /=(double second)
+{
+	value /= second;
+	doubleValue /= second;
+
+	return *this;
+}
+
+Quad& Quad::operator +=(int second)
+{
+	value += second;
+	doubleValue += second;
+
+	return *this;
+}
+
+Quad& Quad::operator -=(int second)
+{
+	value -= second;
+	doubleValue -= second;
+
+	return *this;
+}
+
+Quad& Quad::operator *=(int second)
+{
+	value *= second;
+	doubleValue *= second;
+
+	return *this;
+}
+
+Quad& Quad::operator /=(int second)
+{
+	value /= second;
+	doubleValue /= second;
+
+	return *this;
+}
+
+Quad& Quad::operator +=(_Quad second)
+{
+	value += second;
+	doubleValue += (double) second;
+
+	return *this;
+}
+
+Quad& Quad::operator -=(_Quad second)
+{
+	value -= second;
+	doubleValue -= (double) second;
+
+	return *this;
+}
+
+Quad& Quad::operator *=(_Quad second)
+{
+	value *= second;
+	doubleValue *= (double) second;
+
+	return *this;
+}
+
+Quad& Quad::operator /=(_Quad second)
+{
+	value /= second;
+	doubleValue /= (double) second;
 
 	return *this;
 }

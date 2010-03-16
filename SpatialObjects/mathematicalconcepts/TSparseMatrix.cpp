@@ -1,38 +1,5 @@
 #include "TSparseMatrix.h"
 
-template <typename T, typename U, typename V>
-class Tuple
-{
-public:
-	T a;
-	U b;
-	V c;
-};
-
-inline int tuple_cmp(const void *a, const void *b)
-{
-	Tuple<int, quad, int> *ai = (Tuple<int, quad, int> *) a;
-	Tuple<int, quad, int> *bi = (Tuple<int, quad, int> *) b;
-
-	if (ai->a > bi->a)
-	{
-		return 1;
-	}
-	else if(ai->a < bi->a)
-	{
-		return -1;
-	}
-	else if(ai->c > bi->c)
-	{
-		return 1;
-	}
-	else if(ai->c < bi->c)
-	{
-		return -1;
-	}
-	return 0;
-}
-
 inline int binary_search(int arr[], int size, int value)
 {
 	int low = 0, high = size - 1, midpoint = (low + high) / 2;
@@ -79,37 +46,44 @@ TSparseMatrix::~TSparseMatrix()
 
 TSparseMatrix* TSparseMatrix::transposed() const
 {
-	int nnz = matrix->colptr[matrix->n];
-	Matrix *result = new Matrix(matrix->n, matrix->m, nnz);
+	int* temp = new int[matrix->m];
+	int i, j, q;
 
-	int i;
-	Tuple<int, quad, int> *t = new Tuple<int, quad, int>[nnz];
-	for (i = 0; i < nnz; i++)
+	quad* values = new quad[matrix->colptr[matrix->n]];
+	int* colptr = new int[matrix->m + 1];
+	int* rowind = new int[matrix->colptr[matrix->n]];
+	for (i = 0; i < matrix->m; i++)
 	{
-		t[i].a = matrix->rowind[i];
-		t[i].b = matrix->values[i];
-		t[i].c = i;
+		temp[i] = 0;
 	}
-	qsort(t, nnz, sizeof(Tuple<int, quad, int>), tuple_cmp);
 
-	int last = t[0].a;
-	int used = 1;
-	result->colptr[0] = 0;
-	for (i = 0; i < nnz; i++)
+	for (i = 0; i < matrix->colptr[matrix->n]; i++)
 	{
-		while (t[i].a != last)
-		{
-			result->colptr[used++] = i;
-			last++;
-		}
-		result->values[i] = t[i].b;
-		result->rowind[i] = binary_search(matrix->colptr, matrix->n + 1, t[i].c);
+		temp[matrix->rowind[i]]++;
 	}
-	result->colptr[used] = nnz;
 
-	delete[] t;
+	int total = 0;
+	for (i = 0; i < matrix->m; i++)
+	{
+		colptr[i] = total;
+		total += temp[i];
+		temp[i] = colptr[i];
+	}
+	colptr[matrix->m] = total;
 
-	return new TSparseMatrix(result);
+	for (i = 0; i < matrix->n; i++)
+    {
+        for (j = matrix->colptr[i]; j < matrix->colptr[i + 1]; j++)
+        {
+			q = temp[matrix->rowind[j]]++;
+            rowind[q] = i;
+            values[q] = matrix->values[j];
+        }
+    }
+
+	delete[] temp;
+
+	return new TSparseMatrix(matrix->n, matrix->m, values, rowind, colptr);
 }
 
 TSparseMatrix* TSparseMatrix::multiply_F(const TSparseMatrix& second) const
