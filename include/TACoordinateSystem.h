@@ -41,107 +41,109 @@ class  TACoordinateSystem : public  TVCoordinateSystem //: public TObject
 public:
 	/*!\name Functions for Vector*/
 	//@{
-	/*!get the H coordinate of a position vector, default def:
-	\return TLength Null*/
-	virtual TLength getH(const TPositionVector*) const;
+		/*!get the H coordinate of a position vector, default def:
+		\return TLength Null*/
+		virtual TLength getH(const TPositionVector*) const;
 
-	/*!get the Lambda coordinate of a position vector, default def: 
-	\return TLength Null*/
-	virtual TAngle getLambdaEllipsoid(const TPositionVector*) const;
+		/*!get the Lambda coordinate of a position vector, default def: 
+		\return TLength Null*/
+		virtual TAngle getLambdaEllipsoid(const TPositionVector*) const;
 
-	/*!get the Phi coordinate of a position vector, default def: 
-	\return TAngle Null*/
-	virtual TAngle getPhiEllipsoid(const TPositionVector*) const;
+		/*!get the Phi coordinate of a position vector, default def: 
+		\return TAngle Null*/
+		virtual TAngle getPhiEllipsoid(const TPositionVector*) const;
 
-	/*!get the X coordinate of a position vector or a free vector, default def: 
-	\return TLength Null*/
-	virtual TLength getX(const TACoordSysVector*) const;
+		/*!get the X coordinate of a position vector or a free vector, default def: 
+		\return TLength Null*/
+		virtual TLength getX(const TACoordSysVector*) const;
 
-	/*!get the Y coordinate of a position vector or a free vector, default def: 
-	\return TLength Null*/
-	virtual TLength getY(const TACoordSysVector*) const;
+		/*!get the Y coordinate of a position vector or a free vector, default def: 
+		\return TLength Null*/
+		virtual TLength getY(const TACoordSysVector*) const;
 
-	/*!get the Z coordinate of a position vector or a free vector, default def: 
-	\return TLength Null*/
-	virtual TLength getZ(const TACoordSysVector*) const;
+		/*!get the Z coordinate of a position vector or a free vector, default def: 
+		\return TLength Null*/
+		virtual TLength getZ(const TACoordSysVector*) const;
 
-	/*!set the H Coordinate of a position vector, default def:
-	\return false*/
-	virtual bool setH(TPositionVector*, const TLength&);
+		/*!set the H Coordinate of a position vector, default def:
+		\return false*/
+		virtual bool setH(TPositionVector*, const TLength&);
 
-	/*!set the Lambda Coordinate of a position vector, default def:
-	\return false*/
-	virtual bool setLambdaEllipsoid(TPositionVector*, const TAngle&);
+		/*!set the Lambda Coordinate of a position vector, default def:
+		\return false*/
+		virtual bool setLambdaEllipsoid(TPositionVector*, const TAngle&);
 
-	/*!set the Phi Coordinate of a position vector, default def:
-	\return false*/
-	virtual bool setPhiEllipsoid(TPositionVector*, const TAngle&);
+		/*!set the Phi Coordinate of a position vector, default def:
+		\return false*/
+		virtual bool setPhiEllipsoid(TPositionVector*, const TAngle&);
 
-	/*!set the X Coordinate of a position vector or a free vector, default def:
-	\return false*/
-	virtual bool setX(TACoordSysVector*, const TLength&);
+		/*!set the X Coordinate of a position vector or a free vector, default def:
+		\return false*/
+		virtual bool setX(TACoordSysVector*, const TLength&);
 
-	/*!set the Y Coordinate of a position vector or a free vector, default def:
-	\return false*/
-	virtual bool setY(TACoordSysVector*, const TLength&);
+		/*!set the Y Coordinate of a position vector or a free vector, default def:
+		\return false*/
+		virtual bool setY(TACoordSysVector*, const TLength&);
 
-	/*!set the Z Coordinate of a position vector or a free vector, default def:
-	\return false*/
-	virtual bool setZ(TACoordSysVector*, const TLength&);
+		/*!set the Z Coordinate of a position vector or a free vector, default def:
+		\return false*/
+		virtual bool setZ(TACoordSysVector*, const TLength&);
 	//@}
 
 	/*!\name Functions for Matrix*/
 	//@{
-	/*!create a TRotationMatrix default def:
-	\return false*/
-	virtual bool setAllRotations(TRotationMatrix*, TRotationMatrix::ERotationType kR, quad &om, quad &p, quad &k);
+		using TVCoordinateSystem::getElt;
 
-	/*!get angles of a TRotationMatrix return a structure (omega, phi, kappa), default def
-	\return false*/
-	virtual	struct Angles getAngles(const TRotationMatrix*, const TRotationMatrix::ERotationType kR) const;
-	
-	//!change a rotation matrix into the identity matrix, default def: return false
-	virtual bool identity(TRotationMatrix*);
-	
-	//!set a element into a 3D matrix
-	virtual	bool setElt(T3DMatrix*, const int, const int, const quad);
+		/*!create a TRotationMatrix default def:
+		\return false*/
+		virtual bool setAllRotations(TRotationMatrix*, TRotationMatrix::ERotationType kR, quad &om, quad &p, quad &k);
 
-	//!get a element from a 3D matrix
-	virtual	quad getElt(const T3DMatrix*, const int, const int) const;
-	
-	//!get a element from a rotation matrix
-	virtual	quad getElt(const TRotationMatrix*, const int, const int) const;
-	
+		/*!get angles of a TRotationMatrix return a structure (omega, phi, kappa), default def
+		\return false*/
+		virtual	struct Angles getAngles(const TRotationMatrix*, const TRotationMatrix::ERotationType kR) const;
+		
+		//!change a rotation matrix into the identity matrix, default def: return false
+		virtual bool identity(TRotationMatrix*);
+		
+		//!set a element into a 3D matrix
+		virtual	bool setElt(T3DMatrix*, const int, const int, const quad);
+
+		//!get a element from a 3D matrix
+		virtual	quad getElt(const T3DMatrix*, const int, const int) const;
+		
+		//!get a element from a rotation matrix
+		virtual	quad getElt(const TRotationMatrix*, const int, const int) const;
+		
 	//@}
 
 	/*!\name Member Functions*/
 	//@{
-	//! set the coordinate system identifier
-	virtual void setCoordSysId(TCoordSysFactory::ECoordSys);
+		//! set the coordinate system identifier
+		virtual void setCoordSysId(TCoordSysFactory::ECoordSys);
 
-	//! get the coordinate system identifier
-	virtual TCoordSysFactory::ECoordSys getCoordSysId() const;
+		//! get the coordinate system identifier
+		virtual TCoordSysFactory::ECoordSys getCoordSysId() const;
 	//@}
 
 protected:
 
-		/*!\name Member Protected Functions for Vector*/
+	/*!\name Member Protected Functions for Vector*/
 	//@{
-	//!get the Xi coordinate of a vector in all Coordinate System
-	quad	getX(const TACoordSysVector*, const int& ) const;
+		//!get the Xi coordinate of a vector in all Coordinate System
+		quad	getX(const TACoordSysVector*, const int& ) const;
 
 
-	//!set the Xi coordinate of a vector in all Coordinate System
-	void	setX(TACoordSysVector*, const int&, const quad&);
+		//!set the Xi coordinate of a vector in all Coordinate System
+		void	setX(TACoordSysVector*, const int&, const quad&);
 	//@}
 		
 	/*!\name Member Protected Functions for Matrix*/
 	//@{
-	//!get the (i,j) value of a matrix
-	quad getC(const TACoordSysMatrix*, const int& i, const int& j) const;
+		//!get the (i,j) value of a matrix
+		quad getC(const TACoordSysMatrix*, const int& i, const int& j) const;
 
-	//!set value to (i,j) of a matrix
-	void setC(TACoordSysMatrix*, const int& i, const int& j, quad value);
+		//!set value to (i,j) of a matrix
+		void setC(TACoordSysMatrix*, const int& i, const int& j, quad value);
 	//@}
 
 private:

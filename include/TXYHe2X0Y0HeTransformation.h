@@ -66,6 +66,8 @@ public:
 
 	/**@name Member Functions */
 	//@{
+		using TARefFrameTransformation::transform;
+
 		/// Copy Assignment Operator 
 		TXYHe2X0Y0HeTransformation&			operator=( const TXYHe2X0Y0HeTransformation& );
 

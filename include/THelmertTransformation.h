@@ -52,8 +52,8 @@ public:
 		virtual ~THelmertTransformation();
 	//@}
 
-	using TVAffineTransformation::operator();
 	using TAAffineTransformation::operator();
+	using TAAffineTransformation::transform;
 
 	//! Copy Assignment Operator 
 	THelmertTransformation & operator= ( const THelmertTransformation & );

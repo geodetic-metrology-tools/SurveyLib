@@ -58,6 +58,7 @@ public:
 
 	/**@name Member Functions */
 	//@{
+		using TAModifiedLocalAstronomicalRF::getOrientation;
 
 		/// return the associated local geodetic reference frame
 		virtual TModifiedLocalGeodeticRF* getLocalGeodeticRF() const;

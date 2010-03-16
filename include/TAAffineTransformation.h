@@ -59,6 +59,7 @@ public:
 	/**@name Member Functions */
 	//@{
 		using TVAffineTransformation::operator();
+		using TVAffineTransformation::transform;
 
 		//! Create a composite transformation by applying this transformation to an affine transformation
 		virtual  TCompositeAffTransform & operator() ( TCompositeAffTransform & ) const;

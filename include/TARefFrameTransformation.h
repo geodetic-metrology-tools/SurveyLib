@@ -58,6 +58,8 @@ public:
 
 	/**@name Member Functions */
 	//@{
+		using TVRefFrameTransformation::transform;
+
 		/** Indicates if the transformation is initialised or not.
 		 *   
 		 *	The transformation is initialised as soon as both the source

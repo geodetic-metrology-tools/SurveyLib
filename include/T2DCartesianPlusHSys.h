@@ -40,33 +40,35 @@ class	T2DCartesianPlusHSys : public  TACoordinateSystem //: public TObject
 public:
 	/*!\name Functions for Vector*/
 	//@{
-	//!get the X coordinate of a position vector or a free vector	
-	virtual TLength getX(const TACoordSysVector*) const;
+		//!get the X coordinate of a position vector or a free vector	
+		virtual TLength getX(const TACoordSysVector*) const;
 
-	//!get the Y coordinate of a position vector or a free vector
-	virtual TLength getY(const TACoordSysVector*) const;
+		//!get the Y coordinate of a position vector or a free vector
+		virtual TLength getY(const TACoordSysVector*) const;
 
-	//!get the H coordinate of a position vector
-	virtual TLength getH(const TPositionVector*) const;
+		//!get the H coordinate of a position vector
+		virtual TLength getH(const TPositionVector*) const;
 
-	//!set the X Coordinate in meters of a position vector or a free vector
-	virtual bool setX(TACoordSysVector*, const TLength&);
+		//!set the X Coordinate in meters of a position vector or a free vector
+		virtual bool setX(TACoordSysVector*, const TLength&);
 
-	//!set the Y Coordinate in meters of a position vector or a free vector
-	virtual bool setY(TACoordSysVector*, const TLength&);
-	
-	//!set the H Coordinate of a position vector, default def:
-	virtual bool setH(TPositionVector*, const TLength&);
+		//!set the Y Coordinate in meters of a position vector or a free vector
+		virtual bool setY(TACoordSysVector*, const TLength&);
+		
+		//!set the H Coordinate of a position vector, default def:
+		virtual bool setH(TPositionVector*, const TLength&);
 	//@}
 
 
 	/*!\name Functions for Matrix*/
 	//@{
-	//!set a element into a 3D matrix
-	virtual	bool setElt(T3DMatrix*, const int, const int, const quad);
+		using TACoordinateSystem::getElt;
 
-	//!get a element from a 3D matrix
-	virtual	quad getElt(const T3DMatrix*, const int, const int) const;
+		//!set a element into a 3D matrix
+		virtual	bool setElt(T3DMatrix*, const int, const int, const quad);
+
+		//!get a element from a 3D matrix
+		virtual	quad getElt(const T3DMatrix*, const int, const int) const;
 	//@}
 
 

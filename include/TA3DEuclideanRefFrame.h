@@ -57,24 +57,26 @@ public:
 		virtual  ~TA3DEuclideanRefFrame();
 	//@}
 
-		/*!@name default definition of TVReferenceFrame's Data extraction methods*/
-		//@{
+		using TAReferenceFrame::getOrientation;
+
+	/*!@name default definition of TVReferenceFrame's Data extraction methods*/
+	//@{
 		//! return the position vector of a spatial position 
 		virtual TPositionVector getCoordinates(const TSpatialPosition* sp, TCoordSysFactory::ECoordSys) const;
 		//! return the free vector of a spatial vector
 		virtual TFreeVector getElements(const TSpatialVector* sv, TCoordSysFactory::ECoordSys) const;
 		//! return the rotation matrix of a spatial orientation
 		virtual TRotationMatrix getElements(const TSpatialOrientation* so, TCoordSysFactory::ECoordSys ) const;
-		//@}
+	//@}
 
 	/*!@name default definition of TVReferenceFrame's Settings methods*/
 	//@{
-	//! set the position vector of a spatial position 
-	virtual bool setCoordinates(TSpatialPosition* sp, const TPositionVector& pv);
-	//! set the free vector of a spatial vector
-	virtual bool setElements(TSpatialVector* sv, const TFreeVector& fv);
-	//! set the rotation matrix of a spatial orientation
-	virtual bool setElements(TSpatialOrientation* so, const TRotationMatrix& rm);
+		//! set the position vector of a spatial position 
+		virtual bool setCoordinates(TSpatialPosition* sp, const TPositionVector& pv);
+		//! set the free vector of a spatial vector
+		virtual bool setElements(TSpatialVector* sv, const TFreeVector& fv);
+		//! set the rotation matrix of a spatial orientation
+		virtual bool setElements(TSpatialOrientation* so, const TRotationMatrix& rm);
 	//@}
 
 

@@ -59,8 +59,8 @@ public:
 
 	/**@name Member Functions */
 	//@{
-		using TVAffineTransformation::operator();
 		using TAAffineTransformation::operator();
+		using TAAffineTransformation::transform;
 
 		//! Copy Assignment Operator 
 		TScaleFactor & operator = ( const TScaleFactor & );

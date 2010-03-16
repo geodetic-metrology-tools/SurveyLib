@@ -40,6 +40,8 @@ public:
 
 	/*!@name public member functions */
 	//@{
+		using TALSCalcParameter::operator ==;
+		
 		/*! Copy assignment operator */
 		TLSCalcPosVectorParam&	operator=(const TLSCalcPosVectorParam& right);
 

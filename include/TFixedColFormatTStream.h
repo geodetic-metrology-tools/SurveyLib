@@ -88,8 +88,11 @@ public:
 
 	/**@name Overloaded stream extraction operators*/
 	//@{
-	//!Extraction of a TSpatialPoint object;
-	virtual TAStreamFormatter &operator>>( TSpatialPoint & );
+		using TAStreamFormatter::operator <<;
+		using TAStreamFormatter::operator >>;
+
+		//!Extraction of a TSpatialPoint object;
+		virtual TAStreamFormatter &operator>>( TSpatialPoint & );
 
 	//@}
 

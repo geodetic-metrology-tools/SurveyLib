@@ -58,8 +58,8 @@ public:
 
 	/**@name Member Functions */
 	//@{
-		using TVAffineTransformation::operator();
 		using TAAffineTransformation::operator();
+		using TAAffineTransformation::transform;
 
 		//! Copy Assignment Operator 
 		TReflection& operator=( const TReflection& );

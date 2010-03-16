@@ -48,6 +48,9 @@ public:
 	virtual ~TFreeFormatTStream();
 
 	// member functions
+	using TAStreamFormatter::operator <<;
+	using TAStreamFormatter::operator >>;
+
 	virtual  TAStreamFormatter  &operator>>( TSpatialPoint & );
 
 	virtual  TAStreamFormatter  &operator<<( const TSpatialPosition & );

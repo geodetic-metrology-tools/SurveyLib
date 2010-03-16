@@ -27,6 +27,7 @@ using namespace std;
 class TAPointMeasurement : public TAMeasurement 
 {
 public:
+	using TAMeasurement::operator ==;
 
 	const TSpatialPoint* getTargetPoint() const { return targetPoint; }	
 

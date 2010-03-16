@@ -63,6 +63,8 @@ public:
 
 	/*!@name Member Functions */
 	//@{
+		using TARefFrameTransformation::transform;
+
 		//!Copy Assignment Operator 
 		TMLA2XYHsTransformation&			operator=( const TMLA2XYHsTransformation& );
 
