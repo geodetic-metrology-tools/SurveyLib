@@ -223,7 +223,7 @@ void THelmertTransformation::invert()
 	fScaleFactor.invert();
 	fRotation.invert();
 	fTranslation.invert();
-	fTranslation=(fRotation.getRotationMatrix()*fTranslation.getVector())*fScaleFactor.getScaleFactor();
+	fTranslation = (fRotation.getRotationMatrix()*fTranslation.getVector())*fScaleFactor.getScaleFactor();
 	return;
 }
 
