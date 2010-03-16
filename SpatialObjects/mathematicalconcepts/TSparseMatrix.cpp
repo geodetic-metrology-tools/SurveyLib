@@ -1212,7 +1212,7 @@ void TSparseMatrix::writeMatrixFile(const char *filename) const
 	{
 		for (int j = matrix->colptr[i]; j < matrix->colptr[i + 1]; j++)
 		{
-			fprintf(f, "%d %d %.20e\n", matrix->rowind[j] + 1, i + 1, matrix->values[j]);
+			fprintf(f, "%d %d %.20e\n", matrix->rowind[j] + 1, i + 1, (double) matrix->values[j]);
 		}
 	}
 	fclose(f);

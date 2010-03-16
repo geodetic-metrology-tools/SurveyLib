@@ -1,5 +1,7 @@
 #include "Quad.h"
 
+#if _DEBUG
+
 Quad::Quad()
 {
 }
@@ -32,24 +34,28 @@ Quad& Quad::operator =(const Quad& other)
 {
 	doubleValue = (double) other.value;
 	value = other.value;
+	return *this;
 }
 
 Quad& Quad::operator =(_Quad other)
 {
 	doubleValue = (double) other;
 	value = other;
+	return *this;
 }
 
 Quad& Quad::operator =(double other)
 {
 	doubleValue = other;
 	value = other;
+	return *this;
 }
 
 Quad& Quad::operator =(int other)
 {
 	doubleValue = other;
 	value = other;
+	return *this;
 }
 
 Quad operator +(const Quad& first, const Quad& second)
@@ -504,3 +510,5 @@ Quad::operator _Quad*()
 {
 	return &value;
 }
+
+#endif
