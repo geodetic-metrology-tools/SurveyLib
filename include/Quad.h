@@ -113,6 +113,21 @@ public:
 	Quad& operator *=(const Quad& second);
 	Quad& operator /=(const Quad& second);
 
+	Quad& operator +=(double second);
+	Quad& operator -=(double second);
+	Quad& operator *=(double second);
+	Quad& operator /=(double second);
+
+	Quad& operator +=(int second);
+	Quad& operator -=(int second);
+	Quad& operator *=(int second);
+	Quad& operator /=(int second);
+
+	Quad& operator +=(_Quad second);
+	Quad& operator -=(_Quad second);
+	Quad& operator *=(_Quad second);
+	Quad& operator /=(_Quad second);
+
 	operator _Quad() const;
 	operator _Quad*();
 
