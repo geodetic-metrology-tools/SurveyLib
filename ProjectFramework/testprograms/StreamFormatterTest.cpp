@@ -61,10 +61,10 @@ void main()
 	{
 		TSpatialStatus::ESpatialStatus status = i->getPosition().getObjectStatus();
 		string name=i->getPtName();
-		quad X =i->getPosition().getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-		quad Y =i->getPosition().getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-		quad Z =i->getPosition().getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue();
-		quad dist=i->getDist();
+		real X =i->getPosition().getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
+		real Y =i->getPosition().getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
+		real Z =i->getPosition().getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue();
+		real dist=i->getDist();
 		int id=i->getId();
 		string com=i->getComment();
 		string head=i->getHeaderComment();

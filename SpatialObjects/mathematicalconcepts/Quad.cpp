@@ -1,6 +1,6 @@
 #include "Quad.h"
 
-#if _DEBUG
+#if _DEBUG && __INTEL_COMPILER
 
 Quad::Quad()
 {

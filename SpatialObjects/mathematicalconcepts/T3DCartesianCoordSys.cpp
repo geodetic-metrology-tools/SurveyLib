@@ -65,35 +65,35 @@ return true;
 //////////////////////////////////////////////////////////////////////////////////
 
 
-bool T3DCartesianCoordSys::setAllRotations(TRotationMatrix* mx, TRotationMatrix::ERotationType kR, quad &omega, quad &phi, quad &kappa)
+bool T3DCartesianCoordSys::setAllRotations(TRotationMatrix* mx, TRotationMatrix::ERotationType kR, real &omega, real &phi, real &kappa)
 {//create a TRotationMatrix default def: return false
 
 	//computation of sine and cosine from the angle and setting the value to 0 when less than 2 epsilon
 	TAngle om(omega), p(phi), k(kappa);
-	quad xcos, xsin, ycos, ysin, zcos, zsin;
+	real xcos, xsin, ycos, ysin, zcos, zsin;
 
 	xcos = om.cosine();
-	if (__fabsq(xcos) <= 2*DBL_EPSILON)
+	if (fabsq(xcos) <= 2*DBL_EPSILON)
 	{xcos = 0;}
 
 	xsin = om.sine();
-	if (__fabsq(xsin) <= 2*DBL_EPSILON)
+	if (fabsq(xsin) <= 2*DBL_EPSILON)
 	{xsin = 0;}
 
 	ycos = p.cosine();
-	if (__fabsq(ycos) <= 2*DBL_EPSILON)
+	if (fabsq(ycos) <= 2*DBL_EPSILON)
 	{ycos = 0;}
 
 	ysin = p.sine();
-	if (__fabsq(ysin) <= 2*DBL_EPSILON)
+	if (fabsq(ysin) <= 2*DBL_EPSILON)
 	{ysin = 0;}
 
 	zcos = k.cosine();
-	if (__fabsq(zcos) <= 2*DBL_EPSILON)
+	if (fabsq(zcos) <= 2*DBL_EPSILON)
 	{zcos = 0;}
 
 	zsin = k.sine();
-	if (__fabsq(zsin) <= 2*DBL_EPSILON)
+	if (fabsq(zsin) <= 2*DBL_EPSILON)
 	{zsin = 0;}
 
 	
@@ -131,7 +131,7 @@ bool T3DCartesianCoordSys::setAllRotations(TRotationMatrix* mx, TRotationMatrix:
 
 struct Angles T3DCartesianCoordSys::getAngles(const TRotationMatrix* mx, const TRotationMatrix::ERotationType kR) const
 {//get angles of a TRotationMatrix return a structure (omega, phi, kappa), default def return false
-	quad omega, phi, kappa;
+	real omega, phi, kappa;
 	TAngle ang, om, p, k;
 	Angles xyz;
 
@@ -140,7 +140,7 @@ struct Angles T3DCartesianCoordSys::getAngles(const TRotationMatrix* mx, const T
 		{	
 			omega = ang.aTan2(-getC(mx,2,1),getC(mx,2,2)).getRadiansValue();
 			kappa = ang.aTan2(-getC(mx,1,0),getC(mx,0,0)).getRadiansValue();
-			phi = ang.aTan2((getC(mx,2,0)),__sqrtq(__powq(getC(mx,0,0),2)+__powq(getC(mx,1,0),2))).getRadiansValue();
+			phi = ang.aTan2((getC(mx,2,0)),sqrtq(powq(getC(mx,0,0),2)+powq(getC(mx,1,0),2))).getRadiansValue();
 
 			om.setRadiansValue(omega);
 			p.setRadiansValue(phi);
@@ -186,7 +186,7 @@ struct Angles T3DCartesianCoordSys::getAngles(const TRotationMatrix* mx, const T
 	case (TRotationMatrix::kRzxy):
 		{
 			phi = ang.aTan2(getC(mx,2,0),getC(mx,2,2)).getRadiansValue();
-			omega = ang.aTan2((-getC(mx,2,1)),__sqrtq(__powq(getC(mx,1,1),2)+__powq(getC(mx,0,1),2))).getRadiansValue();
+			omega = ang.aTan2((-getC(mx,2,1)),sqrtq(powq(getC(mx,1,1),2)+powq(getC(mx,0,1),2))).getRadiansValue();
 			kappa = ang.aTan2(getC(mx,0,1),getC(mx,1,1)).getRadiansValue();
 
 			om.setRadiansValue(omega);
@@ -249,20 +249,20 @@ return true;
 }
 
 
-bool T3DCartesianCoordSys::setElt(T3DMatrix* mx, const int i, const int j, const quad value)
+bool T3DCartesianCoordSys::setElt(T3DMatrix* mx, const int i, const int j, const real value)
 {//set a element into a 3D matrix
 setC(mx, i, j, value);
 return true;
 }
 
 
-quad T3DCartesianCoordSys::getElt(const T3DMatrix* mx, const int i, const int j) const
+real T3DCartesianCoordSys::getElt(const T3DMatrix* mx, const int i, const int j) const
 {//get a element from a 3D matrix
 return getC(mx, i, j);
 }
 
 
-quad T3DCartesianCoordSys::getElt(const TRotationMatrix* mx, const int i, const int j) const
+real T3DCartesianCoordSys::getElt(const TRotationMatrix* mx, const int i, const int j) const
 {//get a element from a 3D matrix
 return getC(mx, i, j);
 }

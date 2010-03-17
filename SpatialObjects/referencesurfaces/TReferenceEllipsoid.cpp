@@ -45,7 +45,7 @@ void	TReferenceEllipsoid::setAAndESquared( const EllipseParameter a, const Ellip
 
 	fA = a;
 	fESquared = eSquared;
-	fF = 1.0 - __sqrtq(1.0 - eSquared);
+	fF = 1.0 - sqrtq(1.0 - eSquared);
 
 	setDerivedParameters();
 	
@@ -78,20 +78,20 @@ void TReferenceEllipsoid::setDerivedParameters()
 // at a given latitude.
 EllipseParameter  TReferenceEllipsoid::getNu( const TAngle& phi )  const
 {
-	quad sinP = __sinq( phi.getRadiansValue() );
+	real sinP = sinq( phi.getRadiansValue() );
 	
-	quad nu = fA / __sqrtq( 1.0 - (fESquared * sinP * sinP) );
+	real nu = fA / sqrtq( 1.0 - (fESquared * sinP * sinP) );
 	return nu;
 }
 
 
 // Get the Radius of Curvature of the Ellipsoid in the Prime Vertical
 // at a given latitude given in radians.
-EllipseParameter  TReferenceEllipsoid::getNu( const quad phi )  const
+EllipseParameter  TReferenceEllipsoid::getNu( const real phi )  const
 {
-	quad sinP = __sinq( phi );
+	real sinP = sinq( phi );
 	
-	quad nu = fA / __sqrtq( 1.0 - (fESquared * sinP * sinP) );
+	real nu = fA / sqrtq( 1.0 - (fESquared * sinP * sinP) );
 	return nu;
 }
 
@@ -100,20 +100,20 @@ EllipseParameter  TReferenceEllipsoid::getNu( const quad phi )  const
 //	at a given latitude.
 EllipseParameter  TReferenceEllipsoid::getRho( const TAngle& phi )  const
 {
-	quad sinP = __sinq( phi.getRadiansValue() );
+	real sinP = sinq( phi.getRadiansValue() );
 	
-	quad rho = fA * (1.0 - fESquared) / __powq(( 1.0 - (fESquared * sinP * sinP) ), 3.0/2.0);
+	real rho = fA * (1.0 - fESquared) / powq(( 1.0 - (fESquared * sinP * sinP) ), 3.0/2.0);
 	return rho;
 }
 
 
 // Get the Radius of Curvature of the Ellipsoid in the Meridian
 //	at a given latitude given in radians.
-EllipseParameter  TReferenceEllipsoid::getRho( const quad phi )  const
+EllipseParameter  TReferenceEllipsoid::getRho( const real phi )  const
 {
-	quad sinP = __sinq( phi );
+	real sinP = sinq( phi );
 	
-	quad rho = fA * (1.0 - fESquared) / __powq(( 1.0 - (fESquared * sinP * sinP) ), 3.0/2.0);
+	real rho = fA * (1.0 - fESquared) / powq(( 1.0 - (fESquared * sinP * sinP) ), 3.0/2.0);
 	return rho;
 }
 
@@ -122,24 +122,24 @@ EllipseParameter  TReferenceEllipsoid::getRho( const quad phi )  const
 //	at a given latitude, and azimuth.
 EllipseParameter  TReferenceEllipsoid::getEuler( const TAngle& phi, const TAngle& alpha )  const
 {
-	quad cosP = __cosq( phi.getRadiansValue() );
-	quad cosA = __cosq( alpha.getRadiansValue() );
-	quad nu = getNu( phi );
+	real cosP = cosq( phi.getRadiansValue() );
+	real cosA = cosq( alpha.getRadiansValue() );
+	real nu = getNu( phi );
 	
-	quad euler = nu / ( 1.0 + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
+	real euler = nu / ( 1.0 + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
 	return euler;
 }
 
 
 // Get the Euler's Radius of Curvature of the Ellipsoid
 //	at a given latitude, and azimuth given in radians.
-EllipseParameter  TReferenceEllipsoid::getEuler( const quad phi, const quad alpha )  const
+EllipseParameter  TReferenceEllipsoid::getEuler( const real phi, const real alpha )  const
 {
-	quad cosP = __cosq( phi );
-	quad cosA = __cosq( alpha );
-	quad nu = getNu( phi );
+	real cosP = cosq( phi );
+	real cosA = cosq( alpha );
+	real nu = getNu( phi );
 	
-	quad euler = nu / ( 1.0 + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
+	real euler = nu / ( 1.0 + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
 	return euler;
 }
 

@@ -36,7 +36,7 @@ TRotationMatrix::TRotationMatrix()
 }
 
 
-TRotationMatrix::TRotationMatrix(ERotationType kR, quad omega, quad phi, quad kappa)
+TRotationMatrix::TRotationMatrix(ERotationType kR, real omega, real phi, real kappa)
 {//Constructor taking the radians value of the angles in the order phi-omega-kappa, and the coordinate system
 setCoordSys(TCoordSysFactory::k3DCartesian);
 setAllRotations(kR, omega, phi, kappa);
@@ -88,7 +88,7 @@ TRotationMatrix TRotationMatrix::operator*( const TRotationMatrix& right) const
 		{
 		for (int k=0; k<3 ;k++)
 			{
-			quad a=0;
+			real a=0;
 			for (int j=0; j<3; j++)
 				{
 				a=a+getC(i,j)*right.getC(j,k);
@@ -152,7 +152,7 @@ bool TRotationMatrix::identity()
 return getCoordSysPtr()->identity(this);
 }
 
-bool TRotationMatrix::setAllRotations(ERotationType kR, quad &om, quad &p, quad &k)
+bool TRotationMatrix::setAllRotations(ERotationType kR, real &om, real &p, real &k)
 {//set the 3 rotations taking angles in the specified order
 return getCoordSysPtr()->setAllRotations(this, kR, om, p, k);
 }
@@ -192,7 +192,7 @@ TRotationMatrix TRotationMatrix::transposed() const
 }
 
 
-quad TRotationMatrix::getElt(const int i, const int j) const
+real TRotationMatrix::getElt(const int i, const int j) const
 {//set a element into a 3D matrix
 return this->getCoordSysPtr()->getElt(this, i, j);
 }

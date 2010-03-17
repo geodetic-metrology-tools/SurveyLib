@@ -16,7 +16,11 @@
 // other forward declarations
 #include  "TAReferenceFrame.h"
 #include  "TSpatialVector.h"
-#include  "mathimf.h"
+#if __INTEL_COMPILER
+#include	<mathimf.h>
+#else
+#include <math.h>
+#endif
 #include  "TAngle.h"
 
 
@@ -44,7 +48,7 @@ TSpatialVector::TSpatialVector(TAReferenceFrame* frame)
 
 
 TSpatialVector::TSpatialVector(TAReferenceFrame* rf,
-							   const quad x, const quad y, const quad z,
+							   const real x, const real y, const real z,
 							   TCoordSysFactory::ECoordSys cs )
 {
 	fFv = new TFreeVector(x,y,z,cs);
@@ -115,7 +119,7 @@ TSpatialVector& TSpatialVector::operator-( const TSpatialVector& second)
 }
 
 
-TSpatialVector& TSpatialVector::operator*( const quad factor)
+TSpatialVector& TSpatialVector::operator*( const real factor)
 {	/// Multiplication by a constant
 	*fFv = *fFv *  factor;
 	return *this;

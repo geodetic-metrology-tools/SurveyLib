@@ -29,7 +29,7 @@ inline int binary_search(int arr[], int size, int value)
 	return low - 1;
 }
 
-TSparseMatrix::TSparseMatrix(int rows, int columns, quad* vals, int* rowInds, int* colPtr)
+TSparseMatrix::TSparseMatrix(int rows, int columns, real* vals, int* rowInds, int* colPtr)
 {
 	matrix = new Matrix(rows, columns, vals, colPtr, rowInds);
 }
@@ -49,7 +49,7 @@ TSparseMatrix* TSparseMatrix::transposed() const
 	int* temp = new int[matrix->m];
 	int i, j, q;
 
-	quad* values = new quad[matrix->colptr[matrix->n]];
+	real* values = new real[matrix->colptr[matrix->n]];
 	int* colptr = new int[matrix->m + 1];
 	int* rowind = new int[matrix->colptr[matrix->n]];
 	for (i = 0; i < matrix->m; i++)
@@ -88,8 +88,8 @@ TSparseMatrix* TSparseMatrix::transposed() const
 
 TSparseMatrix* TSparseMatrix::multiply_F(const TSparseMatrix& second) const
 {
-    quad *resultColumn = new quad[matrix->m];
-    Vector<quad> results(matrix->m * second.matrix->n / 2);
+    real *resultColumn = new real[matrix->m];
+    Vector<real> results(matrix->m * second.matrix->n / 2);
     Vector<int> rowInds(matrix->m * second.matrix->n / 2);
     int i, k, l;
     Matrix *result = new Matrix(matrix->m, second.matrix->n);
@@ -132,7 +132,7 @@ TSparseMatrix* TSparseMatrix::multiply_F(const TSparseMatrix& second) const
 
 TSparseMatrix* TSparseMatrix::multiply_LM(const TSparseMatrix& second) const
 {
-	quad *resultColumn = new quad[matrix->m];
+	real *resultColumn = new real[matrix->m];
     int i, k, l;
     Matrix *result;
     int nnz = 0;
@@ -190,7 +190,7 @@ TSparseMatrix* TSparseMatrix::multiply_LM(const TSparseMatrix& second) const
 TSparseMatrix* TSparseMatrix::multiply_returning_unordered_F(const TSparseMatrix& second) const
 {
 	int* cache = new int[matrix->m];
-    Vector<quad> results(matrix->m * second.matrix->n / 2);
+    Vector<real> results(matrix->m * second.matrix->n / 2);
     Vector<int> rowInds(matrix->m * second.matrix->n / 2);
     int i, k, l;
     Matrix *result = new Matrix(matrix->m, second.matrix->n);
@@ -235,7 +235,7 @@ TSparseMatrix* TSparseMatrix::multiply_returning_unordered_F(const TSparseMatrix
     return new TSparseMatrix(result);
 }
 
-quad TSparseMatrix::operator ()(int row, int column) const
+real TSparseMatrix::operator ()(int row, int column) const
 {
 	if (column <= matrix->n / 2)
 	{
@@ -264,11 +264,11 @@ quad TSparseMatrix::operator ()(int row, int column) const
 	return 0;
 }
 
-quad* TSparseMatrix::operator *(const quad* right) const
+real* TSparseMatrix::operator *(const real* right) const
 {
 	int i, j;
 
-	quad* result = new quad[matrix->m];
+	real* result = new real[matrix->m];
 
 	for (i = 0; i < matrix->m; i++)
 	{
@@ -289,11 +289,11 @@ quad* TSparseMatrix::operator *(const quad* right) const
 	return result;
 }
 
-quad* TSparseMatrix::operator *(const TColumnVector& right) const
+real* TSparseMatrix::operator *(const TColumnVector& right) const
 {
 	int i, j;
 
-	quad* result = new quad[matrix->m];
+	real* result = new real[matrix->m];
 
 	for (i = 0; i < matrix->m; i++)
 	{
@@ -366,8 +366,8 @@ TSparseMatrix* TSparseMatrix::deepCopy(const TSparseMatrix* matrix)
 
 TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lower_triangular() const
 {
-	quad* resultColumn = new quad[matrix->n];
-	Vector<quad> results(matrix->n * matrix->n / 2);
+	real* resultColumn = new real[matrix->n];
+	Vector<real> results(matrix->n * matrix->n / 2);
 	Vector<int> rowInds(matrix->n * matrix->n / 2);
 
 	Matrix *result = new Matrix(matrix->n, matrix->n);
@@ -396,7 +396,7 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 			// if this element in the column is not zero
 			if (count < col && rowInds[count] == i)
 			{
-				quad columnMainValue = results[count++];
+				real columnMainValue = results[count++];
 				resultColumn[i] -= columnMainValue * columnMainValue;
 
 				// we multiply each element of the rest of the column with the "main value" which is
@@ -423,14 +423,14 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 			delete result;
 			return NULL;
 		}
-		resultColumn[i] = __sqrtq(resultColumn[i]);
+		resultColumn[i] = sqrtq(resultColumn[i]);
 		rowInds.add(i);
 		results.add(resultColumn[i]);
 		col++;
 
 		for (int j = i + 1; j < matrix->n; j++)
 		{
-			quad val = resultColumn[j];
+			real val = resultColumn[j];
 			if (j == matrix->rowind[col] && col < matrix->colptr[i + 1])
 			{
 				val += matrix->values[col++];
@@ -460,14 +460,14 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 	return new TSparseMatrix(result);
 }
 
-quad* TSparseMatrix::solve_eqn(const quad* b) const
+real* TSparseMatrix::solve_eqn(const real* b) const
 {
-	quad* result = new quad[matrix->m];
+	real* result = new real[matrix->m];
 
 	TSparseMatrix* LT = this->transposed(); // TODO: isn't there another way?
 
 	int col;
-	quad sum;
+	real sum;
 	for (int i = 0; i < matrix->n; i++)
 	{
 		sum = b[i];
@@ -509,11 +509,11 @@ TSparseMatrix* TSparseMatrix::invert_lower_triangular_cholesky_decomposed() cons
 {
 	TSparseMatrix* transposed = this->transposed();
 
-	Vector<quad> results(matrix->colptr[matrix->n] * 4); // TODO: perhaps 4 times is too much?
+	Vector<real> results(matrix->colptr[matrix->n] * 4); // TODO: perhaps 4 times is too much?
 	Vector<int> rowInds(matrix->colptr[matrix->n] * 4);
 
 	int i, j, k, l;
-	quad sum = 0;
+	real sum = 0;
 
 	Matrix *result = new Matrix(matrix->n, matrix->n);
 	result->colptr[0] = 0;
@@ -617,11 +617,11 @@ TSparseMatrix* TSparseMatrix::invert_lower_triangular_cholesky_decomposed_return
 {
 	TSparseMatrix* transposed = this->transposed(); // TODO: isn't there another way?
 
-	Vector<quad> results(matrix->colptr[matrix->n] * 4); // TODO: perhaps 4 times is too much?
+	Vector<real> results(matrix->colptr[matrix->n] * 4); // TODO: perhaps 4 times is too much?
 	Vector<int> rowInds(matrix->colptr[matrix->n] * 4);
 
 	int i, j, k, l;
-	quad sum = 0;
+	real sum = 0;
 
 	Matrix *result = new Matrix(matrix->n, matrix->n);
 	result->colptr[0] = 0;
@@ -679,9 +679,9 @@ TSparseMatrix* TSparseMatrix::invert_lower_triangular_cholesky_decomposed_return
 	return new TSparseMatrix(result);
 }
 
-quad* TSparseMatrix::multiply_returning_diagonal(const TSparseMatrix& second) const
+real* TSparseMatrix::multiply_returning_diagonal(const TSparseMatrix& second) const
 {
-	quad* result = new quad[second.matrix->n];
+	real* result = new real[second.matrix->n];
     int i, k, l, secondN = second.matrix->n / 2;
     for (i = 0; i < secondN; i++)
     {
@@ -719,9 +719,9 @@ quad* TSparseMatrix::multiply_returning_diagonal(const TSparseMatrix& second) co
 	return result;
 }
 
-quad* TSparseMatrix::multiply_three_returning_diagonal(const TSparseMatrix& second, const TSparseMatrix& third) const
+real* TSparseMatrix::multiply_three_returning_diagonal(const TSparseMatrix& second, const TSparseMatrix& third) const
 {
-	quad* result = new quad[third.matrix->n]; // TODO: is that correct?
+	real* result = new real[third.matrix->n]; // TODO: is that correct?
 	int i, k, j, l, thirdN = third.matrix->n / 2;
     for (i = 0; i < thirdN; i++)
     {
@@ -766,8 +766,8 @@ quad* TSparseMatrix::multiply_three_returning_diagonal(const TSparseMatrix& seco
 
 TSparseMatrix* TSparseMatrix::multiply_three_F(const TSparseMatrix& second, const TSparseMatrix& third) const
 {
-	quad *resultColumn = new quad[matrix->m];
-	Vector<quad> results(matrix->m * third.matrix->n / 2);
+	real *resultColumn = new real[matrix->m];
+	Vector<real> results(matrix->m * third.matrix->n / 2);
 	Vector<int> rowInds(matrix->m * third.matrix->n / 2);
     int i, k, l, j;
     Matrix *result = new Matrix(matrix->m, third.matrix->n);
@@ -814,7 +814,7 @@ TSparseMatrix* TSparseMatrix::multiply_three_F(const TSparseMatrix& second, cons
 
 TSparseMatrix* TSparseMatrix::multiply_three_LM(const TSparseMatrix& second, const TSparseMatrix& third) const
 {
-	quad *resultColumn = new quad[matrix->m];
+	real *resultColumn = new real[matrix->m];
     int i, k, l, j;
     Matrix *result;
     int nnz = 0;
@@ -877,8 +877,8 @@ TSparseMatrix* TSparseMatrix::multiply_three_LM(const TSparseMatrix& second, con
 
 TSparseMatrix* TSparseMatrix::multiply_three_returning_lower_triangular_F(const TSparseMatrix& second, const TSparseMatrix& third) const
 {
-    quad *resultColumn = new quad[matrix->m];
-    Vector<quad> results((matrix->m * third.matrix->n) / 2 + matrix->m);
+    real *resultColumn = new real[matrix->m];
+    Vector<real> results((matrix->m * third.matrix->n) / 2 + matrix->m);
     Vector<int> rowInds((matrix->m * third.matrix->n) / 2 + matrix->m);
     int i, k, l, j;
     Matrix *result = new Matrix(matrix->m, third.matrix->n);
@@ -925,7 +925,7 @@ TSparseMatrix* TSparseMatrix::multiply_three_returning_lower_triangular_F(const 
 
 TSparseMatrix* TSparseMatrix::multiply_three_returning_lower_triangular_LM(const TSparseMatrix& second, const TSparseMatrix& third) const
 {
-	quad *resultColumn = new quad[matrix->m];
+	real *resultColumn = new real[matrix->m];
     int i, k, l, j;
     Matrix *result;
     int nnz = 0;
@@ -988,8 +988,8 @@ TSparseMatrix* TSparseMatrix::multiply_three_returning_lower_triangular_LM(const
 
 TSparseMatrix* TSparseMatrix::multiply_returning_lower_triangular_F(const TSparseMatrix& second) const
 {
-    quad *resultColumn = new quad[matrix->m];
-    Vector<quad> results((matrix->m * second.matrix->n) / 2 + matrix->m);
+    real *resultColumn = new real[matrix->m];
+    Vector<real> results((matrix->m * second.matrix->n) / 2 + matrix->m);
     Vector<int> rowInds((matrix->m * second.matrix->n) / 2 + matrix->m);
     int i, k, l;
     Matrix *result = new Matrix(matrix->m, second.matrix->n);
@@ -1033,7 +1033,7 @@ TSparseMatrix* TSparseMatrix::multiply_returning_lower_triangular_F(const TSpars
 
 TSparseMatrix* TSparseMatrix::multiply_returning_lower_triangular_LM(const TSparseMatrix& second) const
 {
-	quad *resultColumn = new quad[matrix->m];
+	real *resultColumn = new real[matrix->m];
     int i, k, l;
     Matrix *result;
     int nnz = 0;
@@ -1097,7 +1097,7 @@ TSparseMatrix* TSparseMatrix::add(const TSparseMatrix& second) const
     {
         while (first < matrix->colptr[col] && sec < second.matrix->colptr[col])
         {
-			quad res;
+			real res;
             if (matrix->rowind[first] == second.matrix->rowind[sec] && matrix->values[first++] + second.matrix->values[sec++] != 0)
             {
 	            total++;
@@ -1131,7 +1131,7 @@ TSparseMatrix* TSparseMatrix::add(const TSparseMatrix& second) const
     {
         while (first < matrix->colptr[col] && sec < second.matrix->colptr[col])
         {
-			quad res;
+			real res;
             if (matrix->rowind[first] == second.matrix->rowind[sec])
             {
 				res = matrix->values[first] + second.matrix->values[sec++];
@@ -1170,7 +1170,7 @@ TSparseMatrix* TSparseMatrix::add(const TSparseMatrix& second) const
     return new TSparseMatrix(result);
 }
 
-void TSparseMatrix::multiply_by_number(quad n)
+void TSparseMatrix::multiply_by_number(real n)
 {
 	for (int i = 0; i < matrix->colptr[matrix->n]; i++)
 	{

@@ -155,13 +155,13 @@ void main()
 					*Ninv = N.inverseSym();
 					cout << "after N is inverted" << endl;
 					*Nbig0 = (*Ninv)*N - N*(*Ninv);
-					quad max = 0.0;
+					real max = 0.0;
 					for (int i=0;i<N.numRows();i++)
 					{
 						for (int j=0;j<N.numCols();j++)
 						{
-							if (__fabsq((*Nbig0)(i,j))>max)
-								max = __fabsq((*Nbig0)(i,j));
+							if (fabsq((*Nbig0)(i,j))>max)
+								max = fabsq((*Nbig0)(i,j));
 						}
 					}
 					cout << "max " << max << endl;*/

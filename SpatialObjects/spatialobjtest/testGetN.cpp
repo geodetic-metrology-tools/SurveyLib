@@ -19,8 +19,8 @@ void main() {
 
 	//TTLength len(12.0);
 
-	quad a(2000.0), b(2000), c(2000);
-	quad N(0.0);
+	real a(2000.0), b(2000), c(2000);
+	real N(0.0);
 	cout.precision(7);
 	cout << getCG2000N0(a,b,&N);
 	cout << "   " << N << endl;
@@ -71,9 +71,9 @@ void main() {
 
 
 
-	quad x0(-3500), y0(4500), z0(2433.660);
-	quad x(3000), y(2500), z(2400);
-//	quad x3, y3, z3;
+	real x0(-3500), y0(4500), z0(2433.660);
+	real x(3000), y(2500), z(2400);
+//	real x3, y3, z3;
 	//char* geoid = "CG2000";
 
 	
@@ -97,7 +97,7 @@ void main() {
 	cout << x << "  " << y << "  " << z << endl;
 	
 	
-	quad x2(-4258.36987), y2(6987.36524), z2(2436.25896);
+	real x2(-4258.36987), y2(6987.36524), z2(2436.25896);
 
 
 	cout << transformToMLA2(-3500, 4500, 2433.660, &x2, &y2, &z2, "CG1985") << endl;
@@ -112,10 +112,10 @@ void main() {
 	stream->setf(ios_base::fixed,ios_base::floatfield);
 	stream->precision(7);
 
-	quad xr, yr, hr;
-	quad xv1 = 1999.9999639;
-	quad yv1 = 3000.0141029;
-	quad hv1 = 550.0628652;
+	real xr, yr, hr;
+	real xv1 = 1999.9999639;
+	real yv1 = 3000.0141029;
+	real hv1 = 550.0628652;
 	*stream<<"descente pour V1"<<endl;
 	*stream<<"V1 : "<<xv1<<" / "<<yv1<<" / "<<hv1<<endl;
 	*stream<<"premier point :"<<endl;

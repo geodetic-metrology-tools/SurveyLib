@@ -35,7 +35,7 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 
 
 TLSResultsMatrices::TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, 
-									   quad sigm2)
+									   real sigm2)
 {// constructor setting the results
 
 	cout<<(double) sigm2<<endl<<endl;
@@ -89,7 +89,7 @@ TLSResultsMatrices::~TLSResultsMatrices()
 TColumnVector	TLSResultsMatrices::computeVarObs(const TSparseMatrix& A, const TSparseMatrix& ATransposed) 
 {
 	int nobs = A.rowsCount(); //number of observations
-	quad *result = A.multiply_three_returning_diagonal(*fUnknownsCovarianceMtrx, ATransposed);
+	real *result = A.multiply_three_returning_diagonal(*fUnknownsCovarianceMtrx, ATransposed);
 	TColumnVector var(nobs);
 	for (int i = 0; i < nobs; i++)
 	{

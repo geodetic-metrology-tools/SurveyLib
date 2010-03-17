@@ -42,8 +42,8 @@
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
-const quad TModifiedLocalGeodeticRF::precisionH = 0.0000001; //precision calcul h
-const quad TModifiedLocalGeodeticRF::precisionPhi = 0.00000000000001; //precision calcul phi
+const real TModifiedLocalGeodeticRF::precisionH = 0.0000001; //precision calcul h
+const real TModifiedLocalGeodeticRF::precisionPhi = 0.00000000000001; //precision calcul phi
 
 
 
