@@ -88,7 +88,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 		TSparseMatrix* solutionMatrixA = aTransTimesBTimesWInvTimesBTransInverted->multiply_returning_lower_triangular_F(*firstDM);
 
-		quad* solutionVectorb = *aTransTimesBTimesWInvTimesBTransInverted * misclV;
+		real* solutionVectorb = *aTransTimesBTimesWInvTimesBTransInverted * misclV;
 		for (int i = 0; i < aTransTimesBTimesWInvTimesBTransInverted->rowsCount(); i++)
 		{
 			solutionVectorb[i] = -solutionVectorb[i];
@@ -111,7 +111,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 		rm->setL(L);
 
-		quad* solution = L->solve_eqn(solutionVectorb);
+		real* solution = L->solve_eqn(solutionVectorb);
 
 		delete[] solutionVectorb;
 
@@ -138,7 +138,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 		TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
 		fAtPA->writeMatrixFile("C:\\AtPA.txt");
-		quad* solutionVectorb = *aTransTimesW * misclV;
+		real* solutionVectorb = *aTransTimesW * misclV;
 		for (int i = 0; i < aTransTimesW->rowsCount(); i++)
 		{
 			solutionVectorb[i] = -solutionVectorb[i];
@@ -162,7 +162,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 		rm->setL(L);
 
-		quad* solution = L->solve_eqn(solutionVectorb);
+		real* solution = L->solve_eqn(solutionVectorb);
 
 		delete[] solutionVectorb;
 
@@ -227,11 +227,11 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		decomposed = solutionMatrixA->cholesky_decompose_lower_triangular_returning_lower_triangular();
 		delete solutionMatrixA;
 
-		quad* aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec =
+		real* aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec =
 			*aTransTimesBTimesWInvTimesBTransInverted * misclV;
 		delete aTransTimesBTimesWInvTimesBTransInverted;
 
-		quad* solutionVectorb = *cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted *
+		real* solutionVectorb = *cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted *
 			aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec;
 		delete cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted;
 
@@ -240,7 +240,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 			solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
 		}
 
-		quad* solution = decomposed->solve_eqn(solutionVectorb);
+		real* solution = decomposed->solve_eqn(solutionVectorb);
 		delete decomposed;		
 		delete[] solutionVectorb;
 
@@ -295,10 +295,10 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		decomposed = solutionMatrixA->cholesky_decompose_lower_triangular_returning_lower_triangular();
 		delete solutionMatrixA;
 
-		quad* aTransTimesWTimesATimesMiscVec = *aTransW * misclV;
+		real* aTransTimesWTimesATimesMiscVec = *aTransW * misclV;
 		delete aTransW;
 
-		quad* solutionVectorb = *cstrATimesATransTimesWTimesAInverted * aTransTimesWTimesATimesMiscVec;
+		real* solutionVectorb = *cstrATimesATransTimesWTimesAInverted * aTransTimesWTimesATimesMiscVec;
 		delete cstrATimesATransTimesWTimesAInverted;
 
 		for (int i = 0; i < misclV.dimension(); i++)
@@ -306,7 +306,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 			solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
 		}
 
-		quad* solution = decomposed->solve_eqn(solutionVectorb);
+		real* solution = decomposed->solve_eqn(solutionVectorb);
 		delete decomposed;
 		delete[] solutionVectorb;
 

@@ -101,24 +101,24 @@ TARefFrameTransformation*  TMLA2XYHsTransformation::inverse() const
 bool  TMLA2XYHsTransformation::transform(TPositionVector& pv) const
 {// Transformation of a position vector using the parameters of the two reference frames
 	
-	quad dx, dy, dz, d;
-	quad d0, omega;
+	real dx, dy, dz, d;
+	real d0, omega;
 	// radius of the sphere
-	quad R = 6371000;	
+	real R = 6371000;	
 	// transform TPositionVector
-	quad H;
+	real H;
 
 	//distance from P0 in XY-plane
 	dx = pv.getX().getMetresValue() - fFrom->getFalseOrigin().getX().getMetresValue();
 	dy = pv.getY().getMetresValue() - fFrom->getFalseOrigin().getY().getMetresValue();
 	dz = pv.getZ().getMetresValue() - fFrom->getFalseOrigin().getZ().getMetresValue()
 		+ fTo->getMLARefFrame()->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getH(/*TGraph::getGraph()->getEllipsoid(TGraph::kGRS80)*/).getMetresValue();
-	d=__sqrtq( (__powq(dx,2)) + (__powq(dy,2)) );
+	d=sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 
-	//H = __sqrtq( (__powq((R+dz),2) + (__powq(d,2))) )-  R;
-	omega = __atanq(d / (R+dz));
-	d0 = d * R * __cosq(omega) / (R + dz);
-	H = ( dz + (d0 * __tanq(omega/2.0)) ) / __cosq(omega);
+	//H = sqrtq( (powq((R+dz),2) + (powq(d,2))) )-  R;
+	omega = atanq(d / (R+dz));
+	d0 = d * R * cosq(omega) / (R + dz);
+	H = ( dz + (d0 * tanq(omega/2.0)) ) / cosq(omega);
 
 	TLength newH (H);
 	

@@ -44,8 +44,8 @@ TColumnVector::TColumnVector()
 TColumnVector::TColumnVector(int nRows):
 fNbRows(nRows)
 {//!Constructor setting the dimensions of the vector
-	fVector = new quad [fNbRows];
-	(*this) = quad(0.0);
+	fVector = new real [fNbRows];
+	(*this) = real(0.0);
 	setStatus( TANumericValue::kKnown );
 }
 		
@@ -56,7 +56,7 @@ fNbRows(source.fNbRows)
 {//!Copy constructor
 
 	//!dimensioning of the vector
-	fVector = new quad [fNbRows];
+	fVector = new real [fNbRows];
 
 	//!copy the vector coefficients
 	for (int i = 0; i<fNbRows; i++)
@@ -156,7 +156,7 @@ TColumnVector& TColumnVector::operator -=(const TColumnVector& right)
 }
 
 
-TColumnVector TColumnVector::operator*(const quad k)
+TColumnVector TColumnVector::operator*(const real k)
 {//!multiplies the vector by a scalar
 	TColumnVector result (dimension());
 	for (int i=0; i<fNbRows; i++)
@@ -171,7 +171,7 @@ TColumnVector TColumnVector::operator*(const TDouble k)
 	if (status!=kNull )
 	{
 		resultat.setDimension(dimension());
-		quad d=k.getValue();
+		real d=k.getValue();
 		for (int i=0; i<fNbRows; i++)
 			(resultat)(i) = (*this)(i)*d;
 	}
@@ -187,7 +187,7 @@ TDouble TColumnVector::operator *(const TColumnVector& right) const
 	EStatus status=this->testStatus(right);
 	if (status!=kNull && dimension() == right.dimension())
 	{
-		quad result = 0.0;
+		real result = 0.0;
 		for (int i=0; i<dimension(); i++)
 			result =result + (*this)(i) * right(i);
 		resultat.setValue(result);
@@ -197,20 +197,20 @@ TDouble TColumnVector::operator *(const TColumnVector& right) const
 }
 
 
-void TColumnVector::operator=(const quad comVal)
+void TColumnVector::operator=(const real comVal)
 {//!inits all the vector coefficients to a common value
 	for (int i = 0; i<fNbRows; i++)
 		fVector[i] = comVal;
 }
 
 
-quad& TColumnVector::operator()(const int row)
+real& TColumnVector::operator()(const int row)
 {//!returns a reference to a vector coefficient
 	return fVector[row];
 }
 
 
-quad TColumnVector::operator()(const int row) const
+real TColumnVector::operator()(const int row) const
 {//!returns a copy of a vector coefficient (const version of the previous method)
 	return fVector[row];
 }
@@ -237,7 +237,7 @@ void TColumnVector::setDimension(const int nRows)
 
 	//!creates the new vector
 	fNbRows = nRows;
-	fVector = new quad [fNbRows];
+	fVector = new real [fNbRows];
 }
 
 
@@ -259,7 +259,7 @@ TMatrix TColumnVector::transposed()const
 ///Private Function
 /////////////////////////////////////////////////////
 
-quad* TColumnVector::getFirstEltAdr() const
+real* TColumnVector::getFirstEltAdr() const
 {//!returns the adress of the vector's first element
 	return fVector;
 }

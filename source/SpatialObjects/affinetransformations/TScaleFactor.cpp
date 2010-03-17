@@ -40,7 +40,7 @@ TScaleFactor::TScaleFactor()
 }
 
 
-TScaleFactor::TScaleFactor( quad f )
+TScaleFactor::TScaleFactor( real f )
 {	// constructor taking factor
 	fScaleFactor.setValue(f);
 	this->setStatus( TVNumericValue::kKnown );

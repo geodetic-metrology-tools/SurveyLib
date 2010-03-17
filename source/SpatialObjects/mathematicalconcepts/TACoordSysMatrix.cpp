@@ -84,13 +84,13 @@ void TACoordSysMatrix::setCoordSysTRotation(TRotationMatrix* mx, TCoordSysFactor
 // Member Protected Functions
 //////////////////////////////////////////////////////////////////////
 
-quad TACoordSysMatrix::getC(const int& i, const int& j) const
+real TACoordSysMatrix::getC(const int& i, const int& j) const
 {//get the (i,j) value
 	return mx[i][j];
 }
 
 
-void	TACoordSysMatrix::setC(const int& i, const int& j, quad value)
+void	TACoordSysMatrix::setC(const int& i, const int& j, real value)
 {//!set value to (i,j)
 	mx[i][j]=value;
 }

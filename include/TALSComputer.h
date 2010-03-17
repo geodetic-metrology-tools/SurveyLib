@@ -13,7 +13,11 @@
 /////////////////////////////////////////////////////
 // Forward declarations
 /////////////////////////////////////////////////////
-#include <mathimf.h>
+#if __INTEL_COMPILER
+#include	<mathimf.h>
+#else
+#include <math.h>
+#endif
 
 
 class TLSInputMatrices;
@@ -31,7 +35,7 @@ public:
 	!@param rm a pointer to the LS results matrices*/
 	virtual bool computeResultsMtrs(const TLSInputMatrices* im, TLSResultsMatrices* rm) = 0;
 	//!Sets the scale factor for the sigma zero a priori
-//	virtual void				setS0APrioriScaleFactor(quad scalefac);
+//	virtual void				setS0APrioriScaleFactor(real scalefac);
 
 	//!makes the variances to be calculated with respect to the sigma zero a priori
 //	virtual void				s0APrioriVariances();
@@ -44,7 +48,7 @@ protected:
 	TALSComputer();
 
 //	bool		fS0APosterioriVariances;
-//	quad		fS0APrioriScaleFactor;
+//	real		fS0APrioriScaleFactor;
 
 
 };

@@ -23,7 +23,11 @@
 //!Includes Files
 #include    <iostream>
 #include	<float.h>
+#if __INTEL_COMPILER
 #include	<mathimf.h>
+#else
+#include <math.h>
+#endif
 #include	<assert.h>
 //
 
@@ -32,7 +36,7 @@ class TDouble;
 using namespace std;
 
 //!Type Definition
-typedef	quad	LengthValue;	// the value for the coordinate
+typedef	real	LengthValue;	// the value for the coordinate
 //
 ////////////////////////////////////////////////////////////////
 
@@ -114,13 +118,13 @@ public:
 	TDouble operator/(const TLength& );
 	
 	//!multiply a TLength object by a factor
-	TLength operator*(const quad );
+	TLength operator*(const real );
 	
 	//!idem *
 	TLength operator*(const TDouble &);
 
 	//!idem *
-	friend  TLength operator*(const quad, const TLength & );
+	friend  TLength operator*(const real, const TLength & );
 
 	//!assign a TLength object to an other
 	TLength& operator=(const TLength &);
@@ -132,14 +136,14 @@ public:
 	TLength& operator-=(const TLength &);
 	
 	//!multiply a TLength object by a factor and rewrite this
-	TLength& operator*=(const quad );
+	TLength& operator*=(const real );
 	
 	//!idem *=
 	TLength& operator*=(const TDouble&);
 
 
 	//!idem *=
-	//friend  TLength& operator*=(const quad, const TLength & );
+	//friend  TLength& operator*=(const real, const TLength & );
 	//@}
 
 
@@ -147,8 +151,8 @@ private:
 
 	/*!\name Protected Methods*/
 	//@{
-	//!return the sign of a quad number
-	ENumberSign		sign(quad	number) const;
+	//!return the sign of a real number
+	ENumberSign		sign(real	number) const;
 	//@}
 
 

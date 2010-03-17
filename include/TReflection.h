@@ -65,10 +65,10 @@ public:
 		TReflection& operator=( const TReflection& );
 
 		/*//! Return element ri, cj of the Reflection matrix
-		quad operator()(int row, int col) const;
+		real operator()(int row, int col) const;
 
 		//! Return element ri, cj of the Reflection matrix
-		quad& operator()(int row, int col);*/
+		real& operator()(int row, int col);*/
 
 		//! return the reflection matrix
 		T3DMatrix getReflectionMatrix() const { return fReflectionMatrix; }

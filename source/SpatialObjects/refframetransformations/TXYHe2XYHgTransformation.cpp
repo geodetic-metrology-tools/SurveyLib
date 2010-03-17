@@ -108,7 +108,7 @@ bool  TXYHe2XYHgTransformation::transform( TPositionVector& pv ) const
 {// Transformation of a position vector using N (height above geoid)
 
 	TLength he(pv.getH());
-	quad x, y, h;
+	real x, y, h;
 	x = pv.getX().getMetresValue();
 	y = pv.getY().getMetresValue();
 	h = he.getMetresValue();

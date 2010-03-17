@@ -625,6 +625,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\SpatialObjects\referencesurfaces\TGeoidValues.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\Source\SpatialObjects\ReferenceSurfaces\TGraphLocalAstronomicalRF.cpp"
 				>
 				<FileConfiguration
@@ -958,7 +962,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\TEuclidianReferenceFrame.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\TGeodeticRefFrame.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\TGeoidValues.h"
 				>
 			</File>
 			<File

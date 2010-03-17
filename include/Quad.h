@@ -6,7 +6,7 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
-#if _DEBUG
+#if _DEBUG && __INTEL_COMPILER
 
 class Quad
 {
@@ -135,11 +135,15 @@ public:
 	_Quad value;
 };
 
-typedef Quad quad;
+typedef Quad real;
+
+#elif __INTEL_COMPILER
+
+typedef _Quad real;
 
 #else
 
-typedef _Quad quad;
+typedef double real;
 
 #endif
 

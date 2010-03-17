@@ -44,12 +44,12 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
 
-const quad	TAngle::kPi = __acosq(-1.0);  // Pi = 3.14159265358979323844;
-const quad	TAngle::kRadiansToGons = 200.0/kPi;
-const quad	TAngle::kGonsToRadians = kPi/200.0;
-const quad	TAngle::kRadiansToDecDegs = 180.0/kPi;
-const quad	TAngle::kDecDegsToRadians = kPi/180.0;
-const quad	TAngle::seuil = 0.00000000001;
+const real	TAngle::kPi = acosq(-1.0);  // Pi = 3.14159265358979323844;
+const real	TAngle::kRadiansToGons = 200.0/kPi;
+const real	TAngle::kGonsToRadians = kPi/200.0;
+const real	TAngle::kRadiansToDecDegs = 180.0/kPi;
+const real	TAngle::kDecDegsToRadians = kPi/180.0;
+const real	TAngle::seuil = 0.00000000001;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -112,28 +112,28 @@ const TAngle TAngle::piBy4()
 }
 
 
-const quad  TAngle::radsToGonsFactor()
+const real  TAngle::radsToGonsFactor()
 {   // Provides a scale factor to convert from angles 
 	//in radians to angles in gons
 	return  kRadiansToGons;
 }
 
 
-const quad  TAngle::gonsToRadsFactor()
+const real  TAngle::gonsToRadsFactor()
 {   // Provides a scale factor to convert from angles 
 	// in gons to angles in radians
 	return  kGonsToRadians;
 }
 
 
-const quad  TAngle::radsToDecDegsFactor()
+const real  TAngle::radsToDecDegsFactor()
 {   // Provides a scale factor to convert from angles 
 	// in radians to angles in decimal degrees
 	return  kRadiansToDecDegs;
 }
 
 
-const quad  TAngle::decDegsToRadsFactor()
+const real  TAngle::decDegsToRadsFactor()
 {   // Provides a scale factor to convert from angles 
 	// in decimal degrees to angles in radians
 	return  kDecDegsToRadians;
@@ -202,7 +202,7 @@ bool	TAngle::setDMSValue(const	Degrees	degs,
 
 	absDegs = abs(degs);
 	absMins = abs(mins);
-	absSecs = __fabsq(secs);
+	absSecs = fabsq(secs);
 	
 	// check the sign of the angle entered
 	if(degs >= 0  &&  mins >= 0  &&  secs >= 0 ) 
@@ -227,7 +227,7 @@ bool	TAngle::setDMSValue(const	Degrees	degs,
 
 
 	// convert the given values to radians
-	fValue = angleSign * (quad(absDegs) + ((quad(absMins))/60.0) + (absSecs/3600.0)) * kDecDegsToRadians;
+	fValue = angleSign * (real(absDegs) + ((real(absMins))/60.0) + (absSecs/3600.0)) * kDecDegsToRadians;
 
 	//normalise the radians value
 	normaliseAngle();
@@ -242,17 +242,17 @@ bool	TAngle::setDMSValue(const	Degrees	degs,
 Minutes	TAngle::getMinutesValue() const
 {	// get the integer minutes of the angular value
 	
-	quad	decDegs;
-	quad	degs;
-	quad	decMins;
+	real	decDegs;
+	real	degs;
+	real	decMins;
 	
 	// determine the degrees and minutes values
 	decDegs = fValue * kRadiansToDecDegs; 
-#if _DEBUG
-	decMins = 60.0*__modfq(decDegs, degs);	// if the decimal degrees are negative
+#if _DEBUG && __INTEL_COMPILER
+	decMins = 60.0*modfq(decDegs, degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
 #else
-	decMins = 60.0*__modfq(decDegs, &degs);	// if the decimal degrees are negative
+	decMins = 60.0*modfq(decDegs, &degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
 #endif
 
@@ -272,23 +272,23 @@ Minutes	TAngle::getMinutesValue() const
 Seconds	TAngle::getSecondsValue() const
 {	// get the decimal seconds of the angular value
 	
-	quad	decDegs;
-	quad	degs;
-	quad	decMins;
-	quad	mins;
-	quad	seconds;
+	real	decDegs;
+	real	degs;
+	real	decMins;
+	real	mins;
+	real	seconds;
 
 	// determine the degrees, minutes, and seconds values
 	decDegs = fValue * kRadiansToDecDegs; 
-#if _DEBUG
-	decMins = 60.0*__modfq(decDegs, degs);	// if the decimal degrees are negative
+#if _DEBUG && __INTEL_COMPILER
+	decMins = 60.0*modfq(decDegs, degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
-	seconds = 60.0*__modfq(decMins, mins);	// if the decimal minutes are negative
+	seconds = 60.0*modfq(decMins, mins);	// if the decimal minutes are negative
 										// BOTH the minutes and seconds will be negative
 #else
-	decMins = 60.0*__modfq(decDegs, &degs);	// if the decimal degrees are negative
+	decMins = 60.0*modfq(decDegs, &degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
-	seconds = 60.0*__modfq(decMins, &mins);	// if the decimal minutes are negative
+	seconds = 60.0*modfq(decMins, &mins);	// if the decimal minutes are negative
 										// BOTH the minutes and seconds will be negative
 #endif
 
@@ -299,7 +299,7 @@ Seconds	TAngle::getSecondsValue() const
 	}
 	else
 	{	// degrees or minutes non-zero, so seconds must be positive
-		return __fabsq(seconds);
+		return fabsq(seconds);
 	}
 }
 
@@ -380,7 +380,7 @@ TAngle TAngle::operator-(const TAngle &angle) const
 }
 
 	
-TAngle TAngle::operator*(const quad factor) const
+TAngle TAngle::operator*(const real factor) const
 {// Multiplies the angle by a scale factor
 	TAngle resultat;
 	if (isNull()!=true)
@@ -428,7 +428,7 @@ TDouble TAngle::operator/(const TAngle& div) const
 }
 
 
-TAngle	operator*(const quad factor, const TAngle &angle )
+TAngle	operator*(const real factor, const TAngle &angle )
 {// Multiplies a TAngle by a scale factor
 	TAngle resultat;
 	if (angle.isNull()!=true)
@@ -464,7 +464,7 @@ return (*this)=(*this)-angle;
 }
 
 
-TAngle& TAngle::operator*=(const quad factor)
+TAngle& TAngle::operator*=(const real factor)
 {// Multiply the angle by a scale factor
 return (*this)=(*this)*factor;
 }
@@ -479,69 +479,69 @@ return (*this)=(*this)*factor;
 // trigonometric functions
 //////////////////////////////////////////////////////////////////////
 
-quad TAngle::cosine() const
+real TAngle::cosine() const
 {//cosine of the angle
-	return __cosq(this->getRadiansValue());
+	return cosq(this->getRadiansValue());
 }
 
 
-quad TAngle::sine() const
+real TAngle::sine() const
 {//sine of the angle
-	return __sinq(this->getRadiansValue());
+	return sinq(this->getRadiansValue());
 }
 
 
-quad TAngle::tangent() const
+real TAngle::tangent() const
 {//tangent of the angle
-	return __tanq(this->getRadiansValue());
+	return tanq(this->getRadiansValue());
 }
 
 
-quad TAngle::cosineh() const
+real TAngle::cosineh() const
 {//hyperbolic cosine of the angle
-	return __coshq(this->getRadiansValue());
+	return coshq(this->getRadiansValue());
 }
 
 
-quad TAngle::sineh() const
+real TAngle::sineh() const
 {//hyperbolic sine of the angle
-	return __sinhq(this->getRadiansValue());
+	return sinhq(this->getRadiansValue());
 }
 
 
-quad TAngle::tangenth() const
+real TAngle::tangenth() const
 {//hyperbolic tangent of the angle
-	return __tanhq(this->getRadiansValue());
+	return tanhq(this->getRadiansValue());
 }
 
-TAngle TAngle::aCos(const quad x)
-{//determines the arccosine of a quad as a TAngle
+TAngle TAngle::aCos(const real x)
+{//determines the arccosine of a real as a TAngle
 	if (-1.0>x  ||  x>1.0) throw "incorrect value";
 
-	TAngle angle(__acosq(x));
+	TAngle angle(acosq(x));
 	return angle;
 }
 
 
-TAngle TAngle::aSin(const quad x)
-{//determines the arcsine of a quad as a TAngle
+TAngle TAngle::aSin(const real x)
+{//determines the arcsine of a real as a TAngle
 	if (-1.0>x  ||  x>1.0) throw "incorrect value";
 
-	TAngle angle(__asinq(x));
+	TAngle angle(asinq(x));
 	return angle;
 }
 
 
-TAngle TAngle::aTan(const quad x)
-{//determines the arctan of a quad as a TAngle
-	TAngle angle(__atanq(x));
+TAngle TAngle::aTan(const real x)
+{//determines the arctan of a real as a TAngle
+	TAngle angle(atanq(x));
 	return angle;
 }
 
 
-TAngle TAngle::aTan2(const quad x, const quad y)
+TAngle TAngle::aTan2(const real x, const real y)
 {//determines the arctan(x/y) as a TAngle
-	TAngle angle(__atan2q(x, y));
+	TAngle angle(atan2q(x, y));
 	return angle;
 }
 
@@ -552,19 +552,19 @@ TAngle TAngle::aTan2(const quad x, const quad y)
 
 
 	
-TAngle::ENumberSign		TAngle::sign(quad	number) const
+TAngle::ENumberSign		TAngle::sign(real	number) const
 {	// return the sign of the number entered
 
 	ENumberSign	sign;
 
-	// divide the quad by its absolute value
+	// divide the real by its absolute value
 	// the result should be -1, or 1, for numbers 
 	// not equal to 0
-	if(number / __fabsq(number) < 0.0)
+	if(number / fabsq(number) < 0.0)
 	{
 		sign = kNegative;
 	}
-	else if (number / __fabsq(number) > 0.0)
+	else if (number / fabsq(number) > 0.0)
 	{
 		sign = kPositive;
 	}

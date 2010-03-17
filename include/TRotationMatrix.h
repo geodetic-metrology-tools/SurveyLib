@@ -65,11 +65,11 @@ public:
 		
 		/*! Constructor taking the radians value of the angles in the specified order
 			\param RotationType enum type for the order of filling rotation matrix
-			\param quad omega radian value of the rotation angle around the X axis
-			\param quad phi radian value of the rotation angle around the Y axis
-			\param quad kappa radian value of the rotation angle around the Z axis
+			\param real omega radian value of the rotation angle around the X axis
+			\param real phi radian value of the rotation angle around the Y axis
+			\param real kappa radian value of the rotation angle around the Z axis
 			\param TVCoordinateSystem* */
-		TRotationMatrix(ERotationType kR, quad, quad, quad);
+		TRotationMatrix(ERotationType kR, real, real, real);
 
 		
 		//! Copy Constructor 
@@ -114,7 +114,7 @@ public:
 			\param omega radian value for the rotation angle around X axis
 			\param phi radian value for the rotation angle around Y axis
 			\param kappa radian value for the rotation angle around Z axis */
-		bool setAllRotations(ERotationType kR, quad&, quad&, quad&);
+		bool setAllRotations(ERotationType kR, real&, real&, real&);
 
 		
 		
@@ -133,7 +133,7 @@ public:
 		virtual TRotationMatrix		transposed() const;
 
 		//!get a element of a rotation matrix
-		quad getElt(const int, const int) const;
+		real getElt(const int, const int) const;
 
 
 	

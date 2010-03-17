@@ -33,7 +33,7 @@ TPositionVector::TPositionVector(TCoordSysFactory::ECoordSys en)
 	setStatus(kNull); 
 }
 
-TPositionVector::TPositionVector(const quad& x, const quad& y, const quad& z,TCoordSysFactory::ECoordSys en)
+TPositionVector::TPositionVector(const real& x, const real& y, const real& z,TCoordSysFactory::ECoordSys en)
 {
 	setX(0, x);
 	setX(1, y);
@@ -42,7 +42,7 @@ TPositionVector::TPositionVector(const quad& x, const quad& y, const quad& z,TCo
 	setStatus(kKnown); 
 }
 
-/*TPositionVector::TPositionVector(const quad& x, const quad& y, const quad&z)
+/*TPositionVector::TPositionVector(const real& x, const real& y, const real&z)
 {
 	TLength X(x), Y(y),Z(z);
 	fPositionVector[0] = X;
@@ -126,7 +126,7 @@ TPositionVector TPositionVector::operator*( const TDouble& factor)
 	TANumericValue::EStatus status = this->testStatus(factor);
 	if ( status!= kNull)
 	{
-		quad scalar = factor.getValue();
+		real scalar = factor.getValue();
 		resultat.setX( 0, scalar * getX(0) ); 
 		resultat.setX( 1, scalar * getX(1) );
 		resultat.setX( 2, scalar * getX(2) );
@@ -142,7 +142,7 @@ TPositionVector TPositionVector::operator *( const TScalar& factor)
 	TANumericValue::EStatus status = this->testStatus(factor);
 	if ( status!= kNull)
 	{
-		quad scalar = factor.getValue();
+		real scalar = factor.getValue();
 		resultat.setX( 0, scalar * getX(0) ); 
 		resultat.setX( 1, scalar * getX(1) );
 		resultat.setX( 2, scalar * getX(2) );
@@ -152,8 +152,8 @@ TPositionVector TPositionVector::operator *( const TScalar& factor)
 }
 
 
-TPositionVector TPositionVector::operator*(const quad& factor)
-{//!Multiplication by a quad object
+TPositionVector TPositionVector::operator*(const real& factor)
+{//!Multiplication by a real object
 	TPositionVector resultat (getCoordSys());
 	if ( this->isNull()== false)
 		{
@@ -173,7 +173,7 @@ TPositionVector & TPositionVector::operator *=( const TScalar& right)
 }
 
 
-TPositionVector & TPositionVector::operator *=( const quad& right)
+TPositionVector & TPositionVector::operator *=( const real& right)
 {//Multiply this vector by a TScalar
 	*this = (*this) * right;
 	return (*this);

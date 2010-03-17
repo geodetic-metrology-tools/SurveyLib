@@ -365,7 +365,7 @@ if (flistener != 0)
 
 }
 
-void  TSpatialPoint::setDist( const quad& id) 
+void  TSpatialPoint::setDist( const real& id) 
 {
 	fPointDist = id; 
 	if (flistener != 0)

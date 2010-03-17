@@ -64,10 +64,10 @@ public:
 		using TACoordinateSystem::getElt;
 
 		//!set a element into a 3D matrix
-		virtual	bool setElt(T3DMatrix*, const int, const int, const quad);
+		virtual	bool setElt(T3DMatrix*, const int, const int, const real);
 
 		//!get a element from a 3D matrix
-		virtual	quad getElt(const T3DMatrix*, const int, const int) const;
+		virtual	real getElt(const T3DMatrix*, const int, const int) const;
 	//@}
 
 private:

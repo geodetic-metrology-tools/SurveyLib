@@ -222,7 +222,7 @@ void main ()
 //		" kappa : " << ang.kappa.getRadiansValue() << endl <<endl ;
 		
 
-	// bon sf Pb si angle = pi avec __atan2q
+	// bon sf Pb si angle = pi avec atan2q
 
 
 

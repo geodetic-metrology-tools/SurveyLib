@@ -68,10 +68,10 @@ public:
 		TTranslation  operator+ ( const TTranslation & );
 
 		/*//! Return element i
-		quad       operator[](int ) const;
+		real       operator[](int ) const;
 
 		//! Return element i
-		quad&      operator[](int );*/
+		real&      operator[](int );*/
 
 		//! Return the translation vector
 		TFreeVector   getVector() const;

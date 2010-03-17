@@ -70,17 +70,17 @@ protected:
 		void	writeStringSep(const int width, const string data);
 		void	writeStringLeftSep(const int width, const string data);
 
-		/*!write a quad and
-		\param int : width used to write the quad
-		\param int : precision used to write the quad
-		\param quad : quad to write*/
-		void	writeDouble(const int width, const int pres, const quad data);
+		/*!write a real and
+		\param int : width used to write the real
+		\param int : precision used to write the real
+		\param real : real to write*/
+		void	writeDouble(const int width, const int pres, const real data);
 
-		/*!write a quad and add a separator
-		\param int : width used to write the quad
-		\param int : precision used to write the quad
-		\param quad : quad to write*/
-		void	writeDoubleSep(const int width, const int pres, const quad data);
+		/*!write a real and add a separator
+		\param int : width used to write the real
+		\param int : precision used to write the real
+		\param real : real to write*/
+		void	writeDoubleSep(const int width, const int pres, const real data);
 
 		void	writeLength(const int width, const int pres, const TLength::EUnits, const TLength data);
 		void	writeAngle(const int width, const int pres, const TAngle::EUnits, const TAngle data);

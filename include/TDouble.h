@@ -1,6 +1,6 @@
 //	TDouble.h 
 /*!
-The TDouble class represents a real numerical value in quad precision.
+The TDouble class represents a real numerical value in real precision.
 
  
 Patterns:
@@ -34,14 +34,14 @@ class TFreeVector;
 #include "TColumnVector.h"
 
 //!Type Definition
-typedef	quad	DoubleValue;	// the value for quad
+typedef	real	DoubleValue;	// the value for real
 //
 ////////////////////////////////////////////////////////////////
 
 /*! \ingroup spatialobjects
 	@{*/
 
-//! Class for a quad
+//! Class for a real
 class	TDouble : public  TANumericValue //: public TObject
 {
 
@@ -52,8 +52,8 @@ public:
 	//@{
 	//! Default Constructor
 	TDouble();
-	//! constructor taking a given quad value
-	TDouble(quad DoubleValue);
+	//! constructor taking a given real value
+	TDouble(real DoubleValue);
 	//! copy constructor
 	TDouble(const TDouble&);
 	//! Destructor

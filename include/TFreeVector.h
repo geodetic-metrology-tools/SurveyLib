@@ -23,7 +23,11 @@
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-#include <mathimf.h>
+#if __INTEL_COMPILER
+#include	<mathimf.h>
+#else
+#include <math.h>
+#endif
 
 class TDouble;
 class TScalar;
@@ -50,8 +54,8 @@ public:
 		//!Default Constructor 
 		TFreeVector(TCoordSysFactory::ECoordSys);
 	
-		//!Constructor taking 3 quad (value in meter)
-		TFreeVector(const quad&, const quad&, const quad&, TCoordSysFactory::ECoordSys);
+		//!Constructor taking 3 real (value in meter)
+		TFreeVector(const real&, const real&, const real&, TCoordSysFactory::ECoordSys);
 
 		//!Copy Constructor 
 		TFreeVector( const TFreeVector&);
@@ -85,14 +89,14 @@ public:
 		//!Multiplication by a TScalar
 		TFreeVector operator*( const TScalar& );
 
-		//!Multiplication by a quad 
-		TFreeVector operator*( const quad& );
+		//!Multiplication by a real 
+		TFreeVector operator*( const real& );
 
 		//!Multiply this vector by a TScalar
 		TFreeVector & operator *= ( const TScalar& );
 
-		//!Multiply this vector by a quad 
-		TFreeVector & operator *= ( const quad& );
+		//!Multiply this vector by a real 
+		TFreeVector & operator *= ( const real& );
 
 		//!Copy Assignment Operator 
 		TFreeVector& operator=( const TFreeVector& );

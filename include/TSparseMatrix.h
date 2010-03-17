@@ -9,7 +9,7 @@ class TSparseMatrix
 {
 public:
 
-	TSparseMatrix(int rows, int columns, quad* vals, int* rowInds, int* colPtr);
+	TSparseMatrix(int rows, int columns, real* vals, int* rowInds, int* colPtr);
 	// this does a shallow copy on purpose! The result matrix should not be changed!
 	TSparseMatrix(const TSparseMatrix&);
 	~TSparseMatrix();
@@ -17,20 +17,20 @@ public:
 	// Sparse matrix transposition.
 	TSparseMatrix* transposed() const;
 
-	quad* operator *(const quad* right) const;
-	quad* operator *(const TColumnVector& right) const;
-	quad operator ()(int row, int column) const;
+	real* operator *(const real* right) const;
+	real* operator *(const TColumnVector& right) const;
+	real operator ()(int row, int column) const;
 
 	bool operator ==(const TSparseMatrix&) const;
 	bool operator !=(const TSparseMatrix&) const;
 	
-	void multiply_by_number(quad);
+	void multiply_by_number(real);
 
 	TSparseMatrix* cholesky_decompose_lower_triangular_returning_lower_triangular() const;
 	TSparseMatrix* invert_diagonal_matrix() const;
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed() const;
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed_returning_lower_triangular() const;
-	quad* solve_eqn(const quad* b) const;
+	real* solve_eqn(const real* b) const;
 
     TSparseMatrix* add(const TSparseMatrix& second) const;
 
@@ -38,20 +38,20 @@ public:
 	TSparseMatrix* multiply_F(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_LM(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_returning_unordered_F(const TSparseMatrix& second) const;
-	quad* multiply_returning_diagonal(const TSparseMatrix& second) const;
+	real* multiply_returning_diagonal(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_returning_lower_triangular_F(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_returning_lower_triangular_LM(const TSparseMatrix& second) const;
 
     TSparseMatrix* multiply_three_F(const TSparseMatrix& second, const TSparseMatrix& third) const;
     TSparseMatrix* multiply_three_LM(const TSparseMatrix& second, const TSparseMatrix& third) const;
-	quad* multiply_three_returning_diagonal(const TSparseMatrix& second, const TSparseMatrix& third) const;
+	real* multiply_three_returning_diagonal(const TSparseMatrix& second, const TSparseMatrix& third) const;
 	TSparseMatrix* multiply_three_returning_lower_triangular_F(const TSparseMatrix& second, const TSparseMatrix& third) const;
 	TSparseMatrix* multiply_three_returning_lower_triangular_LM(const TSparseMatrix& second, const TSparseMatrix& third) const;
 
 	inline int columnsCount() const { return matrix->n; }
 	inline int rowsCount() const { return matrix->m; }
 
-	inline const quad* values() const { return matrix->values; }
+	inline const real* values() const { return matrix->values; }
 	inline const int* rowIndices() const { return matrix->rowind; }
 	inline const int* colPointers() const { return matrix->colptr; }
 
@@ -70,12 +70,12 @@ private:
 			m = rows;
 			n = columns;
 
-			values = new quad[nnz];
+			values = new real[nnz];
 			colptr = new int[n + 1];
 			rowind = new int[nnz];
 		}
 
-		Matrix(int rows, int columns, quad* vs, int* cs, int* rs)
+		Matrix(int rows, int columns, real* vs, int* cs, int* rs)
 		{
 			m = rows;
 			n = columns;
@@ -96,7 +96,7 @@ private:
 
         inline void setNNZ(int nnz)
         {
-            values = new quad[nnz];
+            values = new real[nnz];
             rowind = new int[nnz];
         }
 
@@ -127,7 +127,7 @@ private:
 
 		int* colptr;
 		int* rowind;
-		quad* values;
+		real* values;
 	};
 
 	inline TSparseMatrix(Matrix* m)

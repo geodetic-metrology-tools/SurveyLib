@@ -96,7 +96,7 @@ public:
 
 		/*!create a TRotationMatrix default def:
 		\return false*/
-		virtual bool setAllRotations(TRotationMatrix*, TRotationMatrix::ERotationType kR, quad &om, quad &p, quad &k);
+		virtual bool setAllRotations(TRotationMatrix*, TRotationMatrix::ERotationType kR, real &om, real &p, real &k);
 
 		/*!get angles of a TRotationMatrix return a structure (omega, phi, kappa), default def
 		\return false*/
@@ -106,13 +106,13 @@ public:
 		virtual bool identity(TRotationMatrix*);
 		
 		//!set a element into a 3D matrix
-		virtual	bool setElt(T3DMatrix*, const int, const int, const quad);
+		virtual	bool setElt(T3DMatrix*, const int, const int, const real);
 
 		//!get a element from a 3D matrix
-		virtual	quad getElt(const T3DMatrix*, const int, const int) const;
+		virtual	real getElt(const T3DMatrix*, const int, const int) const;
 		
 		//!get a element from a rotation matrix
-		virtual	quad getElt(const TRotationMatrix*, const int, const int) const;
+		virtual	real getElt(const TRotationMatrix*, const int, const int) const;
 		
 	//@}
 
@@ -130,20 +130,20 @@ protected:
 	/*!\name Member Protected Functions for Vector*/
 	//@{
 		//!get the Xi coordinate of a vector in all Coordinate System
-		quad	getX(const TACoordSysVector*, const int& ) const;
+		real	getX(const TACoordSysVector*, const int& ) const;
 
 
 		//!set the Xi coordinate of a vector in all Coordinate System
-		void	setX(TACoordSysVector*, const int&, const quad&);
+		void	setX(TACoordSysVector*, const int&, const real&);
 	//@}
 		
 	/*!\name Member Protected Functions for Matrix*/
 	//@{
 		//!get the (i,j) value of a matrix
-		quad getC(const TACoordSysMatrix*, const int& i, const int& j) const;
+		real getC(const TACoordSysMatrix*, const int& i, const int& j) const;
 
 		//!set value to (i,j) of a matrix
-		void setC(TACoordSysMatrix*, const int& i, const int& j, quad value);
+		void setC(TACoordSysMatrix*, const int& i, const int& j, real value);
 	//@}
 
 private:

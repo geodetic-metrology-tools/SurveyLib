@@ -88,7 +88,7 @@ public:
 	virtual TColumnVector&	operator-=(const TColumnVector&);
 
 	//!return the product of this vector by a scalar
-	virtual TColumnVector	operator*(const quad k);
+	virtual TColumnVector	operator*(const real k);
 
 	//!return the product of this vector by TDouble
 	virtual TColumnVector	operator*(const TDouble k);
@@ -98,15 +98,15 @@ public:
 
 	//!* Initializes all the vector's elements to a common value
 	/*!	\param comVal the common value of all the vector's elements*/
-	virtual void	operator=(const quad comVal);
+	virtual void	operator=(const real comVal);
 
 	//!Vector element access operator (non-const version). Indices start at 1.
 	/*!\param row the row of the desired element*/
-	virtual quad&		operator()(const int row);
+	virtual real&		operator()(const int row);
 
 	//!Vector element access operator (const version). Indices start at 1.
 	/*!\param row the row of the desired element*/
-	virtual quad		operator()(const int row) const;
+	virtual real		operator()(const int row) const;
 
 	
 	//@}
@@ -131,9 +131,9 @@ public:
 private:
 
 	//!return the adress of the vector's first element
-	virtual quad *	getFirstEltAdr() const;
+	virtual real *	getFirstEltAdr() const;
 
-	quad*			fVector;
+	real*			fVector;
 	int				fNbRows;
 
 };

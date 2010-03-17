@@ -117,7 +117,7 @@ bool  TXYHg2XYHeTransformation::transform( TPositionVector& pv ) const
 
 	TLength hg(pv.getH());
 
-	quad x, y, h;
+	real x, y, h;
 	x = pv.getX().getMetresValue();
 	y = pv.getY().getMetresValue();
 	h = hg.getMetresValue();

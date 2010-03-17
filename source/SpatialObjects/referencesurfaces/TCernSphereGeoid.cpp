@@ -6,7 +6,11 @@
 #include "TCernSphereGeoid.h"
 
 #include <vector>
-#include "mathimf.h"
+#if __INTEL_COMPILER
+#include	<mathimf.h>
+#else
+#include <math.h>
+#endif
 
 
 

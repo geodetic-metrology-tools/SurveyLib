@@ -40,17 +40,21 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 //
 #include    <iostream>
 #include	<float.h>
+#if __INTEL_COMPILER
 #include	<mathimf.h>
+#else
+#include <math.h>
+#endif
 #include	<assert.h>
 //
 #include  "TANumericValue.h"
 class TDouble;
 using namespace std;
 // typedefs
-typedef	quad	AngleValue;		// the value for the angle
+typedef	real	AngleValue;		// the value for the angle
 typedef	int		Degrees;		// the degrees of an angle
 typedef	int		Minutes;		// the minutes of an angle
-typedef	quad	Seconds;		// the seconds of an angle
+typedef	real	Seconds;		// the seconds of an angle
 //
 ////////////////////////////////////////////////////////////////
 
@@ -93,13 +97,13 @@ public:
 	/*! Defines the angle Pi/4 */
 	static const TAngle piBy4();
 	/*! Provides a scale factor to convert from angles in radians to angles in gons */
-	static const quad  radsToGonsFactor();	
+	static const real  radsToGonsFactor();	
 	/*! Provides a scale factor to convert from angles in gons to angles in radians */
-	static const quad  gonsToRadsFactor();
+	static const real  gonsToRadsFactor();
 	/*! Provides a scale factor to convert from angles in radians to angles in degres */
-	static const quad  radsToDecDegsFactor();
+	static const real  radsToDecDegsFactor();
 	/*! Provides a scale factor to convert from angles in degres to angles in radians */
-	static const quad  decDegsToRadsFactor();
+	static const real  decDegsToRadsFactor();
 	//@}
 	
 	
@@ -140,13 +144,13 @@ public:
 	/*! Substract 2 TAngles */
 	TAngle operator-(const TAngle &) const;
 	/*! Multiplies a TAngle by a scale factor */
-	TAngle operator*(const quad ) const;
+	TAngle operator*(const real ) const;
 	/*! Multiplies a TAngle by a TDouble scale factor */
 	TAngle operator*(const TDouble& ) const;
 	/*! div. a TAngle by a TAngle*/
 	TDouble operator/(const TAngle& ) const;
 	/*! Multiplies a TAngle by a scale factor */
-	friend  TAngle operator*(const quad, const TAngle & );
+	friend  TAngle operator*(const real, const TAngle & );
 	/*! Assigns a TAngle to an other */
 	TAngle& operator=(const TAngle &);
 	/*! Adds a TAngle to the angle */
@@ -154,32 +158,32 @@ public:
 	/*! Substracts a TAngle from the angle */
 	TAngle& operator-=(const TAngle &);
 	/*! Multiplies the angle by a scale factor */
-	TAngle& operator*=(const quad );
+	TAngle& operator*=(const real );
 	/*! Multiplies the TAngle by a TDouble scale factor */
 	TAngle& operator*=(const TDouble &);
 
 	/*!@name trigonometric functions */
 	//@{
-	/*! Calculates the cosine of the angle, for example: angle.Cos() = __cosq(angle) */
-	quad cosine() const;
+	/*! Calculates the cosine of the angle, for example: angle.Cos() = cosq(angle) */
+	real cosine() const;
 	/*! Calculates the sine of the angle */
-	quad sine() const;
+	real sine() const;
 	/*! Calculates the tangent of the angle */
-	quad tangent() const;
+	real tangent() const;
 	/*! Calculates the hyperbolic cosine of the angle */
-	quad cosineh() const;
+	real cosineh() const;
 	/*! Calculates the hyperbolic sine of the angle */
-	quad sineh() const;
+	real sineh() const;
 	/*! Calculates the hyperbolic tangent of the angle */
-	quad tangenth() const;
-	/*! Calculates the arccosine of a quad as a TAngle */
-	static TAngle aCos(const quad);
-	/*! Calculates the arcsine of a quad as a TAngle */
-	static TAngle aSin(const quad);
-	/*! Calculates the arctan of a quad as a TAngle */
-	static TAngle aTan(const quad);
+	real tangenth() const;
+	/*! Calculates the arccosine of a real as a TAngle */
+	static TAngle aCos(const real);
+	/*! Calculates the arcsine of a real as a TAngle */
+	static TAngle aSin(const real);
+	/*! Calculates the arctan of a real as a TAngle */
+	static TAngle aTan(const real);
 	/*! Calculates the arctan(x/y) as a TAngle */
-	static TAngle aTan2(const quad, const quad);
+	static TAngle aTan2(const real, const real);
 	//@}
 
 private:
@@ -189,19 +193,19 @@ private:
 
 	/*!@name angle conversion multiplication factors */
 	//@{
-	static const quad	kPi; /*!< pi */
-	static const quad	kRadiansToGons; /*!< convertion rad->gon factor */
-	static const quad	kGonsToRadians; /*!< convertion gon->rad factor */
-	static const quad	kRadiansToDecDegs; /*!< convertion rad->deg factor */
-	static const quad	kDecDegsToRadians; /*!< convertion deg->rad factor */
-	static const quad	seuil;
+	static const real	kPi; /*!< pi */
+	static const real	kRadiansToGons; /*!< convertion rad->gon factor */
+	static const real	kGonsToRadians; /*!< convertion gon->rad factor */
+	static const real	kRadiansToDecDegs; /*!< convertion rad->deg factor */
+	static const real	kDecDegsToRadians; /*!< convertion deg->rad factor */
+	static const real	seuil;
 	//@}
 
 	/*! normalise the angle value to lie between -2Pi and +2Pi */
 	void normaliseAngle();
 	
-	/*! return the sign of a quad number */
-	ENumberSign		sign(quad	number) const;	
+	/*! return the sign of a real number */
+	ENumberSign		sign(real	number) const;	
 
 private:	
 	AngleValue		fValue;		/*!< Angle value, default = 0.0 */

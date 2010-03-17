@@ -27,8 +27,6 @@
 class  TVReferenceFrame;
 #include  "TANumericValue.h"
 
-using namespace std;
-
 // typedefs
 //
 //

@@ -44,7 +44,7 @@ class TVRefFrameTransformation;
 using namespace std;
 
 // typedefs
-typedef  quad  Coordinate;
+typedef  real  Coordinate;
 typedef  bool  CoordKnown;
 //
 //
@@ -66,7 +66,7 @@ public:
 	//@{
 		explicit  TSpatialPosition( TAReferenceFrame* rf );
 
-		TSpatialPosition(TAReferenceFrame*, const quad, const quad, const quad, TCoordSysFactory::ECoordSys );
+		TSpatialPosition(TAReferenceFrame*, const real, const real, const real, TCoordSysFactory::ECoordSys );
 
 		TSpatialPosition(TAReferenceFrame*, counted_ptr< TSpatialStatus >);
 

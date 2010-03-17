@@ -60,10 +60,10 @@ TLSCalcScalarParam& TLSCalcScalarParam::operator =(const TLSCalcScalarParam& rig
 // re-initialises the parameters alterred during or after a least squares calculation
 void	TLSCalcScalarParam::reInitialise()
 {
-	fCorrection = quad(0.0); /*,TCoordSysFactory::k3DCartesian*/
+	fCorrection = real(0.0); /*,TCoordSysFactory::k3DCartesian*/
 	fEstimatedValue = fProvisionalValue;
-	fEstimatedPrecision = quad(0.0); /*,TCoordSysFactory::k3DCartesian*/
-	fCovariance = quad(0.0); /*,TCoordSysFactory::k3DCartesian*/
+	fEstimatedPrecision = real(0.0); /*,TCoordSysFactory::k3DCartesian*/
+	fCovariance = real(0.0); /*,TCoordSysFactory::k3DCartesian*/
 
 	return;
 }
@@ -74,11 +74,11 @@ void	TLSCalcScalarParam::reInitialise()
 
 void TLSCalcScalarParam::resetValues()
 {
-fProvisionalValue = quad(1.0);
-fCorrection = quad(0.0);
-fEstimatedValue = quad(0.0);
-fEstimatedPrecision = quad(0.0);
-fCovariance = quad(0.0);
+fProvisionalValue = real(1.0);
+fCorrection = real(0.0);
+fEstimatedValue = real(0.0);
+fEstimatedPrecision = real(0.0);
+fCovariance = real(0.0);
 
 }
 

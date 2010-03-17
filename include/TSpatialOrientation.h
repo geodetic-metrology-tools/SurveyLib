@@ -59,7 +59,7 @@ public:
 							TAReferenceFrame*, TCoordSysFactory::ECoordSys );
 
 		/// Constructor taking the radian value of the angles in the choosen order
-		TSpatialOrientation(TRotationMatrix::ERotationType, quad&, quad&, quad&,
+		TSpatialOrientation(TRotationMatrix::ERotationType, real&, real&, real&,
 							TAReferenceFrame*, TCoordSysFactory::ECoordSys );
 
 		//! Constructor taking a rotation matrix
