@@ -61,7 +61,7 @@ copyingexample operator+(const copyingexample&,const copyingexample&)
 }
 */
 
-void main()
+/*void main1()
 {
 	//test TANumericValue
 	TANumericValue num;
@@ -1038,7 +1038,7 @@ void main()
 	std::cout << "B(2,3) :" << std::endl << B(2, 3) << std::endl;
 	std::cout << "B(3,4) :" << std::endl << B(3, 4) << std::endl;
 	std::cout << "B(-6,-8) :" << std::endl << B(-6, -8) << std::endl;
-	std::cout << "B(0,5) :" << std::endl << B(0, 5) << std::endl;
+	std::cout << "B(0,5) :" << std::endl << B(0, 5) << std::endl;*/
 
 	// operator= is not working properly
 	
@@ -1137,7 +1137,7 @@ void main()
 	std::cout << (d/e)<<endl;*/
 
 	//test modulo 2pi
-	TAngle angTest (-1.8);
+	/*TAngle angTest (-1.8);
 	angTest = angTest + 2 * TAngle::pi();
 	cout<<"angTest : "<< angTest.getRadiansValue()<<endl;
 
@@ -1147,4 +1147,4 @@ void main()
 	cin >> i;
 	return;
 
-}
+}*/

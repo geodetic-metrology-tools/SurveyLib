@@ -331,9 +331,9 @@ bool TSparseMatrix::operator ==(const TSparseMatrix& second) const
 
 	for (int i = 0; i < matrix->colptr[matrix->n]; i++)
 	{
+		real temp = matrix->values[i] / second.matrix->values[i];
 		if (matrix->rowind[i] != second.matrix->rowind[i] ||
-			matrix->values[i] < second.matrix->values[i] - THRESHOLD ||
-			matrix->values[i] > second.matrix->values[i] + THRESHOLD)
+			temp < 1 - THRESHOLD || temp > 1 + THRESHOLD)
 		{
 			return false;
 		}
