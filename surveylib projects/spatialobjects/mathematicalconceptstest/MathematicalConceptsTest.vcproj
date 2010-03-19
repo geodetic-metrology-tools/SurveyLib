@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="MathematicalConceptsTest"
 	ProjectGUID="{84DD7CF7-35C9-415A-9FE5-E0AE85D46209}"
+	RootNamespace="MathematicalConceptsTest"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -132,9 +133,10 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/Zm300 "
 				Optimization="0"
+				AdditionalIncludeDirectories=".\..\..\..\include;.\..\..\..\..\SEAL_Libraries\nagc;&quot;C:\Program Files\Intel\Compiler\11.1\054\Include&quot;;.\..\..\..\..\SEAL_Libraries\apfloat\include;.\..\..\..\source\SpatialObjects\mathematicalconcepts"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/MathematicalConceptsTest.pch"
 				AssemblerListingLocation=".\Debug/"
@@ -157,9 +159,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="apfloat.lib"
 				OutputFile=".\Debug/MathematicalConceptsTest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories=".\..\..\..\..\SEAL_Libraries\apfloat\lib"
+				IgnoreDefaultLibraryNames="libcmt;msvcprtd;msvcrtd"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/MathematicalConceptsTest.pdb"
 				SubSystem="1"
@@ -285,36 +290,12 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\..\Source\SpatialObjects\MathematicConceptsTest\testMathConcepts.cpp"
+				RelativePath="..\..\..\source\SpatialObjects\mathematicconceptstest\SparseMatrixTest.cpp"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Insure|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\SpatialObjects\mathematicconceptstest\testMathConcepts.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
@@ -327,22 +308,6 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\libgenmat\win32 files\libgenmat vcpp projects\genmat\Debug\genmat.lib"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\..\libgeodefs\Win32 Files\libgeodefs VCpp Projects\geodefs\Debug\geodefs.lib"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\..\liblsapps\win32 files\liblsapps vcpp projects\lsapps\Debug\lsapps.lib"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\lib\SpatialObjects\MathematicalConcepts.lib"
-			>
-		</File>
 		<File
 			RelativePath="G:\Support\SurveyingEng\software\nagc\dll\nagc.lib"
 			>
