@@ -677,7 +677,52 @@ TAStreamFormatter &TAStreamFormatter::operator>>( float &f )
 
 
 TAStreamFormatter &TAStreamFormatter::operator>>( real &d )
-{   double f; (*fIOStream)>>( f ); d = f; return *this; }
+{
+#if __INTEL_COMPILER
+
+	string str;
+	(*fIOStream) >> str;
+	
+	_Quad wholePart = 0, fractionPart = 0;
+	int strLen = str.length();
+
+	int sign = 0, i = 0;
+
+	if (str[0] == '-')
+	{
+		sign = -1;
+		i++;
+	}
+	else
+	{
+		sign = 1;
+	}
+
+	while (str[i] != '.' && i < strLen)
+	{
+		wholePart *= 10;
+		wholePart += str[i++] - '0';
+	}
+	if (i != strLen)
+	{
+		i++;
+	}
+	int len = strLen - i;
+	while (i < strLen)
+	{
+		fractionPart *= 10;
+		fractionPart += str[i++] - '0';
+	}
+	_Quad fraction = fractionPart / __powq(10.0q, len);
+	d = sign * (wholePart + fraction);
+
+#else
+
+	(*fIOStream) >> d;
+
+#endif
+	return *this;
+}
 
 
 TAStreamFormatter &TAStreamFormatter::operator>>( char *s )

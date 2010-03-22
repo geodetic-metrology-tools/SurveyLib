@@ -350,7 +350,7 @@ void TLSInputMatrices::finishedFillingMatrices()
         int* rows4 = new int[constraintFirstDesignMatrixRowInd->size()];
         list<real>::const_iterator iter4 = constraintFirstDesignMatrixValues->begin();
         list<int>::const_iterator iterRows4 = constraintFirstDesignMatrixRowInd->begin();
-        int i = 0;
+        i = 0;
         while (iter4 != constraintFirstDesignMatrixValues->end())
         {
             rows4[i] = *iterRows4;

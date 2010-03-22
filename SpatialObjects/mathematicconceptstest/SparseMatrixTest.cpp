@@ -170,9 +170,9 @@ TSparseMatrix* generateIntegralLowerTriangularMatrix(int size)
 	int whichCol = 0;
 	for (int i = 0; i < colptr[colp]; i++)
 	{
-		int r = rand() % (XMax - XMin);
-		int X = XMin + r; // transform to wanted range
-		while (X == 0 || (colptr[whichCol] == i && X < 0))
+		double r = double (rand()) / (double (RAND_MAX) + 1.0);
+		double X = XMin + r * (XMax - XMin); // transform to wanted range
+		while ((int) X == 0 || (colptr[whichCol] == i && X < 0))
 		{
 			r = rand() % (XMax - XMin);
 			X = XMin + r;
@@ -181,7 +181,7 @@ TSparseMatrix* generateIntegralLowerTriangularMatrix(int size)
 		{
 			whichCol++;
 		}
-		values[rowi++] = apfloat(X, 1000);
+		values[rowi++] = apfloat((int) X, 1000);
 	}
 	
 	TSparseMatrix* res = new TSparseMatrix(size, size, values, realRowind, colptr);
@@ -192,19 +192,19 @@ TSparseMatrix* generateIntegralLowerTriangularMatrix(int size)
 bool MatricesEqual(const TSparseMatrix& first, const TSparseMatrix& second)
 {
 	if (first.columnsCount() != second.columnsCount() || first.rowsCount() != second.rowsCount() ||
-		first.colPointers()[first.columnsCount()] != second.colPointers()[second.columnsCount()])
+		first.columnPointers()[first.columnsCount()] != second.columnPointers()[second.columnsCount()])
 	{
 		return false;
 	}
 	for (int i = 0; i < first.columnsCount(); i++)
 	{
-		if (first.colPointers()[i] != second.colPointers()[i])
+		if (first.columnPointers()[i] != second.columnPointers()[i])
 		{
 			return false;
 		}
 	}
 
-	for (int i = 0; i < first.colPointers()[first.columnsCount()]; i++)
+	for (int i = 0; i < first.columnPointers()[first.columnsCount()]; i++)
 	{
 		real temp = first.values()[i] / second.values()[i];
 		if (first.rowIndices()[i] != second.rowIndices()[i] ||
@@ -222,7 +222,7 @@ int main()
 {
 	srand(time(0));
 
-	int minRows = 50, maxRows = 60;
+	int minRows = 90, maxRows = 130;
 
 	for (int count = 0; count < 0; count++)
 	{
@@ -306,10 +306,10 @@ int main()
 	apfloat from = apfloat("0.999999999999999999999999999999999999999999999999999999999999999999999999", 1000);
 	apfloat to = apfloat("1.0000000000000000000000000000000000000000000000000000000000000000000000001", 1000);
 	apfloat atLeast = apfloat("1E-50", 1000);
-	for (int a = 4; a < 50; a++)
-	for (int count = 0; count < 5; count++)
+	//for (int a = 4; a < 50; a++)
+	for (int count = 0; count < 20; count++)
 	{
-		//int a = rand() % (maxRows - minRows) + minRows;
+		int a = rand() % (maxRows - minRows) + minRows;
 		TSparseMatrix* L = generateLowerTriangularMatrix(a);
 		
 		TSparseMatrix* LT = L->transposed();
@@ -342,7 +342,7 @@ int main()
 		int* diagIndices = new int[cholInvFull1->rowsCount() + 1];
 		for (int i = 0; i < cholInvFull1->rowsCount(); i++)
 		{
-			diagg[i] = -(*cholInv)(i, i);
+			diagg[i] = -cholInv->values()[cholInv->columnPointers()[i]];
 			diagg[i].prec(1000);
 			diagIndices[i] = i;
 		}
@@ -352,26 +352,23 @@ int main()
 		TSparseMatrix* realCholInvFull = cholInvFull1->add(*te);
 		delete te;
 		delete cholInvFull1;
-		cholInvFull1 = realCholInvFull;
-		if (!MatricesEqual(*cholInvFull, *cholInvFull1))
+		if (!MatricesEqual(*cholInvFull, *realCholInvFull))
 		{
 			printf("full inversion doesn't work!\n");
 		}
 
 		delete cholInvFull;
-		delete cholInvFull1;
+		delete realCholInvFull;
 
 		TSparseMatrix* positiveDefiniteTrans = positiveDefinite->transposed();
 		TSparseMatrix* A = positiveDefinite->add(*positiveDefiniteTrans);
 
 		apfloat* diag = new apfloat[L->rowsCount()];
-		apfloat* diagonalElements = new apfloat[L->rowsCount()];
 		int* diagonalIndices = new int[L->rowsCount() + 1];
 		for (int i = 0; i < L->rowsCount(); i++)
 		{
-			diag[i] = -(*positiveDefinite)(i, i);
+			diag[i] = -positiveDefinite->values()[positiveDefinite->columnPointers()[i]];
 			diag[i].prec(1000);
-			diagonalElements[i] = 1;
 			diagonalIndices[i] = i;
 		}
 		diagonalIndices[L->rowsCount()] = L->rowsCount();
@@ -385,10 +382,10 @@ int main()
 
 		delete positiveDefiniteTrans;
 		TSparseMatrix* AInv = cholInvTrans->multiply_F(*cholInv);
-		TSparseMatrix* result = AInv->multiply_F(*A);
+		TSparseMatrix* result = AInv->multiply_LM(*A);
 		//TSparseMatrix* result = cholInvTrans->multiply_three_LM(*cholInv, *A);
 
-		for (int i = 0; i < result->colPointers()[result->columnsCount()]; i++)
+		for (int i = 0; i < result->columnPointers()[result->columnsCount()]; i++)
 		{
 			if (!(result->values()[i] >= from && result->values()[i] < to) && result->values()[i] > atLeast)
 			{
@@ -421,11 +418,25 @@ int main()
 				break;
 			}
 		}
+
+		apfloat* resAxEqb2 = *A * resAxEqb;
+		
+		for (int i = 0; i < a; i++)
+		{
+			apfloat t = resAxEqb2[i] / b[i];
+
+			if (!(t >= from && t < to) && t > atLeast)
+			{
+				printf("equation doesn't work!\n");
+				break;
+			}
+		}
 		
 		delete AInv;
 		delete[] b;
 		delete[] resAxEqb;
 		delete[] resAxEqb1;
+		delete[] resAxEqb2;
 
 		delete A;
 		delete result;
