@@ -1,21 +1,21 @@
 #ifndef SPARSE_MATRIX_H
 #define SPARSE_MATRIX_H
 
-#include "TColumnVector.h"
-
 #define THRESHOLD 0.0000000001
+
+#include "TColumnVector.h"
 
 class TSparseMatrix
 {
 public:
 
 	TSparseMatrix(int rows, int columns, real* vals, int* rowInds, int* colPtr);
-	// this does a shallow copy on purpose! The result matrix should not be changed!
-	TSparseMatrix(const TSparseMatrix&);
 	~TSparseMatrix();
 	
 	// Sparse matrix transposition.
 	TSparseMatrix* transposed() const;
+    // Sparse matrix inversion - the matrix should be symmetric, lower triangular, positive definite. Cholesky decomposition is used.
+	TSparseMatrix* symmetric_lower_inverse() const;
 
 	real* operator *(const real* right) const;
 	real* operator *(const TColumnVector& right) const;
@@ -48,94 +48,51 @@ public:
 	TSparseMatrix* multiply_three_returning_lower_triangular_F(const TSparseMatrix& second, const TSparseMatrix& third) const;
 	TSparseMatrix* multiply_three_returning_lower_triangular_LM(const TSparseMatrix& second, const TSparseMatrix& third) const;
 
-	inline int columnsCount() const { return matrix->n; }
-	inline int rowsCount() const { return matrix->m; }
+	inline int columnsCount() const { return cols; }
+	inline int rowsCount() const { return rows; }
 
-	inline const real* values() const { return matrix->values; }
-	inline const int* rowIndices() const { return matrix->rowind; }
-	inline const int* colPointers() const { return matrix->colptr; }
+	inline const real* values() const { return vals; }
+	inline const int* rowIndices() const { return rowind; }
+	inline const int* columnPointers() const { return colptr; }
 
-	void writeMatrixFile(const char *) const;
-	static TSparseMatrix* readMatrixFile(const char *);
+	void write_matrix_file(const char *) const;
+	static TSparseMatrix* read_matrix_file(const char *);
 
-	static TSparseMatrix* deepCopy(const TSparseMatrix* matrix);
-
+	static TSparseMatrix* deep_copy(const TSparseMatrix* matrix);
 
 private:
 
-	struct Matrix
+	TSparseMatrix(int rows, int columns, int nnz)
 	{
-		Matrix(int rows, int columns, int nnz)
-		{
-			m = rows;
-			n = columns;
+		this->rows = rows;
+		cols = columns;
 
-			values = new real[nnz];
-			colptr = new int[n + 1];
-			rowind = new int[nnz];
-		}
-
-		Matrix(int rows, int columns, real* vs, int* cs, int* rs)
-		{
-			m = rows;
-			n = columns;
-
-			values = vs;
-			colptr = cs;
-			rowind = rs;
-		}
-
-        Matrix(int rows, int columns)
-        {
-            m = rows;
-            n = columns;
-
-            values = NULL;
-            colptr = new int[n + 1];
-        }
-
-        inline void setNNZ(int nnz)
-        {
-            values = new real[nnz];
-            rowind = new int[nnz];
-        }
-
-        ~Matrix()
-        {
-            if (colptr != NULL)
-            {
-				if (colptr == rowind)
-				{
-					rowind = NULL;
-				}
-                delete[] colptr;
-            }
-
-            if (values != NULL)
-            {
-                delete[] values;
-            }
-
-            if (rowind != NULL)
-            {
-                delete[] rowind;
-            }
-        }
-
-		int n; // columns
-		int m; // rows
-
-		int* colptr;
-		int* rowind;
-		real* values;
-	};
-
-	inline TSparseMatrix(Matrix* m)
-	{
-		matrix = m;
+		vals = new real[nnz];
+		colptr = new int[cols + 1];
+		rowind = new int[nnz];
 	}
 
-	Matrix* matrix;
+    TSparseMatrix(int rows, int columns)
+    {
+        this->rows = rows;
+        cols = columns;
+
+        vals = NULL;
+        colptr = new int[cols + 1];
+    }
+
+    inline void setNNZ(int nnz)
+    {
+        vals = new real[nnz];
+        rowind = new int[nnz];
+    }
+
+	int cols;
+	int rows;
+
+	int* colptr;	// length cols + 1
+	int* rowind;	// length colptr[cols]
+	real* vals;	// length colptr[cols]
 
 	template <typename T>
 	class Vector
@@ -157,7 +114,6 @@ private:
 		{
 			if (count == allocated)
 			{
-				//printf("Bad! Try not to get into here!\n"); // TODO: remove that
 				T *temp = new T[allocated];
 				for (int i = 0; i < allocated; i++)
 				{

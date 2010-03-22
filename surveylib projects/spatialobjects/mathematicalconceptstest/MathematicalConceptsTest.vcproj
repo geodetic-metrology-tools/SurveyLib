@@ -131,7 +131,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/Zm300 "
+				AdditionalOptions="-Qoption,cpp,--extended_float_type"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\..\..\include;.\..\..\..\..\SEAL_Libraries\nagc;&quot;C:\Program Files\Intel\Compiler\11.1\054\Include&quot;;.\..\..\..\..\SEAL_Libraries\apfloat\include;.\..\..\..\source\SpatialObjects\mathematicalconcepts"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
