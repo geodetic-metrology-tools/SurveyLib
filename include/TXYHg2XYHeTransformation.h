@@ -72,7 +72,7 @@ public:
 		TXYHg2XYHeTransformation&			operator=( const TXYHg2XYHeTransformation& );
 
 		/// Return a pointer to a clone of this reference frame
-		virtual TARefFrameTransformation*	clone() const;
+		virtual TXYHg2XYHeTransformation*	clone() const;
 
 		/// Return a pointer to the inverse of this transformation
 		virtual TARefFrameTransformation*	inverse() const;

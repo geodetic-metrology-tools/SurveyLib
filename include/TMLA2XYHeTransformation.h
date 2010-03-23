@@ -73,7 +73,7 @@ public:
 		TMLA2XYHeTransformation&			operator=( const TMLA2XYHeTransformation& );
 
 		/// Return a pointer to a clone of this reference frame
-		virtual TARefFrameTransformation*	clone() const;
+		virtual TMLA2XYHeTransformation*	clone() const;
 
 		/// Return a pointer to the inverse of this transformtion
 		virtual TARefFrameTransformation*	inverse() const;

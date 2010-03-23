@@ -83,7 +83,7 @@ public:
 		//virtual  TCompositeAffTransform operator() ( const TAAffineTransformation & ) const;
 
 		//! Return a pointer to a clone of this transformation
-		TAAffineTransformation*  clone() const;
+		virtual TReflection*  clone() const;
 
 		//! Transform a TPosition Vector
 		virtual bool transform( TPositionVector & ) const;

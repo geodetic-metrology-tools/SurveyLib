@@ -29,7 +29,6 @@
 //
 //using namespace system;
 // #include  <cmath>
-#include  "TCompositeAffTransform.h"
 #include  "TARefFrameTransformation.h"
 #include  "TAModifiedLocalAstronomicalRF.h"
 #include  "TXYHeProjection.h"
@@ -73,7 +72,7 @@ public:
 		TXYHs2MLATransformation&			operator=( const TXYHs2MLATransformation& );
 
 		/// Return a pointer to a clone of this reference frame
-		virtual TARefFrameTransformation*	clone() const;
+		virtual TXYHs2MLATransformation*	clone() const;
 
 		/// Return a pointer to the inverse of this transformation
 		virtual TARefFrameTransformation*	inverse() const;

@@ -25,7 +25,6 @@ Copyright 2002 CERN EST/SU. All rights reserved.
 // Forward declarations
 //
 // #include  <cmath>
-#include  "TCompositeAffTransform.h"
 #include  "TARefFrameTransformation.h"
 #include  "TAModifiedLocalAstronomicalRF.h"
 #include  "TXYHeProjection.h"
@@ -64,15 +63,16 @@ public:
 	/*!@name Member Functions */
 	//@{
 		using TARefFrameTransformation::transform;
+		//using TARefFrameTransformation::inverse;
 
 		//!Copy Assignment Operator 
 		TMLA2XYHsTransformation&			operator=( const TMLA2XYHsTransformation& );
 
 		//!Return a pointer to a clone of this reference frame
-		virtual TARefFrameTransformation*	clone() const;
+		virtual TMLA2XYHsTransformation *	clone() const;
 
 		//!Return a pointer to the inverse of this transformtion
-		virtual TARefFrameTransformation*  inverse() const;
+		virtual TARefFrameTransformation *  inverse() const;
 
 		//!Return the source frame
 		virtual TAReferenceFrame*			getSourceFrame() const { return fFrom; }

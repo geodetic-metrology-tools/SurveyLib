@@ -100,6 +100,23 @@ public:
 
 	/*!\return the point's spatial status*/
 	virtual TSpatialStatus::ESpatialStatus				getSpatialStatus() const;
+
+
+	/*!\return the width reserved for the point name fields*/
+	virtual void  setNameWidth(int i) {fNameWidth = i; return;}
+
+	/*!\return the width reserved for the position coordinate fiels*/
+	virtual void  setCoordWidth(int i) {fCoordWidth = i; return;}
+
+	/*!\return the precision with wich the positions will be displayed*/
+	virtual void  setCoordPrecision(ECoordPrecision e) {fCoordPrecision = e; return;}
+
+	/*!\return the width reserved for the position error fiels*/
+	virtual void  setCoordErrorWidth(int i) {fCoordErrorWidth = i; return;}
+
+	/*!\return the precision with wich the positions error will be displayed*/
+	virtual void  setCoordErrorPrecision(ECoordPrecision e) {fCoordErrorPrecision = e; return;}
+
 	//@}
 
 

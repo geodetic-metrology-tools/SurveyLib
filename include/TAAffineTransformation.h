@@ -60,6 +60,8 @@ public:
 	//@{
 		using TVAffineTransformation::operator();
 		using TVAffineTransformation::transform;
+		using TVAffineTransformation::clone;
+		using TVAffineTransformation::inverse;
 
 		//! Create a composite transformation by applying this transformation to an affine transformation
 		virtual  TCompositeAffTransform & operator() ( TCompositeAffTransform & ) const;
@@ -68,7 +70,7 @@ public:
 		virtual  TCompositeAffTransform operator() ( const TAAffineTransformation & ) const;
 
 		//! Return a pointer to a clone of this transformation
-		//virtual  TAAffineTransformation*  clone() const = 0;
+		virtual  TAAffineTransformation*  clone() const = 0;
 		
 		//! transform a spatial position
 		virtual  bool  transform( TSpatialPosition & ) const;
@@ -107,7 +109,7 @@ public:
 		virtual  TRotationMatrix &  operator() ( TRotationMatrix & ) const = 0;
 
 		//! Return a pointer to the inverse of this transformation
-		//virtual TVAffineTransformation * inverse() const = 0;
+		virtual TAAffineTransformation * inverse() const = 0;
 
 		//! Invert the transformation, replaces the current transformation parameters
 		//virtual void invert() = 0;

@@ -1,7 +1,9 @@
 // TCompositeAffTransform.h
 //
 /** Class for transformations composed of multiple single transformations
-Wrappers around those transformations are kept in a list*/
+Wrappers around those transformations are kept in a list
+
+The last transformation added is applied first in the transformation of an object*/
 //
 // Patterns:
 // this class is close to the pattern Composite
@@ -70,6 +72,7 @@ public:
 		TCompositeAffTransform& operator=( const TCompositeAffTransform& );
 
 		//! add to the composite transformation by applying this transformation to an affine transformation
+		// the added transformation will be applied before any other transformations already in this composite
 		virtual  TCompositeAffTransform & operator()( const TAAffineTransformation & );
 	
 		//! Return a pointer to a clone of this transformation
@@ -112,7 +115,8 @@ public:
 		//! return the composite set
 		//CompositeTransformationSet getComposite() const;
 
-		// Prepend a TAAffineTransformation
+		// Prepend a TAAffineTransformation, 
+		// the added transformation will be applied after any other transformations already in this composite
 		void prepend( const TAAffineTransformation & transf );
 	//@}
 protected:

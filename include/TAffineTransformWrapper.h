@@ -27,18 +27,18 @@
 
 #include  "TPtrWrapper.h"
 //#include  "TConstPtrWrapper.h"
-#include  "TVAffineTransformation.h"
+#include  "TAAffineTransformation.h"
 
 
 //! Wrapper class
-class  TAffineTransformWrapper : public TPtrWrapper<TVAffineTransformation>
+class  TAffineTransformWrapper : public TPtrWrapper<TAAffineTransformation>
 {
 public:
 		/// default constructeur
 		TAffineTransformWrapper();
 
 		/// Constructor taking a pointer to a transformation
-		TAffineTransformWrapper( TVAffineTransformation* transformer );
+		TAffineTransformWrapper( TAAffineTransformation* transformer );
 
 		/// Copy Constructor 
 		TAffineTransformWrapper( const TAffineTransformWrapper & );
@@ -46,8 +46,8 @@ public:
 		/// Destructor
 		virtual  ~TAffineTransformWrapper();
 
-		TVAffineTransformation*  getTransformation()  {return this->getPtr();}
-		const TVAffineTransformation*  getTransformation() const {return this->getPtr();}
+		TAAffineTransformation*  getTransformation()  {return this->getPtr();}
+		const TAAffineTransformation*  getTransformation() const {return this->getPtr();}
 
 private:
 		//!Copy assignment operator

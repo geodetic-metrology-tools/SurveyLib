@@ -175,8 +175,8 @@ public:
 	/*!get the stream's precision*/
 	virtual	int	getPrecisionFormat() const;
 
-	virtual const TPointFormat*			getPointFormat() const;
-	virtual const TObservationFormat*	getObsFormat() const;
+	virtual TPointFormat *  getPointFormat();
+	virtual TObservationFormat *  getObsFormat();
 	//@}
 
 
