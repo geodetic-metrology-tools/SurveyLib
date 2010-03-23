@@ -42,13 +42,13 @@
 //Default constructor
 //template <class T>
 TAffineTransformWrapper::TAffineTransformWrapper() 
-:TPtrWrapper<TVAffineTransformation>()
+:TPtrWrapper<TAAffineTransformation>()
 {}
 
 //Constructor taking a pointer to the template object
 //template <class T>
-TAffineTransformWrapper::TAffineTransformWrapper( TVAffineTransformation * transformer )
-:TPtrWrapper<TVAffineTransformation>(transformer)
+TAffineTransformWrapper::TAffineTransformWrapper( TAAffineTransformation * transformer )
+:TPtrWrapper<TAAffineTransformation>(transformer)
 { 
 }
 
@@ -56,7 +56,7 @@ TAffineTransformWrapper::TAffineTransformWrapper( TVAffineTransformation * trans
 //Copy constructor
 //template <class T>
 TAffineTransformWrapper::TAffineTransformWrapper( const TAffineTransformWrapper & original )
-:TPtrWrapper<TVAffineTransformation>( original )
+:TPtrWrapper<TAAffineTransformation>( original )
 {
 }
 

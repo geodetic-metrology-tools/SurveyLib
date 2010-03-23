@@ -75,7 +75,7 @@ TReflection&  TReflection::operator=( const TReflection& right)
 }
 
 
-TAAffineTransformation*  TReflection::clone() const
+TReflection*  TReflection::clone() const
 {// Return a pointer to a clone of this transformation
 	return new TReflection( *this );
 }
@@ -162,7 +162,7 @@ TRotationMatrix &  TReflection::operator() ( TRotationMatrix & right ) const
 TReflection * TReflection::inverse() const
 {// Return a pointer to the inverse of this transformation
 	// the inverse of a reflection is the same reflection
-	TReflection * inverse = new TReflection(*this);
+	TReflection * inverse = this->clone();
 	return inverse;
 }
 

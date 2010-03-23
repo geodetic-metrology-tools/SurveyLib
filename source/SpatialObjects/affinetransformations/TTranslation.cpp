@@ -181,7 +181,7 @@ TRotationMatrix &  TTranslation::operator() ( TRotationMatrix & right ) const
 
 TTranslation * TTranslation::inverse() const
 {// Return a pointer to the inverse of this transformation
-	TTranslation * copy = new TTranslation(*this);
+	TTranslation * copy = this->clone();
 	copy->invert();
 	return copy;
 }

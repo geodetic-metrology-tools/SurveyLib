@@ -44,13 +44,13 @@
 //////////////////////////////////////////////////////////////////////
 
 TX0Y0He2XYHeTransformation::TX0Y0He2XYHeTransformation()
-	: fFrom(0), fTo(0), fEllipsoid(0)
+: fFrom(0), fTo(0), fEllipsoid(0)
 {	// default constructor
 }
 
 
 TX0Y0He2XYHeTransformation::TX0Y0He2XYHeTransformation( TX0Y0HeProjection* from )
-	: fFrom( from )
+: fFrom( from )
 {	// constructor taking pointers to the source and destination reference frames
 	fTo = from->getXYHe();
 	fEllipsoid = from->getEllipsoid();
@@ -58,11 +58,9 @@ TX0Y0He2XYHeTransformation::TX0Y0He2XYHeTransformation( TX0Y0HeProjection* from 
 
 
 TX0Y0He2XYHeTransformation::TX0Y0He2XYHeTransformation( const  TX0Y0He2XYHeTransformation& original )
+: fFrom(0), fTo(0), fEllipsoid(0)
 {	// copy constructor
-
-	setSourceFrame( original.getX0Y0He() );
-	setDestinationFrame( original.getXYHe() );
-	setEllipsoid( original.getEllipsoid() );
+	*this = original;
 }
 
 
@@ -87,7 +85,7 @@ TX0Y0He2XYHeTransformation&  TX0Y0He2XYHeTransformation::operator=(const TX0Y0He
 }
 
 
-TARefFrameTransformation*  TX0Y0He2XYHeTransformation::clone() const
+TX0Y0He2XYHeTransformation*  TX0Y0He2XYHeTransformation::clone() const
 {// Return a pointer to a clone of this reference frame
 	return new TX0Y0He2XYHeTransformation( *this );
 }

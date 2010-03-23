@@ -43,13 +43,13 @@
 //////////////////////////////////////////////////////////////////////
 
 TMLA2XYHeTransformation::TMLA2XYHeTransformation()
-	: fFrom(0), fTo(0)
+: fFrom(0), fTo(0)
 {	// default constructor
 }
 
 
 TMLA2XYHeTransformation::TMLA2XYHeTransformation( TXYHeProjection* to )
-	: fTo( to )
+: fTo( to )
 {	// constructor taking pointers to the source and destination reference frames
 	fFrom = to->getMLARefFrame();
 	fEllipsoid = to->getEllipsoid();
@@ -57,11 +57,9 @@ TMLA2XYHeTransformation::TMLA2XYHeTransformation( TXYHeProjection* to )
 
 
 TMLA2XYHeTransformation::TMLA2XYHeTransformation( const  TMLA2XYHeTransformation& original )
+: fFrom(0), fTo(0)
 {	// copy constructor
-
-	setSourceFrame( original.getMLARF() );
-	setDestinationFrame( original.getXYHe() );
-	setEllipsoid( original.getEllipsoid() );
+	*this = original;
 }
 
 
@@ -74,7 +72,6 @@ TMLA2XYHeTransformation::~TMLA2XYHeTransformation()
 //////////////////////////////////////////////////////////////////////
 TMLA2XYHeTransformation&  TMLA2XYHeTransformation::operator=(const TMLA2XYHeTransformation& right)
 {	// Copy Assignment operator
-
 	if (this != &right)
 	{
 		setSourceFrame( right.getMLARF() );
@@ -85,7 +82,7 @@ TMLA2XYHeTransformation&  TMLA2XYHeTransformation::operator=(const TMLA2XYHeTran
 }
 
 
-TARefFrameTransformation*  TMLA2XYHeTransformation::clone() const
+TMLA2XYHeTransformation*  TMLA2XYHeTransformation::clone() const
 {// Return a pointer to a clone of this reference frame
 	return new TMLA2XYHeTransformation( *this );
 }

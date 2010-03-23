@@ -75,10 +75,11 @@ TRotation::~TRotation()
 TRotation&  TRotation::operator=(const TRotation& right)
 {	// Copy Assignment operator
 
-
-	fRotationMatrix = right.getRotationMatrix();
-	setStatus(kKnown);
-
+	if (this != &right)
+	{		
+		fRotationMatrix = right.getRotationMatrix();
+		setStatus(right.getStatus());
+	}
 	return *this;
 }
 
@@ -207,7 +208,7 @@ TRotationMatrix &  TRotation::operator() ( TRotationMatrix & right ) const
 
 TRotation * TRotation::inverse() const
 {//Return a pointer to the inverse of this transformation
-	TRotation * copy = new TRotation(*this);
+	TRotation * copy = this->clone();
 	copy->invert();
 	return copy;
 }

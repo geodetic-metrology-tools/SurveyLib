@@ -32,14 +32,14 @@
 //////////////////////////////////////////////////////////////////////
 
 TGC2MLATransformation::TGC2MLATransformation()
-	: fFrom(0), fTo(0), fTransform(0)
+: fFrom(0), fTo(0), fTransform(0)
 {	// default constructor
 }
 
 
 TGC2MLATransformation::TGC2MLATransformation( TAModifiedLocalAstronomicalRF* to,
 											   TAGeoidModel* IMLARFGeoid)
-	: fTo( to ), fGeoid( IMLARFGeoid )
+: fTo( to ), fGeoid( IMLARFGeoid )
 {	// constructor taking pointers to the source and destination reference frames
 	fTransform = 0;
 
@@ -53,12 +53,9 @@ TGC2MLATransformation::TGC2MLATransformation( TAModifiedLocalAstronomicalRF* to,
 
 
 TGC2MLATransformation::TGC2MLATransformation( const  TGC2MLATransformation& original )
+: fFrom(0), fTo(0), fTransform(0)
 {	// copy constructor
-	fTransform = 0;	//initialise in the setDestinationFrame method
-
-	setSourceFrame( original.getGCRF() );
-	setDestinationFrame( original.getMLARF() );
-	setGeoid( original.getGeoid() );
+	*this = original;
 }
 
 
@@ -87,7 +84,7 @@ TGC2MLATransformation&  TGC2MLATransformation::operator=(const TGC2MLATransforma
 }
 
 
-TARefFrameTransformation*  TGC2MLATransformation::clone() const
+TGC2MLATransformation*  TGC2MLATransformation::clone() const
 {// Return a pointer to a clone of this reference frame
 	return new TGC2MLATransformation( *this );
 }
