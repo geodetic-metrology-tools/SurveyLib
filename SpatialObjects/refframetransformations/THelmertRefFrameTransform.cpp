@@ -43,7 +43,7 @@
 // CONSTRUCTOR / DESTRUCTOR
 //////////////////////////////////////////////////////////////////////
 THelmertRefFrameTransform::THelmertRefFrameTransform()
-	: fFrom(0), fTo(0), fTransform(0)
+: fFrom(0), fTo(0), fTransform(0)
 {	// default constructor
 }
 
@@ -51,41 +51,32 @@ THelmertRefFrameTransform::THelmertRefFrameTransform()
 THelmertRefFrameTransform::THelmertRefFrameTransform( TAReferenceFrame* from, 
 													  TAReferenceFrame* to, 
 													  THelmertTransformation* transform )
-	: fFrom(from), fTo(to), fTransform(0)
+: fFrom(from), fTo(to), fTransform(0)
 {	// constructor taking pointers to the source and destination reference frames
-	fTransform = new TCompositeAffTransform(*transform);
+	fTransform = transform;
 }
 
 
 THelmertRefFrameTransform::THelmertRefFrameTransform( TAReferenceFrame* from, 
 													  TAReferenceFrame* to, 
 													  const TScaleFactor& enlarg, const TRotation& rot, const TTranslation& transl)
-	: fFrom(from), fTo(to), fTransform(0)
+: fFrom(from), fTo(to), fTransform(0)
 {
-	//TTranslation temp(0,0,0);
-	THelmertTransformation helmert(enlarg, rot, transl);
-/*	TCompositeAffTransform temp;
-	temp.setStatus(helmert.getStatus());
-	fTransform = new TCompositeAffTransform(temp*helmert);*/
-	setTransform(&helmert);
+	setTransform(enlarg, rot, transl);
 }
 
 
 
 THelmertRefFrameTransform::THelmertRefFrameTransform( const  THelmertRefFrameTransform& original )
+: fFrom(0), fTo(0), fTransform(0)
 {// copy constructor
-	fTransform = 0;	//initialise in setTransform
-
-	setSourceFrame( original.getSourceFrame() );
-	setDestinationFrame( original.getDestinationFrame() );
-
-	setTransform( original.getTransform() );
+	*this = original;
 }
 
 
 THelmertRefFrameTransform::~THelmertRefFrameTransform()
 {//destructor
-	if( 0 != fTransform )
+	if( fTransform != 0 )
 	{
 		delete fTransform;
 	}
@@ -103,33 +94,38 @@ THelmertRefFrameTransform&  THelmertRefFrameTransform::operator=(const THelmertR
 	{
 		setSourceFrame( right.getSourceFrame() );
 		setDestinationFrame( right.getDestinationFrame() );
-		setTransform( right.getTransform() );
+		setTransform( right.getTransform()->clone() );
 	}
 	return *this;
 }
 
 
-TARefFrameTransformation*  THelmertRefFrameTransform::clone() const
+THelmertRefFrameTransform*  THelmertRefFrameTransform::clone() const
 {// Return a pointer to a clone of this reference frame
+	THelmertRefFrameTransform *  result = new THelmertRefFrameTransform();
+	result->setSourceFrame( this->getSourceFrame() );
+	result->setDestinationFrame( this->getDestinationFrame() );
+	result->setTransform( this->getTransform()->clone() );
 	return new THelmertRefFrameTransform( *this );
 }
 
 
-TARefFrameTransformation*  THelmertRefFrameTransform::inverse() const
+THelmertRefFrameTransform*  THelmertRefFrameTransform::inverse() const
 {// Return a pointer to the inverse of this transformtion
 
-	TCompositeAffTransform* inv;
-	inv = new TCompositeAffTransform ( *this->getTransform() );
-	inv->invert();
+	THelmertRefFrameTransform * inver = this->clone();
+	inver->invert();
+	return inver;
+}
 
-	THelmertRefFrameTransform* result = new THelmertRefFrameTransform;
-	result->setSourceFrame( getDestinationFrame() );
-	result->setDestinationFrame( getSourceFrame() );
-	result->setTransform( inv );
 
-	delete inv;
-
-	return result;
+void  THelmertRefFrameTransform::invert()
+{
+	TAReferenceFrame *  tmp = getSourceFrame();
+	this->setSourceFrame( getDestinationFrame() );
+	this->setDestinationFrame( tmp );
+	this->getTransform()->invert();
+	return;
 }
 
 
@@ -172,17 +168,17 @@ void THelmertRefFrameTransform::setTransform(THelmertTransformation* helmert)
 	{
 		delete fTransform;
 	}
-	fTransform = new TCompositeAffTransform(*helmert);
+	fTransform = helmert;
 }
 
 
-void THelmertRefFrameTransform::setTransform( TCompositeAffTransform* composite )
+void THelmertRefFrameTransform::setTransform( const TScaleFactor& scale, const TRotation& rot, const TTranslation& transl )
 { 
 	if (fTransform != 0)
 	{
 		delete fTransform;
 	}
-	fTransform = new TCompositeAffTransform(*composite);
+	fTransform = new THelmertTransformation(scale, rot, transl);
 	return;
 }
 

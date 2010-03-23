@@ -45,16 +45,14 @@
 // CONSTRUCTOR / DESTRUCTOR
 //////////////////////////////////////////////////////////////////////
 TLG2LATransformation::TLG2LATransformation()
-	: fFrom(0), fTo(0), fTransform(0)
+: fFrom(0), fTo(0), fTransform(0)
 {	// default constructor
 }
 
 
 TLG2LATransformation::TLG2LATransformation( TGraphLocalAstronomicalRF* to )
-	: fTo( to )
+: fTo( to ), fTransform(0)
 {	// constructor taking pointers to the source and destination reference frames
-	fTransform = 0;
-
 	fFrom = to->getLocalGeodeticRF();
 	
 	// if both reference frame pointers are not null pointers initialise the transformation
@@ -64,11 +62,9 @@ TLG2LATransformation::TLG2LATransformation( TGraphLocalAstronomicalRF* to )
 
 
 TLG2LATransformation::TLG2LATransformation( const  TLG2LATransformation& original )
+: fFrom(0), fTo(0), fTransform(0)
 {	// copy constructor
-	fTransform = 0;	//initialise in the setDestinationFrame method
-
-	setSourceFrame( original.getLGRF() );
-	setDestinationFrame( original.getLARF() );
+	*this = original;
 }
 
 
@@ -96,7 +92,7 @@ TLG2LATransformation&  TLG2LATransformation::operator=(const TLG2LATransformatio
 }
 
 
-TARefFrameTransformation*  TLG2LATransformation::clone() const
+TLG2LATransformation*  TLG2LATransformation::clone() const
 {// Return a pointer to a clone of this reference frame
   return new TLG2LATransformation( *this );
 }

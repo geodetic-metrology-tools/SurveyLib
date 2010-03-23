@@ -212,14 +212,14 @@ TRotationMatrix &  THelmertTransformation::operator() ( TRotationMatrix & right 
 
 THelmertTransformation * THelmertTransformation::inverse() const
 {/// Return the inverse ht X = R~-1*(1/factor)(x-T);
-	THelmertTransformation * inver = new THelmertTransformation(*this);
+	THelmertTransformation * inver = this->clone();
 	inver->invert();
 	return inver;
 }
 
 
 void THelmertTransformation::invert()
-{/// Invert the transformation 
+{/// Invert the transformation, X = R~-1*(1/factor)(x-T) 
 	fScaleFactor.invert();
 	fRotation.invert();
 	fTranslation.invert();

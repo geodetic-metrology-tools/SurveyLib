@@ -20,8 +20,8 @@
 //#include  "TVReferenceFrame.h"
 #include  "TRotation.h"
 #include  "TReferenceEllipsoid.h"
-#include  "TMLA2XYHsTransformation.h"
 #include  "TXYHs2MLATransformation.h"
+#include  "TMLA2XYHsTransformation.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -37,13 +37,13 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 TXYHs2MLATransformation::TXYHs2MLATransformation()
-	: fFrom(0), fTo(0), fEllipsoid(0)
+: fFrom(0), fTo(0), fEllipsoid(0)
 {	// default constructor
 }
 
 
 TXYHs2MLATransformation::TXYHs2MLATransformation( TXYHeProjection* from )
-	: fFrom( from )
+: fFrom( from )
 {	// constructor taking pointers to the source and destination reference frames
 	fTo = from->getMLARefFrame();
 	fEllipsoid = from->getEllipsoid();
@@ -51,11 +51,9 @@ TXYHs2MLATransformation::TXYHs2MLATransformation( TXYHeProjection* from )
 
 
 TXYHs2MLATransformation::TXYHs2MLATransformation( const  TXYHs2MLATransformation& original )
+: fFrom(0), fTo(0), fEllipsoid(0)
 {	// copy constructor
-
-	setSourceFrame( original.getXYHs() );
-	setDestinationFrame( original.getMLARF() );
-	setEllipsoid( original.getEllipsoid() );
+	*this = original;
 }
 
 
@@ -81,7 +79,7 @@ TXYHs2MLATransformation&  TXYHs2MLATransformation::operator=(const TXYHs2MLATran
 }
 
 
-TARefFrameTransformation*  TXYHs2MLATransformation::clone() const
+TXYHs2MLATransformation*  TXYHs2MLATransformation::clone() const
 {// Return a pointer to a clone of this reference frame
 		return new TXYHs2MLATransformation( *this );
 }

@@ -1,7 +1,9 @@
 // TCompositeAffTransform.cpp
 //
 /** Class for transformations composed of multiple single transformations
-Wrappers around those transformations are kept in a list*/
+Wrappers around those transformations are kept in a list
+
+The last transformation added is applied first in the transformation of an object*/
 //
 // Patterns:
 // this class is close to the pattern Composite
@@ -103,8 +105,8 @@ TCompositeAffTransform&  TCompositeAffTransform::operator=( const TCompositeAffT
 // to an affine transformation
 //////////////////////////////////////////////////////////////////////
 TCompositeAffTransform & TCompositeAffTransform::operator() ( const TAAffineTransformation & right )
-{// Add another affine transformation to the composition  f = f(g())
-	
+{// Add another affine transformation to the composition  this = this( right )
+	// right will be applied before any other transformations already in this composite
 	TAffineTransformWrapper wrapper( right.clone() );
 	this->fComposite.push_front( wrapper );
 	this->setStatus( this->testStatus(right) );
@@ -115,7 +117,23 @@ TCompositeAffTransform & TCompositeAffTransform::operator() ( const TAAffineTran
 
 TCompositeAffTransform *  TCompositeAffTransform::clone() const
 {// Return a pointer to a clone of this transformation
-	return new TCompositeAffTransform( *this );
+
+	TCompositeAffTransform *  clonedTransform = new TCompositeAffTransform();
+	
+	//fComposite = right.getComposite();
+	TCompositeAffTransform::ConstCompositeIter  end = this->getCompositeEndIterator();
+	TCompositeAffTransform::ConstCompositeIter  beg = this->getCompositeBeginIterator();
+
+	while(beg != end)
+	{
+		// prepends a clone of the current transformation
+		clonedTransform->prepend( *(beg->getTransformation()) );
+		beg++;
+	}
+
+	clonedTransform->setStatus( this->getStatus() );
+	
+	return clonedTransform;
 	
 }
 
@@ -252,7 +270,7 @@ TRotationMatrix &  TCompositeAffTransform::operator() ( TRotationMatrix & right 
 
 TCompositeAffTransform * TCompositeAffTransform::inverse() const
 {/// Return the inverse of this transformation
-	TCompositeAffTransform * copy = new TCompositeAffTransform(*this);
+	TCompositeAffTransform * copy = this->clone();
 	copy->invert();
 	return copy;
 }
