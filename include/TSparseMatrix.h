@@ -78,6 +78,7 @@ private:
         cols = columns;
 
         vals = NULL;
+        rowind = NULL;
         colptr = new int[cols + 1];
     }
 
