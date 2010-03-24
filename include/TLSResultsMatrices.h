@@ -82,9 +82,6 @@ public:
 	/*! sets the boolean */
 	virtual void			setS0APosterioriVariances(bool s0) {fS0APosterioriVariances = s0; return;}
 
-	/*! Save the results matrices in a file */
-	void			saveMatricesToFile(int nbIter) const;
-
 	/*! compute and return a vector of observations variances */
 	TColumnVector	computeVarObs(const TSparseMatrix& A, const TSparseMatrix& ATransposed);
 

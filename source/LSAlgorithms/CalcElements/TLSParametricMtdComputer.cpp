@@ -103,7 +103,6 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 		if (L == NULL)
 		{
 			delete[] solutionVectorb;
-			// TODO: set some error
 			return false; // Matrix is not positive definite
 		}
 
@@ -154,7 +153,6 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 		if (L == NULL)
 		{
 			delete[] solutionVectorb;
-			// TODO: set some error
 			return false; // Matrix is not positive definite
 		}
 

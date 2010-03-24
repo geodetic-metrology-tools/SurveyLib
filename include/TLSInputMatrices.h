@@ -110,8 +110,6 @@ public:
 	//@}
 
 
-	//!Debug method
-	void						saveMatricesToFile(int nbIter) const;
 
 	void setNewRow();
 	void setConstraintNewColumn();
