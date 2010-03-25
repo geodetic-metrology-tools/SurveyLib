@@ -474,11 +474,11 @@ int	TAStreamFormatter::getPrecisionFormat() const
 }
 
 
-const TPointFormat* TAStreamFormatter::getPointFormat() const
+TPointFormat* TAStreamFormatter::getPointFormat()
 {return &fPointFormat;}
 
 
-const TObservationFormat* TAStreamFormatter::getObsFormat() const
+TObservationFormat* TAStreamFormatter::getObsFormat()
 {return &fObservationFormat;}
 
 
