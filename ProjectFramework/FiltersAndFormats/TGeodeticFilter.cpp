@@ -260,21 +260,25 @@ void	TGeodeticFilter::output(TAStreamFormatter& oStream, const TPositionVector& 
 	// sets the stream's width and precision and outputs the coordinates
 	if (pv.getStatus()!= TANumericValue::kNull)
 	{
+		int width = oStream.getWidthFormat();
 		int precision = oStream.getPrecisionFormat();
 
 		if(	oStream.getAngleUnits() == TAngle::kDMS && 
 			oStream.getCoordSys() == TCoordSysFactory::kGeodetic)
 		{
+			oStream.setWidthFormat(width + 3);
 			oStream.setPrecisionFormat(precision + 6);
 		}
 		else if (	oStream.getAngleUnits() == TAngle::kGons && 
 					oStream.getCoordSys() == TCoordSysFactory::kGeodetic)
 		{
+			oStream.setWidthFormat(width + 1);
 			oStream.setPrecisionFormat(precision + 5);
 		}
 
 		oStream<<pv.getPhiEllipsoid()<<sep<<pv.getLambdaEllipsoid() << sep;
 		
+		oStream.setWidthFormat(width);
 		oStream.setPrecisionFormat(precision);
 		oStream<<pv.getH() << sep;
 	}
