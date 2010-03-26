@@ -140,7 +140,7 @@ TCompositeAffTransform *  TCompositeAffTransform::clone() const
 
 bool  TCompositeAffTransform::transform(TPositionVector& pv) const
 {/// Return a transformed position vector
-	bool trans = false;
+	bool trans = true;
 
 
 	if (isNull() == false)
@@ -163,7 +163,7 @@ bool  TCompositeAffTransform::transform(TPositionVector& pv) const
 
 bool  TCompositeAffTransform::transform(TFreeVector& fv) const 
 {/// Return a transformed free vector
-	bool trans = false;
+	bool trans = true;
 
 	if (isNull() == false)
 	{
@@ -184,7 +184,7 @@ bool  TCompositeAffTransform::transform(TFreeVector& fv) const
 
 bool  TCompositeAffTransform::transform(TRotationMatrix& rm) const
 {/// Return a transformed Rotation Matrix
-	bool trans = false;
+	bool trans = true;
 	
 	if (isNull() == false)
 	{
