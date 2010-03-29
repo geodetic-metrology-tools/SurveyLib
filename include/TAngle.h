@@ -69,7 +69,7 @@ public:
 	/*!@name Enumerators and Constants */
 	//@{
 	/*! Enumeration of the possible angular units */
-	enum			EUnits {kRadians, kGons, k100MicroGons, kDMS}; 
+	enum			EUnits { kRadians, kGons, k100MicroGons, kDMS, kCCs }; 
 	//@}
 	
 	/*!@name constructors and destructors */
