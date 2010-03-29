@@ -24,16 +24,16 @@ void main() {
 	/* LEVELING MEASUREMENT STATION*/
 
 	// test sur les vert.dist. measurements
-	TLength	dist(1.004); 
-	TLength	sigma(0.0001);
-	TLength	dist1(1.003); 
-	TLength	sigma1(0.0002); 
-	TLength	dist2(1.023); 
-	TLength	sigma2(0.0001); 
-	TLength	dist3(0.985); 
-	TLength	sigma3(0.0003); 
-	TLength	dist4(0.752); 
-	TLength	sigma4(0.0001); 
+	TLength	dist(LITERAL(1.004)); 
+	TLength	sigma(LITERAL(0.0001));
+	TLength	dist1(LITERAL(1.003)); 
+	TLength	sigma1(LITERAL(0.0002)); 
+	TLength	dist2(LITERAL(1.023)); 
+	TLength	sigma2(LITERAL(0.0001)); 
+	TLength	dist3(LITERAL(0.985)); 
+	TLength	sigma3(LITERAL(0.0003)); 
+	TLength	dist4(LITERAL(0.752)); 
+	TLength	sigma4(LITERAL(0.0001)); 
 	
 	TVerticalDistMeasurement vdm(testSt,dist,sigma);
 	TVerticalDistMeasurement vdm1(testTg1,dist1,sigma1);
@@ -152,23 +152,23 @@ void main() {
 	/* DISTANCE MEASUREMENT STATION */
 
 	// test de mise en place des SpatialDist, HorizontalDist, 2DOffset...
-	TLength	spDistObs1(12.036521);
-	TLength spDistObs2(25.125489);
-	TLength spDistObs3(7.2585654);
+	TLength	spDistObs1(LITERAL(12.036521));
+	TLength spDistObs2(LITERAL(25.125489));
+	TLength spDistObs3(LITERAL(7.2585654));
 
-	TLength spDistSigma1(0.000500);
-	TLength spDistSigma23(0.000100);
+	TLength spDistSigma1(LITERAL(0.000500));
+	TLength spDistSigma23(LITERAL(0.000100));
 	
 	string prismNb("1");
-	TLength prismH1(0.012025);
-	TLength prismH2(0.008523);
-	TLength prismH3(0.015632);
+	TLength prismH1(LITERAL(0.012025));
+	TLength prismH2(LITERAL(0.008523));
+	TLength prismH3(LITERAL(0.015632));
 
 	string line("line"); 
-	TLength vobs(0.002); 
-	TLength	vsigma(0.0001);								
-	TLength	hobs(0.004); 
-	TLength	hsigma(0.0002);
+	TLength vobs(LITERAL(0.002)); 
+	TLength	vsigma(LITERAL(0.0001));								
+	TLength	hobs(LITERAL(0.004)); 
+	TLength	hsigma(LITERAL(0.0002));
 
 	T2DOffsetMeasurement om(line,hobs,hsigma,vobs,vsigma);
 
@@ -342,17 +342,17 @@ void main() {
 	TAngle	orie2(2);
 	TAngle	orie3(3);
 
-	TAngle	sigmaOrie1(0.001);
-	TAngle	sigmaOrie2(0.002);
-	TAngle	sigmaOrie3(0.003);
+	TAngle	sigmaOrie1(LITERAL(0.001));
+	TAngle	sigmaOrie2(LITERAL(0.002));
+	TAngle	sigmaOrie3(LITERAL(0.003));
 
-	TAngle	angleObsH1(0.785236); TAngle  angleObsZ1(0.356245);
-	TAngle	angleObsH2(0.856321); TAngle  angleObsZ2(0.451262);
-	TAngle	angleObsH3(0.945631); TAngle  angleObsZ3(0.216354);
+	TAngle	angleObsH1(LITERAL(0.785236)); TAngle  angleObsZ1(LITERAL(0.356245));
+	TAngle	angleObsH2(LITERAL(0.856321)); TAngle  angleObsZ2(LITERAL(0.451262));
+	TAngle	angleObsH3(LITERAL(0.945631)); TAngle  angleObsZ3(LITERAL(0.216354));
 
-	TAngle	sigmaObsH1(0.001526); TAngle  sigmaObsZ1(0.003215);
-	TAngle	sigmaObsH2(0.002005); TAngle  sigmaObsZ2(0.002991);
-	TAngle	sigmaObsH3(0.000998); TAngle  sigmaObsZ3(0.002554);
+	TAngle	sigmaObsH1(LITERAL(0.001526)); TAngle  sigmaObsZ1(LITERAL(0.003215));
+	TAngle	sigmaObsH2(LITERAL(0.002005)); TAngle  sigmaObsZ2(LITERAL(0.002991));
+	TAngle	sigmaObsH3(LITERAL(0.000998)); TAngle  sigmaObsZ3(LITERAL(0.002554));
 
 	THorAngleMeasurement angHorMeas1(testTg1,angleObsH1,sigmaObsH1);
 	THorAngleMeasurement angHorMeas2(testTg2,angleObsH2,sigmaObsH2);
@@ -568,11 +568,11 @@ void main() {
 //test ECTH ECHO ECSP ECVE
 ////////////////////////////////////////////////////////////////////////////////
 
-	TLength	offset1(1.12);
+	TLength	offset1(LITERAL(1.12));
 	TLength c (49);
-	TLength distSigma1(0.0001);
+	TLength distSigma1(LITERAL(0.0001));
 	TLength distSigma2(11111111111);//test des fonction ifNotDoneSet....
-	TLength distSigmaPpm1(0.0003);
+	TLength distSigmaPpm1(LITERAL(0.0003));
 
 	string planeName("plane");
 	TSpatialLineName lineName (testTg1);

@@ -239,9 +239,9 @@ bool T3DCartesianCoordSys::identity(TRotationMatrix* mx)
 			for (int j=0; j<3; j++)
 			{
 				if (i == j)
-				{setC(mx,i,j,1.0);}
+				{setC(mx,i,j,LITERAL(1.0));}
 				else
-				{setC(mx,i,j,0.0);}
+				{setC(mx,i,j,LITERAL(0.0));}
 			}
 		}
 	mx->setStatus(TANumericValue::kKnown);

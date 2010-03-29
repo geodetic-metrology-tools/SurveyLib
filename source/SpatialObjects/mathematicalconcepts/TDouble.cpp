@@ -27,7 +27,7 @@
 //////////////////////////////////////////////////////////////////////
 
 
-TDouble::TDouble(): fValue(0.0)
+TDouble::TDouble(): fValue(LITERAL(0.0))
 {	// default constructor 
 	setStatus( TANumericValue::kNull );
 }

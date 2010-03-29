@@ -208,7 +208,7 @@ private:
 	ENumberSign		sign(real	number) const;	
 
 private:	
-	AngleValue		fValue;		/*!< Angle value, default = 0.0 */
+	AngleValue		fValue;		/*!< Angle value, default = LITERAL(0.0) */
 	
 	//ClassDef(TAngle, 1)
 };
@@ -234,11 +234,11 @@ inline AngleValue	TAngle::getGonsValue() const
 	AngleValue gValue = fValue;
 	while (gValue < 0)
 	{
-		gValue += 2.0 * kPi;
+		gValue += LITERAL(2.0) * kPi;
 	}
-	while (gValue >= 2.0 * kPi - seuil)
+	while (gValue >= LITERAL(2.0) * kPi - seuil)
 	{
-		gValue -= 2.0 * kPi;
+		gValue -= LITERAL(2.0) * kPi;
 	}
 	if (gValue < 0)
 	{

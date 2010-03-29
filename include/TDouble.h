@@ -138,7 +138,7 @@ private:
 	/*!\name Protected Attributes*/
 	//@{
 	
-	DoubleValue			fValue; /*!< default = 0.0 */
+	DoubleValue			fValue; /*!< default = LITERAL(0.0) */
 	//@}
 
 

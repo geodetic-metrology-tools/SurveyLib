@@ -51,7 +51,7 @@ TCernSphereGeoid::~TCernSphereGeoid()
 //////////////////////////////////////////////////////////////////////
 TLength TCernSphereGeoid::getN ( const TSpatialPosition& sp) const
 {
-	TLength NValue (0.0);
+	TLength NValue (LITERAL(0.0));
 	return NValue;
 
 }
@@ -59,28 +59,28 @@ TLength TCernSphereGeoid::getN ( const TSpatialPosition& sp) const
 
 TAngle TCernSphereGeoid::getEta ( const TSpatialPosition& sp) const
 {
-	TAngle eta(0.0);
+	TAngle eta(LITERAL(0.0));
 	return eta;
 }
 
 
 TAngle TCernSphereGeoid::getXi ( const TSpatialPosition& sp) const
 {
-	TAngle xsi(0.0);
+	TAngle xsi(LITERAL(0.0));
 	return xsi;
 }
 
 
 TAngle	TCernSphereGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 {
-	TAngle alpha (0.0);
+	TAngle alpha (LITERAL(0.0));
 	return alpha;
 }
 
 
 TAngle	TCernSphereGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& latitude ) const
 {
-	TAngle alpha (0.0);
+	TAngle alpha (LITERAL(0.0));
 	return alpha;
 }
 

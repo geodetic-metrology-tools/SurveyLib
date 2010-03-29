@@ -174,7 +174,7 @@ private:
 	
 
 private:
-	EllipseParameter				fA;		          /*!< default = 0.0 */
+	EllipseParameter				fA;		          /*!< default = LITERAL(0.0) */
 	EllipseParameter				fESquared;		  /*!< ellispoid parameter: e^2 */		
 	EllipseParameter				fF;               /*!< ellispoid parameter: F */
 	EllipseParameter				fB;               /*!< ellispoid parameter: B */

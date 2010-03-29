@@ -18,7 +18,7 @@ TWorkingConstants::TWorkingConstants():fLastDistNbr(0), fLastAngleNbr(0)
 }
 
 
-/*TWorkingConstants::TWorkingConstants(InstNb in, PrismNb	pn):fValue(0.0){
+/*TWorkingConstants::TWorkingConstants(InstNb in, PrismNb	pn):fValue(LITERAL(0.0)){
 	fInstrumentNumber = in;
 	fPrismeNumber = pn;
 	fStatus = TANumericValue:: kFixed;

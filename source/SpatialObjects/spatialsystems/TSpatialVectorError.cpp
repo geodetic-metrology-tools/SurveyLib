@@ -202,7 +202,7 @@ bool  TSpatialVectorError::setSigmaYZ(const TLength &x )
 //!Sets al the sigmas to zero
 void TSpatialVectorError::setToZero(){
 
-	fSigmaMtrx = 0.0;
+	fSigmaMtrx = LITERAL(0.0);
 }
 
 

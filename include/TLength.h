@@ -160,7 +160,7 @@ private:
 
 	/*!\name Protected Attributes*/
 	//@{
-	//! default = 0.0
+	//! default = LITERAL(0.0)
 	LengthValue			fValue;
 	//@}
 

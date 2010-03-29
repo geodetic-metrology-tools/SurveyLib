@@ -148,7 +148,7 @@ class TXAxisRotation : public TRotation
 public:
 	
 	//! Constructor
-	TXAxisRotation(const real& omega):TRotation(TRotationMatrix::kRzyx, omega, 0.0, 0.0){};
+	TXAxisRotation(const real& omega):TRotation(TRotationMatrix::kRzyx, omega, LITERAL(0.0), LITERAL(0.0)){};
 
 	/// Destructor
 	virtual ~TXAxisRotation(){};
@@ -162,7 +162,7 @@ class TYAxisRotation : public TRotation
 public:
 	
 	//! Constructor
-	TYAxisRotation(const real& phi):TRotation(TRotationMatrix::kRzyx, 0.0, phi, 0.0){};
+	TYAxisRotation(const real& phi):TRotation(TRotationMatrix::kRzyx, LITERAL(0.0), phi, LITERAL(0.0)){};
 
 	/// Destructor
 	virtual ~TYAxisRotation(){};
@@ -176,7 +176,7 @@ class TZAxisRotation : public TRotation
 public:
 	
 	//! Constructor
-	TZAxisRotation(const real& kappa):TRotation(TRotationMatrix::kRzyx, 0.0, 0.0, kappa){};
+	TZAxisRotation(const real& kappa):TRotation(TRotationMatrix::kRzyx, LITERAL(0.0), LITERAL(0.0), kappa){};
 
 	/// Destructor
 	virtual ~TZAxisRotation(){};

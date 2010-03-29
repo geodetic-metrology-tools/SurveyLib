@@ -12,7 +12,7 @@ void main() {
 /*	NE MARCHE PAS !!	
 	string grs("GRS80");
 	TReferenceEllipsoid* pGRS80 = new TReferenceEllipsoid(grs);
-	pGRS80->setAAndESquared(6378137.0, 0.0066943800229);
+	pGRS80->setAAndESquared(LITERAL(6378137.0), LITERAL(0.0066943800229));
 	pGRS80->setEllId(kGRS80);
 	fRefEllList.push_back(pGRS80);
 
@@ -24,9 +24,9 @@ void main() {
 	TSpatialPosition origin(pCGRF);
 	TAngle phi, lambda;
 	TLength H;
-	phi.setGonsValue(51.3692);
-	lambda.setGonsValue(6.72124);
-	H.setMetresValue(433.65921);
+	phi.setGonsValue(LITERAL(51.3692));
+	lambda.setGonsValue(LITERAL(6.72124));
+	H.setMetresValue(LITERAL(433.65921));
 	
 	origin.setPLH( phi, lambda, H, pGRS80 );
 
@@ -38,9 +38,9 @@ void main() {
 	TGraphLocalAstronomicalRF* pLA = new TGraphLocalAstronomicalRF( "LA CCS", etaP0, xsiP0, dAlphaP0, pLG );
 	string ccs("CCS");
 	TFreeVector falseOrigin;	
-	falseOrigin.setXYZComponents(2000, 2097.79265, 2433.66000);
+	falseOrigin.setXYZComponents(2000, LITERAL(2097.79265), LITERAL(2433.66000));
 	TAngle omega(0), phi2(0), kappa;
-	kappa.setGonsValue(37.77864);
+	kappa.setGonsValue(LITERAL(37.77864));
 	TAModifiedLocalAstronomicalRF* pCCS = new TGraphMLARF(ccs, falseOrigin,
 		pLA, omega, phi2, kappa);*/
 

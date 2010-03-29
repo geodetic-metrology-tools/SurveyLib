@@ -142,16 +142,16 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 
 	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
 	{
-		// round to 0.01 cc 
+		// round to LITERAL(0.01) cc 
 		real interpolated = splineInterpolation(fEtaMatrix, spos) * 100;
 		int temp = (int) interpolated;
-		if ( ( interpolated - temp ) >= 0.5)
+		if ( ( interpolated - temp ) >= LITERAL(0.5))
 			temp += 1;
 
 		real newTemp = temp;
 		newTemp = newTemp/100;
 
-		eta.setGonsValue( newTemp * 0.0001 );
+		eta.setGonsValue( newTemp * LITERAL(0.0001) );
 		return eta;
 	}
 
@@ -192,16 +192,16 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 
 	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
 	{
-		// round to 0.01 cc 
+		// round to LITERAL(0.01) cc 
 		real interpolated = splineInterpolation(fXiMatrix, spos) * 100;
 		int temp = (int) interpolated;
-		if ( ( interpolated - temp ) >= 0.5)
+		if ( ( interpolated - temp ) >= LITERAL(0.5))
 			temp += 1;
 
 		real newTemp = temp;
 		newTemp = newTemp/100;
 
-		xsi.setGonsValue( newTemp * 0.0001 );
+		xsi.setGonsValue( newTemp * LITERAL(0.0001) );
 		return xsi;
 	}
 
@@ -252,7 +252,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
 	{
 		
-		eta = getEta(position); // / (6.366 * 100000);
+		eta = getEta(position); // / (LITERAL(6.366) * 100000);
 		fDAlphaValue = eta*tanq(phi);
 		return fDAlphaValue;
 	}
@@ -288,7 +288,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& lat
 		&& (position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() >= fDownLeft.getY().getMetresValue()) && (position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() <= fUpRight.getY().getMetresValue()) )
 	{
 		
-		eta = getEta(position); // / (6.366 * 100000);
+		eta = getEta(position); // / (LITERAL(6.366) * 100000);
 		fDAlphaValue = eta*tanq(phi);
 		return fDAlphaValue;
 	}
@@ -366,17 +366,17 @@ real TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialPo
 
 	// Catmull Rom splines
 	// base matrix
-	base(0,0) = -0.5;
-	base(0,1) = 1.5;
-	base(0,2) = -1.5;
-	base(0,3) = 0.5;
+	base(0,0) = -LITERAL(0.5);
+	base(0,1) = LITERAL(1.5);
+	base(0,2) = -LITERAL(1.5);
+	base(0,3) = LITERAL(0.5);
 	base(1,0) = 1;
-	base(1,1) = -2.5;
+	base(1,1) = -LITERAL(2.5);
 	base(1,2) = 2;
-	base(1,3) = -0.5;
-	base(2,0) = -0.5;
+	base(1,3) = -LITERAL(0.5);
+	base(2,0) = -LITERAL(0.5);
 	base(2,1) = 0;
-	base(2,2) = 0.5;
+	base(2,2) = LITERAL(0.5);
 	base(2,3) = 0;
 	base(3,0) = 0;
 	base(3,1) = 1;

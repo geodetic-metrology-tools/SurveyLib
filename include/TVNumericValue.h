@@ -64,6 +64,8 @@ _Quad __floorq(_Quad x);
 #define ceilq __ceilq
 #define floorq __floorq
 
+#define LITERAL(x) x ## q
+
 #else
 
 #define sqrtq sqrt
@@ -83,6 +85,8 @@ _Quad __floorq(_Quad x);
 #define logq log
 #define ceilq ceil
 #define floorq floor
+
+#define LITERAL(x) x
 
 #endif
 

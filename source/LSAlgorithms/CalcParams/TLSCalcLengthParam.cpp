@@ -9,10 +9,10 @@
 // Default constructor
 TLSCalcLengthParam::TLSCalcLengthParam():TALSCalcParameter("") {
 
-	fProvisionalValue = TLength(0.0);
-	fCorrection = TLength(0.0);
+	fProvisionalValue = TLength(LITERAL(0.0));
+	fCorrection = TLength(LITERAL(0.0));
 	fEstimatedValue = fProvisionalValue;
-	fEstimatedPrecision = TLength(0.0);
+	fEstimatedPrecision = TLength(LITERAL(0.0));
 	fIndex = 0;
 	fStatus = TALSCalcParameter::kVariable;
 }
@@ -21,9 +21,9 @@ TLSCalcLengthParam::TLSCalcLengthParam():TALSCalcParameter("") {
 TLSCalcLengthParam::TLSCalcLengthParam(TLength lobs,TALSCalcParameter::ELSStatus els,string name):
 fProvisionalValue(lobs),TALSCalcParameter(name) {
 
-	fCorrection = TLength(0.0);
+	fCorrection = TLength(LITERAL(0.0));
 	fEstimatedValue = fProvisionalValue;
-	fEstimatedPrecision = TLength(0.0);
+	fEstimatedPrecision = TLength(LITERAL(0.0));
 	fIndex = 0;
 	fStatus = els;
 }
@@ -56,9 +56,9 @@ TLSCalcLengthParam& TLSCalcLengthParam::operator =(const TLSCalcLengthParam& rig
 // re-initialises the parameters alterred during or after a least squares calculation
 void	TLSCalcLengthParam::reInitialise()
 {
-	fCorrection = TLength(0.0);
+	fCorrection = TLength(LITERAL(0.0));
 	fEstimatedValue = fProvisionalValue;
-	fEstimatedPrecision = TLength(0.0);
+	fEstimatedPrecision = TLength(LITERAL(0.0));
 
 	return;
 }

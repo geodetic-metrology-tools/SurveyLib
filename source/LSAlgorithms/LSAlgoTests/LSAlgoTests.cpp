@@ -148,14 +148,14 @@ void main()
 //					TMatrix& NbigId = invN * N;
 					
 //					TMatrix* unkCov = resMat.getUnkCovarMtrx();
-//					*unkCov = 0.0;
+//					*unkCov = LITERAL(0.0);
 //					*unkCov = N.inverseAasen();
 /*					TMatrix* Ninv = new TMatrix(N.numCols(),N.numRows());
 					TMatrix* Nbig0 = new TMatrix(N.numCols(),N.numRows());
 					*Ninv = N.inverseSym();
 					cout << "after N is inverted" << endl;
 					*Nbig0 = (*Ninv)*N - N*(*Ninv);
-					real max = 0.0;
+					real max = LITERAL(0.0);
 					for (int i=0;i<N.numRows();i++)
 					{
 						for (int j=0;j<N.numCols();j++)
@@ -203,7 +203,7 @@ void main()
 					cout << "copied" << endl;*/
 
 /*					TColumnVector* sol = resMat.getSolutionVctr();
-					*sol = 0.0;
+					*sol = LITERAL(0.0);
 					*sol = *unkCov * A.transposed() * P * matrices.getMisclosureVctr();
 
 					TLSResultsMatricesExtractor extractor(&dataset);
@@ -243,12 +243,12 @@ void main()
 
 			//intermediate N = (A1tPA1) matrix
 			TMatrix	N (nbUnk, nbUnk);
-			N = 0.0;
+			N = LITERAL(0.0);
 			
 			N = firstDM.transposed() * weightM * firstDM;
 
 			TMatrix	Nbig (nbUnk + nbCnstr, nbUnk + nbCnstr);
-			Nbig = 0.0;
+			Nbig = LITERAL(0.0);
 
 			//insert N in Nbig
 			int i = 0;
@@ -299,7 +299,7 @@ void main()
 			*NbigId = Nbig.inverseSym() * Nbig;
 			// inverse Nbig
 //			TMatrix* unkCov = rm->getUnkCovarMtrx();
-//			*unkCov = 0.0;
+//			*unkCov = LITERAL(0.0);
 //			*unkCov = Nbig * Nbig.inverseSym();
 //			TLSResultsMatricesExtractor extractor(&dataset);
 //			bool DSextracted = extractor.extractResults(firstDM,*rm,*(project.getCalcParams()));
@@ -417,7 +417,7 @@ void main()
 			if (computed)
 			{	// extract the results from the matrices
 				TLSResultsMatricesExtractor extractor(&dataset);
-				bool DSextracted = extractor.extractResults(resMat,0.1);
+				bool DSextracted = extractor.extractResults(resMat,LITERAL(0.1));
 				if (DSextracted) {
 					cout << "copying results matrices..." << endl;
 					resMat.saveMatricesToFile(1);

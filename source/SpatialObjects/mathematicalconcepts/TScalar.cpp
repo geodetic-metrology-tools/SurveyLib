@@ -29,7 +29,7 @@
 //////////////////////////////////////////////////////////////////////
 
 
-TScalar::TScalar(): fValue(0.0)
+TScalar::TScalar(): fValue(LITERAL(0.0))
 {	// default constructor 
 	setStatus( TANumericValue::kNull );
 }

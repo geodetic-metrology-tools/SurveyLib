@@ -35,7 +35,7 @@ void main(){
 
 	TLength len1(123), len2(345), len3(432);
 	TPositionVector pv(321,543,234, TCoordSysFactory::k3DCartesian), pv1(TCoordSysFactory::k3DCartesian);
-	TAngle phi(0.66), lambda(0.5);
+	TAngle phi(LITERAL(0.66)), lambda(LITERAL(0.5));
 	pv1.setX(len1);
 	pv1.setY(len2);
 	pv1.setZ(len3);
@@ -278,7 +278,7 @@ void main(){
 	//test TSpatialOrientation
 /*	TSpatialOrientation sori(p_rframe), sori1(p_rframe);
 
-	TAngle a(0.5),b(-.3),c(.6);
+	TAngle a(LITERAL(0.5)),b(-.3),c(.6);
 	TRotationMatrix rm;
 
 //	rm(0,0) = 1;

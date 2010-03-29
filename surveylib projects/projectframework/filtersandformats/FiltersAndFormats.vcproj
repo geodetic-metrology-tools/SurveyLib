@@ -355,6 +355,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\ProjectFramework\FiltersAndFormats\TCCsFilter.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\ProjectFramework\FiltersAndFormats\TDMSFilter.cpp"
 				>
 				<FileConfiguration
@@ -857,6 +861,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TAngleFilter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\TCCsFilter.h"
 				>
 			</File>
 			<File

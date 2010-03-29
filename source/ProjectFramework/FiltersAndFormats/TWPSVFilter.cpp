@@ -69,7 +69,7 @@ void TWPSVFilter::input(TLGCTStream &iStream, TWPSMeasurement &wps) const{
 	
 
 	TSpatialPointName end1Name, end2Name, setupName;
-	TLength obsTOffset(0.0), tSigma(0.0), obsVOffset(0.0), vSigma(0.0);
+	TLength obsTOffset(LITERAL(0.0)), tSigma(LITERAL(0.0)), obsVOffset(LITERAL(0.0)), vSigma(LITERAL(0.0));
 	
 	//get the wire's first end point's name
 	iStream >> end1Name;
@@ -88,7 +88,7 @@ void TWPSVFilter::input(TLGCTStream &iStream, TWPSMeasurement &wps) const{
 	//possibly read the vertical offset's precision
 	if (!iStream.atEnd()){
 		iStream >> vSigma;
-		vSigma *= 0.001;
+		vSigma *= LITERAL(0.001);
 	}
 
 	TWPSMeasurement* newWPS = new TWPSMeasurement(end1Name, setupName, end2Name, obsTOffset, tSigma, obsVOffset, vSigma);

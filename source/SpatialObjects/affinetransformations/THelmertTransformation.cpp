@@ -26,7 +26,7 @@
 //////////////////////////////////////////////////////////////////////
 
 THelmertTransformation::THelmertTransformation()
-:fScaleFactor(1.0), fRotation(), fTranslation()
+:fScaleFactor(LITERAL(1.0)), fRotation(), fTranslation()
 {// default constructor
 	this->setStatus( TVNumericValue::kNull );
 }
@@ -48,7 +48,7 @@ THelmertTransformation::THelmertTransformation( const TScaleFactor& scale, const
 
 
 THelmertTransformation::THelmertTransformation( const TRotation& rotate, const TTranslation& trans)
-:fScaleFactor(1.0), fRotation(rotate), fTranslation(trans)
+:fScaleFactor(LITERAL(1.0)), fRotation(rotate), fTranslation(trans)
 {// Constructor
 	if (rotate.getStatus() != TVNumericValue::kNull 
 		&& trans.getStatus() != TVNumericValue::kNull)

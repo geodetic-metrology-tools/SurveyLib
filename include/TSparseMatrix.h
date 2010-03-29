@@ -1,7 +1,7 @@
 #ifndef SPARSE_MATRIX_H
 #define SPARSE_MATRIX_H
 
-#define THRESHOLD 0.0000000001
+#define THRESHOLD LITERAL(0.0000000001)
 
 #include "TColumnVector.h"
 

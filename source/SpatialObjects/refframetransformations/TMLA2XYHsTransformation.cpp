@@ -116,7 +116,7 @@ bool  TMLA2XYHsTransformation::transform(TPositionVector& pv) const
 	//H = sqrtq( (powq((R+dz),2) + (powq(d,2))) )-  R;
 	omega = atanq(d / (R+dz));
 	d0 = d * R * cosq(omega) / (R + dz);
-	H = ( dz + (d0 * tanq(omega/2.0)) ) / cosq(omega);
+	H = ( dz + (d0 * tanq(omega/LITERAL(2.0))) ) / cosq(omega);
 
 	TLength newH (H);
 	

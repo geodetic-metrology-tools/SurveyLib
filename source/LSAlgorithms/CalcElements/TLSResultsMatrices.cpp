@@ -15,7 +15,7 @@ TLSResultsMatrices::TLSResultsMatrices()
 
 	fSolutionVctr = 0;
 	fResidualsVctr = 0;
-	fSigmaZero2 = 0.0;
+	fSigmaZero2 = LITERAL(0.0);
 	fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
 	L = NULL;
@@ -26,7 +26,7 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 {// constructor dimensioning the matrices
 	fSolutionVctr = new TColumnVector(ueoi.UIndex);
 	fResidualsVctr = new TColumnVector(ueoi.OIndex);
-	fSigmaZero2 = 0.0;
+	fSigmaZero2 = LITERAL(0.0);
 	//fUnknownsCovarianceMtrx = new TMatrix(ueoi.UIndex, ueoi.UIndex);
 	fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
@@ -54,7 +54,7 @@ TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations)
 
 	fSolutionVctr = new TColumnVector (numUnknowns);
 	fResidualsVctr = new TColumnVector (numEquations);
-	fSigmaZero2 = 0.0;
+	fSigmaZero2 = LITERAL(0.0);
 	//fUnknownsCovarianceMtrx = new TMatrix(numUnknowns,numUnknowns);
 	fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;

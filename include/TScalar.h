@@ -148,7 +148,7 @@ private:
 	/*!\name Protected Attributes*/
 	//@{
 	
-	ScalarValue			fValue; /*!< default = 0.0 */
+	ScalarValue			fValue; /*!< default = LITERAL(0.0) */
 	//@}
 
 

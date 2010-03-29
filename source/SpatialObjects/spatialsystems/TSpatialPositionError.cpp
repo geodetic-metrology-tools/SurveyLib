@@ -206,7 +206,7 @@ bool  TSpatialPositionError::setSigmaYZ(const TLength &x )
 //!Sets al the sigmas to zero
 void TSpatialPositionError::setToZero(){
 
-	fSigmaMtrx = 0.0;
+	fSigmaMtrx = LITERAL(0.0);
 }
 */
 /*

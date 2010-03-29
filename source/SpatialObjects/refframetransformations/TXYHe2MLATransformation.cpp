@@ -148,7 +148,7 @@ bool  TXYHe2MLATransformation::transform(TPositionVector& pv) const
 	// transform TPositionVector
 	Dzh = fTo->getFalseOrigin().getZ().getMetresValue() - fTo->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getH(/*TGraph::getGraph()->getEllipsoid(TGraph::kGRS80)*/).getMetresValue();
 
-	TAngle omegaBy2 = omega * 0.5;
+	TAngle omegaBy2 = omega * LITERAL(0.5);
 
 	TLength newZ(Dzh + he * omega.cosine()
 		- d0 * (omegaBy2.tangent()));

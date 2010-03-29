@@ -21,8 +21,8 @@ void main()
 	TSpatialPointName pointName1 (name1);
 	TSpatialPointName pointName2 (name2);
 
-	TAngle angle (3.59);
-	TAngle angle2 (6.1);
+	TAngle angle (LITERAL(3.59));
+	TAngle angle2 (LITERAL(6.1));
 
 	TSpatialLine line1, line2, line6, line7;
 	TSpatialLine line3 (pointName2);

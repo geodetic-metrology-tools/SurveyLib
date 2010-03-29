@@ -107,7 +107,7 @@ bool  TXYHs2MLATransformation::transform(TPositionVector& pv) const
 	real dx, dy, hs, d;
 	real d0, omega;
 	// radius of the sphere
-	real R = 6371000.0;
+	real R = LITERAL(6371000.0);
 	// transform TPositionVector
 	real Z;
 
@@ -117,10 +117,10 @@ bool  TXYHs2MLATransformation::transform(TPositionVector& pv) const
 	hs = pv.getH().getMetresValue();
 	d=sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 
-	//Z = sqrtq( (powq((R+hs),2) - (powq(d,2))) )-  R + 2000.00079;
+	//Z = sqrtq( (powq((R+hs),2) - (powq(d,2))) )-  R + LITERAL(2000.00079);
 	d0 = d * R / (R + hs);
 	omega = asinq(d0 / R);
-	Z = 2000.00079 + (hs * cosq(omega)) - (d0 * tanq(omega/2.0));
+	Z = LITERAL(2000.00079) + (hs * cosq(omega)) - (d0 * tanq(omega/LITERAL(2.0)));
 
 	TLength newZ (Z);
 

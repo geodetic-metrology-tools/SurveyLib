@@ -1,7 +1,7 @@
 #include "TAngleConstants.h"
 
 
-TAngleConstants::TAngleConstants():fValue(0.0){
+TAngleConstants::TAngleConstants():fValue(LITERAL(0.0)){
 
 	fConstId = "";
 	fStatus = TAMeasurement::kFixed;
