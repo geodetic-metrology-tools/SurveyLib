@@ -32,6 +32,7 @@
 #include	"TDMSFilter.h"
 #include	"TGonsFilter.h"
 #include	"T100MicroGonsFilter.h"
+#include	"TCCsFilter.h"
 #include	"TRadiansFilter.h"
 
 #include	"TLengthFilter.h"
@@ -1258,6 +1259,9 @@ TAngleFilter *TAStreamFormatter::getAngleFilter( TAngle::EUnits units )
 		break;
 	case TAngle::kDMS:
 		filter = TDMSFilter::instance();
+		break;
+	case TAngle::kCCs:
+		filter = TCCsFilter::instance();
 		break;
 	default:
 		// undefined angle filter requested

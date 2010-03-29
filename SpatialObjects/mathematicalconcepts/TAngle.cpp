@@ -44,12 +44,12 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
 
-const real	TAngle::kPi = acosq(-LITERAL(LITERAL(1.0)));  // Pi = LITERAL(LITERAL(3.14159265358979323844));
-const real	TAngle::kRadiansToGons = LITERAL(LITERAL(200.0))/kPi;
-const real	TAngle::kGonsToRadians = kPi/LITERAL(LITERAL(200.0));
-const real	TAngle::kRadiansToDecDegs = LITERAL(LITERAL(180.0))/kPi;
-const real	TAngle::kDecDegsToRadians = kPi/LITERAL(LITERAL(180.0));
-const real	TAngle::seuil = LITERAL(LITERAL(0.00000000001));
+const real	TAngle::kPi = acosq(-LITERAL(1.0));  // Pi = LITERAL(3.14159265358979323844);
+const real	TAngle::kRadiansToGons = LITERAL(200.0)/kPi;
+const real	TAngle::kGonsToRadians = kPi/LITERAL(200.0);
+const real	TAngle::kRadiansToDecDegs = LITERAL(180.0)/kPi;
+const real	TAngle::kDecDegsToRadians = kPi/LITERAL(180.0);
+const real	TAngle::seuil = LITERAL(0.00000000001);
 
 
 //////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ const real	TAngle::seuil = LITERAL(LITERAL(0.00000000001));
 //////////////////////////////////////////////////////////////////////
 
 
-TAngle::TAngle() : fValue(LITERAL(LITERAL(0.0)))
+TAngle::TAngle() : fValue(LITERAL(0.0))
 {	// default constructor
 	setStatus( TANumericValue::kNull );
 }
@@ -93,21 +93,21 @@ const TAngle TAngle::pi()
 
 const TAngle TAngle::twoPi()
 {   // Defines the angle 2*Pi 
-	TAngle twoPi(LITERAL(LITERAL(2.0))*kPi);
+	TAngle twoPi(LITERAL(2.0)*kPi);
 	return twoPi;
 }
 
 
 const TAngle TAngle::piBy2()
 {   // Defines the angle Pi/2
-	TAngle piBy2(kPi/LITERAL(LITERAL(2.0)));
+	TAngle piBy2(kPi/LITERAL(2.0));
 	return piBy2;
 }
 
 
 const TAngle TAngle::piBy4()
 {   // Defines the angle Pi/4
-	TAngle piBy4(kPi/LITERAL(LITERAL(4.0)));
+	TAngle piBy4(kPi/LITERAL(4.0));
 	return piBy4;
 }
 
@@ -150,11 +150,11 @@ void TAngle::normaliseAngle()
 
 	while (fValue > kPi - seuil)
 	{
-		fValue -= LITERAL(LITERAL(2.0)) * kPi;
+		fValue -= LITERAL(2.0) * kPi;
 	}
 	while (fValue < -kPi + seuil)
 	{
-		fValue += LITERAL(LITERAL(2.0)) * kPi;
+		fValue += LITERAL(2.0) * kPi;
 	}
 }
 
@@ -227,7 +227,7 @@ bool	TAngle::setDMSValue(const	Degrees	degs,
 
 
 	// convert the given values to radians
-	fValue = angleSign * (real(absDegs) + ((real(absMins))/LITERAL(LITERAL(60.0))) + (absSecs/LITERAL(LITERAL(3600.0)))) * kDecDegsToRadians;
+	fValue = angleSign * (real(absDegs) + ((real(absMins))/LITERAL(60.0)) + (absSecs/LITERAL(3600.0))) * kDecDegsToRadians;
 
 	//normalise the radians value
 	normaliseAngle();
@@ -249,10 +249,10 @@ Minutes	TAngle::getMinutesValue() const
 	// determine the degrees and minutes values
 	decDegs = fValue * kRadiansToDecDegs; 
 #if _DEBUG && __INTEL_COMPILER
-	decMins = LITERAL(LITERAL(60.0))*modfq(decDegs, degs);	// if the decimal degrees are negative
+	decMins = LITERAL(60.0)*modfq(decDegs, degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
 #else
-	decMins = LITERAL(LITERAL(60.0))*modfq(decDegs, &degs);	// if the decimal degrees are negative
+	decMins = LITERAL(60.0)*modfq(decDegs, &degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
 #endif
 
@@ -281,14 +281,14 @@ Seconds	TAngle::getSecondsValue() const
 	// determine the degrees, minutes, and seconds values
 	decDegs = fValue * kRadiansToDecDegs; 
 #if _DEBUG && __INTEL_COMPILER
-	decMins = LITERAL(LITERAL(60.0))*modfq(decDegs, degs);	// if the decimal degrees are negative
+	decMins = LITERAL(60.0)*modfq(decDegs, degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
-	seconds = LITERAL(LITERAL(60.0))*modfq(decMins, mins);	// if the decimal minutes are negative
+	seconds = LITERAL(60.0)*modfq(decMins, mins);	// if the decimal minutes are negative
 										// BOTH the minutes and seconds will be negative
 #else
-	decMins = LITERAL(LITERAL(60.0))*modfq(decDegs, &degs);	// if the decimal degrees are negative
+	decMins = LITERAL(60.0)*modfq(decDegs, &degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
-	seconds = LITERAL(LITERAL(60.0))*modfq(decMins, &mins);	// if the decimal minutes are negative
+	seconds = LITERAL(60.0)*modfq(decMins, &mins);	// if the decimal minutes are negative
 										// BOTH the minutes and seconds will be negative
 #endif
 
@@ -355,8 +355,8 @@ TAngle TAngle::operator-(const TAngle &angle) const
 	if (status!= kNull)
 	{
 /*		TAngle a(angle);
-		if (a.getRadiansValue() < LITERAL(LITERAL(0.0))) { a += (2 * pi()); }
-		if (this->getRadiansValue() < LITERAL(LITERAL(0.0))) { (*this) += (2 * pi()); }
+		if (a.getRadiansValue() < LITERAL(0.0)) { a += (2 * pi()); }
+		if (this->getRadiansValue() < LITERAL(0.0)) { (*this) += (2 * pi()); }
 		if (((a.getRadiansValue()) < pi().getRadiansValue()) && ((this->getRadiansValue()) >= pi().getRadiansValue()))
 		{
 			resultat.setRadiansValue((this->getRadiansValue() - a.getRadiansValue()) - 2 * pi().getRadiansValue());
@@ -413,13 +413,13 @@ TDouble TAngle::operator/(const TAngle& div) const
 	status=this->testStatus(div);
 	if (status!= kNull)
 	{	
-		if(div.getRadiansValue() != LITERAL(LITERAL(0.0)))
+		if(div.getRadiansValue() != LITERAL(0.0))
 		{
 			resultat.setValue(this->getRadiansValue()/div.getRadiansValue());
 		}
 		else
 		{
-			resultat.setValue(LITERAL(LITERAL(0.0)));
+			resultat.setValue(LITERAL(0.0));
 			status = kNull;
 		}
 	}
@@ -516,7 +516,7 @@ real TAngle::tangenth() const
 
 TAngle TAngle::aCos(const real x)
 {//determines the arccosine of a real as a TAngle
-	if (-LITERAL(LITERAL(1.0))>x  ||  x>LITERAL(LITERAL(1.0))) throw "incorrect value";
+	if (-LITERAL(1.0)>x  ||  x>LITERAL(1.0)) throw "incorrect value";
 
 	TAngle angle(acosq(x));
 	return angle;
@@ -525,7 +525,7 @@ TAngle TAngle::aCos(const real x)
 
 TAngle TAngle::aSin(const real x)
 {//determines the arcsine of a real as a TAngle
-	if (-LITERAL(LITERAL(1.0))>x  ||  x>LITERAL(LITERAL(1.0))) throw "incorrect value";
+	if (-LITERAL(1.0)>x  ||  x>LITERAL(1.0)) throw "incorrect value";
 
 	TAngle angle(asinq(x));
 	return angle;
@@ -560,11 +560,11 @@ TAngle::ENumberSign		TAngle::sign(real	number) const
 	// divide the real by its absolute value
 	// the result should be -1, or 1, for numbers 
 	// not equal to 0
-	if(number / fabsq(number) < LITERAL(LITERAL(0.0)))
+	if(number / fabsq(number) < LITERAL(0.0))
 	{
 		sign = kNegative;
 	}
-	else if (number / fabsq(number) > LITERAL(LITERAL(0.0)))
+	else if (number / fabsq(number) > LITERAL(0.0))
 	{
 		sign = kPositive;
 	}
