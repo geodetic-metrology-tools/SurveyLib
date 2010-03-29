@@ -27,7 +27,7 @@ TACoordSysVector::TACoordSysVector(): TANumericValue()
 	int i = 0;
 	while(i<3)
 	{
-		fVector[i] = 0.0;
+		fVector[i] = LITERAL(0.0);
 		i++;
 	}
 	fCoordSys = 0;

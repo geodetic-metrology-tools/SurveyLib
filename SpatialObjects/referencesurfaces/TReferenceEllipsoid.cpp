@@ -45,7 +45,7 @@ void	TReferenceEllipsoid::setAAndESquared( const EllipseParameter a, const Ellip
 
 	fA = a;
 	fESquared = eSquared;
-	fF = 1.0 - sqrtq(1.0 - eSquared);
+	fF = LITERAL(1.0) - sqrtq(LITERAL(1.0) - eSquared);
 
 	setDerivedParameters();
 	
@@ -56,8 +56,8 @@ void	TReferenceEllipsoid::setAAndReciprocalF( const EllipseParameter a, const El
 {	// set all parameters when the values of semi-major axis and reciprocal of the flattening are given
 
 	fA = a;
-	fF = 1.0 / reciprocalF;
-	fESquared = fF * (2.0 - fF);
+	fF = LITERAL(1.0) / reciprocalF;
+	fESquared = fF * (LITERAL(2.0) - fF);
 
 	setDerivedParameters();
 
@@ -68,8 +68,8 @@ void	TReferenceEllipsoid::setAAndReciprocalF( const EllipseParameter a, const El
 void TReferenceEllipsoid::setDerivedParameters() 
 { //set remaining parameters of the ellipsoid
 	
-	fB = fA * (1.0 - fF);
-	fEPrimeSquared = fESquared / (1.0 - fESquared);
+	fB = fA * (LITERAL(1.0) - fF);
+	fEPrimeSquared = fESquared / (LITERAL(1.0) - fESquared);
 
 }
 
@@ -80,7 +80,7 @@ EllipseParameter  TReferenceEllipsoid::getNu( const TAngle& phi )  const
 {
 	real sinP = sinq( phi.getRadiansValue() );
 	
-	real nu = fA / sqrtq( 1.0 - (fESquared * sinP * sinP) );
+	real nu = fA / sqrtq( LITERAL(1.0) - (fESquared * sinP * sinP) );
 	return nu;
 }
 
@@ -91,7 +91,7 @@ EllipseParameter  TReferenceEllipsoid::getNu( const real phi )  const
 {
 	real sinP = sinq( phi );
 	
-	real nu = fA / sqrtq( 1.0 - (fESquared * sinP * sinP) );
+	real nu = fA / sqrtq( LITERAL(1.0) - (fESquared * sinP * sinP) );
 	return nu;
 }
 
@@ -102,7 +102,7 @@ EllipseParameter  TReferenceEllipsoid::getRho( const TAngle& phi )  const
 {
 	real sinP = sinq( phi.getRadiansValue() );
 	
-	real rho = fA * (1.0 - fESquared) / powq(( 1.0 - (fESquared * sinP * sinP) ), 3.0/2.0);
+	real rho = fA * (LITERAL(1.0) - fESquared) / powq(( LITERAL(1.0) - (fESquared * sinP * sinP) ), LITERAL(3.0)/LITERAL(2.0));
 	return rho;
 }
 
@@ -113,7 +113,7 @@ EllipseParameter  TReferenceEllipsoid::getRho( const real phi )  const
 {
 	real sinP = sinq( phi );
 	
-	real rho = fA * (1.0 - fESquared) / powq(( 1.0 - (fESquared * sinP * sinP) ), 3.0/2.0);
+	real rho = fA * (LITERAL(1.0) - fESquared) / powq(( LITERAL(1.0) - (fESquared * sinP * sinP) ), LITERAL(3.0)/LITERAL(2.0));
 	return rho;
 }
 
@@ -126,7 +126,7 @@ EllipseParameter  TReferenceEllipsoid::getEuler( const TAngle& phi, const TAngle
 	real cosA = cosq( alpha.getRadiansValue() );
 	real nu = getNu( phi );
 	
-	real euler = nu / ( 1.0 + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
+	real euler = nu / ( LITERAL(1.0) + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
 	return euler;
 }
 
@@ -139,7 +139,7 @@ EllipseParameter  TReferenceEllipsoid::getEuler( const real phi, const real alph
 	real cosA = cosq( alpha );
 	real nu = getNu( phi );
 	
-	real euler = nu / ( 1.0 + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
+	real euler = nu / ( LITERAL(1.0) + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
 	return euler;
 }
 

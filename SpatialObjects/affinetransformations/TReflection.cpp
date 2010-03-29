@@ -188,26 +188,26 @@ void TReflection::fillMatrix( TReflection::EType type )
 
 	case kNull:break;
 
-	case kXEqual0: fReflectionMatrix.setElt(0,0,-1.0);break;
+	case kXEqual0: fReflectionMatrix.setElt(0,0,-LITERAL(1.0));break;
 
-	case kYEqual0: fReflectionMatrix.setElt(1,1,-1.0);break;
+	case kYEqual0: fReflectionMatrix.setElt(1,1,-LITERAL(1.0));break;
 
-	case kZEqual0: fReflectionMatrix.setElt(2,2,-1.0);break;
+	case kZEqual0: fReflectionMatrix.setElt(2,2,-LITERAL(1.0));break;
 
-	case kXEqualY: fReflectionMatrix.setElt(0,0,0.0);
-				fReflectionMatrix.setElt(1,1,0.0);
-				fReflectionMatrix.setElt(0,1,1.0);
-				fReflectionMatrix.setElt(1,0,1.0);break;
+	case kXEqualY: fReflectionMatrix.setElt(0,0,LITERAL(0.0));
+				fReflectionMatrix.setElt(1,1,LITERAL(0.0));
+				fReflectionMatrix.setElt(0,1,LITERAL(1.0));
+				fReflectionMatrix.setElt(1,0,LITERAL(1.0));break;
 
-	case kXEqualZ: fReflectionMatrix.setElt(0,0,0.0);
-				fReflectionMatrix.setElt(2,2,0.0);
-				fReflectionMatrix.setElt(0,2,1.0);
-				fReflectionMatrix.setElt(2,0,1.0);break;
+	case kXEqualZ: fReflectionMatrix.setElt(0,0,LITERAL(0.0));
+				fReflectionMatrix.setElt(2,2,LITERAL(0.0));
+				fReflectionMatrix.setElt(0,2,LITERAL(1.0));
+				fReflectionMatrix.setElt(2,0,LITERAL(1.0));break;
 
-	case kYEqualZ: fReflectionMatrix.setElt(1,1,0.0);
-				fReflectionMatrix.setElt(2,2,0.0);
-				fReflectionMatrix.setElt(1,2,1.0);
-				fReflectionMatrix.setElt(2,1,1.0);break;
+	case kYEqualZ: fReflectionMatrix.setElt(1,1,LITERAL(0.0));
+				fReflectionMatrix.setElt(2,2,LITERAL(0.0));
+				fReflectionMatrix.setElt(1,2,LITERAL(1.0));
+				fReflectionMatrix.setElt(2,1,LITERAL(1.0));break;
 
 	default: break;
 	}

@@ -27,7 +27,7 @@
 //////////////////////////////////////////////////////////////////////
 
 
-TLength::TLength(): fValue(0.0)
+TLength::TLength(): fValue(LITERAL(0.0))
 {	// default constructor 
 	setStatus( TANumericValue::kNull );
 }
@@ -204,11 +204,11 @@ TLength::ENumberSign		TLength::sign(real	number) const
 
 	ENumberSign	sign;
 
-	if(number / fabsq(number) < 0.0)
+	if(number / fabsq(number) < LITERAL(0.0))
 	{
 		sign = kNegative;
 	}
-	else if (number / fabsq(number) > 0.0)
+	else if (number / fabsq(number) > LITERAL(0.0))
 	{
 		sign = kPositive;
 	}

@@ -43,7 +43,7 @@ void  erel()
 {
 /*	static NagError fail;
 	fail.print = false;
-	real wmax = nag_deviates_normal(Nag_UpperTail,0.1,&fail);
+	real wmax = nag_deviates_normal(Nag_UpperTail,LITERAL(0.1),&fail);
 
 	cout << wmax << endl;*/
 

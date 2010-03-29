@@ -45,7 +45,7 @@ TColumnVector::TColumnVector(int nRows):
 fNbRows(nRows)
 {//!Constructor setting the dimensions of the vector
 	fVector = new real [fNbRows];
-	(*this) = real(0.0);
+	(*this) = real(LITERAL(0.0));
 	setStatus( TANumericValue::kKnown );
 }
 		
@@ -187,7 +187,7 @@ TDouble TColumnVector::operator *(const TColumnVector& right) const
 	EStatus status=this->testStatus(right);
 	if (status!=kNull && dimension() == right.dimension())
 	{
-		real result = 0.0;
+		real result = LITERAL(0.0);
 		for (int i=0; i<dimension(); i++)
 			result =result + (*this)(i) * right(i);
 		resultat.setValue(result);

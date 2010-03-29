@@ -87,8 +87,8 @@ copyingexample operator+(const copyingexample&,const copyingexample&)
 	ang1.setStatus(TANumericValue::kNull);
 	cout<<"angle1: "<<ang1.getStatus()<<endl;
 
-	ang1.setRadiansValue(1.5);
-	ang2.setGonsValue(100.00);
+	ang1.setRadiansValue(LITERAL(1.5));
+	ang2.setGonsValue(LITERAL(100.00));
 	ang3.setDMSValue(45, 0, 0);
 
 
@@ -174,7 +174,7 @@ copyingexample operator+(const copyingexample&,const copyingexample&)
 	//test TLength
 	cout<<"TEST TLength"<<endl<<endl;
 	TLength len, len1;
-	len.setMetresValue(12.00);
+	len.setMetresValue(LITERAL(12.00));
 	cout<<len.getKMetresValue()<<" "<<len.getMMetresValue()<<endl;
 
 	len.setKMetresValue(1);
@@ -887,10 +887,10 @@ copyingexample operator+(const copyingexample&,const copyingexample&)
 	//Test Tdouble
 	cout<<"Test TDouble\n"<<endl;
 	TDouble doublen, double0, double1, double2;
-	double0.setValue(0.0);
-	double1.setValue(12.0);
+	double0.setValue(LITERAL(0.0));
+	double1.setValue(LITERAL(12.0));
 	double1.setStatus(TANumericValue ::kKnown);
-	double2.setValue(-4.0);
+	double2.setValue(-LITERAL(4.0));
 	double2.setStatus(TANumericValue ::kKnown);
 	cout<<"doublen:"<<doublen.getValue()<<",status:"<<doublen.getStatus()<<endl;
 	cout<<"double0:"<<double0.getValue()<<",status:"<<double0.getStatus()<<endl;
@@ -920,12 +920,12 @@ copyingexample operator+(const copyingexample&,const copyingexample&)
 	double4=double3/doublen;
 	cout<<"double4=double3/doublen:"<<double4.getValue()<<",status:"<<double4.getStatus()<<"\n"<<endl;
 
-	double0.setValue(0.0);
-	double1.setValue(1.0);
-	double2.setValue(2.0);
-	double3.setValue(3.0);
-	double4.setValue(4.0);
-	double5.setValue(5.0);
+	double0.setValue(LITERAL(0.0));
+	double1.setValue(LITERAL(1.0));
+	double2.setValue(LITERAL(2.0));
+	double3.setValue(LITERAL(3.0));
+	double4.setValue(LITERAL(4.0));
+	double5.setValue(LITERAL(5.0));
 	cout<<"double0:"<<double0.getValue()<<",status:"<<double0.getStatus()<<endl;
 	cout<<"double1:"<<double1.getValue()<<",status:"<<double1.getStatus()<<endl;
 	cout<<"double2:"<<double2.getValue()<<",status:"<<double2.getStatus()<<endl;
@@ -979,7 +979,7 @@ copyingexample operator+(const copyingexample&,const copyingexample&)
 	cv1(1)=4;
 	cv1(2)=3;
 
-	double3.setValue(3.0);
+	double3.setValue(LITERAL(3.0));
 	double3.setStatus(TANumericValue ::kKnown);
 
 	cout<<"angle1:"<<angle1.getRadiansValue()<<",status:"<<angle1.getStatus()<<endl;
@@ -1137,7 +1137,7 @@ copyingexample operator+(const copyingexample&,const copyingexample&)
 	std::cout << (d/e)<<endl;*/
 
 	//test modulo 2pi
-	/*TAngle angTest (-1.8);
+	/*TAngle angTest (-LITERAL(1.8));
 	angTest = angTest + 2 * TAngle::pi();
 	cout<<"angTest : "<< angTest.getRadiansValue()<<endl;
 

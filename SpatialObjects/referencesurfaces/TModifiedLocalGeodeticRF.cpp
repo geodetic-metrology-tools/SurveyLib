@@ -42,8 +42,8 @@
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
-const real TModifiedLocalGeodeticRF::precisionH = 0.0000001; //precision calcul h
-const real TModifiedLocalGeodeticRF::precisionPhi = 0.00000000000001; //precision calcul phi
+const real TModifiedLocalGeodeticRF::precisionH = LITERAL(0.0000001); //precision calcul h
+const real TModifiedLocalGeodeticRF::precisionPhi = LITERAL(0.00000000000001); //precision calcul phi
 
 
 
@@ -106,7 +106,7 @@ TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 		alpha.sine(), TCoordSysFactory::k3DCartesian);
 	//unitVector.setElements(vector);
 
-	TAngle azcern(37.77864 * TAngle::gonsToRadsFactor());
+	TAngle azcern(LITERAL(37.77864) * TAngle::gonsToRadsFactor());
 	TAngle phiP0, lambdaP0;
 	TVReferenceFrame* rf = TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS);
 	phiP0 = rf->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();

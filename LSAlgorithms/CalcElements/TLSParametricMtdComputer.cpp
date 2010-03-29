@@ -15,7 +15,7 @@
 //CONSTRUCTOR / DESTRUCTOR
 //////////////////////////////////////////////////////////
 TLSParametricMtdComputer::TLSParametricMtdComputer():
-fError("")/*, fS0PostUpLimit(0.0), fS0PostLoLimit(0.0), fSigmaZero2(0.0)*/
+fError("")/*, fS0PostUpLimit(LITERAL(0.0)), fS0PostLoLimit(LITERAL(0.0)), fSigmaZero2(LITERAL(0.0))*/
 {//default constructor
 	count = 1;
 }
@@ -136,6 +136,10 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 		TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
 		fAtPA->write_matrix_file("C:\\AtPA.txt");
 		real* solutionVectorb = *aTransTimesW * misclV;
+		for (int i = 0; i < misclV.dimension(); i++)
+		{
+			printf("%.20e\n", (double) misclV(i));
+		}
 		for (int i = 0; i < aTransTimesW->rowsCount(); i++)
 		{
 			solutionVectorb[i] = -solutionVectorb[i];

@@ -67,7 +67,7 @@ TMatrix::TMatrix(int nRows,int nCols):fNbRows(nRows), fNbCols(nCols)
 	if( (fNbRows > 0) && (fNbCols > 0) )
 	{
 		fMatrix = new double [fNbRows * fNbCols];
-		(*this) = 0.0;
+		(*this) = LITERAL(0.0);
 		setStatus( TANumericValue::kKnown );
 	}
 	else
@@ -75,7 +75,7 @@ TMatrix::TMatrix(int nRows,int nCols):fNbRows(nRows), fNbCols(nCols)
 		fNbRows = 1;
 		fNbCols = 1;
 		fMatrix = new double [fNbRows * fNbCols];
-		(*this) = 0.0;
+		(*this) = LITERAL(0.0);
 		fError = "Invalid dimension" + '\n';
 		setStatus( TANumericValue::kNull );
 	}
@@ -203,8 +203,8 @@ TMatrix TMatrix::operator*(const TMatrix& right) const
 	status=this->testStatus(right);
 	if (status!=kNull && numCols() == right.numRows())
 	{
-			dgemm(NoTranspose, NoTranspose, resultat.numRows(), resultat.numCols(), numCols(), 1.0, getFirstEltAdr(),
-			numCols(), right.getFirstEltAdr(), right.numCols(), 0.0, resultat.getFirstEltAdr(), resultat.numCols());
+			dgemm(NoTranspose, NoTranspose, resultat.numRows(), resultat.numCols(), numCols(), LITERAL(1.0), getFirstEltAdr(),
+			numCols(), right.getFirstEltAdr(), right.numCols(), LITERAL(0.0), resultat.getFirstEltAdr(), resultat.numCols());
 	resultat.setStatus(status);
 	}
 	return resultat;
@@ -224,8 +224,8 @@ TColumnVector TMatrix::operator*(const TColumnVector& right) const
 	status=this->testStatus(right);
 	if (status!=kNull && numCols() == right.dimension())
 	{
-		dgemv(NoTranspose, numRows(), numCols(), 1.0, getFirstEltAdr(), numCols(), (double *) right.getFirstEltAdr(), 
-		1, 0.0, (double *) resultat.getFirstEltAdr(), 1);
+		dgemv(NoTranspose, numRows(), numCols(), LITERAL(1.0), getFirstEltAdr(), numCols(), (double *) right.getFirstEltAdr(), 
+		1, LITERAL(0.0), (double *) resultat.getFirstEltAdr(), 1);
 		resultat.setStatus(status);
 	}
 	return resultat;	
@@ -324,7 +324,7 @@ bool TMatrix::initDiag( const double& comVal)
 				if (i == j)
 				{(*this)(i,j) = comVal;}
 				else
-				{(*this)(i,j) = 0.0;}
+				{(*this)(i,j) = LITERAL(0.0);}
 			}
 		}
 	return true;
@@ -350,14 +350,14 @@ void TMatrix::setDimensions( const int& nRows,  const int& nCols)
 		fNbRows = nRows;
 		fNbCols = nCols;
 		fMatrix = new double [fNbRows * fNbCols];
-		(*this) = 0.0;
+		(*this) = LITERAL(0.0);
 	}
 	else
 	{
 		fNbRows = 1;
 		fNbCols = 1;
 		fMatrix = new double [fNbRows * fNbCols];
-		(*this) = 0.0;
+		(*this) = LITERAL(0.0);
 		fError = "Invalid dimension" + '\n';
 		setStatus( TANumericValue::kNull );
 	}
@@ -405,7 +405,7 @@ bool TMatrix::invert()
 
 			//right hand side 
 			TMatrix rhs (fNbCols, fNbCols);
-			rhs.initDiag(1.0);
+			rhs.initDiag(LITERAL(1.0));
 
 			//Computation of the inverse
 			nag_real_lu_solve_mult_rhs(fNbCols, fNbCols, copyMat->getFirstEltAdr(), fNbCols, pivot, rhs.getFirstEltAdr(),
@@ -518,8 +518,8 @@ TMatrix TMatrix::dfact(int* n_pivot,int* pivot_i,int* pivot_j)
 	
 
 	int i(0),j(0),k(0),l(0),jp1(0),jm1(0);
-	double zero(0.0),one(1.0),x(0.0),y(0.0),tf(0.0),s11(0.0),s12(0.0);
-	double g1(1.0e-19),g2(1.0e19),p(0.0),q(0.0),t(0.0);
+	double zero(LITERAL(0.0)),one(LITERAL(1.0)),x(LITERAL(0.0)),y(LITERAL(0.0)),tf(LITERAL(0.0)),s11(LITERAL(0.0)),s12(LITERAL(0.0));
+	double g1(1.0e-19),g2(1.0e19),p(LITERAL(0.0)),q(LITERAL(0.0)),t(LITERAL(0.0));
 	
 	int nxch(-1);
 
@@ -541,7 +541,7 @@ TMatrix TMatrix::dfact(int* n_pivot,int* pivot_i,int* pivot_j)
 			} // label 121
 			if(k==j)
 			{
-				if (p==0.0) // pivot == 0 ->singularity
+				if (p==LITERAL(0.0)) // pivot == 0 ->singularity
 				{
 					return TMatrix(); // error handling
 				}
@@ -567,7 +567,7 @@ TMatrix TMatrix::dfact(int* n_pivot,int* pivot_i,int* pivot_j)
 		}
 		else //j==n 
 		{
-			if (p==0.0)
+			if (p==LITERAL(0.0))
 			{
 				return TMatrix();
 			}
@@ -606,7 +606,7 @@ TColumnVector TMatrix::dfeqn(TColumnVector* B,int n_pivot,int* pivot_i,int* pivo
 
 	int n(this->numRows()-1);
 	int i(0),j(0),m(0),im1(0),nm1(0),nmi(0),nmjp1(0);
-	double x(0.0),y(0.0),te(0.0),s21(0.0),s22(0.0);
+	double x(LITERAL(0.0)),y(LITERAL(0.0)),te(LITERAL(0.0)),s21(LITERAL(0.0)),s22(LITERAL(0.0));
 
 	if (n_pivot>-1)
 	{
@@ -773,15 +773,15 @@ TMatrix	TMatrix::aasen_inv2()
 {
 	// inverts this matrix and returns the invert
 	int nbRows ,nbCols, n;
-	double   sum(0.0),element(0.0);
+	double   sum(LITERAL(0.0)),element(LITERAL(0.0));
 	// get matrix and vector boundaries to avoid clutter
 	nbRows = this->numRows();
 	nbCols = this->numCols();
 	n = nbRows - 1;
 	
 	// vector containing the diagonals of T matrix, and the permutations
-	//	valarray<double> diagT(0.0,nbRows),diagTsym(0.0,nbRows),vcswap(0.0,nbRows);
-	valarray<double> vcswap(0.0,nbRows);
+	//	valarray<double> diagT(LITERAL(0.0),nbRows),diagTsym(LITERAL(0.0),nbRows),vcswap(LITERAL(0.0),nbRows);
+	valarray<double> vcswap(LITERAL(0.0),nbRows);
 	// T as a matrix
 	TMatrix* T = new TMatrix(nbRows,nbCols);
 	// unit lower triangular matrix
@@ -800,11 +800,11 @@ TMatrix	TMatrix::aasen_inv2()
 	// compute inverse of L
 	for (i=0;i<=n;i++)
 	{
-		(*invL)(i,i) = 1.0/(*L)(i,i);
+		(*invL)(i,i) = LITERAL(1.0)/(*L)(i,i);
 
 		for (j=i+1;j<=n;j++)
 		{
-			sum = 0.0;
+			sum = LITERAL(0.0);
 			for (k=0;k<=j-1;k++)
 				sum -=(*L)(j,k) * (*invL)(k,i);
 
@@ -903,7 +903,7 @@ void	TMatrix::aasen_dcmp2(TMatrix* N,TMatrix* L,TMatrix* T, valarray<double> *vc
 
 	register int i(0),j(0),k(0),qflg(0);
 	int nbRows,nbCols,n;
-	double element(0.0);
+	double element(LITERAL(0.0));
 	
 	nbRows = N->numRows();
 	nbCols = N->numCols();	
@@ -913,11 +913,11 @@ void	TMatrix::aasen_dcmp2(TMatrix* N,TMatrix* L,TMatrix* T, valarray<double> *vc
 	cout << "nbCols " << nbCols << endl;
 	cout << "n " << n << endl;
 
-	valarray<double> vch(0.0,nbRows),vcv(0.0,nbRows);
+	valarray<double> vch(LITERAL(0.0),nbRows),vcv(LITERAL(0.0),nbRows);
 
 	for (k=0;k<=n;k++) {
 		// establish lower triangular matrix values for relevant column
-		(*L)(k,k) = 1.0;
+		(*L)(k,k) = LITERAL(1.0);
 		// determine relevant column of T*(transpose(L))
 
 		for (i=1;i<=(k-1);i++) {
@@ -1022,7 +1022,7 @@ TMatrix TMatrix::dfinv(int* n_pivot,int* pivot_i,int* pivot_j)
 		
 		int n(this->numRows()-1);
 		int i(0),j(0),k(0),im2(0),nm1(0),nmi(0),nxch(0),m(0),ij(0);
-		double zero(0.0),x(0.0),y(0.0),ti(0.0),s31(0.0),s32(0.0),s33(0.0),s34(0.0);
+		double zero(LITERAL(0.0)),x(LITERAL(0.0)),y(LITERAL(0.0)),ti(LITERAL(0.0)),s31(LITERAL(0.0)),s32(LITERAL(0.0)),s33(LITERAL(0.0)),s34(LITERAL(0.0));
 
 		(res)(1,0) = -(res)(1,1)*(res)(0,0)*(res)(1,0);
 		(res)(0,1) = -(res)(0,1);

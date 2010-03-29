@@ -24,7 +24,7 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 //CONSTRUCTOR / DESTRUCTOR
 //////////////////////////////////////////////////////////////////////
 TOrientationCnstr::TOrientationCnstr():
-fConstraintBearing(0.0), fRefPoint()
+fConstraintBearing(LITERAL(0.0)), fRefPoint()
 {//Default constructor	
 	fName = "";
 	fIdentifier = 0;
@@ -116,7 +116,7 @@ bool TOrientationCnstr::operator==( const TOrientationCnstr& right) const
 TAngle TOrientationCnstr::getSigma() const
 {
 	TAngle sigma;
-	sigma.setGonsValue(0.00000001);
+	sigma.setGonsValue(LITERAL(0.00000001));
 	return sigma;
 }
 
@@ -145,7 +145,7 @@ string TOrientationCnstr::getName() const
 void	TOrientationCnstr::ifNotDoneSetCnstrBearing(TAngle cBear)
 {//Sets the constraint's width if it isn't done yet
 
-	if ( fConstraintBearing.getGonsValue() == 0.0)
+	if ( fConstraintBearing.getGonsValue() == LITERAL(0.0))
 		fConstraintBearing = cBear;
 }
 

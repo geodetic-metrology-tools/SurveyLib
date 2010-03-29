@@ -31,7 +31,7 @@ T3DMatrix::T3DMatrix(TCoordSysFactory::ECoordSys en )
 {//default constructor
 	for (int i=0; i<3; i++)
 		{	for (int j=0; j<3; j++)
-			{setC(i,j,0.0);}
+			{setC(i,j,LITERAL(0.0));}
 		}
 	setStatus(kNull);
 	setCoordSys(en);
@@ -280,7 +280,7 @@ bool T3DMatrix::initDiag( const real& comVal)
 				if (i == j)
 				{setElt(i,j,comVal);}
 				else
-				{setElt(i,j,0.0);}
+				{setElt(i,j,LITERAL(0.0));}
 			}
 		}
 	setStatus(kKnown);

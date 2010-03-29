@@ -86,7 +86,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 	unitVector.transform(fGeodeticSys);
 
 	//set rotation matrix for GC to LG system
-	TRotation r(TRotationMatrix::kRzyx,0.0,
+	TRotation r(TRotationMatrix::kRzyx,LITERAL(0.0),
 		//TAngle::piBy2().getRadiansValue() - origin.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue(),
 		//TAngle::pi().getRadiansValue() - origin.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue());
 		TAngle::piBy2().getRadiansValue() - fGeodeticSys->getGeodeticCoords( &origin, ell).getPhiEllipsoid().getRadiansValue(),
@@ -114,7 +114,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 	//set spatial orientation
 	// azimut of the vector projection on the xy-plane
 	real x(vector.getX().getMetresValue()), y(vector.getY().getMetresValue());
-	TAngle az, zero(0.0);
+	TAngle az, zero(LITERAL(0.0));
 	az.setRadiansValue((TAngle::aTan2(y,x).getRadiansValue()));
 	// construction of the orientation matrix
 	TSpatialOrientation spatialOrientation(TRotationMatrix::kRzyx, zero, zero, az,
@@ -209,7 +209,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 
 	// geoid parameters
 	fGeoid = TRefSystemFactory::kNoGeoid;
-	TAngle ang(0.0);
+	TAngle ang(LITERAL(0.0));
 	setEta( ang );
 	setXsi( ang );
 	setDAlpha( ang );
@@ -275,7 +275,7 @@ void	TModifiedLocalAstronomicalRF::initialiseMLA(TSpatialPosition origin)
 	unitVector.transform(fGeodeticSys);
 
 	//set rotation matrix for GC to LG system
-	TRotation r(TRotationMatrix::kRzyx,0.0,
+	TRotation r(TRotationMatrix::kRzyx,LITERAL(0.0),
 				TAngle::piBy2().getRadiansValue() - fGeodeticSys->getGeodeticCoords( &origin, ell).getPhiEllipsoid().getRadiansValue(),
 				TAngle::pi().getRadiansValue() - fGeodeticSys->getGeodeticCoords( &origin, ell).getLambdaEllipsoid().getRadiansValue());
 	r.invert();
@@ -301,7 +301,7 @@ void	TModifiedLocalAstronomicalRF::initialiseMLA(TSpatialPosition origin)
 	//set spatial orientation
 	// azimut of the vector projection on the xy-plane
 	real x(vector.getX().getMetresValue()), y(vector.getY().getMetresValue());
-	TAngle az, zero(0.0);
+	TAngle az, zero(LITERAL(0.0));
 	az.setRadiansValue((TAngle::aTan2(y,x).getRadiansValue()));
 	// construction of the orientation matrix
 	TSpatialOrientation spatialOrientation(TRotationMatrix::kRzyx, zero, zero, az,

@@ -14,16 +14,16 @@ TLSCalcOrientationParam::TLSCalcOrientationParam():TALSCalcParameter("") {
 	for (int i=0;i<3;i++)
 		fOrientIndex[i]=0;
 
-	fProvisionalValue.omega = TAngle(0.0);
-	fProvisionalValue.phi = TAngle(0.0);
-	fProvisionalValue.kappa = TAngle(0.0);
-	fCorrection.omega = TAngle(0.0);
-	fCorrection.phi = TAngle(0.0);
-	fCorrection.kappa = TAngle(0.0);
+	fProvisionalValue.omega = TAngle(LITERAL(0.0));
+	fProvisionalValue.phi = TAngle(LITERAL(0.0));
+	fProvisionalValue.kappa = TAngle(LITERAL(0.0));
+	fCorrection.omega = TAngle(LITERAL(0.0));
+	fCorrection.phi = TAngle(LITERAL(0.0));
+	fCorrection.kappa = TAngle(LITERAL(0.0));
 	fEstimatedValue = fProvisionalValue;
-	fEstimatedPrecision.omega = TAngle(0.0);
-	fEstimatedPrecision.phi = TAngle(0.0);
-	fEstimatedPrecision.kappa = TAngle(0.0);
+	fEstimatedPrecision.omega = TAngle(LITERAL(0.0));
+	fEstimatedPrecision.phi = TAngle(LITERAL(0.0));
+	fEstimatedPrecision.kappa = TAngle(LITERAL(0.0));
 	fStatus.first = TALSCalcParameter::kVariable;
 	fStatus.second = TALSCalcParameter::kVariable;
 	fStatus.third = TALSCalcParameter::kVariable;
@@ -32,13 +32,13 @@ TLSCalcOrientationParam::TLSCalcOrientationParam():TALSCalcParameter("") {
 // Constructor using a structure angle (provisional value) and parameter status as argument
 TLSCalcOrientationParam::TLSCalcOrientationParam(struct Angles& provAng,struct LSParaStatus ems,string name):
 fProvisionalValue(provAng), fStatus(ems), TALSCalcParameter(name) {
-	fCorrection.omega = TAngle(0.0);
-	fCorrection.phi = TAngle(0.0);
-	fCorrection.kappa = TAngle(0.0);
+	fCorrection.omega = TAngle(LITERAL(0.0));
+	fCorrection.phi = TAngle(LITERAL(0.0));
+	fCorrection.kappa = TAngle(LITERAL(0.0));
 	fEstimatedValue = fProvisionalValue;
-	fEstimatedPrecision.omega = TAngle(0.0);
-	fEstimatedPrecision.phi = TAngle(0.0);
-	fEstimatedPrecision.kappa = TAngle(0.0);
+	fEstimatedPrecision.omega = TAngle(LITERAL(0.0));
+	fEstimatedPrecision.phi = TAngle(LITERAL(0.0));
+	fEstimatedPrecision.kappa = TAngle(LITERAL(0.0));
 	// Sets the index to 0
 	for (int i=0;i<3;i++)
 		fOrientIndex[i]=0;
@@ -84,13 +84,13 @@ TLSCalcOrientationParam& TLSCalcOrientationParam::operator=(const TLSCalcOrienta
 // re-initialises the parameters alterred during or after a least squares calculation
 void	TLSCalcOrientationParam::reInitialise()
 {
-	fCorrection.omega = TAngle(0.0);
-	fCorrection.phi = TAngle(0.0);
-	fCorrection.kappa = TAngle(0.0);
+	fCorrection.omega = TAngle(LITERAL(0.0));
+	fCorrection.phi = TAngle(LITERAL(0.0));
+	fCorrection.kappa = TAngle(LITERAL(0.0));
 	fEstimatedValue = fProvisionalValue;
-	fEstimatedPrecision.omega = TAngle(0.0);
-	fEstimatedPrecision.phi = TAngle(0.0);
-	fEstimatedPrecision.kappa = TAngle(0.0);
+	fEstimatedPrecision.omega = TAngle(LITERAL(0.0));
+	fEstimatedPrecision.phi = TAngle(LITERAL(0.0));
+	fEstimatedPrecision.kappa = TAngle(LITERAL(0.0));
 
 	return;
 }
@@ -101,16 +101,16 @@ void	TLSCalcOrientationParam::reInitialise()
 ////////////////////////////////////////////////////////////////////////////
 void TLSCalcOrientationParam::resetValues()
 {
-	fProvisionalValue.omega = TAngle(0.0);
-	fProvisionalValue.phi = TAngle(0.0);
-	fProvisionalValue.kappa = TAngle(0.0);
-	fCorrection.omega = TAngle(0.0);
-	fCorrection.phi = TAngle(0.0);
-	fCorrection.kappa = TAngle(0.0);
+	fProvisionalValue.omega = TAngle(LITERAL(0.0));
+	fProvisionalValue.phi = TAngle(LITERAL(0.0));
+	fProvisionalValue.kappa = TAngle(LITERAL(0.0));
+	fCorrection.omega = TAngle(LITERAL(0.0));
+	fCorrection.phi = TAngle(LITERAL(0.0));
+	fCorrection.kappa = TAngle(LITERAL(0.0));
 	fEstimatedValue = fProvisionalValue;
-	fEstimatedPrecision.omega = TAngle(0.0);
-	fEstimatedPrecision.phi = TAngle(0.0);
-	fEstimatedPrecision.kappa = TAngle(0.0);
+	fEstimatedPrecision.omega = TAngle(LITERAL(0.0));
+	fEstimatedPrecision.phi = TAngle(LITERAL(0.0));
+	fEstimatedPrecision.kappa = TAngle(LITERAL(0.0));
 
 }
 

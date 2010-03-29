@@ -10,11 +10,11 @@
 //////////////////////////////////////////////////////////////////////
 TLSCalcPosVectorParam::TLSCalcPosVectorParam():
 TALSCalcParameter(""),
-fProvisionalValue(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian),
-fCorrection(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian),
+fProvisionalValue(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
+fCorrection(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
 fEstimatedValue(fProvisionalValue),
-fEstimatedPrecision(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian),
-fCovariance(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian)
+fEstimatedPrecision(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
+fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian)
 {// Default constructor
 	for (int i=0;i<3;i++)
 		fPosVectorIndices[i] = 0;
@@ -29,10 +29,10 @@ TLSCalcPosVectorParam::TLSCalcPosVectorParam(TPositionVector pos,struct LSParaSt
 TALSCalcParameter(name),
 fProvisionalValue(pos),
 fStatus(status),
-fCorrection(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian),
+fCorrection(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
 fEstimatedValue(fProvisionalValue),
-fEstimatedPrecision(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian),
-fCovariance(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian)
+fEstimatedPrecision(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
+fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian)
 {// Constructor taking provisional value and parameter status as argument
 	for (int i=0;i<3;i++)
 		fPosVectorIndices[i] = 0;
@@ -110,7 +110,7 @@ bool	TLSCalcPosVectorParam::operator==(const TLSCalcPosVectorParam& right) const
 // re-initialises the parameters alterred during or after a least squares calculation
 void	TLSCalcPosVectorParam::reInitialise()
 {
-	TFreeVector zeroVec(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian);
+	TFreeVector zeroVec(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian);
 	fCorrection = zeroVec;
 	fEstimatedValue = fProvisionalValue;
 	fEstimatedPrecision = zeroVec;
@@ -314,7 +314,7 @@ TLength		TLSCalcPosVectorParam::getErrorEllMajorAxis() const
 	real vxy = getXYCovar().getMMetresValue();
 	real sx2 = powq(getXSigma().getMMetresValue(), 2) ;
 	real sy2 = powq(getYSigma().getMMetresValue(), 2) ;
-	real gdAxe = (1.0/sqrtq(2.0)) * sqrtq( sx2 + sy2 + sqrtq( powq((sy2 - sx2), 2) + (4.0 * vxy * vxy) ) );
+	real gdAxe = (LITERAL(1.0)/sqrtq(LITERAL(2.0))) * sqrtq( sx2 + sy2 + sqrtq( powq((sy2 - sx2), 2) + (LITERAL(4.0) * vxy * vxy) ) );
 	
 	TLength res;
 	res.setMMetresValue(gdAxe);
@@ -327,7 +327,7 @@ TLength		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
 	real vxy = getXYCovar().getMMetresValue();
 	real sx2 = powq(getXSigma().getMMetresValue(), 2) ;
 	real sy2 = powq(getYSigma().getMMetresValue(), 2) ;
-	real ptAxe = (1.0/sqrtq(2.0)) * sqrtq( sx2 + sy2 - sqrtq( powq((sy2 - sx2), 2) + (4.0 * vxy *vxy) ) );
+	real ptAxe = (LITERAL(1.0)/sqrtq(LITERAL(2.0))) * sqrtq( sx2 + sy2 - sqrtq( powq((sy2 - sx2), 2) + (LITERAL(4.0) * vxy *vxy) ) );
 	
 	TLength res;
 	res.setMMetresValue(ptAxe);
@@ -340,7 +340,7 @@ TAngle		TLSCalcPosVectorParam::getErrorEllGis() const
 	real vxy = getXYCovar().getMMetresValue();
 	real sx2 = powq(getXSigma().getMMetresValue(), 2) ;
 	real sy2 = powq(getYSigma().getMMetresValue(), 2) ;
-	TAngle gis (( 0.5) * TAngle::aTan2(2*vxy , (sy2 - sx2) ) );
+	TAngle gis (( LITERAL(0.5)) * TAngle::aTan2(2*vxy , (sy2 - sx2) ) );
 	
 	real testAffichage = gis.getGonsValue();
 	TAngle deuxCentGrad;

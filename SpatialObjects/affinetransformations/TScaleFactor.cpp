@@ -35,7 +35,7 @@
 
 TScaleFactor::TScaleFactor()
 {	// default constructor
-	fScaleFactor.setValue(1.0);
+	fScaleFactor.setValue(LITERAL(1.0));
 	this->setStatus( TVNumericValue::kNull );
 }
 
@@ -174,14 +174,14 @@ TRotationMatrix &  TScaleFactor::operator() ( TRotationMatrix & right ) const
 
 TScaleFactor *  TScaleFactor::inverse() const
 {// Return the inverse transformation
-	TScaleFactor * inverse = new TScaleFactor( 1.0 / this->getScaleFactor().getValue() );
+	TScaleFactor * inverse = new TScaleFactor( LITERAL(1.0) / this->getScaleFactor().getValue() );
 	return inverse;
 }
 
 
 void TScaleFactor::invert()
 {/// Change this transformation in the inverse
-	fScaleFactor.setValue( 1.0 / fScaleFactor.getValue() );
+	fScaleFactor.setValue( LITERAL(1.0) / fScaleFactor.getValue() );
 	return;
 }
 

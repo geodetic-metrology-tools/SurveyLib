@@ -138,7 +138,7 @@ bool  TMLA2XYHeTransformation::transform(TPositionVector& pv) const
 	d0 = k*d;
 
 	// transform TPositionVector
-	TAngle omegaBy2 = omega * 0.5;
+	TAngle omegaBy2 = omega * LITERAL(0.5);
 	TLength newH( (dz + d0 * omegaBy2.tangent()) / omega.cosine() );
 	
 	// Change the third dimension Z of the position vector into H

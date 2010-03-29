@@ -26,8 +26,8 @@
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
-const real TCernParabolicGeoid::scaleFactor = 0.001;
-const real TCernParabolicGeoid::scaleFactorM = 0.01;
+const real TCernParabolicGeoid::scaleFactor = LITERAL(0.001);
+const real TCernParabolicGeoid::scaleFactorM = LITERAL(0.01);
 
 
 //////////////////////////////////////////////////////////////////////
@@ -64,8 +64,8 @@ fCalcRFPtr(0), fDefEllPtr(0)
 {		
 		// set the derived parameters of the paraboloid
 		real thc, azp;
-		real azxs = -1.12878 * TAngle::gonsToRadsFactor();
-		real gsc = 38.90742 * TAngle::gonsToRadsFactor();
+		real azxs = -LITERAL(1.12878) * TAngle::gonsToRadsFactor();
+		real gsc = LITERAL(38.90742) * TAngle::gonsToRadsFactor();
 
 		thc = fThs - gsc;
 		azp = fThs + azxs;
@@ -93,13 +93,13 @@ TCernParabolicGeoid::TCernParabolicGeoid( const string& name, const real a,
 {		
 		// set the derived parameters of the paraboloid
 		real thc, azp;
-		real azxs = -1.12878 * TAngle::gonsToRadsFactor();
-		real gsc = 38.90742 * TAngle::gonsToRadsFactor();
+		real azxs = -LITERAL(1.12878) * TAngle::gonsToRadsFactor();
+		real gsc = LITERAL(38.90742) * TAngle::gonsToRadsFactor();
 
 	/*	//modif du 25/07/03 pour representer le niv5 utiliser dans LGC
-		if(fThs* TAngle::radsToGonsFactor() == 48.219)
+		if(fThs* TAngle::radsToGonsFactor() == LITERAL(48.219))
 		{
-			thc = 9.31158177001953 * TAngle::gonsToRadsFactor();
+			thc = LITERAL(9.31158177001953) * TAngle::gonsToRadsFactor();
 		//	azp = thc;
 		}
 		else
@@ -147,7 +147,7 @@ TLength	TCernParabolicGeoid::getN( const TSpatialPosition& position ) const
 	real dx, dy, xp, yp;
 	//TSpatialPosition position( point.getPosition( modelSystem ) );
 	//GeoidValue fNValue;
-	real falseOriginX(2000), falseOriginY(2097.79265);
+	real falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
 
 	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
@@ -185,7 +185,7 @@ TAngle	TCernParabolicGeoid::getXi( const TSpatialPosition& sp ) const
 
 	LengthValue x, y;
 	real dx, dy, xp, yp;
-	real falseOriginX(2000), falseOriginY(2097.79265);
+	real falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
 	//TSpatialPosition position( modelSystem );
 	TAngle fXiValue;
 
@@ -200,7 +200,7 @@ TAngle	TCernParabolicGeoid::getXi( const TSpatialPosition& sp ) const
 	yp = dx*sinthc+dy*costhc;
 
 // Calculate the vertical deflection in N-S direction  
-	fXiValue.setRadiansValue((fA*sinazp*xp -fB*cosazp*yp)/100000 ); //* 6.366;
+	fXiValue.setRadiansValue((fA*sinazp*xp -fB*cosazp*yp)/100000 ); //* LITERAL(6.366);
 	return fXiValue;
 
 }
@@ -221,7 +221,7 @@ TAngle	TCernParabolicGeoid::getEta( const TSpatialPosition& sp ) const
 
 	LengthValue x, y;
 	real dx, dy, xp, yp;
-	real falseOriginX(2000), falseOriginY(2097.79265);
+	real falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
 	TAngle fEtaValue;
 
 	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
@@ -234,7 +234,7 @@ TAngle	TCernParabolicGeoid::getEta( const TSpatialPosition& sp ) const
 	yp = dx*sinthc+dy*costhc;
 
 // Calculate the vertical deflection in E-O direction 
-	fEtaValue.setRadiansValue((-fA*cosazp*xp -fB*sinazp*yp)/100000 ); // * 6.366;
+	fEtaValue.setRadiansValue((-fA*cosazp*xp -fB*sinazp*yp)/100000 ); // * LITERAL(6.366);
 	return fEtaValue;
 
 }

@@ -8,11 +8,11 @@
 
 // Default constructor
 TLSCalcFreeVectorParam::TLSCalcFreeVectorParam():
-fProvisionalValue(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian),
-fCorrection(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian),
+fProvisionalValue(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
+fCorrection(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
 fEstimatedValue(fProvisionalValue),
-fEstimatedPrecision(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian),
-fCovariance(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian),
+fEstimatedPrecision(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
+fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
 TALSCalcParameter("") {
 	for (int i=0;i<3;i++)
 		fFreeVectorIndices[i] = 0;
@@ -26,10 +26,10 @@ TLSCalcFreeVectorParam::TLSCalcFreeVectorParam(TFreeVector pos,struct LSParaStat
 											 string name ):
 fProvisionalValue(pos),
 fStatus(status),TALSCalcParameter(name),
-fCorrection(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian),
+fCorrection(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
 fEstimatedValue(fProvisionalValue),
-fEstimatedPrecision(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian),
-fCovariance(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian)
+fEstimatedPrecision(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
+fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian)
 {
 	for (int i=0;i<3;i++)
 		fFreeVectorIndices[i] = 0;
@@ -67,7 +67,7 @@ TLSCalcFreeVectorParam& TLSCalcFreeVectorParam::operator =(const TLSCalcFreeVect
 // re-initialises the parameters alterred during or after a least squares calculation
 void	TLSCalcFreeVectorParam::reInitialise()
 {
-	TFreeVector zeroVec(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian);
+	TFreeVector zeroVec(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian);
 	fCorrection = zeroVec;
 	fEstimatedValue = fProvisionalValue;
 	fEstimatedPrecision = zeroVec;
@@ -216,8 +216,8 @@ int TLSCalcFreeVectorParam::size()
 
 void TLSCalcFreeVectorParam::resetValues()
 {
-//fProvisionalValue(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian);
-TFreeVector zero(0.0,0.0,0.0,TCoordSysFactory::k3DCartesian);
+//fProvisionalValue(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian);
+TFreeVector zero(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian);
 fCorrection = zero;
 fEstimatedValue = fProvisionalValue;
 fEstimatedPrecision = zero;

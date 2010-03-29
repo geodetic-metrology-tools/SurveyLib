@@ -35,8 +35,8 @@
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
-const real TGeodeticRefFrame::precisionH = 0.0000001; //precision calcul h
-const real TGeodeticRefFrame::precisionPhi = 0.00000000000001; //precision calcul phi
+const real TGeodeticRefFrame::precisionH = LITERAL(0.0000001); //precision calcul h
+const real TGeodeticRefFrame::precisionPhi = LITERAL(0.00000000000001); //precision calcul phi
 
 
 
@@ -151,7 +151,7 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 		TAngle phirad, lrad;
 		TLength hm;
 		phirad = TAngle::piBy2();;
-		lrad.setRadiansValue(0.0);
+		lrad.setRadiansValue(LITERAL(0.0));
 		hm.setMetresValue(z-a);
 		geodpv.setPhiEllipsoid(phirad);
 		geodpv.setLambdaEllipsoid(lrad);
@@ -169,7 +169,7 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 		//initialisation
 		h = 0;
 		temph = 1;
-		phi = atanq ( z / (p * ( 1.0 - eSquared )) );
+		phi = atanq ( z / (p * ( LITERAL(1.0) - eSquared )) );
 		tempphi = phi+1;
 
 		//boucle
@@ -179,7 +179,7 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 			temph = h;
 			h = ( p / cosq(phi) ) - nu;
 			tempphi = phi;
-			phi = atanq ( z / (p * ( 1.0 - (eSquared * nu / (nu+h)) )) );
+			phi = atanq ( z / (p * ( LITERAL(1.0) - (eSquared * nu / (nu+h)) )) );
 		}
 		
 		TAngle phirad, lrad;

@@ -24,7 +24,7 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 //CONSTRUCTOR / DESTRUCTOR
 //////////////////////////////////////////////////////////////////////
 TRadialOffsetCnstr::TRadialOffsetCnstr():
-fConstraintBearing(0.0), fConstraintWidth(0.0), fPoint()
+fConstraintBearing(LITERAL(0.0)), fConstraintWidth(LITERAL(0.0)), fPoint()
 {//Default constructor	
 	fName = "";
 	fIdentifier = 0;
@@ -143,7 +143,7 @@ string TRadialOffsetCnstr::getName() const
 void	TRadialOffsetCnstr::ifNotDoneSetSigma(TLength cWidth)
 {//Sets the constraint's width if it isn't done yet
 
-	if ( fConstraintWidth.getMetresValue() == 0.0)
+	if ( fConstraintWidth.getMetresValue() == LITERAL(0.0))
 		fConstraintWidth = cWidth;
 }
 
@@ -151,7 +151,7 @@ void	TRadialOffsetCnstr::ifNotDoneSetSigma(TLength cWidth)
 void	TRadialOffsetCnstr::ifNotDoneSetCnstrBearing(TAngle cBear)
 {//Sets the constraint's width if it isn't done yet
 
-	if ( fConstraintBearing.getGonsValue() == 0.0)
+	if ( fConstraintBearing.getGonsValue() == LITERAL(0.0))
 		fConstraintBearing = cBear;
 }
 

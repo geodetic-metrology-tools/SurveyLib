@@ -51,7 +51,7 @@ void main ()
 
 
 	// TRotationMatrix
-	TAngle a(0.0), b(0.0), c, d;
+	TAngle a(LITERAL(0.0)), b(LITERAL(0.0)), c, d;
 	c=TAngle::piBy2();
 	TRotationMatrix rmx(TRotationMatrix::kRzyx, a.getRadiansValue(),b.getRadiansValue(),
 		c.getRadiansValue());
@@ -67,7 +67,7 @@ void main ()
 	
 	// TEST TENLARGEMENT
 
-	TEnlargement enlarge(2.57);
+	TEnlargement enlarge(LITERAL(2.57));
 //	cout << "enlargement status:" << enlarge.getStatus() << endl << endl;
 		
 			// transformations
@@ -119,7 +119,7 @@ void main ()
 
 
 	// TEST TTRANSLATION
-	TLength tx(5.0), ty(100.0), tz(2000.0);
+	TLength tx(LITERAL(5.0)), ty(LITERAL(100.0)), tz(LITERAL(2000.0));
 
 	TTranslation trans(tx, ty, tz);
 	//trans.setStatus(TVNumericValue::kNull);
@@ -174,7 +174,7 @@ void main ()
 	TYAxisRotation ry(b.getRadiansValue());
 	TZAxisRotation rz(c.getRadiansValue());
 
-	TRotation rot(TRotationMatrix::kRzyx, 0.66, 0.335, 1.2);
+	TRotation rot(TRotationMatrix::kRzyx, LITERAL(0.66), LITERAL(0.335), LITERAL(1.2));
 //	cout << "rotation status : " << rot.getStatus() << endl;
 
 	Angles ang;

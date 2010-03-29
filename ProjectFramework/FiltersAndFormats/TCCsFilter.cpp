@@ -1,8 +1,8 @@
-// TGonsFilter.cpp
+// TCCsFilter.cpp
 //
 // Concrete Class of the TAngleFilter PABC.
 // Handles the IO of an TAngle object angles in a text stream with 
-// gons units. 
+// cc units. 
 // 
 // Patterns:
 // This class is a Singleton.
@@ -20,28 +20,28 @@
 #include "TAngle.h"
 #include "TObservationFormat.h"
 #include "TPointFormat.h"
-#include "TGonsFilter.h"
+#include "TCCsFilter.h"
 //////////////////////////////////////////////////////////////////////
 
 
-//ClassImp(TGonsFilter)
+//ClassImp(TCCsFilter)
 
 
 
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
-TGonsFilter *TGonsFilter::fFilter = 0;
+TCCsFilter *TCCsFilter::fFilter = 0;
 
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-TGonsFilter::TGonsFilter()
+TCCsFilter::TCCsFilter()
 {}
 
-TGonsFilter::~TGonsFilter()
+TCCsFilter::~TCCsFilter()
 {}
 
 
@@ -49,21 +49,21 @@ TGonsFilter::~TGonsFilter()
 // Member Functions
 //////////////////////////////////////////////////////////////////////
 
-TGonsFilter *TGonsFilter::instance()
+TCCsFilter *TCCsFilter::instance()
 {
 	if( fFilter == 0 )
 	{
-		fFilter = new TGonsFilter;
+		fFilter = new TCCsFilter;
 	}
 
 	return fFilter;
 }
 
 
-void	TGonsFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
+void	TCCsFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 {	// function to get a gons angle from a QTextStream object
 	// and set the value in a TAngle object
-	real	gons;
+	real	ccs;
 
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')
@@ -74,11 +74,12 @@ void	TGonsFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 
 	else
 	{
-		iStream >> gons;
+		iStream >> ccs;
+		ccs *= LITERAL(0.0001);
 		if(!(iStream.fail()))
 		{
 			angle.setStatus(TVNumericValue::kKnown);
-			angle.setGonsValue(gons);
+			angle.setGonsValue(ccs);
 		}
 		else
 		{
@@ -102,7 +103,7 @@ void	TGonsFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 /////////////////////////////////////////////////////////
 // outputs an angle formatted in Gons units to the stream
 /////////////////////////////////////////////////////////
-void	TGonsFilter::output(TAStreamFormatter& oStream,const TAngle& angle)const
+void	TCCsFilter::output(TAStreamFormatter& oStream,const TAngle& angle)const
 {	// function to put a gons angle to a QTextStream object.
 	// Gets the value from a TAngle object
 

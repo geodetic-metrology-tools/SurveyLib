@@ -31,28 +31,28 @@ void main(){
 		spos4(TGraph::getGraph()->getRefFrame(TGraph::kCCS)),
 		spos5(TGraph::getGraph()->getRefFrame(TGraph::kCCS));
 	
-	TLength z(2000.0);
-	TLength x(2000), y(2097.79265), z1(2000.00079);
+	TLength z(LITERAL(2000.0));
+	TLength x(2000), y(LITERAL(2097.79265)), z1(LITERAL(2000.00079));
 	spos.setXCoord(x);
 	spos.setYCoord(y);
 	spos.setZCoord(z1);
 
-	TLength x2(-4999.9999999), y2(0), z2(2000);
+	TLength x2(-LITERAL(4999.9999999)), y2(0), z2(2000);
 	spos2.setXCoord(x2);
 	spos2.setYCoord(y2);
 	spos2.setZCoord(z2);
 
-	TLength x3(4200), y3(3720.569), z3(2000);
+	TLength x3(4200), y3(LITERAL(3720.569)), z3(2000);
 	spos3.setXCoord(x3);
 	spos3.setYCoord(y3);
 	spos3.setZCoord(z3);
 
-	TLength x4(-3758.345), y4(11000);
+	TLength x4(-LITERAL(3758.345)), y4(11000);
 	spos4.setXCoord(x4);
 	spos4.setYCoord(y4);
 	spos4.setZCoord(z);
 
-	TLength x5(-4565.12580), y5(1478.25020);
+	TLength x5(-LITERAL(4565.12580)), y5(LITERAL(1478.25020));
 	spos5.setXCoord(x5);
 	spos5.setYCoord(y5);
 	spos5.setZCoord(z);

@@ -35,8 +35,8 @@ TSparseMatrix* generateMatrix(int rows, int cols)
 	{
 		for (int j = 0; j < rows; j++)
 		{
-			double r = double (rand()) / (double (RAND_MAX) + 1.0);
-			if (r >= 0.7)
+			double r = double (rand()) / (double (RAND_MAX) + LITERAL(1.0));
+			if (r >= LITERAL(0.7))
 			{
 				rowind[rowi++] = j;
 			}
@@ -58,11 +58,11 @@ TSparseMatrix* generateMatrix(int rows, int cols)
 	rowi = 0;
 	for (int i = 0; i < colptr[colp]; i++)
 	{
-		double r = double (rand()) / (double (RAND_MAX) + 1.0);
+		double r = double (rand()) / (double (RAND_MAX) + LITERAL(1.0));
 		double X = XMin + r * (XMax - XMin); // transform to wanted range
 		while (X == 0)
 		{
-			r = double (rand()) / (double (RAND_MAX) + 1.0);
+			r = double (rand()) / (double (RAND_MAX) + LITERAL(1.0));
 			X = XMin + r * (XMax - XMin);
 		}
 		values[rowi++] = apfloat(X, 1000);
@@ -88,8 +88,8 @@ TSparseMatrix* generateLowerTriangularMatrix(int size)
 		rowind[rowi++] = i;
 		for (int j = i + 1; j < size; j++)
 		{
-			double r = double (rand()) / (double (RAND_MAX) + 1.0);
-			if (r >= 0.7)
+			double r = double (rand()) / (double (RAND_MAX) + LITERAL(1.0));
+			if (r >= LITERAL(0.7))
 			{
 				rowind[rowi++] = j;
 			}
@@ -112,11 +112,11 @@ TSparseMatrix* generateLowerTriangularMatrix(int size)
 	int whichCol = 0;
 	for (int i = 0; i < colptr[colp]; i++)
 	{
-		double r = double (rand()) / (double (RAND_MAX) + 1.0);
+		double r = double (rand()) / (double (RAND_MAX) + LITERAL(1.0));
 		double X = XMin + r * (XMax - XMin); // transform to wanted range
 		while (X == 0 || (colptr[whichCol] == i && X < 0))
 		{
-			r = double (rand()) / (double (RAND_MAX) + 1.0);
+			r = double (rand()) / (double (RAND_MAX) + LITERAL(1.0));
 			X = XMin + r * (XMax - XMin);
 		}
 		if (colptr[whichCol] == i)
@@ -146,8 +146,8 @@ TSparseMatrix* generateIntegralLowerTriangularMatrix(int size)
 		rowind[rowi++] = i;
 		for (int j = i + 1; j < size; j++)
 		{
-			double r = double (rand()) / (double (RAND_MAX) + 1.0);
-			if (r >= 0.7)
+			double r = double (rand()) / (double (RAND_MAX) + LITERAL(1.0));
+			if (r >= LITERAL(0.7))
 			{
 				rowind[rowi++] = j;
 			}
@@ -170,7 +170,7 @@ TSparseMatrix* generateIntegralLowerTriangularMatrix(int size)
 	int whichCol = 0;
 	for (int i = 0; i < colptr[colp]; i++)
 	{
-		double r = double (rand()) / (double (RAND_MAX) + 1.0);
+		double r = double (rand()) / (double (RAND_MAX) + LITERAL(1.0));
 		double X = XMin + r * (XMax - XMin); // transform to wanted range
 		while ((int) X == 0 || (colptr[whichCol] == i && X < 0))
 		{
@@ -400,7 +400,7 @@ int main()
 		{
 			double XMin = -10;
 			double XMax = 10;
-			double r = double (rand()) / (double (RAND_MAX) + 1.0);
+			double r = double (rand()) / (double (RAND_MAX) + LITERAL(1.0));
 			double X = XMin + r * (XMax - XMin); // transform to wanted range
 			b[i] = apfloat(X, 1000);
 		}

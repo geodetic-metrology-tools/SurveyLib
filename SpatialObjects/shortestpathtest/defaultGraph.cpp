@@ -38,16 +38,16 @@ void main()
 /*	cout.setf(ios_base::fixed,ios_base::floatfield);
 
 	TSpatialPosition P3(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
-	TPositionVector pv3(4387471.2929123, 465158.5961008, 4590473.7950682, TCoordSysFactory::k3DCartesian);	
+	TPositionVector pv3(LITERAL(4387471.2929123), LITERAL(465158.5961008), LITERAL(4590473.7950682), TCoordSysFactory::k3DCartesian);	
 	P3.setCoordinates(pv3);
 
 	TSpatialPosition P2(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
 	TPositionVector pv(TCoordSysFactory::kGeodetic);
 	TAngle phi, lambda;
-	phi.setGonsValue(51.401284151381);
-	lambda.setGonsValue(6.787226063805);
+	phi.setGonsValue(LITERAL(51.401284151381));
+	lambda.setGonsValue(LITERAL(6.787226063805));
 	TLength h;
-	h.setMetresValue(2.4494467);
+	h.setMetresValue(LITERAL(2.4494467));
 	pv.setPhiEllipsoid(phi);
 	pv.setLambdaEllipsoid(lambda);
 	pv.setH(h);
@@ -86,17 +86,17 @@ void main()
 	// transformations between reference frames
 
 	TModifiedLocalAstronomicalRF* localRF;
-	TFreeVector falseOrigin(0.0, 0.0, 0.0, TCoordSysFactory::k3DCartesian);
+	TFreeVector falseOrigin(LITERAL(0.0), LITERAL(0.0), LITERAL(0.0), TCoordSysFactory::k3DCartesian);
 	TSpatialPosition origin (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
-	TPositionVector pvOri(4000471.2929123, 400058.5961008, 4000473.7950682, TCoordSysFactory::k3DCartesian);	
+	TPositionVector pvOri(LITERAL(4000471.2929123), LITERAL(400058.5961008), LITERAL(4000473.7950682), TCoordSysFactory::k3DCartesian);	
 	origin.setCoordinates(pvOri);
 
 	localRF = new TModifiedLocalAstronomicalRF("Instrument Local Ref Frame",
 												TRefSystemFactory::kCG1985Machine,
 												origin,
 												falseOrigin,
-												TAngle(0.0),
-												TAngle(0.0));
+												TAngle(LITERAL(0.0)),
+												TAngle(LITERAL(0.0)));
 	
 	P2.transform(localRF);
 
@@ -376,15 +376,15 @@ void main()
 	//construction d'une transformation d helmert
 	//trans entre ccs et cgrf sphere
 	TAngle rx, ry, rz;
-	rx.setGonsValue(-42.726243230216);
-	ry.setGonsValue(-25.285434244947);
-	rz.setGonsValue(-77.864346765085);
+	rx.setGonsValue(-LITERAL(42.726243230216));
+	ry.setGonsValue(-LITERAL(25.285434244947));
+	rz.setGonsValue(-LITERAL(77.864346765085));
 	TRotation rs(TRotationMatrix::kRzyx, rx.getRadiansValue(), ry.getRadiansValue(), rz.getRadiansValue());
 	//translation pour situer le centre de la sphere
-	TLength txs (4381882.331989), tys (461505.530464), tzs (4598944.364158);
+	TLength txs (LITERAL(4381882.331989)), tys (LITERAL(461505.530464)), tzs (LITERAL(4598944.364158));
 	TTranslation transls(txs, tys, tzs);
 	//facteur d echelle
-	TEnlargement ks (1.0);
+	TEnlargement ks (LITERAL(1.0));
 
 
 	THelmertRefFrameTransform* helmert =
