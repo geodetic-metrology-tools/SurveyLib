@@ -1,0 +1,10 @@
+------ Build started: Project: MathematicalConceptsTest, Configuration: Release Win32 ------
+
+MathematicalConceptsTest - up-to-date.
+
+
+---------------------- Done ----------------------
+
+    Build: 1 succeeded, 0 failed, 0 skipped
+
+

@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StreamFormatters", "StreamFormatters.vcproj", "{99F2FD5C-9B6A-49D6-840E-8598CC52EB3A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Insure = Insure
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{99F2FD5C-9B6A-49D6-840E-8598CC52EB3A}.Debug.ActiveCfg = Debug|Win32
+		{99F2FD5C-9B6A-49D6-840E-8598CC52EB3A}.Debug.Build.0 = Debug|Win32
+		{99F2FD5C-9B6A-49D6-840E-8598CC52EB3A}.Insure.ActiveCfg = Insure|Win32
+		{99F2FD5C-9B6A-49D6-840E-8598CC52EB3A}.Insure.Build.0 = Insure|Win32
+		{99F2FD5C-9B6A-49D6-840E-8598CC52EB3A}.Release.ActiveCfg = Release|Win32
+		{99F2FD5C-9B6A-49D6-840E-8598CC52EB3A}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

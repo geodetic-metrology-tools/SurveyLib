@@ -1,0 +1,85 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "LSAlgorithmsLibrary"=".\lsalgorithms\lsalgorithmslibrary\LSAlgorithmsLibrary.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU Source] SurveyLib|SurveyLib>SurveyLib\SurveyLib Projects\LSAlgorithms\LSAlgorithmsLibrary
+    .\lsalgorithms\lsalgorithmslibrary
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ProjectFrameworkLibrary"=".\projectframework\projectframeworklibrary\ProjectFrameworkLibrary.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU Source] SurveyLib|SurveyLib>SurveyLib\SurveyLib Projects\ProjectFramework\ProjectFrameworkLibrary
+    .\projectframework\projectframeworklibrary
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "SpatialMeasurementsLibrary"=".\spatialmeasurements\SpatialMeasurementsLibrary\SpatialMeasurementsLibrary.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU Source] SurveyLib|SurveyLib>SurveyLib\SurveyLib Projects\SpatialMeasurements\SpatialMeasurementsLibrary
+    .\spatialmeasurements\spatialmeasurementslibrary
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "SpatialObjectsLibrary"=".\spatialobjects\spatialobjectslibrary\SpatialObjectsLibrary.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU Source] SurveyLib|SurveyLib>SurveyLib\SurveyLib Projects\SpatialObjects\SpatialObjectsLibrary
+    .\spatialobjects\spatialobjectslibrary
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+    begin source code control
+    <[SU source] SurveyLib|SurveyLib>SurveyLib
+    j:\susoft\surveylib\win32 files\surveylib vcpp projects
+    end source code control
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

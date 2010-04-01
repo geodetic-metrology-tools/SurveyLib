@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RefFrameTransformations", "RefFrameTransformations.vcproj", "{0866F5C5-30E8-46D0-814E-FF0FFA2BD33E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Insure = Insure
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{0866F5C5-30E8-46D0-814E-FF0FFA2BD33E}.Debug.ActiveCfg = Debug|Win32
+		{0866F5C5-30E8-46D0-814E-FF0FFA2BD33E}.Debug.Build.0 = Debug|Win32
+		{0866F5C5-30E8-46D0-814E-FF0FFA2BD33E}.Insure.ActiveCfg = Insure|Win32
+		{0866F5C5-30E8-46D0-814E-FF0FFA2BD33E}.Insure.Build.0 = Insure|Win32
+		{0866F5C5-30E8-46D0-814E-FF0FFA2BD33E}.Release.ActiveCfg = Release|Win32
+		{0866F5C5-30E8-46D0-814E-FF0FFA2BD33E}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

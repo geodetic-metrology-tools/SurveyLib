@@ -1,0 +1,25 @@
+
+### placed after the method "skipWhiteSpace"
+
+
+## Header File
+
+    QChar       peek();
+
+
+
+## Source Code File
+
+/*!
+  Peek at the next character -EST/SU
+*/
+QChar QTextStream::peek()
+{
+    QChar  c;
+
+    ts_ungetc( c = eat_ws() );
+
+    return c;
+}
+
+
