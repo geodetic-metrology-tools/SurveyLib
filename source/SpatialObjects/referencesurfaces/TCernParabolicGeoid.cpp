@@ -26,8 +26,8 @@
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
-const double TCernParabolicGeoid::scaleFactor = 0.001;
-const double TCernParabolicGeoid::scaleFactorM = 0.01;
+const quad TCernParabolicGeoid::scaleFactor = 0.001;
+const quad TCernParabolicGeoid::scaleFactorM = 0.01;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -57,22 +57,22 @@ fCalcRFPtr(0), fDefEllPtr(0)
  *						2                 2
  */
 
-/*TCernParabolicGeoid::TCernParabolicGeoid( const string& name, const double a,
-										 const double b, const double ths)
+/*TCernParabolicGeoid::TCernParabolicGeoid( const string& name, const quad a,
+										 const quad b, const quad ths)
 		:  fName( name ), fA( a ), fB( b ), fThs( ths ),
 		fDefinitionRF(TRefSurfServer::kCGRF), fDefinitionEllipsoid(TRefSurfServer::kGRS80), fCalculationRF(TRefSurfServer::kCCS)
 {		
 		// set the derived parameters of the paraboloid
-		double thc, azp;
-		double azxs = -1.12878 * TAngle::gonsToRadsFactor();
-		double gsc = 38.90742 * TAngle::gonsToRadsFactor();
+		quad thc, azp;
+		quad azxs = -1.12878 * TAngle::gonsToRadsFactor();
+		quad gsc = 38.90742 * TAngle::gonsToRadsFactor();
 
 		thc = fThs - gsc;
 		azp = fThs + azxs;
-		costhc = cos(thc);
-		sinthc = sin(thc);
-		cosazp = cos(azp);
-		sinazp = sin(azp);
+		costhc = __cosq(thc);
+		sinthc = __sinq(thc);
+		cosazp = __cosq(azp);
+		sinazp = __sinq(azp);
 
 
 	
@@ -84,17 +84,17 @@ fCalcRFPtr(0), fDefEllPtr(0)
 
 
 
-TCernParabolicGeoid::TCernParabolicGeoid( const string& name, const double a,
-										 const double b, const double ths,
+TCernParabolicGeoid::TCernParabolicGeoid( const string& name, const quad a,
+										 const quad b, const quad ths,
 										 TAReferenceFrame* def, TReferenceEllipsoid* ell,
 										 TAReferenceFrame* calc)
 		:  fName( name ), fA( a ), fB( b ), fThs( ths ),
 		fDefRFPtr(def), fDefEllPtr(ell), fCalcRFPtr(calc)
 {		
 		// set the derived parameters of the paraboloid
-		double thc, azp;
-		double azxs = -1.12878 * TAngle::gonsToRadsFactor();
-		double gsc = 38.90742 * TAngle::gonsToRadsFactor();
+		quad thc, azp;
+		quad azxs = -1.12878 * TAngle::gonsToRadsFactor();
+		quad gsc = 38.90742 * TAngle::gonsToRadsFactor();
 
 	/*	//modif du 25/07/03 pour representer le niv5 utiliser dans LGC
 		if(fThs* TAngle::radsToGonsFactor() == 48.219)
@@ -108,10 +108,10 @@ TCernParabolicGeoid::TCernParabolicGeoid( const string& name, const double a,
 		}*/
 		thc = fThs - gsc;
 		azp = fThs + azxs;
-		costhc = cos(thc);
-		sinthc = sin(thc);
-		cosazp = cos(azp);
-		sinazp = sin(azp);
+		costhc = __cosq(thc);
+		sinthc = __sinq(thc);
+		cosazp = __cosq(azp);
+		sinazp = __sinq(azp);
 }
 
 
@@ -144,10 +144,10 @@ TCernParabolicGeoid::~TCernParabolicGeoid()
 TLength	TCernParabolicGeoid::getN( const TSpatialPosition& position ) const
 {//
 	LengthValue x, y;
-	double dx, dy, xp, yp;
+	quad dx, dy, xp, yp;
 	//TSpatialPosition position( point.getPosition( modelSystem ) );
 	//GeoidValue fNValue;
-	double falseOriginX(2000), falseOriginY(2097.79265);
+	quad falseOriginX(2000), falseOriginY(2097.79265);
 
 	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
@@ -184,8 +184,8 @@ TAngle	TCernParabolicGeoid::getXi( const TSpatialPosition& sp ) const
 
 
 	LengthValue x, y;
-	double dx, dy, xp, yp;
-	double falseOriginX(2000), falseOriginY(2097.79265);
+	quad dx, dy, xp, yp;
+	quad falseOriginX(2000), falseOriginY(2097.79265);
 	//TSpatialPosition position( modelSystem );
 	TAngle fXiValue;
 
@@ -220,8 +220,8 @@ TAngle	TCernParabolicGeoid::getEta( const TSpatialPosition& sp ) const
 
 
 	LengthValue x, y;
-	double dx, dy, xp, yp;
-	double falseOriginX(2000), falseOriginY(2097.79265);
+	quad dx, dy, xp, yp;
+	quad falseOriginX(2000), falseOriginY(2097.79265);
 	TAngle fEtaValue;
 
 	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
@@ -265,7 +265,7 @@ TAngle	TCernParabolicGeoid::getDAlpha( const TSpatialPosition& sp ) const
 	position.transform(fCalcRFPtr);
 
 	eta = getEta(position);
-	fDAlphaValue = eta*tan(phi);
+	fDAlphaValue = eta*__tanq(phi);
 	return fDAlphaValue;
 }
 
@@ -287,7 +287,7 @@ TAngle	TCernParabolicGeoid::getDAlpha( const TSpatialPosition& sp, const TAngle&
 
 
 	eta = getEta(position);
-	fDAlphaValue = eta*tan(phi);
+	fDAlphaValue = eta*__tanq(phi);
 	return fDAlphaValue;
 }
 

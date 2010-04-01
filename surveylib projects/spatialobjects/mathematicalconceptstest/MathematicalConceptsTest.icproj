@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="MathematicalConceptsTest"
+	ProjectGUID="{8F57FFE4-EA00-47B4-88FC-2A60D4EF6086}"
+	VCNestedProjectGUID="{84DD7CF7-35C9-415A-9FE5-E0AE85D46209}"
+	VCNestedProjectFileName="MathematicalConceptsTest.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

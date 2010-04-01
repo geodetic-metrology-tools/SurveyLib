@@ -127,13 +127,13 @@ void TX0Y0He2XYHeTransformation::setEllipsoid( TReferenceEllipsoid* ellipsoid )
 
 bool  TX0Y0He2XYHeTransformation::transform(TPositionVector& pv) const
 {// Transformation of a spatial position using the parameters of the two reference frames
-	double Dx, dx, Dy, dy, he, d, falseX, falseY;
+	quad Dx, dx, Dy, dy, he, d, falseX, falseY;
 
 	// distance from p0 in X0Y0-plane
 	dx = pv.getX().getMetresValue() - fTo->getMLARefFrame()->getFalseOrigin().getX().getMetresValue();
 	dy = pv.getY().getMetresValue() - fTo->getMLARefFrame()->getFalseOrigin().getY().getMetresValue();
 	he = pv.getH().getMetresValue();
-	d = sqrt( (pow(dx,2)) + (pow(dy,2)) );
+	d = __sqrtq( (__powq(dx,2)) + (__powq(dy,2)) );
 	
 	// bearing from p0 in the X0Y0-plane
 	TAngle beta = TAngle::aTan2(dx,dy);
@@ -154,13 +154,13 @@ bool  TX0Y0He2XYHeTransformation::transform(TPositionVector& pv) const
 	TAngle phiP0;
 	phiP0 = fTo->getMLARefFrame()->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid(/*fEllipsoid, &falseOrigin*/);
 	
-	double nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
+	quad nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
 
-	double rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
-		*pow( (phiP0.cosine()) * (azimuth.cosine()) ,2 ) );
+	quad rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
+		*__powq( (phiP0.cosine()) * (azimuth.cosine()) ,2 ) );
 	
 	// scale factor
-	double k = (rhoalpha + he) / rhoalpha ;
+	quad k = (rhoalpha + he) / rhoalpha ;
 	
 	//Deltas to be added on X0 and Y0 coordinates, using the scale factor
  	Dx = k * dx;

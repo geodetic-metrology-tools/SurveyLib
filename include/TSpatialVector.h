@@ -38,7 +38,7 @@ class  TModifiedLocalAstronomicalRF;
 using namespace std;
 
 
-typedef double Component;
+typedef quad Component;
 ////////////////////////////////////////////////////////////////
 
 /*!\ingroup spatialobjects 
@@ -63,7 +63,7 @@ public:
 		//TSpatialVector(TRefSurfServer::ERefFrame frame);
 	
 		//! Constructor taking 3 TLength and the RF
-		TSpatialVector(TAReferenceFrame*, const double, const double, const double, TCoordSysFactory::ECoordSys );
+		TSpatialVector(TAReferenceFrame*, const quad, const quad, const quad, TCoordSysFactory::ECoordSys );
 
 		//! Constructor taking a free vector and the RF
 		//TSpatialVector(const TFreeVector& fv, TVReferenceFrame* frame);
@@ -92,7 +92,7 @@ public:
 		TSpatialVector& operator-( const TSpatialVector& );
 
 		//! Multiplication by a constant
-		TSpatialVector& operator*( const double );
+		TSpatialVector& operator*( const quad );
 
 		//! Access to the coordinates of the vector as a free vector
 		TFreeVector getElements(TCoordSysFactory::ECoordSys) const;

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="StreamFormattersTest"
+	ProjectGUID="{143F6029-4033-421C-B763-00C9E6CA9994}"
+	VCNestedProjectGUID="{9FA305B9-A12F-47CA-8FA2-05C86E8CB1B1}"
+	VCNestedProjectFileName="StreamFormattersTest.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

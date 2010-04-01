@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="InstrumentStations"
+	ProjectGUID="{765A20BC-75CB-4D8F-A253-5141CEE89001}"
+	VCNestedProjectGUID="{8AE7DDE7-F4F7-40BC-8BEB-A609907B324F}"
+	VCNestedProjectFileName="InstrumentStations.vcproj">
+	<Configurations>
+		<Configuration
+			Name="Release|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				Optimization="1000"
+				GlobalOptimizations="true"
+				FloatingPointSpeculation="1"
+				GenerateAlternateCodePaths="1"
+				UseProcessorExtensions="1"/>
+		</Configuration>
+	</Configurations>
+	<Files/>
+</VisualStudioProject>

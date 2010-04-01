@@ -79,17 +79,17 @@ public:
 
 	/*!\name Functions for Matrix*/
 	//@{
-	virtual bool setAllRotations(TRotationMatrix*, TRotationMatrix::ERotationType kR, double &om, double &p, double &k)=0;
+	virtual bool setAllRotations(TRotationMatrix*, TRotationMatrix::ERotationType kR, quad &om, quad &p, quad &k)=0;
 
 	virtual	struct Angles getAngles(const TRotationMatrix*, const TRotationMatrix::ERotationType kR) const =0;
 	
 	virtual bool identity(TRotationMatrix*)=0;
 	
-	virtual	bool setElt(T3DMatrix*, const int, const int, const double)=0;
+	virtual	bool setElt(T3DMatrix*, const int, const int, const quad)=0;
 
-	virtual	double getElt(const T3DMatrix*, const int, const int) const=0;
+	virtual	quad getElt(const T3DMatrix*, const int, const int) const=0;
 
-	virtual	double getElt(const TRotationMatrix*, const int, const int) const=0;
+	virtual	quad getElt(const TRotationMatrix*, const int, const int) const=0;
 	//@}
 
 

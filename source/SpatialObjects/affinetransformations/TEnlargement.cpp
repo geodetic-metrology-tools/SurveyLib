@@ -42,20 +42,13 @@ TEnlargement::TEnlargement()
 }
 
 
-TEnlargement::TEnlargement(double f)
+TEnlargement::TEnlargement(quad f)
 {	// constructor taking factor
 	fScaleFactor.setValue(f);
 	setStatus(kKnown);
 }
 
 TEnlargement::TEnlargement(TDouble f)
-{	// constructor taking factor
-	fScaleFactor = f;
-	setStatus(kKnown);
-}
-
-
-TEnlargement::TEnlargement(TScalar f)
 {	// constructor taking factor
 	fScaleFactor = f;
 	setStatus(kKnown);
@@ -92,44 +85,17 @@ TEnlargement&  TEnlargement::operator=(const TEnlargement& right)
 //////////////////////////////////////////////////////////////////////
 // Composition
 //////////////////////////////////////////////////////////////////////
-TCompositeAffTransform TEnlargement::operator*(  TAAffineTransformation& trans )
+TCompositeAffTransform TEnlargement::operator*( const TAAffineTransformation& trans )
 {
 	TAAffineTransformation* transfo = new TEnlargement(*this);
 	TAffineTransformWrapper wrapper(transfo);
 	TCompositeAffTransform result(wrapper);
+	delete transfo;
 
 	return (result*trans);
 }
 
 
-// Multiplication by another enlargement transformation
-TEnlargement& TEnlargement::operator*(const TEnlargement& trans)
-{
-	this->setFactor( this->getFactor() * trans.getFactor() );
-	return this;
-}
-
-// Follow another affine transformation
-TCompositeAffTransform TEnlargement::operator+(TAAffineTransformation& trans)
-{
-	TAAffineTransformation* transfo = new TEnlargement(*this);
-	TAffineTransformWrapper wrapper(transfo);
-	TCompositeAffTransform result(wrapper);
-
-	return (result*trans);
-}
-
-
-// Follow a composite affine transformation
-TCompositeAffTransform& TEnlargement::operator+(TCompositeAffTransform& trans);
-{
-	TAAffineTransformation* transfo = new TEnlargement(*this);
-	TAffineTransformWrapper wrapper(transfo);
-	TCompositeAffTransform result(wrapper);
-
-	return (result*trans);
-}
-		
 
 TAAffineTransformation*  TEnlargement::clone() const
 {// Return a pointer to a clone of this transformation

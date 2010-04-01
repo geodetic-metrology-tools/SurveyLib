@@ -128,13 +128,13 @@ T3DMatrix TACoordSysVector::transposed() const
 // Member Protected Functions
 //////////////////////////////////////////////////////////////////////
 
-double TACoordSysVector::getX(const int& i) const
+quad TACoordSysVector::getX(const int& i) const
 {//!get the Xi coordinate of a vector in all Coordinate System
 	return fVector[i];
 }
 
 
-void TACoordSysVector::setX(const int& i, const double& value)
+void TACoordSysVector::setX(const int& i, const quad& value)
 {//!set the Xi coordinate of a vector in all Coordinate System
 	fVector[i]=value;
 	return;

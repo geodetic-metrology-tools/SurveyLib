@@ -7,7 +7,7 @@
 
 #include <valarray>
 #include <vector>
-#include "math.h"
+#include "mathimf.h"
 
 
 
@@ -86,7 +86,7 @@ TLength TCernGridGeoid::getN ( const TSpatialPosition& sp) const
 
 
 	// the spatial position must be in the LEP grid
-	double x,y,xdl,ydl,xur,yur;
+	quad x,y,xdl,ydl,xur,yur;
 	x = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	y = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
 	xdl = fDownLeft.getX().getMetresValue();
@@ -127,7 +127,7 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 
 
 	// the spatial position must be in the LEP grid
-	double x,y,xdl,ydl,xur,yur;
+	quad x,y,xdl,ydl,xur,yur;
 	x = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	y = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
 	xdl = fDownLeft.getX().getMetresValue();
@@ -139,11 +139,12 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
 	{
 		// round to 0.01 cc 
-		int temp = (int) (splineInterpolation(fEtaMatrix, spos)) * 100;
-		if ( ( (splineInterpolation(fEtaMatrix, spos)) * 100 - temp ) >= 0.5)
+		quad interpolated = splineInterpolation(fEtaMatrix, spos) * 100;
+		int temp = (int) interpolated;
+		if ( ( interpolated - temp ) >= 0.5)
 			temp += 1;
 
-		double newTemp = temp;
+		quad newTemp = temp;
 		newTemp = newTemp/100;
 
 		eta.setGonsValue( newTemp * 0.0001 );
@@ -176,7 +177,7 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 
 
 	// the spatial position must be in the LEP grid
-	double x,y,xdl,ydl,xur,yur;
+	quad x,y,xdl,ydl,xur,yur;
 	x = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	y = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
 	xdl = fDownLeft.getX().getMetresValue();
@@ -188,11 +189,12 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
 	{
 		// round to 0.01 cc 
-		int temp = (int) (splineInterpolation(fXiMatrix, spos)) * 100;
-		if ( ( (splineInterpolation(fXiMatrix, spos)) * 100 - temp ) >= 0.5)
+		quad interpolated = splineInterpolation(fXiMatrix, spos) * 100;
+		int temp = (int) interpolated;
+		if ( ( interpolated - temp ) >= 0.5)
 			temp += 1;
 
-		double newTemp = temp;
+		quad newTemp = temp;
 		newTemp = newTemp/100;
 
 		xsi.setGonsValue( newTemp * 0.0001 );
@@ -222,7 +224,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 	
 	// computation of phi (latitude for the spatial position)
 	TAngle latitude;
-	double phi;
+	quad phi;
 	TAngle eta, fDAlphaValue;
 	
 	latitude = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();
@@ -234,7 +236,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 
 
 	// the spatial position must be in the LEP grid
-	double x,y,xdl,ydl,xur,yur;
+	quad x,y,xdl,ydl,xur,yur;
 	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
 	xdl = fDownLeft.getX().getMetresValue();
@@ -247,7 +249,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 	{
 		
 		eta = getEta(position); // / (6.366 * 100000);
-		fDAlphaValue = eta*tan(phi);
+		fDAlphaValue = eta*__tanq(phi);
 		return fDAlphaValue;
 	}
 
@@ -265,7 +267,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& lat
 	// deep copy of TSpatialPosition
 	TSpatialPosition position(sp);
 
-	double phi;
+	quad phi;
 	TAngle eta, fDAlphaValue;
 	
 	phi = latitude.getRadiansValue();
@@ -283,7 +285,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& lat
 	{
 		
 		eta = getEta(position); // / (6.366 * 100000);
-		fDAlphaValue = eta*tan(phi);
+		fDAlphaValue = eta*__tanq(phi);
 		return fDAlphaValue;
 	}
 
@@ -307,14 +309,14 @@ void TCernGridGeoid::setGeoidId(const TRefSystemFactory::EGeoid geoidId)
 // Private Member Functions
 //////////////////////////////////////////////////////////////////////
 
-double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialPosition& spos) const
+quad TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialPosition& spos) const
 {
 
 	
-	double N;
-	double Xo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getKMetresValue()), Yo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getKMetresValue());
-	valarray<double> x(matrix.numCols()), y(matrix.numRows()), absx(matrix.numCols()), absy(matrix.numRows());
-	double xmin, ymin, t;
+	quad N;
+	quad Xo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getKMetresValue()), Yo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getKMetresValue());
+	valarray<quad> x(matrix.numCols()), y(matrix.numRows()), absx(matrix.numCols()), absy(matrix.numRows());
+	quad xmin, ymin, t;
 	int I,J;
 	TMatrix base(4,4), c(4,3), T(1,4), q(1,3), Q(4,3);
 	vector<int> L(4), K(4);
@@ -326,14 +328,14 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 	for(i = 0; i<matrix.numRows(); i++)
 	{
 		y[i] = (i-1)-Yo;
-		absy[i] = fabs(y[i]);
+		absy[i] = __fabsq(y[i]);
 	}
 
 
 	for(i = 0; i<matrix.numCols(); i++)
 	{
 		x[i] = (i-6)-Xo;
-		absx[i] = fabs(x[i]);
+		absx[i] = __fabsq(x[i]);
 	}
 
 
@@ -345,13 +347,13 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 	xmin = absx.min();
 	ymin = absy.min();
 
-	for(i = 0; i<matrix.numRows(); i++)
+	for(i = 0; i<matrix.numCols(); i++)
 	{
 		if (absx[i] == xmin)
 			J = i;
 	}
 
-	for(i = 0; i<matrix.numCols(); i++)
+	for(i = 0; i<matrix.numRows(); i++)
 	{
 		if (absy[i] == ymin)
 			I = i;
@@ -448,8 +450,8 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 
 			t = -x[L[1]];
 
-			T(0,0) = pow(t,3);
-			T(0,1) = pow(t,2);
+			T(0,0) = __powq(t,3);
+			T(0,1) = __powq(t,2);
 			T(0,2) = t;
 			T(0,3) = 1;
 
@@ -469,8 +471,8 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 
 		t = -y[K[1]];
 
-		T(0,0) = pow(t,3);
-		T(0,1) = pow(t,2);
+		T(0,0) = __powq(t,3);
+		T(0,1) = __powq(t,2);
 		T(0,2) = t;
 		T(0,3) = 1;
 
@@ -511,8 +513,8 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 
 			t = -y[K[1]];
 
-			T(0,0) = pow(t,3);
-			T(0,1) = pow(t,2);
+			T(0,0) = __powq(t,3);
+			T(0,1) = __powq(t,2);
 			T(0,2) = t;
 			T(0,3) = 1;
 
@@ -541,8 +543,8 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 
 		t = -x[L[1]];
 
-		T(0,0) = pow(t,3);
-		T(0,1) = pow(t,2);
+		T(0,0) = __powq(t,3);
+		T(0,1) = __powq(t,2);
 		T(0,2) = t;
 		T(0,3) = 1;
 

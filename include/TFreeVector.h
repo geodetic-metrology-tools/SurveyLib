@@ -23,10 +23,9 @@
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-#include <math.h>
+#include <mathimf.h>
 
 class TDouble;
-class TScalar;
 
 #include "TACoordSysVector.h"
 using namespace std;
@@ -50,8 +49,8 @@ public:
 		//!Default Constructor 
 		TFreeVector(TCoordSysFactory::ECoordSys);
 	
-		//!Constructor taking 3 double (value in meter)
-		TFreeVector(const double&, const double&, const double&, TCoordSysFactory::ECoordSys);
+		//!Constructor taking 3 quad (value in meter)
+		TFreeVector(const quad&, const quad&, const quad&, TCoordSysFactory::ECoordSys);
 
 		//!Copy Constructor 
 		TFreeVector( const TFreeVector&);
@@ -82,11 +81,8 @@ public:
 		//!Multiplication by a TDouble object
 		TFreeVector operator*( const TDouble& );
 
-		//!Multiplication by a TScalar
-		TFreeVector operator*( const TScalar& );
-
-		//!Multiplication by a double 
-		TFreeVector operator*( const double& );
+		//!Multiplication by a quad 
+		TFreeVector operator*( const quad& );
 
 		//!Copy Assignment Operator 
 		TFreeVector& operator=( const TFreeVector& );

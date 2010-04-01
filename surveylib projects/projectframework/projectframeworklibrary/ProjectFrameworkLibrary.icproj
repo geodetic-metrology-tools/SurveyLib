@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="ProjectFrameworkLibrary"
+	ProjectGUID="{B0DE1F09-5EBB-4BAB-A074-95DC089AB489}"
+	VCNestedProjectGUID="{78C670AA-AF10-4508-94D7-9FA0D8E2FD09}"
+	VCNestedProjectFileName="ProjectFrameworkLibrary.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

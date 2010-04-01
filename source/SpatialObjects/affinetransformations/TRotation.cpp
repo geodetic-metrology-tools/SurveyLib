@@ -53,7 +53,7 @@ TRotation::TRotation( const TRotationMatrix matrix)
 
 
 
-TRotation::TRotation(TRotationMatrix::ERotationType kR, double omega, double phi, double kappa)
+TRotation::TRotation(TRotationMatrix::ERotationType kR, quad omega, quad phi, quad kappa)
 : fRotationMatrix(kR, omega, phi, kappa)
 {//Constructor taking the radians values of the angles in the specified order
 	
@@ -96,17 +96,17 @@ TAAffineTransformation*  TRotation::clone() const
 }
 
 
-double TRotation::operator()(int i, int j) const
+quad TRotation::operator()(int i, int j) const
 {
 	// return the ri, cj element with 0<=i,j<=2
 	return fRotationMatrix.getElt(i,j);
 }
 
 /*insure
-double& TRotation::operator()(int i, int j) 
+quad& TRotation::operator()(int i, int j) 
 {
 	// return the ri, cj element with 0<=i,j<=2
-	double* d = new double (fRotationMatrix.getElt(i,j));
+	quad* d = new quad (fRotationMatrix.getElt(i,j));
 	return *d;
 }*/
 
@@ -124,7 +124,7 @@ TCompositeAffTransform TRotation::operator*(const TAAffineTransformation& right)
 }
 
 
-void TRotation::setAllRotations(TRotationMatrix::ERotationType kR, double &om, double &p, double &k)
+void TRotation::setAllRotations(TRotationMatrix::ERotationType kR, quad &om, quad &p, quad &k)
 {
 	fRotationMatrix.setAllRotations(kR,om,p,k);
 }
@@ -196,7 +196,7 @@ void TRotation::invert()
 //////////////////////////////////////////////////////////////////////
 // Private Member Functions
 //////////////////////////////////////////////////////////////////////
-void TRotation::fillRotationMatrix(TRotationMatrix::ERotationType kR, double om, double p, double k)
+void TRotation::fillRotationMatrix(TRotationMatrix::ERotationType kR, quad om, quad p, quad k)
 {
 	fRotationMatrix.setAllRotations(kR,om,p,k);
 	return;

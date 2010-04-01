@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="GeoidModelTest"
+	ProjectGUID="{1EB076D3-421C-4485-88C9-A8D0C53A3E59}"
+	VCNestedProjectGUID="{E45BF506-89CD-48CF-B952-1CDBEC824D2C}"
+	VCNestedProjectFileName="GeoidModelTest.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

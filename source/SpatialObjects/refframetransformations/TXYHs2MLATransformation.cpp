@@ -106,23 +106,23 @@ void TXYHs2MLATransformation::setSourceFrame( TXYHeProjection* XYHs )
 
 bool  TXYHs2MLATransformation::transform(TPositionVector& pv) const
 {// Transformation of a position vector using the parameters of the two reference frames
-	double dx, dy, hs, d;
-	double d0, omega;
+	quad dx, dy, hs, d;
+	quad d0, omega;
 	// radius of the sphere
-	double R = 6371000.0;
+	quad R = 6371000.0;
 	// transform TPositionVector
-	double Z;
+	quad Z;
 
 	// distance from P0 in XY-plane
 	dx = pv.getX().getMetresValue() - fTo->getFalseOrigin().getX().getMetresValue();
 	dy = pv.getY().getMetresValue() - fTo->getFalseOrigin().getY().getMetresValue();
 	hs = pv.getH().getMetresValue();
-	d=sqrt( (pow(dx,2)) + (pow(dy,2)) );
+	d=__sqrtq( (__powq(dx,2)) + (__powq(dy,2)) );
 
-	//Z = sqrt( (pow((R+hs),2) - (pow(d,2))) )-  R + 2000.00079;
+	//Z = __sqrtq( (__powq((R+hs),2) - (__powq(d,2))) )-  R + 2000.00079;
 	d0 = d * R / (R + hs);
-	omega = asin(d0 / R);
-	Z = 2000.00079 + (hs * cos(omega)) - (d0 * tan(omega/2.0));
+	omega = __asinq(d0 / R);
+	Z = 2000.00079 + (hs * __cosq(omega)) - (d0 * __tanq(omega/2.0));
 
 	TLength newZ (Z);
 

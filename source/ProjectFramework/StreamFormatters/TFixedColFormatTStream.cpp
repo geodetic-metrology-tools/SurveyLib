@@ -110,7 +110,7 @@ TAStreamFormatter  &TFixedColFormatTStream::operator>>( TSpatialPoint &point )
 		this->TAStreamFormatter::operator>>(*position);
 	}
 	
-	double dist=-1;
+	quad dist=-1;
 	int id=-1;
 	string comment="";
 	string comeol="";

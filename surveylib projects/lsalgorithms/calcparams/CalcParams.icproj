@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="CalcParams"
+	ProjectGUID="{8DFB4F9A-0DB4-40CC-B190-68B863D215A0}"
+	VCNestedProjectGUID="{408EF4A9-8BD7-4E46-AAF5-60B87A9EE51D}"
+	VCNestedProjectFileName="CalcParams.vcproj">
+	<Configurations>
+		<Configuration
+			Name="Release|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				Optimization="1000"
+				GlobalOptimizations="true"
+				FloatingPointSpeculation="1"
+				GenerateAlternateCodePaths="1"
+				UseProcessorExtensions="1"/>
+		</Configuration>
+	</Configurations>
+	<Files/>
+</VisualStudioProject>

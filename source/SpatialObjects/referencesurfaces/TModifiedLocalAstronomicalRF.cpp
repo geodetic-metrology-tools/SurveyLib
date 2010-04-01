@@ -113,7 +113,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 
 	//set spatial orientation
 	// azimut of the vector projection on the xy-plane
-	double x(vector.getX().getMetresValue()), y(vector.getY().getMetresValue());
+	quad x(vector.getX().getMetresValue()), y(vector.getY().getMetresValue());
 	TAngle az, zero(0.0);
 	az.setRadiansValue((TAngle::aTan2(y,x).getRadiansValue()));
 	// construction of the orientation matrix
@@ -164,7 +164,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 	setFalseOrigin( vector );
 
 	// orientation matrix
-	double zero(0);
+	quad zero(0);
 	TSpatialOrientation orientation(TRotationMatrix::kRzyx,zero,zero,zero,
 		TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kLAp0),
 		TCoordSysFactory::k3DCartesian);
@@ -201,7 +201,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 	setFalseOrigin( vector );
 
 	// orientation matrix
-	double zero(0);
+	quad zero(0);
 	TSpatialOrientation orientation(TRotationMatrix::kRzyx,zero,zero,zero,
 		TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kLAp0),
 		TCoordSysFactory::k3DCartesian);
@@ -300,7 +300,7 @@ void	TModifiedLocalAstronomicalRF::initialiseMLA(TSpatialPosition origin)
 
 	//set spatial orientation
 	// azimut of the vector projection on the xy-plane
-	double x(vector.getX().getMetresValue()), y(vector.getY().getMetresValue());
+	quad x(vector.getX().getMetresValue()), y(vector.getY().getMetresValue());
 	TAngle az, zero(0.0);
 	az.setRadiansValue((TAngle::aTan2(y,x).getRadiansValue()));
 	// construction of the orientation matrix
@@ -329,7 +329,7 @@ void	TModifiedLocalAstronomicalRF::initialiseLA(TSpatialPosition origin)
 	setOrigin(origin);
 
 	// orientation matrix
-	double zero(0);
+	quad zero(0);
 	TSpatialOrientation orientation(TRotationMatrix::kRzyx,zero,zero,zero,
 		TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kLAp0),
 		TCoordSysFactory::k3DCartesian);

@@ -72,13 +72,13 @@ public:
 
 
 		//! Multiplication by an affine transformation
-		TCompositeAffTransform operator*(  TAAffineTransformation& );
+		TCompositeAffTransform operator*( const TAAffineTransformation& );
 
 		/// Return element ri, cj of the Reflection matrix
-		double operator()(int row, int col) const;
+		quad operator()(int row, int col) const;
 
 		/// Return element ri, cj of the Reflection matrix
-		double& operator()(int row, int col);
+		quad& operator()(int row, int col);
 
 		//! return the reflection matrix
 		T3DMatrix getReflectionMatrix() const { return fReflectionMatrix; }

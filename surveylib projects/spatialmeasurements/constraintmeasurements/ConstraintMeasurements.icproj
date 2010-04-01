@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="ConstraintMeasurements"
+	ProjectGUID="{D4D524C3-0046-411A-85E1-EE340F1C39D6}"
+	VCNestedProjectGUID="{AFF3E993-9938-4AB0-BC91-BBE89B5358A9}"
+	VCNestedProjectFileName="ConstraintMeasurements.vcproj">
+	<Configurations>
+		<Configuration
+			Name="Release|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				Optimization="1000"
+				GlobalOptimizations="true"
+				FloatingPointSpeculation="1"
+				GenerateAlternateCodePaths="1"
+				UseProcessorExtensions="1"/>
+		</Configuration>
+	</Configurations>
+	<Files/>
+</VisualStudioProject>

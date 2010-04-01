@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="RefFrameTransformationsTest"
+	ProjectGUID="{C5968166-793C-49C2-9169-A89843CABDDF}"
+	VCNestedProjectGUID="{111C84C4-E206-4FBA-A23F-A51C2E7A4108}"
+	VCNestedProjectFileName="RefFrameTransformationsTest.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

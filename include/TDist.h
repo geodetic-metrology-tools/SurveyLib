@@ -24,23 +24,23 @@
 	\param TLength y1, coordinate  y of the first point
 	\param TLength x2, coordinate  x of the second point
 	\param TLength y2, coordinate  y of the second point
-	\return Distance as double
+	\return Distance as quad
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	double	dist(TLength x1, TLength y1, TLength x2, TLength y2);
+	quad	dist(TLength x1, TLength y1, TLength x2, TLength y2);
 	/*@}*/
 
 /*! computation of the distance from 2D coordinates
-	\param double x1, coordinate  x of the first point
-	\param double y1, coordinate  y of the first point
-	\param double x2, coordinate  x of the second point
-	\param double y2, coordinate  y of the second point
-	\return Distance as double
+	\param quad x1, coordinate  x of the first point
+	\param quad y1, coordinate  y of the first point
+	\param quad x2, coordinate  x of the second point
+	\param quad y2, coordinate  y of the second point
+	\return Distance as quad
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	double	dist(double x1, double y1, double x2, double y2);
+	quad	dist(quad x1, quad y1, quad x2, quad y2);
 	/*@}*/
 
 
@@ -52,25 +52,25 @@
 	\param TLength x2, coordinate  x of the second point
 	\param TLength y2, coordinate  y of the second point
 	\param TLength z2, coordinate  z of the second point
-	\return Distance as double
+	\return Distance as quad
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	double	dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2);
+	quad	dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2);
 	/*@}*/
 
 /*! computation of the distance from 3D coordinates
-	\param double x1, coordinate  x of the first point
-	\param double y1, coordinate  y of the first point
-	\param double z1, coordinate  z of the first point
-	\param double x2, coordinate  x of the second point
-	\param double y2, coordinate  y of the second point
-	\param double z2, coordinate  z of the second point
-	\return Distance as double
+	\param quad x1, coordinate  x of the first point
+	\param quad y1, coordinate  y of the first point
+	\param quad z1, coordinate  z of the first point
+	\param quad x2, coordinate  x of the second point
+	\param quad y2, coordinate  y of the second point
+	\param quad z2, coordinate  z of the second point
+	\return Distance as quad
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	double	dist3D(double x1, double y1, double z1, double x2, double y2, double z2);
+	quad	dist3D(quad x1, quad y1, quad z1, quad x2, quad y2, quad z2);
 	/*@}*/
 
 

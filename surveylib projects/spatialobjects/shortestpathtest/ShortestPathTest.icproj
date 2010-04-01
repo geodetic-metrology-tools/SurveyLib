@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="ShortestPathTest"
+	ProjectGUID="{B50E7041-8C67-4CAF-8257-60A3D24A8DBA}"
+	VCNestedProjectGUID="{5EA3DED1-8D6E-48EB-9F31-593D4EA2E3DF}"
+	VCNestedProjectFileName="ShortestPathTest.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

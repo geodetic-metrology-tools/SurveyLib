@@ -311,10 +311,10 @@ TLength		TLSCalcPosVectorParam::getNEstValue(const TRefSystemFactory::EGeoid	geo
 
 TLength		TLSCalcPosVectorParam::getErrorEllMajorAxis() const
 {
-	double vxy = getXYCovar().getMMetresValue();
-	double sx2 = pow(getXSigma().getMMetresValue(), 2) ;
-	double sy2 = pow(getYSigma().getMMetresValue(), 2) ;
-	double gdAxe = (1.0/sqrt(2.0)) * sqrt( sx2 + sy2 + sqrt( pow((sy2 - sx2), 2) + (4.0 * vxy * vxy) ) );
+	quad vxy = getXYCovar().getMMetresValue();
+	quad sx2 = pow(getXSigma().getMMetresValue(), 2) ;
+	quad sy2 = pow(getYSigma().getMMetresValue(), 2) ;
+	quad gdAxe = (1.0/__sqrtq(2.0)) * __sqrtq( sx2 + sy2 + __sqrtq( pow((sy2 - sx2), 2) + (4.0 * vxy * vxy) ) );
 	
 	TLength res;
 	res.setMMetresValue(gdAxe);
@@ -324,10 +324,10 @@ TLength		TLSCalcPosVectorParam::getErrorEllMajorAxis() const
 	
 TLength		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
 {
-	double vxy = getXYCovar().getMMetresValue();
-	double sx2 = pow(getXSigma().getMMetresValue(), 2) ;
-	double sy2 = pow(getYSigma().getMMetresValue(), 2) ;
-	double ptAxe = (1.0/sqrt(2.0)) * sqrt( sx2 + sy2 - sqrt( pow((sy2 - sx2), 2) + (4.0 * vxy *vxy) ) );
+	quad vxy = getXYCovar().getMMetresValue();
+	quad sx2 = pow(getXSigma().getMMetresValue(), 2) ;
+	quad sy2 = pow(getYSigma().getMMetresValue(), 2) ;
+	quad ptAxe = (1.0/__sqrtq(2.0)) * __sqrtq( sx2 + sy2 - __sqrtq( pow((sy2 - sx2), 2) + (4.0 * vxy *vxy) ) );
 	
 	TLength res;
 	res.setMMetresValue(ptAxe);
@@ -337,12 +337,12 @@ TLength		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
 	
 TAngle		TLSCalcPosVectorParam::getErrorEllGis() const
 {
-	double vxy = getXYCovar().getMMetresValue();
-	double sx2 = pow(getXSigma().getMMetresValue(), 2) ;
-	double sy2 = pow(getYSigma().getMMetresValue(), 2) ;
+	quad vxy = getXYCovar().getMMetresValue();
+	quad sx2 = pow(getXSigma().getMMetresValue(), 2) ;
+	quad sy2 = pow(getYSigma().getMMetresValue(), 2) ;
 	TAngle gis (( 0.5) * TAngle::aTan2(2*vxy , (sy2 - sx2) ) );
 	
-	double testAffichage = gis.getGonsValue();
+	quad testAffichage = gis.getGonsValue();
 	TAngle deuxCentGrad;
 	deuxCentGrad.setGonsValue(200);
 	if(testAffichage > 200)

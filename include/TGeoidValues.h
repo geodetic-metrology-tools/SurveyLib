@@ -18,13 +18,13 @@
 // Forward declarations
 //
 #include	<float.h>
-#include	<math.h>
+#include	<mathimf.h>
 #include	<assert.h>
 class	TAngle;
 
 
 // typedefs
-typedef	double	GeoidValue;	
+typedef	_Quad	GeoidValue;	
 
 
 ////////////////////////////////////////////////////////////////

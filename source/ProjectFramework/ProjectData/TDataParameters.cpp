@@ -188,7 +188,7 @@ bool  TDataParameters::setUnits( const TDataParameters::ECoordUnit& units )
 	fCoordUnit= units;
 
 	if(	fRefFrameEnum == TDataParameters::kCGRF || fRefFrameEnum == TDataParameters::kWGS84 || 
-		fRefFrameEnum == TDataParameters::kROMA40 || fRefFrameEnum == TDataParameters::kITRF97)
+		fRefFrameEnum == TDataParameters::kROMA40 || fRefFrameEnum != TDataParameters::kITRF97)
 	{
 		if ( units == kDMS )
 		{

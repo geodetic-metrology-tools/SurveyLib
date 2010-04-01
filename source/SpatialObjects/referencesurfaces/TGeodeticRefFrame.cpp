@@ -35,8 +35,8 @@
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
-const double TGeodeticRefFrame::precisionH = 0.0000001; //precision calcul h
-const double TGeodeticRefFrame::precisionPhi = 0.00000000000001; //precision calcul phi
+const quad TGeodeticRefFrame::precisionH = 0.0000001; //precision calcul h
+const quad TGeodeticRefFrame::precisionPhi = 0.00000000000001; //precision calcul phi
 
 
 
@@ -126,20 +126,20 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TSpatialPosition* 
 TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv, const TReferenceEllipsoid* ellipsoid )  const
 {
 	// get the Cartesian coordinates of the position
-	double  x = pv.getX().getMetresValue();
-	double  y = pv.getY().getMetresValue();
-	double  z = pv.getZ().getMetresValue();
-	//double  x = getX1( posn );
-	//double  y = getX2( posn );
-	//double  z = getX3( posn );
+	quad  x = pv.getX().getMetresValue();
+	quad  y = pv.getY().getMetresValue();
+	quad  z = pv.getZ().getMetresValue();
+	//quad  x = getX1( posn );
+	//quad  y = getX2( posn );
+	//quad  z = getX3( posn );
 
 	//get a copy of the parameters of the ellipsoid
-	double  a = ellipsoid->getA();
-	double  b = ellipsoid->getB();
-	double  eSquared = ellipsoid->getESquared();
+	quad  a = ellipsoid->getA();
+	quad  b = ellipsoid->getB();
+	quad  eSquared = ellipsoid->getESquared();
 
-	double p;
-	double nu;
+	quad p;
+	quad nu;
 	AngleValue phi, tempphi, lambda;
 	LengthValue h, temph;
 	TPositionVector  geodpv(TCoordSysFactory::kGeodetic);
@@ -160,7 +160,7 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 	}
 	else
 	{	
-		p = sqrt(x*x + y*y);
+		p = __sqrtq(x*x + y*y);
 
 		//calcul lambda
 		lambda = 2 * atan ( y / (x + p) );
@@ -173,11 +173,11 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 		tempphi = phi+1;
 
 		//boucle
-		while ( ( fabs( phi-tempphi ) > TGeodeticRefFrame::precisionPhi ) ||  ( fabs( temph-h ) > TGeodeticRefFrame::precisionH ))
+		while ( ( __fabsq( phi-tempphi ) > TGeodeticRefFrame::precisionPhi ) ||  ( __fabsq( temph-h ) > TGeodeticRefFrame::precisionH ))
 		{
 			nu = ellipsoid->getNu( phi );
 			temph = h;
-			h = ( p / cos(phi) ) - nu;
+			h = ( p / __cosq(phi) ) - nu;
 			tempphi = phi;
 			phi = atan ( z / (p * ( 1.0 - (eSquared * nu / (nu+h)) )) );
 		}
@@ -199,20 +199,20 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 
 TPositionVector  TGeodeticRefFrame::getCartesianCoords( TPositionVector posvec, const TReferenceEllipsoid* ellipsoid )
 {
-	// get coordinates of posvec as double
-	double phi = posvec.getPhiEllipsoid().getRadiansValue();
-	double lambda = posvec.getLambdaEllipsoid().getRadiansValue();
-	double he = posvec.getH().getMetresValue();
+	// get coordinates of posvec as quad
+	quad phi = posvec.getPhiEllipsoid().getRadiansValue();
+	quad lambda = posvec.getLambdaEllipsoid().getRadiansValue();
+	quad he = posvec.getH().getMetresValue();
 
 	//get a copy of the parameters of the ellipsoid
-	double a = ellipsoid->getA();
-	double b = ellipsoid->getB();
-	double nu = ellipsoid->getNu( phi );
+	quad a = ellipsoid->getA();
+	quad b = ellipsoid->getB();
+	quad nu = ellipsoid->getNu( phi );
 
 	//retablissement XYZ
-	double x((nu+he)*cos(phi)*cos(lambda)),
-		y((nu+he)*cos(phi)*sin(lambda)),
-		z( (nu*b*b/(a*a) + he)*sin(phi));
+	quad x((nu+he)*__cosq(phi)*__cosq(lambda)),
+		y((nu+he)*__cosq(phi)*__sinq(lambda)),
+		z( (nu*b*b/(a*a) + he)*__sinq(phi));
 	TPositionVector pv(x,y,z,TCoordSysFactory::k3DCartesian);
 
 	return pv;

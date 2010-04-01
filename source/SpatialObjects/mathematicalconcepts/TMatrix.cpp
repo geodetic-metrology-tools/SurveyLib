@@ -15,9 +15,9 @@ Designed to be easiliy usable with matrix functions of the NagC math library */
 //#include	"TROOT.h"
 //
 // other forward declarations
-#include "TColumnVector.h"
 #include "TDouble.h"
 #include  "TMatrix.h"
+#include "TColumnVector.h"
 
 //#include	"vecmatdefs.h"
 //#include	"errmesg.h"
@@ -224,8 +224,8 @@ TColumnVector TMatrix::operator*(const TColumnVector& right) const
 	status=this->testStatus(right);
 	if (status!=kNull && numCols() == right.dimension())
 	{
-		dgemv(NoTranspose, numRows(), numCols(), 1.0, getFirstEltAdr(), numCols(), right.getFirstEltAdr(), 
-		1, 0.0, resultat.getFirstEltAdr(), 1);
+		dgemv(NoTranspose, numRows(), numCols(), 1.0, getFirstEltAdr(), numCols(), (double *) right.getFirstEltAdr(), 
+		1, 0.0, (double *) resultat.getFirstEltAdr(), 1);
 		resultat.setStatus(status);
 	}
 	return resultat;	
@@ -298,7 +298,7 @@ TColumnVector TMatrix::eqnSolve(const TColumnVector& B)
 
 	//computation of the solution vector X
 	TColumnVector solution (numRows());
-	nag_real_lin_eqn(numRows(), thisCopy->getFirstEltAdr(), numCols(), B.getFirstEltAdr(), solution.getFirstEltAdr(), &fail);
+	nag_real_lin_eqn(numRows(), thisCopy->getFirstEltAdr(), numCols(), (double *) B.getFirstEltAdr(), (double *) solution.getFirstEltAdr(), &fail);
 
 	// Possible errors: input unconsistency, matrix singularity, or memory allocation failure
 	if ((fail.code == NE_INT_ARG_LT) || (fail.code == NE_2_INT_ARG_LT) || 

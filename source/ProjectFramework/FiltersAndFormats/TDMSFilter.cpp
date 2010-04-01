@@ -67,7 +67,7 @@ void	TDMSFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 {	// function to get a sexagesimal angle from a QTextStream object
 	// and set the value in a TAngle object
 	int		degs, mins;
-	double	secs;
+	quad	secs;
 
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')
@@ -161,22 +161,21 @@ void	TDMSFilter::output(TAStreamFormatter& oStream, const TAngle& angle)const
 	string sep =oStream.getSeparator();
 
 	
-	int dWidth, mWidth, sWidth, precision;
-	precision = oStream.getPrecisionFormat() - 4; 
+	int width, precision;
+	precision = oStream.getPrecisionFormat(); //oStream.getPointFormat()->getCoordPrecision();
+	width =  3 + precision;//oStream.getPointFormat()->getCoordWidth();
 	if (precision <=1)
 		precision = 0;
-	sWidth = precision + 5;
-	mWidth = 4;
-	dWidth = max(oStream.getWidthFormat()-(sWidth+mWidth), 5);
+
 		
-	oStream.width(dWidth);
+	oStream.width(3);
 	oStream.precision(0);
 	oStream<<right;
 	oStream<<(angle.getDegreesValue());
 	
 	oStream<<sep;
 
-	oStream.width(mWidth);
+	oStream.width(3);
 	oStream.precision(0);
 	oStream<<right;
 	oStream<< angle.getMinutesValue();
@@ -184,7 +183,7 @@ void	TDMSFilter::output(TAStreamFormatter& oStream, const TAngle& angle)const
 	oStream<<sep;
 
 	oStream.setf(ios::fixed,ios::floatfield);
-	oStream.width(sWidth);
+	oStream.width(width);
 	oStream.precision(precision);
 	oStream<<right;
 	oStream<< angle.getSecondsValue();

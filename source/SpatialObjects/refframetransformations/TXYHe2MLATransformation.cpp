@@ -109,13 +109,13 @@ void TXYHe2MLATransformation::setSourceFrame( TXYHeProjection* xyhe )
 
 bool  TXYHe2MLATransformation::transform(TPositionVector& pv) const
 {// Transformation of a position vector using the parameters of the two reference frames	
-	double dx, dy, he, d, d0, Dzh;
+	quad dx, dy, he, d, d0, Dzh;
 
 	// distance from P0 in XY-plane
 	dx = pv.getX().getMetresValue() - fTo->getFalseOrigin().getX().getMetresValue();
 	dy = pv.getY().getMetresValue() - fTo->getFalseOrigin().getY().getMetresValue();
 	he = pv.getH().getMetresValue();
-	d=sqrt( (pow(dx,2)) + (pow(dy,2)) );
+	d=__sqrtq( (__powq(dx,2)) + (__powq(dy,2)) );
 
 	// bearing from P0 in the XY-plane
 	TAngle beta = TAngle::aTan2(dx,dy);
@@ -134,16 +134,16 @@ bool  TXYHe2MLATransformation::transform(TPositionVector& pv) const
 	
 	TAngle phiP0;
 	phiP0 = fTo->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid(/*fEllipsoid, &falseOrigin*/);
-	double nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
+	quad nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
 
-	double rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
-		*pow( (phiP0.cosine()) * (azimuth.cosine()) ,2 ) );
+	quad rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
+		*__powq( (phiP0.cosine()) * (azimuth.cosine()) ,2 ) );
 
 	// angle between point and z-axis
 	TAngle omega = TAngle::aSin( d / (rhoalpha + he) );
 
 	// scale factor
-	double k = rhoalpha  / (rhoalpha + he);
+	quad k = rhoalpha  / (rhoalpha + he);
 
 	d0 = k*d;
 

@@ -11,7 +11,7 @@
 //! Don't put the same pointer in a second object also responsible fordeleting 
 //! it's children. The TPtrWrapper is responsible for deleting the pointed to object.
 //! 
-//! Copyright 2002-2010, CERN, SU, M/Jones. All rights reserved.
+//! Copyright 2002, CERN, EST/SU. All rights reserved.
 //!////////////////////////////////////////////////////////////////////
 
 
@@ -42,9 +42,9 @@ public:
 	/*!@name Constructors / Destructor*/
 	//@{
 	//!Default constructor
-    //TPtrWrapper();
+    TPtrWrapper();
 	//!Constructor taking a pointer to the template object
-    explicit TPtrWrapper( T* pointer = 0 );
+    explicit  TPtrWrapper( T* pointer );
 	//!Copy constructor
     TPtrWrapper( TPtrWrapper<T>& source ); 
 	//!Destructor
@@ -59,7 +59,7 @@ public:
 	//!Get the pointer
     T* getPtr() { return fPointer; };
 
-protected:
+private:
 	//!Manages the changes necessary when a wrapper is deleted
 	void  deletion();
 	//!Get the count
@@ -88,13 +88,12 @@ bool operator<( const TPtrWrapper<T>& wrapper1, const TPtrWrapper<T>& wrapper2 )
 
 
 //Default constructor
-/*template <class T>
+template <class T>
 TPtrWrapper<T>::TPtrWrapper() : fPointer(0), fCount(0) 
 { 
 }
-*/
 
-/*
+
 //Constructor taking a pointer to the template object
 template <class T>
 TPtrWrapper<T>::TPtrWrapper( T* pointer ) : fPointer( pointer ) 
@@ -154,7 +153,7 @@ void  TPtrWrapper<T>::deletion()
 
 	return;
 }
-*/
+
 
 
 #endif  //SU_POINTERWRAPPER

@@ -63,7 +63,7 @@ TGonsFilter *TGonsFilter::instance()
 void	TGonsFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 {	// function to get a gons angle from a QTextStream object
 	// and set the value in a TAngle object
-	double	gons;
+	quad	gons;
 
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')

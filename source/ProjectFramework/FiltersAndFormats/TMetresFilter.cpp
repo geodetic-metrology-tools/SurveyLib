@@ -63,7 +63,7 @@ TMetresFilter *TMetresFilter::instance()
 void	TMetresFilter::input(TAStreamFormatter&	iStream, TLength& length)const
 {	// function to get a metre length from a QTextStream object
 	// and set the value in a TLength object
-	double	lenVal;
+	quad	lenVal;
 	
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')

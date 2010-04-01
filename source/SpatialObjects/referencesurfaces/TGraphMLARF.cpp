@@ -47,7 +47,7 @@ TGraphMLARF::TGraphMLARF( const string& name,TFreeVector falseOrigin,
 	setFalseOrigin( falseOrigin );
 
 	// orientation matrix
-	double o(omega.getRadiansValue()),p(phi.getRadiansValue()),k(kappa.getRadiansValue());
+	quad o(omega.getRadiansValue()),p(phi.getRadiansValue()),k(kappa.getRadiansValue());
 	TRotationMatrix matrix(TRotationMatrix::kRzyx,o,p,k);
 	fOrientationMatrix.setElements(matrix);
 //	TSpatialOrientation matrix(,fLocAstroSys);

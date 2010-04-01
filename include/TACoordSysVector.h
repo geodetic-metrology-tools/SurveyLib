@@ -99,11 +99,11 @@ protected:
 	//@{
 	
 	//!get the Xi coordinate of a vector in all Coordinate System
-	double	getX(const int& ) const;
+	quad	getX(const int& ) const;
 
 
 	//!set the Xi coordinate of a vector in all Coordinate System
-	void	setX(const int&, const double&);
+	void	setX(const int&, const quad&);
 			
 	//@}
 		
@@ -115,7 +115,7 @@ private:
 	/**@name Member Attributes */
 		//@{
 				//int				fNbRows;
-				double					fVector[3]; /*!< element of the 3*1 vector */
+				quad					fVector[3]; /*!< element of the 3*1 vector */
 				TVCoordinateSystem*		fCoordSys; /*!< coordinate system */
 
 		//@}

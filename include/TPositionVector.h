@@ -29,7 +29,6 @@ using namespace std;
 #include "TACoordSysVector.h"
 #include "TFreeVector.h"
 #include "TDouble.h"
-#include "TScalar.h"
 #include "TLength.h"
 //
 //#include  "**classname**.h"
@@ -55,8 +54,8 @@ public:
 		//!Constructor taking 3 TLength
 		//TPositionVector(const TLength&, const TLength&, const TLength&);
 
-		//!Constructor taking 3 double
-		TPositionVector(const double&, const double&, const double&,TCoordSysFactory::ECoordSys);
+		//!Constructor taking 3 quad
+		TPositionVector(const quad&, const quad&, const quad&,TCoordSysFactory::ECoordSys);
 
 		//!Copy Constructor 
 		TPositionVector( const TPositionVector&);
@@ -80,14 +79,11 @@ public:
 		//!substract two TPositionVector objects and return a FreeVector
 		TFreeVector operator-(const TPositionVector& );
 		
-		//!Multiply a TPositionVector object by a TDouble
+		//!Multiple a TPositionVector object by a TDouble object
 		TPositionVector operator*(const TDouble&);
 
-		//!Multiply a TPositionVector object by a TSCalar
-		TPositionVector operator*(const TScalar&);
-
-		//!Multiple a TPositionVector object by a double 
-		TPositionVector operator*(const double&);
+		//!Multiple a TPositionVector object by a quad 
+		TPositionVector operator*(const quad&);
 
 		//!Copy Assignment Operator 
 		TPositionVector& operator=(const TPositionVector& );

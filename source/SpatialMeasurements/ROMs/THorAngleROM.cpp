@@ -203,10 +203,10 @@ void THorAngleROM::setRefAngle(THorAngleMeasurement* refAngle){
 	bool yRefk = (fReferencePoint->getPosition()).knownYCoord();
 
 	if (xStk && yStk && yRefk && xRefk){
-		double xSt = ((fParentStation->getStationedPoint()->getPosition()).getXCoord()).getMetresValue();
-		double ySt = ((fParentStation->getStationedPoint()->getPosition()).getYCoord()).getMetresValue();
-		double xRef = (fReferencePoint->getPosition()).getXCoord().getMetresValue();
-		double yRef = (fReferencePoint->getPosition()).getYCoord().getMetresValue();
+		quad xSt = ((fParentStation->getStationedPoint()->getPosition()).getXCoord()).getMetresValue();
+		quad ySt = ((fParentStation->getStationedPoint()->getPosition()).getYCoord()).getMetresValue();
+		quad xRef = (fReferencePoint->getPosition()).getXCoord().getMetresValue();
+		quad yRef = (fReferencePoint->getPosition()).getYCoord().getMetresValue();
 
 		TAngle gisCalc = (TAngle::aTan((xRef-xSt)/(yRef-ySt)));
 		TAngle v0 = (TAngle::aTan((xRef-xSt)/(yRef-ySt))) - fRefMeasAngle->getAngleValue();

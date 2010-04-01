@@ -106,7 +106,7 @@ TAStreamFormatter  &TSeparatedFormatTStream::operator>>( TSpatialPoint &point )
 	
 	TSpatialPointName  name;
 	TSpatialPosition*	position = new TSpatialPosition(fRefFrame);
-	double dist=-1;
+	quad dist=-1;
 	int id=-1;
 	string comment="";
 	string comeol="";

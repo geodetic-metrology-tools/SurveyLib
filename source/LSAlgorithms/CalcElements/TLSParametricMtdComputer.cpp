@@ -4,10 +4,10 @@
 // using the parametric method (case where 2nd dgn mtrx = -I)
 //
 
-#include "TLSInputMatrices.h"
-#include "TLSResultsMatrices.h"
 
 #include "TLSParametricMtdComputer.h"
+#include "TLSResultsMatrices.h"
+#include "TLSInputMatrices.h"
 
 #include	<nag.h>
 #include	<nagg01.h>
@@ -69,50 +69,47 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	const TColumnVector& misclV = im->getMisclosureVctr();
 	
     TSparseMatrix* firstDM = firstDMTransposed->transposed();
+	firstDM->write_matrix_file("C:\\AOld.txt");
 	im->setFirstDesignMatrix(firstDM);
-	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply(*weightM);
+	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
+	aTransTimesW->write_matrix_file("C:\\AtPOld.txt");
 
-	TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular(*firstDM);
-	double* solutionVectorb = *aTransTimesW * misclV;
+	TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
+	fAtPA->write_matrix_file("C:\\AtPAOld.txt");
+	quad* solutionVectorb = *aTransTimesW * misclV;
+	for (int i = 0; i < misclV.dimension(); i++)
+	{
+		printf("%.20e\n", (double) misclV(i));
+	}
 	for (int i = 0; i < aTransTimesW->rowsCount(); i++)
 	{
 		solutionVectorb[i] = -solutionVectorb[i];
+		printf("%.20e\n", (double) solutionVectorb[i]);
 	}
 	delete aTransTimesW;
 
 	int success = 0;
-	
-    /* I do this, because for some strange reason design matrix A has A LOT less non-zeros the first time -
-	   actually each time it has the same non-zero structure, except the first. */
-	if (count == 1)
-	{
-		rm->setSymbolic(taucs_ccs_factor_llt_mf(*fAtPA));
-	}
-	else if (count == 2)
-	{
-		taucs_supernodal_factor_free(rm->getSymbolic());
-		rm->setSymbolic(taucs_ccs_factor_llt_symbolic(*fAtPA));
-		success = taucs_ccs_factor_llt_numeric(*fAtPA, rm->getSymbolic());
-	}
-	else
-	{
-		taucs_supernodal_factor_free_numeric(rm->getSymbolic());
-		taucs_ccs_factor_llt_numeric(*fAtPA, rm->getSymbolic());
-	}
-	count++;
 
-	if (rm->getSymbolic() == NULL || success == -1)
+	if (rm->getL() != NULL)
+	{
+		delete rm->getL();
+	}
+	TSparseMatrix* L = fAtPA->cholesky_decompose_lower_triangular_returning_lower_triangular();
+	//L->write_matrix_file("C:\\LOld.txt");
+
+	delete fAtPA;
+
+	if (L == NULL)
 	{
 		delete[] solutionVectorb;
 		// TODO: set some error
 		return false; // Matrix is not positive definite
 	}
 
-	delete fAtPA;
+	rm->setL(L);
 
-	double* solution = new double[im->getNbrUnknowns()];
+	quad* solution = L->solve_eqn(solutionVectorb);
 
-    taucs_supernodal_solve_llt(rm->getSymbolic(), solution, solutionVectorb);
 	delete[] solutionVectorb;
 
 	TColumnVector* solutionVector = rm->getSolutionVctr();
@@ -121,8 +118,6 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	{
 		(*solutionVector)(i) = solution[i];
 	}
-
-	delete[] solution;
 
 	return true;
 }

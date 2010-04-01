@@ -57,7 +57,7 @@ public:
 		TRotation(TRotationMatrix matrix);
 		
 		/** Constructor taking the radians value of the angles in the specified order */  
-		TRotation(TRotationMatrix::ERotationType kR, double omega, double phi, double kappa);
+		TRotation(TRotationMatrix::ERotationType kR, quad omega, quad phi, quad kappa);
 
 		//! Copy Constructor 
 		TRotation(const  TRotation&);
@@ -76,17 +76,17 @@ public:
 		TAAffineTransformation*  clone() const;
 
 		//! Return element ri, cj of the rotation matrix
-		double operator()(int row, int col) const;
+		quad operator()(int row, int col) const;
 
 		//! Return element ri, cj of the rotation matrix
-//insure		double& operator()(int row, int col);
+//insure		quad& operator()(int row, int col);
 
 
 		//! Multiplication by an affine transformation
 		TCompositeAffTransform operator*(const TAAffineTransformation&);
 
 		//! set the 3 rotations taking angles values in the order specified by the enumerator
-		void setAllRotations(TRotationMatrix::ERotationType kR, double& omega,double& phi,double& kappa);
+		void setAllRotations(TRotationMatrix::ERotationType kR, quad& omega,quad& phi,quad& kappa);
 
 		//! return the rotation matrix as TRotationMatrix
 		TRotationMatrix getRotationMatrix() const;
@@ -115,7 +115,7 @@ public:
 private:
 
 		//! fill the matrix of rotation with the specified type
-		void fillRotationMatrix(TRotationMatrix::ERotationType kR, double om, double p, double k);
+		void fillRotationMatrix(TRotationMatrix::ERotationType kR, quad om, quad p, quad k);
 
 		//! Member Attributs
 		TRotationMatrix		fRotationMatrix; /*!< rotation matrix */
@@ -148,7 +148,7 @@ class TXAxisRotation : public TRotation
 public:
 	
 	//! Constructor
-	TXAxisRotation(const double& omega):TRotation(TRotationMatrix::kRzyx, omega, 0.0, 0.0){};
+	TXAxisRotation(const quad& omega):TRotation(TRotationMatrix::kRzyx, omega, 0.0, 0.0){};
 
 	/// Destructor
 	virtual ~TXAxisRotation(){};
@@ -162,7 +162,7 @@ class TYAxisRotation : public TRotation
 public:
 	
 	//! Constructor
-	TYAxisRotation(const double& phi):TRotation(TRotationMatrix::kRzyx, 0.0, phi, 0.0){};
+	TYAxisRotation(const quad& phi):TRotation(TRotationMatrix::kRzyx, 0.0, phi, 0.0){};
 
 	/// Destructor
 	virtual ~TYAxisRotation(){};
@@ -176,7 +176,7 @@ class TZAxisRotation : public TRotation
 public:
 	
 	//! Constructor
-	TZAxisRotation(const double& kappa):TRotation(TRotationMatrix::kRzyx, 0.0, 0.0, kappa){};
+	TZAxisRotation(const quad& kappa):TRotation(TRotationMatrix::kRzyx, 0.0, 0.0, kappa){};
 
 	/// Destructor
 	virtual ~TZAxisRotation(){};

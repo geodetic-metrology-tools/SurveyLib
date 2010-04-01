@@ -30,7 +30,6 @@ class  THelmertTransformation;
 class  TCompositeAffTransform;
 #include  "TAAffineTransformation.h"
 #include  "TDouble.h"
-#include  "TScalar.h"
 // typedefs
 //
 //
@@ -49,14 +48,11 @@ public:
 		/// Default Constructor, factor initialized to 1 
 		TEnlargement();
 
-		/// Constructor taking a scale factor as a double
-		explicit TEnlargement(double);
+		/// Constructor taking a scale factor as a quad
+		TEnlargement(quad);
 
 		/// Constructor taking a scale factor as a TDouble
-		explicit TEnlargement(TDouble);
-
-		/// Constructor taking a scale factor as a TDouble
-		explicit TEnlargement(TScalar);
+		TEnlargement(TDouble);
 
 		/// Copy Constructor 
 		TEnlargement(const  TEnlargement&);
@@ -69,28 +65,16 @@ public:
 	/**@name Member Functions */
 	//@{
 		/// Copy Assignment Operator 
-		TEnlargement& operator=(const TEnlargement& );
+		TEnlargement& operator=( const TEnlargement& );
 
 		//! Multiplication by an affine transformation
 		TCompositeAffTransform operator*(const TAAffineTransformation&);
-		
-		//! Multiplication by another enlargement transformation
-		TEnlargement& operator*(const TEnlargement&);
-		
-		//! Follow another affine transformation
-		TCompositeAffTransform operator+(TAAffineTransformation&);
-
-		//! Follow a composite affine transformation
-		TCompositeAffTransform& operator+(TCompositeAffTransform&);
 		
 		// Return a pointer to a clone of this transformation
 		TAAffineTransformation*  clone() const;
 
 		/// Set the factor of Enlargement
 		void setFactor( TDouble );
-
-		/// Set the factor of Enlargement
-		void setFactor( TScalar );
 
 		/// Return the factor
 		TDouble getFactor() const;

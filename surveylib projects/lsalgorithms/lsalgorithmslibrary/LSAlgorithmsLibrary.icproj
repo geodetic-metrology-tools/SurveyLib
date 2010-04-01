@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="LSAlgorithmsLibrary"
+	ProjectGUID="{9967A2BC-ADC9-4F0E-8981-07438F4D59F3}"
+	VCNestedProjectGUID="{D56B57AB-D5BB-44D0-AD23-E3C25D855AA5}"
+	VCNestedProjectFileName="LSAlgorithmsLibrary.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

@@ -16,15 +16,15 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////////
 TLSInputMatrices::TLSInputMatrices()
 {//Constructor
-	firstDesignMatrixTransposedValues = new list<double>();
+	firstDesignMatrixTransposedValues = new list<quad>();
 	firstDesignMatrixTransposedColPtr = new list<int>();
 	firstDesignMatrixTransposedRowInd = new list<int>();
 
-	secondDesignMatrixTransposedValues = new list<double>();
+	secondDesignMatrixTransposedValues = new list<quad>();
 	secondDesignMatrixTransposedColPtr = new list<int>();
 	secondDesignMatrixTransposedRowInd = new list<int>();
 
-	weightMatrixValues = new list<double>();
+	weightMatrixValues = new list<quad>();
 
 	firstDesignMatrixTransposed = NULL;
 	secondDesignMatrixTransposed = NULL;
@@ -94,7 +94,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 
 
 /*
-void TLSInputMatrices::setS0APrioriScaleFactor(double scalefac)
+void TLSInputMatrices::setS0APrioriScaleFactor(quad scalefac)
 {//sets the scale factor for the S0 a priori
 	fS0APrioriScaleFactor = scalefac;
 }*/
@@ -120,7 +120,7 @@ void TLSInputMatrices::clearMatrices()
 }
 
 
-bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, double coeff)
+bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, quad coeff)
 {//sets an element of the first design matrix
 	bool successfullySet = true;
 	if (coeff != 0)
@@ -133,7 +133,7 @@ bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 }
 
 
-bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex column, double coeff)
+bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex column, quad coeff)
 {//sets an element of the second design matrix
 	bool successfullySet = true;
 	if (coeff != 0)
@@ -146,7 +146,7 @@ bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex colu
 }
 
 
-bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, double coeff)
+bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, quad coeff)
 {//sets an element of the misclosure vector
 	bool successfullySet = true;
 	if (row <= fNbEqn)
@@ -158,7 +158,7 @@ bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, double coeff)
 }
 
 
-bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, double coeff)
+bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, quad coeff)
 {//sets en element of the weight matrix
 	bool successfullySet = true;
 	if (coeff != 0)
@@ -170,7 +170,7 @@ bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column,
 }
 
 
-bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, double coeff)
+bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, quad coeff)
 {//sets an element of the constraint first design matrix
 	bool successfullySet = true;
 	if (row<=fNbCnstr && column <=fNbUnk)
@@ -185,7 +185,7 @@ bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex 
 }
 
 
-bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, double coeff)
+bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, quad coeff)
 {//sets an element of the constraint misclosure vector
 	bool successfullySet = true;
 	if (row <= fNbCnstr)
@@ -206,22 +206,85 @@ void TLSInputMatrices::setNewRow()
 }
 
 void TLSInputMatrices::finishedFillingMatrices()
-{	
-	firstDesignMatrixTransposed = new TSparseMatrix(fNbObs, fNbUnk, 
-		firstDesignMatrixTransposedValues->size(), firstDesignMatrixTransposedValues, 
-		firstDesignMatrixTransposedRowInd, firstDesignMatrixTransposedColPtr);
-	secondDesignMatrixTransposed = new TSparseMatrix(fNbObs, fNbUnk,
-		secondDesignMatrixTransposedValues->size(), secondDesignMatrixTransposedValues, 
-		secondDesignMatrixTransposedRowInd, secondDesignMatrixTransposedColPtr);
-	list<int>* rowinds = new list<int>();
-	for (int i = 0; i <= fNbObs; i++)
+{
+	quad* vals = new quad[firstDesignMatrixTransposedValues->size()];
+	int* cols = new int[firstDesignMatrixTransposedColPtr->size()];
+	int* rows = new int[firstDesignMatrixTransposedRowInd->size()];
+	list<quad>::const_iterator iter = firstDesignMatrixTransposedValues->begin();
+	list<int>::const_iterator iterRows = firstDesignMatrixTransposedRowInd->begin();
+	int i = 0;
+	while (iter != firstDesignMatrixTransposedValues->end())
 	{
-		rowinds->push_back(i);
+		rows[i] = *iterRows;
+		vals[i++] = *iter;
+
+		iter++;
+		iterRows++;
 	}
+	firstDesignMatrixTransposedValues->clear();
+	firstDesignMatrixTransposedRowInd->clear();
+
+	i = 0;
+	list<int>::const_iterator iterCols = firstDesignMatrixTransposedColPtr->begin();
+	while (iterCols != firstDesignMatrixTransposedColPtr->end())
+	{
+		cols[i++] = *iterCols;
+
+		iterCols++;
+	}
+	firstDesignMatrixTransposedColPtr->clear();
+	
+	quad* vals2 = new quad[secondDesignMatrixTransposedValues->size()];
+	int* cols2 = new int[secondDesignMatrixTransposedColPtr->size()];
+	int* rows2 = new int[secondDesignMatrixTransposedRowInd->size()];
+
+	list<quad>::const_iterator iter2 = secondDesignMatrixTransposedValues->begin();
+	list<int>::const_iterator iterRows2 = secondDesignMatrixTransposedRowInd->begin();
+	i = 0;
+	while (iter2 != secondDesignMatrixTransposedValues->end())
+	{
+		rows2[i] = *iterRows2;
+		vals2[i++] = *iter2;
+
+		iter2++;
+		iterRows2++;
+	}
+	secondDesignMatrixTransposedValues->clear();
+	secondDesignMatrixTransposedRowInd->clear();
+
+	i = 0;
+	list<int>::const_iterator iterCols2 = secondDesignMatrixTransposedColPtr->begin();
+	while (iterCols2 != secondDesignMatrixTransposedColPtr->end())
+	{
+		cols2[i++] = *iterCols2;
+
+		iterCols2++;
+	}
+	secondDesignMatrixTransposedColPtr->clear();
+
+	firstDesignMatrixTransposed = new TSparseMatrix(fNbUnk, fNbObs,
+		vals, rows, cols);
+	secondDesignMatrixTransposed = new TSparseMatrix(fNbUnk, fNbObs,
+		vals2, rows2, cols2);
+	int* rowinds = new int[fNbObs + 1];
+	for (i = 0; i <= fNbObs; i++)
+	{
+		rowinds[i] = i;
+	}
+
+	quad* vals3 = new quad[weightMatrixValues->size()];
+	list<quad>::const_iterator iter3 = weightMatrixValues->begin();
+	i = 0;
+	while (iter3 != weightMatrixValues->end())
+	{
+		vals3[i++] = *iter3;
+
+		iter3++;
+	}
+	weightMatrixValues->clear();
+
 	weightMatrix = new TSparseMatrix(fNbObs, fNbObs,
-		weightMatrixValues->size(), weightMatrixValues, 
-		rowinds, rowinds);
-	delete rowinds;
+		vals3, rowinds, rowinds);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

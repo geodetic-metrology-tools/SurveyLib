@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="Measurements"
+	ProjectGUID="{AD3CF79F-B7C6-4A29-BB2C-BAB26BCB728A}"
+	VCNestedProjectGUID="{4E45CBDA-6835-4656-BC93-53A16B4EC726}"
+	VCNestedProjectFileName="Measurements.vcproj">
+	<Configurations>
+		<Configuration
+			Name="Release|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				Optimization="1000"
+				GlobalOptimizations="true"
+				FloatingPointSpeculation="1"
+				GenerateAlternateCodePaths="1"
+				UseProcessorExtensions="1"/>
+		</Configuration>
+	</Configurations>
+	<Files/>
+</VisualStudioProject>

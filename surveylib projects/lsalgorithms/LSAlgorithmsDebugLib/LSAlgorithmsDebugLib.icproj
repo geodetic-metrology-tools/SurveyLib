@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="LSAlgorithmsDebugLib"
+	ProjectGUID="{17E996EA-0454-4EDC-9E13-1AB2ED1AC7B7}"
+	VCNestedProjectGUID="{0B8EC44B-6D2A-4863-A5E8-871FB7D71319}"
+	VCNestedProjectFileName="LSAlgorithmsDebugLib.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="ROMs"
+	ProjectGUID="{9EBBD436-E408-47F3-B278-17E653AA964A}"
+	VCNestedProjectGUID="{58945A29-5CCF-4976-B448-B12B56C829CD}"
+	VCNestedProjectFileName="ROMs.vcproj">
+	<Configurations>
+		<Configuration
+			Name="Release|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				Optimization="1000"
+				GlobalOptimizations="true"
+				FloatingPointSpeculation="1"
+				GenerateAlternateCodePaths="1"
+				UseProcessorExtensions="1"/>
+		</Configuration>
+	</Configurations>
+	<Files/>
+</VisualStudioProject>

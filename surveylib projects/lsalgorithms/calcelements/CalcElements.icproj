@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="CalcElements"
+	ProjectGUID="{8EAF1BC7-762B-4E9C-8AF8-272C19D35C4E}"
+	VCNestedProjectGUID="{37B3EE22-9F97-4683-92D3-6EE917F93B40}"
+	VCNestedProjectFileName="CalcElements.vcproj">
+	<Configurations>
+		<Configuration
+			Name="Release|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				Optimization="1000"
+				GlobalOptimizations="true"
+				FloatingPointSpeculation="1"
+				GenerateAlternateCodePaths="1"
+				UseProcessorExtensions="1"/>
+		</Configuration>
+	</Configurations>
+	<Files/>
+</VisualStudioProject>

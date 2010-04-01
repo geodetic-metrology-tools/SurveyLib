@@ -15,8 +15,8 @@
 //
 // other forward declarations
 //#include  "TLength.h"
-#include  "TPositionVector.h"
 #include  "TVCoordinateSystem.h"
+#include  "TPositionVector.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -33,7 +33,7 @@ TPositionVector::TPositionVector(TCoordSysFactory::ECoordSys en)
 	setStatus(kNull); 
 }
 
-TPositionVector::TPositionVector(const double& x, const double& y, const double& z,TCoordSysFactory::ECoordSys en)
+TPositionVector::TPositionVector(const quad& x, const quad& y, const quad& z,TCoordSysFactory::ECoordSys en)
 {
 	setX(0, x);
 	setX(1, y);
@@ -42,7 +42,7 @@ TPositionVector::TPositionVector(const double& x, const double& y, const double&
 	setStatus(kKnown); 
 }
 
-/*TPositionVector::TPositionVector(const double& x, const double& y, const double&z)
+/*TPositionVector::TPositionVector(const quad& x, const quad& y, const quad&z)
 {
 	TLength X(x), Y(y),Z(z);
 	fPositionVector[0] = X;
@@ -126,34 +126,17 @@ TPositionVector TPositionVector::operator*( const TDouble& factor)
 	TANumericValue::EStatus status = this->testStatus(factor);
 	if ( status!= kNull)
 	{
-		double scalar = factor.getValue();
-		resultat.setX( 0, scalar * getX(0) ); 
-		resultat.setX( 1, scalar * getX(1) );
-		resultat.setX( 2, scalar * getX(2) );
+		resultat.setX(0, getX(0)*factor.getValue()); 
+		resultat.setX(1, getX(1)*factor.getValue());
+		resultat.setX(2, getX(2)*factor.getValue());
 	}
 	resultat.setStatus(status);
 	return resultat;
 }
 
 
-TPositionVector TPositionVector::operator*( const TScalar& factor)
-{//!Multiplication by a TScalar
-	TPositionVector resultat (getCoordSys());
-	TANumericValue::EStatus status = this->testStatus(factor);
-	if ( status!= kNull)
-	{
-		double scalar = factor.getValue();
-		resultat.setX( 0, scalar * getX(0) ); 
-		resultat.setX( 1, scalar * getX(1) );
-		resultat.setX( 2, scalar * getX(2) );
-	}
-	resultat.setStatus(status);
-	return resultat;
-}
-
-
-TPositionVector TPositionVector::operator*(const double& factor)
-{//!Multiplication by a double object
+TPositionVector TPositionVector::operator*(const quad& factor)
+{//!Multiplication by a quad object
 	TPositionVector resultat (getCoordSys());
 	if ( this->isNull()== false)
 		{

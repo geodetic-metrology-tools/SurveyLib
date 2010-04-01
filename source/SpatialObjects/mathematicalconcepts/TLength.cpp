@@ -123,7 +123,7 @@ TDouble TLength::operator/(const TLength& div)
 }
 
 	
-TLength TLength::operator*(const double factor)
+TLength TLength::operator*(const quad factor)
 {//multiply a TLength object by a factor
 	TLength resultat;
 	if(isNull()!=true)
@@ -144,7 +144,7 @@ TLength	TLength::operator*(const TDouble &factor)
 	return resultat;
 }	
 
-TLength	operator*(const double factor, const TLength &length )
+TLength	operator*(const quad factor, const TLength &length )
 {//multiply a TLength object by a factor
 	TLength resultat;
 	if(length.isNull()!=true)
@@ -177,7 +177,7 @@ return *this=*this-length;
 }
 
 
-TLength& TLength::operator*=(const double factor)
+TLength& TLength::operator*=(const quad factor)
 {//multiply a TLength object by a factor and rewrite this
 return *this=(*this)*factor;
 }
@@ -188,7 +188,7 @@ TLength& TLength::operator*=(const TDouble &factor)
 return *this=(*this)*factor;
 }
 
-/*TLength operator*=(const double factor, TLength &length )
+/*TLength operator*=(const quad factor, TLength &length )
 {//multiply a TLength object by a factor and rewrite it
 return length=factor*length;
 }
@@ -199,16 +199,16 @@ return length=factor*length;
 //////////////////////////////////////////////////////////////////////
 
 	
-TLength::ENumberSign		TLength::sign(double	number) const
+TLength::ENumberSign		TLength::sign(quad	number) const
 {	// return the sign of the number entered
 
 	ENumberSign	sign;
 
-	if(number / fabs(number) < 0.0)
+	if(number / __fabsq(number) < 0.0)
 	{
 		sign = kNegative;
 	}
-	else if (number / fabs(number) > 0.0)
+	else if (number / __fabsq(number) > 0.0)
 	{
 		sign = kPositive;
 	}

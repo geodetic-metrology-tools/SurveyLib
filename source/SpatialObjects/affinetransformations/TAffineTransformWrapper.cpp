@@ -49,7 +49,7 @@
 	// the two reference frames linked by the transformation
 }*/
 
-/*
+
 TAffineTransformWrapper::TAffineTransformWrapper() : fTransformer (0)
 {
 }
@@ -146,4 +146,4 @@ TAAffineTransformation*  TAffineTransformWrapper::getTransformation() const
 //////////////////////////////////////////////////////////////////////
 // Utility Member Functions
 //////////////////////////////////////////////////////////////////////
-*/
+

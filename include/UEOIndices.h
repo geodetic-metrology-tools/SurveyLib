@@ -7,10 +7,11 @@
 #define SU_UEOINDICES
 
 
+#include "Quad.h"
 //matrix index type
 typedef int MatrixIndex;
 //matrix element type
-typedef double MatrixElmt;
+typedef quad MatrixElmt;
 
 
 //structure for unknowns, equations and observations indicies
