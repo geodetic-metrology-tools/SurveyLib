@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="InstrumentStations"
 	ProjectGUID="{8AE7DDE7-F4F7-40BC-8BEB-A609907B324F}"
+	RootNamespace="InstrumentStations"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -49,7 +50,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories=".\..\..\..\include;&quot;C:\Program Files\Intel\Compiler\11.1\054\Include&quot;"
+				AdditionalIncludeDirectories=".\..\..\..\include;.\..\..\..\..\SEAL_Libraries\nagc;&quot;C:\Program Files\Intel\Compiler\11.1\054\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -198,7 +199,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Qoption,cpp,--extended_float_type"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\..\..\..\include;&quot;C:\Program Files\Intel\Compiler\11.1\054\Include&quot;"
+				AdditionalIncludeDirectories=".\..\..\..\include;.\..\..\..\..\SEAL_Libraries\nagc;&quot;C:\Program Files\Intel\Compiler\11.1\054\Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"

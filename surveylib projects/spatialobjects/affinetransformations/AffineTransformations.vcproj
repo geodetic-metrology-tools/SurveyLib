@@ -357,6 +357,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\SpatialObjects\affinetransformations\TEnlargement.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\Source\SpatialObjects\AffineTransformations\THelmertTransformation.cpp"
 				>
 				<FileConfiguration
@@ -456,10 +460,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\SpatialObjects\affinetransformations\TScaleFactor.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\Source\SpatialObjects\AffineTransformations\TTranslation.cpp"
 				>
 				<FileConfiguration
@@ -510,6 +510,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\TEnlargement.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\THelmertTransformation.h"
 				>
 			</File>
@@ -519,10 +523,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TRotation.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TScaleFactor.h"
 				>
 			</File>
 			<File
