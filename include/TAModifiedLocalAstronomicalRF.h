@@ -59,6 +59,8 @@ public:
 
 	/**@name Member Functions */
 	//@{
+		using TA3DEuclideanRefFrame::getOrientation;
+
 		/// Returns a pointer to the Geodetic RF
 		virtual TGeodeticRefFrame* getGeodeticRF() const;
 

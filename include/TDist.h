@@ -24,23 +24,23 @@
 	\param TLength y1, coordinate  y of the first point
 	\param TLength x2, coordinate  x of the second point
 	\param TLength y2, coordinate  y of the second point
-	\return Distance as quad
+	\return Distance as real
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	quad	dist(TLength x1, TLength y1, TLength x2, TLength y2);
+	real	dist(TLength x1, TLength y1, TLength x2, TLength y2);
 	/*@}*/
 
 /*! computation of the distance from 2D coordinates
-	\param quad x1, coordinate  x of the first point
-	\param quad y1, coordinate  y of the first point
-	\param quad x2, coordinate  x of the second point
-	\param quad y2, coordinate  y of the second point
-	\return Distance as quad
+	\param real x1, coordinate  x of the first point
+	\param real y1, coordinate  y of the first point
+	\param real x2, coordinate  x of the second point
+	\param real y2, coordinate  y of the second point
+	\return Distance as real
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	quad	dist(quad x1, quad y1, quad x2, quad y2);
+	real	dist(real x1, real y1, real x2, real y2);
 	/*@}*/
 
 
@@ -52,25 +52,25 @@
 	\param TLength x2, coordinate  x of the second point
 	\param TLength y2, coordinate  y of the second point
 	\param TLength z2, coordinate  z of the second point
-	\return Distance as quad
+	\return Distance as real
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	quad	dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2);
+	real	dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2);
 	/*@}*/
 
 /*! computation of the distance from 3D coordinates
-	\param quad x1, coordinate  x of the first point
-	\param quad y1, coordinate  y of the first point
-	\param quad z1, coordinate  z of the first point
-	\param quad x2, coordinate  x of the second point
-	\param quad y2, coordinate  y of the second point
-	\param quad z2, coordinate  z of the second point
-	\return Distance as quad
+	\param real x1, coordinate  x of the first point
+	\param real y1, coordinate  y of the first point
+	\param real z1, coordinate  z of the first point
+	\param real x2, coordinate  x of the second point
+	\param real y2, coordinate  y of the second point
+	\param real z2, coordinate  z of the second point
+	\return Distance as real
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	quad	dist3D(quad x1, quad y1, quad z1, quad x2, quad y2, quad z2);
+	real	dist3D(real x1, real y1, real z1, real x2, real y2, real z2);
 	/*@}*/
 
 

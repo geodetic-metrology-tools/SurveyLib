@@ -5,7 +5,7 @@
   
     Patterns:
   
-    Copyright 2000 CERN EST/SU. All rights reserved.
+    Copyright 2000-10 CERN SU, M.Jones. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 
@@ -26,13 +26,11 @@
 //#include  <##classname##>
 //using namespace std;
 //
-class  TVReferenceFrame;
-#include  "TPositionVector.h"
-#include  "TFreeVector.h"
-#include  "TRotationMatrix.h"
+class  TPositionVector;
+class  TFreeVector;
+class  TRotationMatrix;
 
-#include  "TGlobalDefs.h"
-//#include  "TSpatialPosition.h"
+//#include  "TGlobalDefs.h"
 // typedefs
 //
 //
@@ -45,6 +43,9 @@ class  TVReferenceFrame;
 class /*SU_DECLSPEC*/ TVTransformation //: public TObject  
 {
 public:
+
+	virtual ~TVTransformation() { }
+
 	/**@name Member Functions */
 	//@{
 		//! transform a position vector

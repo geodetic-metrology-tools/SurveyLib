@@ -18,13 +18,17 @@
 // Forward declarations
 //
 #include	<float.h>
+#if __INTEL_COMPILER
 #include	<mathimf.h>
+#else
+#include <math.h>
+#endif
 #include	<assert.h>
 class	TAngle;
 
 
 // typedefs
-typedef	_Quad	GeoidValue;	
+typedef	double	GeoidValue;	
 
 
 ////////////////////////////////////////////////////////////////
@@ -59,10 +63,10 @@ public:
 	GeoidValue	getEtaAzimuth(TAngle);
 
 private:
-	GeoidValue			fNValue;		// default = 0.0
-	GeoidValue			fXiValue;		// default = 0.0
-	GeoidValue			fEtaValue;		// default = 0.0
-	GeoidValue			fDAlphaValue;	// default = 0.0
+	GeoidValue			fNValue;		// default = LITERAL(0.0)
+	GeoidValue			fXiValue;		// default = LITERAL(0.0)
+	GeoidValue			fEtaValue;		// default = LITERAL(0.0)
+	GeoidValue			fDAlphaValue;	// default = LITERAL(0.0)
 	
 	//ClassDef(TGeoidValues, 1)
 };

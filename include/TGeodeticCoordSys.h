@@ -39,33 +39,35 @@ public:
 	/*!\name Member Functions for vector*/
 	//@{
 	
-	//!get the Phi coordinate of a position vector 
-	virtual TAngle getPhiEllipsoid(const TPositionVector*) const;
-	
-	//!get the Lambda coordinate of a position vector
-	virtual TAngle getLambdaEllipsoid(const TPositionVector*) const;
-	
-	//!get the H coordinate of a position vector
-	virtual TLength getH(const TPositionVector*) const;
-	
-	//!set the Phi Coordinate of a position vector
-	virtual bool setPhiEllipsoid(TPositionVector*, const TAngle&);
+		//!get the Phi coordinate of a position vector 
+		virtual TAngle getPhiEllipsoid(const TPositionVector*) const;
+		
+		//!get the Lambda coordinate of a position vector
+		virtual TAngle getLambdaEllipsoid(const TPositionVector*) const;
+		
+		//!get the H coordinate of a position vector
+		virtual TLength getH(const TPositionVector*) const;
+		
+		//!set the Phi Coordinate of a position vector
+		virtual bool setPhiEllipsoid(TPositionVector*, const TAngle&);
 
-	//!set the Lambda Coordinate of a position vector
-	virtual bool setLambdaEllipsoid(TPositionVector*, const TAngle&);
-	
-	//!set the H Coordinate of a position vector
-	virtual bool setH(TPositionVector*, const TLength&);
+		//!set the Lambda Coordinate of a position vector
+		virtual bool setLambdaEllipsoid(TPositionVector*, const TAngle&);
+		
+		//!set the H Coordinate of a position vector
+		virtual bool setH(TPositionVector*, const TLength&);
 	//@}
 
 
 	/*!\name Functions for Matrix*/
 	//@{
-	//!set a element into a 3D matrix
-	virtual	bool setElt(T3DMatrix*, const int, const int, const quad);
+		using TACoordinateSystem::getElt;
 
-	//!get a element from a 3D matrix
-	virtual	quad getElt(const T3DMatrix*, const int, const int) const;
+		//!set a element into a 3D matrix
+		virtual	bool setElt(T3DMatrix*, const int, const int, const real);
+
+		//!get a element from a 3D matrix
+		virtual	real getElt(const T3DMatrix*, const int, const int) const;
 	//@}
 
 private:

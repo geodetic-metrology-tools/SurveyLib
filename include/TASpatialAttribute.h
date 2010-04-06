@@ -29,7 +29,7 @@ class		TAReferenceFrame;
 #include	"counted_ptr.h"
 #include	"TVNumericValue.h"
 
-using namespace std;
+//using namespace std;
 // typedefs
 //
 //
@@ -39,7 +39,7 @@ using namespace std;
 	@{*/
 
 //! An abstract class
-class TASpatialAttribute //: public TVNumericValue
+class TASpatialAttribute : public TANumericValue
 {
 public:
 	

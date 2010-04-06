@@ -12,7 +12,7 @@
 //////////////
 
 TWPSStation::TWPSStation(TSpatialPointName setupPt) : TAInstrumentStation(setupPt),
-fOmega(0.0), fPhi(0.0), fKappa(0.0) {
+fOmega(LITERAL(0.0)), fPhi(LITERAL(0.0)), fKappa(LITERAL(0.0)) {
 }
 /*
 TWPSStation::TWPSStation(TWorkingStations* parent, TWorkingPoints::PointIterator iterSetupPt, TAngle omega, TAngle phi, TAngle kappa):

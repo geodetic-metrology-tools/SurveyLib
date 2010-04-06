@@ -1,7 +1,7 @@
 #include "TDistConstants.h"
 
 
-TDistConstants::TDistConstants():fValue(0.0){
+TDistConstants::TDistConstants():fValue(LITERAL(0.0)){
 
 	fConstId = "";
 	fStatus = TAMeasurement::kFixed;

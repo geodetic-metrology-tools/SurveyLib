@@ -3,7 +3,7 @@
 //
 /** Classe pour une transformation helmert X1 = Fact*R*X+T*/
 //
-// Copyright 2000, CERN EST/SU. All rights reserved.
+// Copyright 2000-2010 CERN SU, M.Jones. All rights reserved.
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef SU_HELMERT_TRANSFORMATION
@@ -19,13 +19,11 @@
 // Forward declarations
 //
 //
-#include  "TEnlargement.h"
+#include  "TScaleFactor.h"
 #include  "TRotation.h"
 #include  "TTranslation.h"
-#include  "TCompositeAffTransform.h"
 #include  "TAAffineTransformation.h"
 // typedefs
-//
 //
 ////////////////////////////////////////////////////////////////
 
@@ -38,45 +36,35 @@ class  THelmertTransformation : public TAAffineTransformation
 public:
 	/**@name  Constructors and destructors */
 	//@{
-		
+		//! Default Constructor
 		THelmertTransformation();
 
-		THelmertTransformation(const TEnlargement&, const TRotation&, const TTranslation&);
+		//! Constructor
+		THelmertTransformation(const TScaleFactor &, const TRotation &, const TTranslation &);
 
-		THelmertTransformation(const TRotation&, const TTranslation&);
+		//! Constructor
+		THelmertTransformation(const TRotation &, const TTranslation &);
 
-		THelmertTransformation(const THelmertTransformation& );
+		//! Copy Constructor
+		THelmertTransformation(const THelmertTransformation & );
 		
+		//! Destructor
 		virtual ~THelmertTransformation();
 	//@}
 
+	using TAAffineTransformation::operator();
+	using TAAffineTransformation::transform;
 
-	
-		/// Copy Assignment Operator 
-		THelmertTransformation& operator=( const THelmertTransformation& );
+	//! Copy Assignment Operator 
+	THelmertTransformation & operator= ( const THelmertTransformation & );
 
-		//! Multiplication by an affine transformation
-		TCompositeAffTransform operator*( const TAAffineTransformation& );
-
-		//! Return a pointer to a clone of this transformation
-		TAAffineTransformation*  clone() const;
-
-		
-		
-		/// Return the inverse transformation: X = R~-1*(1/factor)(x-T)
-		THelmertTransformation inverse();
-
-		/// Invert the transformation
-		void invert();
-
-		
 	/**@name Setting Member Functions */
 	//@{
-		//! Set all 3 transformation
-		void setTransformations(const TEnlargement&, const TRotation&, const TTranslation&);
+		//! Set all 3 transformations
+		void setTransformations(const TScaleFactor&, const TRotation&, const TTranslation&);
 		
 		//! Set scaling factor
-		void setEnlargement( const TEnlargement&);
+		void setScaleFactor( const TScaleFactor&);
 
 		//! Set rotation
 		void setRotation(const TRotation&);
@@ -85,47 +73,71 @@ public:
 		void setTranslation(const TTranslation&);
 	//@}
 
-
 	/**@name Getting Member Functions */
 	//@{
-		//! Get all the Helmert transformation
-		THelmertTransformation* getTransformations() const;
-
 		//! Get scaling factor
-		TEnlargement getEnlargement()const;
+		TScaleFactor getScaleFactor() const;
 
 		//! Get rotation
-		TRotation getRotation()const;
+		TRotation getRotation() const;
 		
 		//! Get translation
-		TTranslation getTranslation()const;
-
-
+		TTranslation getTranslation() const;
 	//@}
 		
 		
-	/**@name  Transform Methods */
+	/**@name  TVAffineTransformation Interface Methods */
 	//@{	
-		/// Return a transformed position vector
+		//! Create a composite transformation by applying this transformation to an affine transformation
+		//virtual  TCompositeAffTransform operator() ( const TAAffineTransformation & ) const;
+
+		//! Return a pointer to a clone of this transformation
+		virtual THelmertTransformation*  clone() const;
+
+		//! Transform a position vector
 		virtual bool  transform( TPositionVector& ) const;
 
-		/// Return a transformed free vector
+		//! Transform a free vector
 		virtual bool  transform( TFreeVector& ) const ;
 
-		/// Return a transformed Rotation Matrix
+		//! Transform a Rotation Matrix
 		virtual bool  transform( TRotationMatrix& ) const;
-	//@}
+
+		//! apply this transformation to a position vector
+		virtual  TPositionVector &  operator() ( TPositionVector & ) const;
+
+		//! apply this transformation to a free vector
+		virtual  TFreeVector &  operator() ( TFreeVector & ) const;
+
+		//! apply this transformation to a Rotation Matrix
+		virtual  TRotationMatrix &  operator() ( TRotationMatrix & ) const;
+
+		//! Return a pointer to the inverse of this transformation: X = R~-1*(1/factor)(x-T)
+		virtual  THelmertTransformation * inverse() const;
+
+		//! Invert the transformation, replaces the current transformation parameters
+		virtual  void invert();
+//@}
+
+
+protected:
+	// protected methods
+	//! Get a pointer to the scale factor
+	const TScaleFactor * scaleFactor() const { return &fScaleFactor; }
+
+	//! Get a pointer to the rotation
+	const TRotation * rotation() const { return &fRotation; }
+	
+	//! Get a pointer to the translation
+	const TTranslation * translation() const { return & fTranslation; }
 
 
 private:
-		// member attributes
-
-		TEnlargement fEnlargement; /*!< scaling */
-		TRotation fRotation; /*!< rotation */
-		TTranslation fTranslation; /*!< translation */
+	// member attributes
+	TScaleFactor fScaleFactor; /*!< scaling */
+	TRotation fRotation; /*!< rotation */
+	TTranslation fTranslation; /*!< translation */
 		
-		
-	
 	//ClassDef(THelmertTransformation, 1)
 };
 /*@}*/
@@ -134,13 +146,13 @@ private:
 // Inline Definitions
 //////////////////////////////////////////////////////////////////////
 
-inline  void THelmertTransformation::setEnlargement( const TEnlargement& scaling){fEnlargement = scaling; return;}
-inline	void THelmertTransformation::setRotation(const TRotation& rotate){fRotation = rotate; return;}
-inline	void THelmertTransformation::setTranslation(const TTranslation& trans){fTranslation = trans;return;}
+inline  void THelmertTransformation::setScaleFactor( const TScaleFactor& scaling) {fScaleFactor = scaling; return;}
+inline	void THelmertTransformation::setRotation(const TRotation& rotate) {fRotation = rotate; return;}
+inline	void THelmertTransformation::setTranslation(const TTranslation& trans) {fTranslation = trans;return;}
 
-inline  TEnlargement THelmertTransformation::getEnlargement()const{return fEnlargement;}
-inline	TRotation    THelmertTransformation::getRotation()const{return fRotation;}
-inline	TTranslation THelmertTransformation::getTranslation()const{return fTranslation;}
+inline  TScaleFactor THelmertTransformation::getScaleFactor() const {return fScaleFactor;}
+inline	TRotation    THelmertTransformation::getRotation() const {return fRotation;}
+inline	TTranslation THelmertTransformation::getTranslation() const {return fTranslation;}
 		
 
 #endif // SU_HELMERT_TRANSFORMATION

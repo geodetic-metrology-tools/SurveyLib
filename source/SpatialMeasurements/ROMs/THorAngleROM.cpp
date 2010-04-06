@@ -14,7 +14,7 @@ THorAngleROM::THorAngleROM():
 TAUnreferencedROM() {
 
 	// TODO: removed fRefMeasAngle(0) from pre-constructor calls
-	fV0.setRadiansValue(0.0);
+	fV0.setRadiansValue(LITERAL(0.0));
 	fV0Status = TAMeasurement::kVariable;
 
 	//fParentStation = &parent;

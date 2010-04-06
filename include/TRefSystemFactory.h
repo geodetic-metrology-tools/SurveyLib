@@ -51,11 +51,11 @@ class TSpatialPosition;
 	@{*/
 
 
-#define XP0 2000.00000;
-#define YP0 2097.79265;
-#define ZP0 2433.66000;
-#define HP0 433.65921;
-#define PHIP0 51.3692;
+#define XP0 LITERAL(2000.00000);
+#define YP0 LITERAL(2097.79265);
+#define ZP0 LITERAL(2433.66000);
+#define HP0 LITERAL(433.65921);
+#define PHIP0 LITERAL(51.3692);
 
 
 struct LocalSystemOrigin{TSpatialPosition* origin; TAngle gisement; TAngle slope;};

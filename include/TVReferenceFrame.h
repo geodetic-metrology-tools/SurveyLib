@@ -44,6 +44,7 @@ class TModifiedLocalAstronomicalRF;
 #include  "TAngle.h"
 #include  "TLength.h"
 
+#include  "TCoordSysFactory.h"
 #include  "TRefSystemFactory.h"
 
 
@@ -69,6 +70,8 @@ public:
 	friend class TA3DEuclideanRefFrame;
 	//typedef set< TTransformWrapper, less< TTransformWrapper > > TransformationSet;
 	//typedef TransformationSet::iterator iterator;
+
+	virtual ~TVReferenceFrame() { }
 
 		//! Get the name of the reference frame
 		virtual string  getName() const = 0;

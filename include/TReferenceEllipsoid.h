@@ -24,7 +24,11 @@
 // Forward declarations
 //
 //#include	<float.h>
+#if __INTEL_COMPILER
 #include	<mathimf.h>
+#else
+#include <math.h>
+#endif
 //#include	<assert.h>
 #include    <string>
 //
@@ -34,7 +38,8 @@ using namespace std;
 //#include  "TVReferenceEllipsoid.h"
 //
 // typedefs
-typedef quad EllipseParameter;
+typedef real EllipseParameter;
+
 ////////////////////////////////////////////////////////////////
 
 /*! \ingroup spatialobjects
@@ -115,7 +120,7 @@ public:
 
 			@param  phi the latitude in radians
 		 */
-		virtual EllipseParameter  getNu( const quad phi )  const;
+		virtual EllipseParameter  getNu( const real phi )  const;
 
 		/** Get the Radius of Curvature of the Ellipsoid in the Meridian
 		    at a given latitude.
@@ -129,7 +134,7 @@ public:
 
 			@param  phi the latitude in radians
 		 */
-		virtual EllipseParameter  getRho( const quad phi )  const;
+		virtual EllipseParameter  getRho( const real phi )  const;
 
 		/** Get the Euler's Radius of Curvature of the Ellipsoid
 		    at a given latitude, and azimuth.
@@ -145,7 +150,7 @@ public:
 			@param  phi the latitude in radians
 			@param  alpha the azimuth in radians
 		 */
-		virtual EllipseParameter  getEuler( const quad phi, const quad alpha )  const;
+		virtual EllipseParameter  getEuler( const real phi, const real alpha )  const;
 
 
 		virtual void setEllId(const TRefSystemFactory::ERefEll ellId);
@@ -169,7 +174,7 @@ private:
 	
 
 private:
-	EllipseParameter				fA;		          /*!< default = 0.0 */
+	EllipseParameter				fA;		          /*!< default = LITERAL(0.0) */
 	EllipseParameter				fESquared;		  /*!< ellispoid parameter: e^2 */		
 	EllipseParameter				fF;               /*!< ellispoid parameter: F */
 	EllipseParameter				fB;               /*!< ellispoid parameter: B */
@@ -190,7 +195,7 @@ private:
 inline EllipseParameter	TReferenceEllipsoid::getA() const {	return fA;}
 
 
-inline EllipseParameter	TReferenceEllipsoid::getE() const {	return __sqrtq( fESquared );}
+inline EllipseParameter	TReferenceEllipsoid::getE() const {	return sqrtq( fESquared );}
 
 
 inline EllipseParameter	TReferenceEllipsoid::getESquared() const {	return fESquared;}
@@ -202,7 +207,7 @@ inline EllipseParameter	TReferenceEllipsoid::getF() const {	return fF;}
 inline EllipseParameter	TReferenceEllipsoid::getB() const {	return fB;}
 
 
-inline EllipseParameter	TReferenceEllipsoid::getEPrime() const { return __sqrtq( fEPrimeSquared );}
+inline EllipseParameter	TReferenceEllipsoid::getEPrime() const { return sqrtq( fEPrimeSquared );}
 
 
 inline EllipseParameter	TReferenceEllipsoid::getEPrimeSquared() const {	return fEPrimeSquared;}

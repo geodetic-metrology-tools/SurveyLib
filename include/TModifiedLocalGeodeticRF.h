@@ -76,6 +76,7 @@ public:
 
 	/**@name Member Functions */
 	//@{
+		using TA3DEuclideanRefFrame::getOrientation;
 
 		//! Returns the geodetic system for the local RF
 		virtual TGeodeticRefFrame* getGeodeticRF() const { return fGeodeticSys; }
@@ -108,11 +109,11 @@ private:
 	TModifiedLocalGeodeticRF& operator=( const TModifiedLocalGeodeticRF& );
 	
 	// constants
-	static const quad precisionH;
-	static const quad precisionPhi;
+	static const real precisionH;
+	static const real precisionPhi;
 
 	//typedef
-	typedef struct {quad phi; quad lambda; quad h;} TGeodeticCoords;
+	typedef struct {real phi; real lambda; real h;} TGeodeticCoords;
 
 	
 

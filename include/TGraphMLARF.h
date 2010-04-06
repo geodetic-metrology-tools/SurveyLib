@@ -58,6 +58,7 @@ public:
 
 	/**@name Member Functions */
 	//@{
+		using TAModifiedLocalAstronomicalRF::getOrientation;
 
 		/// return the associated local astronomical reference frame
 		TGraphLocalAstronomicalRF* getLocalAstronomicalRF() const;

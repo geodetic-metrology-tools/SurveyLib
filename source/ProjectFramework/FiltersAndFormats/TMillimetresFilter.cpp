@@ -67,7 +67,7 @@ TMillimetresFilter *TMillimetresFilter::instance()
 void	TMillimetresFilter::input(TAStreamFormatter& iStream, TLength& length)const
 {	// function to get a millimetre length from a QTextStream object
 	// and set the value in a TLength object
-	quad	lenVal;
+	real	lenVal;
 
 	iStream >> lenVal;
 	if(!(iStream.fail()))

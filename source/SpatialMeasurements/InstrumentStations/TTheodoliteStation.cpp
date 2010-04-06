@@ -130,11 +130,11 @@ void TTheodoliteStation::setInstrumentHeight(const TLength height)
 }
 
 /////////////////////////////////////////////////////
-// sets measurement's angle constant (if still = 0.0)
+// sets measurement's angle constant (if still = LITERAL(0.0))
 /////////////////////////////////////////////////////
 void TTheodoliteStation::ifNotDoneSetAngleConst(const TAngleConstants angConst)
 {
-	if (fAngleConst.getValue().getGonsValue() == 0.0)
+	if (fAngleConst.getValue().getGonsValue() == LITERAL(0.0))
 		fAngleConst = angConst;
 	return;
 }

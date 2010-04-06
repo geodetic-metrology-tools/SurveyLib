@@ -67,6 +67,7 @@ public:
 
 	/**@name Member Functions */
 	//@{
+		using TAModifiedLocalAstronomicalRF::getOrientation;
 		
 		/// Returns a pointer to the Local Geodetic RF
 		TGeodeticRefFrame* getGeodeticRF() const;

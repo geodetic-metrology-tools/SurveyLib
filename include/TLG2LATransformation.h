@@ -71,7 +71,7 @@ public:
 		TLG2LATransformation&				operator=( const TLG2LATransformation& );
 
 		/// Return a pointer to a clone of this reference frame
-		virtual TARefFrameTransformation*	clone() const;
+		virtual TLG2LATransformation*	clone() const;
 
 		/// Return a pointer to the inverse of this transformtion
 		virtual TARefFrameTransformation*	inverse() const;

@@ -27,8 +27,8 @@
 //#include  <##classname##>
 //
 //using namespace system;
-#include  <cmath>
-#include  "TCompositeAffTransform.h"
+// #include  <cmath>
+//#include  "TCompositeAffTransform.h"
 #include  "TARefFrameTransformation.h"
 #include  "TXYHeProjection.h"
 #include  "TAReferenceFrame.h"
@@ -66,11 +66,13 @@ public:
 
 	/**@name Member Functions */
 	//@{
+		using TARefFrameTransformation::transform;
+
 		/// Copy Assignment Operator 
 		TXYHe2X0Y0HeTransformation&			operator=( const TXYHe2X0Y0HeTransformation& );
 
 		/// Return a pointer to a clone of this reference frame
-		virtual TARefFrameTransformation*	clone() const;
+		virtual TXYHe2X0Y0HeTransformation*	clone() const;
 
 		/// Return a pointer to the inverse of this transformation
 		virtual TARefFrameTransformation*	inverse() const;

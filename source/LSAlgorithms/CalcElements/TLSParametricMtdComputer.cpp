@@ -15,7 +15,7 @@
 //CONSTRUCTOR / DESTRUCTOR
 //////////////////////////////////////////////////////////
 TLSParametricMtdComputer::TLSParametricMtdComputer():
-fError("")/*, fS0PostUpLimit(0.0), fS0PostLoLimit(0.0), fSigmaZero2(0.0)*/
+fError("")/*, fS0PostUpLimit(LITERAL(0.0)), fS0PostLoLimit(LITERAL(0.0)), fSigmaZero2(LITERAL(0.0))*/
 {//default constructor
 	count = 1;
 }
@@ -76,7 +76,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 	TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
 	fAtPA->write_matrix_file("C:\\AtPAOld.txt");
-	quad* solutionVectorb = *aTransTimesW * misclV;
+	real* solutionVectorb = *aTransTimesW * misclV;
 	for (int i = 0; i < misclV.dimension(); i++)
 	{
 		printf("%.20e\n", (double) misclV(i));
@@ -108,7 +108,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 	rm->setL(L);
 
-	quad* solution = L->solve_eqn(solutionVectorb);
+	real* solution = L->solve_eqn(solutionVectorb);
 
 	delete[] solutionVectorb;
 
@@ -144,7 +144,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 
 	////intermediate N = (A1tPA1) matrix
 	//TMatrix	N (nbUnk, nbUnk);
-	//N = 0.0;
+	//N = LITERAL(0.0);
 	//
 	//N = firstDM.transposed() * weightM * firstDM;
 
@@ -154,7 +154,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	//		 (A2, 0 ))
 	//*/
 	//TMatrix	Nbig (nbUnk + nbCnstr, nbUnk + nbCnstr);
-	//Nbig = 0.0;
+	//Nbig = LITERAL(0.0);
 
 	////insert N in Nbig
 	//int i = 0;
@@ -207,10 +207,10 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	//		 (cnstrMisclV ) )
 	//*/
 	//TColumnVector Cbig ( nbUnk + nbCnstr);
-	//Cbig = 0.0;
+	//Cbig = LITERAL(0.0);
 	//TColumnVector C ( nbUnk);
-	//C = 0.0;
-	//C = firstDM.transposed() * weightM * misclV*(-1.0);
+	//C = LITERAL(0.0);
+	//C = firstDM.transposed() * weightM * misclV*(-LITERAL(1.0));
 
 	////insert C in Cbig
 	//i = 0;
@@ -233,7 +233,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 
 	////computation of the solution vector
 	//TColumnVector solutionBig (nbUnk + nbCnstr);
-	//solutionBig = 0.0;
+	//solutionBig = LITERAL(0.0);
 	//solutionBig = NbigInv.dfeqn(&Cbig,n_pivot,pivot_i,pivot_j);
 
 	//delete[] pivot_i;
@@ -247,7 +247,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	//}
 
 	//TColumnVector* solution = rm->getSolutionVctr();
-	//(*solution) = 0.0;
+	//(*solution) = LITERAL(0.0);
 	//// extraction of solution from solutionBig
 	//i = 0;
 	//while( i < nbUnk)

@@ -32,10 +32,9 @@
 //using namespace std;
 //
 class  THelmertTransformation;
-class  TEnlargement;
+class  TScaleFactor;
 class  TRotation;
 class  TTranslation;
-class  TCompositeAffTransform;
 #include  "TARefFrameTransformation.h"
 #include  "TSpatialPosition.h"
 // typedefs
@@ -65,7 +64,7 @@ public:
 		THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, THelmertTransformation* );
 
 		/// Constructor taking parameters of a THelmertTransformation
-		THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, const TEnlargement&, const TRotation&, const TTranslation&);
+		THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, const TScaleFactor&, const TRotation&, const TTranslation&);
 
 		/// Copy Constructor 
 		THelmertRefFrameTransform(const  THelmertRefFrameTransform&);
@@ -81,10 +80,13 @@ public:
 		THelmertRefFrameTransform&			operator=( const THelmertRefFrameTransform& );
 
 		/// Return a pointer to a clone of this reference frame
-		virtual TARefFrameTransformation*	clone() const;
+		virtual THelmertRefFrameTransform*	clone() const;
 
 		/// Return a pointer to the inverse of this transformtion
-		virtual TARefFrameTransformation*	inverse() const;
+		virtual THelmertRefFrameTransform*	inverse() const;
+
+		//! Invert the transformation, replaces the current transformation parameters
+		virtual void  invert();
 
 		/// Return the LG source frame
 		virtual TAReferenceFrame*			getSourceFrame() const { return fFrom; }
@@ -93,7 +95,7 @@ public:
 		virtual TAReferenceFrame*			getDestinationFrame() const { return fTo; }
 
 		/// Return the helmert transformation
-		virtual TCompositeAffTransform*		getTransform() const { return fTransform; }
+		virtual THelmertTransformation*		getTransform() const { return fTransform; }
 
 		/// Set the LG source frame
 		virtual void						setSourceFrame( TAReferenceFrame* from) { fFrom = from; return; }
@@ -104,8 +106,8 @@ public:
 		/// Set the Helmert transformation
 		virtual void						setTransform( THelmertTransformation* helmert);
 
-		/// Set the helmert transformation by using a composite affine transformation
-		virtual void						setTransform( TCompositeAffTransform* composite );// { fTransform = composite; return; }
+		/// Set the helmert transformation using the parameters of the transformation
+		virtual void						setTransform( const TScaleFactor&, const TRotation&, const TTranslation& );
 
 		/// transform a position vector
 		virtual  bool						transform( TPositionVector& pv ) const;
@@ -122,7 +124,7 @@ public:
 
 private:
 
-	TCompositeAffTransform*		fTransform;
+	THelmertTransformation*		fTransform;
 	TAReferenceFrame*			fFrom;
 	TAReferenceFrame*			fTo;
 

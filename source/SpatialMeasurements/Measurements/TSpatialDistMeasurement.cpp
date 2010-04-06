@@ -15,7 +15,7 @@
 //////////////////////
 TSpatialDistMeasurement::TSpatialDistMeasurement():
 TAPointMeasurement(),
-fObservedDist(0.0), fSigmaAPriori(0), fSigmaPpm(0),
+fObservedDist(LITERAL(0.0)), fSigmaAPriori(0), fSigmaPpm(0),
 fPrismHeight(0), fPrismNumber(""), fMeasConstant(){
 
 	fHeightStatus = kFixed;
@@ -29,7 +29,7 @@ fPrismHeight(0), fPrismNumber(""), fMeasConstant(){
 TSpatialDistMeasurement::TSpatialDistMeasurement(TSpatialPointName targetName, TLength obsDist, TLength sigma/*, PrismNb pn*/):
 TAPointMeasurement(targetName),fObservedDist(obsDist), fSigmaAPriori(sigma), fSigmaPpm(0)/*, fPrismNumber(pn)*/, fMeasConstant(){
 
-	fPrismHeight.setMetresValue(0.0);
+	fPrismHeight.setMetresValue(LITERAL(0.0));
 	fHeightStatus = kFixed;
 
 }
@@ -156,7 +156,7 @@ TAMeasurement::ECalcStatus TSpatialDistMeasurement::getPrismHeightStatus() const
 /////////////////////////////////////
 void TSpatialDistMeasurement::ifNotDoneSetSigma(TLength sigma){
 
-	if (fSigmaAPriori.getMetresValue() == 0.0)
+	if (fSigmaAPriori.getMetresValue() == LITERAL(0.0))
 		fSigmaAPriori = sigma;
 }
 
@@ -166,7 +166,7 @@ void TSpatialDistMeasurement::ifNotDoneSetSigma(TLength sigma){
 /////////////////////////////////////////
 void TSpatialDistMeasurement::ifNotDoneSetSigmaPpm(TLength sigmaPpm){
 
-	if (fSigmaPpm.getMetresValue() == 0.0)
+	if (fSigmaPpm.getMetresValue() == LITERAL(0.0))
 		fSigmaPpm = sigmaPpm;
 }
 
@@ -175,7 +175,7 @@ void TSpatialDistMeasurement::ifNotDoneSetSigmaPpm(TLength sigmaPpm){
 ////////////////////////////////////////////////////
 void TSpatialDistMeasurement::ifNotDoneSetMeasConst(const TDistConstants& cte){
 
-	if (fMeasConstant.getValue().getMetresValue() == 0.0)
+	if (fMeasConstant.getValue().getMetresValue() == LITERAL(0.0))
 		fMeasConstant = cte;
 }
 

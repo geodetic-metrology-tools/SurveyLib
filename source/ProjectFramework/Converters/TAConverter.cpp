@@ -156,7 +156,7 @@ void	TAConverter::writeStringLeftSep(const int width, const string data)
 	return;
 }
 
-void	TAConverter::writeDouble(const int width, const int pres, const quad data)
+void	TAConverter::writeDouble(const int width, const int pres, const real data)
 {
 	fStream->width(width);
 	fStream->precision(pres);
@@ -165,7 +165,7 @@ void	TAConverter::writeDouble(const int width, const int pres, const quad data)
 }
 
 
-void	TAConverter::writeDoubleSep(const int width, const int pres, const quad data)
+void	TAConverter::writeDoubleSep(const int width, const int pres, const real data)
 {
 	writeDouble(width, pres, data);
 	(*fStream)<<fSeparator;

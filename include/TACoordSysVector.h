@@ -50,6 +50,7 @@ public:
 	friend class TACoordinateSystem;
 
 	TACoordSysVector();
+	virtual ~TACoordSysVector() { }
 	
 	
 	/**@name Member Public Functions */
@@ -99,11 +100,11 @@ protected:
 	//@{
 	
 	//!get the Xi coordinate of a vector in all Coordinate System
-	quad	getX(const int& ) const;
+	real	getX(const int& ) const;
 
 
 	//!set the Xi coordinate of a vector in all Coordinate System
-	void	setX(const int&, const quad&);
+	void	setX(const int&, const real&);
 			
 	//@}
 		
@@ -115,7 +116,7 @@ private:
 	/**@name Member Attributes */
 		//@{
 				//int				fNbRows;
-				quad					fVector[3]; /*!< element of the 3*1 vector */
+				real					fVector[3]; /*!< element of the 3*1 vector */
 				TVCoordinateSystem*		fCoordSys; /*!< coordinate system */
 
 		//@}

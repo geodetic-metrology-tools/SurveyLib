@@ -35,7 +35,7 @@ class  TDouble;
 #include	<nagf04.h>
 #include	<nag_stdlib.h>
 #include	<list>
-#include	<valarray>
+//#include	<valarray>
 
 using namespace std;
 //

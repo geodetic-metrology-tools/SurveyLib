@@ -169,7 +169,7 @@ string TWireToWireDistMeas::getMeasKind() const{
 //////////////////////////////////////////////////////////////
 void TWireToWireDistMeas::ifNotDoneSetHSigma(TLength sigma){
 
-	if (fHSigma.getMetresValue() == 0.0)
+	if (fHSigma.getMetresValue() == LITERAL(0.0))
 		fHSigma = sigma;
 }
 
@@ -178,7 +178,7 @@ void TWireToWireDistMeas::ifNotDoneSetHSigma(TLength sigma){
 ////////////////////////////////////////////////////////////
 void TWireToWireDistMeas::ifNotDoneSetVSigma(TLength sigma){
 
-	if (fVSigma.getMetresValue() == 0.0)
+	if (fVSigma.getMetresValue() == LITERAL(0.0))
 		fVSigma = sigma;
 }
 

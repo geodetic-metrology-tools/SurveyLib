@@ -117,7 +117,7 @@ private:
 	/**@name Private Functions */
 	//@{
 		/*!used to interpolate N*/
-		quad splineInterpolation(const TMatrix& mat, const TSpatialPosition& spos) const;
+		real splineInterpolation(const TMatrix& mat, const TSpatialPosition& spos) const;
 	//@}
 	
 	/**@name Member Attributes */

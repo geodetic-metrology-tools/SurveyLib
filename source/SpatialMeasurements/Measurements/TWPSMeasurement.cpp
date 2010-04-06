@@ -189,7 +189,7 @@ TLength TWPSMeasurement::getVertSigma() const{
 ////////////////////////////////////////////////
 void TWPSMeasurement::ifNotDoneSetVSigma(TLength sigma){
 
-	if (fVertSigma.getMetresValue() == 0.0)
+	if (fVertSigma.getMetresValue() == LITERAL(0.0))
 		fVertSigma = sigma;
 }
 
@@ -215,7 +215,7 @@ TLength TWPSMeasurement::getTransSigma() const{
 ////////////////////////////////////////////////
 void TWPSMeasurement::ifNotDoneSetTSigma(TLength sigma){
 
-	if (fTransSigma.getMetresValue() == 0.0)
+	if (fTransSigma.getMetresValue() == LITERAL(0.0))
 		fTransSigma = sigma;
 }
 
@@ -329,7 +329,7 @@ bool TWPSMeasurement::addToStation(TWorkingPoints* wp, TWorkingStations* ws){
 	else{
 
 		//each WPS measurement has its own station, so a station is created each time
-		TAngle zero(0.0);
+		TAngle zero(LITERAL(0.0));
 		TWPSStation* newWPSSt = new TWPSStation(ws, iterStPt, zero, zero, zero);
 		delete newWPSSt;
 

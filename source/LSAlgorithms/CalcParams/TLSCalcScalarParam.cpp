@@ -8,11 +8,11 @@
 
 // Default constructor
 TLSCalcScalarParam::TLSCalcScalarParam():
-fProvisionalValue(0.0 /*, TCoordSysFactory::k3DCartesian*/),
-fCorrection(0.0 /*, TCoordSysFactory::k3DCartesian*/),
+fProvisionalValue(LITERAL(0.0) /*, TCoordSysFactory::k3DCartesian*/),
+fCorrection(LITERAL(0.0) /*, TCoordSysFactory::k3DCartesian*/),
 fEstimatedValue(fProvisionalValue),
-fEstimatedPrecision(0.0 /*, TCoordSysFactory::k3DCartesian*/),
-fCovariance(0.0 /*,TCoordSysFactory::k3DCartesian*/),
+fEstimatedPrecision(LITERAL(0.0) /*, TCoordSysFactory::k3DCartesian*/),
+fCovariance(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/),
 TALSCalcParameter("") {
 	
 	fStatus = TALSCalcParameter::kVariable;
@@ -23,10 +23,10 @@ TALSCalcParameter("") {
 TLSCalcScalarParam::TLSCalcScalarParam(TScalar pv, ELSStatus status, string name )://does the scalar need a name?
 fProvisionalValue(pv),
 fStatus(status),TALSCalcParameter(name), 
-fCorrection(0.0 /*,TCoordSysFactory::k3DCartesian*/),
+fCorrection(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/),
 fEstimatedValue(fProvisionalValue),
-fEstimatedPrecision(0.0 /*,TCoordSysFactory::k3DCartesian*/),
-fCovariance(0.0 /*,TCoordSysFactory::k3DCartesian*/)
+fEstimatedPrecision(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/),
+fCovariance(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/)
 {
 	
 }
@@ -60,10 +60,10 @@ TLSCalcScalarParam& TLSCalcScalarParam::operator =(const TLSCalcScalarParam& rig
 // re-initialises the parameters alterred during or after a least squares calculation
 void	TLSCalcScalarParam::reInitialise()
 {
-	fCorrection = quad(0.0); /*,TCoordSysFactory::k3DCartesian*/
+	fCorrection = real(LITERAL(0.0)); /*,TCoordSysFactory::k3DCartesian*/
 	fEstimatedValue = fProvisionalValue;
-	fEstimatedPrecision = quad(0.0); /*,TCoordSysFactory::k3DCartesian*/
-	fCovariance = quad(0.0); /*,TCoordSysFactory::k3DCartesian*/
+	fEstimatedPrecision = real(LITERAL(0.0)); /*,TCoordSysFactory::k3DCartesian*/
+	fCovariance = real(LITERAL(0.0)); /*,TCoordSysFactory::k3DCartesian*/
 
 	return;
 }
@@ -74,11 +74,11 @@ void	TLSCalcScalarParam::reInitialise()
 
 void TLSCalcScalarParam::resetValues()
 {
-fProvisionalValue = quad(1.0);
-fCorrection = quad(0.0);
-fEstimatedValue = quad(0.0);
-fEstimatedPrecision = quad(0.0);
-fCovariance = quad(0.0);
+fProvisionalValue = real(LITERAL(1.0));
+fCorrection = real(LITERAL(0.0));
+fEstimatedValue = real(LITERAL(0.0));
+fEstimatedPrecision = real(LITERAL(0.0));
+fCovariance = real(LITERAL(0.0));
 
 }
 

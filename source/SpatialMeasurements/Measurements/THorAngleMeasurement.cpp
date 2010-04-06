@@ -16,7 +16,7 @@
 // default constructor
 //////////////////////
 THorAngleMeasurement::THorAngleMeasurement(): TAPointMeasurement(),
-fMeasuredAngle(0.0), fSigmaAPriori(0){
+fMeasuredAngle(LITERAL(0.0)), fSigmaAPriori(0){
 
 }
 
@@ -75,7 +75,7 @@ bool THorAngleMeasurement::operator==(const THorAngleMeasurement& right) const {
 
 	bool isEqualTo = false;
 	if ((fTargetPtName == (right.fTargetPtName)) &&
-		(__fabsq(fMeasuredAngle.getRadiansValue() - right.fMeasuredAngle.getRadiansValue()) < pow(1.0,-10.0)))
+		(__fabsq(fMeasuredAngle.getRadiansValue() - right.fMeasuredAngle.getRadiansValue()) < pow(LITERAL(1.0),-LITERAL(10.0))))
 		isEqualTo = true;
 	return isEqualTo;
 }
@@ -120,7 +120,7 @@ TAngle THorAngleMeasurement::getSigma() const{
 /////////////////////////////////////
 void THorAngleMeasurement::ifNotDoneSetSigma(TAngle sigma){
 
-	if (fSigmaAPriori.getRadiansValue() == 0.0)
+	if (fSigmaAPriori.getRadiansValue() == LITERAL(0.0))
 		fSigmaAPriori = sigma;
 }
 

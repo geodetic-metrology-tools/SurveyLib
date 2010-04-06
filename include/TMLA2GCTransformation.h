@@ -22,7 +22,7 @@
 
 
 
-#include  <cmath>
+// #include  <cmath>
 #include  "TCompositeAffTransform.h"
 #include  "TARefFrameTransformation.h"
 #include  "TAModifiedLocalAstronomicalRF.h"
@@ -61,7 +61,7 @@ public:
 		TMLA2GCTransformation&				operator=( const TMLA2GCTransformation& );
 
 		/*! Return a pointer to a clone of this reference frame*/
-		virtual TARefFrameTransformation*	clone() const;
+		virtual TMLA2GCTransformation*	clone() const;
 
 		/*! Return a pointer to the inverse of this transformtion*/
 		virtual TARefFrameTransformation*	inverse() const;

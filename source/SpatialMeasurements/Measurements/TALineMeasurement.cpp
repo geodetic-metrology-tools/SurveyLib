@@ -107,7 +107,7 @@ TDistConstants		TALineMeasurement::getMeasConst() const
 
 void	TALineMeasurement::ifNotDoneSetSigma(TLength sigma)
 {//sets the sigma if it is still zero
-	if (fSigmaAPriori.getMetresValue() == 0.0)
+	if (fSigmaAPriori.getMetresValue() == LITERAL(0.0))
 	{
 		fSigmaAPriori = sigma;
 	}
@@ -117,7 +117,7 @@ void	TALineMeasurement::ifNotDoneSetSigma(TLength sigma)
 
 void	TALineMeasurement::ifNotDoneSetMeasConst(const TDistConstants& constant)
 {//Sets the measurement constant
-	if (fMeasConstant.getValue().getMetresValue() == 0.0)
+	if (fMeasConstant.getValue().getMetresValue() == LITERAL(0.0))
 	{
 		fMeasConstant = constant;
 	}

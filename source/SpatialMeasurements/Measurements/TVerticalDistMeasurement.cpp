@@ -35,7 +35,7 @@
 // default constructor
 //////////////////////
 TVerticalDistMeasurement::TVerticalDistMeasurement():
-TAPointMeasurement() ,fMeasuredDist(0.0),fSigmaAPriori(0), fMeasConstant(){
+TAPointMeasurement() ,fMeasuredDist(LITERAL(0.0)),fSigmaAPriori(0), fMeasConstant(){
 
 }
 
@@ -130,7 +130,7 @@ TLength TVerticalDistMeasurement::getSigma() const{
 /////////////////////////////////////
 void TVerticalDistMeasurement::ifNotDoneSetSigma(TLength sigma){
 
-	if (fSigmaAPriori.getMetresValue() == 0.0)
+	if (fSigmaAPriori.getMetresValue() == LITERAL(0.0))
 		fSigmaAPriori = sigma;
 }
 
@@ -139,7 +139,7 @@ void TVerticalDistMeasurement::ifNotDoneSetSigma(TLength sigma){
 ////////////////////////////////////////////////////
 void TVerticalDistMeasurement::ifNotDoneSetMeasConst(const TDistConstants& cte){
 
-	if (fMeasConstant.getValue().getMetresValue() == 0.0)
+	if (fMeasConstant.getValue().getMetresValue() == LITERAL(0.0))
 		fMeasConstant = cte;
 }
 

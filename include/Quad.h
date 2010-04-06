@@ -6,7 +6,7 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
-#if _DEBUG
+#if _DEBUG && __INTEL_COMPILER
 
 class Quad
 {
@@ -16,6 +16,11 @@ public:
 	Quad(int other);
 	Quad(const Quad& other);
 	Quad();
+
+	Quad& operator =(const Quad& other);
+	Quad& operator =(_Quad other);
+	Quad& operator =(double other);
+	Quad& operator =(int other);
 
 	friend Quad operator +(const Quad& first, const Quad& second);
 	friend Quad operator -(const Quad& first, const Quad& second);
@@ -108,6 +113,21 @@ public:
 	Quad& operator *=(const Quad& second);
 	Quad& operator /=(const Quad& second);
 
+	Quad& operator +=(double second);
+	Quad& operator -=(double second);
+	Quad& operator *=(double second);
+	Quad& operator /=(double second);
+
+	Quad& operator +=(int second);
+	Quad& operator -=(int second);
+	Quad& operator *=(int second);
+	Quad& operator /=(int second);
+
+	Quad& operator +=(_Quad second);
+	Quad& operator -=(_Quad second);
+	Quad& operator *=(_Quad second);
+	Quad& operator /=(_Quad second);
+
 	operator _Quad() const;
 	operator _Quad*();
 
@@ -115,11 +135,15 @@ public:
 	_Quad value;
 };
 
-typedef Quad quad;
+typedef Quad real;
+
+#elif __INTEL_COMPILER
+
+typedef _Quad real;
 
 #else
 
-typedef _Quad quad;
+typedef double real;
 
 #endif
 

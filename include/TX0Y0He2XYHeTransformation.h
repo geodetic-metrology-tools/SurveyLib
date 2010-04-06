@@ -27,7 +27,7 @@
 //#include  <##classname##>
 //
 //using namespace system;
-#include  <cmath>
+// #include  <cmath>
 #include  "TCompositeAffTransform.h"
 #include  "TARefFrameTransformation.h"
 #include  "TXYHeProjection.h"
@@ -67,29 +67,31 @@ public:
 
 	/**@name Member Functions */
 	//@{
+		using TARefFrameTransformation::transform;
+
 		/// Copy Assignment Operator 
-		TX0Y0He2XYHeTransformation&			operator=( const TX0Y0He2XYHeTransformation& );
+		TX0Y0He2XYHeTransformation &  operator=( const TX0Y0He2XYHeTransformation& );
 
 		/// Return a pointer to a clone of this reference frame
-		virtual TARefFrameTransformation*	clone() const;
+		virtual TX0Y0He2XYHeTransformation *  clone() const;
 
 		/// Return a pointer to the inverse of this transformation
-		virtual TARefFrameTransformation*	inverse() const;
+		virtual TARefFrameTransformation *  inverse() const;
 
 		/// Return the source frame
-		virtual TAReferenceFrame*			getSourceFrame() const { return fFrom; }
+		virtual TAReferenceFrame *  getSourceFrame() const { return fFrom; }
 
 		/// Return the destination frame
-		virtual TAReferenceFrame*			getDestinationFrame() const { return fTo; }
+		virtual TAReferenceFrame *  getDestinationFrame() const { return fTo; }
 
 		/// Return the ellipsoid of the transformation
-		virtual TReferenceEllipsoid*		getEllipsoid() const { return fEllipsoid; }
+		virtual TReferenceEllipsoid *  getEllipsoid() const { return fEllipsoid; }
 
 		/// Set the XYHe source frame
-		virtual void						setSourceFrame( TX0Y0HeProjection* );
+		virtual void  setSourceFrame( TX0Y0HeProjection* );
 
 		//! tranformation of a position vector between reference frames
-		virtual bool						transform(TPositionVector& pv) const;
+		virtual bool  transform(TPositionVector& pv) const;
 	//@}
 
 private:

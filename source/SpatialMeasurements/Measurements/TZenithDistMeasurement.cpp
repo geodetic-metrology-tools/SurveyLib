@@ -14,7 +14,7 @@
 //////////////////////
 
 TZenithDistMeasurement::TZenithDistMeasurement() : TAPointMeasurement(),
-fMeasuredAngle(0.0), fSigmaAPriori(0.0), fPrismeHeight (0.0)
+fMeasuredAngle(LITERAL(0.0)), fSigmaAPriori(LITERAL(0.0)), fPrismeHeight (LITERAL(0.0))
 {
 	fHeightStatus = kVariable;
 
@@ -28,7 +28,7 @@ TZenithDistMeasurement::TZenithDistMeasurement(TSpatialPointName tgName, TAngle 
 TAPointMeasurement(tgName), fMeasuredAngle(obsAng), fSigmaAPriori(sigma)
 {
 	// if prisme heigth is not given, it is supposed to be variable
-	fPrismeHeight.setMetresValue(0.0);
+	fPrismeHeight.setMetresValue(LITERAL(0.0));
 	fHeightStatus = kFixed;
 
 }
@@ -168,7 +168,7 @@ void TZenithDistMeasurement::setPrismeHeightStatus(ECalcStatus status){
 /////////////////////////////////////
 void TZenithDistMeasurement::ifNotDoneSetSigma(TAngle sigma){
 
-	if (fSigmaAPriori.getRadiansValue() == 0.0)
+	if (fSigmaAPriori.getRadiansValue() == LITERAL(0.0))
 		fSigmaAPriori = sigma;
 }
 

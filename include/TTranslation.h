@@ -1,12 +1,11 @@
 // TTranslation.h
 //
-/** Class for a translation
-    Operators : + Translation */
+/** A translation transformation*/
 //
 // Patterns:
 //
 // 
-// Copyright 2000 CERN EST/SU. All rights reserved.
+// Copyright 2000-10 CERN SU, M.Jones. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 
@@ -24,7 +23,8 @@
 // Forward declarations
 //
 #include  "TAAffineTransformation.h"
-#include  "TCompositeAffTransform.h"
+#include  "TFreeVector.h"
+class  TCompositeAffTransform;
 //
 ////////////////////////////////////////////////////////////////
 
@@ -58,52 +58,58 @@ public:
 
 	/**@name Member Functions */
 	//@{
-		/// Copy Assignment Operator 
-		TTranslation& operator=( const TTranslation& );
+		using TAAffineTransformation::operator();
+		using TAAffineTransformation::transform;
 
-		/// operator + : T2 = T + T1
-		TTranslation  operator+(const TTranslation&);
+		//! Copy Assignment Operator 
+		TTranslation& operator= ( const TTranslation & );
 
-		//! Multiplication by an affine transformation
-		TCompositeAffTransform operator*(const TAAffineTransformation&);
+		//! add two translation vectors
+		TTranslation  operator+ ( const TTranslation & );
 
-		/// Return element i
-		quad       operator[](int ) const;
+		/*//! Return element i
+		real       operator[](int ) const;
 
-		/// Return element i
-		quad&      operator[](int );
+		//! Return element i
+		real&      operator[](int );*/
 
-		/// Return the translation vector
+		//! Return the translation vector
 		TFreeVector   getVector() const;
 
-		/// Return a pointer to a clone of this transformation
-		TAAffineTransformation*  clone() const;
+		//! Create a composite transformation by applying this transformation to an affine transformation
+		//virtual  TCompositeAffTransform operator() ( const TAAffineTransformation & ) const;
 
-		/// Transform a position vector 
-		virtual bool transform( TPositionVector& )const;
+		//! Return a pointer to a clone of this transformation
+		virtual  TTranslation *  clone() const;
 
-		/// Transform a free vector
-		virtual bool transform( TFreeVector& )const;
+		//! Transform a position vector 
+		virtual  bool transform( TPositionVector & ) const;
 
-		/// Transform a rotation matrix
-		virtual bool transform( TRotationMatrix& )const;
+		//! Transform a free vector
+		virtual  bool transform( TFreeVector & ) const;
 
-		/// inverse transformation
-		TTranslation inverse();
+		//! Transform a rotation matrix
+		virtual  bool transform( TRotationMatrix & ) const;
 
-		/// invert the transformation
-		void invert();
+		//! apply this transformation to a position vector 
+		virtual  TPositionVector &  operator() ( TPositionVector & ) const;
 
-	
+		//! apply this transformation to a free vector 
+		virtual  TFreeVector &  operator() ( TFreeVector & ) const;
+
+		//! apply this transformation to a Rotation Matrix 
+		virtual  TRotationMatrix &  operator() ( TRotationMatrix & ) const;
+
+		//! Return a pointer to the inverse of this transformation
+		virtual  TTranslation * inverse() const;
+
+		//! Invert the transformation, replaces the current transformation parameters
+		virtual  void invert();
 	//@}
 
 
 private:
-
-	
-		TFreeVector fTranslationVector;
-
-
+	TFreeVector fTranslationVector;
 
 	//ClassDef(TTranslation, 1)
 };

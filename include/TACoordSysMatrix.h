@@ -74,16 +74,16 @@ protected:
 	/*!\name member protected functions*/
 	//@{
 	//!get the (i,j) value
-	quad getC(const int& i, const int& j) const;
+	real getC(const int& i, const int& j) const;
 
 	//!set value to (i,j)
-	void setC(const int& i, const int& j, quad value);
+	void setC(const int& i, const int& j, real value);
 	//@}
 
 
 private:
 	
-	quad					mx[3][3]; /*!< élément of the 3*3 matrix */
+	real					mx[3][3]; /*!< élément of the 3*3 matrix */
 	TVCoordinateSystem*		fCoordSys; /*!< coordinate system */
 		
 	

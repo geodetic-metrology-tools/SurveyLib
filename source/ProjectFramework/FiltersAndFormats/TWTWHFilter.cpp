@@ -69,7 +69,7 @@ void TWTWHFilter::input(TLGCTStream &iStream, TWireToWireDistMeas &WTW) const{
 	
 
 	TSpatialPointName w1End1Name, w1End2Name, w2End1Name, w2End2Name;
-	TLength w1Pos(0.0), w2Pos(0.0), obsHDist(0.0), hSigma(0.0), obsVDist(0.0), vSigma(0.0);
+	TLength w1Pos(LITERAL(0.0)), w2Pos(LITERAL(0.0)), obsHDist(LITERAL(0.0)), hSigma(LITERAL(0.0)), obsVDist(LITERAL(0.0)), vSigma(LITERAL(0.0));
 	
 	//get the first wire's first end point's name
 	iStream >> w1End1Name;
@@ -97,7 +97,7 @@ void TWTWHFilter::input(TLGCTStream &iStream, TWireToWireDistMeas &WTW) const{
 	//possibly read the horizontal distance's precision
 	if (!iStream.atEnd()){
 		iStream >> hSigma;
-		hSigma *= 0.001;
+		hSigma *= LITERAL(0.001);
 	}
 
 	TWireToWireDistMeas* newWTW = new TWireToWireDistMeas

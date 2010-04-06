@@ -47,8 +47,8 @@ fHUsedInCalc(true), fVUsedInCalc(true)
 // destructor
 /////////////
 T2DOffsetMeasurement::~T2DOffsetMeasurement() //: 
-/*fSetupPtName(""), fLineName(""), fVertOffset(0.0), 
-fVertSigma(0.0), fHorOffset(0.0), fHorSigma(0.0), 
+/*fSetupPtName(""), fLineName(""), fVertOffset(LITERAL(0.0)), 
+fVertSigma(LITERAL(0.0)), fHorOffset(LITERAL(0.0)), fHorSigma(LITERAL(0.0)), 
 fActiveMeasCount(0), fActiveEqCount(0), fActiveUnkCount(0)*/ {
 
 }
@@ -171,7 +171,7 @@ void T2DOffsetMeasurement::setLineName(string ln) {
 ////////////////////////////////////////////////
 void T2DOffsetMeasurement::ifNotDoneSetVSigma(TLength sigma){
 
-	if (fVertSigma.getMetresValue() == 0.0)
+	if (fVertSigma.getMetresValue() == LITERAL(0.0))
 		fVertSigma = sigma;
 }
 
@@ -197,7 +197,7 @@ TLength T2DOffsetMeasurement::getHorSigma() const{
 ////////////////////////////////////////////////
 void T2DOffsetMeasurement::ifNotDoneSetHSigma(TLength sigma){
 
-	if (fHorSigma.getMetresValue() == 0.0)
+	if (fHorSigma.getMetresValue() == LITERAL(0.0))
 		fHorSigma = sigma;
 }
 

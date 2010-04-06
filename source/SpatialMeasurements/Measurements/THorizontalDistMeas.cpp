@@ -14,7 +14,7 @@
 // default constructor
 //////////////////////
 THorizontalDistMeas::THorizontalDistMeas(): TAPointMeasurement(),
-fObservedDist(0.0),fSigmaAPriori(0.0), fSigmaPpm(0.0), fMeasConstant()
+fObservedDist(LITERAL(0.0)),fSigmaAPriori(LITERAL(0.0)), fSigmaPpm(LITERAL(0.0)), fMeasConstant()
 {
 
 }
@@ -104,7 +104,7 @@ TLength THorizontalDistMeas::getSigmaPpm() const{
 /////////////////////////////////////
 void THorizontalDistMeas::ifNotDoneSetSigma(TLength sigma){
 
-	if (fSigmaAPriori.getMetresValue() == 0.0)
+	if (fSigmaAPriori.getMetresValue() == LITERAL(0.0))
 		fSigmaAPriori = sigma;
 }
 
@@ -113,7 +113,7 @@ void THorizontalDistMeas::ifNotDoneSetSigma(TLength sigma){
 /////////////////////////////////////////
 void THorizontalDistMeas::ifNotDoneSetSigmaPpm(TLength ppm){
 
-	if (fSigmaPpm.getMetresValue() == 0.0)
+	if (fSigmaPpm.getMetresValue() == LITERAL(0.0))
 		fSigmaPpm = ppm;
 }
 
@@ -122,7 +122,7 @@ void THorizontalDistMeas::ifNotDoneSetSigmaPpm(TLength ppm){
 ////////////////////////////////////////////////////
 void THorizontalDistMeas::ifNotDoneSetMeasConst(const TDistConstants& cte){
 
-	if (fMeasConstant.getValue().getMetresValue() == 0.0)
+	if (fMeasConstant.getValue().getMetresValue() == LITERAL(0.0))
 		fMeasConstant = cte;
 }
 
