@@ -75,7 +75,7 @@ GeoidValue	TGeoidValues::getXiAzimuth(TAngle azimuth)
 {//
 	double  az = azimuth.getRadiansValue();
 	GeoidValue	XiAzimuthValue;
-	XiAzimuthValue = fXiValue*cos(az) + fEtaValue*sin(az);
+	XiAzimuthValue = fXiValue*cosq(az) + fEtaValue*sinq(az);
 	return XiAzimuthValue;
 }
 
@@ -84,6 +84,6 @@ GeoidValue	TGeoidValues::getEtaAzimuth(TAngle azimuth)
 {//
 	double  az = azimuth.getRadiansValue();
 	GeoidValue	EtaAzimuthValue;
-	EtaAzimuthValue = fEtaValue*cos(az) - fXiValue*sin(az);
+	EtaAzimuthValue = fEtaValue*cosq(az) - fXiValue*sinq(az);
 	return EtaAzimuthValue;
 }
