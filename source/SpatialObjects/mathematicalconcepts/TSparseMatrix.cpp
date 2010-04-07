@@ -430,7 +430,7 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 			delete result;
 			return NULL;
 		}
-		resultColumn[i] = sqrt(resultColumn[i]);
+		resultColumn[i] = sqrtq(resultColumn[i]);
 		rowInds.add(i);
 		results.add(resultColumn[i]);
 		col++;

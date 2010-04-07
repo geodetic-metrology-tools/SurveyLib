@@ -526,13 +526,13 @@ TMatrix TMatrix::dfact(int* n_pivot,int* pivot_i,int* pivot_j)
 	for (j=0;j<=n;j++)
 	{
 		k=j;
-		p=fabs((res)(j,j));
+		p=fabsq((res)(j,j));
 		if (j<n)
 		{
 			jp1 = j+1;
 			for (i=jp1;i<=n;i++)
 			{
-				q=fabs((res)(i,j));
+				q=fabsq((res)(i,j));
 				if (q>p)
 				{
 					k=i;
@@ -952,7 +952,7 @@ void	TMatrix::aasen_dcmp2(TMatrix* N,TMatrix* L,TMatrix* T, valarray<double> *vc
 			qflg = k+1;
 			for (j=k+2;j<=n;j++) {
 					
-					if (fabs(vcv[j]) > fabs(vcv[qflg]))
+					if (fabsq(vcv[j]) > fabsq(vcv[qflg]))
 						qflg = j;
 				}
 
@@ -995,7 +995,7 @@ void	TMatrix::aasen_dcmp2(TMatrix* N,TMatrix* L,TMatrix* T, valarray<double> *vc
 			(*T)(k+1,k) = vcv[k+1];
 			(*T)(k,k+1) = vcv[k+1];
 
-			if ((fabs(vcv[k+1])>1.0e-14) && (k<= n-2)) {
+			if ((fabsq(vcv[k+1])>1.0e-14) && (k<= n-2)) {
 				
 				for (i=k+2;i<=n;i++)
 					(*L)(i,k+1) = vcv[i]/vcv[k+1];

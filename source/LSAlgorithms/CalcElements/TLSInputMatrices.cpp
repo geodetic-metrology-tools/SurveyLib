@@ -162,10 +162,12 @@ void TLSInputMatrices::clearMatrices()
 	if (fMisclosureVector != NULL)
 	{
 		delete fMisclosureVector;
+        fMisclosureVector = NULL;
 	}
 	if (fCnstrMisclosureVector != NULL)
 	{
 		delete fCnstrMisclosureVector;
+        fCnstrMisclosureVector = NULL;
 	}
 }
 
