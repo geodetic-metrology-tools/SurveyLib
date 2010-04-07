@@ -75,7 +75,7 @@ bool THorAngleMeasurement::operator==(const THorAngleMeasurement& right) const {
 
 	bool isEqualTo = false;
 	if ((fTargetPtName == (right.fTargetPtName)) &&
-		(__fabsq(fMeasuredAngle.getRadiansValue() - right.fMeasuredAngle.getRadiansValue()) < pow(LITERAL(1.0),-LITERAL(10.0))))
+		(fabsq(fMeasuredAngle.getRadiansValue() - right.fMeasuredAngle.getRadiansValue()) < powq(LITERAL(1.0),-LITERAL(10.0))))
 		isEqualTo = true;
 	return isEqualTo;
 }

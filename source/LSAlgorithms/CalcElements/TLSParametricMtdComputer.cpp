@@ -69,24 +69,19 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	const TColumnVector& misclV = im->getMisclosureVctr();
 	
     TSparseMatrix* firstDM = firstDMTransposed->transposed();
-	firstDM->write_matrix_file("C:\\AOld.txt");
 	im->setFirstDesignMatrix(firstDM);
 	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
-	aTransTimesW->write_matrix_file("C:\\AtPOld.txt");
 
 	TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
+#if _DEBUG
+	firstDM->write_matrix_file("C:\\AOld.txt");
+	aTransTimesW->write_matrix_file("C:\\AtPOld.txt");
 	fAtPA->write_matrix_file("C:\\AtPAOld.txt");
-	real* solutionVectorb = *aTransTimesW * misclV;
 	for (int i = 0; i < misclV.dimension(); i++)
 	{
 		printf("%.20e\n", (double) misclV(i));
 	}
-	for (int i = 0; i < aTransTimesW->rowsCount(); i++)
-	{
-		solutionVectorb[i] = -solutionVectorb[i];
-		printf("%.20e\n", (double) solutionVectorb[i]);
-	}
-	delete aTransTimesW;
+#endif
 
 	int success = 0;
 
@@ -101,12 +96,20 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 	if (L == NULL)
 	{
-		delete[] solutionVectorb;
-		// TODO: set some error
 		return false; // Matrix is not positive definite
 	}
 
 	rm->setL(L);
+
+	real* solutionVectorb = *aTransTimesW * misclV;
+	delete aTransTimesW;
+	for (int i = 0; i < aTransTimesW->rowsCount(); i++)
+	{
+		solutionVectorb[i] = -solutionVectorb[i];
+#if _DEBUG
+		printf("%.20e\n", (double) solutionVectorb[i]);
+#endif
+	}
 
 	real* solution = L->solve_eqn(solutionVectorb);
 
@@ -128,140 +131,91 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 ////////////////////////////////////////////////////////////////
 bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm){
 
-//	cout << "Entered computer\n";
+	const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
+	const TSparseMatrix* constraintFirstDM = im->getCnstrFirstDgnMtrx();
+	const TSparseMatrix* weightM = im->getWeightMtrx();
+	const TColumnVector& misclV = im->getMisclosureVctr();
+	const TColumnVector& constraintMisclV = im->getCnstrMisclosureVctr();
+	
+	TSparseMatrix* firstDM = firstDMTransposed->transposed();
+	im->setFirstDesignMatrix(firstDM);
+	TSparseMatrix* constraintFirstDMTransposed = constraintFirstDM->transposed();
 
-	//const TMatrix& firstDM = im->getFirstDgnMtrx(); //A1
-	//const TMatrix& weightM = im->getWeightMtrx();  //P
-	//const TColumnVector& misclV = im->getMisclosureVctr(); //W1
+	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
 
-	//const TMatrix& cnstrFirstDM = im->getCnstrFirstDgnMtrx(); //A2
-	//const TColumnVector& cnstrMisclV = im->getCnstrMisclosureVctr(); //W2      
+	TSparseMatrix* temp = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);		
+#if _DEBUG
+	firstDM->write_matrix_file("C:\\AOld.txt");
+	aTransTimesW->write_matrix_file("C:\\AtPOld.txt");
+	temp->write_matrix_file("C:\\AtPAOld.txt");
+	constraintFirstDM->write_matrix_file("C:\\COld.txt");
+#endif
+	TSparseMatrix* aTransTimesWTimesAInverted = temp->symmetric_lower_inverse();
+	delete temp;
 
-	//int nbUnk = im->getNbrUnknowns();
-	//int nbObs = im->getNbrObservations();
-	//int nbCnstr = im->getNbrConstraints();
-	//int nbCnstrObs = im->getNbrConstraintObs();
+	if (aTransTimesWTimesAInverted == NULL)
+	{
+		delete aTransTimesW;
+		return false;
+	}
+	
+	TSparseMatrix* cstrATimesATransTimesWTimesAInverted =
+		constraintFirstDM->multiply_F(*aTransTimesWTimesAInverted);
 
-	////intermediate N = (A1tPA1) matrix
-	//TMatrix	N (nbUnk, nbUnk);
-	//N = LITERAL(0.0);
-	//
-	//N = firstDM.transposed() * weightM * firstDM;
+	TSparseMatrix* solutionMatrixA = cstrATimesATransTimesWTimesAInverted->
+			multiply_returning_lower_triangular_F(*constraintFirstDMTransposed);
+	TSparseMatrix* decomposed = solutionMatrixA->cholesky_decompose_lower_triangular_returning_lower_triangular();
+	delete solutionMatrixA;
+	if (decomposed == NULL)
+	{
+        delete cstrATimesATransTimesWTimesAInverted;
+		delete aTransTimesW;
+		return false;
+	}
 
-	////intermediate Nbig
-	///*
-	//Nbig = ( (N  , A2t)
-	//		 (A2, 0 ))
-	//*/
-	//TMatrix	Nbig (nbUnk + nbCnstr, nbUnk + nbCnstr);
-	//Nbig = LITERAL(0.0);
+	real* aTransTimesWTimesATimesMiscVec = *aTransTimesW * misclV;
+	delete aTransTimesW;
 
-	////insert N in Nbig
-	//int i = 0;
-	//while( i < nbUnk )
-	//{
-	//	//insert N
-	//	int j = 0;
-	//	while(j < nbUnk)
-	//	{// modif
-	//		Nbig(i,j) = N(i,j);
-	//		j++;
-	//	}
+#if _DEBUG
+	for (int i = 0; i < misclV.dimension(); i++)
+	{
+		printf("%.20e\n", (double) misclV(i));
+	}
+#endif
 
-	//	
-	//	int J = 0;
-	//	while(j<nbUnk + nbCnstr)
-	//	{
-	//		Nbig(i,j) = cnstrFirstDM(J,i);//insert A2t
-	//		Nbig(j,i) = cnstrFirstDM(J,i);//insert A2
-	//		j++;
-	//		J++;
-	//	}
-	//	i++;
-	//}
+	real* solutionVectorb = *cstrATimesATransTimesWTimesAInverted * aTransTimesWTimesATimesMiscVec;
+	delete cstrATimesATransTimesWTimesAInverted;
 
-	////inverse Nbig matrix
-	//TMatrix NbigInv (nbUnk + nbCnstr, nbUnk + nbCnstr);
-	//NbigInv = 0,0;
-	//// NbigInv = intermediate matrix containing LU decomposition for solving of equation system
-	//int n_pivot(NbigInv.numRows()-1); // pivot used in LU decomposition
-	//int* pivot_i; // pivot used in LU decomposition
-	//int* pivot_j; // pivot used in LU decomposition
+	for (int i = 0; i < constraintMisclV.dimension(); i++)
+	{
+		solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
+	}
 
-	//pivot_i = new int [n_pivot+1];
-	//pivot_j = new int [n_pivot+1];
-	//// LU decomposition
-	//NbigInv = Nbig.dfact(&n_pivot,pivot_i,pivot_j);
+	real* solution = decomposed->solve_eqn(solutionVectorb);
+	delete decomposed;
+	delete[] solutionVectorb;
 
+	solutionVectorb = *constraintFirstDMTransposed * solution;
+	delete[] solution;
+	
+	for (int i = 0; i < constraintFirstDMTransposed->rowsCount(); i++)
+	{
+		solutionVectorb[i] = -solutionVectorb[i] - aTransTimesWTimesATimesMiscVec[i];
+	}
+    delete constraintFirstDMTransposed;
+	delete[] aTransTimesWTimesATimesMiscVec;
 
-	//
-	//if (NbigInv.isNull())
-	//{// if inverse method fails, an error message is generated
-	//	fError = NbigInv.getError();
-	//	return false;
-	//}
+	solution = *aTransTimesWTimesAInverted * solutionVectorb;
+	delete[] solutionVectorb;
+	delete aTransTimesWTimesAInverted;
 
-	////intermediate ColumnVector Cbig
-	///*
-	//Cbig = ( (A1t*p*misclV)
-	//		 (cnstrMisclV ) )
-	//*/
-	//TColumnVector Cbig ( nbUnk + nbCnstr);
-	//Cbig = LITERAL(0.0);
-	//TColumnVector C ( nbUnk);
-	//C = LITERAL(0.0);
-	//C = firstDM.transposed() * weightM * misclV*(-LITERAL(1.0));
+	TColumnVector* s = rm->getSolutionVctr();
+	for (int i = 0; i < s->dimension(); i++)
+	{
+		(*s)(i) = solution[i];
+	}
 
-	////insert C in Cbig
-	//i = 0;
-	//while( i < nbUnk )
-	//{
-	//	Cbig(i) = C(i);
-	//	i++;
-	//}
-
-	////insert cnstrMisclV in Nbig
-	//i = nbUnk;
-	//int I = 0;
-	//while( i < (nbUnk + nbCnstr) )
-	//{
-	//	Cbig(i) = cnstrMisclV(I);
-	//	i++;
-	//	I++;
-	//}
-
-
-	////computation of the solution vector
-	//TColumnVector solutionBig (nbUnk + nbCnstr);
-	//solutionBig = LITERAL(0.0);
-	//solutionBig = NbigInv.dfeqn(&Cbig,n_pivot,pivot_i,pivot_j);
-
-	//delete[] pivot_i;
-	//delete[] pivot_j;
-
-
-	//if (solutionBig.isNull())
-	//{// if dfeqn method fails, an error message is generated
-	//	fError = NbigInv.getError();
-	//	return false;
-	//}
-
-	//TColumnVector* solution = rm->getSolutionVctr();
-	//(*solution) = LITERAL(0.0);
-	//// extraction of solution from solutionBig
-	//i = 0;
-	//while( i < nbUnk)
-	//{
-	//	(*solution)(i) =  solutionBig(i);
-	//	i++;
-	//}
-
-	//if (fAtPA == 0)
-	//{
-	//	fAtPA = new TMatrix (nbUnk + nbCnstr, nbUnk + nbCnstr);
-	//}
-	//*fAtPA = Nbig;
-
+	delete[] solution;
 
 	return true;
 }

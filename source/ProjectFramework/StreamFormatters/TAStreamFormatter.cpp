@@ -677,7 +677,9 @@ TAStreamFormatter &TAStreamFormatter::operator>>( float &f )
 
 
 TAStreamFormatter &TAStreamFormatter::operator>>( real &d )
-{	
+{
+#if __INTEL_COMPILER
+
 	string str;
 	(*fIOStream) >> str;
 	
@@ -713,6 +715,12 @@ TAStreamFormatter &TAStreamFormatter::operator>>( real &d )
 	}
 	_Quad fraction = fractionPart / __powq(10.0q, len);
 	d = sign * (wholePart + fraction);
+
+#else
+
+	(*fIOStream) >> d;
+
+#endif
 	return *this;
 }
 

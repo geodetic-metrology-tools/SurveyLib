@@ -314,7 +314,7 @@ TLength		TLSCalcPosVectorParam::getErrorEllMajorAxis() const
 	real vxy = getXYCovar().getMMetresValue();
 	real sx2 = pow(getXSigma().getMMetresValue(), 2) ;
 	real sy2 = pow(getYSigma().getMMetresValue(), 2) ;
-	real gdAxe = (LITERAL(1.0)/__sqrtq(LITERAL(2.0))) * __sqrtq( sx2 + sy2 + __sqrtq( pow((sy2 - sx2), 2) + (LITERAL(4.0) * vxy * vxy) ) );
+	real gdAxe = (LITERAL(1.0)/sqrtq(LITERAL(2.0))) * sqrtq( sx2 + sy2 + sqrtq( pow((sy2 - sx2), 2) + (LITERAL(4.0) * vxy * vxy) ) );
 	
 	TLength res;
 	res.setMMetresValue(gdAxe);
@@ -327,7 +327,7 @@ TLength		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
 	real vxy = getXYCovar().getMMetresValue();
 	real sx2 = pow(getXSigma().getMMetresValue(), 2) ;
 	real sy2 = pow(getYSigma().getMMetresValue(), 2) ;
-	real ptAxe = (LITERAL(1.0)/__sqrtq(LITERAL(2.0))) * __sqrtq( sx2 + sy2 - __sqrtq( pow((sy2 - sx2), 2) + (LITERAL(4.0) * vxy *vxy) ) );
+	real ptAxe = (LITERAL(1.0)/sqrtq(LITERAL(2.0))) * sqrtq( sx2 + sy2 - sqrtq( pow((sy2 - sx2), 2) + (LITERAL(4.0) * vxy *vxy) ) );
 	
 	TLength res;
 	res.setMMetresValue(ptAxe);

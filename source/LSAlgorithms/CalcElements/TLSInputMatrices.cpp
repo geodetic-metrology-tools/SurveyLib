@@ -29,17 +29,25 @@ TLSInputMatrices::TLSInputMatrices()
 	firstDesignMatrixTransposed = NULL;
 	secondDesignMatrixTransposed = NULL;
 	weightMatrix = NULL;
+	bTimesWInvTimesBTransInverted = NULL;
+	weightMatrixInverted = NULL;
 
-	fMisclosureVector = 0;
-	
-	fCnstrFirstDesignMtrx = 0;
+	fCnstrFirstDesignMtrx = NULL;
+
+	fMisclosureVector = NULL;
+
 	fCnstrMisclosureVector = 0;
+
+	constraintFirstDesignMatrixValues = NULL;
+	constraintFirstDesignMatrixColPtr = NULL;
+	constraintFirstDesignMatrixRowInd = NULL;
 
 	fNbUnk = 0;
 	fNbEqn = 0;
 	fNbObs = 0;
 	fNbCnstr = 0;
 	fNbCnstrObs = 0;
+
 
 //	fS0APrioriScaleFactor = 1;
 }
@@ -56,10 +64,14 @@ TLSInputMatrices::~TLSInputMatrices()
 	delete weightMatrixValues;
 	delete fMisclosureVector;
 
-	delete fCnstrFirstDesignMtrx;
-	delete fCnstrMisclosureVector;
-
-
+	if (constraintFirstDesignMatrixValues != NULL)
+	{
+		delete constraintFirstDesignMatrixValues;
+		delete constraintFirstDesignMatrixColPtr;
+		delete constraintFirstDesignMatrixRowInd;
+		delete fCnstrFirstDesignMtrx;
+		delete fCnstrMisclosureVector;
+	}
 }
 
 
@@ -75,6 +87,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	fNbEqn = equations;
 	fNbCnstrObs = cnstrObs;
 
+	clearMatrices();
 	fMisclosureVector = new TColumnVector(fNbObs);
 }
 
@@ -87,8 +100,14 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	fNbEqn = equations;
 	fNbCnstr = constraints;
 	fNbCnstrObs = nbCnstrObs;
-	
+
+	clearMatrices();
 	fMisclosureVector = new TColumnVector(fNbObs);
+	fCnstrMisclosureVector = new TColumnVector(fNbCnstr);
+
+	constraintFirstDesignMatrixValues = new list<real>();
+	constraintFirstDesignMatrixColPtr = new list<int>();
+	constraintFirstDesignMatrixRowInd = new list<int>();
 }
 
 
@@ -101,21 +120,55 @@ void TLSInputMatrices::setS0APrioriScaleFactor(real scalefac)
 
 void TLSInputMatrices::clearMatrices()
 {
-	firstDesignMatrixTransposedValues->clear();
-	firstDesignMatrixTransposedRowInd->clear();
-	firstDesignMatrixTransposedColPtr->clear();
-	
-	secondDesignMatrixTransposedValues->clear();
-	secondDesignMatrixTransposedRowInd->clear();
-	secondDesignMatrixTransposedColPtr->clear();
-
-	weightMatrixValues->clear();
-
 	if (firstDesignMatrixTransposed != NULL)
 	{
-		delete firstDesignMatrixTransposed;
 		delete secondDesignMatrixTransposed;
+		delete firstDesignMatrixTransposed;
 		delete weightMatrix;
+
+		firstDesignMatrixTransposed = NULL;
+		secondDesignMatrixTransposed = NULL;
+		weightMatrix = NULL;
+	}
+
+	if (fCnstrFirstDesignMtrx != NULL)
+	{
+		delete fCnstrFirstDesignMtrx;
+		fCnstrFirstDesignMtrx = NULL;
+	}
+
+	if (weightMatrixInverted != NULL)
+	{
+		delete weightMatrixInverted;
+		weightMatrixInverted = NULL;
+	}
+
+	if (bTimesWInvTimesBTransInverted != NULL)
+	{
+		delete bTimesWInvTimesBTransInverted;
+		bTimesWInvTimesBTransInverted = NULL;
+	}
+
+	if (constraintFirstDesignMatrixValues != NULL)
+	{
+		delete constraintFirstDesignMatrixValues;
+		delete constraintFirstDesignMatrixColPtr;
+		delete constraintFirstDesignMatrixRowInd;
+
+		constraintFirstDesignMatrixValues = NULL;
+		constraintFirstDesignMatrixColPtr = NULL;
+		constraintFirstDesignMatrixRowInd = NULL;
+	}
+
+	if (fMisclosureVector != NULL)
+	{
+		delete fMisclosureVector;
+		fMisclosureVector = NULL;
+	}
+	if (fCnstrMisclosureVector != NULL)
+	{
+		delete fCnstrMisclosureVector;
+		fCnstrMisclosureVector = NULL;
 	}
 }
 
@@ -170,16 +223,13 @@ bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column,
 }
 
 
-bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, real coeff)
+bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, real coeff)
 {//sets an element of the constraint first design matrix
 	bool successfullySet = true;
-	if (row<=fNbCnstr && column <=fNbUnk)
+	if (coeff != 0)
 	{
-		(*fCnstrFirstDesignMtrx)(row, column) = (*fCnstrFirstDesignMtrx)(row, column) + coeff;
-	}
-	else
-	{
-		successfullySet = false;
+		constraintFirstDesignMatrixValues->push_back(coeff);
+		constraintFirstDesignMatrixRowInd->push_back(row);
 	}
 	return successfullySet;
 }
@@ -203,6 +253,11 @@ void TLSInputMatrices::setNewRow()
 {
 	firstDesignMatrixTransposedColPtr->push_back(firstDesignMatrixTransposedValues->size());
 	secondDesignMatrixTransposedColPtr->push_back(secondDesignMatrixTransposedValues->size());
+}
+
+void TLSInputMatrices::setConstraintNewColumn()
+{
+	constraintFirstDesignMatrixColPtr->push_back(constraintFirstDesignMatrixValues->size());
 }
 
 void TLSInputMatrices::finishedFillingMatrices()
@@ -233,7 +288,7 @@ void TLSInputMatrices::finishedFillingMatrices()
 		iterCols++;
 	}
 	firstDesignMatrixTransposedColPtr->clear();
-	
+
 	real* vals2 = new real[secondDesignMatrixTransposedValues->size()];
 	int* cols2 = new int[secondDesignMatrixTransposedColPtr->size()];
 	int* rows2 = new int[secondDesignMatrixTransposedRowInd->size()];
@@ -262,7 +317,7 @@ void TLSInputMatrices::finishedFillingMatrices()
 	}
 	secondDesignMatrixTransposedColPtr->clear();
 
-	firstDesignMatrixTransposed = new TSparseMatrix(fNbUnk, fNbObs,
+	firstDesignMatrixTransposed = new TSparseMatrix(fNbUnk, fNbEqn,
 		vals, rows, cols);
 	secondDesignMatrixTransposed = new TSparseMatrix(fNbUnk, fNbObs,
 		vals2, rows2, cols2);
@@ -285,6 +340,44 @@ void TLSInputMatrices::finishedFillingMatrices()
 
 	weightMatrix = new TSparseMatrix(fNbObs, fNbObs,
 		vals3, rowinds, rowinds);
+
+	if (fNbCnstr != 0)
+	{
+		while (constraintFirstDesignMatrixColPtr->size() <= fNbUnk)
+		{
+			setConstraintNewColumn();
+		}
+
+        real* vals4 = new real[constraintFirstDesignMatrixValues->size()];
+        int* cols4 = new int[constraintFirstDesignMatrixColPtr->size()];
+        int* rows4 = new int[constraintFirstDesignMatrixRowInd->size()];
+        list<real>::const_iterator iter4 = constraintFirstDesignMatrixValues->begin();
+        list<int>::const_iterator iterRows4 = constraintFirstDesignMatrixRowInd->begin();
+        i = 0;
+        while (iter4 != constraintFirstDesignMatrixValues->end())
+        {
+            rows4[i] = *iterRows4;
+            vals4[i++] = *iter4;
+
+            iter4++;
+            iterRows4++;
+        }
+        constraintFirstDesignMatrixValues->clear();
+        constraintFirstDesignMatrixRowInd->clear();
+
+        i = 0;
+        list<int>::const_iterator iterCols4 = constraintFirstDesignMatrixColPtr->begin();
+        while (iterCols4 != constraintFirstDesignMatrixColPtr->end())
+        {
+            cols4[i++] = *iterCols4;
+
+            iterCols4++;
+        }
+        constraintFirstDesignMatrixColPtr->clear();
+
+		fCnstrFirstDesignMtrx = new TSparseMatrix(fNbCnstr, fNbUnk,
+			vals4, rows4, cols4);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -311,9 +404,9 @@ const TColumnVector& TLSInputMatrices::getMisclosureVctr() const
 }
 
 
-const TMatrix& TLSInputMatrices::getCnstrFirstDgnMtrx() const
+const TSparseMatrix* TLSInputMatrices::getCnstrFirstDgnMtrx() const
 {//returns a reference to the constraint first dgn matrix
-	return *fCnstrFirstDesignMtrx;
+	return fCnstrFirstDesignMtrx;
 }
 
 
