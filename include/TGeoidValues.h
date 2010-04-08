@@ -17,18 +17,13 @@
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-#include	<float.h>
-#if __INTEL_COMPILER
-#include	<mathimf.h>
-#else
-#include <math.h>
-#endif
+#include	<TVNumericValue.h>
 #include	<assert.h>
 class	TAngle;
 
 
 // typedefs
-typedef	double	GeoidValue;	
+typedef	real	GeoidValue;	
 
 
 ////////////////////////////////////////////////////////////////
