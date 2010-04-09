@@ -102,7 +102,6 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	rm->setL(L);
 
 	real* solutionVectorb = *aTransTimesW * misclV;
-	delete aTransTimesW;
 	for (int i = 0; i < aTransTimesW->rowsCount(); i++)
 	{
 		solutionVectorb[i] = -solutionVectorb[i];
@@ -110,6 +109,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 		printf("%.20e\n", (double) solutionVectorb[i]);
 #endif
 	}
+	delete aTransTimesW;
 
 	real* solution = L->solve_eqn(solutionVectorb);
 
