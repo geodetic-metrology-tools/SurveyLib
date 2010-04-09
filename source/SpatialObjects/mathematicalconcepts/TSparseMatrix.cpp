@@ -380,6 +380,7 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 	TSparseMatrix *result = new TSparseMatrix(cols, cols);
 
 	result->colptr[0] = 0;
+	int colDiv2 = cols / 2;
 
 	for (int i = 0; i < cols; i++)
 	{
@@ -392,16 +393,17 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 		int col = result->colptr[column];
 
 		int count = 0;
-		while (column <= i) // going through all the computed columns
+		int minim = i < colDiv2 ? i : colDiv2;
+		while (column <= minim)
 		{
 			// finding the i -th row of the current column
-			while (count < col && rowInds[count] < i)
+			while (count < col - 1 && rowInds[count] < i)
 			{
 				count++;
 			}
 
 			// if this element in the column is not zero
-			if (count < col && rowInds[count] == i)
+			if (rowInds[count] == i)
 			{
 				real columnMainValue = results[count++];
 				resultColumn[i] -= columnMainValue * columnMainValue;
@@ -421,10 +423,36 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 			col = result->colptr[++column];
 		}
 
+		while (column <= i) // going through all the computed columns
+		{
+			// finding the i -th row of the current column
+			count = col - 1;
+			while (count > result->colptr[column - 1] && rowInds[count] > i)
+			{
+				count--;
+			}
+
+			// if this element in the column is not zero
+			if (rowInds[count] == i)
+			{
+				real columnMainValue = results[count++];
+				resultColumn[i] -= columnMainValue * columnMainValue;
+
+				// we multiply each element of the rest of the column with the "main value" which is
+				// on the i -th row and then subtract that from the current row's sum
+				while (count < col)
+				{
+					resultColumn[rowInds[count]] -= results[count] * columnMainValue;
+					count++;
+				}
+			}
+			col = result->colptr[++column];
+		}
+
 		col = colptr[i];
 
 		resultColumn[i] += vals[col];
-		if (resultColumn[i] < 0)
+		if (resultColumn[i] <= 0)
 		{
 			delete[] resultColumn;
 			delete result;
@@ -463,6 +491,96 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
         result->vals[i] = results[i];
         result->rowind[i] = rowInds[i];
 	}
+
+	return result;
+}
+
+TSparseMatrix* TSparseMatrix::ldlt_decompose_lower_triangular_returning_lower_triangular() const
+{
+	real* resultColumn = new real[cols];
+	Vector<real> results(cols * cols / 4);
+	Vector<int> rowInds(cols * cols / 4);
+
+	int* colWhereTo = new int[cols];
+
+	TSparseMatrix *result = new TSparseMatrix(cols, cols);
+	result->colptr[0] = 0;
+
+	for (int i = 0; i < cols; i++)
+	{
+		resultColumn[i] = 0;
+	}
+
+	for (int i = 0; i < cols; i++)
+	{
+		colWhereTo[i] = results.size() + 1;
+
+		// computing the diagonal element
+		real diag = vals[colptr[i]];
+		for (int j = 0; j < i; j++)
+		{
+			if (colWhereTo[j] != -1 && rowInds[colWhereTo[j]] == i)
+			{
+				diag -= results[result->colptr[j]] * results[colWhereTo[j]] * results[colWhereTo[j]];
+			}
+		}
+		if (diag == 0)
+		{
+			delete[] resultColumn;
+			delete[] colWhereTo;
+			delete result;
+			return NULL;
+		}
+		rowInds.add(i);
+		results.add(diag);
+
+		// computing the rest of the column...
+
+		// for each of the computed columns up to this one
+		for (int j = 0; j < i; j++)
+		{
+			if (colWhereTo[j] != -1 && rowInds[colWhereTo[j]] == i)
+			{
+				real multiplier = results[result->colptr[j]] * results[colWhereTo[j]];
+				for (int k = colWhereTo[j]; k < result->colptr[j + 1]; k++)
+				{
+					resultColumn[rowInds[k]] += multiplier * results[k];
+				}
+
+				if (++colWhereTo[j] >= result->colptr[j + 1])
+				{
+					colWhereTo[j] = -1;
+				}
+			}
+		}
+
+		diag = 1 / diag;
+		// fill the elements
+		for (int j = i + 1, k = colptr[i] + 1; j < cols; j++)
+		{
+			real element = diag * ((rowind[k] == j ? vals[k++] : 0) - resultColumn[j]);
+			if (element != 0)
+			{
+				rowInds.add(j);
+				results.add(element);
+			}
+			resultColumn[j] = 0;
+		}
+
+		result->colptr[i + 1] = results.size();
+	}
+
+	delete[] colWhereTo;
+
+	result->setNNZ(results.size());
+
+	for (int i = 0; i < results.size(); i++)
+	{
+        result->vals[i] = results[i];
+        result->rowind[i] = rowInds[i];
+	}
+
+	delete[] resultColumn;
 
 	return result;
 }

@@ -27,6 +27,7 @@ public:
 	void multiply_by_number(real);
 
 	TSparseMatrix* cholesky_decompose_lower_triangular_returning_lower_triangular() const;
+	TSparseMatrix* ldlt_decompose_lower_triangular_returning_lower_triangular() const;
 	TSparseMatrix* invert_diagonal_matrix() const;
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed() const;
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed_returning_lower_triangular() const;

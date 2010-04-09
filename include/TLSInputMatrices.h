@@ -137,11 +137,11 @@ private:
 	list<int>*		firstDesignMatrixTransposedColPtr;
 	list<int>*		firstDesignMatrixTransposedRowInd;
 
-	list<real>*	secondDesignMatrixTransposedValues; /*!< matrix (o x e) for the conditional part of the model  */
+	list<real>*	secondDesignMatrixTransposedValues; /*!< matrix (o x e) for the parametric part of the model  */
 	list<int>*		secondDesignMatrixTransposedColPtr;
 	list<int>*		secondDesignMatrixTransposedRowInd;
 
-	list<real>*	    constraintFirstDesignMatrixValues; /*!< matrix (u x c) for the parametric part of the model  */
+	list<real>*	    constraintFirstDesignMatrixValues; /*!< matrix (c x u) for the conditional part of the model  */
 	list<int>*		constraintFirstDesignMatrixColPtr;
 	list<int>*		constraintFirstDesignMatrixRowInd;
 
@@ -150,13 +150,13 @@ private:
 	TColumnVector*	fMisclosureVector; /*!< vector (u) for misclosure errors */
 //	real			fS0APrioriScaleFactor; /*!< indicates if there is a priori scale factor or not */
 
-	TSparseMatrix*	fCnstrFirstDesignMtrx; /*!< matrix (u x c) for the parametric part of the model */
+	TSparseMatrix*	fCnstrFirstDesignMtrx; /*!< matrix (c x u) for the parametric part of the model */
 	TColumnVector*	fCnstrMisclosureVector; /*!< vector for misclosure errors */
 
-	TSparseMatrix*	firstDesignMatrix;
-	TSparseMatrix*	firstDesignMatrixTransposed;
-	TSparseMatrix*	secondDesignMatrixTransposed;
-	TSparseMatrix*	weightMatrix;
+	TSparseMatrix*	firstDesignMatrix; /*!< matrix (e x u) for the parametric part of the model */
+	TSparseMatrix*	firstDesignMatrixTransposed; /*!< matrix (u x e) for the parametric part of the model */
+	TSparseMatrix*	secondDesignMatrixTransposed; /*!< matrix (u x e) for the parametric part of the model */
+	TSparseMatrix*	weightMatrix; /*!< matrix (o x o) for the observations weights */
 	TSparseMatrix*	weightMatrixInverted;
 	TSparseMatrix*	bTimesWInvTimesBTransInverted;
 
