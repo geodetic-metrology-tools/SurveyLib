@@ -564,7 +564,7 @@ real* TSparseMatrix::solve_eqn(const real* b) const
 	for (int i = 0; i < cols; i++)
 	{
 		sum = b[i];
-		for (col = LT->colptr[i]; col < LT->colptr[i + 1] && LT->rowind[col] < i; col++)
+		for (col = LT->colptr[i]; LT->rowind[col] < i; col++)
 		{
 			sum -= LT->vals[col] * result[LT->rowind[col]];
 		}
@@ -573,11 +573,45 @@ real* TSparseMatrix::solve_eqn(const real* b) const
 	for (int i = cols - 1; i >= 0; i--)
 	{
 		sum = result[i];
-		for (col = colptr[i + 1] - 1; col >= colptr[i] && rowind[col] > i; col--)
+		for (col = colptr[i + 1] - 1; rowind[col] > i; col--)
 		{
 			sum -= vals[col] * result[rowind[col]];
 		}
 		result[i] = sum / vals[col];
+	}
+
+	return result;
+}
+
+real* TSparseMatrix::solve_ldlt(const real* b) const
+{
+	real* result = new real[rows];
+
+	TSparseMatrix* LT = this->transposed();
+
+	int col;
+	real sum;
+	for (int i = 0; i < cols; i++)
+	{
+		sum = b[i];
+		for (col = LT->colptr[i]; LT->rowind[col] < i; col++)
+		{
+			sum -= LT->vals[col] * result[LT->rowind[col]];
+		}
+		result[i] = sum;
+	}
+	for (int i = 0; i < cols; i++)
+	{
+		result[i] /= vals[colptr[i]];
+	}
+	for (int i = cols - 1; i >= 0; i--)
+	{
+		sum = result[i];
+		for (col = colptr[i + 1] - 1; rowind[col] > i; col--)
+		{
+			sum -= vals[col] * result[rowind[col]];
+		}
+		result[i] = sum;
 	}
 
 	return result;

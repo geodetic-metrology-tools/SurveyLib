@@ -32,6 +32,7 @@ public:
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed() const;
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed_returning_lower_triangular() const;
 	real* solve_eqn(const real* b) const;
+	real* solve_ldlt(const real* b) const;
 
     TSparseMatrix* add(const TSparseMatrix& second) const;
 

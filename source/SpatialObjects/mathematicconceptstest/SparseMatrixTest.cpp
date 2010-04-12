@@ -332,7 +332,7 @@ int main()
 	TSparseMatrix* L = res->ldlt_decompose_lower_triangular_returning_lower_triangular();
 	L->write_matrix_file("C:\\foo1.txt");*/
 
-	//srand(time(0));
+	srand(time(0));
 
 	int minRows = 60, maxRows = 90;
 
@@ -424,10 +424,10 @@ int main()
     double to = 1.000000000000001;
     double atLeast = 1e-50;
 #endif
-	for (int a = 4; a < 50; a++)
+	//for (int a = 4; a < 50; a++)
 	for (int count = 0; count < 20; count++)
 	{
-		//int a = rand() % (maxRows - minRows) + minRows;
+		int a = rand() % (maxRows - minRows) + minRows;
 		TSparseMatrix* L = generateLowerTriangularMatrix(a);
 		
 		TSparseMatrix* LT = L->transposed();
@@ -559,8 +559,7 @@ int main()
 		}
 
 		/*delete L;
-		L = generateIntegralLowerTriangularMatrix(a);
-		L->write_matrix_file("C:\\foo.txt");*/
+		L = generateIntegralLowerTriangularMatrix(a);*/
 		TSparseMatrix* ldlt = L->ldlt_decompose_lower_triangular_returning_lower_triangular();
 
 		if (ldlt != NULL)
@@ -609,10 +608,26 @@ int main()
 
 			TSparseMatrix* D = new TSparseMatrix(ldlt->columnsCount(), ldlt->columnsCount(),
 				vals1, rows1, cols1);
+
+//			real* bb = new real[a];
+//			for (int i = 0; i < a; i++)
+//			{
+//				double XMin = -10;
+//				double XMax = 10;
+//				double r = double (rand()) / (double (RAND_MAX) + LITERAL(1.0));
+//				double X = XMin + r * (XMax - XMin); // transform to wanted range
+//#ifdef APFLOAT
+//				bb[i] = apfloat((int) X, 1000);
+//#else
+//				bb[i] = (int) X;
+//#endif
+//			}
+			real* solutionVector = ldlt->solve_ldlt(b);
 			delete ldlt;
 
 			TSparseMatrix* transd = newldlt->transposed();
 			TSparseMatrix* original = newldlt->multiply_three_returning_lower_triangular_F(*D, *transd);
+			TSparseMatrix* originalBig = newldlt->multiply_three_F(*D, *transd);
 			delete newldlt;
 			delete transd;
 			delete D;
@@ -622,7 +637,22 @@ int main()
 				printf("LDLT doesn't work!\n");
 			}
 
+			real* otherSolutionVector = *originalBig * solutionVector;
+		
+			for (int i = 0; i < a; i++)
+			{
+				real t = otherSolutionVector[i] / b[i];
+
+				if (t <= 0 || (!(t >= from && t < to) && t > atLeast))
+				{
+					printf("LDLt equation doesn't work!\n");
+					break;
+				}
+			}
+
 			delete original;
+			delete originalBig;
+			delete[] solutionVector;
 		}
 		else
 		{
