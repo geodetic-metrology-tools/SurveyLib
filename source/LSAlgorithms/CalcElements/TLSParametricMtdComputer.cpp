@@ -1,6 +1,6 @@
 //
 // TLSParametricMtdComputer.cpp : implementation file
-// class for a least squares computer producing the results matrices 
+// class for a least squares computer producing the results matrices
 // using the parametric method (case where 2nd dgn mtrx = -I)
 //
 
@@ -59,15 +59,15 @@ bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsM
 bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm)
 {
 	/* in this method, the solution is computed with a numeric equations solver method (nagc lib).
-	   The unknown variance-covariance matrix is thus not computed here. 
-	   The fAtPAInv attribute contains the AtPA product, and is updated during each iteration. 
-	   It is finally inverted outside the method, when there are no iterations left to 
+	   The unknown variance-covariance matrix is thus not computed here.
+	   The fAtPAInv attribute contains the AtPA product, and is updated during each iteration.
+	   It is finally inverted outside the method, when there are no iterations left to
 	   be performed (in TLSCalculation). */
 
 	const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 	const TSparseMatrix* weightM = im->getWeightMtrx();
 	const TColumnVector& misclV = im->getMisclosureVctr();
-	
+
     TSparseMatrix* firstDM = firstDMTransposed->transposed();
 	im->setFirstDesignMatrix(firstDM);
 	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
@@ -136,78 +136,92 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	const TSparseMatrix* weightM = im->getWeightMtrx();
 	const TColumnVector& misclV = im->getMisclosureVctr();
 	const TColumnVector& constraintMisclV = im->getCnstrMisclosureVctr();
-	
+
 	TSparseMatrix* firstDM = firstDMTransposed->transposed();
 	im->setFirstDesignMatrix(firstDM);
 	TSparseMatrix* constraintFirstDMTransposed = constraintFirstDM->transposed();
 
 	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
 
-	TSparseMatrix* temp = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);		
+	TSparseMatrix* temp = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
+	real* aTransTimesWTimesATimesMiscVec = *aTransTimesW * misclV;
+	int solVecRows = aTransTimesW->rowsCount();
+
 #if _DEBUG
 	firstDM->write_matrix_file("C:\\AOld.txt");
 	aTransTimesW->write_matrix_file("C:\\AtPOld.txt");
 	temp->write_matrix_file("C:\\AtPAOld.txt");
 	constraintFirstDM->write_matrix_file("C:\\COld.txt");
-#endif
-	TSparseMatrix* aTransTimesWTimesAInverted = temp->symmetric_lower_inverse();
-	delete temp;
 
-	if (aTransTimesWTimesAInverted == NULL)
-	{
-		delete aTransTimesW;
-		return false;
-	}
-	
-	TSparseMatrix* cstrATimesATransTimesWTimesAInverted =
-		constraintFirstDM->multiply_F(*aTransTimesWTimesAInverted);
-
-	TSparseMatrix* solutionMatrixA = cstrATimesATransTimesWTimesAInverted->
-			multiply_returning_lower_triangular_F(*constraintFirstDMTransposed);
-	TSparseMatrix* decomposed = solutionMatrixA->cholesky_decompose_lower_triangular_returning_lower_triangular();
-	delete solutionMatrixA;
-	if (decomposed == NULL)
-	{
-        delete cstrATimesATransTimesWTimesAInverted;
-		delete aTransTimesW;
-		return false;
-	}
-
-	real* aTransTimesWTimesATimesMiscVec = *aTransTimesW * misclV;
-	delete aTransTimesW;
-
-#if _DEBUG
 	for (int i = 0; i < misclV.dimension(); i++)
 	{
 		printf("%.20e\n", (double) misclV(i));
 	}
 #endif
+	delete aTransTimesW;
 
-	real* solutionVectorb = *cstrATimesATransTimesWTimesAInverted * aTransTimesWTimesATimesMiscVec;
-	delete cstrATimesATransTimesWTimesAInverted;
+    int nnz = temp->columnPointers()[temp->columnsCount()] + 2 * constraintFirstDM->columnPointers()[constraintFirstDM->columnsCount()];
+    int cols = temp->columnsCount() + constraintFirstDMTransposed->columnsCount();
+    real* bigValues = new real[nnz];
+    int* bigRowind = new int[nnz];
+    int* bigColptr = new int[cols + 1];
+    bigColptr[0] = 0;
 
-	for (int i = 0; i < constraintMisclV.dimension(); i++)
-	{
-		solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
-	}
-
-	real* solution = decomposed->solve_eqn(solutionVectorb);
-	delete decomposed;
-	delete[] solutionVectorb;
-
-	solutionVectorb = *constraintFirstDMTransposed * solution;
-	delete[] solution;
+    int count = 0;
+    for (int i = 0; i < temp->columnsCount(); i++)
+    {
+        for (int j = temp->columnPointers()[i]; j < temp->columnPointers()[i + 1]; j++)
+        {
+            bigValues[count] = temp->values()[j];
+            bigRowind[count++] = temp->rowIndices()[j];
+        }
+        for (int j = constraintFirstDM->columnPointers()[i]; j < constraintFirstDM->columnPointers()[i + 1]; j++)
+        {
+            bigValues[count] = constraintFirstDM->values()[j];
+            bigRowind[count++] = constraintFirstDM->rowIndices()[j] + temp->rowsCount();
+        }
+        bigColptr[i + 1] = count;
+    }
+    for (int i = 0, k = temp->columnsCount() + 1; i < constraintFirstDMTransposed->columnsCount(); i++, k++)
+    {
+        for (int j = constraintFirstDMTransposed->columnPointers()[i]; j < constraintFirstDMTransposed->columnPointers()[i + 1]; j++)
+        {
+            bigValues[count] = constraintFirstDMTransposed->values()[j];
+            bigRowind[count++] = constraintFirstDMTransposed->rowIndices()[j];
+        }
+        bigColptr[k] = count;
+    }
 	
-	for (int i = 0; i < constraintFirstDMTransposed->rowsCount(); i++)
+	delete constraintFirstDMTransposed;
+	delete temp;
+
+    TSparseMatrix* bigMatrix = new TSparseMatrix(cols, cols,
+		bigValues, bigRowind, bigColptr);
+#if _DEBUG
+	bigMatrix->write_matrix_file("C:\\bigOld.txt");
+#endif
+
+	real* bigSolutionVector = new real[cols];
+	for (int i = 0; i < solVecRows; i++)
 	{
-		solutionVectorb[i] = -solutionVectorb[i] - aTransTimesWTimesATimesMiscVec[i];
+		bigSolutionVector[i] = aTransTimesWTimesATimesMiscVec[i];
 	}
-    delete constraintFirstDMTransposed;
+	for (int i = solVecRows, j = 0; j < constraintMisclV.dimension(); i++, j++)
+	{
+		bigSolutionVector[i] = constraintMisclV(j);
+	}
 	delete[] aTransTimesWTimesATimesMiscVec;
 
-	solution = *aTransTimesWTimesAInverted * solutionVectorb;
-	delete[] solutionVectorb;
-	delete aTransTimesWTimesAInverted;
+	TSparseMatrix* ldlt = bigMatrix->ldlt_decompose_lower_triangular_returning_lower_triangular();
+	if (ldlt == NULL)
+	{
+		delete bigMatrix;
+		delete[] bigSolutionVector;
+		return false;
+	}
+	delete bigMatrix;
+	real* solution = ldlt->solve_ldlt(bigSolutionVector);
+	delete[] bigSolutionVector;
 
 	TColumnVector* s = rm->getSolutionVctr();
 	for (int i = 0; i < s->dimension(); i++)
