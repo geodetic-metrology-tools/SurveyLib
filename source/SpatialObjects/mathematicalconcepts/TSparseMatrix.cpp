@@ -125,14 +125,15 @@ TSparseMatrix* TSparseMatrix::multiply_F(const TSparseMatrix& second) const
         }
         result->colptr[i + 1] = results.size();
     }
+
+    delete[] resultColumn;
+
     result->setNNZ(results.size());
     for (i = 0; i < results.size(); i++)
     {
         result->vals[i] = results[i];
         result->rowind[i] = rowInds[i];
     }
-
-    delete[] resultColumn;
 
     return result;
 }
@@ -230,14 +231,15 @@ TSparseMatrix* TSparseMatrix::multiply_returning_unordered_F(const TSparseMatrix
 			cache[rowInds[k]] = 0;
         }
     }
+
+    delete[] cache;
+
     result->setNNZ(results.size());
     for (i = 0; i < results.size(); i++)
     {
         result->vals[i] = results[i];
         result->rowind[i] = rowInds[i];
     }
-
-    delete[] cache;
 
     return result;
 }
@@ -377,10 +379,11 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 	Vector<real> results(cols * cols / 2);
 	Vector<int> rowInds(cols * cols / 2);
 
+	int* colWhereTo = new int[cols];
+
 	TSparseMatrix *result = new TSparseMatrix(cols, cols);
 
 	result->colptr[0] = 0;
-	int colDiv2 = cols / 2;
 
 	for (int i = 0; i < cols; i++)
 	{
@@ -389,21 +392,19 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 
 	for (int i = 0; i < cols; i++)
 	{
-		int column = 1;
-		int col = result->colptr[column];
+		colWhereTo[i] = results.size() + 1;
 
-		int count = 0;
-		int minim = i < colDiv2 ? i : colDiv2;
-		while (column <= minim)
+		int column = 0;
+		int col = result->colptr[column + 1];
+
+		int count;
+
+		while (column < i) // going through all the computed columns
 		{
-			// finding the i -th row of the current column
-			while (count < col - 1 && rowInds[count] < i)
-			{
-				count++;
-			}
+			count = colWhereTo[column];
 
 			// if this element in the column is not zero
-			if (rowInds[count] == i)
+			if (count != -1 && rowInds[count] == i)
 			{
 				real columnMainValue = results[count++];
 				resultColumn[i] -= columnMainValue * columnMainValue;
@@ -415,38 +416,13 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 					resultColumn[rowInds[count]] -= results[count] * columnMainValue;
 					count++;
 				}
-			}
-			else
-			{
-				count = col;
-			}
-			col = result->colptr[++column];
-		}
 
-		while (column <= i) // going through all the computed columns
-		{
-			// finding the i -th row of the current column
-			count = col - 1;
-			while (count > result->colptr[column - 1] && rowInds[count] > i)
-			{
-				count--;
-			}
-
-			// if this element in the column is not zero
-			if (rowInds[count] == i)
-			{
-				real columnMainValue = results[count++];
-				resultColumn[i] -= columnMainValue * columnMainValue;
-
-				// we multiply each element of the rest of the column with the "main value" which is
-				// on the i -th row and then subtract that from the current row's sum
-				while (count < col)
+				if (++colWhereTo[column] >= result->colptr[column + 1])
 				{
-					resultColumn[rowInds[count]] -= results[count] * columnMainValue;
-					count++;
+					colWhereTo[column] = -1;
 				}
 			}
-			col = result->colptr[++column];
+			col = result->colptr[++column + 1];
 		}
 
 		col = colptr[i];
@@ -455,6 +431,7 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 		if (resultColumn[i] <= 0)
 		{
 			delete[] resultColumn;
+			delete[] colWhereTo;
 			delete result;
 			return NULL;
 		}
@@ -482,10 +459,10 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
         result->colptr[i + 1] = results.size();
 	}
 
+	delete[] colWhereTo;
 	delete[] resultColumn;
 
 	result->setNNZ(results.size());
-
 	for (int i = 0; i < results.size(); i++)
 	{
         result->vals[i] = results[i];
@@ -521,7 +498,20 @@ TSparseMatrix* TSparseMatrix::ldlt_decompose_lower_triangular_returning_lower_tr
 		{
 			if (colWhereTo[j] != -1 && rowInds[colWhereTo[j]] == i)
 			{
-				diag -= results[result->colptr[j]] * results[colWhereTo[j]] * results[colWhereTo[j]];
+				real multiplier = results[result->colptr[j]] * results[colWhereTo[j]];
+				diag -= multiplier * results[colWhereTo[j]];
+
+				if (++colWhereTo[j] >= result->colptr[j + 1])
+				{
+					colWhereTo[j] = -1;
+				}
+				else
+				{				
+					for (int k = colWhereTo[j]; k < result->colptr[j + 1]; k++)
+					{
+						resultColumn[rowInds[k]] += multiplier * results[k];
+					}
+				}
 			}
 		}
 		if (diag == 0)
@@ -534,31 +524,11 @@ TSparseMatrix* TSparseMatrix::ldlt_decompose_lower_triangular_returning_lower_tr
 		rowInds.add(i);
 		results.add(diag);
 
-		// computing the rest of the column...
-
-		// for each of the computed columns up to this one
-		for (int j = 0; j < i; j++)
-		{
-			if (colWhereTo[j] != -1 && rowInds[colWhereTo[j]] == i)
-			{
-				real multiplier = results[result->colptr[j]] * results[colWhereTo[j]];
-				for (int k = colWhereTo[j]; k < result->colptr[j + 1]; k++)
-				{
-					resultColumn[rowInds[k]] += multiplier * results[k];
-				}
-
-				if (++colWhereTo[j] >= result->colptr[j + 1])
-				{
-					colWhereTo[j] = -1;
-				}
-			}
-		}
-
 		diag = 1 / diag;
-		// fill the elements
+		// computing the rest of the column...
 		for (int j = i + 1, k = colptr[i] + 1; j < cols; j++)
 		{
-			real element = diag * ((rowind[k] == j ? vals[k++] : 0) - resultColumn[j]);
+			real element = diag * ((k < colptr[i + 1] && rowind[k] == j ? vals[k++] : 0) - resultColumn[j]);
 			if (element != 0)
 			{
 				rowInds.add(j);
@@ -571,16 +541,14 @@ TSparseMatrix* TSparseMatrix::ldlt_decompose_lower_triangular_returning_lower_tr
 	}
 
 	delete[] colWhereTo;
+	delete[] resultColumn;
 
 	result->setNNZ(results.size());
-
 	for (int i = 0; i < results.size(); i++)
 	{
         result->vals[i] = results[i];
         result->rowind[i] = rowInds[i];
 	}
-
-	delete[] resultColumn;
 
 	return result;
 }
@@ -725,10 +693,9 @@ TSparseMatrix* TSparseMatrix::invert_lower_triangular_cholesky_decomposed() cons
         result->colptr[i + 1] = results.size();
 	}
 
-	result->setNNZ(results.size());
-
 	delete transposed;
 
+	result->setNNZ(results.size());
 	for (i = 0; i < results.size(); i++)
 	{
 		result->rowind[i] = rowInds[i];
@@ -791,10 +758,9 @@ TSparseMatrix* TSparseMatrix::invert_lower_triangular_cholesky_decomposed_return
         result->colptr[i + 1] = results.size();
 	}
 
-	result->setNNZ(results.size());
-
 	delete transposed;
 
+	result->setNNZ(results.size());
 	for (i = 0; i < results.size(); i++)
 	{
 		result->rowind[i] = rowInds[i];
@@ -925,14 +891,14 @@ TSparseMatrix* TSparseMatrix::multiply_three_F(const TSparseMatrix& second, cons
 		result->colptr[i + 1] = results.size();
     }
 
+	delete[] resultColumn;
+
     result->setNNZ(results.size());
 	for (i = 0; i < results.size(); i++)
 	{
         result->vals[i] = results[i];
         result->rowind[i] = rowInds[i];
 	}
-
-	delete[] resultColumn;
 
     return result;
 }
@@ -1036,14 +1002,14 @@ TSparseMatrix* TSparseMatrix::multiply_three_returning_lower_triangular_F(const 
         result->colptr[i + 1] = results.size();
     }
 
+    delete[] resultColumn;
+
     result->setNNZ(results.size());
-    for (i = 0; results.size(); i++)
+    for (i = 0; i < results.size(); i++)
     {
         result->vals[i] = results[i];
         result->rowind[i] = rowInds[i];
     }
-
-    delete[] resultColumn;
 
     return result;
 }
@@ -1144,14 +1110,14 @@ TSparseMatrix* TSparseMatrix::multiply_returning_lower_triangular_F(const TSpars
         result->colptr[i + 1] = results.size();
     }
 
+    delete[] resultColumn;
+
     result->setNNZ(results.size());
     for (i = 0; i < results.size(); i++)
     {
         result->vals[i] = results[i];
         result->rowind[i] = rowInds[i];
     }
-
-    delete[] resultColumn;
 
     return result;
 }
