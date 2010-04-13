@@ -139,12 +139,11 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 
 	TSparseMatrix* firstDM = firstDMTransposed->transposed();
 	im->setFirstDesignMatrix(firstDM);
-	TSparseMatrix* constraintFirstDMTransposed = constraintFirstDM->transposed();
 
 	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
 
 	TSparseMatrix* temp = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
-	real* aTransTimesWTimesATimesMiscVec = *aTransTimesW * misclV;
+	real* aTransTimesWTimesMiscVec = *aTransTimesW * misclV;
 	int solVecRows = aTransTimesW->rowsCount();
 
 #if _DEBUG
@@ -160,8 +159,8 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 #endif
 	delete aTransTimesW;
 
-    int nnz = temp->columnPointers()[temp->columnsCount()] + 2 * constraintFirstDM->columnPointers()[constraintFirstDM->columnsCount()];
-    int cols = temp->columnsCount() + constraintFirstDMTransposed->columnsCount();
+    int nnz = temp->columnPointers()[temp->columnsCount()] + constraintFirstDM->columnPointers()[constraintFirstDM->columnsCount()];
+    int cols = temp->columnsCount() + constraintFirstDM->rowsCount();
     real* bigValues = new real[nnz];
     int* bigRowind = new int[nnz];
     int* bigColptr = new int[cols + 1];
@@ -182,17 +181,10 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
         }
         bigColptr[i + 1] = count;
     }
-    for (int i = 0, k = temp->columnsCount() + 1; i < constraintFirstDMTransposed->columnsCount(); i++, k++)
-    {
-        for (int j = constraintFirstDMTransposed->columnPointers()[i]; j < constraintFirstDMTransposed->columnPointers()[i + 1]; j++)
-        {
-            bigValues[count] = constraintFirstDMTransposed->values()[j];
-            bigRowind[count++] = constraintFirstDMTransposed->rowIndices()[j];
-        }
-        bigColptr[k] = count;
-    }
-	
-	delete constraintFirstDMTransposed;
+	for (int i = temp->columnsCount() + 1; i <= cols; i++)
+	{
+        bigColptr[i] = count;
+	}
 	delete temp;
 
     TSparseMatrix* bigMatrix = new TSparseMatrix(cols, cols,
@@ -204,22 +196,27 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	real* bigSolutionVector = new real[cols];
 	for (int i = 0; i < solVecRows; i++)
 	{
-		bigSolutionVector[i] = aTransTimesWTimesATimesMiscVec[i];
+		bigSolutionVector[i] = -aTransTimesWTimesMiscVec[i];
 	}
 	for (int i = solVecRows, j = 0; j < constraintMisclV.dimension(); i++, j++)
 	{
-		bigSolutionVector[i] = constraintMisclV(j);
+		bigSolutionVector[i] = -constraintMisclV(j);
 	}
-	delete[] aTransTimesWTimesATimesMiscVec;
+	delete[] aTransTimesWTimesMiscVec;
 
+	if (rm->getL() != NULL)
+	{
+		delete rm->getL();
+	}
 	TSparseMatrix* ldlt = bigMatrix->ldlt_decompose_lower_triangular_returning_lower_triangular();
+	delete bigMatrix;
 	if (ldlt == NULL)
 	{
-		delete bigMatrix;
 		delete[] bigSolutionVector;
 		return false;
 	}
-	delete bigMatrix;
+	rm->setL(ldlt);
+
 	real* solution = ldlt->solve_ldlt(bigSolutionVector);
 	delete[] bigSolutionVector;
 
