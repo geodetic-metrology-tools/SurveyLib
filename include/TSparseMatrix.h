@@ -27,18 +27,22 @@ public:
 	void multiply_by_number(real);
 
 	TSparseMatrix* cholesky_decompose_lower_triangular_returning_lower_triangular() const;
-	TSparseMatrix* ldlt_decompose_lower_triangular_returning_lower_triangular() const;
+	TSparseMatrix* ldlt_decompose_lower_triangular_returning_lower_triangular(real*& D) const;
 	TSparseMatrix* invert_diagonal_matrix() const;
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed() const;
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed_returning_lower_triangular() const;
+	TSparseMatrix* invert_lower_triangular_ldlt_decomposed(const real* D) const;
+	TSparseMatrix* invert_lower_triangular_ldlt_decomposed_returning_lower_triangular(const real* D) const;
+	real* invert_lower_triangular_ldlt_decomposed_returning_diagonal(const real* D) const;
 	real* solve_eqn(const real* b) const;
-	real* solve_ldlt(const real* b) const;
+	real* solve_ldlt(const real* D, const real* b) const;
 
     TSparseMatrix* add(const TSparseMatrix& second) const;
 
 	// General multiplication of sparse matrices.
 	TSparseMatrix* multiply_F(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_LM(const TSparseMatrix& second) const;
+	TSparseMatrix* multiply_diagonal(const real* second, int secondCols) const;
 	TSparseMatrix* multiply_returning_unordered_F(const TSparseMatrix& second) const;
 	real* multiply_returning_diagonal(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_returning_lower_triangular_F(const TSparseMatrix& second) const;
