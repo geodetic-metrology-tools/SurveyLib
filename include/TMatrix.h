@@ -40,6 +40,7 @@ class  TDouble;
 using namespace std;
 //
 #include  "TANumericValue.h"
+class TSparseMatrix;
 
 // typedefs
 //
@@ -170,6 +171,8 @@ public:
 
 		/*! resolve equations system */
 		virtual TColumnVector dfeqn(TColumnVector* B,int n_pivot,int* pivot_i,int* pivot_j);
+
+		TSparseMatrix* toSparse() const;
 	//@}
 
 private:

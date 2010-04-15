@@ -204,20 +204,21 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	}
 	delete[] aTransTimesWTimesMiscVec;
 
-	if (rm->getL() != NULL)
+	if (rm->getBigMatrix() != NULL)
 	{
-		delete rm->getL();
+		delete rm->getBigMatrix();
 	}
-	TSparseMatrix* ldlt = bigMatrix->ldlt_decompose_lower_triangular_returning_lower_triangular();
-	delete bigMatrix;
+	real* D;
+	TSparseMatrix* ldlt = bigMatrix->ldlt_decompose_lower_triangular_returning_lower_triangular(D);
 	if (ldlt == NULL)
 	{
+		delete bigMatrix;
 		delete[] bigSolutionVector;
 		return false;
 	}
-	rm->setL(ldlt);
+	rm->setBigMatrix(bigMatrix);
 
-	real* solution = ldlt->solve_ldlt(bigSolutionVector);
+	real* solution = ldlt->solve_ldlt(D, bigSolutionVector);
 	delete[] bigSolutionVector;
 
 	TColumnVector* s = rm->getSolutionVctr();

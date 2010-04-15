@@ -97,6 +97,8 @@ public:
 
 	TSparseMatrix* getL() const { return L; }
 	void setL(TSparseMatrix* l) { L = l; }
+	TSparseMatrix* getBigMatrix() const { return bigMatrix; }
+	void setBigMatrix(TSparseMatrix* l) { bigMatrix = l; }
 
 private:
 	//mj2008
@@ -120,6 +122,7 @@ private:
 	real			fSigmaZero2; /*!< calculated "average variance" on residues */
 	bool			fS0APosterioriVariances; /*!< indicates if the s0 a posteriori should be applied */
 	TSparseMatrix* L;
+	TSparseMatrix* bigMatrix;
 };
 
 /////////////////////
