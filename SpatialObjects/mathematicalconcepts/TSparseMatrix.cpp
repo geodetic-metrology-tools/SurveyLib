@@ -195,28 +195,49 @@ TSparseMatrix* TSparseMatrix::multiply_LM(const TSparseMatrix& second) const
     return result;
 }
 
-TSparseMatrix* TSparseMatrix::multiply_diagonal(const real* second, int secondCols) const
+TSparseMatrix* TSparseMatrix::multiply_diagonal_dense(const real* second, int secondCols) const
 {
-    Vector<real> results(colptr[cols]);
-    Vector<int> rowInds(colptr[cols]);
     int i, l;
-    TSparseMatrix *result = new TSparseMatrix(rows, secondCols);
+    TSparseMatrix *result = new TSparseMatrix(rows, secondCols, colptr[cols]);
     result->colptr[0] = 0;
+	int count = 0;
     for (i = 0; i < secondCols; i++)
     {
         for (l = colptr[i]; l < colptr[i + 1]; l++)
         {
-			results.add(second[i] * vals[l]);
-			rowInds.add(rowind[l]);
+			result->vals[count] = second[i] * vals[l];
+			result->rowind[count++] = rowind[l];
         }
-        result->colptr[i + 1] = results.size();
+        result->colptr[i + 1] = count;
     }
 
-    result->setNNZ(results.size());
-    for (i = 0; i < results.size(); i++)
+    return result;
+}
+
+TSparseMatrix* TSparseMatrix::multiply_diagonal_sparse(const real* second, int secondCols) const
+{
+    int i, l, nnz = 0;
+	for (int i = 0; i < secondCols; i++)
+	{
+		if (second[i] != 0)
+		{
+			nnz += colptr[i + 1] - colptr[i];
+		}
+	}
+    TSparseMatrix *result = new TSparseMatrix(rows, secondCols, nnz);
+    result->colptr[0] = 0;
+	int count = 0;
+    for (i = 0; i < secondCols; i++)
     {
-        result->vals[i] = results[i];
-        result->rowind[i] = rowInds[i];
+		if (second[i] != 0)
+		{
+			for (l = colptr[i]; l < colptr[i + 1]; l++)
+			{
+				result->vals[count] = second[i] * vals[l];
+				result->rowind[count++] = rowind[l];
+			}
+		}
+        result->colptr[i + 1] = count;
     }
 
     return result;
@@ -521,7 +542,15 @@ TSparseMatrix* TSparseMatrix::ldlt_decompose_lower_triangular_returning_lower_tr
 		colWhereTo[i] = results.size() + 1;
 
 		// computing the diagonal element
-		real diag = vals[colptr[i]];
+		real diag;
+		if (colptr[i] != colptr[cols])
+		{
+			diag = vals[colptr[i]];
+		}
+		else
+		{
+			diag = 0;
+		}
 		for (int j = 0; j < i; j++)
 		{
 			if (colWhereTo[j] != -1 && rowInds[colWhereTo[j]] == i)
@@ -546,6 +575,7 @@ TSparseMatrix* TSparseMatrix::ldlt_decompose_lower_triangular_returning_lower_tr
 		{
 			delete[] resultColumn;
 			delete[] colWhereTo;
+			delete[] D;
 			delete result;
 			return NULL;
 		}
@@ -640,6 +670,30 @@ real* TSparseMatrix::solve_ldlt(const real* D, const real* b) const
 	}
 
 	return result;
+}
+
+void TSparseMatrix::solve_ldlt_in_place(const TSparseMatrix* LT, const real* D, real* b, int up_to) const
+{
+	int col;
+	real sum;
+	for (int i = 0; i < cols; i++)
+	{
+		sum = b[i];
+		for (col = LT->colptr[i]; LT->rowind[col] < i; col++)
+		{
+			sum -= LT->vals[col] * b[LT->rowind[col]];
+		}
+		b[i] = sum;
+	}
+	for (int i = cols - 1; i >= up_to; i--)
+	{
+		sum = b[i] / D[i];
+		for (col = colptr[i + 1] - 1; rowind[col] > i; col--)
+		{
+			sum -= vals[col] * b[rowind[col]];
+		}
+		b[i] = sum;
+	}
 }
 
 TSparseMatrix* TSparseMatrix::invert_diagonal_matrix() const
@@ -831,55 +885,117 @@ TSparseMatrix* TSparseMatrix::invert_lower_triangular_cholesky_decomposed_return
 
 TSparseMatrix* TSparseMatrix::invert_lower_triangular_ldlt_decomposed(const real* D) const
 {
-	TSparseMatrix* chol = this->invert_lower_triangular_cholesky_decomposed_returning_lower_triangular();
-	TSparseMatrix* cholTrans = chol->transposed();
-	real* dInv = new real[cholTrans->columnsCount()];
-	for (int i = 0; i < cholTrans->columnsCount(); i++)
+	TSparseMatrix* Ainv = this->invert_lower_triangular_ldlt_decomposed_returning_lower_triangular(D);
+	TSparseMatrix* trans = Ainv->transposed();
+
+	real* ds = new real[cols];
+	int* rs = new int[cols + 1];
+
+	for (int i = 0; i < cols; i++)
 	{
-		dInv[i] = 1 / D[i];
+		ds[i] = -Ainv->vals[Ainv->colptr[i]];
+		rs[i] = i;
 	}
-	TSparseMatrix* middle = cholTrans->multiply_diagonal(dInv, cholTrans->columnsCount());
-	delete[] dInv;
-	delete cholTrans;
-	TSparseMatrix* result = middle->multiply_F(*chol);
+	rs[cols] = cols;
+	TSparseMatrix* diag = new TSparseMatrix(cols, cols, ds, rs, rs);
+	TSparseMatrix* middle = Ainv->add(*diag);
+	delete Ainv;
+	delete diag;
+	TSparseMatrix* result = middle->add(*trans);
 	delete middle;
-	delete chol;
+	delete trans;
 	return result;
 }
 
 TSparseMatrix* TSparseMatrix::invert_lower_triangular_ldlt_decomposed_returning_lower_triangular(const real* D) const
 {
-	TSparseMatrix* chol = this->invert_lower_triangular_cholesky_decomposed_returning_lower_triangular();
-	TSparseMatrix* cholTrans = chol->transposed();
-	real* dInv = new real[cholTrans->columnsCount()];
-	for (int i = 0; i < cholTrans->columnsCount(); i++)
+	TSparseMatrix* LT = this->transposed();
+
+	real* temp = new real[cols];
+
+	Vector<real> results(colptr[cols]);
+	Vector<real> rowInds(colptr[cols]);
+
+	TSparseMatrix* result = new TSparseMatrix(cols, cols);
+	result->colptr[0] = 0;
+
+	for (int i = 0; i < cols; i++)
 	{
-		dInv[i] = 1 / D[i];
+		temp[i] = 0;
 	}
-	TSparseMatrix* middle = cholTrans->multiply_diagonal(dInv, cholTrans->columnsCount());
-	delete[] dInv;
-	delete cholTrans;
-	TSparseMatrix* result = middle->multiply_returning_lower_triangular_F(*chol);
-	delete middle;
-	delete chol;
+
+	for (int i = 0; i < cols; i++)
+	{
+		temp[i] = 1;
+
+		solve_ldlt_in_place(LT, D, temp, i);
+
+		for (int j = i; j < cols; j++)
+		{
+			if (temp[j] != 0)
+			{
+				results.add(temp[j]);
+				rowInds.add(j);
+				temp[j] = 0;
+			}
+		}
+
+		result->colptr[i + 1] = results.size();
+	}
+
+	delete LT;
+	delete[] temp;
+
+	result->setNNZ(results.size());
+	for (int i = 0; i < results.size(); i++)
+	{
+		result->rowind[i] = rowInds[i];
+		result->vals[i] = results[i];
+	}
+
 	return result;
 }
 
 real* TSparseMatrix::invert_lower_triangular_ldlt_decomposed_returning_diagonal(const real* D) const
 {
-	TSparseMatrix* chol = this->invert_lower_triangular_cholesky_decomposed_returning_lower_triangular();
-	TSparseMatrix* cholTrans = chol->transposed();
-	real* dInv = new real[cholTrans->columnsCount()];
-	for (int i = 0; i < cholTrans->columnsCount(); i++)
+	// TODO: not working!
+	int i, j;
+
+	Vector<real> results(colptr[cols]);
+	Vector<int> rowInds(colptr[cols]);
+
+	int* newColptr = new int[cols + 1];
+
+	newColptr[cols] = 0;
+	results.add(1 / D[cols - 1]);
+	rowInds.add(cols - 1);
+	newColptr[cols - 1] = 1;
+
+	for (i = cols - 2; i >= 0; i--)
 	{
-		dInv[i] = 1 / D[i];
+		real diag = 1 / D[i];
+		for (j = colptr[i + 1] - 1; j > colptr[i]; j--)
+		{
+			real res = -results[newColptr[rowind[j] + 1]] * vals[j];
+			results.add(res);
+			rowInds.add(rowind[j]);
+			diag -= res * vals[j];
+		}
+		results.add(diag);
+		rowInds.add(i);
+		newColptr[i] = results.size();
 	}
-	TSparseMatrix* middle = cholTrans->multiply_diagonal(dInv, cholTrans->columnsCount());
-	delete[] dInv;
-	delete cholTrans;
-	real* result = middle->multiply_returning_diagonal(*chol);
-	delete middle;
-	delete chol;
+
+	real* result = new real[cols];
+
+	int sum = 0;
+	for (i = 0, j = cols - 1; i < cols; i++, j--)
+	{
+		result[i] = results[newColptr[j] - 1];
+	}
+
+	delete[] newColptr;
+
 	return result;
 }
 
@@ -1421,8 +1537,27 @@ TSparseMatrix* TSparseMatrix::read_matrix_file(const char* filename)
 		matrix->rowind[count] = row - 1;
 		matrix->vals[count++] = temp;
 	}
-	matrix->colptr[colptr] = count;
+	while (colptr <= matrix->columnsCount())
+	{
+		matrix->colptr[colptr++] = count;
+	}
 	fclose(f);
 
 	return matrix;
+}
+
+TMatrix* TSparseMatrix::to_dense() const
+{
+	TMatrix* res = new TMatrix(rows, cols);
+	*res = 0;
+
+	for (int i = 0; i < cols; i++)
+	{
+		for (int j = colptr[i]; j < colptr[i + 1]; j++)
+		{
+			(*res)(rowind[j], i) = vals[j];
+		}
+	}
+
+	return res;
 }

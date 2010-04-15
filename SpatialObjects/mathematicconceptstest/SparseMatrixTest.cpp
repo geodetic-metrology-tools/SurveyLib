@@ -246,9 +246,10 @@ bool MatricesEqualAtLeast(const TSparseMatrix& first, const TSparseMatrix& secon
 #ifdef APFLOAT
 	apfloat atLeast = apfloat("1E-100", 1000);
 #else
-	double atLeast = 1e-10;
+	double atLeast = 1e-8;
 #endif
-	for (int i = 0, j = 0; i < first.columnPointers()[first.columnsCount()] && j < second.columnPointers()[second.columnsCount()]; )
+	int i, j;
+	for (i = 0, j = 0; i < first.columnPointers()[first.columnsCount()] && j < second.columnPointers()[second.columnsCount()]; )
 	{
 		if (first.values()[i] < atLeast)
 		{
@@ -266,7 +267,7 @@ bool MatricesEqualAtLeast(const TSparseMatrix& first, const TSparseMatrix& secon
 				temp < apfloat("0.9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999", 1000)
 				|| temp > apfloat("1.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001", 1000))
 #else
-				temp < 0.99999999999999 || temp > 1.000000000000000001)
+				temp < 0.99999999999999 || temp > 1.00000000000001)
 #endif
 			{
 				return false;
@@ -275,59 +276,26 @@ bool MatricesEqualAtLeast(const TSparseMatrix& first, const TSparseMatrix& secon
 			j++;
 		}
 	}
+	for ( ; i < first.columnPointers()[first.columnsCount()]; i++)
+	{
+		if (first.values()[i] >= atLeast)
+		{
+			return false;
+		}
+	}
+	for ( ; j < second.columnPointers()[second.columnsCount()]; j++)
+	{
+		if (second.values()[j] >= atLeast)
+		{
+			return false;
+		}
+	}
 
 	return true;
 }
 
 int main()
 {
-	/*real* vsss = new real[5];
-	vsss[0] = 2;
-	vsss[1] = 6;
-	vsss[2] = 2;
-	vsss[3] = 2;
-	vsss[4] = 1;
-	int* cos = new int[5];
-	cos[0] = 0;
-	cos[1] = 1;
-	cos[2] = 3;
-	cos[3] = 4;
-	cos[4] = 5;
-	int* ros = new int[5];
-	ros[0] = 0;
-	ros[1] = 1;
-	ros[2] = 2;
-	ros[3] = 2;
-	ros[4] = 3;
-	real* vsss1 = new real[6];
-	vsss1[0] = 2;
-	vsss1[1] = 6;
-	vsss1[2] = 2;
-	vsss1[3] = 2;
-	vsss1[4] = 2;
-	vsss1[5] = 1;
-	int* cos1 = new int[5];
-	cos1[0] = 0;
-	cos1[1] = 1;
-	cos1[2] = 3;
-	cos1[3] = 5;
-	cos1[4] = 6;
-	int* ros1 = new int[6];
-	ros1[0] = 0;
-	ros1[1] = 1;
-	ros1[2] = 2;
-	ros1[3] = 1;
-	ros1[4] = 2;
-	ros1[5] = 3;
-	TSparseMatrix* qwe = new TSparseMatrix(4, 4, vsss, ros, cos);
-	TSparseMatrix* qwe1 = new TSparseMatrix(4, 4, vsss1, ros1, cos1);
-
-	TSparseMatrix* ll = qwe->ldlt_decompose_lower_triangular_returning_lower_triangular();
-	ll->write_matrix_file("C:\\foo.txt");
-
-	TSparseMatrix* ivnsdf = ll->invert_lower_triangular_ldlt_decomposed();
-	ivnsdf->multiply_F(*qwe1)->write_matrix_file("C:\\foo.txt");*/
-
 	srand(time(0));
 
 	int minRows = 60, maxRows = 90;
@@ -422,26 +390,24 @@ int main()
 #endif
 
 
-	//for (int a = 4; a < 50; a++)
+	for (int a = 4; a < 50; a++)
 	for (int count = 0; count < 10; count++)
 	{
-		int a = rand() % (maxRows - minRows) + minRows;
+		//int a = rand() % (maxRows - minRows) + minRows;
 		TSparseMatrix* L = generateLowerTriangularMatrix(a);
 
 		real* idV = new real[a];
-		int* idR = new int[a];
-		int* idC = new int[a + 1];
+		int* idR = new int[a + 1];
 
 		for (int i = 0; i < a; i++)
 		{
 			idV[i] = 1;
 			idR[i] = i;
-			idC[i] = i;
 		}
-		idC[a] = a;
+		idR[a] = a;
 
-		TSparseMatrix* identity = new TSparseMatrix(a, a, idV, idR, idC);
-		
+		TSparseMatrix* identity = new TSparseMatrix(a, a, idV, idR, idR);
+
 		TSparseMatrix* LT = L->transposed();
 		TSparseMatrix* positiveDefinite = L->multiply_returning_lower_triangular_F(*LT);
 
@@ -546,7 +512,7 @@ int main()
 		{
 			real t = resAxEqb1[i] / resAxEqb[i];
 
-			if (!(t >= from && t < to) && t > atLeast)
+			if (t <= 0 || (!(t >= from && t < to) && t > atLeast))
 			{
 				printf("equation doesn't work!\n");
 				break;
@@ -559,15 +525,13 @@ int main()
 		{
 			real t = resAxEqb2[i] / b[i];
 
-			if (!(t >= from && t < to) && t > atLeast)
+			if (t <= 0 || (!(t >= from && t < to) && t > atLeast))
 			{
 				printf("equation doesn't work!\n");
 				break;
 			}
 		}
 
-		/*delete L;
-		L = generateIntegralLowerTriangularMatrix(a);*/
 		real* D;
 		TSparseMatrix* ldlt = L->ldlt_decompose_lower_triangular_returning_lower_triangular(D);
 
@@ -577,7 +541,7 @@ int main()
 			TSparseMatrix* ldltInverse = ldlt->invert_lower_triangular_ldlt_decomposed(D);
 
 			TSparseMatrix* transd = ldlt->transposed();
-			TSparseMatrix* middle = ldlt->multiply_diagonal(D, ldlt->columnsCount());
+			TSparseMatrix* middle = ldlt->multiply_diagonal_dense(D, ldlt->columnsCount());
 			delete ldlt;
 			TSparseMatrix* original = middle->multiply_returning_lower_triangular_F(*transd);
 			TSparseMatrix* originalBig = middle->multiply_F(*transd);
