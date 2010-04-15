@@ -13,15 +13,17 @@
 				Name="CppCmplrTool"
 				Optimization="1000"
 				GlobalOptimizations="true"
-				FloatingPointSpeculation="1"
+				FloatingPointSpeculation="2"
 				GenerateAlternateCodePaths="1"
-				UseProcessorExtensions="1"/>
+				UseProcessorExtensions="1"
+				UseIntelOptimizedHeaders="true"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32">
 			<Tool
 				Name="CppCmplrTool"
-				WarningLevel="1000"/>
+				WarningLevel="1000"
+				FloatingPointSpeculation="2"/>
 		</Configuration>
 	</Configurations>
 	<Files/>

@@ -18,6 +18,7 @@ Designed to be easiliy usable with matrix functions of the NagC math library */
 #include "TDouble.h"
 #include  "TMatrix.h"
 #include "TColumnVector.h"
+#include "TSparseMatrix.h"
 
 //#include	"vecmatdefs.h"
 //#include	"errmesg.h"
@@ -650,6 +651,45 @@ TColumnVector TMatrix::dfeqn(TColumnVector* B,int n_pivot,int* pivot_i,int* pivo
 	} // label 299 (endif)
 
 	return *B;
+}
+
+TSparseMatrix* TMatrix::toSparse() const
+{
+	int nnz = 0;
+	int rowStart;
+
+	for (int i = 0; i < fNbRows; i++)
+	{
+		rowStart = i * fNbCols;
+		for (int j = 0; j < fNbCols; j++)
+		{
+			if (fMatrix[rowStart + j] != 0)
+			{
+				nnz++;
+			}
+		}
+	}
+
+	real* vs = new real[nnz];
+	int* rs = new int[nnz];	
+	int* cs = new int[fNbCols + 1];
+	cs[0] = 0;
+	nnz = 0;
+
+	for (int i = 0; i < fNbCols; i++)
+	{
+		for (int j = 0; j < fNbRows; j++)
+		{
+			if (fMatrix[i + j * fNbCols] != 0)
+			{
+				vs[nnz] = fMatrix[i + j * fNbCols];
+				rs[nnz++] = j;
+			}
+		}
+		cs[i + 1] = nnz;
+	}
+
+	return new TSparseMatrix(fNbRows, fNbCols, vs, rs, cs);
 }
 
 

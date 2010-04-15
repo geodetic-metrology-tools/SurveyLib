@@ -19,6 +19,7 @@ TLSResultsMatrices::TLSResultsMatrices()
 	fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
 	L = NULL;
+	bigMatrix = NULL;
 }
 
 
@@ -31,6 +32,7 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 	fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
 	L = NULL;
+	bigMatrix = NULL;
 }
 
 
@@ -46,6 +48,7 @@ TLSResultsMatrices::TLSResultsMatrices(TColumnVector* solut, TColumnVector* resi
 	fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
 	L = NULL;
+	bigMatrix = NULL;
 }
 
 
@@ -59,6 +62,7 @@ TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations)
 	fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
 	L = NULL;
+	bigMatrix = NULL;
 }
 
 

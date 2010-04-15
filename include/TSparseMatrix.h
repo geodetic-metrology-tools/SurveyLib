@@ -4,6 +4,7 @@
 #define THRESHOLD LITERAL(0.0000000001)
 
 #include "TColumnVector.h"
+#include "TMatrix.h"
 
 class TSparseMatrix
 {
@@ -36,13 +37,15 @@ public:
 	real* invert_lower_triangular_ldlt_decomposed_returning_diagonal(const real* D) const;
 	real* solve_eqn(const real* b) const;
 	real* solve_ldlt(const real* D, const real* b) const;
+	void solve_ldlt_in_place(const TSparseMatrix* LT, const real* D, real* b, int up_to = 0) const;
 
     TSparseMatrix* add(const TSparseMatrix& second) const;
 
 	// General multiplication of sparse matrices.
 	TSparseMatrix* multiply_F(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_LM(const TSparseMatrix& second) const;
-	TSparseMatrix* multiply_diagonal(const real* second, int secondCols) const;
+	TSparseMatrix* multiply_diagonal_dense(const real* second, int secondCols) const;
+	TSparseMatrix* multiply_diagonal_sparse(const real* second, int secondCols) const;
 	TSparseMatrix* multiply_returning_unordered_F(const TSparseMatrix& second) const;
 	real* multiply_returning_diagonal(const TSparseMatrix& second) const;
 	TSparseMatrix* multiply_returning_lower_triangular_F(const TSparseMatrix& second) const;
@@ -57,14 +60,16 @@ public:
 	inline int columnsCount() const { return cols; }
 	inline int rowsCount() const { return rows; }
 
-	inline const real* values() const { return vals; }
-	inline const int* rowIndices() const { return rowind; }
-	inline const int* columnPointers() const { return colptr; }
+	inline real* values() const { return vals; }
+	inline int* rowIndices() const { return rowind; }
+	inline int* columnPointers() const { return colptr; }
 
 	void write_matrix_file(const char *) const;
 	static TSparseMatrix* read_matrix_file(const char *);
 
 	static TSparseMatrix* deep_copy(const TSparseMatrix* matrix);
+
+	TMatrix* to_dense() const;
 
 private:
 

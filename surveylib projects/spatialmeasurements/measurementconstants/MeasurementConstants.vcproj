@@ -127,7 +127,7 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="true"
+				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="false"
 				EnableEnhancedInstructionSet="0"
 				FloatingPointModel="0"
