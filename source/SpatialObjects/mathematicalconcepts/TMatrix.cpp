@@ -527,13 +527,13 @@ TMatrix TMatrix::dfact(int* n_pivot,int* pivot_i,int* pivot_j)
 	for (j=0;j<=n;j++)
 	{
 		k=j;
-		p=fabsq((res)(j,j));
+		p= (double) fabsq((res)(j,j));
 		if (j<n)
 		{
 			jp1 = j+1;
 			for (i=jp1;i<=n;i++)
 			{
-				q=fabsq((res)(i,j));
+				q=(double) fabsq((res)(i,j));
 				if (q>p)
 				{
 					k=i;
