@@ -12,7 +12,7 @@
 			<Tool
 				Name="CppCmplrTool"
 				WarningLevel="1000"
-				FloatingPointSpeculation="2"/>
+				FloatingPointSpeculation="3"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32">
@@ -20,7 +20,7 @@
 				Name="CppCmplrTool"
 				Optimization="1000"
 				GlobalOptimizations="true"
-				FloatingPointSpeculation="2"
+				FloatingPointSpeculation="3"
 				GenerateAlternateCodePaths="1"
 				UseProcessorExtensions="1"
 				UseIntelOptimizedHeaders="true"/>
