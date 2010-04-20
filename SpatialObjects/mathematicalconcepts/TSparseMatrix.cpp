@@ -217,7 +217,7 @@ TSparseMatrix* TSparseMatrix::multiply_diagonal_dense(const real* second, int se
 TSparseMatrix* TSparseMatrix::multiply_diagonal_sparse(const real* second, int secondCols) const
 {
     int i, l, nnz = 0;
-	for (int i = 0; i < secondCols; i++)
+	for (i = 0; i < secondCols; i++)
 	{
 		if (second[i] != 0)
 		{
