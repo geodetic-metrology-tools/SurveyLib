@@ -16,7 +16,7 @@
 				FloatingPointSpeculation="3"
 				GenerateAlternateCodePaths="1"
 				UseProcessorExtensions="1"
-				UseIntelOptimizedHeaders="true"/>
+				UseIntelOptimizedHeaders="false"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32">
