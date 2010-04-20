@@ -120,7 +120,26 @@ TLSResultsMatrices::~TLSResultsMatrices()
 TColumnVector	TLSResultsMatrices::computeVarObs(const TSparseMatrix& A, const TSparseMatrix& ATransposed) 
 {
 	int nobs = A.rowsCount(); //number of observations
-	real *result = A.multiply_three_returning_diagonal(*fUnknownsCovarianceMtrx, ATransposed);
+	int nunk = A.columnsCount(); //number of observations
+	real* vals = new real[fUnknownsCovarianceMtrx->columnPointers()[nunk]];
+	int* rows = new int[fUnknownsCovarianceMtrx->columnPointers()[nunk]];
+	int* cols = new int[nunk + 1];
+	cols[0] = 0;
+	int count = 0;
+	for (int i = 0; i < nunk; i++)
+	{
+		for (int j = fUnknownsCovarianceMtrx->columnPointers()[i];
+			j < fUnknownsCovarianceMtrx->columnPointers()[i + 1] && fUnknownsCovarianceMtrx->rowIndices()[j] < nunk;
+			j++)
+		{
+			vals[count] = fUnknownsCovarianceMtrx->values()[j];
+			rows[count++] = fUnknownsCovarianceMtrx->rowIndices()[j];
+		}
+		cols[i + 1] = count;
+	}
+	TSparseMatrix* ucm = new TSparseMatrix(nunk, nunk, vals, rows, cols);
+	real *result = A.multiply_three_returning_diagonal(*ucm, ATransposed);
+	delete ucm;
 	TColumnVector var(nobs);
 	for (int i = 0; i < nobs; i++)
 	{

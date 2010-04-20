@@ -20,6 +20,8 @@ public:
 	virtual void positionChanged(PointIterator iter)= 0;
 	virtual void distChanged(PointIterator iter)= 0;
 	virtual void statusChanged(PointIterator iter)= 0;
+
+	virtual ~TVPtListListener() { };
 	
 };
 	
