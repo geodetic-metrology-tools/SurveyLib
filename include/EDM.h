@@ -36,7 +36,15 @@ public:
 	~EDM();
 
 	const EDMTarget* getDefaultTarget() const { return defaultTarget; }
-	const EDMTarget* getTargetNamed(const string& targetName) const { return targets.find(targetName)->second; }
+	const EDMTarget* getTargetNamed(const string& targetName) const
+	{
+		hash_map<string, const EDMTarget*>::const_iterator i = targets.find(targetName);
+		if (i == targets.end())
+		{
+			return NULL;
+		}
+		return i->second;
+	}
 
 	void addTarget(const EDMTarget* target, bool def);
 

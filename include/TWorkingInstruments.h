@@ -30,8 +30,15 @@ class TWorkingInstruments
 {
 public:
 
-	// TODO: some error checking whether it exists
-	TTheodolite* getTheodoliteNamed(const string& name) { return theodolitesMap.find(name)->second; }
+	TTheodolite* getTheodoliteNamed(const string& name)
+	{
+		hash_map<string, TTheodolite*>::iterator i = theodolitesMap.find(name);
+		if (i == theodolitesMap.end())
+		{
+			return NULL;
+		}
+		return i->second;
+	}
 
 	void addTheodolite(TTheodolite* theo)
 	{
@@ -39,7 +46,15 @@ public:
 		theodolitesMap[theo->getInstrumentID()] = theo;
 	}
 	
-	Scale* getScaleNamed(const string& name) { return scalesMap.find(name)->second; }
+	Scale* getScaleNamed(const string& name)
+	{
+		hash_map<string, Scale*>::iterator i = scalesMap.find(name);
+		if (i == scalesMap.end())
+		{
+			return NULL;
+		}
+		return i->second;
+	}
 
 	void addScale(Scale* scale)
 	{
@@ -47,7 +62,15 @@ public:
 		scalesMap[scale->getInstrumentID()] = scale;
 	}
 	
-	EDM* getEDMNamed(const string& name) { return edmsMap.find(name)->second; }
+	EDM* getEDMNamed(const string& name)
+	{
+		hash_map<string, EDM*>::iterator i = edmsMap.find(name);
+		if (i == edmsMap.end())
+		{
+			return NULL;
+		}
+		return i->second;
+	}
 
 	void addEDM(EDM* edm)
 	{
@@ -55,7 +78,15 @@ public:
 		edmsMap[edm->getInstrumentID()] = edm;
 	}
 	
-	Gyroscope* getGyroscopeNamed(const string& name) { return gyroscopesMap.find(name)->second; }
+	Gyroscope* getGyroscopeNamed(const string& name)
+	{
+		hash_map<string, Gyroscope*>::iterator i = gyroscopesMap.find(name);
+		if (i == gyroscopesMap.end())
+		{
+			return NULL;
+		}
+		return i->second;
+	}
 
 	void addGyroscope(Gyroscope* gyro)
 	{
@@ -63,7 +94,15 @@ public:
 		gyroscopesMap[gyro->getInstrumentID()] = gyro;
 	}
 	
-	Level* getLevelNamed(const string& name) { return levelsMap.find(name)->second; }
+	Level* getLevelNamed(const string& name)
+	{
+		hash_map<string, Level*>::iterator i = levelsMap.find(name);
+		if (i == levelsMap.end())
+		{
+			return NULL;
+		}
+		return i->second;
+	}
 
 	void addLevel(Level* level)
 	{

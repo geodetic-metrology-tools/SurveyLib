@@ -263,6 +263,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\OffsetToVerticalLineROM.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\TheodoliteStationROM.h"
 				>
 			</File>

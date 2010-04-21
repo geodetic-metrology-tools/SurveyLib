@@ -36,7 +36,15 @@ public:
 	~Level();
 
 	const Staff* getDefaultStaff() const { return defaultStaff; }
-	const Staff* getStaffNamed(const string& staffName) const { return staffs.find(staffName)->second; }
+	const Staff* getStaffNamed(const string& staffName) const
+	{
+		hash_map<string, const Staff*>::const_iterator i = staffs.find(staffName);
+		if (i == staffs.end())
+		{
+			return NULL;
+		}
+		return i->second;
+	}
 
 	void addStaff(const Staff* staff, bool def);
 

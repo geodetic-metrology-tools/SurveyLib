@@ -39,7 +39,15 @@ public:
 	const TAngleConstants* getAngleConst() const { return angleConstant; }
 
 	const TheodoliteTarget* getDefaultTarget() const { return defaultTarget; }
-	const TheodoliteTarget* getTargetNamed(const string& targetName) const { return targets.find(targetName)->second; }
+	const TheodoliteTarget* getTargetNamed(const string& targetName) const
+	{		
+		hash_map<string, const TheodoliteTarget*>::const_iterator i = targets.find(targetName);
+		if (i == targets.end())
+		{
+			return NULL;
+		}
+		return i->second;
+	}
 
 	void addTarget(const TheodoliteTarget* target, bool def);
 
