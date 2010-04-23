@@ -288,10 +288,10 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
         int solVecRows = aTransTimesW->rowsCount();
 
 #if _DEBUG
-        firstDM->write_matrix_file("C:\\AOld.txt");
-        aTransTimesW->write_matrix_file("C:\\AtPOld.txt");
-        temp->write_matrix_file("C:\\AtPAOld.txt");
-        constraintFirstDM->write_matrix_file("C:\\COld.txt");
+        firstDM->write_matrix_file("C:\\A.txt");
+        aTransTimesW->write_matrix_file("C:\\AtP.txt");
+        temp->write_matrix_file("C:\\AtPA.txt");
+        constraintFirstDM->write_matrix_file("C:\\C.txt");
 
         for (int i = 0; i < misclV.dimension(); i++)
         {
@@ -331,7 +331,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
         TSparseMatrix* bigMatrix = new TSparseMatrix(cols, cols,
                 bigValues, bigRowind, bigColptr);
 #if _DEBUG
-        bigMatrix->write_matrix_file("C:\\bigOld.txt");
+        bigMatrix->write_matrix_file("C:\\big.txt");
 #endif
 
         real* bigSolutionVector = new real[cols];
