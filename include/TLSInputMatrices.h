@@ -64,7 +64,7 @@ public:
 			\param nbEquations the survey network's number of equations
 			\param nbObservations the survey network's number of observations
 			\param nbConstraints the free survey network's number of constraint*/
-		virtual void				setDimensions(int nbUnknowns, int nbEquations, int nbCnstrObs, int nbObservations, int nbConstraints);
+		virtual void				setDimensions(int nbUnknowns, int nbEquations, int nbCnstrObs, int nbObservations, int nbConstraints, int offsetContraints);
 	
 		//!Sets the scale factor for the sigma zero a priori
 //		virtual void				setS0APrioriScaleFactor(real scalefac);
@@ -79,6 +79,8 @@ public:
 		virtual bool				setWeightMtrxElement(real coefficient);
 		//!Sets a coefficient of the constraint first design matrix
 		virtual bool				setCnstrFirstDgnMtrxElement(MatrixIndex column, real coefficient);
+		//!Sets a coefficient of the constraint first design matrix
+		virtual bool				setCnstrFirstDgnMtrxTransposedElement(MatrixIndex column, real coefficient);
 		//!Sets a coefficient of the constraint misclosure vector
 		virtual bool				setCnstrMisclosureVectorElement(MatrixIndex row, real coeff);
 	//@}
@@ -113,6 +115,7 @@ public:
 
 	void setNewRow();
 	void setConstraintNewColumn();
+	void setConstraintTransposedNewColumn();
 	void finishedFillingMatrices();
 
 	void setFirstDesignMatrix(TSparseMatrix* f) { firstDesignMatrix = f; };
@@ -132,18 +135,23 @@ private:
 	MatrixIndex		fNbEqn; /*!< number of equations: e */
 	int				fNbCnstrObs; /*!< number of constraint observations */
 	MatrixIndex		fNbCnstr;/*!<number of constraint: c */
+	MatrixIndex		fNbTotalCnstr;/*!<number of constraint: c */
 
-	list<real>*	firstDesignMatrixTransposedValues; /*!< matrix (u x e) for the parametric part of the model */
+	list<real>*		firstDesignMatrixTransposedValues; /*!< matrix (u x e) for the parametric part of the model */
 	list<int>*		firstDesignMatrixTransposedColPtr;
 	list<int>*		firstDesignMatrixTransposedRowInd;
 
-	list<real>*	secondDesignMatrixTransposedValues; /*!< matrix (o x e) for the parametric part of the model  */
+	list<real>*		secondDesignMatrixTransposedValues; /*!< matrix (o x e) for the parametric part of the model  */
 	list<int>*		secondDesignMatrixTransposedColPtr;
 	list<int>*		secondDesignMatrixTransposedRowInd;
 
 	list<real>*	    constraintFirstDesignMatrixValues; /*!< matrix (c x u) for the conditional part of the model  */
 	list<int>*		constraintFirstDesignMatrixColPtr;
 	list<int>*		constraintFirstDesignMatrixRowInd;
+
+	list<real>*	    constraintFirstDesignMatrixTransposedValues; /*!< matrix (u x c) for the conditional part of the model  */
+	list<int>*		constraintFirstDesignMatrixTransposedColPtr;
+	list<int>*		constraintFirstDesignMatrixTransposedRowInd;
 
 	list<real>*	weightMatrixValues; /*!< matrix (o x o) for observations weights */
 
