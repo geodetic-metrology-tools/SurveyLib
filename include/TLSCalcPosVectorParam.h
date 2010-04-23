@@ -62,6 +62,9 @@ public:
 		/*! Returns the estimated value for the position */
 		TPositionVector	getEstimatedValue() const {	return fEstimatedValue;}
 
+		/*! Returns the estimated value for the position */
+		const TPositionVector*	getEstimatedValuePointer() const {	return &fEstimatedValue;}
+
 		/*! Returns the estimated precision for the position */
 		TFreeVector		getEstimatedPrecision() const {	return fEstimatedPrecision;}
 

@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="SpatialMeasurementsDebugLib"
 	ProjectGUID="{BE4248C2-98D9-4DE4-AD11-9AAC4AD1F606}"
+	RootNamespace="SpatialMeasurementsDebugLib"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -180,6 +181,10 @@
 		</File>
 		<File
 			RelativePath=".\ReadMe.txt"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\debugLib\spatialmeasurements\ROMs.lib"
 			>
 		</File>
 	</Files>

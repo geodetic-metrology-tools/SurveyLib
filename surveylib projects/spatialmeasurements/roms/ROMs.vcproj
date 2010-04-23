@@ -119,14 +119,18 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="&quot;.\..\..\..\..\LGC++\include&quot;;.\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc;.\..\..\..\..\SEAL_Libraries\GSL\include;.\..\..\..\..\SEAL_Libraries\Taucs"
+				AdditionalIncludeDirectories=".\..\..\..\include;&quot;C:\Program Files\Intel\Compiler\11.1\054\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="true"
+				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="false"
-				EnableEnhancedInstructionSet="2"
+				EnableEnhancedInstructionSet="0"
+				FloatingPointModel="1"
+				FloatingPointExceptions="true"
+				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/ROMs.pch"
 				AssemblerListingLocation=".\Release/"
@@ -194,12 +198,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Qoption,cpp,--extended_float_type -wd981 -wd383 -wd1418"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;.\..\..\..\..\LGC++\include&quot;;.\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc;.\..\..\..\..\SEAL_Libraries\GSL\include;.\..\..\..\..\SEAL_Libraries\Taucs"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				AdditionalIncludeDirectories=".\..\..\..\include;&quot;C:\Program Files\Intel\Compiler\11.1\054\Include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
+				SmallerTypeCheck="true"
 				RuntimeLibrary="3"
+				FloatingPointModel="1"
 				FloatingPointExceptions="true"
+				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/ROMs.pch"
 				AssemblerListingLocation=".\Debug/"
@@ -207,7 +215,7 @@
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="1"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -249,6 +257,10 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;f90;for;f;fpp"
 			>
+			<File
+				RelativePath="..\..\..\source\SpatialMeasurements\ROMs\OffsetToSpatialLineROM.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -256,6 +268,10 @@
 			>
 			<File
 				RelativePath="..\..\..\include\ObservationROM.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\OffsetToSpatialLineROM.h"
 				>
 			</File>
 			<File

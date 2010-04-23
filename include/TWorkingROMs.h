@@ -21,6 +21,7 @@ using namespace std;
 #include "ObservationROM.h"
 #include "VerticalDistanceROM.h"
 #include "OffsetToVerticalLineROM.h"
+#include "OffsetToSpatialLineROM.h"
 
 //!Class storing all the instruments
 class TWorkingROMs
@@ -35,9 +36,9 @@ public:
 
 	void addOffsetToVerticalLineROM(const OffsetToVerticalLineROM* rom) { offsetToVerticalLineROMs.push_back(rom); }
 
-	const list<const OffsetToLineOrPlaneROM*>& getOffsetToSpatialLineROMs() const { return offsetToSpatialLineROMs; }
+	const list<const OffsetToSpatialLineROM*>& getOffsetToSpatialLineROMs() const { return offsetToSpatialLineROMs; }
 
-	void addOffsetToSpatialLineROM(const OffsetToLineOrPlaneROM* rom) { offsetToSpatialLineROMs.push_back(rom); }
+	void addOffsetToSpatialLineROM(const OffsetToSpatialLineROM* rom) { offsetToSpatialLineROMs.push_back(rom); }
 
 	const list<const VerticalDistanceROM*>& getVerticalDistanceROMs() const { return verticalDistanceROMs; }
 
@@ -47,7 +48,7 @@ private :
 
 	list<const OffsetToLineOrPlaneROM*> offsetToVerticalPlaneROMs;
 	list<const OffsetToVerticalLineROM*> offsetToVerticalLineROMs;
-	list<const OffsetToLineOrPlaneROM*> offsetToSpatialLineROMs;
+	list<const OffsetToSpatialLineROM*> offsetToSpatialLineROMs;
 	list<const VerticalDistanceROM*> verticalDistanceROMs;
 
 };

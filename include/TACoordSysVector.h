@@ -63,13 +63,13 @@ public:
 		bool testCoordSysCart(TCoordSysFactory::ECoordSys);
 		
 		//!get the X coordinate of a vector in a specific Coordinate System
-		TLength getX() const;
+		virtual TLength getX() const;
 
 		//!get the Y coordinate of a vector in a specific Coordinate System
-		TLength getY() const;
+		virtual TLength getY() const;
 
 		//!get the Z coordinate of a vector in a specific Coordinate System
-		TLength getZ() const;
+		virtual TLength getZ() const;
 
 		//!set the X coordinate of a vector in a specific Coordinate System return true if X is defined
 		bool setX(const TLength&);
