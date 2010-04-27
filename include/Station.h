@@ -25,6 +25,8 @@ public:
 
 	const TLength* getInstrumentCenteringSigma() const { return instrumentCenteringSigma; }
 
+	const TLength* getInstrumentHeightSigma() const { return instrumentHeightSigma; }
+
 	virtual ~Station()
 	{
 		delete instrumentHeight;
