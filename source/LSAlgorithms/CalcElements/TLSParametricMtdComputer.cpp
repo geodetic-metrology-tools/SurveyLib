@@ -68,6 +68,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	{		
 		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 		const TSparseMatrix* secondDMTransposed = im->getSecondDgnMtrxTransposed();
+		// TODO: invert_diagonal_matrix should be changed when not using a diagonal weight matrix!!!
 		TSparseMatrix* weightMInversed = im->getWeightMtrx()->invert_diagonal_matrix();
 		im->setWeightMatrixInverted(weightMInversed);
 		const TColumnVector& misclV = im->getMisclosureVctr();
@@ -199,6 +200,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 		const TSparseMatrix* secondDMTransposed = im->getSecondDgnMtrxTransposed();
 		const TSparseMatrix* constraintFirstDM = im->getCnstrFirstDgnMtrx();
+		// TODO: invert_diagonal_matrix should be changed when not using a diagonal weight matrix!!!
 		TSparseMatrix* weightMInversed = im->getWeightMtrx()->invert_diagonal_matrix();
 		im->setWeightMatrixInverted(weightMInversed);
 		const TColumnVector& misclV = im->getMisclosureVctr();
@@ -209,18 +211,113 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		TSparseMatrix* secondDM = secondDMTransposed->transposed();		
 		TSparseMatrix* constraintFirstDMTransposed = constraintFirstDM->transposed();
 		// TODO: multiplying three matrices is slower than twice two matrices - probably should change that
+		//secondDM->write_matrix_file("C:\\B.txt");
+		//weightMInversed->write_matrix_file("C:\\WInv.txt");
 		TSparseMatrix* bTimesWInvTimesBTrans =
 			secondDM->multiply_three_returning_lower_triangular_F(*weightMInversed, *secondDMTransposed);
+		//bTimesWInvTimesBTrans->write_matrix_file("C:\\BWInvBT.txt");
         delete secondDM;
 
 		TSparseMatrix* bTimesWInvTimesBTransInverted = bTimesWInvTimesBTrans->symmetric_lower_inverse();
+		//bTimesWInvTimesBTransInverted->write_matrix_file("C:\\BWInvBTInv.txt");
+		//bTimesWInvTimesBTransInverted->multiply_F(*bTimesWInvTimesBTrans)->write_matrix_file("C:\\ID.txt");
 		delete bTimesWInvTimesBTrans;		
 		im->setBTimesWInvTimesBTransInverted(bTimesWInvTimesBTransInverted);
 
 		TSparseMatrix* aTransTimesBTimesWInvTimesBTransInverted = firstDMTransposed->multiply_F(*bTimesWInvTimesBTransInverted);
 
-		TSparseMatrix* temp = aTransTimesBTimesWInvTimesBTransInverted->multiply_returning_lower_triangular_F(*firstDM);		
-		TSparseMatrix* aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted = temp->symmetric_lower_inverse();
+		TSparseMatrix* temp = aTransTimesBTimesWInvTimesBTransInverted->multiply_returning_lower_triangular_F(*firstDM);
+        
+		aTransTimesBTimesWInvTimesBTransInverted->write_matrix_file("C:\\ATBWInvBTInv.txt");
+		real* aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec =
+			*aTransTimesBTimesWInvTimesBTransInverted * misclV;
+        int solVecRows = aTransTimesBTimesWInvTimesBTransInverted->rowsCount();
+		delete aTransTimesBTimesWInvTimesBTransInverted;
+
+		
+
+        int nnz = temp->columnPointers()[temp->columnsCount()] + constraintFirstDM->columnPointers()[constraintFirstDM->columnsCount()];
+        int cols = temp->columnsCount() + constraintFirstDM->rowsCount();
+        real* bigValues = new real[nnz];
+        int* bigRowind = new int[nnz];
+        int* bigColptr = new int[cols + 1];
+        bigColptr[0] = 0;
+
+        int count = 0;
+        for (int i = 0; i < temp->columnsCount(); i++)
+        {
+            for (int j = temp->columnPointers()[i]; j < temp->columnPointers()[i + 1]; j++)
+            {
+                bigValues[count] = temp->values()[j];
+                bigRowind[count++] = temp->rowIndices()[j];
+            }
+            for (int j = constraintFirstDM->columnPointers()[i]; j < constraintFirstDM->columnPointers()[i + 1]; j++)
+            {
+                bigValues[count] = constraintFirstDM->values()[j];
+                bigRowind[count++] = constraintFirstDM->rowIndices()[j] + temp->rowsCount();
+            }
+            bigColptr[i + 1] = count;
+        }
+        for (int i = temp->columnsCount() + 1; i <= cols; i++)
+        {
+            bigColptr[i] = count;
+        }
+        delete temp;
+
+        TSparseMatrix* bigMatrix = new TSparseMatrix(cols, cols,
+                bigValues, bigRowind, bigColptr);
+#if _DEBUG
+        bigMatrix->write_matrix_file("C:\\big.txt");
+#endif
+
+        real* bigSolutionVector = new real[cols];
+        for (int i = 0; i < solVecRows; i++)
+        {
+            bigSolutionVector[i] = -aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec[i];
+        }
+        for (int i = solVecRows, j = 0; j < constraintMisclV.dimension(); i++, j++)
+        {
+            bigSolutionVector[i] = -constraintMisclV(j);
+        }
+        delete[] aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec;
+
+        if (rm->getBigMatrix() != NULL)
+        {
+            delete rm->getBigMatrix();
+        }
+        real* D;
+        TSparseMatrix* ldlt = bigMatrix->ldlt_decompose_lower_triangular_returning_lower_triangular(D);
+        if (ldlt == NULL)
+        {
+            delete bigMatrix;
+            delete[] bigSolutionVector;
+            return false;
+        }
+        rm->setBigMatrix(bigMatrix);
+
+        real* solution = ldlt->solve_ldlt(D, bigSolutionVector);
+        delete[] bigSolutionVector;
+
+        TColumnVector* s = rm->getSolutionVctr();
+        for (int i = 0; i < s->dimension(); i++)
+        {
+            (*s)(i) = solution[i];
+        }
+
+        delete[] solution;
+
+
+
+
+
+
+
+
+
+
+
+
+		/*TSparseMatrix* aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted = temp->symmetric_lower_inverse();
 		delete temp;
 		
 		TSparseMatrix* cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted =
@@ -268,7 +365,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 			(*s)(i) = solution[i];
 		}
 
-		delete[] solution;
+		delete[] solution;*/
 	}
 	else
     {

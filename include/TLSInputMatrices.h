@@ -34,6 +34,7 @@
 #include <sstream>
 //#include <iostream>
 #include "UEOIndices.h"
+#include <vector>
 using namespace std;
 
 
@@ -70,9 +71,9 @@ public:
 //		virtual void				setS0APrioriScaleFactor(real scalefac);
 	
 		//!Sets a coefficient of the first design matrix
-		virtual bool				setFirstDgnMtrxElement(MatrixIndex column, real coefficient);
+		virtual bool				setFirstDgnMtrxTransElement(MatrixIndex row, real coefficient);
 		//!Sets a coefficient of the second design matrix
-		virtual bool				setSecondDgnMtrxElement(MatrixIndex column, real coefficient);
+		virtual bool				setSecondDgnMtrxTransElement(MatrixIndex row, real coefficient);
 		//!Sets a coefficient of the misclosure vector
 		virtual bool				setMisclosureVectorElement(MatrixIndex row, real coeff);
 		//!Sets a coefficient of the weight matrix
@@ -113,7 +114,7 @@ public:
 
 
 
-	void setNewRow();
+	void setNewColumn();
 	void setConstraintNewColumn();
 	void setConstraintTransposedNewColumn();
 	void finishedFillingMatrices();
@@ -134,26 +135,26 @@ private:
 	MatrixIndex		fNbObs; /*!< number of observations: o */
 	MatrixIndex		fNbEqn; /*!< number of equations: e */
 	int				fNbCnstrObs; /*!< number of constraint observations */
-	MatrixIndex		fNbCnstr;/*!<number of constraint: c */
-	MatrixIndex		fNbTotalCnstr;/*!<number of constraint: c */
+	MatrixIndex		fNbCnstr;/*!<number of free constraint: c */
+	MatrixIndex		fNbTotalCnstr;/*!<total number of constraint: c */
 
-	list<real>*		firstDesignMatrixTransposedValues; /*!< matrix (u x e) for the parametric part of the model */
-	list<int>*		firstDesignMatrixTransposedColPtr;
-	list<int>*		firstDesignMatrixTransposedRowInd;
+	vector<real>*	firstDesignMatrixTransposedValues; /*!< matrix (u x e) for the parametric part of the model */
+	vector<int>*	firstDesignMatrixTransposedColPtr;
+	vector<int>*	firstDesignMatrixTransposedRowInd;
 
-	list<real>*		secondDesignMatrixTransposedValues; /*!< matrix (o x e) for the parametric part of the model  */
-	list<int>*		secondDesignMatrixTransposedColPtr;
-	list<int>*		secondDesignMatrixTransposedRowInd;
+	vector<real>*	secondDesignMatrixTransposedValues; /*!< matrix (o x e) for the parametric part of the model  */
+	vector<int>*	secondDesignMatrixTransposedColPtr;
+	vector<int>*	secondDesignMatrixTransposedRowInd;
 
-	list<real>*	    constraintFirstDesignMatrixValues; /*!< matrix (c x u) for the conditional part of the model  */
-	list<int>*		constraintFirstDesignMatrixColPtr;
-	list<int>*		constraintFirstDesignMatrixRowInd;
+	vector<real>*	constraintFirstDesignMatrixValues; /*!< matrix (c x u) for the conditional part of the model  */
+	vector<int>*	constraintFirstDesignMatrixColPtr;
+	vector<int>*	constraintFirstDesignMatrixRowInd;
 
-	list<real>*	    constraintFirstDesignMatrixTransposedValues; /*!< matrix (u x c) for the conditional part of the model  */
-	list<int>*		constraintFirstDesignMatrixTransposedColPtr;
-	list<int>*		constraintFirstDesignMatrixTransposedRowInd;
+	vector<real>*	constraintFirstDesignMatrixTransposedValues; /*!< matrix (u x c) for the conditional part of the model  */
+	vector<int>*	constraintFirstDesignMatrixTransposedColPtr;
+	vector<int>*	constraintFirstDesignMatrixTransposedRowInd;
 
-	list<real>*	weightMatrixValues; /*!< matrix (o x o) for observations weights */
+	vector<real>*	weightMatrixValues; /*!< matrix (o x o) for observations weights */
 
 	TColumnVector*	fMisclosureVector; /*!< vector (u) for misclosure errors */
 //	real			fS0APrioriScaleFactor; /*!< indicates if there is a priori scale factor or not */

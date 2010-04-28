@@ -72,7 +72,10 @@ public:
 	// page 101, code for inversion
 	// the same as the above, i.e. accepts the Cholesky decomposition of a matrix and returns LInv, but only the lower part of it. This can be used to find the inverse of the original matrix (it is used internally in symmetric_lower_inverse).
 	TSparseMatrix* invert_lower_triangular_cholesky_decomposed_returning_lower_triangular() const;
-	// this, as opposed to the above two routines, returns the inverse of A (i.e. the original matrix, before decomposition), not of L. As the decomposition itself, this function does not do any kind of pivoting, and that is why I have found it to be not very useful in many cases, because the result is far from "the truth".
+	// this, as opposed to the above two routines, returns the inverse of A 
+	// (i.e. the original matrix, before decomposition), not of L. As the decomposition itself, this 
+	// function does not do any kind of pivoting, and that is why I have found it to be not very useful in 
+	// many cases, because the result is far from "the truth".
 	TSparseMatrix* invert_lower_triangular_ldlt_decomposed(const real* D) const;
 	// as the above, only returns the lower triangular part of A-inverse.
 	TSparseMatrix* invert_lower_triangular_ldlt_decomposed_returning_lower_triangular(const real* D) const;
