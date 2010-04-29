@@ -9,21 +9,20 @@ Scale::Scale(const string& id, const TLength* const spDSigma, const TLength* ppm
 			 const TDistConstants* dc, const TLength* sdc, const TLength* sic, const TLength* to, const TLength* sto, int dcun)
 	: TAFreeInstrument(id, sic)
 {	
-	distanceConstant = dc;
+	distanceCorrection = dc;
+	distanceCorrectionSigma = sdc;
+	distanceCorrectionUnknownNumber = dcun;
 
-	distanceConstantSigma = sdc;
 	spatialDistanceSigma = spDSigma;
 	ppm = ppmE;
 	targetOffset = to;
 	targetOffsetSigma = sto;
-
-	distanceCorrectionUnknownNumber = dcun;
 }
 
 Scale::~Scale()
 {
-	delete distanceConstant;
-	delete distanceConstantSigma;
+	delete distanceCorrection;
+	delete distanceCorrectionSigma;
 	delete spatialDistanceSigma;
 	delete ppm;
 	delete targetOffset;
