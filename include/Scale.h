@@ -36,7 +36,9 @@ public:
 
 	~Scale();
 	
-	const TDistConstants* getDistanceConst() const { return distanceConstant; }
+	const TDistConstants* getDistanceCorrection() const { return distanceCorrection; }
+
+    const TLength* getDistanceCorrectionSigma() const { return distanceCorrectionSigma; }
 
     const TLength* getSpatialDistanceSigma() const { return spatialDistanceSigma; }
 
@@ -50,15 +52,14 @@ public:
 
 private:
 
-	const TDistConstants* distanceConstant;
-	const TLength* distanceConstantSigma;
+	const TDistConstants* distanceCorrection;
+	const TLength* distanceCorrectionSigma;
+	int distanceCorrectionUnknownNumber;
 
 	const TLength* spatialDistanceSigma;
 	const TLength* ppm;
 	const TLength* targetOffset;
 	const TLength* targetOffsetSigma;
-
-	int distanceCorrectionUnknownNumber;
 
 };
 
