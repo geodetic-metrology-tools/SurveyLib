@@ -27,15 +27,15 @@ TLSParametricMtdComputer::~TLSParametricMtdComputer()
 
 
 
-bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsMatrices* rm, bool isCombinedCase, bool isFreeNetwork, bool hasConstraints)
+bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsMatrices* rm, bool isCombinedCase, bool isFreeNetworkOrECHO, bool hasConstraints)
 {
 	bool result;
 	//int nbCnstr = im->getNbrConstraints();
 	if(rm->getSolutionVctr()->dimension() != 0)
 	{
-		if(isFreeNetwork || hasConstraints)
+		if(isFreeNetworkOrECHO || hasConstraints)
 		{
-			result = computeFreeOrConstrainedResultsMtrs( im, rm, isCombinedCase, isFreeNetwork);
+			result = computeFreeOrConstrainedResultsMtrs( im, rm, isCombinedCase, isFreeNetworkOrECHO);
 		}
 		else
 		{
@@ -191,11 +191,11 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 ////////////////////////////////////////////////////////////////
 //COMPUTES THE RESULTS MATRICES FOR FREE CALCULATION
 ////////////////////////////////////////////////////////////////
-bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm, bool isCombinedCase, bool isFreeNetwork)
+bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm, bool isCombinedCase, bool isFreeNetworkOrECHO)
 {
 	if (isCombinedCase)
 	{
-		if (isFreeNetwork)
+		if (isFreeNetworkOrECHO)
 		{
 			const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 			const TSparseMatrix* secondDMTransposed = im->getSecondDgnMtrxTransposed();
@@ -390,9 +390,8 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 	}
 	else
     {
-		if (isFreeNetwork)
+		if (isFreeNetworkOrECHO)
 		{
-foo:
 			const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 			const TSparseMatrix* constraintFirstDM = im->getCnstrFirstDgnMtrx();
 			const TSparseMatrix* weightM = im->getWeightMtrx();
@@ -493,7 +492,6 @@ foo:
 		}
 		else
 		{
-			goto foo;
 			const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 			const TSparseMatrix* constraintFirstDM = im->getCnstrFirstDgnMtrx();
 			const TSparseMatrix* weightM = im->getWeightMtrx();
