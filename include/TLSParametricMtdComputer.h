@@ -31,7 +31,7 @@ public:
 	~TLSParametricMtdComputer();
 
 
-	bool computeResults(TLSInputMatrices*, TLSResultsMatrices*, bool isCombinedCase, bool isFreeNetwork, bool hasConstraints);
+	bool computeResults(TLSInputMatrices*, TLSResultsMatrices*, bool isCombinedCase, bool isFreeNetworkOrECHO, bool hasConstraints);
 
 	//!Computes the results matrices
 	/*!@param im a pointer to the LS input matrices*/
@@ -39,7 +39,7 @@ public:
 
 	//!Computes the results matrices for a free calculation
 	/*!\param im a pointer to the LS input matrices*/
-	bool computeFreeOrConstrainedResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*, bool isCombinedCase, bool isFreeNetwork);
+	bool computeFreeOrConstrainedResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*, bool isCombinedCase, bool isFreeNetworkOrECHO);
 
 	/*! Access to eventual error */
 	string		getError() const { return fError; }
