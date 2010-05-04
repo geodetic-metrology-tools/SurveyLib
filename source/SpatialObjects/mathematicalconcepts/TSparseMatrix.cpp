@@ -76,11 +76,22 @@ TSparseMatrix* TSparseMatrix::transposed() const
 
 TSparseMatrix* TSparseMatrix::symmetric_lower_inverse() const
 {
-	TSparseMatrix* decomposed = this->cholesky_decompose_lower_triangular_returning_lower_triangular();
-    if (decomposed != NULL)
+	TSparseMatrix* L;
+	TSparseMatrix* res = symmetric_lower_inverse_saving_L(L);
+	if (res != NULL)
+	{
+		delete L;
+		return res;
+	}
+	return NULL;
+}
+
+TSparseMatrix* TSparseMatrix::symmetric_lower_inverse_saving_L(TSparseMatrix*& L) const
+{
+	L = this->cholesky_decompose_lower_triangular_returning_lower_triangular();
+    if (L != NULL)
     {
-        TSparseMatrix* inverse = decomposed->invert_lower_triangular_cholesky_decomposed_returning_lower_triangular();
-        delete decomposed;
+        TSparseMatrix* inverse = L->invert_lower_triangular_cholesky_decomposed_returning_lower_triangular();
         TSparseMatrix* inverseTrans = inverse->transposed();
         TSparseMatrix* result = inverseTrans->multiply_F(*inverse);
         delete inverse;

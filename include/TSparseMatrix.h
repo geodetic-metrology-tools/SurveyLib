@@ -42,6 +42,8 @@ public:
 	TSparseMatrix* transposed() const;
     // returns the inverse of a lower triangular, symmetric, positive-definite matrix. Cholesky decomposition is used. Returns a non-NULL pointer on success.
 	TSparseMatrix* symmetric_lower_inverse() const;
+	// same as the above, only saves the decomposition
+	TSparseMatrix* symmetric_lower_inverse_saving_L(TSparseMatrix*& L) const;
 
 	// multiplies the matrix by a column vector - returns another vector.
 	real* operator *(const real* right) const;
