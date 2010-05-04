@@ -12,6 +12,12 @@
 #endif
 
 #define SU_TCOLUMN_VECTOR
+#define QUAD_H
+#define SU_TMatrix
+
+#ifdef __INTEL_COMPILER
+#undef __INTEL_COMPILER
+#endif
 
 class TColumnVector
 {
@@ -19,8 +25,18 @@ public:
 	double operator ()(int index) const { return 0; }
 };
 
-#define sqrtq sqrt
+class TMatrix
+{
+public:
+	TMatrix(int, int) {}
+	TMatrix(int) {}
+	double& operator ()(int index, int) { return x; }
+	double x;
+};
+
 #define LITERAL(x) x
+#define sqrtq sqrt
+
 #include "TSparseMatrix.cpp"
 
 #include <list>
@@ -390,10 +406,10 @@ int main()
 #endif
 
 
-	for (int a = 4; a < 50; a++)
+	//for (int a = 4; a < 50; a++)
 	for (int count = 0; count < 10; count++)
 	{
-		//int a = rand() % (maxRows - minRows) + minRows;
+		int a = rand() % (maxRows - minRows) + minRows;
 		TSparseMatrix* L = generateLowerTriangularMatrix(a);
 
 		real* idV = new real[a];
@@ -533,11 +549,23 @@ int main()
 		}
 
 		real* D;
-		TSparseMatrix* ldlt = L->ldlt_decompose_lower_triangular_returning_lower_triangular(D);
+		TSparseMatrix* ldlt = positiveDefinite->ldlt_decompose_lower_triangular_returning_lower_triangular(D);
 
 		if (ldlt != NULL)
 		{
 			real* solutionVector = ldlt->solve_ldlt(D, b);
+		
+			for (int i = 0; i < a; i++)
+			{
+				real t = resAxEqb1[i] / solutionVector[i];
+
+				if (t <= 0 || (!(t >= from && t < to) && t > atLeast))
+				{
+					printf("LDLT equation doesn't work! 1\n");
+					break;
+				}
+			}
+
 			TSparseMatrix* ldltInverse = ldlt->invert_lower_triangular_ldlt_decomposed(D);
 
 			TSparseMatrix* transd = ldlt->transposed();

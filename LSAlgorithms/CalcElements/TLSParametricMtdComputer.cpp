@@ -99,6 +99,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 		if (L == NULL)
 		{
+			delete aTransTimesBTimesWInvTimesBTransInverted;
 			return false; // Matrix is not positive definite
 		}
 
@@ -332,19 +333,30 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			int solVecRows = aTransTimesBTimesWInvTimesBTransInverted->rowsCount();
 			delete aTransTimesBTimesWInvTimesBTransInverted;
 
-			TSparseMatrix* aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted = temp->symmetric_lower_inverse();
+			temp->write_matrix_file("C:\\aTransTimesBTimesWInvTimesBTransInvertedTimesA.txt");
+
+			if (rm->getL() != NULL)
+			{
+				delete rm->getL();
+			}
+			TSparseMatrix* decomposed = temp->cholesky_decompose_lower_triangular_returning_lower_triangular();
 			delete temp;
 
-			if (aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted == NULL)
+			if (decomposed == NULL)
 			{
+				delete[] aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec;
 				return false;
-			}			
+			}
+			rm->setL(decomposed);
+			TSparseMatrix* aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted = decomposed->in
 			TSparseMatrix* cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted =
 				constraintFirstDM->multiply_F(*aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted);
 
 			TSparseMatrix* solutionMatrixA = cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted->
 					multiply_returning_lower_triangular_F(*constraintFirstDMTransposed);
-			TSparseMatrix* decomposed = solutionMatrixA->cholesky_decompose_lower_triangular_returning_lower_triangular();
+
+			decomposed = solutionMatrixA->cholesky_decompose_lower_triangular_returning_lower_triangular();
+
 			delete solutionMatrixA;
 			if (decomposed == NULL)
 			{
@@ -362,7 +374,6 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			}
 
 			real* solution = decomposed->solve_eqn(solutionVectorb);
-			delete decomposed;		
 			delete[] solutionVectorb;
 
 			solutionVectorb = *constraintFirstDMTransposed * solution;
@@ -501,7 +512,6 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			TSparseMatrix* firstDM = firstDMTransposed->transposed();
 			im->setFirstDesignMatrix(firstDM);
 			TSparseMatrix* constraintFirstDMTransposed = constraintFirstDM->transposed();
-			// TODO: multiplying three matrices is slower than twice two matrices - probably should change that
 			
 			TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
 
@@ -524,6 +534,11 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 
 			TSparseMatrix* solutionMatrixA = cstrATimesATransTimesWTimesAInverted->
 					multiply_returning_lower_triangular_F(*constraintFirstDMTransposed);
+			
+			if (rm->getL() != NULL)
+			{
+				delete rm->getL();
+			}
 			TSparseMatrix* decomposed = solutionMatrixA->cholesky_decompose_lower_triangular_returning_lower_triangular();
 			delete solutionMatrixA;
 			if (decomposed == NULL)
@@ -531,6 +546,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 				delete cstrATimesATransTimesWTimesAInverted;
 				return false;
 			}
+			rm->setL(decomposed);
 
 			real* solutionVectorb = *cstrATimesATransTimesWTimesAInverted *
 				aTransTimesWTimesMiscVec;
@@ -542,7 +558,6 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			}
 
 			real* solution = decomposed->solve_eqn(solutionVectorb);
-			delete decomposed;		
 			delete[] solutionVectorb;
 
 			solutionVectorb = *constraintFirstDMTransposed * solution;
