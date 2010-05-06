@@ -215,7 +215,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			delete secondDM;
 
 			TSparseMatrix* bTimesWInvTimesBTransInverted = bTimesWInvTimesBTrans->symmetric_lower_inverse();
-			delete bTimesWInvTimesBTrans;		
+			delete bTimesWInvTimesBTrans;
 			im->setBTimesWInvTimesBTransInverted(bTimesWInvTimesBTransInverted);
 
 			TSparseMatrix* aTransTimesBTimesWInvTimesBTransInverted = firstDMTransposed->multiply_F(*bTimesWInvTimesBTransInverted);
@@ -234,6 +234,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			int* bigColptr = new int[cols + 1];
 			bigColptr[0] = 0;
 
+			// computing the "big" matrix
 			int count = 0;
 			for (int i = 0; i < temp->columnsCount(); i++)
 			{
@@ -438,6 +439,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			int* bigColptr = new int[cols + 1];
 			bigColptr[0] = 0;
 
+			// computing the "big" matrix
 			int count = 0;
 			for (int i = 0; i < temp->columnsCount(); i++)
 			{
