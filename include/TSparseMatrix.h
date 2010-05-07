@@ -26,6 +26,8 @@ It is going to take care of the memory.
 Practically none of the routines check for correct input so you should make sure that you are passing 
 the right arguments.
 
+This library can be found at: http://sparsematrix.codeplex.com
+
 */
 
 class TSparseMatrix

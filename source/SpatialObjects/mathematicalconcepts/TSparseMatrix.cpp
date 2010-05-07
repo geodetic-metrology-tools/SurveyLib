@@ -308,11 +308,11 @@ real TSparseMatrix::operator ()(int row, int column) const
 	if (column <= cols / 2)
 	{
 		int i = colptr[column];
-		while (rowind[i] < row && i < colptr[column + 1])
+		while (i < colptr[column + 1] && rowind[i] < row)
 		{
 			i++;
 		}
-		if (rowind[i] == row && i < colptr[column + 1])
+		if (i < colptr[column + 1] && rowind[i] == row)
 		{
 			return vals[i];
 		}
@@ -320,11 +320,11 @@ real TSparseMatrix::operator ()(int row, int column) const
 	else
 	{
 		int i = colptr[column + 1] - 1;
-		while (rowind[i] > row && i >= colptr[column])
+		while (i >= colptr[column] && rowind[i] > row)
 		{
 			i--;
 		}
-		if (rowind[i] == row && i >= colptr[column])
+		if (i >= colptr[column] && rowind[i] == row)
 		{
 			return vals[i];
 		}

@@ -828,10 +828,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\SpatialObjects\mathematicalconcepts\TPointToPointVector.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\Source\SpatialObjects\MathematicalConcepts\TPositionVector.cpp"
 				>
 				<FileConfiguration
@@ -1009,10 +1005,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TMatrix.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TPointToPointVector.h"
 				>
 			</File>
 			<File
