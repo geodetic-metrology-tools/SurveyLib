@@ -13,7 +13,7 @@
 #include  "TANumericValue.h"
 #include  "TSpatialPosition.h"
 #include  "TSpatialPoint.h"
-#include "TWorkingPoints.h"
+//#include "TWorkingPoints.h"
 //#include "TRoundOfMeasNetworkListnr.h"
 ////////////////////////////////////////////////////////////////
 
