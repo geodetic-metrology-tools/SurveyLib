@@ -5,8 +5,8 @@ FOREACH(subproject ${PROJECTFRAMEWORK_LIB_SUBPROJECTS})
     list(APPEND COMBINED_LIBRARY_FILES "${CMAKE_BINARY_DIR}/${subproject}/${CMAKE_BUILD_TYPE}/${subproject}.lib")
 ENDFOREACH(subproject) 
 
-add_library(ProjectFramework STATIC ${COMBINED_LIBRARY_FILES})
-add_dependencies(ProjectFramework ${PROJECTFRAMEWORK_LIB_SUBPROJECTS})
+add_library(ProjectFrameworkLibrary STATIC ${COMBINED_LIBRARY_FILES})
+add_dependencies(ProjectFrameworkLibrary ${PROJECTFRAMEWORK_LIB_SUBPROJECTS})
 
 SET_SOURCE_FILES_PROPERTIES(
   ${COMBINED_LIBRARY_FILES}
@@ -16,14 +16,14 @@ SET_SOURCE_FILES_PROPERTIES(
 )
 
 SET_TARGET_PROPERTIES(
-  ProjectFramework
+  ProjectFrameworkLibrary
   PROPERTIES
   LINKER_LANGUAGE CXX
 )
 
 
-install(TARGETS ProjectFramework 
+install(TARGETS ProjectFrameworkLibrary 
 	DESTINATION ${INSTALL_PREFIX}
-	EXPORT ProjectFramework-targets)
-install(EXPORT ProjectFramework-targets 
+	EXPORT ProjectFrameworkLibrary-targets)
+install(EXPORT ProjectFrameworkLibrary-targets 
 	DESTINATION ${INSTALL_PREFIX})
