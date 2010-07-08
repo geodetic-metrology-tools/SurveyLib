@@ -354,7 +354,7 @@ bool	TDataParameters::setLocalSystemOrigin(const struct LocalSystemOrigin LSO)
 //////////////////////////////////////////////////////////////////////
 //get Functions
 //////////////////////////////////////////////////////////////////////
-TAReferenceFrame*  TDataParameters::getRefFrame()
+TAReferenceFrame*  TDataParameters::getRefFrame() const
 {//! get the reference system identifier
 
 	

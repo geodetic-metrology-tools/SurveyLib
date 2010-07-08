@@ -126,7 +126,7 @@ public:
 	
 
 		//! get the reference system identifier
-		TAReferenceFrame*	getRefFrame();
+		TAReferenceFrame*	getRefFrame() const;
 
 		//! get the reference system identifier
 		TDataParameters::ERefFrame	getRefFrameEnumerator() const;
@@ -185,7 +185,7 @@ public:
 
 private:
 
-	TAReferenceFrame*							fRefFrame;
+	mutable TAReferenceFrame*					fRefFrame;
 	TDataParameters::ERefFrame					fRefFrameEnum;
 	TDataParameters::ECoordUnit					fCoordUnit;
 	struct LocalSystemOrigin	fLSO;
