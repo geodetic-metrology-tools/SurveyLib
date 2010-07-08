@@ -6,8 +6,8 @@ FOREACH(subproject ${SPATIALOBJECTS_LIB_SUBPROJECTS})
 ENDFOREACH(subproject) 
 
 
-add_library(SpatialObjects STATIC  ${COMBINED_LIBRARY_FILES})
-add_dependencies(SpatialObjects ${SPATIALOBJECTS_LIB_SUBPROJECTS})
+add_library(SpatialObjectsLibrary STATIC  ${COMBINED_LIBRARY_FILES})
+add_dependencies(SpatialObjectsLibrary ${SPATIALOBJECTS_LIB_SUBPROJECTS})
 
 SET_SOURCE_FILES_PROPERTIES(
   ${COMBINED_LIBRARY_FILES}
@@ -17,13 +17,13 @@ SET_SOURCE_FILES_PROPERTIES(
 )
 
 SET_TARGET_PROPERTIES(
-  SpatialObjects
+  SpatialObjectsLibrary
   PROPERTIES
   LINKER_LANGUAGE CXX
 )
 
-install(TARGETS SpatialObjects 
+install(TARGETS SpatialObjectsLibrary 
 	DESTINATION ${INSTALL_PREFIX}
-	EXPORT SpatialObjects-targets)
-install(EXPORT SpatialObjects-targets 
+	EXPORT SpatialObjectsLibrary-targets)
+install(EXPORT SpatialObjectsLibrary-targets 
 	DESTINATION ${INSTALL_PREFIX})
