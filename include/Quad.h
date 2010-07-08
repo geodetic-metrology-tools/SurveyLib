@@ -6,6 +6,8 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
+#include <iosfwd>
+
 #if _DEBUG && __INTEL_COMPILER
 
 class Quad
@@ -136,10 +138,14 @@ public:
 };
 
 typedef Quad real;
+std::ostream& operator<<(std::ostream& stream, const real & value);
+std::istream& operator>>(std::istream& stream, real & value);
 
 #elif __INTEL_COMPILER
 
 typedef _Quad real;
+std::ostream& operator<<(std::ostream& stream, const real & value);
+std::istream& operator>>(std::istream& stream, real & value);
 
 #else
 
