@@ -118,7 +118,7 @@ void	TRefSystemFactory::init()
 
 	// Definition of the reference frame list
 	string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf("ITRF97"), wgs("WGS84"), roma("ROMA40");
-	string ccs("CCS");
+	string ccs("CCS"), etrf("ETRF93");
 	
 		// CGRF
 	TGeodeticRefFrame* pCGRF = new TGeodeticRefFrame(cgrf, pGRS80);
@@ -136,6 +136,11 @@ void	TRefSystemFactory::init()
 	TGeodeticRefFrame* pITRF97 = new TGeodeticRefFrame(itrf, pGRS80);
 	pITRF97->setRefFrameId(kITRF97);
 	fRefFrameList.push_back(pITRF97);
+
+		// ETRF93
+	TGeodeticRefFrame* pETRF93 = new TGeodeticRefFrame(etrf, pGRS80);
+	pETRF93->setRefFrameId(kETRF93);
+	fRefFrameList.push_back(pETRF93);
 
 		// WGS84
 	TGeodeticRefFrame* pWGS = new TGeodeticRefFrame(wgs, pWGSEll);
@@ -645,6 +650,25 @@ void	TRefSystemFactory::init()
 	TARefFrameTransformation* pCGRF2ITRF97 = pITRF972CGRF->inverse(); //utilise new
 	pCGRF2ITRF97->setTransformId(kCGRF2ITRF97);
 	fTransformList.push_back(pCGRF2ITRF97);
+
+	{
+		// Helmert Transformation between ITRF97 (ep1998.5) and ETRF93
+		// There is no rotation:
+		TRotation r3(TRotationMatrix::kRzyx, 0, 0, 0);
+		// Total translation resulting from epoch changes and Reference Frame changes:
+		// TODO:
+		TLength Tx3(LITERAL(0.163550)), Ty3(LITERAL(-0.131900)), Tz3(LITERAL(-0.142100));
+		TTranslation transl3(Tx3, Ty3, Tz3);
+		// There is no scaling:
+		TScaleFactor enl3(LITERAL(1.000000000000000));
+		THelmertRefFrameTransform* pITRF972ETRF93 = new THelmertRefFrameTransform(pITRF97, pETRF93, enl3, r3, transl3);
+		pITRF972ETRF93->setTransformId(kITRF972ETRF93);
+		fTransformList.push_back(pITRF972ETRF93);
+		//Inverse
+		TARefFrameTransformation* pETRF932ITRF97 = pITRF972ETRF93->inverse(); //utilise new
+		pETRF932ITRF97->setTransformId(kETRF932ITRF97);
+		fTransformList.push_back(pETRF932ITRF97);
+	}
 
 
 	// Transformation between CERN projection XYHe and CCS

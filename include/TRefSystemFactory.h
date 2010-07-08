@@ -74,10 +74,27 @@ public:
 		enum  EGeoid {kCG2000, kCG2000Machine, kCG2000topo, kCG1985, 
 			          kCG1985Machine, kNoGeoid, kCGSphere};
 		/*! Enumerator for Reference Frames implemented in the factory */
-		enum  ERefFrame {kCCS, kLAp0, kLGp0, kCGRF, kITRF97, kWGS84, 
-			             kROMA40, kCernXYHe, kCernX0Y0He, kCernXYHg00, 
-						 kCernXYHg00Topo, kCernXYHg00Machine, kCernXYHg85, 
-						 kCernXYHg85Machine, kCERNXYHsSphereSPS, kCGRFSphere, kNotInGraph};
+		enum  ERefFrame {
+			kCCS                 =  0, 
+			kLAp0                =  1,
+			kLGp0                =  2, 
+			kCGRF                =  3, 
+			kITRF97              =  4, 
+			kWGS84               =  5, 
+			kROMA40              =  6, 
+			kCernXYHe            =  7, 
+			kCernX0Y0He          =  8, 
+			kCernXYHg00          =  9, 
+			kCernXYHg00Topo      = 10, 
+			kCernXYHg00Machine   = 11, 
+			kCernXYHg85          = 12, 
+			kCernXYHg85Machine   = 13, 
+			kCERNXYHsSphereSPS   = 14, 
+			kCGRFSphere          = 15,
+			kETRF93              = 16,
+			// ADD NEW VALUES HERE
+			kNotInGraph			 = -1};
+
 		/*! Enumerator for transformations between Ref.Frames implemented in the factory */
 		enum  ERefFrameTransform {	kCCS2CGRF, kLAp02LGp0, kLGp02CGRF, kLAp02CCS,
 									kROMA2WGS, kWGS2CGRF, kXYHe2CCS, kX0Y0He2XYHe,
@@ -88,7 +105,8 @@ public:
 									kWGS2ROMA, kCGRF2WGS, kCCS2XYHe, kXYHe2X0Y0He,
 									kXYHe2XYHg, kXYHe00Topo2XYHg, kXYHe00Machine2XYHg, 
 									kXYHe852XYHg, kXYHe85Machine2XYHg, kCCS2XYHsSphereSPS,
-									kCGRFSphere2CCS, kITRF972CGRF, kCGRF2ITRF97};
+									kCGRFSphere2CCS, kITRF972CGRF, kCGRF2ITRF97, 
+									kITRF972ETRF93, kETRF932ITRF97};
 	//@}
 	
 
