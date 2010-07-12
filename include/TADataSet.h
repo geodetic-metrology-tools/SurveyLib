@@ -101,7 +101,7 @@ public:
 		bool	isOriginExpected() const;
 
 		//! set the reference system identifier
-		bool	setRefFrame(TDataParameters::ERefFrame);
+		bool	setRefFrame(TRefSystemFactory::ERefFrame);
 
 		//!set the coordinate system
 		bool	setCoordSys(const TCoordSysFactory::ECoordSys&);
@@ -134,7 +134,7 @@ public:
 		TAReferenceFrame*	getRefFrame();
 
 		//! get the reference system identifier
-		TDataParameters::ERefFrame	getRefFrameEnumerator() const;
+        TRefSystemFactory::ERefFrame	getRefFrameEnumerator() const;
 
 		//! get the coordinate system for the RefSystem data
 		TCoordSysFactory::ECoordSys		getCoordinateSystem()  const;

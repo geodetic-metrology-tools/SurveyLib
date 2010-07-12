@@ -81,18 +81,22 @@ public:
 			kCGRF                =  3, 
 			kITRF97              =  4, 
 			kWGS84               =  5, 
-			kROMA40              =  6, 
-			kCernXYHe            =  7, 
-			kCernX0Y0He          =  8, 
-			kCernXYHg00          =  9, 
-			kCernXYHg00Topo      = 10, 
-			kCernXYHg00Machine   = 11, 
-			kCernXYHg85          = 12, 
-			kCernXYHg85Machine   = 13, 
-			kCERNXYHsSphereSPS   = 14, 
-			kCGRFSphere          = 15,
-			kETRF93              = 16,
-			// ADD NEW VALUES HERE
+			kROMA40              =  6,
+            kETRF93              =  7,
+            // Projections:
+			kCernXYHe            = 100, 
+			kCernX0Y0He          = 101, 
+			kCernXYHg00          = 102, 
+			kCernXYHg00Topo      = 103, 
+			kCernXYHg00Machine   = 104, 
+			kCernXYHg85          = 105, 
+			kCernXYHg85Machine   = 106, 
+			kCERNXYHsSphereSPS   = 107, 
+			kCGRFSphere          = 108,
+            // Local Reference Frames:
+            kMLA1985Machine      = 1000,
+            kMLA2000Machine      = 1001,
+            // Reserved value:
 			kNotInGraph			 = -1};
 
 		/*! Enumerator for transformations between Ref.Frames implemented in the factory */

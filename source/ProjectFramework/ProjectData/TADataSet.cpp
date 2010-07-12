@@ -183,7 +183,7 @@ bool	TADataSet::isOriginExpected() const
 }
 
 
-bool	TADataSet::setRefFrame(TDataParameters::ERefFrame ref)
+bool	TADataSet::setRefFrame(TRefSystemFactory::ERefFrame ref)
 {//! set the reference system identifier
 	return fDataParams.setRefFrame(ref);
 }
@@ -258,7 +258,7 @@ TAReferenceFrame*	TADataSet::getRefFrame()
 }
 
 
-TDataParameters::ERefFrame	TADataSet::getRefFrameEnumerator() const
+TRefSystemFactory::ERefFrame	TADataSet::getRefFrameEnumerator() const
 {//! get the reference system identifier
 	return fDataParams.getRefFrameEnumerator();
 }

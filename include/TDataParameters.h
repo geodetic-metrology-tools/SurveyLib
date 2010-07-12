@@ -56,12 +56,8 @@ class  TDataParameters //: public TObject
 public:
 	
 	/*//!@name Constants
-	//@{
-		! Enumerator for Reference Frames */
-		enum  ERefFrame {kUndefined, kMLA2000Machine, kMLA1985Machine, kCCS,  kCernX0Y0He, kCernXYHg00Machine, 
-			kCernXYHg85, kCernXYHg85Machine, kCERNXYHsSphereSPS, kLocalRefFrame, kCernLGatP0, kCGRF,
-			kWGS84, kROMA40, kITRF97};
-
+	//@{*/
+		
 		enum  ECoordUnit {kNotDefined, kMetric, kGons, kDMS};
 
 	//@}
@@ -92,7 +88,7 @@ public:
 		bool	isOriginExpected() const;
 
 		//! set the reference system identifier
-		bool	setRefFrame(TDataParameters::ERefFrame);
+		bool	setRefFrame(TRefSystemFactory::ERefFrame);
 
 		//!set the coordinate system
 		bool	setCoordSys(const TCoordSysFactory::ECoordSys&);
@@ -122,14 +118,14 @@ public:
 		//!set the point name's width
 		void	setPointNameWidth(const int);
 
-		bool	setLocalSystemOrigin(const struct LocalSystemOrigin);
+		bool	setLocalSystemOrigin(const LocalSystemOrigin &);
 	
 
 		//! get the reference system identifier
 		TAReferenceFrame*	getRefFrame() const;
 
 		//! get the reference system identifier
-		TDataParameters::ERefFrame	getRefFrameEnumerator() const;
+		TRefSystemFactory::ERefFrame	getRefFrameEnumerator() const;
 
 		//! get the coordinate system for the RefSystem data
 		TCoordSysFactory::ECoordSys		getCoordinateSystem()  const;
@@ -186,9 +182,9 @@ public:
 private:
 
 	mutable TAReferenceFrame*					fRefFrame;
-	TDataParameters::ERefFrame					fRefFrameEnum;
+    TRefSystemFactory::ERefFrame			    fRefFrameEnum;
 	TDataParameters::ECoordUnit					fCoordUnit;
-	struct LocalSystemOrigin	fLSO;
+    LocalSystemOrigin                           fLSO;
 	TCoordSysFactory::ECoordSys					fCoordSys;
 
 	TAngle::EUnits								fAngleUnits;
