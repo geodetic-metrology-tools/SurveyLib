@@ -6,9 +6,10 @@
 
 TRefFrameInfo::TDetails::TDetails(
                                   const std::string & name, 
-                                  TCoordSysFactory::ECoordSys coordSys,
+                                  TCoordSysFactory::ECoordSys defaultCoordSys,
+                                  int allowedCoordsys,
                                   bool local)
-: fName(name), fDefaultCoordSys(coordSys), fLocal(local)
+: fName(name), fDefaultCoordSys(defaultCoordSys), fAllowedCoordSys(allowedCoordsys|defaultCoordSys), fLocal(local)
 {
 }
 
@@ -19,16 +20,47 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
 	if(mapping.get()==NULL)
 	{
 		MapPtr tmp = MapPtr(new MappingType);
-		tmp->insert(std::make_pair(TRefSystemFactory::kCCS, TDetails("CCS", TCoordSysFactory::k3DCartesian)));
-		tmp->insert(std::make_pair(TRefSystemFactory::kETRF93, TDetails("ETRF93", TCoordSysFactory::k3DCartesian)));
-		tmp->insert(std::make_pair(TRefSystemFactory::kITRF97, TDetails("ITRF97", TCoordSysFactory::k3DCartesian)));
-		tmp->insert(std::make_pair(TRefSystemFactory::kROMA40, TDetails("ROMA40", TCoordSysFactory::k3DCartesian)));
-		tmp->insert(std::make_pair(TRefSystemFactory::kWGS84, TDetails("WGS84", TCoordSysFactory::k3DCartesian)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kCCS, 
+            TDetails("CCS - CERN XYZ", TCoordSysFactory::k3DCartesian)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kLAp0, 
+            TDetails("LAp0", TCoordSysFactory::k3DCartesian)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kLGp0, 
+            TDetails("LGp0", TCoordSysFactory::k3DCartesian)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kCGRF, 
+            TDetails("CERN GRF", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kITRF97, 
+            TDetails("ITRF97 ep98.5", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kWGS84, 
+            TDetails("WGS84", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kROMA40, 
+            TDetails("ROMA40", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kETRF93,
+            TDetails("ETRF93", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+		 
+        tmp->insert(std::make_pair(TRefSystemFactory::kCernXYHe, 
+            TDetails("CERN XYHe", TCoordSysFactory::k2DPlusH)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kCernX0Y0He, 
+            TDetails("CERN XoYoHe (Map Transfer)", TCoordSysFactory::k2DPlusH)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kCernXYHg00, 
+            TDetails("CERN XYHg00", TCoordSysFactory::k2DPlusH)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kCernXYHg00Topo, 
+            TDetails("CERN XYHg00Topo", TCoordSysFactory::k2DPlusH)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kCernXYHg00Machine, 
+            TDetails("CERN XYHg (RS2K)", TCoordSysFactory::k2DPlusH)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kCernXYHg85, 
+            TDetails("CERN XYHg1985 (Surface Topo)", TCoordSysFactory::k2DPlusH)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kCernXYHg85Machine, 
+            TDetails("CERN XYHg1985 (LHC)", TCoordSysFactory::k2DPlusH)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kCERNXYHsSphereSPS, 
+            TDetails("CERN XYHs (SPS)", TCoordSysFactory::k2DPlusH)));
 
-        tmp->insert(std::make_pair(TRefSystemFactory::kCERNXYHsSphereSPS, TDetails("CERNXYHsSphereSPS", TCoordSysFactory::k2DPlusH)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kCGRFSphere,
+            TDetails("CERN GRF sphere", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 
-        tmp->insert(std::make_pair(TRefSystemFactory::kMLA1985Machine, TDetails("MLA1985Machine", TCoordSysFactory::k3DCartesian, true)));
-        tmp->insert(std::make_pair(TRefSystemFactory::kMLA2000Machine, TDetails("MLA2000Machine", TCoordSysFactory::k3DCartesian, true)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kMLA1985Machine, 
+            TDetails("MLA (1985)", TCoordSysFactory::k3DCartesian, 0, true)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kMLA2000Machine, 
+            TDetails("MLA (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
 		// ...
 		mapping = tmp;
 	}
@@ -86,6 +118,16 @@ TCoordSysFactory::ECoordSys TRefFrameInfo::getDefaultCoordSys(int frame)
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
 
+bool TRefFrameInfo::isCoordSysAllowed(int frame, TCoordSysFactory::ECoordSys sys)
+{
+    MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
+	if(iter!=getMapping().end())
+	{
+		return iter->second.fAllowedCoordSys & sys;
+	}
+	throw std::invalid_argument("Unknown ERefFrame value");
+}
+
 bool TRefFrameInfo::isLocalRefFrame(int frame)
 {
     MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
@@ -96,7 +138,7 @@ bool TRefFrameInfo::isLocalRefFrame(int frame)
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
 
-TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const LocalSystemOrigin *lso)
+TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso)
 {
     TRefSystemFactory::ERefFrame refFrame = fromNumber(frame);
     if(refFrame==TRefSystemFactory::kMLA1985Machine || refFrame==TRefSystemFactory::kMLA2000Machine)

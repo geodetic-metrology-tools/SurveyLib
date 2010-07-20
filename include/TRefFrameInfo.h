@@ -29,10 +29,21 @@ private:
 
 	struct TDetails
 	{
-		TDetails(const std::string & name, TCoordSysFactory::ECoordSys coordSys, bool local=false);
+        /**
+         *  Initialise the Reference Frame information structure.
+         *  \param[in] name user friendly name (for GUI, help, etc) of the refFrame
+         *  \param[in] defaultCoordSys Default coordinate system for the refFrame.
+         *               It is automatically added to the list of allowed coordinate systems.
+         *  \param[in] allowedCoordSys optional parameter for specifying additional 
+         *               permitted coordinate systems. Default value 0 means that no additional
+         *               coordinate systems are allowed.
+         *  \param[in] local optional parameter for specifying whether we are dealing with
+         *               a local reference frame (e.g. MLA)
+         */
+		TDetails(const std::string & name, TCoordSysFactory::ECoordSys defaultCoordSys, int allowedCoordSys=0, bool local=false);
 		const std::string fName;
-        // @@@@ This will have to be changed! More than one system is allowed!!!
 		const TCoordSysFactory::ECoordSys fDefaultCoordSys;
+        const int fAllowedCoordSys;
         const bool fLocal;
 	};
 	typedef std::map<TRefSystemFactory::ERefFrame, TDetails> MappingType;
@@ -80,9 +91,11 @@ public:
 	 */
 	static TCoordSysFactory::ECoordSys getDefaultCoordSys(int frame);
 
+    static bool isCoordSysAllowed(int frame, TCoordSysFactory::ECoordSys sys);
+
     static bool isLocalRefFrame(int frame);
 
-    static TAReferenceFrame * getReferenceFrame(int frame, const LocalSystemOrigin * lso = NULL);
+    static TAReferenceFrame * getReferenceFrame(int frame, const TLocalSystemOrigin * lso = NULL);
 };
 
 

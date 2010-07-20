@@ -42,6 +42,9 @@ class		TAReferenceFrame;
 #include	"TObservationFormat.h"
 #include	"TAStreamFormatter.h"
 
+#include <TRefSystemFactory.h> 
+#include <memory>
+
 // typedefs
 //
 //
@@ -78,7 +81,9 @@ public:
 	/*!@name member functions */
 	//@{
 		//! copy assignment operator
-		TDataParameters& operator=(const TDataParameters& );
+		TDataParameters& operator=(TDataParameters); // Pass-by-value, simpler and better in C++0x
+        
+        void swap(TDataParameters & other) throw();
 
 		//! equivalence operator
 		bool	operator==(const TDataParameters& );
@@ -118,7 +123,7 @@ public:
 		//!set the point name's width
 		void	setPointNameWidth(const int);
 
-		bool	setLocalSystemOrigin(const LocalSystemOrigin &);
+        bool	setLocalSystemOrigin(const TLocalSystemOrigin &);
 	
 
 		//! get the reference system identifier
@@ -148,7 +153,7 @@ public:
 		//! get the point name's width 
 		int										getPointNameWidth() const;
 
-		struct LocalSystemOrigin				getLocalSystemOrigin() const;
+        std::tr1::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
 			
 	//@}
 	/*!@output stream format access methods*/
@@ -184,7 +189,7 @@ private:
 	mutable TAReferenceFrame*					fRefFrame;
     TRefSystemFactory::ERefFrame			    fRefFrameEnum;
 	TDataParameters::ECoordUnit					fCoordUnit;
-    LocalSystemOrigin                           fLSO;
+    std::tr1::shared_ptr<TLocalSystemOrigin>    fLSO;
 	TCoordSysFactory::ECoordSys					fCoordSys;
 
 	TAngle::EUnits								fAngleUnits;
@@ -202,6 +207,14 @@ private:
 	string resultsSeparator;
 	//ClassDef(TDataParameters, 1)
 };
+
+namespace std {
+    template<>
+    void swap(TDataParameters & lhs, TDataParameters & rhs)
+    {
+        lhs.swap(rhs);
+    }
+}
 
 
 #endif // SU_DATA_PARAMETERS

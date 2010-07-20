@@ -971,22 +971,23 @@ TAReferenceFrame*	TRefSystemFactory::getNewLocalRefFrame()
 }
 
 
-TAReferenceFrame*	TRefSystemFactory::getNewLocalRefFrame(struct LocalSystemOrigin fLSO, EGeoid geoid)
+TAReferenceFrame*	TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigin & LSO, EGeoid geoid)
 {
 	TModifiedLocalAstronomicalRF* pMLA = 0;
 
-	if(fLSO.origin != 0)
-	{
-		TSpatialPosition* originPointer = fLSO.origin;
-		TSpatialPosition origin (*originPointer);
-		TAngle gis = fLSO.gisement;
-		TAngle slope = fLSO.slope;
+	//if(fLSO.origin != 0)
+	//{
+	//	TSpatialPosition* originPointer = fLSO.origin;
+	//	TSpatialPosition origin (*originPointer);
+		TAngle gis = LSO.gisement();
+		TAngle slope = LSO.slope();
 
 		TFreeVector falseOrigin (0,0,0, TCoordSysFactory::k3DCartesian);
 
-		pMLA = new TModifiedLocalAstronomicalRF("mla", geoid, origin,falseOrigin, gis, slope);
+		//pMLA = new TModifiedLocalAstronomicalRF("mla", geoid, origin,falseOrigin, gis, slope);
+        pMLA = new TModifiedLocalAstronomicalRF("mla", geoid, LSO.origin(), falseOrigin, gis, slope);
 		fLocalRefFrameList.push_back(pMLA);
-	}
+	//}
 
 	return pMLA;
 }

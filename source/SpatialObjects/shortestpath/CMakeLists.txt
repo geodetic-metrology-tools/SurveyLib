@@ -13,6 +13,7 @@ include_directories (
 # Create a variable containing all .cpp files:
 set(ShortestPath_SOURCES 
 	TGraph.cpp
+	TLocalSystemOrigin.cpp
 	TRefFrameInfo.cpp
 	TRefFrameWrapper.cpp
 	TRefSystemFactory.cpp
@@ -24,6 +25,7 @@ set(ShortestPath_HEADERS
 	${SURVEYLIB_INCLUDE_PATH}/DynamicPriorityQueue.h
 	${SURVEYLIB_INCLUDE_PATH}/PtrGreater.h
 	${SURVEYLIB_INCLUDE_PATH}/TGraph.h
+	${SURVEYLIB_INCLUDE_PATH}/TLocalSystemOrigin.h
 	${SURVEYLIB_INCLUDE_PATH}/TRefFrameInfo.h
 	${SURVEYLIB_INCLUDE_PATH}/TRefFrameWrapper.h
 	${SURVEYLIB_INCLUDE_PATH}/TRefSystemFactory.h

@@ -127,7 +127,7 @@ public:
 		//!set the point name's width
 		void	setPointNameWidth(const int);
 
-		bool	setLocalSystemOrigin(const struct LocalSystemOrigin);
+		bool	setLocalSystemOrigin(const TLocalSystemOrigin &);
 	
 
 		//! get the reference system identifier
@@ -158,7 +158,7 @@ public:
 		int										getPointNameWidth() const;
 
 
-		struct LocalSystemOrigin				getLocalSystemOrigin() const;
+        std::tr1::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
 	//@}
 	
 		

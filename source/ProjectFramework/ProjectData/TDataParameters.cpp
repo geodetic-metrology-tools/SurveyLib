@@ -40,7 +40,7 @@ TDataParameters::TDataParameters()
 	punchFileFormat = TAStreamFormatter::kColumnFormat;
 	*/
 	fRefFrame =0;
-	fLSO.origin = 0;
+	//fLSO.origin = 0;
     fRefFrameEnum = TRefSystemFactory::kNotInGraph;
 	fCoordUnit = TDataParameters::kNotDefined;
 	fCoordSys = TCoordSysFactory::k3DCartesian;
@@ -52,10 +52,19 @@ TDataParameters::TDataParameters()
 	fPointNameWidth=7;
 }
 
-
 TDataParameters::TDataParameters(const TDataParameters& original )
-{	// copy constructor
-	*this = original;
+: fRefFrame(original.fRefFrame)
+, fRefFrameEnum(original.fRefFrameEnum)
+, fCoordUnit(original.fCoordUnit)
+, fLSO(original.fLSO.get() ? new TLocalSystemOrigin( *original.fLSO.get()) : 0)
+, fCoordSys(original.fCoordSys)
+, fAngleUnits(original.fAngleUnits)
+, fLengthUnits(original.fLengthUnits)
+, fAnglePrecision(original.fAnglePrecision)
+, fLengthPrecision(original.fLengthPrecision)
+, fCoordPrecision(original.fCoordPrecision)
+, fPointNameWidth(original.fPointNameWidth)
+{
 }
 
 
@@ -67,35 +76,36 @@ TDataParameters::~TDataParameters()
 //////////////////////////////////////////////////////////////////////
 // Member Functions
 //////////////////////////////////////////////////////////////////////
-TDataParameters&  TDataParameters::operator=(const TDataParameters& rhs )
-{//Copy Assignment operator
-
-	if (this != &rhs)
-	{
-		fRefFrame = rhs.fRefFrame;
-		fRefFrameEnum = rhs.getRefFrameEnumerator();
-		fCoordUnit= rhs.fCoordUnit;
-		fLSO = rhs.getLocalSystemOrigin();
-		fCoordSys = rhs.getCoordinateSystem();
-		fAngleUnits = rhs.getAngleUnits();
-		fLengthUnits = rhs.getLengthUnits();
-		fAnglePrecision = rhs.getAnglePrecision(); 
-		fLengthPrecision = rhs.getLengthPrecision();
-		fCoordPrecision = rhs.getCoordPrecision();
-		fPointNameWidth=rhs.fPointNameWidth;
-		
-	}
-	return *this;
+TDataParameters&  TDataParameters::operator=(TDataParameters rhs )
+{
+    // rhs is a copy of the source; hard work already done
+    swap(rhs); // trade our resources for rhs'es
+    return *this;    // our (old) resources get destroyed with rhs (copy)
 }
 
+void TDataParameters::swap(TDataParameters & other) throw()
+{
+    std::swap(fRefFrame,other.fRefFrame);
+    std::swap(fRefFrameEnum,other.fRefFrameEnum);
+    std::swap(fCoordUnit,other.fCoordUnit);
+    std::swap(fLSO,other.fLSO);
+    std::swap(fCoordSys,other.fCoordSys);
+    std::swap(fAngleUnits,other.fAngleUnits);
+    std::swap(fLengthUnits,other.fLengthUnits);
+    std::swap(fAnglePrecision,other.fAnglePrecision);
+    std::swap(fLengthPrecision,other.fLengthPrecision);
+    std::swap(fCoordPrecision,other.fCoordPrecision);
+    std::swap(fPointNameWidth,other.fPointNameWidth);
+}
 
 bool  TDataParameters::operator==(const TDataParameters& rhs )
 {//Equivalence operator
 	return	fRefFrameEnum == rhs.getRefFrameEnumerator() && 
 		fCoordUnit == rhs.fCoordUnit &&
-		getLocalSystemOrigin().gisement == rhs.getLocalSystemOrigin().gisement &&
-		getLocalSystemOrigin().slope == rhs.getLocalSystemOrigin().slope &&
-		getLocalSystemOrigin().origin == rhs.getLocalSystemOrigin().origin &&
+		//getLocalSystemOrigin().gisement == rhs.getLocalSystemOrigin().gisement &&
+		//getLocalSystemOrigin().slope == rhs.getLocalSystemOrigin().slope &&
+		//getLocalSystemOrigin().origin == rhs.getLocalSystemOrigin().origin &&
+        fLSO == rhs.fLSO &&
 		fCoordSys == rhs.getCoordinateSystem() &&
 		fAngleUnits == rhs.getAngleUnits() && 
 		fLengthUnits == rhs.getLengthUnits() && 
@@ -335,15 +345,16 @@ void  TDataParameters::setPointNameWidth(const int width )
 }
 
 
-bool	TDataParameters::setLocalSystemOrigin(const LocalSystemOrigin & LSO)
+bool	TDataParameters::setLocalSystemOrigin(const TLocalSystemOrigin & LSO)
 {
 	bool res = false;
 
 	if( ( fRefFrameEnum == TRefSystemFactory::kMLA2000Machine || fRefFrameEnum == TRefSystemFactory::kMLA1985Machine )
-		&& LSO.origin != 0
+		//&& LSO.origin != 0
 		&& fRefFrame == 0)
 	{
-		fLSO = LSO;
+		//fLSO = LSO;
+        fLSO.reset(new TLocalSystemOrigin(LSO));
 		res = true;
 	}
 
@@ -357,11 +368,7 @@ bool	TDataParameters::setLocalSystemOrigin(const LocalSystemOrigin & LSO)
 //////////////////////////////////////////////////////////////////////
 TAReferenceFrame*  TDataParameters::getRefFrame() const
 {//! get the reference system identifier
-    if(TRefFrameInfo::isLocalRefFrame(fRefFrameEnum))
-        fRefFrame = TRefFrameInfo::getReferenceFrame(fRefFrameEnum, &fLSO);	
-    else
-        fRefFrame = TRefFrameInfo::getReferenceFrame(fRefFrameEnum);
-    return fRefFrame;
+    return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fLSO.get());;
 //		switch (fRefFrameEnum)
 //		{
 //			case TDataParameters::kCCS:
@@ -544,7 +551,7 @@ int  TDataParameters::getPointNameWidth() const
 }
 
 
-LocalSystemOrigin TDataParameters::getLocalSystemOrigin() const
+std::tr1::shared_ptr<TLocalSystemOrigin> TDataParameters::getLocalSystemOrigin() const
 {
 	return fLSO;
 }
@@ -590,6 +597,7 @@ string TDataParameters::getPunchSeparator()
 	return punchSeparator;
 }
 */
+
 /////////////////////////////////////////////////////////////////////////////
 //end
 /////////////////////////////////////////////////////////////////////////////

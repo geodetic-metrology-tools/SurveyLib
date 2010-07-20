@@ -42,7 +42,8 @@ class TModifiedLocalAstronomicalRF;
 
 class TARefFrameTransformation;
 class TSpatialPosition;
-#include "TAngle.h"
+
+#include <TLocalSystemOrigin.h>
 //
 //
 ////////////////////////////////////////////////////////////////
@@ -56,10 +57,6 @@ class TSpatialPosition;
 #define ZP0 LITERAL(2433.66000);
 #define HP0 LITERAL(433.65921);
 #define PHIP0 LITERAL(51.3692);
-
-
-struct LocalSystemOrigin{TSpatialPosition* origin; TAngle gisement; TAngle slope;};
-
 
 //! Singleton class: produce one unique instance listing ref. surfaces, ref.frames and transformations
 class TRefSystemFactory
@@ -155,7 +152,7 @@ public:
 		TAReferenceFrame* getNewLocalRefFrame();
 
 		//return a pointer to a new Modified Local Astronomic ref Frame and put it in a list in order to be deleted
-		TAReferenceFrame* getNewLocalRefFrame(struct LocalSystemOrigin, EGeoid);
+		TAReferenceFrame* getNewLocalRefFrame(const TLocalSystemOrigin & LSO, EGeoid);
 
 
 	//@}
