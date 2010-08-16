@@ -17,6 +17,7 @@ SET(USE_INTEL_COMPILER TRUE)
 # Set the paths to the libraries
 SET(SURVEYLIB_INCLUDE_PATH "C:/SVN/SVN_SurveyLib/SurveyLib/include")
 SET(NAGC_INCLUDE_PATH "G:/Support/SurveyingEng/software/nagc/include")
+SET(TUT_INCLUDE_PATH "C:/lib/tut-2009-08-30")
 
 # Where to look for the libraries to link against
 SET(NAGC_LIBRARY_DIR "G:/Support/SurveyingEng/software/nagc/dll")
@@ -49,7 +50,7 @@ IF(WIN32)
 	ENDIF(USE_INTEL_COMPILER)
 ENDIF(WIN32)
 
-# add subdirectories
+# add subdirectories that are a part of the library
 SET(SPATIALOBJECTS_LIB_SUBPROJECTS
 	AffineTransformations
 	MathematicalConcepts
@@ -66,3 +67,5 @@ ENDFOREACH(subproject)
 
 ADD_SUBDIRECTORY(SpatialObjectsLibraryStatic)
 install(FILES SpatialObjects-config.cmake DESTINATION ${INSTALL_PREFIX})
+
+ADD_SUBDIRECTORY(UnitTests)

@@ -94,7 +94,10 @@ void	TGraph::init()
 
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972ETRF93),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932ITRF97));
-	
+
+    insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932CH1903plus),
+            TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCH1903plus2ETRF93));
+
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kXYHe2CCS),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCCS2XYHe));
 

@@ -36,6 +36,9 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("ROMA40", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kETRF93,
             TDetails("ETRF93", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kCH1903plus,
+            TDetails("CH1903+", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+		 
 		 
         tmp->insert(std::make_pair(TRefSystemFactory::kCernXYHe, 
             TDetails("CERN XYHe", TCoordSysFactory::k2DPlusH)));
@@ -53,7 +56,6 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("CERN XYHg1985 (LHC)", TCoordSysFactory::k2DPlusH)));
         tmp->insert(std::make_pair(TRefSystemFactory::kCERNXYHsSphereSPS, 
             TDetails("CERN XYHs (SPS)", TCoordSysFactory::k2DPlusH)));
-
         tmp->insert(std::make_pair(TRefSystemFactory::kCGRFSphere,
             TDetails("CERN GRF sphere", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 

@@ -47,6 +47,10 @@ private:
         const bool fLocal;
 	};
 	typedef std::map<TRefSystemFactory::ERefFrame, TDetails> MappingType;
+    /**
+     * We cannot have a static map member, due to the risk of static initialisation fiasco:
+     * http://www.parashift.com/c++-faq-lite/ctors.html#faq-10.12
+     */
 	static const MappingType & getMapping();
 public:
 	typedef std::set<TRefSystemFactory::ERefFrame> RefFrameSet;

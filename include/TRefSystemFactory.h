@@ -66,7 +66,7 @@ public:
 	//!@name Constants
 	//@{
 		/*! Enumerator for ellipsoids implemented in the factory */
-		enum  ERefEll {kGRS80, kWGSEll, kInternationalEll, kSphere, kNoEllipsoid};
+		enum  ERefEll {kGRS80, kWGSEll, kInternationalEll, kSphere, kNoEllipsoid, kBessel1841};
 		/*! Enumerator for geoids implemented in the factory */
 		enum  EGeoid {kCG2000, kCG2000Machine, kCG2000topo, kCG1985, 
 			          kCG1985Machine, kNoGeoid, kCGSphere};
@@ -80,6 +80,7 @@ public:
 			kWGS84               =  5, 
 			kROMA40              =  6,
             kETRF93              =  7,
+            kCH1903plus          =  8, /*!< Swiss coordinate system */
             // Projections:
 			kCernXYHe            = 100, 
 			kCernX0Y0He          = 101, 
@@ -107,7 +108,8 @@ public:
 									kXYHe2XYHg, kXYHe00Topo2XYHg, kXYHe00Machine2XYHg, 
 									kXYHe852XYHg, kXYHe85Machine2XYHg, kCCS2XYHsSphereSPS,
 									kCGRFSphere2CCS, kITRF972CGRF, kCGRF2ITRF97, 
-									kITRF972ETRF93, kETRF932ITRF97};
+									kITRF972ETRF93, kETRF932ITRF97,
+                                    kETRF932CH1903plus, kCH1903plus2ETRF93};
 	//@}
 	
 

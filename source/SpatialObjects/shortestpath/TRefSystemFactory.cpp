@@ -88,7 +88,7 @@ void	TRefSystemFactory::init()
 	
 	///////////////////////////////////////////////////////////////////
 	// Definition of the ellipsoid list
-	string grs("GRS80"), wgsEll("WGS84 Ellipsoid"), internationalEll("Hayford1903 Ellipsoid"), sps("SphereSPS");
+	string grs("GRS80"), wgsEll("WGS84 Ellipsoid"), internationalEll("Hayford1903 Ellipsoid"), sps("SphereSPS"), Bessel("Bessel Ellipsoid");
 
 		// Sphere SPS
 	TReferenceEllipsoid* pSphere = new TReferenceEllipsoid(sps);
@@ -114,11 +114,17 @@ void	TRefSystemFactory::init()
 	pInternationalEll->setEllId(kInternationalEll);
 	fRefEllList.push_back(pInternationalEll);
 
+    	// Bessel 1841
+	TReferenceEllipsoid* pBessel1841 = new TReferenceEllipsoid(Bessel);
+	pBessel1841->setAAndESquared(LITERAL(6378197.155), LITERAL(0.006674372230614));
+	pBessel1841->setEllId(kBessel1841);
+	fRefEllList.push_back(pBessel1841);
+
 
 
 	// Definition of the reference frame list
 	string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf("ITRF97"), wgs("WGS84"), roma("ROMA40");
-	string ccs("CCS"), etrf("ETRF93");
+	string ccs("CCS"), etrf("ETRF93"), ch1903plus("CH1903plus");
 	
 		// CGRF
 	TGeodeticRefFrame* pCGRF = new TGeodeticRefFrame(cgrf, pGRS80);
@@ -141,6 +147,11 @@ void	TRefSystemFactory::init()
 	TGeodeticRefFrame* pETRF93 = new TGeodeticRefFrame(etrf, pGRS80);
 	pETRF93->setRefFrameId(kETRF93);
 	fRefFrameList.push_back(pETRF93);
+
+        // CH1903plus
+	TGeodeticRefFrame* pCH1903plus = new TGeodeticRefFrame(ch1903plus, pBessel1841);
+	pCH1903plus->setRefFrameId(kCH1903plus);
+	fRefFrameList.push_back(pCH1903plus);
 
 		// WGS84
 	TGeodeticRefFrame* pWGS = new TGeodeticRefFrame(wgs, pWGSEll);
@@ -670,7 +681,26 @@ void	TRefSystemFactory::init()
 		fTransformList.push_back(pETRF932ITRF97);
 	}
 
-
+    {
+        ////////////////////////////////////////////////////////////////
+		// Helmert Transformation between ETRF93 (ep1993) and CH1903plus
+        ////////////////////////////////////////////////////////////////
+		// There is no rotation:
+		TRotation r3(TRotationMatrix::kRzyx, 0, 0, 0);
+		// Total translation resulting from epoch changes and Reference Frame changes:
+		TLength Tx3(LITERAL(-674.374)), Ty3(LITERAL(-15.056)), Tz3(LITERAL(-405.346));
+		TTranslation transl3(Tx3, Ty3, Tz3);
+		// There is no scaling:
+		TScaleFactor enl3(LITERAL(1.000000000000000));
+		THelmertRefFrameTransform* pETRF932CH1903plus = new THelmertRefFrameTransform(pETRF93, pCH1903plus, enl3, r3, transl3);
+		pETRF932CH1903plus->setTransformId(kETRF932CH1903plus);
+		fTransformList.push_back(pETRF932CH1903plus);
+		//Inverse
+		TARefFrameTransformation* pCH1903plus2ETRF93 = pETRF932CH1903plus->inverse(); //utilise new
+		pCH1903plus2ETRF93->setTransformId(kCH1903plus2ETRF93);
+		fTransformList.push_back(pCH1903plus2ETRF93);
+	}
+            
 	// Transformation between CERN projection XYHe and CCS
 	TXYHe2MLATransformation* pXYHe2CCS = new TXYHe2MLATransformation(pCernXYHe);
 	pXYHe2CCS->setTransformId(kXYHe2CCS);
