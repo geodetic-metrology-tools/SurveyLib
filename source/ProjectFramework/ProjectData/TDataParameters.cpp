@@ -239,19 +239,9 @@ bool  TDataParameters::setUnits( const TDataParameters::ECoordUnit& units )
 
 bool  TDataParameters::setAngUnits( const TAngle::EUnits& un)
 {//! set the angle units
-	// returns "true" if the parameters are set correctly
-	bool  retVal = true;
-
-	if ( un > 0  &&  un < 4 )
-	{
-		fAngleUnits = un;  
-	}
-	else
-	{
-		retVal = false;
-	}
-
-	return  retVal;
+	fAngleUnits = un;  
+    return true;
+	
 }
 
 
@@ -345,22 +335,27 @@ void  TDataParameters::setPointNameWidth(const int width )
 }
 
 
-bool	TDataParameters::setLocalSystemOrigin(const TLocalSystemOrigin & LSO)
+bool TDataParameters::setLocalSystemOrigin(const TLocalSystemOrigin & LSO)
 {
-	bool res = false;
-
-	if( ( fRefFrameEnum == TRefSystemFactory::kMLA2000Machine || fRefFrameEnum == TRefSystemFactory::kMLA1985Machine )
-		//&& LSO.origin != 0
+    if(TRefFrameInfo::isLocalRefFrame(fRefFrameEnum)
 		&& fRefFrame == 0)
 	{
 		//fLSO = LSO;
         fLSO.reset(new TLocalSystemOrigin(LSO));
-		res = true;
+		return true;
 	}
-
-	return res;
+	return false;
 }
-
+bool TDataParameters::setLocalSystemOrigin(std::tr1::shared_ptr<TLocalSystemOrigin> lso)
+{
+    if(TRefFrameInfo::isLocalRefFrame(fRefFrameEnum)
+		&& fRefFrame == 0)
+	{
+        fLSO = lso;
+        return true;
+    }
+    return false;
+}
 
 
 //////////////////////////////////////////////////////////////////////
