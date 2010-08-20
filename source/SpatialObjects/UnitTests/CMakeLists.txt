@@ -16,6 +16,9 @@ link_directories (
 
 set(UnitTests_SOURCES
 	testTransformations.cpp
+	
+	testTLV95Transformation.cpp
+	
 	testTRefFrameInfo.cpp
 
 	main.cpp

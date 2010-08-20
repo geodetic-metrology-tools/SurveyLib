@@ -28,6 +28,8 @@ set(RefFrameTransformations_SOURCES
 	TXYHe2XYHgTransformation.cpp
 	TXYHg2XYHeTransformation.cpp
 	TXYHs2MLATransformation.cpp
+	
+	TLV95Transformation.cpp
 )
 
 # Create a variable containing all .h files:
@@ -50,6 +52,8 @@ set(RefFrameTransformations_HEADERS
 	${SURVEYLIB_INCLUDE_PATH}/TXYHe2XYHgTransformation.h
 	${SURVEYLIB_INCLUDE_PATH}/TXYHg2XYHeTransformation.h
 	${SURVEYLIB_INCLUDE_PATH}/TXYHs2MLATransformation.h
+	
+	${SURVEYLIB_INCLUDE_PATH}/TLV95Transformation.h
 )
 
 # Create a static library from sources:

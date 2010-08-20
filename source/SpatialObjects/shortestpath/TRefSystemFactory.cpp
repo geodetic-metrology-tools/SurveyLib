@@ -116,7 +116,7 @@ void	TRefSystemFactory::init()
 
     	// Bessel 1841
 	TReferenceEllipsoid* pBessel1841 = new TReferenceEllipsoid(Bessel);
-	pBessel1841->setAAndESquared(LITERAL(6378197.155), LITERAL(0.006674372230614));
+	pBessel1841->setAAndESquared(LITERAL(6377397.155), LITERAL(0.006674372230614));
 	pBessel1841->setEllId(kBessel1841);
 	fRefEllList.push_back(pBessel1841);
 

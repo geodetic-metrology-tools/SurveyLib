@@ -166,4 +166,57 @@ namespace tut
         ensure_distance("ETRF93 H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<real>(504.935), static_cast<real>(1e-3));
     }
 
+    template<>
+	template<>
+	void object::test<6>()
+	{
+        /* Reference data taken from:
+           "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
+         */
+        set_test_name("(Projection on GRS80) Converting Chrischona CH1903+(Phi,Lambda,H)->CH1903+(XYZ)");
+        TPositionVector pv(TCoordSysFactory::kGeodetic);
+        {
+            TAngle phi; 
+            ensure("Setting phi",phi.setDMSValue(47, 34, 6.404965));
+            TAngle lam; 
+            ensure("Setting lam",lam.setDMSValue(7, 40, 10.574820));
+            TLength h(457.138);
+            ensure("pv.setPhiEllipsoid",pv.setPhiEllipsoid(phi));
+	        ensure("pv.setLambdaEllipsoid",pv.setLambdaEllipsoid(lam));
+	        ensure("pv.setH",pv.setH(h));
+	        pv.setStatus(TVNumericValue::kKnown);
+        }
+		
+        TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
+		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
+
+        ensure_distance("CH1903+ X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<real>(4272473.562), static_cast<real>(0.001));
+		ensure_distance("CH1903+ Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<real>(575353.239), static_cast<real>(0.001));
+		ensure_distance("CH1903+ Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<real>(4684498.293), static_cast<real>(0.001));
+	}
+
+    template<>
+	template<>
+	void object::test<7>()
+	{
+        /* Reference data taken from:
+           "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
+         */
+        set_test_name("(Projection on Bessel1841) Converting Chrischona CH11903+(XYZ)->CH1903+(Phi,Lambda,H).");
+		TPositionVector pv(4272473.562, 575353.239, 4684498.293, TCoordSysFactory::k3DCartesian);
+		
+        TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
+		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
+
+        ensure_equals("CH1903+ Phi (Deg)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getDegreesValue(), 47);
+        ensure_equals("CH1903+ Phi (Min)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getMinutesValue(), 34);
+        ensure_distance("CH1903+ Phi (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getSecondsValue(), static_cast<real>(6.404965), static_cast<real>(1e-4));
+
+        ensure_equals("CH1903+ Lam (Deg)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getDegreesValue(), 7);
+        ensure_equals("CH1903+ Lam (Min)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getMinutesValue(), 40);
+        ensure_distance("CH1903+ Lam (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getSecondsValue(), static_cast<real>(10.574820), static_cast<real>(1e-4)); 
+
+        ensure_distance("CH1903+ H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<real>(457.138), static_cast<real>(1e-3));
+	}
+
 }
