@@ -1,5 +1,5 @@
-#ifndef SURVEYLIB_TLV95TRANSFORMATION_4599afe1-7725-409d-8ea5-b2b9f5f3a95a
-#define SURVEYLIB_TLV95TRANSFORMATION_4599afe1-7725-409d-8ea5-b2b9f5f3a95a
+#ifndef SURVEYLIB_TLV95TRANSFORMATION_4599afe1_7725_409d_8ea5_b2b9f5f3a95a
+#define SURVEYLIB_TLV95TRANSFORMATION_4599afe1_7725_409d_8ea5_b2b9f5f3a95a
 
 #include  <TARefFrameTransformation.h>
 #include  <TSpatialPosition.h>
@@ -18,7 +18,7 @@ public:
     bool transform( TPositionVector & pv) const;
 
 private:
-    const std::size_t kMaxIter = 100;
+    enum { kMaxIter = 100 };
     bool transformFromCH1903plus(TPositionVector & pv) const;
     bool transformToCH1903plus(TPositionVector & pv) const;
 

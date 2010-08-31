@@ -24,13 +24,13 @@ TLV95Transformation * TLV95Transformation::inverse() const
 TAReferenceFrame * TLV95Transformation::getSourceFrame() const
 {
     return TRefFrameInfo::getReferenceFrame(
-        fFromCH1903plus ? TRefSystemFactory::kCH1903plus : TRefSystemFactory::kITRF97);
+        fFromCH1903plus ? TRefSystemFactory::kCH1903plus : TRefSystemFactory::kSwissLV95);
 }
 
 TAReferenceFrame * TLV95Transformation::getDestinationFrame() const
 {
     return TRefFrameInfo::getReferenceFrame(
-        fFromCH1903plus ? TRefSystemFactory::kITRF97 : TRefSystemFactory::kCH1903plus);
+        fFromCH1903plus ? TRefSystemFactory::kSwissLV95 : TRefSystemFactory::kCH1903plus);
 }
 
 bool TLV95Transformation::transform(TPositionVector & pv) const
@@ -102,14 +102,13 @@ bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
 bool TLV95Transformation::transformToCH1903plus(TPositionVector & pv) const
 {
     //transform phi lambda h
-    /*
     TSpatialPosition position(getSourceFrame());
 	if(!position.setCoordinates(pv))
         return false;
-*/
-    const double x = 1268507.870;//position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
-    const double y = 2617306.920;//position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
-    const double h = 457.138;//position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+
+    const double x = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
+    const double y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
+    const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
 
     // constants
     const double a = 6377397.155; 

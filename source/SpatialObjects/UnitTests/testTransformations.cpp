@@ -219,4 +219,48 @@ namespace tut
         ensure_distance("CH1903+ H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<real>(457.138), static_cast<real>(1e-3));
 	}
 
+    template<>
+	template<>
+	void object::test<8>()
+	{
+        /* Reference data taken from:
+           "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
+         */
+        set_test_name("Converting Chrischona CH11903+(XYZ)->LV95");
+		TPositionVector pv(4272473.562, 575353.239, 4684498.293, TCoordSysFactory::k3DCartesian);
+		
+        TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
+		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
+        position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95));
+        ensure_distance("LV95 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<real>(1268507.870), static_cast<real>(0.001));
+		ensure_distance("LV95 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<real>(2617306.920), static_cast<real>(0.001));
+		ensure_distance("LV95 H", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<real>(457.138 - 1.2233), static_cast<real>(0.001));
+	}
+
+    template<>
+	template<>
+	void object::test<9>()
+	{
+        /* Reference data taken from:
+           "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
+         */
+        set_test_name("Converting Chrischona LV95->CH1903+");
+        TPositionVector pv(1268507.870, 2617306.920, (457.138 - 1.2233), TCoordSysFactory::k2DPlusH);
+		
+        TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95));
+		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
+        position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
+        
+
+        ensure_equals("CH1903+ Phi (Deg)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getDegreesValue(), 47);
+        ensure_equals("CH1903+ Phi (Min)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getMinutesValue(), 34);
+        ensure_distance("CH1903+ Phi (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getSecondsValue(), static_cast<real>(6.404965), static_cast<real>(1e-4));
+
+        ensure_equals("CH1903+ Lam (Deg)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getDegreesValue(), 7);
+        ensure_equals("CH1903+ Lam (Min)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getMinutesValue(), 40);
+        ensure_distance("CH1903+ Lam (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getSecondsValue(), static_cast<real>(10.574820), static_cast<real>(1e-4)); 
+
+        ensure_distance("CH1903+ H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<real>(457.138), static_cast<real>(1e-3));
+
+	}
 }

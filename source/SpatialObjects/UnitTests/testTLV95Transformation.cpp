@@ -1,4 +1,5 @@
 #include <TLV95Transformation.h>
+#include <TRefFrameInfo.h>
 
 #include <tut/tut.hpp>
 
@@ -65,5 +66,20 @@ namespace tut
 
         ensure_distance("CH1903+ H", position.getH().getMetresValue(), static_cast<real>(457.138), static_cast<real>(1e-3));
 	}
+
+    template<>
+    template<>
+    void object::test<5>()
+    {
+        set_test_name("Transformation has the right source and destination frames");
+        ensure_equals("TLV95Transformation(true).getSourceFrame() -> CH1903+", 
+            TLV95Transformation(true).getSourceFrame(), TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
+        ensure_equals("TLV95Transformation(true).getDestinationFrame() -> LV95", 
+            TLV95Transformation(true).getDestinationFrame(), TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95));
+        ensure_equals("TLV95Transformation(false).getSourceFrame() -> LV95", 
+            TLV95Transformation(false).getSourceFrame(), TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95));
+        ensure_equals("TLV95Transformation(false).getDestinationFrame() -> CH1903+", 
+            TLV95Transformation(false).getDestinationFrame(), TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
+    }
 
 }

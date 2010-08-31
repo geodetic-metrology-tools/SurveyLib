@@ -91,6 +91,7 @@ public:
 			kCernXYHg85Machine   = 106, 
 			kCERNXYHsSphereSPS   = 107, 
 			kCGRFSphere          = 108,
+            kSwissLV95           = 109,
             // Local Reference Frames:
             kMLA1985Machine      = 1000,
             kMLA2000Machine      = 1001,
@@ -109,7 +110,8 @@ public:
 									kXYHe852XYHg, kXYHe85Machine2XYHg, kCCS2XYHsSphereSPS,
 									kCGRFSphere2CCS, kITRF972CGRF, kCGRF2ITRF97, 
 									kITRF972ETRF93, kETRF932ITRF97,
-                                    kETRF932CH1903plus, kCH1903plus2ETRF93};
+                                    kETRF932CH1903plus, kCH1903plus2ETRF93,
+                                    kCH1903plus2SwissLV95, kSwissLV952CH1903plus};
 	//@}
 	
 

@@ -32,6 +32,7 @@
 #include "TCernParabolicGeoid.h"
 #include "TCernSphereGeoid.h"
 #include "T3DLocalRefFrame.h"
+#include "TLV95ReferenceFrame.h"
 
 #include "TMLA2GCTransformation.h"
 #include "TGC2MLATransformation.h"
@@ -49,6 +50,7 @@
 #include "TXYHe2X0Y0HeTransformation.h"
 #include "TXYHg2XYHeTransformation.h"
 #include "TXYHe2XYHgTransformation.h"
+#include "TLV95Transformation.h"
 
 
 #include "TRefSystemFactory.h"
@@ -124,7 +126,7 @@ void	TRefSystemFactory::init()
 
 	// Definition of the reference frame list
 	string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf("ITRF97"), wgs("WGS84"), roma("ROMA40");
-	string ccs("CCS"), etrf("ETRF93"), ch1903plus("CH1903plus");
+	string ccs("CCS"), etrf("ETRF93");
 	
 		// CGRF
 	TGeodeticRefFrame* pCGRF = new TGeodeticRefFrame(cgrf, pGRS80);
@@ -149,9 +151,14 @@ void	TRefSystemFactory::init()
 	fRefFrameList.push_back(pETRF93);
 
         // CH1903plus
-	TGeodeticRefFrame* pCH1903plus = new TGeodeticRefFrame(ch1903plus, pBessel1841);
+	TGeodeticRefFrame* pCH1903plus = new TGeodeticRefFrame("CH1903plus", pBessel1841);
 	pCH1903plus->setRefFrameId(kCH1903plus);
 	fRefFrameList.push_back(pCH1903plus);
+
+        // Swiss LV95
+    TAReferenceFrame* pLV95 = new TLV95ReferenceFrame("LV95");
+    pLV95->setRefFrameId(kSwissLV95);
+    fRefFrameList.push_back(pLV95);
 
 		// WGS84
 	TGeodeticRefFrame* pWGS = new TGeodeticRefFrame(wgs, pWGSEll);
@@ -699,6 +706,19 @@ void	TRefSystemFactory::init()
 		TARefFrameTransformation* pCH1903plus2ETRF93 = pETRF932CH1903plus->inverse(); //utilise new
 		pCH1903plus2ETRF93->setTransformId(kCH1903plus2ETRF93);
 		fTransformList.push_back(pCH1903plus2ETRF93);
+	}
+
+    {
+        ////////////////////////////////////////////////////////////////
+		// Transformation between CH1903plus and LV95
+        ////////////////////////////////////////////////////////////////
+        TLV95Transformation * pTrans = new TLV95Transformation(true);
+        pTrans->setTransformId(kCH1903plus2SwissLV95);
+		fTransformList.push_back(pTrans);
+		//Inverse
+		TARefFrameTransformation* pInverse = pTrans->inverse();
+        pInverse->setTransformId(kSwissLV952CH1903plus);
+        fTransformList.push_back(pInverse);
 	}
             
 	// Transformation between CERN projection XYHe and CCS
