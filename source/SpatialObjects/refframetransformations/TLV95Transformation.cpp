@@ -6,6 +6,33 @@
 #include <math.h>
 #include <TVNumericValue.h>
 
+// Anonymous namespace for local constants
+namespace
+{
+    // constants
+    const double a = 6377397.155; 
+    const double E2 = 0.006674372230614; 
+    const double PI = 3.14159265358979323844;
+    // Ellipsoidal coordinates of the projection centre in Bern
+    const double phi0 = (46+57/60.0+8.66/3600)*TAngle::decDegsToRadsFactor();
+    const double lam0 = (7+26/60.0+22.5/3600)*TAngle::decDegsToRadsFactor(); 
+    
+    // Radius of the projection sphere
+    const double R = a*sqrt(1-E2)/(1-E2*pow((sin(phi0)),2));
+
+    // Relationship between longitude on sphere and ellipsoid:
+    const double alpha = sqrt(1+E2/(1-E2)*pow(cos(phi0),4));
+
+    // latitude of the fundamental point on the sphere
+    const double b0 = asin(sin(phi0)/alpha); 
+
+    // Constant of the latitude formula
+    const double K=log(tan(PI/4+b0/2)) - alpha*log(tan(PI/4+phi0/2)) + alpha*sqrt(E2)/2*log((1+sqrt(E2)*sin(phi0))/(1-sqrt(E2)*sin(phi0)));
+
+    const int LV95_Y_OFFSET = 2600000;
+    const int LV95_X_OFFSET = 1200000;
+}
+
 TLV95Transformation::TLV95Transformation(bool fromCH1903plus)
 : fFromCH1903plus(fromCH1903plus)
 {
@@ -50,26 +77,6 @@ bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
     const double phi = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue();
     const double lam = position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue();
     const double h   = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
-
-    // constants
-    const double a = 6377397.155; 
-    const double E2 = 0.006674372230614; 
-    const double PI = 3.14159265358979323844;
-    // Ellipsoidal coordinates of the projection centre in Bern
-    const double phi0 = (46+57/60.0+8.66/3600)*TAngle::decDegsToRadsFactor();
-    const double lam0 = (7+26/60.0+22.5/3600)*TAngle::decDegsToRadsFactor(); 
-    
-    // Radius of the projection sphere
-    const double R = a*sqrt(1-E2)/(1-E2*pow((sin(phi0)),2));
-
-    // Relationship between longitude on sphere and ellipsoid:
-    const double alpha = sqrt(1+E2/(1-E2)*pow(cos(phi0),4));
-
-    // latitude of the fundamental point on the sphere
-    const double b0 = asin(sin(phi0)/alpha); 
-
-    // Constant of the latitude formula
-    const double K=log(tan(PI/4+b0/2)) - alpha*log(tan(PI/4+phi0/2)) + alpha*sqrt(E2)/2*log((1+sqrt(E2)*sin(phi0))/(1-sqrt(E2)*sin(phi0)));
     
     // Auxiliary value:
     const double S = - alpha * log(tan(PI/4 - phi/2)) - (alpha*sqrt(E2))/2 * log((1+sqrt(E2)*sin(phi))/(1-sqrt(E2)*sin(phi)))+K;
@@ -91,8 +98,8 @@ bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
 
 
     // Offset to LV95:
-    Y=Y+2600000;
-    X=X+1200000;
+    Y+=LV95_Y_OFFSET;
+    X+=LV95_X_OFFSET;
 
     pv = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);
 
@@ -110,31 +117,9 @@ bool TLV95Transformation::transformToCH1903plus(TPositionVector & pv) const
     const double y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
     const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
 
-    // constants
-    const double a = 6377397.155; 
-    const double E2 = 0.006674372230614; 
-    const double PI = 3.14159265358979323844;
-
-    // Ellipsoidal coordinates of the projection centre in Bern
-    const double phi0 = (46+57/60.0+8.66/3600)*TAngle::decDegsToRadsFactor();
-    const double lam0 = (7+26/60.0+22.5/3600)*TAngle::decDegsToRadsFactor();
-
-    // Radius of the projection sphere
-    const double R = a*sqrt(1-E2)/(1-E2*pow((sin(phi0)),2));
-
-    // Relationship between longitude on sphere and ellipsoid:
-    const double alpha = sqrt(1+E2/(1-E2)*pow(cos(phi0),4));
-
-    // latitude of the fundamental point on the sphere
-    const double b0 = asin(sin(phi0)/alpha);
-
-    // Constant of the latitude formula
-    const double K=log(tan(PI/4+b0/2)) - alpha*log(tan(PI/4+phi0/2)) + alpha*sqrt(E2)/2*log((1+sqrt(E2)*sin(phi0))/(1-sqrt(E2)*sin(phi0)));
-    
-
     // projection plane (x, y) to sphere (l_, b_)
-    const double Y = y - 2600000;
-    const double X = x - 1200000; 
+    const double Y = y - LV95_Y_OFFSET;
+    const double X = x - LV95_X_OFFSET; 
     const double l_ = Y/R;
     const double b_ = 2 * (atan(exp(X/R)) - PI/4);
 
@@ -146,7 +131,7 @@ bool TLV95Transformation::transformToCH1903plus(TPositionVector & pv) const
     const double lambda = lam0 + l/alpha;
 
     double phi = b;
-    for (int i = 0; i != 100; i++)
+    for (int i = 0; i != kMaxIter; i++)
     {
         double S=(log(tan(PI/4+b/2))-K)/alpha + sqrt(E2)*log(tan(PI/4+asin(sqrt(E2)*sin(phi))/2));
         double phi_new = 2*atan(exp(S))-PI/2;

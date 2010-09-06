@@ -18,7 +18,7 @@ public:
     bool transform( TPositionVector & pv) const;
 
 private:
-    enum { kMaxIter = 100 };
+    enum { kMaxIter = 1000 };
     bool transformFromCH1903plus(TPositionVector & pv) const;
     bool transformToCH1903plus(TPositionVector & pv) const;
 
