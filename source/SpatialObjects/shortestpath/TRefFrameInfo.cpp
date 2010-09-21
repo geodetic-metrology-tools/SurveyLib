@@ -59,7 +59,9 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
         tmp->insert(std::make_pair(TRefSystemFactory::kCGRFSphere,
             TDetails("CERN GRF sphere", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
         tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV95,
-            TDetails("Swiss LV95", TCoordSysFactory::k2DPlusH)));
+            TDetails("Swiss LV95 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV03,
+            TDetails("Swiss LV03 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
 
         tmp->insert(std::make_pair(TRefSystemFactory::kMLA1985Machine, 
             TDetails("MLA (1985)", TCoordSysFactory::k3DCartesian, 0, true)));

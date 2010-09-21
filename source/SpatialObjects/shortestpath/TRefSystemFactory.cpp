@@ -33,6 +33,7 @@
 #include "TCernSphereGeoid.h"
 #include "T3DLocalRefFrame.h"
 #include "TLV95ReferenceFrame.h"
+#include "TLV03ReferenceFrame.h"
 
 #include "TMLA2GCTransformation.h"
 #include "TGC2MLATransformation.h"
@@ -51,6 +52,7 @@
 #include "TXYHg2XYHeTransformation.h"
 #include "TXYHe2XYHgTransformation.h"
 #include "TLV95Transformation.h"
+#include "TLV03Transformation.h"
 
 
 #include "TRefSystemFactory.h"
@@ -159,6 +161,11 @@ void	TRefSystemFactory::init()
     TAReferenceFrame* pLV95 = new TLV95ReferenceFrame("LV95");
     pLV95->setRefFrameId(kSwissLV95);
     fRefFrameList.push_back(pLV95);
+
+    // Swiss LV03
+    TAReferenceFrame* pLV03 = new TLV03ReferenceFrame("LV03");
+    pLV03->setRefFrameId(kSwissLV03);
+    fRefFrameList.push_back(pLV03);
 
 		// WGS84
 	TGeodeticRefFrame* pWGS = new TGeodeticRefFrame(wgs, pWGSEll);
@@ -718,6 +725,18 @@ void	TRefSystemFactory::init()
 		//Inverse
 		TARefFrameTransformation* pInverse = pTrans->inverse();
         pInverse->setTransformId(kSwissLV952CH1903plus);
+        fTransformList.push_back(pInverse);
+	}
+    {
+        ////////////////////////////////////////////////////////////////
+		// Transformation between LV95 and LV03
+        ////////////////////////////////////////////////////////////////
+        TLV03Transformation * pTrans = new TLV03Transformation(true);
+        pTrans->setTransformId(kSwissLV952SwissLV03);
+		fTransformList.push_back(pTrans);
+		//Inverse
+		TARefFrameTransformation* pInverse = pTrans->inverse();
+        pInverse->setTransformId(kSwissLV032SwissLV95);
         fTransformList.push_back(pInverse);
 	}
             

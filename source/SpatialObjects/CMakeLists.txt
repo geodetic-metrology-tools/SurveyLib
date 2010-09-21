@@ -18,6 +18,7 @@ SET(USE_INTEL_COMPILER TRUE)
 SET(SURVEYLIB_INCLUDE_PATH "C:/SVN/SVN_SurveyLib/SurveyLib/include")
 SET(NAGC_INCLUDE_PATH "G:/Support/SurveyingEng/software/nagc/include")
 SET(TUT_INCLUDE_PATH "C:/lib/tut-2009-08-30")
+SET(REFRAME_INCLUDE_PATH "C:/TestProject/DLLfile")
 
 # Where to look for the libraries to link against
 SET(NAGC_LIBRARY_DIR "G:/Support/SurveyingEng/software/nagc/dll")
