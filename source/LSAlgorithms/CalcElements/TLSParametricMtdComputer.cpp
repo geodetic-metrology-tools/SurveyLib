@@ -349,7 +349,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 				return false;
 			}
 			rm->setL(decomposed);
-			TSparseMatrix* aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted = decomposed->in
+			TSparseMatrix* aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted = decomposed->invert_lower_triangular_cholesky_decomposed();
 			TSparseMatrix* cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted =
 				constraintFirstDM->multiply_F(*aTransTimesBTimesWInvTimesBTransInvertedTimesAInverted);
 
