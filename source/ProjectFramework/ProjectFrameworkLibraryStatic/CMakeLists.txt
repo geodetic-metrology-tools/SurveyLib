@@ -2,7 +2,7 @@
 
 set(COMBINED_LIBRARY_FILES)
 FOREACH(subproject ${PROJECTFRAMEWORK_LIB_SUBPROJECTS})
-    list(APPEND COMBINED_LIBRARY_FILES "${CMAKE_BINARY_DIR}/${subproject}/${CMAKE_BUILD_TYPE}/${subproject}.lib")
+    list(APPEND COMBINED_LIBRARY_FILES "${CMAKE_BINARY_DIR}/ProjectFramework/${subproject}/${CMAKE_BUILD_TYPE}/${subproject}.lib")
 ENDFOREACH(subproject) 
 
 add_library(ProjectFrameworkLibrary STATIC ${COMBINED_LIBRARY_FILES})
