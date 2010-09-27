@@ -2,6 +2,7 @@
 
 #include <TLV03Transformation.h>
 #include <TRefFrameInfo.h>
+#include <TCoInitializer.h>
 
 #include <iostream>
 
@@ -88,21 +89,25 @@ bool TLV03Transformation::transform(TPositionVector & pv) const
 
 bool TLV03Transformation::computeSwissRefFrame(double & coordinate_x, double & coordinate_y, double & coordinate_z, int reframe_in, int reframe_out) const
 {
-    HRESULT hr = CoInitialize(NULL);
-    /*if(hr!=S_OK)
+    int result = 1;
+    try
     {
-	    std::cerr << "Reframe DLL - CoInitialize failed. DLL is not registered" << std::endl;
-	    return false;
-    }*/
-    reframeLib::IReframePtr pReframe(__uuidof(reframeLib::reframeLib));
-    pReframe->SetDatasetsDir("C:\\Program Files\\swisstopo\\GeoSoftware\\Data\\");
+        CCoInitializer coinit(COINIT_MULTITHREADED);
+        reframeLib::IReframePtr pReframe(__uuidof(reframeLib::reframeLib));
+        pReframe->SetDatasetsDir("C:\\Program Files\\swisstopo\\GeoSoftware\\Data\\");
 
-	// Transform LV95 coordinates to LV03 and Bessel height to Bessel
-    int result = pReframe->ComputeReframe(
-        &coordinate_x, &coordinate_y, &coordinate_z, 
-        reframe_in,reframe_out,
-        compute_reframe_alt::BESSEL,
-        compute_reframe_alt::BESSEL);
+	    // Transform LV95 coordinates to LV03 and Bessel height to Bessel
+        result = pReframe->ComputeReframe(
+            &coordinate_x, &coordinate_y, &coordinate_z, 
+            reframe_in,reframe_out,
+            compute_reframe_alt::BESSEL,
+            compute_reframe_alt::BESSEL);
+    }
+    catch (HRESULT hr)
+    {
+        std::cerr << "Reframe DLL - CoInitialize failed. DLL is not registered" << std::endl;
+	    return false;
+    }
 	if (result==1)
 	{
         return true;
