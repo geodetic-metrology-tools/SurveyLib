@@ -1,0 +1,22 @@
+LIBRARY   	SurveyLib	
+DESCRIPTION 'C Utilities for SU Programs'
+VERSION		LITERAL(1.0)
+EXPORTS
+	        GETCG2000N0=_getCG2000N0@20
+			GETCG2000NMACHINE=_getCG2000NMachine@20
+			GETCG1985N0=_getCG1985N0@20
+			GETCG1985NMACHINE=_getCG1985NMachine@20
+			TRANSFORMTOMLA=_transformToMLA@40
+			TRANSFORMFROMMLA=_transformFromMLA@40
+			TRANSFORMTOMLA2=_transformToMLA2@40
+			TRANSFORMFROMMLA2=_transformFromMLA2@40
+			DESCENTEVERT=_descenteVert@44 
+			getCG2000N0=_getCG2000N0@20
+			getCG2000NMachine=_getCG2000NMachine@20
+			getCG1985N0=_getCG1985N0@20
+			getCG1985NMachine=_getCG1985NMachine@20
+			transformToMLA=_transformToMLA@40
+			transformFromMLA=_transformFromMLA@40
+			transformToMLA2=_transformToMLA2@40
+			transformFromMLA2=_transformFromMLA2@40
+			descenteVert=_descenteVert@44           
