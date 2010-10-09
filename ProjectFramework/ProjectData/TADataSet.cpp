@@ -183,7 +183,7 @@ bool	TADataSet::isOriginExpected() const
 }
 
 
-bool	TADataSet::setRefFrame(TDataParameters::ERefFrame ref)
+bool	TADataSet::setRefFrame(TRefSystemFactory::ERefFrame ref)
 {//! set the reference system identifier
 	return fDataParams.setRefFrame(ref);
 }
@@ -246,7 +246,7 @@ void  TADataSet::setPointNameWidth(const int width )
 
 
 
-bool	TADataSet::setLocalSystemOrigin(const struct LocalSystemOrigin lso)
+bool	TADataSet::setLocalSystemOrigin(const TLocalSystemOrigin & lso)
 {
 	return fDataParams.setLocalSystemOrigin(lso);
 }
@@ -258,7 +258,7 @@ TAReferenceFrame*	TADataSet::getRefFrame()
 }
 
 
-TDataParameters::ERefFrame	TADataSet::getRefFrameEnumerator() const
+TRefSystemFactory::ERefFrame	TADataSet::getRefFrameEnumerator() const
 {//! get the reference system identifier
 	return fDataParams.getRefFrameEnumerator();
 }
@@ -306,7 +306,7 @@ int  TADataSet::getPointNameWidth() const
 }
 
 
-struct LocalSystemOrigin	TADataSet::getLocalSystemOrigin() const
+std::tr1::shared_ptr<TLocalSystemOrigin> TADataSet::getLocalSystemOrigin() const
 {
 	return fDataParams.getLocalSystemOrigin();
 }

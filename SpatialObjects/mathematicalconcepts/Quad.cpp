@@ -1,5 +1,7 @@
 #include "Quad.h"
 
+#include <iostream>
+
 #if _DEBUG && __INTEL_COMPILER
 
 Quad::Quad()
@@ -605,6 +607,36 @@ Quad::operator _Quad() const
 Quad::operator _Quad*()
 {
 	return &value;
+}
+
+std::ostream& operator<<(std::ostream& stream, const real & value) 
+{
+    return stream << (long double)value.value;
+}
+
+std::istream& operator>>(std::istream& stream, real & value) 
+{
+	long double foo;
+	stream >> foo;
+	value.value = foo;
+	value.doubleValue = foo;
+	return stream;
+}
+
+
+#elif __INTEL_COMPILER
+
+std::ostream& operator<<(std::ostream& stream, const real & value) 
+{
+    return stream << (long double)value;
+}
+
+std::istream& operator>>(std::istream& stream, real & value) 
+{
+	long double foo;
+	stream >> foo;
+	value = foo;
+	return stream;
 }
 
 #endif
