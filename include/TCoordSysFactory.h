@@ -48,7 +48,14 @@ public:
 		//!@name Constants
 		//@{
 			/*! Enumerator for coordinate systems implemented in the factory */
-			enum  ECoordSys {k3DCartesian, kGeodetic, k2DPlusH, k2DCartesian, kGeodeticSphere};
+			enum  ECoordSys 
+            {
+                k3DCartesian = 1,
+                kGeodetic = 2,
+                k2DPlusH = 4,
+                k2DCartesian = 8,
+                kGeodeticSphere = 16
+            };
 		//@}
 		
 		//!@name Member Functions		

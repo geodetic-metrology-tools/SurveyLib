@@ -42,7 +42,8 @@ class TModifiedLocalAstronomicalRF;
 
 class TARefFrameTransformation;
 class TSpatialPosition;
-#include "TAngle.h"
+
+#include <TLocalSystemOrigin.h>
 //
 //
 ////////////////////////////////////////////////////////////////
@@ -57,10 +58,6 @@ class TSpatialPosition;
 #define HP0 LITERAL(433.65921);
 #define PHIP0 LITERAL(51.3692);
 
-
-struct LocalSystemOrigin{TSpatialPosition* origin; TAngle gisement; TAngle slope;};
-
-
 //! Singleton class: produce one unique instance listing ref. surfaces, ref.frames and transformations
 class TRefSystemFactory
 {
@@ -69,15 +66,41 @@ public:
 	//!@name Constants
 	//@{
 		/*! Enumerator for ellipsoids implemented in the factory */
-		enum  ERefEll {kGRS80, kWGSEll, kInternationalEll, kSphere, kNoEllipsoid};
+		enum  ERefEll {kGRS80, kWGSEll, kInternationalEll, kSphere, kNoEllipsoid, kBessel1841};
 		/*! Enumerator for geoids implemented in the factory */
 		enum  EGeoid {kCG2000, kCG2000Machine, kCG2000topo, kCG1985, 
 			          kCG1985Machine, kNoGeoid, kCGSphere};
 		/*! Enumerator for Reference Frames implemented in the factory */
-		enum  ERefFrame {kCCS, kLAp0, kLGp0, kCGRF, kITRF97, kWGS84, 
-			             kROMA40, kCernXYHe, kCernX0Y0He, kCernXYHg00, 
-						 kCernXYHg00Topo, kCernXYHg00Machine, kCernXYHg85, 
-						 kCernXYHg85Machine, kCERNXYHsSphereSPS, kCGRFSphere, kNotInGraph};
+		enum  ERefFrame {
+			kCCS                 =  0, 
+			kLAp0                =  1,
+			kLGp0                =  2, 
+			kCGRF                =  3, 
+			kITRF97              =  4, 
+			kWGS84               =  5, 
+			kROMA40              =  6,
+            kETRF93              =  7,
+            kCH1903plus          =  8, /*!< Swiss coordinate system */
+            // Projections:
+			kCernXYHe            = 100, 
+			kCernX0Y0He          = 101, 
+			kCernXYHg00          = 102, 
+			kCernXYHg00Topo      = 103, 
+			kCernXYHg00Machine   = 104, 
+			kCernXYHg85          = 105, 
+			kCernXYHg85Machine   = 106, 
+			kCERNXYHsSphereSPS   = 107, 
+			kCGRFSphere          = 108,
+            kSwissLV95           = 109,
+            kSwissLV03           = 110,
+            // Local Reference Frames:
+            kMLA1985Machine      = 1000,
+            kMLA2000Machine      = 1001,
+            // Reserved value:
+			kNotInGraph			 = -1,
+            kLocalRefFrame       = -2 /*!< This was present in the TDataParameters variant. Referenced in LGC in few places */
+        };
+
 		/*! Enumerator for transformations between Ref.Frames implemented in the factory */
 		enum  ERefFrameTransform {	kCCS2CGRF, kLAp02LGp0, kLGp02CGRF, kLAp02CCS,
 									kROMA2WGS, kWGS2CGRF, kXYHe2CCS, kX0Y0He2XYHe,
@@ -88,7 +111,11 @@ public:
 									kWGS2ROMA, kCGRF2WGS, kCCS2XYHe, kXYHe2X0Y0He,
 									kXYHe2XYHg, kXYHe00Topo2XYHg, kXYHe00Machine2XYHg, 
 									kXYHe852XYHg, kXYHe85Machine2XYHg, kCCS2XYHsSphereSPS,
-									kCGRFSphere2CCS, kITRF972CGRF, kCGRF2ITRF97};
+									kCGRFSphere2CCS, kITRF972CGRF, kCGRF2ITRF97, 
+									kITRF972ETRF93, kETRF932ITRF97,
+                                    kETRF932CH1903plus, kCH1903plus2ETRF93,
+                                    kCH1903plus2SwissLV95, kSwissLV952CH1903plus,
+                                    kSwissLV952SwissLV03, kSwissLV032SwissLV95};
 	//@}
 	
 
@@ -133,7 +160,7 @@ public:
 		TAReferenceFrame* getNewLocalRefFrame();
 
 		//return a pointer to a new Modified Local Astronomic ref Frame and put it in a list in order to be deleted
-		TAReferenceFrame* getNewLocalRefFrame(struct LocalSystemOrigin, EGeoid);
+		TAReferenceFrame* getNewLocalRefFrame(const TLocalSystemOrigin & LSO, EGeoid);
 
 
 	//@}

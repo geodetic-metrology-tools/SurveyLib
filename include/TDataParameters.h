@@ -42,6 +42,9 @@ class		TAReferenceFrame;
 #include	"TObservationFormat.h"
 #include	"TAStreamFormatter.h"
 
+#include <TRefSystemFactory.h> 
+#include <memory>
+
 // typedefs
 //
 //
@@ -56,12 +59,8 @@ class  TDataParameters //: public TObject
 public:
 	
 	/*//!@name Constants
-	//@{
-		! Enumerator for Reference Frames */
-		enum  ERefFrame {kUndefined, kMLA2000Machine, kMLA1985Machine, kCCS,  kCernX0Y0He, kCernXYHg00Machine, 
-			kCernXYHg85, kCernXYHg85Machine, kCERNXYHsSphereSPS, kLocalRefFrame, kCernLGatP0, kCGRF,
-			kWGS84, kROMA40, kITRF97};
-
+	//@{*/
+		
 		enum  ECoordUnit {kNotDefined, kMetric, kGons, kDMS};
 
 	//@}
@@ -82,7 +81,9 @@ public:
 	/*!@name member functions */
 	//@{
 		//! copy assignment operator
-		TDataParameters& operator=(const TDataParameters& );
+		TDataParameters& operator=(TDataParameters); // Pass-by-value, simpler and better in C++0x
+        
+        void swap(TDataParameters & other) throw();
 
 		//! equivalence operator
 		bool	operator==(const TDataParameters& );
@@ -92,7 +93,7 @@ public:
 		bool	isOriginExpected() const;
 
 		//! set the reference system identifier
-		bool	setRefFrame(TDataParameters::ERefFrame);
+		bool	setRefFrame(TRefSystemFactory::ERefFrame);
 
 		//!set the coordinate system
 		bool	setCoordSys(const TCoordSysFactory::ECoordSys&);
@@ -122,14 +123,15 @@ public:
 		//!set the point name's width
 		void	setPointNameWidth(const int);
 
-		bool	setLocalSystemOrigin(const struct LocalSystemOrigin);
+        bool	setLocalSystemOrigin(const TLocalSystemOrigin &);
+        bool    setLocalSystemOrigin(std::tr1::shared_ptr<TLocalSystemOrigin> lso);
 	
 
 		//! get the reference system identifier
-		TAReferenceFrame*	getRefFrame();
+		TAReferenceFrame*	getRefFrame() const;
 
 		//! get the reference system identifier
-		TDataParameters::ERefFrame	getRefFrameEnumerator() const;
+		TRefSystemFactory::ERefFrame	getRefFrameEnumerator() const;
 
 		//! get the coordinate system for the RefSystem data
 		TCoordSysFactory::ECoordSys		getCoordinateSystem()  const;
@@ -152,7 +154,7 @@ public:
 		//! get the point name's width 
 		int										getPointNameWidth() const;
 
-		struct LocalSystemOrigin				getLocalSystemOrigin() const;
+        std::tr1::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
 			
 	//@}
 	/*!@output stream format access methods*/
@@ -185,10 +187,10 @@ public:
 
 private:
 
-	TAReferenceFrame*							fRefFrame;
-	TDataParameters::ERefFrame					fRefFrameEnum;
+	mutable TAReferenceFrame*					fRefFrame;
+    TRefSystemFactory::ERefFrame			    fRefFrameEnum;
 	TDataParameters::ECoordUnit					fCoordUnit;
-	struct LocalSystemOrigin	fLSO;
+    std::tr1::shared_ptr<TLocalSystemOrigin>    fLSO;
 	TCoordSysFactory::ECoordSys					fCoordSys;
 
 	TAngle::EUnits								fAngleUnits;
@@ -206,6 +208,14 @@ private:
 	string resultsSeparator;
 	//ClassDef(TDataParameters, 1)
 };
+
+namespace std {
+    template<>
+    void swap(TDataParameters & lhs, TDataParameters & rhs)
+    {
+        lhs.swap(rhs);
+    }
+}
 
 
 #endif // SU_DATA_PARAMETERS

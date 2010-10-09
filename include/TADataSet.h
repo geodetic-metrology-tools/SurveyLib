@@ -101,7 +101,7 @@ public:
 		bool	isOriginExpected() const;
 
 		//! set the reference system identifier
-		bool	setRefFrame(TDataParameters::ERefFrame);
+		bool	setRefFrame(TRefSystemFactory::ERefFrame);
 
 		//!set the coordinate system
 		bool	setCoordSys(const TCoordSysFactory::ECoordSys&);
@@ -127,14 +127,14 @@ public:
 		//!set the point name's width
 		void	setPointNameWidth(const int);
 
-		bool	setLocalSystemOrigin(const struct LocalSystemOrigin);
+		bool	setLocalSystemOrigin(const TLocalSystemOrigin &);
 	
 
 		//! get the reference system identifier
 		TAReferenceFrame*	getRefFrame();
 
 		//! get the reference system identifier
-		TDataParameters::ERefFrame	getRefFrameEnumerator() const;
+        TRefSystemFactory::ERefFrame	getRefFrameEnumerator() const;
 
 		//! get the coordinate system for the RefSystem data
 		TCoordSysFactory::ECoordSys		getCoordinateSystem()  const;
@@ -158,7 +158,7 @@ public:
 		int										getPointNameWidth() const;
 
 
-		struct LocalSystemOrigin				getLocalSystemOrigin() const;
+        std::tr1::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
 	//@}
 	
 		
