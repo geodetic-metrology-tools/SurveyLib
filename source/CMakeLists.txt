@@ -1,5 +1,5 @@
 # declare a project
-PROJECT(SurveyLib)
+PROJECT(SurveyLib_V3)
 
 # minimum version of CMake
 cmake_minimum_required(VERSION 2.8)
@@ -15,12 +15,13 @@ SET(CMAKE_BUILD_TYPE DEBUG)
 SET(USE_INTEL_COMPILER TRUE)
 
 # installation path prefix (where to copy the lib and include files)
-SET(INSTALL_PREFIX "C:/lib/SurveyLib" CACHE PATH "Installation path prefix.")
+SET(INSTALL_PREFIX "C:/lib/${PROJECT_NAME}" CACHE PATH "Installation path prefix.")
 
 
 # This will not be needed as soon as we put includes along the source files.
 # These are our includes. 
-SET(SURVEYLIB_INCLUDE_PATH "C:/SVN/SVN_SurveyLib/SurveyLib/include")
+#SET(SURVEYLIB_INCLUDE_PATH "C:/SVN/SVN_SurveyLib/SurveyLib/include")
+SET(SURVEYLIB_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/../include")
 
 # Set the paths to the libraries
 SET(NAGC_INCLUDE_PATH "G:/Support/SurveyingEng/software/nagc/include")

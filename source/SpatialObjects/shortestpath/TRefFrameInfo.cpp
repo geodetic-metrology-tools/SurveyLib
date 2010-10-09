@@ -67,6 +67,9 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("MLA (1985)", TCoordSysFactory::k3DCartesian, 0, true)));
         tmp->insert(std::make_pair(TRefSystemFactory::kMLA2000Machine, 
             TDetails("MLA (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
+
+        tmp->insert(std::make_pair(TRefSystemFactory::kLocalRefFrame, 
+            TDetails("LocalRefFrame (RESERVED)", TCoordSysFactory::k3DCartesian, 0, true)));
 		// ...
 		mapping = tmp;
 	}
@@ -155,6 +158,10 @@ TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSyste
             return TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(*lso, TRefSystemFactory::kCG1985Machine);
         if(refFrame==TRefSystemFactory::kMLA2000Machine)
             return TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(*lso, TRefSystemFactory::kCG2000Machine);
+    }
+    else if(refFrame==TRefSystemFactory::kLocalRefFrame)
+    {
+        return TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame();
     }
     else
     {

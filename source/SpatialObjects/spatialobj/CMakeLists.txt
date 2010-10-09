@@ -24,6 +24,7 @@ set(SpatialObj_SOURCES
 
 # Create a variable containing all .h files:
 set(SpatialObj_HEADERS 
+	${SURVEYLIB_INCLUDE_PATH}/TPtrWrapper.h
 	${SURVEYLIB_INCLUDE_PATH}/TASpatialPtListener.h
 	${SURVEYLIB_INCLUDE_PATH}/TSpatialLine.h
 	${SURVEYLIB_INCLUDE_PATH}/TSpatialLineName.h

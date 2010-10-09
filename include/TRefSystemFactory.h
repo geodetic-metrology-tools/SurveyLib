@@ -97,7 +97,9 @@ public:
             kMLA1985Machine      = 1000,
             kMLA2000Machine      = 1001,
             // Reserved value:
-			kNotInGraph			 = -1};
+			kNotInGraph			 = -1,
+            kLocalRefFrame       = -2 /*!< This was present in the TDataParameters variant. Referenced in LGC in few places */
+        };
 
 		/*! Enumerator for transformations between Ref.Frames implemented in the factory */
 		enum  ERefFrameTransform {	kCCS2CGRF, kLAp02LGp0, kLGp02CGRF, kLAp02CCS,

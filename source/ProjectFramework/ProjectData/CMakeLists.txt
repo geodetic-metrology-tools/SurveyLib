@@ -42,6 +42,7 @@ set(ProjectData_HEADERS
 	${SURVEYLIB_INCLUDE_PATH}/TDataParameters.h
 	${SURVEYLIB_INCLUDE_PATH}/TFileParameters.h
 	${SURVEYLIB_INCLUDE_PATH}/TPtListBroadcaster.h
+	${SURVEYLIB_INCLUDE_PATH}/TVPtListListener.h
 	${SURVEYLIB_INCLUDE_PATH}/TWorkingConstants.h
 	${SURVEYLIB_INCLUDE_PATH}/TWorkingConstraints.h
 	${SURVEYLIB_INCLUDE_PATH}/TWorkingInstruments.h
