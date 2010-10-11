@@ -29,7 +29,7 @@ namespace tut
 
         ensure_distance("LV95 X", position.getX().getMetresValue(), static_cast<real>(1268507.870), static_cast<real>(0.001));
 		ensure_distance("LV95 Y", position.getY().getMetresValue(), static_cast<real>(2617306.920), static_cast<real>(0.001));
-		ensure_distance("LV95 H", position.getH().getMetresValue(), static_cast<real>(457.138 - 1.2233), static_cast<real>(0.001));
+		ensure_distance("LV95 H", position.getH().getMetresValue(), static_cast<real>(457.138 /*- 1.2233*/), static_cast<real>(0.001));
 	}
 
     template<>
@@ -51,7 +51,7 @@ namespace tut
     void object::test<4>()
     {
         set_test_name("Transforming a TSpatialPosition from LV95 into CH1903+");
-        TPositionVector position(1268507.870, 2617306.920, (457.138 - 1.2233), TCoordSysFactory::k2DPlusH);
+        TPositionVector position(1268507.870, 2617306.920, (457.138 /*- 1.2233*/), TCoordSysFactory::k2DPlusH);
         
         TLV95Transformation trans(false);
         ensure("Transform returns true", trans.transform(position));

@@ -234,7 +234,7 @@ namespace tut
         position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95));
         ensure_distance("LV95 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<real>(1268507.870), static_cast<real>(0.001));
 		ensure_distance("LV95 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<real>(2617306.920), static_cast<real>(0.001));
-		ensure_distance("LV95 H", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<real>(457.138 - 1.2233), static_cast<real>(0.001));
+		ensure_distance("LV95 H", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<real>(457.138 /*- 1.2233*/), static_cast<real>(0.001));
 	}
 
     template<>
@@ -245,7 +245,7 @@ namespace tut
            "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
          */
         set_test_name("Converting Chrischona LV95->CH1903+");
-        TPositionVector pv(1268507.870, 2617306.920, (457.138 - 1.2233), TCoordSysFactory::k2DPlusH);
+        TPositionVector pv(1268507.870, 2617306.920, (457.138 /*- 1.2233*/), TCoordSysFactory::k2DPlusH);
 		
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
