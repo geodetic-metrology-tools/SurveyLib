@@ -15,6 +15,9 @@ link_directories (
 ##### This will correspond to one VS project!
 
 set(UnitTests_SOURCES
+
+	testTMatrix.cpp
+
 	testTransformations.cpp
 	
 	testTLV95Transformation.cpp
