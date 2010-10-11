@@ -38,7 +38,7 @@ target_link_libraries (UnitTests
 
 # Copy the needed DLLs to the runtime directory
 install(FILES ${NAGC_LIBRARY_DIR}/nagc.dll
-	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}
+	DESTINATION ${STAGING_DIRECTORY}
 )
 # Copy the test files to the right path
 #install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_files
