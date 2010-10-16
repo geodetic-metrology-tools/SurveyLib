@@ -55,6 +55,41 @@ namespace tut
     {
         set_test_name("Test before replacing NAG: Matrix product (rectangular)");
         
+        TMatrix A(3,2); 
+        A(0,0) = 3;  A(0,1) = 2; 
+        A(1,0) = -3; A(1,1) = 5; 
+        A(2,0) = 7;  A(2,1) = 1;
+
+        TMatrix B(2,3);
+        B(0,0) = 1;  B(0,1) = -2; B(0, 2) = 1;
+        B(1,0) = 2;  B(1,1) = 0;  B(1, 2) = -4;
+        
+        TMatrix expected(3,3);
+        expected(0,0)=7;expected(0,1)=-6;expected(0,2)=-5;
+        expected(1,0)=7;expected(1,1)=6;expected(1,2)=-23;
+        expected(2,0)=9;expected(2,1)=-14;expected(2,2)=3;
+
+        TMatrix prod = A*B;
+
+        /*std::cout << std::endl;
+        for(int i=0; i!=prod.numRows(); ++i)
+        {
+            for(int j=0; j!=prod.numCols(); ++j)
+            {
+                std::cout << "C(" << i << "," << j << ")=" << prod(i,j) << ";";
+            }
+            std::cout << std::endl;
+        }*/
+
+        for(int i=0; i!=prod.numRows(); ++i)
+            for(int j=0; j!=prod.numCols(); ++j)
+            {
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_distance(msg.str(), prod(i,j), expected(i,j), 1e-7);
+            }
+
+
     }
 
     template<>
@@ -79,9 +114,9 @@ namespace tut
 
         TColumnVector res = A*v;
 
-        std::cout << std::endl;
-        for(int i=0; i!=3 ; ++i)
-            std::cout << "############" << res(i) << std::endl;
+        //std::cout << std::endl;
+        //for(int i=0; i!=3 ; ++i)
+            //std::cout << "############" << res(i) << std::endl;
 
         for(int i=0; i!=3 ; ++i)
         {
@@ -154,6 +189,12 @@ namespace tut
     void object::test<6>()
     {
         set_test_name("Test before replacing NAG: Matrix inverse - singular - return false");
+    
+        TMatrix A(2,2); 
+        A(0,0) = 1; A(0,1) = 2; 
+        A(1,0) = 2; A(1,1) = 4; 
+        
+        ensure_not("Singular matrix inversion returned true", A.invert());
     }
 
         /*std::cout << std::endl;
@@ -165,5 +206,342 @@ namespace tut
             }
             std::cout << std::endl;
         }*/
+
+    template<>
+    template<>
+    void object::test<7>()
+    {
+        //Copy assignement operator
+        set_test_name("Test before replacing NAG: Matrix assignement operator");
+    
+        TMatrix A(2,2); 
+        A(0,0) = 1; A(0,1) = 2; 
+        A(1,0) = 2; A(1,1) = 4; 
+
+        TMatrix B = A;
+
+        for(int i=0; i!=A.numRows(); ++i)
+            for(int j=0; j!=A.numCols(); ++j)
+            {
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_distance(msg.str(), B(i,j), A(i,j), 1e-7);
+            }
+        
+        
+    }
+
+    template<>
+    template<>
+    void object::test<8>()
+    {
+        //Sum of the matix
+        set_test_name("Test before replacing NAG: Sum of the matix");
+    
+        TMatrix A(2,2); 
+        A(0,0) = 1; A(0,1) = 2; 
+        A(1,0) = 2; A(1,1) = 4; 
+
+        TMatrix B(2,2);
+        B(0,0) = 5; B(0,1) = 2; 
+        B(1,0) = 3; B(1,1) = 2;
+        
+        TMatrix C = A + B;
+        
+        TMatrix expected(2,2);
+        expected(0,0)=6; expected(0,1)=4;
+        expected(1,0)=5; expected(1,1)=6;
+
+        for(int i=0; i!=C.numRows(); ++i)
+            for(int j=0; j!=C.numCols(); ++j)
+            {
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_distance(msg.str(), C(i,j), expected(i,j), 1e-7);
+            }
+        
+        
+    }
+
+    template<>
+    template<>
+    void object::test<9>()
+    {
+        //Sum of the matix
+        set_test_name("Test before replacing NAG: Sum of the matix +=");
+    
+        TMatrix A(2,2); 
+        A(0,0) = 1; A(0,1) = 2; 
+        A(1,0) = 2; A(1,1) = 4; 
+
+        TMatrix B(2,2);
+        B(0,0) = 5; B(0,1) = 2; 
+        B(1,0) = 3; B(1,1) = 2;
+        
+        A += B;
+        
+        TMatrix expected(2,2);
+        expected(0,0)=6; expected(0,1)=4;
+        expected(1,0)=5; expected(1,1)=6;
+
+        for(int i=0; i!=A.numRows(); ++i)
+            for(int j=0; j!=A.numCols(); ++j)
+            {
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_distance(msg.str(), A(i,j), expected(i,j), 1e-7);
+            }
+        
+    }
+
+    template<>
+    template<>
+    void object::test<10>()
+    {
+        set_test_name("Test before replacing NAG: Difference of the matix");
+    
+        TMatrix A(2,2); 
+        A(0,0) = 1; A(0,1) = 2; 
+        A(1,0) = 2; A(1,1) = 4; 
+
+        TMatrix B(2,2);
+        B(0,0) = 5; B(0,1) = 2; 
+        B(1,0) = 3; B(1,1) = 2;
+        
+        TMatrix C = A - B;
+        
+        TMatrix expected(2,2);
+        expected(0,0)=-4; expected(0,1)=0;
+        expected(1,0)=-1; expected(1,1)=2;
+
+        for(int i=0; i!=A.numRows(); ++i)
+            for(int j=0; j!=A.numCols(); ++j)
+            {
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_distance(msg.str(), C(i,j), expected(i,j), 1e-7);
+            }        
+    }
+    template<>
+    template<>
+    void object::test<11>()
+    {
+        set_test_name("Test before replacing NAG: Difference of the matix -=");
+    
+        TMatrix A(2,2); 
+        A(0,0) = 1; A(0,1) = 2; 
+        A(1,0) = 2; A(1,1) = 4; 
+
+        TMatrix B(2,2);
+        B(0,0) = 5; B(0,1) = 2; 
+        B(1,0) = 3; B(1,1) = 2;
+        
+        A -= B;
+        
+        TMatrix expected(2,2);
+        expected(0,0)=-4; expected(0,1)=0;
+        expected(1,0)=-1; expected(1,1)=2;
+
+        for(int i=0; i!=A.numRows(); ++i)
+            for(int j=0; j!=A.numCols(); ++j)
+            {
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_distance(msg.str(), A(i,j), expected(i,j), 1e-7);
+            }        
+    }
+
+    template<>
+    template<>
+    void object::test<12>()
+    {
+        set_test_name("Test before replacing NAG: Matrix transposition");
+    
+        TMatrix A(2,3); 
+        A(0,0) = 1; A(0,1) = 2; A(0,2) = 2;
+        A(1,0) = 2; A(1,1) = 4; A(1,2) = 2; 
+
+        TMatrix B = A.transposed();
+
+
+        TMatrix expected(3,2);
+        expected(0,0)=1; expected(0,1)=2;
+        expected(1,0)=2; expected(1,1)=4;
+        expected(2,0)=2; expected(2,1)=2;
+
+        for(int i=0; i!=B.numRows(); ++i)
+            for(int j=0; j!=B.numCols(); ++j)
+            {
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_distance(msg.str(), B(i,j), expected(i,j), 1e-7);
+            }
+    }
+
+    template<>
+    template<>
+    void object::test<13>()
+    {
+        set_test_name("Test before replacing NAG: Matrix product (square)*=");
+        TMatrix A(3,3);
+        A(0,0) = 3;  A(0,1) = 2; A(0, 2) = 9;
+        A(1,0) = -3; A(1,1) = 5; A(1, 2) = 1;
+        A(2,0) = 7;  A(2,1) = 1; A(2, 2) = -2;
+
+        TMatrix B(3,3);
+        B(0,0) = 1;  B(0,1) = -2; B(0, 2) = 1;
+        B(1,0) = 2;  B(1,1) = 0;  B(1, 2) = -4;
+        B(2,0) = 3;  B(2,1) = 9;  B(2, 2) = 2;
+
+        TMatrix expected(3,3);
+        expected(0,0)=34;expected(0,1)=75;expected(0,2)=13;
+        expected(1,0)=10;expected(1,1)=15;expected(1,2)=-21;
+        expected(2,0)=3;expected(2,1)=-32;expected(2,2)=-1;
+
+        A *= B;
+        for(int i=0; i!=A.numRows(); ++i)
+            for(int j=0; j!=A.numCols(); ++j)
+            {
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_distance(msg.str(), A(i,j), expected(i,j), 1e-7);
+            }
+
+    }
+
+    template<>
+    template<>
+    void object::test<14>()
+    {
+        set_test_name("Test before replacing NAG: Matrix munliplication by a scalar");
+        TMatrix A(3,3);
+        A(0,0) = 3;  A(0,1) = 2; A(0, 2) = 9;
+        A(1,0) = -3; A(1,1) = 5; A(1, 2) = 1;
+        A(2,0) = 7;  A(2,1) = 1; A(2, 2) = -2;
+
+        double k = 2;
+
+        TMatrix expected(3,3);
+        expected(0,0)=6;  expected(0,1)=4;  expected(0,2)=18;
+        expected(1,0)=-6; expected(1,1)=10; expected(1,2)=2;
+        expected(2,0)=14; expected(2,1)=2;  expected(2,2)=-4;
+
+       TMatrix C = A*k;
+        for(int i=0; i!=C.numRows(); ++i)
+            for(int j=0; j!=C.numCols(); ++j)
+            {
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_distance(msg.str(), C(i,j), expected(i,j), 1e-7);
+            }
+
+    }
+
+    template<>
+    template<>
+    void object::test<15>()
+    {
+        set_test_name("Test before replacing NAG: Inits matrix to a common value");
+        TMatrix A(3,3);
+
+        double val = 5;
+        bool bo = A.initDiag(val);
+    
+        TMatrix expected(3,3);
+        expected(0,0)=5; expected(0,1)=0; expected(0,2)=0;
+        expected(1,0)=0; expected(1,1)=5; expected(1,2)=0;
+        expected(2,0)=0; expected(2,1)=0; expected(2,2)=5;
+
+       /* std::cout << std::endl;
+        for(int i=0; i!=A.numRows(); ++i)
+        {
+            for(int j=0; j!=A.numCols(); ++j)
+            {
+                std::cout << "C(" << i << "," << j << ")=" << A(i,j) << ";";
+            }
+            std::cout << std::endl;
+        }*/
+
+        if( bo == true)
+        {
+            for(int i=0; i!=A.numRows(); ++i)
+                for(int j=0; j!=A.numCols(); ++j)
+                {
+                    std::stringstream msg;
+                    msg << "Value mismatch at (" << i << "," << j << ")";
+                    ensure_distance(msg.str(), A(i,j), expected(i,j), 1e-7);
+                }
+        }
+        else
+            std::cout<<"Init faild"<<std::endl;
+
+    }
+
+    template<>
+    template<>
+    void object::test<16>()
+    {
+        set_test_name("Test before replacing NAG: Matrix inverse");
+        TMatrix A(3,3);
+        A(0,0) = 3;  A(0,1) = 2; A(0, 2) = 9;
+        A(1,0) = -3; A(1,1) = 5; A(1, 2) = 1;
+        A(2,0) = 7;  A(2,1) = 1; A(2, 2) = -2;
+
+        TMatrix expected(3,3);
+        expected(0,0)=0.029490616621984;expected(0,1)=-0.034852546916890;expected(0,2)=0.115281501340483;
+        expected(1,0)=-0.002680965147453;expected(1,1)=0.184986595174263;expected(1,2)=0.080428954423592;
+        expected(2,0)=0.101876675603217;expected(2,1)=-0.029490616621984;expected(2,2)=-0.056300268096515;
+
+        TMatrix B = A.inverse();
+        
+
+        for(int i=0; i!=B.numRows(); ++i)
+            for(int j=0; j!=B.numCols(); ++j)
+            {
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_distance(msg.str(), B(i,j), expected(i,j), 1e-7);
+            }
+    }
+
+
+
+    template<>
+    template<>
+    void object::test<17>()
+    {
+        set_test_name("Test before replacing NAG: Clear the matrix");
+        TMatrix A(3,3);
+        A(0,0) = 3;  A(0,1) = 2; A(0, 2) = 9;
+        A(1,0) = -3; A(1,1) = 5; A(1, 2) = 1;
+        A(2,0) = 7;  A(2,1) = 1; A(2, 2) = -2;
+
+        A.clear();
+    
+        TMatrix expected(3,3);
+        expected(0,0)=0; expected(0,1)=0; expected(0,2)=0;
+        expected(1,0)=0; expected(1,1)=0; expected(1,2)=0;
+        expected(2,0)=0; expected(2,1)=0; expected(2,2)=0;
+
+       /* std::cout << std::endl;
+        for(int i=0; i!=A.numRows(); ++i)
+        {
+            for(int j=0; j!=A.numCols(); ++j)
+            {
+                std::cout << "C(" << i << "," << j << ")=" << A(i,j) << ";";
+            }
+            std::cout << std::endl;
+        }*/
+        for(int i=0; i!=A.numRows(); ++i)
+            for(int j=0; j!=A.numCols(); ++j)
+            {
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_distance(msg.str(), A(i,j), expected(i,j), 1e-7);
+            }
+    }
+
+
+
 
 }
