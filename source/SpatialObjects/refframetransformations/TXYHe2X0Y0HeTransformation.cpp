@@ -99,7 +99,7 @@ TARefFrameTransformation*  TXYHe2X0Y0HeTransformation::inverse() const
 
 bool  TXYHe2X0Y0HeTransformation::transform(TPositionVector& pv) const
 {// Transformation of a position vector using the parameters of the two reference frames
-	real Dx, dx, Dy, dy, he, d, falseX, falseY;
+	TReal Dx, dx, Dy, dy, he, d, falseX, falseY;
 
 	// distance from P0 in XY-plane
 	dx = pv.getX().getMetresValue() - fFrom->getMLARefFrame()->getFalseOrigin().getX().getMetresValue();
@@ -125,13 +125,13 @@ bool  TXYHe2X0Y0HeTransformation::transform(TPositionVector& pv) const
 	TAngle phiP0;
 	phiP0 = fFrom->getMLARefFrame()->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid(/*fEllipsoid, &falseOrigin*/);
 	
-	real nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
+	TReal nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
 
-	real rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
+	TReal rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
 		*powq( (phiP0.cosine()) * (azimuth.cosine()) ,2 ) );
 	
 	// scale factor
-	real k = rhoalpha / (rhoalpha + he);
+	TReal k = rhoalpha / (rhoalpha + he);
 	
 	//Deltas to be added on X0 and Y0 coordinates, using the scale factor
  	Dx = k * dx;

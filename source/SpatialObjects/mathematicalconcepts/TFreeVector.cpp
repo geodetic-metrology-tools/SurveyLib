@@ -40,7 +40,7 @@ TFreeVector::TFreeVector(TCoordSysFactory::ECoordSys en)
 	setStatus(kNull);
 }
 
-TFreeVector::TFreeVector(const real& x, const real& y, const real&z, TCoordSysFactory::ECoordSys en)
+TFreeVector::TFreeVector(const TReal& x, const TReal& y, const TReal&z, TCoordSysFactory::ECoordSys en)
 {
 	setX(0, x);
 	setX(1, y);
@@ -49,7 +49,7 @@ TFreeVector::TFreeVector(const real& x, const real& y, const real&z, TCoordSysFa
 	setStatus(kKnown);
 }
 
-/*TFreeVector::TFreeVector(const real& x, const real& y, const real&z)
+/*TFreeVector::TFreeVector(const TReal& x, const TReal& y, const TReal&z)
 {
 	setX(0, x);
 	setX(1, y);
@@ -136,7 +136,7 @@ TFreeVector TFreeVector::operator*( const TDouble& factor)
 	TANumericValue::EStatus status = this->testStatus(factor);
 	if (status != kNull)
     {	
-        real scalar = factor.getValue();
+        TReal scalar = factor.getValue();
 		resultat.setX( 0, scalar * getX(0) ); 
 		resultat.setX( 1, scalar * getX(1) );
 		resultat.setX( 2, scalar * getX(2) );
@@ -151,7 +151,7 @@ TFreeVector TFreeVector::operator*( const TScalar& factor)
 	TANumericValue::EStatus status = this->testStatus(factor);
 	if (status != kNull)
 	{	
-		real scalar = factor.getValue();
+		TReal scalar = factor.getValue();
 		resultat.setX( 0, scalar * getX(0) ); 
 		resultat.setX( 1, scalar * getX(1) );
 		resultat.setX( 2, scalar * getX(2) );
@@ -160,7 +160,7 @@ TFreeVector TFreeVector::operator*( const TScalar& factor)
 	return resultat;
 }
 
-TFreeVector TFreeVector::operator*( const real& factor)
+TFreeVector TFreeVector::operator*( const TReal& factor)
 {//!Multiplication by a TDouble object
 	TFreeVector resultat (getCoordSys());
 	if (this->isNull() == false)
@@ -180,7 +180,7 @@ TFreeVector& TFreeVector::operator *=( const TScalar& right)
 }
 
 
-TFreeVector& TFreeVector::operator *=( const real& right)
+TFreeVector& TFreeVector::operator *=( const TReal& right)
 {//Multiply this vector by a TScalar
 	*this = (*this) * right;
 	return (*this);

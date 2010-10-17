@@ -123,7 +123,7 @@ TDouble TLength::operator/(const TLength& div)
 }
 
 	
-TLength TLength::operator*(const real factor)
+TLength TLength::operator*(const TReal factor)
 {//multiply a TLength object by a factor
 	TLength resultat;
 	if(isNull()!=true)
@@ -144,7 +144,7 @@ TLength	TLength::operator*(const TDouble &factor)
 	return resultat;
 }	
 
-TLength	operator*(const real factor, const TLength &length )
+TLength	operator*(const TReal factor, const TLength &length )
 {//multiply a TLength object by a factor
 	TLength resultat;
 	if(length.isNull()!=true)
@@ -177,7 +177,7 @@ return *this=*this-length;
 }
 
 
-TLength& TLength::operator*=(const real factor)
+TLength& TLength::operator*=(const TReal factor)
 {//multiply a TLength object by a factor and rewrite this
 return *this=(*this)*factor;
 }
@@ -188,7 +188,7 @@ TLength& TLength::operator*=(const TDouble &factor)
 return *this=(*this)*factor;
 }
 
-/*TLength operator*=(const real factor, TLength &length )
+/*TLength operator*=(const TReal factor, TLength &length )
 {//multiply a TLength object by a factor and rewrite it
 return length=factor*length;
 }
@@ -199,7 +199,7 @@ return length=factor*length;
 //////////////////////////////////////////////////////////////////////
 
 	
-TLength::ENumberSign		TLength::sign(real	number) const
+TLength::ENumberSign		TLength::sign(TReal	number) const
 {	// return the sign of the number entered
 
 	ENumberSign	sign;

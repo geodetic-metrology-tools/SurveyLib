@@ -137,19 +137,19 @@ public:
 	_Quad value;
 };
 
-typedef Quad real;
-std::ostream& operator<<(std::ostream& stream, const real & value);
-std::istream& operator>>(std::istream& stream, real & value);
+typedef Quad TReal;
+std::ostream& operator<<(std::ostream& stream, const TReal & value);
+std::istream& operator>>(std::istream& stream, TReal & value);
 
 #elif __INTEL_COMPILER
 
-typedef _Quad real;
-std::ostream& operator<<(std::ostream& stream, const real & value);
-std::istream& operator>>(std::istream& stream, real & value);
+typedef _Quad TReal;
+std::ostream& operator<<(std::ostream& stream, const TReal & value);
+std::istream& operator>>(std::istream& stream, TReal & value);
 
 #else
 
-typedef double real;
+typedef double TReal;
 
 #endif
 

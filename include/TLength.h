@@ -36,7 +36,7 @@ class TDouble;
 using namespace std;
 
 //!Type Definition
-typedef	real	LengthValue;	// the value for the coordinate
+typedef	TReal	LengthValue;	// the value for the coordinate
 //
 ////////////////////////////////////////////////////////////////
 
@@ -118,13 +118,13 @@ public:
 	TDouble operator/(const TLength& );
 	
 	//!multiply a TLength object by a factor
-	TLength operator*(const real );
+	TLength operator*(const TReal );
 	
 	//!idem *
 	TLength operator*(const TDouble &);
 
 	//!idem *
-	friend  TLength operator*(const real, const TLength & );
+	friend  TLength operator*(const TReal, const TLength & );
 
 	//!assign a TLength object to an other
 	TLength& operator=(const TLength &);
@@ -136,14 +136,14 @@ public:
 	TLength& operator-=(const TLength &);
 	
 	//!multiply a TLength object by a factor and rewrite this
-	TLength& operator*=(const real );
+	TLength& operator*=(const TReal );
 	
 	//!idem *=
 	TLength& operator*=(const TDouble&);
 
 
 	//!idem *=
-	//friend  TLength& operator*=(const real, const TLength & );
+	//friend  TLength& operator*=(const TReal, const TLength & );
 	//@}
 
 
@@ -151,8 +151,8 @@ private:
 
 	/*!\name Protected Methods*/
 	//@{
-	//!return the sign of a real number
-	ENumberSign		sign(real	number) const;
+	//!return the sign of a TReal number
+	ENumberSign		sign(TReal	number) const;
 	//@}
 
 

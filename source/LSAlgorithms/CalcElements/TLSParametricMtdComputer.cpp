@@ -105,14 +105,14 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 		rm->setL(L);
 
-		real* solutionVectorb = *aTransTimesBTimesWInvTimesBTransInverted * misclV;
+		TReal* solutionVectorb = *aTransTimesBTimesWInvTimesBTransInverted * misclV;
 		for (int i = 0; i < aTransTimesBTimesWInvTimesBTransInverted->rowsCount(); i++)
 		{
 			solutionVectorb[i] = -solutionVectorb[i];
 		}
 		delete aTransTimesBTimesWInvTimesBTransInverted;
 
-		real* solution = L->solve_eqn(solutionVectorb);
+		TReal* solution = L->solve_eqn(solutionVectorb);
 
 		delete[] solutionVectorb;
 
@@ -160,7 +160,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 		rm->setL(L);
 
-		real* solutionVectorb = *aTransTimesW * misclV;
+		TReal* solutionVectorb = *aTransTimesW * misclV;
 
 		for (int i = 0; i < aTransTimesW->rowsCount(); i++)
 		{
@@ -171,7 +171,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 		}
 		delete aTransTimesW;
 
-		real* solution = L->solve_eqn(solutionVectorb);
+		TReal* solution = L->solve_eqn(solutionVectorb);
 
 		delete[] solutionVectorb;
 
@@ -222,14 +222,14 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 
 			TSparseMatrix* temp = aTransTimesBTimesWInvTimesBTransInverted->multiply_returning_lower_triangular_F(*firstDM);
 	        
-			real* aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec =
+			TReal* aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec =
 				*aTransTimesBTimesWInvTimesBTransInverted * misclV;
 			int solVecRows = aTransTimesBTimesWInvTimesBTransInverted->rowsCount();
 			delete aTransTimesBTimesWInvTimesBTransInverted;
 			
 			int nnz = temp->columnPointers()[temp->columnsCount()] + constraintFirstDM->columnPointers()[constraintFirstDM->columnsCount()];
 			int cols = temp->columnsCount() + constraintFirstDM->rowsCount();
-			real* bigValues = new real[nnz];
+			TReal* bigValues = new TReal[nnz];
 			int* bigRowind = new int[nnz];
 			int* bigColptr = new int[cols + 1];
 			bigColptr[0] = 0;
@@ -262,7 +262,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			bigMatrix->write_matrix_file("C:\\big.txt");
 	#endif
 
-			real* bigSolutionVector = new real[cols];
+			TReal* bigSolutionVector = new TReal[cols];
 			for (int i = 0; i < solVecRows; i++)
 			{
 				bigSolutionVector[i] = -aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec[i];
@@ -277,7 +277,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			{
 				delete rm->getBigMatrix();
 			}
-			real* D;
+			TReal* D;
 			TSparseMatrix* ldlt = bigMatrix->ldlt_decompose_lower_triangular_returning_lower_triangular(D);
 			if (ldlt == NULL)
 			{
@@ -287,7 +287,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			}
 			rm->setBigMatrix(bigMatrix);
 
-			real* solution = ldlt->solve_ldlt(D, bigSolutionVector);
+			TReal* solution = ldlt->solve_ldlt(D, bigSolutionVector);
 			delete[] bigSolutionVector;
 
 			TColumnVector* s = rm->getSolutionVctr();
@@ -329,7 +329,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 
 			TSparseMatrix* temp = aTransTimesBTimesWInvTimesBTransInverted->multiply_returning_lower_triangular_F(*firstDM);
 	        
-			real* aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec =
+			TReal* aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec =
 				*aTransTimesBTimesWInvTimesBTransInverted * misclV;
 			int solVecRows = aTransTimesBTimesWInvTimesBTransInverted->rowsCount();
 			delete aTransTimesBTimesWInvTimesBTransInverted;
@@ -365,7 +365,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 				return false;
 			}
 
-			real* solutionVectorb = *cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted *
+			TReal* solutionVectorb = *cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted *
 				aTransTimesBTimesWInvTimesBTransInvertedTimesMiscVec;
 			delete cstrATimesATransTimesBTimesWInvTimesBTransInvertedTimesAInverted;
 
@@ -374,7 +374,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 				solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
 			}
 
-			real* solution = decomposed->solve_eqn(solutionVectorb);
+			TReal* solution = decomposed->solve_eqn(solutionVectorb);
 			delete[] solutionVectorb;
 
 			solutionVectorb = *constraintFirstDMTransposed * solution;
@@ -416,7 +416,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
 
 			TSparseMatrix* temp = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
-			real* aTransTimesWTimesMiscVec = *aTransTimesW * misclV;
+			TReal* aTransTimesWTimesMiscVec = *aTransTimesW * misclV;
 			int solVecRows = aTransTimesW->rowsCount();
 
 	#if _DEBUG
@@ -434,7 +434,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 
 			int nnz = temp->columnPointers()[temp->columnsCount()] + constraintFirstDM->columnPointers()[constraintFirstDM->columnsCount()];
 			int cols = temp->columnsCount() + constraintFirstDM->rowsCount();
-			real* bigValues = new real[nnz];
+			TReal* bigValues = new TReal[nnz];
 			int* bigRowind = new int[nnz];
 			int* bigColptr = new int[cols + 1];
 			bigColptr[0] = 0;
@@ -467,7 +467,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			bigMatrix->write_matrix_file("C:\\big.txt");
 	#endif
 
-			real* bigSolutionVector = new real[cols];
+			TReal* bigSolutionVector = new TReal[cols];
 			for (int i = 0; i < solVecRows; i++)
 			{
 				bigSolutionVector[i] = -aTransTimesWTimesMiscVec[i];
@@ -482,7 +482,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			{
 				delete rm->getBigMatrix();
 			}
-			real* D;
+			TReal* D;
 			TSparseMatrix* ldlt = bigMatrix->ldlt_decompose_lower_triangular_returning_lower_triangular(D);
 			if (ldlt == NULL)
 			{
@@ -492,7 +492,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			}
 			rm->setBigMatrix(bigMatrix);
 
-			real* solution = ldlt->solve_ldlt(D, bigSolutionVector);
+			TReal* solution = ldlt->solve_ldlt(D, bigSolutionVector);
 			delete[] bigSolutionVector;
 
 			TColumnVector* s = rm->getSolutionVctr();
@@ -519,7 +519,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 
 			TSparseMatrix* temp = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
 	        
-			real* aTransTimesWTimesMiscVec = *aTransTimesW * misclV;
+			TReal* aTransTimesWTimesMiscVec = *aTransTimesW * misclV;
 			int solVecRows = aTransTimesW->rowsCount();
             delete aTransTimesW;
 
@@ -550,7 +550,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 			}
 			rm->setL(decomposed);
 
-			real* solutionVectorb = *cstrATimesATransTimesWTimesAInverted *
+			TReal* solutionVectorb = *cstrATimesATransTimesWTimesAInverted *
 				aTransTimesWTimesMiscVec;
 			delete cstrATimesATransTimesWTimesAInverted;
 
@@ -559,7 +559,7 @@ bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatri
 				solutionVectorb[i] = constraintMisclV(i) - solutionVectorb[i];
 			}
 
-			real* solution = decomposed->solve_eqn(solutionVectorb);
+			TReal* solution = decomposed->solve_eqn(solutionVectorb);
 			delete[] solutionVectorb;
 
 			solutionVectorb = *constraintFirstDMTransposed * solution;

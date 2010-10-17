@@ -670,7 +670,7 @@ TSparseMatrix* TMatrix::toSparse() const
 		}
 	}
 
-	real* vs = new real[nnz];
+	TReal* vs = new TReal[nnz];
 	int* rs = new int[nnz];	
 	int* cs = new int[fNbCols + 1];
 	cs[0] = 0;

@@ -61,7 +61,7 @@ public:
 	//@{
 	/*!create a TRotationMatrix default def:
 	\return false*/
-	virtual bool setAllRotations(TRotationMatrix*, TRotationMatrix::ERotationType kR, real &om, real &p, real &k);
+	virtual bool setAllRotations(TRotationMatrix*, TRotationMatrix::ERotationType kR, TReal &om, TReal &p, TReal &k);
 
 	/*!get angles of a TRotationMatrix return a structure (omega, phi, kappa), default def
 	\return false*/
@@ -71,13 +71,13 @@ public:
 	virtual bool identity(TRotationMatrix*);
 
 	//!set a element into a 3D matrix
-	virtual	bool setElt(T3DMatrix*, const int, const int, const real);
+	virtual	bool setElt(T3DMatrix*, const int, const int, const TReal);
 
 	//!get a element from a 3D matrix
-	virtual	real getElt(const T3DMatrix*, const int, const int) const;
+	virtual	TReal getElt(const T3DMatrix*, const int, const int) const;
 
 	//!get a element from a rotation matrix
-	virtual	real getElt(const TRotationMatrix*, const int, const int) const;
+	virtual	TReal getElt(const TRotationMatrix*, const int, const int) const;
 	//@}
 
 

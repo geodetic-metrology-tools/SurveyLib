@@ -68,22 +68,22 @@ public:
 		virtual void				setDimensions(int nbUnknowns, int nbEquations, int nbCnstrObs, int nbObservations, int nbConstraints, int offsetContraints);
 	
 		//!Sets the scale factor for the sigma zero a priori
-//		virtual void				setS0APrioriScaleFactor(real scalefac);
+//		virtual void				setS0APrioriScaleFactor(TReal scalefac);
 	
 		//!Sets a coefficient of the first design matrix
-		virtual bool				setFirstDgnMtrxTransElement(MatrixIndex row, real coefficient);
+		virtual bool				setFirstDgnMtrxTransElement(MatrixIndex row, TReal coefficient);
 		//!Sets a coefficient of the second design matrix
-		virtual bool				setSecondDgnMtrxTransElement(MatrixIndex row, real coefficient);
+		virtual bool				setSecondDgnMtrxTransElement(MatrixIndex row, TReal coefficient);
 		//!Sets a coefficient of the misclosure vector
-		virtual bool				setMisclosureVectorElement(MatrixIndex row, real coeff);
+		virtual bool				setMisclosureVectorElement(MatrixIndex row, TReal coeff);
 		//!Sets a coefficient of the weight matrix
-		virtual bool				setWeightMtrxElement(real coefficient);
+		virtual bool				setWeightMtrxElement(TReal coefficient);
 		//!Sets a coefficient of the constraint first design matrix
-		virtual bool				setCnstrFirstDgnMtrxElement(MatrixIndex column, real coefficient);
+		virtual bool				setCnstrFirstDgnMtrxElement(MatrixIndex column, TReal coefficient);
 		//!Sets a coefficient of the constraint first design matrix
-		virtual bool				setCnstrFirstDgnMtrxTransposedElement(MatrixIndex column, real coefficient);
+		virtual bool				setCnstrFirstDgnMtrxTransposedElement(MatrixIndex column, TReal coefficient);
 		//!Sets a coefficient of the constraint misclosure vector
-		virtual bool				setCnstrMisclosureVectorElement(MatrixIndex row, real coeff);
+		virtual bool				setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff);
 	//@}
 
 	 virtual int		getNbrUnknowns() const;
@@ -96,7 +96,7 @@ public:
 	/*!@name Acess methods*/
 	//@{
 		/*!@return the sigma zero a priori scale factor*/
-//		virtual real					getS0APrioriScaleFactor() const;
+//		virtual TReal					getS0APrioriScaleFactor() const;
 
 		/*!@return a const reference to the first design matrix*/
 		const TSparseMatrix* getFirstDgnMtrxTransposed() const;
@@ -138,26 +138,26 @@ private:
 	MatrixIndex		fNbCnstr;/*!<number of free constraint: c */
 	MatrixIndex		fNbTotalCnstr;/*!<total number of constraint: c */
 
-	vector<real>*	firstDesignMatrixTransposedValues; /*!< matrix (u x e) for the parametric part of the model */
+	vector<TReal>*	firstDesignMatrixTransposedValues; /*!< matrix (u x e) for the parametric part of the model */
 	vector<int>*	firstDesignMatrixTransposedColPtr;
 	vector<int>*	firstDesignMatrixTransposedRowInd;
 
-	vector<real>*	secondDesignMatrixTransposedValues; /*!< matrix (o x e) for the parametric part of the model  */
+	vector<TReal>*	secondDesignMatrixTransposedValues; /*!< matrix (o x e) for the parametric part of the model  */
 	vector<int>*	secondDesignMatrixTransposedColPtr;
 	vector<int>*	secondDesignMatrixTransposedRowInd;
 
-	vector<real>*	constraintFirstDesignMatrixValues; /*!< matrix (c x u) for the conditional part of the model  */
+	vector<TReal>*	constraintFirstDesignMatrixValues; /*!< matrix (c x u) for the conditional part of the model  */
 	vector<int>*	constraintFirstDesignMatrixColPtr;
 	vector<int>*	constraintFirstDesignMatrixRowInd;
 
-	vector<real>*	constraintFirstDesignMatrixTransposedValues; /*!< matrix (u x c) for the conditional part of the model  */
+	vector<TReal>*	constraintFirstDesignMatrixTransposedValues; /*!< matrix (u x c) for the conditional part of the model  */
 	vector<int>*	constraintFirstDesignMatrixTransposedColPtr;
 	vector<int>*	constraintFirstDesignMatrixTransposedRowInd;
 
-	vector<real>*	weightMatrixValues; /*!< matrix (o x o) for observations weights */
+	vector<TReal>*	weightMatrixValues; /*!< matrix (o x o) for observations weights */
 
 	TColumnVector*	fMisclosureVector; /*!< vector (u) for misclosure errors */
-//	real			fS0APrioriScaleFactor; /*!< indicates if there is a priori scale factor or not */
+//	TReal			fS0APrioriScaleFactor; /*!< indicates if there is a priori scale factor or not */
 
 	TSparseMatrix*	fCnstrFirstDesignMtrx; /*!< matrix (c x u) for the parametric part of the model */
 	TColumnVector*	fCnstrMisclosureVector; /*!< vector for misclosure errors */

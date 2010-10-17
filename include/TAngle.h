@@ -51,10 +51,10 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 class TDouble;
 using namespace std;
 // typedefs
-typedef	real	AngleValue;		// the value for the angle
+typedef	TReal	AngleValue;		// the value for the angle
 typedef	int		Degrees;		// the degrees of an angle
 typedef	int		Minutes;		// the minutes of an angle
-typedef	real	Seconds;		// the seconds of an angle
+typedef	TReal	Seconds;		// the seconds of an angle
 //
 ////////////////////////////////////////////////////////////////
 
@@ -104,13 +104,13 @@ public:
 	/*! Defines the angle Pi/4 */
 	static const TAngle piBy4();
 	/*! Provides a scale factor to convert from angles in radians to angles in gons */
-	static const real  radsToGonsFactor();	
+	static const TReal  radsToGonsFactor();	
 	/*! Provides a scale factor to convert from angles in gons to angles in radians */
-	static const real  gonsToRadsFactor();
+	static const TReal  gonsToRadsFactor();
 	/*! Provides a scale factor to convert from angles in radians to angles in degres */
-	static const real  radsToDecDegsFactor();
+	static const TReal  radsToDecDegsFactor();
 	/*! Provides a scale factor to convert from angles in degres to angles in radians */
-	static const real  decDegsToRadsFactor();
+	static const TReal  decDegsToRadsFactor();
 	//@}
 	
 	
@@ -151,13 +151,13 @@ public:
 	/*! Substract 2 TAngles */
 	TAngle operator-(const TAngle &) const;
 	/*! Multiplies a TAngle by a scale factor */
-	TAngle operator*(const real ) const;
+	TAngle operator*(const TReal ) const;
 	/*! Multiplies a TAngle by a TDouble scale factor */
 	TAngle operator*(const TDouble& ) const;
 	/*! div. a TAngle by a TAngle*/
 	TDouble operator/(const TAngle& ) const;
 	/*! Multiplies a TAngle by a scale factor */
-	friend  TAngle operator*(const real, const TAngle & );
+	friend  TAngle operator*(const TReal, const TAngle & );
 	/*! Assigns a TAngle to an other */
 	TAngle& operator=(const TAngle &);
 	/*! Adds a TAngle to the angle */
@@ -165,32 +165,32 @@ public:
 	/*! Substracts a TAngle from the angle */
 	TAngle& operator-=(const TAngle &);
 	/*! Multiplies the angle by a scale factor */
-	TAngle& operator*=(const real );
+	TAngle& operator*=(const TReal );
 	/*! Multiplies the TAngle by a TDouble scale factor */
 	TAngle& operator*=(const TDouble &);
 
 	/*!@name trigonometric functions */
 	//@{
 	/*! Calculates the cosine of the angle, for example: angle.Cos() = cosq(angle) */
-	real cosine() const;
+	TReal cosine() const;
 	/*! Calculates the sine of the angle */
-	real sine() const;
+	TReal sine() const;
 	/*! Calculates the tangent of the angle */
-	real tangent() const;
+	TReal tangent() const;
 	/*! Calculates the hyperbolic cosine of the angle */
-	real cosineh() const;
+	TReal cosineh() const;
 	/*! Calculates the hyperbolic sine of the angle */
-	real sineh() const;
+	TReal sineh() const;
 	/*! Calculates the hyperbolic tangent of the angle */
-	real tangenth() const;
-	/*! Calculates the arccosine of a real as a TAngle */
-	static TAngle aCos(const real);
-	/*! Calculates the arcsine of a real as a TAngle */
-	static TAngle aSin(const real);
-	/*! Calculates the arctan of a real as a TAngle */
-	static TAngle aTan(const real);
+	TReal tangenth() const;
+	/*! Calculates the arccosine of a TReal as a TAngle */
+	static TAngle aCos(const TReal);
+	/*! Calculates the arcsine of a TReal as a TAngle */
+	static TAngle aSin(const TReal);
+	/*! Calculates the arctan of a TReal as a TAngle */
+	static TAngle aTan(const TReal);
 	/*! Calculates the arctan(x/y) as a TAngle */
-	static TAngle aTan2(const real, const real);
+	static TAngle aTan2(const TReal, const TReal);
 	//@}
 
 private:
@@ -200,19 +200,19 @@ private:
 
 	/*!@name angle conversion multiplication factors */
 	//@{
-	static const real	kPi; /*!< pi */
-	static const real	kRadiansToGons; /*!< convertion rad->gon factor */
-	static const real	kGonsToRadians; /*!< convertion gon->rad factor */
-	static const real	kRadiansToDecDegs; /*!< convertion rad->deg factor */
-	static const real	kDecDegsToRadians; /*!< convertion deg->rad factor */
-	static const real	seuil;
+	static const TReal	kPi; /*!< pi */
+	static const TReal	kRadiansToGons; /*!< convertion rad->gon factor */
+	static const TReal	kGonsToRadians; /*!< convertion gon->rad factor */
+	static const TReal	kRadiansToDecDegs; /*!< convertion rad->deg factor */
+	static const TReal	kDecDegsToRadians; /*!< convertion deg->rad factor */
+	static const TReal	seuil;
 	//@}
 
 	/*! normalise the angle value to lie between -2Pi and +2Pi */
 	void normaliseAngle();
 	
-	/*! return the sign of a real number */
-	ENumberSign		sign(real	number) const;	
+	/*! return the sign of a TReal number */
+	ENumberSign		sign(TReal	number) const;	
 
 private:	
 	AngleValue		fValue;		/*!< Angle value, default = LITERAL(0.0) */

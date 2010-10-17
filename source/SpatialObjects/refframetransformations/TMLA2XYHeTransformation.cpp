@@ -97,7 +97,7 @@ TARefFrameTransformation*  TMLA2XYHeTransformation::inverse() const
 bool  TMLA2XYHeTransformation::transform(TPositionVector& pv) const
 {// Transformation of a position vector using the parameters of the two reference frames
 	
-	real dx, dy, dz, d, d0;
+	TReal dx, dy, dz, d, d0;
 
 	// distance from P0 in XY-plane
 	dx = pv.getX().getMetresValue() - fFrom->getFalseOrigin().getX().getMetresValue();
@@ -124,15 +124,15 @@ bool  TMLA2XYHeTransformation::transform(TPositionVector& pv) const
 	
 	TAngle phiP0;
 	phiP0 = fFrom->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid(/*fEllipsoid, &falseOrigin*/);
-	real nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
+	TReal nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
 
-	real rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
+	TReal rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
 		*powq( (phiP0.cosine()) * (azimuth.cosine()) ,2 ) );
 
 	// angle between point and z-axis
 	TAngle omega = TAngle::aTan( d / (rhoalpha + dz) );
 
-	real k = ( rhoalpha * omega.cosine() ) / (rhoalpha + dz);
+	TReal k = ( rhoalpha * omega.cosine() ) / (rhoalpha + dz);
 
 	// scale factor
 	d0 = k*d;

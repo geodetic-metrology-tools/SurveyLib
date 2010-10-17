@@ -100,11 +100,11 @@ protected:
 	//@{
 	
 	//!get the Xi coordinate of a vector in all Coordinate System
-	real	getX(const int& ) const;
+	TReal	getX(const int& ) const;
 
 
 	//!set the Xi coordinate of a vector in all Coordinate System
-	void	setX(const int&, const real&);
+	void	setX(const int&, const TReal&);
 			
 	//@}
 		
@@ -116,7 +116,7 @@ private:
 	/**@name Member Attributes */
 		//@{
 				//int				fNbRows;
-				real					fVector[3]; /*!< element of the 3*1 vector */
+				TReal					fVector[3]; /*!< element of the 3*1 vector */
 				TVCoordinateSystem*		fCoordSys; /*!< coordinate system */
 
 		//@}

@@ -37,7 +37,7 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 
 
 TLSResultsMatrices::TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, 
-									   real sigm2)
+									   TReal sigm2)
 {// constructor setting the results
 
 	cout<<(double) sigm2<<endl<<endl;
@@ -94,7 +94,7 @@ TColumnVector	TLSResultsMatrices::computeVarObs(const TSparseMatrix& A, const TS
 {
 	int nobs = A.rowsCount(); //number of observations
 	int nunk = A.columnsCount(); //number of observations
-	real* vals = new real[fUnknownsCovarianceMtrx->columnPointers()[nunk]];
+	TReal* vals = new TReal[fUnknownsCovarianceMtrx->columnPointers()[nunk]];
 	int* rows = new int[fUnknownsCovarianceMtrx->columnPointers()[nunk]];
 	int* cols = new int[nunk + 1];
 	cols[0] = 0;
@@ -111,7 +111,7 @@ TColumnVector	TLSResultsMatrices::computeVarObs(const TSparseMatrix& A, const TS
 		cols[i + 1] = count;
 	}
 	TSparseMatrix* ucm = new TSparseMatrix(nunk, nunk, vals, rows, cols);
-	real *result = A.multiply_three_returning_diagonal(*ucm, ATransposed);
+	TReal *result = A.multiply_three_returning_diagonal(*ucm, ATransposed);
 	delete ucm;
 	TColumnVector var(nobs);
 	for (int i = 0; i < nobs; i++)

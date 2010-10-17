@@ -122,7 +122,7 @@ namespace tut
         {
             std::stringstream msg;
             msg << "Value mismatch at (" << i << ","<< ")";
-            ensure_distance(msg.str(), res(i), expected(i), static_cast<real>(1e-7));
+            ensure_distance(msg.str(), res(i), expected(i), static_cast<TReal>(1e-7));
         }
     }
 
@@ -153,7 +153,7 @@ namespace tut
         {
             std::stringstream msg;
             msg << "Value mismatch at (" << i << ","<< ")";
-            ensure_distance(msg.str(), res(i), expected(i), static_cast<real>(1e-7));
+            ensure_distance(msg.str(), res(i), expected(i), static_cast<TReal>(1e-7));
         }
     }
 

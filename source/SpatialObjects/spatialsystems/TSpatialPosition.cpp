@@ -51,7 +51,7 @@ TSpatialPosition::TSpatialPosition( TAReferenceFrame* trf )
 
 
 TSpatialPosition::TSpatialPosition( TAReferenceFrame* trf,
-								   const real x, const real y, const real z,
+								   const TReal x, const TReal y, const TReal z,
 								   TCoordSysFactory::ECoordSys cs )
 {//constructor
 	fX = new TPositionVector(x,y,z,cs);

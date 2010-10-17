@@ -1,5 +1,5 @@
-#ifndef SPATIAL_OBJECTS_e62c6be5-6903-4e36-b58e-5dd8c858f5d2
-#define SPATIAL_OBJECTS_e62c6be5-6903-4e36-b58e-5dd8c858f5d2
+#ifndef SPATIAL_OBJECTS_e62c6be5_6903_4e36_b58e_5dd8c858f5d2
+#define SPATIAL_OBJECTS_e62c6be5_6903_4e36_b58e_5dd8c858f5d2
 
 #include <TAngle.h>
 #include <TSpatialPosition.h>

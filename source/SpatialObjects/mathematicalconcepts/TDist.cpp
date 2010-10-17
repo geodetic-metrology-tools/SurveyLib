@@ -3,7 +3,7 @@
 /////////////////////////////////
 // planimetric distance in meters
 /////////////////////////////////
-real	dist(TLength x1, TLength y1, TLength x2, TLength y2)
+TReal	dist(TLength x1, TLength y1, TLength x2, TLength y2)
 {
 	
 	return sqrtq(powq((x1.getMetresValue()-x2.getMetresValue()),2)
@@ -11,14 +11,14 @@ real	dist(TLength x1, TLength y1, TLength x2, TLength y2)
 }
 
 
-real	dist(real x1, real y1, real x2, real y2)
+TReal	dist(TReal x1, TReal y1, TReal x2, TReal y2)
 {
 	
 	return sqrtq(powq((x1-x2),2)+powq((y1-y2),2));
 }
 
 
-real	dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2)
+TReal	dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2)
 {
 	
 	return sqrtq(powq((x1.getMetresValue()-x2.getMetresValue()),2)
@@ -28,7 +28,7 @@ real	dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength 
 }
 
 
-real	dist3D(real x1, real y1, real z1, real x2, real y2, real z2)
+TReal	dist3D(TReal x1, TReal y1, TReal z1, TReal x2, TReal y2, TReal z2)
 {
 	
 	return sqrtq(powq((x1-x2),2)

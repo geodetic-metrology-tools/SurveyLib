@@ -70,17 +70,17 @@ protected:
 		void	writeStringSep(const int width, const string data);
 		void	writeStringLeftSep(const int width, const string data);
 
-		/*!write a real and
-		\param int : width used to write the real
-		\param int : precision used to write the real
-		\param real : real to write*/
-		void	writeDouble(const int width, const int pres, const real data);
+		/*!write a TReal and
+		\param int : width used to write the TReal
+		\param int : precision used to write the TReal
+		\param TReal : TReal to write*/
+		void	writeDouble(const int width, const int pres, const TReal data);
 
-		/*!write a real and add a separator
-		\param int : width used to write the real
-		\param int : precision used to write the real
-		\param real : real to write*/
-		void	writeDoubleSep(const int width, const int pres, const real data);
+		/*!write a TReal and add a separator
+		\param int : width used to write the TReal
+		\param int : precision used to write the TReal
+		\param TReal : TReal to write*/
+		void	writeDoubleSep(const int width, const int pres, const TReal data);
 
 		void	writeLength(const int width, const int pres, const TLength::EUnits, const TLength data);
 		void	writeAngle(const int width, const int pres, const TAngle::EUnits, const TAngle data);

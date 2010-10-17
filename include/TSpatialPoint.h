@@ -105,11 +105,11 @@ public:
 		virtual  TSpatialPointName  getName()  const;
 		
 		/*!Sets the point's distance (for file from geode)
-		\param id the point's distance as a real*/
-		virtual  void  setDist( const real& id);
+		\param id the point's distance as a TReal*/
+		virtual  void  setDist( const TReal& id);
 
 		/*!Returns the point's distance */
-		virtual  real  getDist()  const {return fPointDist;};
+		virtual  TReal  getDist()  const {return fPointDist;};
 	
 	
 		/*!Sets the point's header line of comment (for file from geode)
@@ -211,7 +211,7 @@ protected:
 	bool						fUsedInCalc; /*!< gives the state of the point whether it is used or not*/
 	TSpatialPointName*			fName; /*!< pointer to the point's TSpatialPointName*/
 
-	real						fPointDist; /*!< distance (from geode's DB point) for the point */
+	TReal						fPointDist; /*!< distance (from geode's DB point) for the point */
 	
 	string						fHeaderComment; /*!<line of comments before the line of coordinate*/
 	string						fEOLComment;/*!<end of line comments*/
