@@ -3,6 +3,7 @@ include_directories (
 	.
 	${SURVEYLIB_INCLUDE_PATH}
 	${NAGC_INCLUDE_PATH}
+	${EIGEN_INCLUDE_PATH}
 )
 
 
@@ -30,6 +31,7 @@ set(MathematicalConcepts_SOURCES
 	TGeodeticCoordSys.cpp
 	TLength.cpp
 	TMatrix.cpp
+	TMatrixImpl.cpp
 	TPositionVector.cpp
 	TRotationMatrix.cpp
 	TScalar.cpp
@@ -56,6 +58,7 @@ set(MathematicalConcepts_HEADERS
 	${SURVEYLIB_INCLUDE_PATH}/TGeodeticCoordSys.h
 	${SURVEYLIB_INCLUDE_PATH}/TLength.h
 	${SURVEYLIB_INCLUDE_PATH}/TMatrix.h
+	${SURVEYLIB_INCLUDE_PATH}/TMatrixImpl.h
 	${SURVEYLIB_INCLUDE_PATH}/TPositionVector.h
 	${SURVEYLIB_INCLUDE_PATH}/TRotationMatrix.h
 	${SURVEYLIB_INCLUDE_PATH}/TScalar.h

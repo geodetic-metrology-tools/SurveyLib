@@ -42,6 +42,8 @@ using namespace std;
 #include  "TANumericValue.h"
 class TSparseMatrix;
 
+class TMatrixImpl;
+
 // typedefs
 //
 //
@@ -75,6 +77,7 @@ public:
 
 		//!Copy Constructor 
 		TMatrix(const  TMatrix&);
+        void swap(TMatrix & other) throw();
 
 		//!Destructor
 		virtual  ~TMatrix();
@@ -83,36 +86,41 @@ public:
 	/*!\name operator functions*/
 	//@{
 		//!Copy assignement operator
-		virtual TMatrix&	operator=(const TMatrix&);
+		virtual TMatrix&	operator=(TMatrix);
 
 		/*!Initializes all the matrice's elements to a common value
 		\param comVal the common value of all the matrice's elements*/
 		virtual void	operator=( const double&);
 		
-		/*!\return the sum of this matrix and a second one*/
-		virtual TMatrix		operator+(const TMatrix&) const;
-
-		/*!replaces this matrix by its sum with a second one
+        /*!replaces this matrix by its sum with a second one
 		\return the sum matrix*/
 		virtual TMatrix&	operator+=(const TMatrix&);
 
-		/*!\return the difference of this matrix and a second one*/
-		virtual TMatrix		operator-(const TMatrix&) const;
+		/*!\return the sum of this matrix and a second one*/
+		virtual TMatrix		operator+(const TMatrix&) const;
 
 		/*!replaces this matrix by its difference with a second one*/
 		virtual TMatrix&	operator-=(const TMatrix&);
 
+        /*!\return the difference of this matrix and a second one*/
+		virtual TMatrix		operator-(const TMatrix&) const;
+
+        /*!replaces this matrix by its product with a second one*/
+		virtual TMatrix&	operator*=(const TMatrix&);
+
 		/*!\return the product of this matrix and a second one*/
 		virtual TMatrix		operator*(const TMatrix&) const;
-
-		/*!replaces this matrix by its product with a second one*/
-		virtual TMatrix&	operator*=(const TMatrix&);
 
 		/*!\return the product of this matrix by a column vector*/
 		virtual TColumnVector		operator*(const TColumnVector& right) const;
 
+
+        virtual TMatrix	& operator*=(double);
+
 		/*!\return the product of this matrix by a scalar*/
-		virtual TMatrix	operator*(const double&);
+		virtual TMatrix	operator*(double);
+
+        virtual TMatrix	& operator*=(const TDouble&);
 
 		/*!\return the product of this matrix by TDouble*/
 		virtual TMatrix	operator*(const TDouble&);
@@ -120,12 +128,12 @@ public:
 		/*!Matrix element access operator (non-const version). Indices start at 1.
 		\param row the row of the desired element
 		\param col the column of the desired element*/
-		virtual double&		operator()(const int& row, const int& col);
+		double & operator()(int row, int col);
 		
 		/*!Matrix element access operator (const version). Indices start at 1.
 		\param row the row of the desired element
 		\param col the column of the desired element*/
-		virtual double		operator()(const int& row, const int& col) const;
+		double operator()(int row, int col) const;
 	//@}
 
 	/*!\name member functions*/
@@ -139,13 +147,13 @@ public:
 
 		/*!Initializes all the matrice's diagonal elements to a common value.
 		The non-diagonal elements are set to zero.
-		\param comVal the common value of all the matrice's diagonal elements*/
-		virtual bool	initDiag( const double&);
+		\param value the common value of all the matrice's diagonal elements*/
+		virtual bool	initDiag(double);
 		
 		/*!Sets the dimensions of the matrix. Destroys previously stored values.
 		\param nRows the matrice's number of rows
 		\param nCols the matrice's number of columns*/
-		virtual void		setDimensions( const int& nRows,  const int& nCols);
+		virtual void		setDimensions(int nRows, int nCols);
 
 		/*!\return the matrice's number of rows*/
 		virtual int			numRows() const;
@@ -176,7 +184,7 @@ public:
 	//@}
 
 private:
-	
+	TMatrixImpl * fImpl;
 	/*!\return the adress of the matrix's first element*/
 	virtual double *	getFirstEltAdr() const;
 
