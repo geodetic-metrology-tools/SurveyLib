@@ -175,18 +175,18 @@ public:
 		string	getError() const { return fError; }
 
 		/*! decompose square matrix N */
-		virtual TMatrix dfact(int* n_pivot,int* pivot_i,int* pivot_j);
+		//virtual TMatrix dfact(int* n_pivot,int* pivot_i,int* pivot_j);
 
 		/*! resolve equations system */
-		virtual TColumnVector dfeqn(TColumnVector* B,int n_pivot,int* pivot_i,int* pivot_j);
+		//virtual TColumnVector dfeqn(TColumnVector* B,int n_pivot,int* pivot_i,int* pivot_j);
 
-		TSparseMatrix* toSparse() const;
+		TSparseMatrix * toSparse() const;
 	//@}
 
 private:
 	TMatrixImpl * fImpl;
 	/*!\return the adress of the matrix's first element*/
-	virtual double *	getFirstEltAdr() const;
+	//virtual double *	getFirstEltAdr() const;
 
 	double*			fMatrix; /*!< pointer to the matrix size */
 	int				fNbRows; /*!< number of rows */
