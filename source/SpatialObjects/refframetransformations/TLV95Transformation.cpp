@@ -14,8 +14,8 @@ namespace
     const double E2 = 0.006674372230614; 
     const double PI = 3.14159265358979323844;
     // Ellipsoidal coordinates of the projection centre in Bern
-    const double phi0 = (46+57/60.0+8.66/3600)*TAngle::decDegsToRadsFactor();
-    const double lam0 = (7+26/60.0+22.5/3600)*TAngle::decDegsToRadsFactor(); 
+    const double phi0 = (46+57/60.0+8.66/3600)*PI/180.0;
+    const double lam0 = (7+26/60.0+22.5/3600)*PI/180.0; 
     
     // Radius of the projection sphere
     const double R = a*sqrt(1-E2)/(1-E2*pow((sin(phi0)),2));
