@@ -93,3 +93,8 @@ TMatrixImpl TMatrixImpl::solve(const TMatrixImpl & b) const
     lu.solve(b.fMatrix, &result.fMatrix);
     return result;
 }
+
+const double * TMatrixImpl::data() const
+{
+    return fMatrix.data();
+}
