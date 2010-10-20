@@ -26,15 +26,11 @@
 //#include  <**classname**>
 //
 //class  **classname**;
-#include <nag.h>
-#include <nagf03.h>
-#include <nagf04.h>
-#include <nagf06.h>
 #include "TACoordSysMatrix.h"
 #include "TFreeVector.h"
 #include "TPositionVector.h"
 #include "TCoordSysFactory.h"
-using namespace std;
+//using namespace std;
 // typedefs
 //
 //

@@ -29,13 +29,7 @@ Designed to be easiliy usable with matrix functions of the NagC math library
 //
 class  TColumnVector;
 class  TDouble;
-#include	<nag.h>
-#include	<nagf06.h>
-#include	<nagf03.h>
-#include	<nagf04.h>
-#include	<nag_stdlib.h>
 #include	<list>
-//#include	<valarray>
 
 using namespace std;
 //
@@ -185,12 +179,6 @@ public:
 
 private:
 	TMatrixImpl * fImpl;
-	/*!\return the adress of the matrix's first element*/
-	//virtual double *	getFirstEltAdr() const;
-
-	double*			fMatrix; /*!< pointer to the matrix size */
-	int				fNbRows; /*!< number of rows */
-	int				fNbCols; /*!< number of columns */
 	string			fError; /*!< errors generated from nagc functions */
 };
 

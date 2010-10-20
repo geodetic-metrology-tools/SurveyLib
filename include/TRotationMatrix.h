@@ -30,10 +30,6 @@ class TPositionVector;
 #include "TCoordSysFactory.h"
 #include  "TAngle.h"
 #include  "TACoordSysMatrix.h"
-#include <nag.h>
-#include  <nagf06.h>
-#include <nagf03.h>
-#include <nagf04.h>
 #include <string>
 #include <iostream>
 

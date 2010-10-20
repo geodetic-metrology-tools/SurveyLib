@@ -555,7 +555,28 @@ namespace tut
         B(0,0) = 1;  B(0,1) = -2; 
         B(1,0) = 2;  B(1,1) = 0;
 
-        //TMatrix result = A + B;
+        TMatrix result = A + B;
+        ensure_equals("Status should be kNull", result.getStatus(), TVNumericValue::kNull);
+        ensure_not("There should be and error message", result.getError().empty());
+    }
+
+    template<>
+    template<>
+    void object::test<19>()
+    {
+        set_test_name("Adding matrixes of wrong sizes");
+        TMatrix A(3,3);
+        A(0,0) = 3;  A(0,1) = 2; A(0, 2) = 9;
+        A(1,0) = -3; A(1,1) = 5; A(1, 2) = 1;
+        A(2,0) = 7;  A(2,1) = 1; A(2, 2) = -2;
+
+        TMatrix B(2,2);
+        B(0,0) = 1;  B(0,1) = -2; 
+        B(1,0) = 2;  B(1,1) = 0;
+
+        TMatrix result = A - B;
+        ensure_equals("Status should be kNull", result.getStatus(), TVNumericValue::kNull);
+        ensure_not("There should be and error message", result.getError().empty());
     }
 
 

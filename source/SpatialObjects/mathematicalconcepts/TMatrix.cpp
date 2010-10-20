@@ -100,6 +100,10 @@ void TMatrix::operator=(const double& value)
 TMatrix & TMatrix::operator+=(const TMatrix & right)
 {//replaces this matrix by its sum with a second one
     setStatus(this->testStatus(right));
+    if(numRows()!=right.numRows() || numCols()!=right.numCols()) {
+        setStatus(kNull);
+        fError += "Cannot add matrices of a different sizes";
+    }
     if(getStatus()!=kNull)
     {
         fImpl->operator+=(*right.fImpl);
@@ -118,6 +122,10 @@ TMatrix TMatrix::operator+(const TMatrix & right) const
 TMatrix & TMatrix::operator-=(const TMatrix& right)
 {//replaces this matrix by its difference with a second one
     setStatus(this->testStatus(right));
+    if(numRows()!=right.numRows() || numCols()!=right.numCols()) {
+        setStatus(kNull);
+        fError += "Cannot calculate a difference between the matrices of a different sizes";
+    }
     if(getStatus()!=kNull)
     {
         fImpl->operator-=(*right.fImpl);
