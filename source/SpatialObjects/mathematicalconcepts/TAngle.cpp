@@ -27,9 +27,6 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
 // other forward declarations
 #include	"TAngle.h"
 #include	"TDouble.h"
@@ -38,19 +35,6 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 
 
 //ClassImp(TAngle)
-
-
-//////////////////////////////////////////////////////////////////////
-// Definitions and Initialisations
-//////////////////////////////////////////////////////////////////////
-
-const TReal	TAngle::kPi = acosq(-LITERAL(1.0));  // Pi = LITERAL(3.14159265358979323844);
-const TReal	TAngle::kRadiansToGons = LITERAL(200.0)/kPi;
-const TReal	TAngle::kGonsToRadians = kPi/LITERAL(200.0);
-const TReal	TAngle::kRadiansToDecDegs = LITERAL(180.0)/kPi;
-const TReal	TAngle::kDecDegsToRadians = kPi/LITERAL(180.0);
-const TReal	TAngle::seuil = LITERAL(0.00000000001);
-
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -79,66 +63,6 @@ TAngle::TAngle(const TAngle& angle)
 	fValue=angle.fValue;
 	setStatus( angle.getStatus() );
 }
-//////////////////////////////////////////////////////////////////////
-// Static Member Functions (multiples de pi comme TAngle)
-//////////////////////////////////////////////////////////////////////
-
- 
-const TAngle TAngle::pi()
-{	// Defines the angle Pi
-	TAngle pi(kPi);
-	return pi;
-}
-
-
-const TAngle TAngle::twoPi()
-{   // Defines the angle 2*Pi 
-	TAngle twoPi(LITERAL(2.0)*kPi);
-	return twoPi;
-}
-
-
-const TAngle TAngle::piBy2()
-{   // Defines the angle Pi/2
-	TAngle piBy2(kPi/LITERAL(2.0));
-	return piBy2;
-}
-
-
-const TAngle TAngle::piBy4()
-{   // Defines the angle Pi/4
-	TAngle piBy4(kPi/LITERAL(4.0));
-	return piBy4;
-}
-
-
-const TReal  TAngle::radsToGonsFactor()
-{   // Provides a scale factor to convert from angles 
-	//in radians to angles in gons
-	return  kRadiansToGons;
-}
-
-
-const TReal  TAngle::gonsToRadsFactor()
-{   // Provides a scale factor to convert from angles 
-	// in gons to angles in radians
-	return  kGonsToRadians;
-}
-
-
-const TReal  TAngle::radsToDecDegsFactor()
-{   // Provides a scale factor to convert from angles 
-	// in radians to angles in decimal degrees
-	return  kRadiansToDecDegs;
-}
-
-
-const TReal  TAngle::decDegsToRadsFactor()
-{   // Provides a scale factor to convert from angles 
-	// in decimal degrees to angles in radians
-	return  kDecDegsToRadians;
-}
-
 
 //////////////////////////////////////////////////////////////////////
 // Member Functions
@@ -148,13 +72,13 @@ void TAngle::normaliseAngle()
 {
 	//modification du 08/05/2003 pour le calcul les angles seront exprimes entre -pi et pi
 
-	while (fValue > kPi - seuil)
+    while (fValue > IPP_PI - seuil())
 	{
-		fValue -= LITERAL(2.0) * kPi;
+        fValue -= IPP_2PI;
 	}
-	while (fValue < -kPi + seuil)
+    while (fValue < -IPP_PI + seuil())
 	{
-		fValue += LITERAL(2.0) * kPi;
+        fValue += IPP_2PI;
 	}
 }
 
@@ -178,7 +102,7 @@ bool	TAngle::setGonsValue(const AngleValue value)
 {	// set the angle value to the given gons value
 	
 	// convert the given value to radians
-	fValue = value * kGonsToRadians;
+    fValue = value * gonsToRadsFactor();
 
 	//normalise the radians value
 	normaliseAngle();
@@ -227,7 +151,7 @@ bool	TAngle::setDMSValue(const	Degrees	degs,
 
 
 	// convert the given values to radians
-	fValue = angleSign * (TReal(absDegs) + ((TReal(absMins))/LITERAL(60.0)) + (absSecs/LITERAL(3600.0))) * kDecDegsToRadians;
+    fValue = angleSign * (TReal(absDegs) + ((TReal(absMins))/LITERAL(60.0)) + (absSecs/LITERAL(3600.0))) * decDegsToRadsFactor();
 
 	//normalise the radians value
 	normaliseAngle();
@@ -247,7 +171,7 @@ Minutes	TAngle::getMinutesValue() const
 	TReal	decMins;
 	
 	// determine the degrees and minutes values
-	decDegs = fValue * kRadiansToDecDegs; 
+    decDegs = fValue * radsToDecDegsFactor(); 
 #if _DEBUG && __INTEL_COMPILER
 	decMins = LITERAL(60.0)*modfq(decDegs, degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
@@ -279,7 +203,7 @@ Seconds	TAngle::getSecondsValue() const
 	TReal	seconds;
 
 	// determine the degrees, minutes, and seconds values
-	decDegs = fValue * kRadiansToDecDegs; 
+    decDegs = fValue * radsToDecDegsFactor(); 
 #if _DEBUG && __INTEL_COMPILER
 	decMins = LITERAL(60.0)*modfq(decDegs, degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
