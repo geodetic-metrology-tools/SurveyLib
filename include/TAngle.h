@@ -42,6 +42,7 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 #include	<float.h>
 #if __INTEL_COMPILER
 #include	<mathimf.h>
+#include    <ippdefs.h>
 #else
 #include <math.h>
 #endif
@@ -55,8 +56,6 @@ typedef	TReal	AngleValue;		// the value for the angle
 typedef	int		Degrees;		// the degrees of an angle
 typedef	int		Minutes;		// the minutes of an angle
 typedef	TReal	Seconds;		// the seconds of an angle
-//
-////////////////////////////////////////////////////////////////
 
 /*! \ingroup spatialobjects
 	@{*/
@@ -96,21 +95,21 @@ public:
 	/*!@name static member functions */
 	//@{
 	/*! Defines the angle Pi */ 
-	static const TAngle pi();
+    static const TAngle pi() { return TAngle(IPP_PI); }
 	/*! Defines the angle 2xPi */
-	static const TAngle twoPi();
+    static const TAngle twoPi() { return TAngle(IPP_2PI); }
 	/*! Defines the angle Pi/2 */
-	static const TAngle piBy2();
+    static const TAngle piBy2() { return TAngle(IPP_PI2); }
 	/*! Defines the angle Pi/4 */
-	static const TAngle piBy4();
+    static const TAngle piBy4() { return TAngle(IPP_PI4); }
 	/*! Provides a scale factor to convert from angles in radians to angles in gons */
-	static const TReal  radsToGonsFactor();	
+    static const TReal  radsToGonsFactor() { return 200.0 / IPP_PI; }	
 	/*! Provides a scale factor to convert from angles in gons to angles in radians */
-	static const TReal  gonsToRadsFactor();
+    static const TReal  gonsToRadsFactor() { return IPP_PI / 200.0; }
 	/*! Provides a scale factor to convert from angles in radians to angles in degres */
-	static const TReal  radsToDecDegsFactor();
+    static const TReal  radsToDecDegsFactor() { return 180.0 / IPP_PI; }
 	/*! Provides a scale factor to convert from angles in degres to angles in radians */
-	static const TReal  decDegsToRadsFactor();
+    static const TReal  decDegsToRadsFactor() { return IPP_PI180; }
 	//@}
 	
 	
@@ -198,15 +197,7 @@ private:
 	/*! Enumeration indicating the sign of an angle value */
 	enum			ENumberSign {kNegative=-1, kZero, kPositive}; 
 
-	/*!@name angle conversion multiplication factors */
-	//@{
-	static const TReal	kPi; /*!< pi */
-	static const TReal	kRadiansToGons; /*!< convertion rad->gon factor */
-	static const TReal	kGonsToRadians; /*!< convertion gon->rad factor */
-	static const TReal	kRadiansToDecDegs; /*!< convertion rad->deg factor */
-	static const TReal	kDecDegsToRadians; /*!< convertion deg->rad factor */
-	static const TReal	seuil;
-	//@}
+    static const TReal seuil() { return LITERAL(0.00000000001); }
 
 	/*! normalise the angle value to lie between -2Pi and +2Pi */
 	void normaliseAngle();
@@ -241,29 +232,29 @@ inline AngleValue	TAngle::getGonsValue() const
 	AngleValue gValue = fValue;
 	while (gValue < 0)
 	{
-		gValue += LITERAL(2.0) * kPi;
+        gValue += IPP_2PI;
 	}
-	while (gValue >= LITERAL(2.0) * kPi - seuil)
+    while (gValue >= IPP_2PI - seuil())
 	{
-		gValue -= LITERAL(2.0) * kPi;
+        gValue -= IPP_2PI;
 	}
 	if (gValue < 0)
 	{
 		gValue = 0;
 	}
-	return (gValue * kRadiansToGons);
+    return (gValue * radsToGonsFactor());
 }
 
 
 inline AngleValue	TAngle::getSignedCCValue() const
 {	// get the CC (100 microgons) angular value for the angle
-	return fValue * kRadiansToGons * 10000;
+    return fValue * radsToGonsFactor() * 10000;
 }
 
 
 inline Degrees	TAngle::getDegreesValue() const
 {	// get the integer degrees of the angular value 
-	return Degrees(fValue * kRadiansToDecDegs);
+    return Degrees(fValue * radsToDecDegsFactor());
 }
 
 
