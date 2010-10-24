@@ -22,7 +22,7 @@
 // Forward declarations
 //
 #include <string>
-using namespace std;
+//using namespace std;
 //
 class  TAngle;
 class  TLength;

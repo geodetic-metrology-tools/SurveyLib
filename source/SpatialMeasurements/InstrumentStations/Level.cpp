@@ -7,7 +7,7 @@
 
 Level::~Level()
 {
-	hash_map<string, const Staff*>::iterator iter = staffs.begin();
+	stdext::hash_map<string, const Staff*>::iterator iter = staffs.begin();
 
 	while (iter != staffs.end())
 	{

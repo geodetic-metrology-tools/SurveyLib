@@ -2,7 +2,7 @@
 #define SPATIALOBSFNS_H
 #include <string>
 
-using namespace std;
+//using namespace std;
 
 #include "TGlobalDefs.h"
 

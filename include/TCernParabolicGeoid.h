@@ -32,7 +32,7 @@ class  TRefSystemFactory;
 
 #include  "TAGeoidModel.h"
 
-using namespace std;
+//using namespace std;
 // typedefs
 //
 //

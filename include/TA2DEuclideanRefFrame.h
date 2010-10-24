@@ -28,7 +28,7 @@
 #include  "TSpatialVector.h"
 
 #include  "TAReferenceFrame.h"
-using namespace std;
+//using namespace std;
 //
 //class  TVTransformation;
 // typedefs

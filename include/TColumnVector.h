@@ -26,7 +26,7 @@ Designed to be easiliy usable with matrix/vector functions of the NagC math libr
 ////////////////////////////////////////////////////////////////
 //
 #include  <list>
-using namespace std;
+//using namespace std;
 //
 //class  **classname**;
 class TDouble;

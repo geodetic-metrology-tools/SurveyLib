@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <stddef.h>
 #include <string>
-using namespace std;
+//using namespace std;
 
 #include "PtrGreater.h"
 

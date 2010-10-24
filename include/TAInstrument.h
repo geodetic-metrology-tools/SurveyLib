@@ -16,7 +16,7 @@
 
 //include files
 #include <string>
-using namespace std;
+//using namespace std;
 
 #include "TAFreeInstrument.h"
 

@@ -15,7 +15,7 @@
 
 
 #include <list>
-using namespace std;
+//using namespace std;
 
 class GyroscopeStation : public Station
 {
