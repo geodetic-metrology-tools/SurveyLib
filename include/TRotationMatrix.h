@@ -33,7 +33,7 @@ class TPositionVector;
 #include <string>
 #include <iostream>
 
-using namespace std;
+//using namespace std;
 
 //
 //typedefs

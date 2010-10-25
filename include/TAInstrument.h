@@ -36,7 +36,7 @@ public:
 
 protected:
 
-	TAInstrument(const string& id, const TLength* ics, const TLength* ih, const TLength* ihs);
+	TAInstrument(const std::string& id, const TLength* ics, const TLength* ih, const TLength* ihs);
 
 	const TLength* instrumentHeight;
 	const TLength* instrumentHeightSigma;		

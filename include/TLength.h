@@ -33,7 +33,7 @@
 
 #include  "TANumericValue.h"
 class TDouble;
-using namespace std;
+//using namespace std;
 
 //!Type Definition
 typedef	TReal	LengthValue;	// the value for the coordinate

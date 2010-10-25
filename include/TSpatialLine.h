@@ -19,7 +19,7 @@
 
 #include <list>
 #include <sstream>
-using namespace std;
+//using namespace std;
 
 #include "TAngle.h"
 #include "TSpatialPointName.h"
@@ -70,7 +70,7 @@ public:
 		/*!\rreturn the name of the line's second end point*/
 		virtual	TSpatialPointName	getSecondEndName() const;
 		/*!\return the line's name*/
-		virtual string				getName() const;
+		virtual std::string				getName() const;
 
 		/*!build the name (used only for TWorkingLines
 		if the line which is added to the list is not defined)*/
@@ -89,7 +89,7 @@ private:
 
 	TSpatialPointName			fFirstEndName;
 	TSpatialPointName			fSecondEndName;
-	string						fName;
+	std::string					fName;
 
 };
 /*@}*/
@@ -98,7 +98,7 @@ private:
 /*!@name Typedefs*/
 //@{
 /*! Type of the container used to store points */
-typedef list<TSpatialLine> SpatialLineContainer;
+typedef std::list<TSpatialLine> SpatialLineContainer;
 /*! Type of an iterator pointing to an element of the container */
 typedef SpatialLineContainer::iterator LineIterator;
 /*! Type of a const iterator pointing to an element of the container */

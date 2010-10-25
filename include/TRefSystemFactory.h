@@ -32,7 +32,7 @@
 #include <iomanip>
 
 #include <stddef.h>
-using namespace std;
+//using namespace std;
 
 class TAGeoidModel;
 class TReferenceEllipsoid;

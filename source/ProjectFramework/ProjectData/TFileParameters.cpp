@@ -112,7 +112,7 @@ bool  TFileParameters::setFileName( const string& filename )
 
 
 
-bool  TFileParameters::setFileName( const string& filename )
+bool  TFileParameters::setFileName( const std::string& filename )
 {	// Set the filename using the combined string
 	// returns "true" if the parameters are set correctly
 	bool retVal = true;
@@ -134,7 +134,7 @@ bool  TFileParameters::setFileName( const string& filename )
 
 
 
-bool  TFileParameters::setFilePath( const string& path )
+bool  TFileParameters::setFilePath( const std::string& path )
 {	// Set the path using the combined string
 	// returns "true" if the parameters are set correctly
 	bool retVal = true;
@@ -167,7 +167,7 @@ bool  TFileParameters::setFilePath( const string& path )
 
 
 
-bool  TFileParameters::setTypeFormat( const string& str )
+bool  TFileParameters::setTypeFormat( const std::string& str )
 {	// Set the filetype from the file filter
 	// returns "true" if the parameters are set correctly
 	
@@ -186,9 +186,9 @@ bool  TFileParameters::setTypeFormat( const string& str )
 
 
 //! get the full filename, both path and name
-string  TFileParameters::getFileName()  const
+std::string  TFileParameters::getFileName()  const
 { 
-	string fn;
+	std::string fn;
 	
 	if( fPath.empty() )
 	{
@@ -196,7 +196,7 @@ string  TFileParameters::getFileName()  const
 	}
 	else
 	{
-		stringstream path ;//(fPath, ios_base::out);
+		std::stringstream path ;//(fPath, ios_base::out);
 		path << fPath;
 		char c = '/';
 		bool qt = false;
@@ -230,7 +230,7 @@ bool  TFileParameters::defined()  const
 
 	// defined if the filename, file type and format
 	// have all been set
-	string  fn = getFileName();
+	std::string  fn = getFileName();
 	retVal = !(fn.empty())  
 				&&  fType != kNull 
 				&&  fFormat != kNullFormat;
@@ -256,7 +256,7 @@ void  TFileParameters::defaultValues()
 
 
 //! convert a file type from string form to enumerator form
-TFileParameters::EFileType  TFileParameters::toType( const string& type )
+TFileParameters::EFileType  TFileParameters::toType( const std::string& type )
 {
 	EFileType  result;
 
@@ -274,7 +274,7 @@ TFileParameters::EFileType  TFileParameters::toType( const string& type )
 
 
 //! convert a format from string form to enumerator form
-TFileParameters::ETextFormat  TFileParameters::toFormat( const string& format )
+TFileParameters::ETextFormat  TFileParameters::toFormat( const std::string& format )
 {
 	ETextFormat  result;
 

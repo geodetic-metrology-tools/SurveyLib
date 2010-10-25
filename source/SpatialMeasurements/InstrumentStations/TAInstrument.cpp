@@ -5,7 +5,7 @@
 
 #include "TAInstrument.h"
 
-TAInstrument::TAInstrument(const string& id, const TLength* ics, const TLength* ih, const TLength* ihs)
+TAInstrument::TAInstrument(const std::string& id, const TLength* ics, const TLength* ih, const TLength* ihs)
 	: TAFreeInstrument(id, ics)
 {
 	instrumentHeight = ih;

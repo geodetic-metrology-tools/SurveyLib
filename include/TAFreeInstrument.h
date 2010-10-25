@@ -28,11 +28,11 @@ public:
 
 	virtual	bool operator ==(const TAFreeInstrument& right) const;
 	
-	const string& getSetup() const;
+	const std::string& getSetup() const;
 
-	void setSetup(string setup);
+	void setSetup(std::string setup);
 
-	const string& getInstrumentID() const;
+	const std::string& getInstrumentID() const;
 
 	const TLength* getInstrumentCenteringSigma() const { return instrumentCenteringSigma; }
 	
@@ -43,10 +43,10 @@ public:
 
 protected:
 
-	TAFreeInstrument(const string& id, const TLength* ics);
+	TAFreeInstrument(const std::string& id, const TLength* ics);
 
-	string instrumentID;
-	string fSetup;	/*!< setup attribute */
+	std::string instrumentID;
+	std::string fSetup;	/*!< setup attribute */
 	
 	const TLength* instrumentCenteringSigma;			
 };

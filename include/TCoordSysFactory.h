@@ -28,7 +28,7 @@
 #include <iostream>
 #include <iomanip>
 #include <stddef.h>
-using namespace std;
+//using namespace std;
 
 class TVCoordinateSystem;
 // typedefs
@@ -88,7 +88,7 @@ private:
 private:
 
 	static TCoordSysFactory*			fCoordSysFactoryPtr; /*!< static member that contains a pointer to the unique instance of TCoordSysFactory */
-	vector<TVCoordinateSystem*>	fCoordSysList; /*!< vector of pointers to coordinate systems*/
+    std::vector<TVCoordinateSystem*>	fCoordSysList; /*!< vector of pointers to coordinate systems*/
 
 };
 /*@}*/

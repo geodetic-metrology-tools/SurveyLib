@@ -35,7 +35,7 @@
 //#include <iostream>
 #include "UEOIndices.h"
 #include <vector>
-using namespace std;
+//using namespace std;
 
 
 //! class for input matrices used in the ls-calculation
@@ -138,23 +138,23 @@ private:
 	MatrixIndex		fNbCnstr;/*!<number of free constraint: c */
 	MatrixIndex		fNbTotalCnstr;/*!<total number of constraint: c */
 
-	vector<TReal>*	firstDesignMatrixTransposedValues; /*!< matrix (u x e) for the parametric part of the model */
-	vector<int>*	firstDesignMatrixTransposedColPtr;
-	vector<int>*	firstDesignMatrixTransposedRowInd;
+	std::vector<TReal>*	firstDesignMatrixTransposedValues; /*!< matrix (u x e) for the parametric part of the model */
+	std::vector<int>*	firstDesignMatrixTransposedColPtr;
+	std::vector<int>*	firstDesignMatrixTransposedRowInd;
 
-	vector<TReal>*	secondDesignMatrixTransposedValues; /*!< matrix (o x e) for the parametric part of the model  */
-	vector<int>*	secondDesignMatrixTransposedColPtr;
-	vector<int>*	secondDesignMatrixTransposedRowInd;
+	std::vector<TReal>*	secondDesignMatrixTransposedValues; /*!< matrix (o x e) for the parametric part of the model  */
+	std::vector<int>*	secondDesignMatrixTransposedColPtr;
+	std::vector<int>*	secondDesignMatrixTransposedRowInd;
 
-	vector<TReal>*	constraintFirstDesignMatrixValues; /*!< matrix (c x u) for the conditional part of the model  */
-	vector<int>*	constraintFirstDesignMatrixColPtr;
-	vector<int>*	constraintFirstDesignMatrixRowInd;
+	std::vector<TReal>*	constraintFirstDesignMatrixValues; /*!< matrix (c x u) for the conditional part of the model  */
+	std::vector<int>*	constraintFirstDesignMatrixColPtr;
+	std::vector<int>*	constraintFirstDesignMatrixRowInd;
 
-	vector<TReal>*	constraintFirstDesignMatrixTransposedValues; /*!< matrix (u x c) for the conditional part of the model  */
-	vector<int>*	constraintFirstDesignMatrixTransposedColPtr;
-	vector<int>*	constraintFirstDesignMatrixTransposedRowInd;
+	std::vector<TReal>*	constraintFirstDesignMatrixTransposedValues; /*!< matrix (u x c) for the conditional part of the model  */
+	std::vector<int>*	constraintFirstDesignMatrixTransposedColPtr;
+	std::vector<int>*	constraintFirstDesignMatrixTransposedRowInd;
 
-	vector<TReal>*	weightMatrixValues; /*!< matrix (o x o) for observations weights */
+	std::vector<TReal>*	weightMatrixValues; /*!< matrix (o x o) for observations weights */
 
 	TColumnVector*	fMisclosureVector; /*!< vector (u) for misclosure errors */
 //	TReal			fS0APrioriScaleFactor; /*!< indicates if there is a priori scale factor or not */

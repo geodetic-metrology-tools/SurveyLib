@@ -13,7 +13,7 @@
 #include "TAMeasurement.h"
 
 #include <hash_map>
-using namespace stdext;
+//using namespace stdext;
 
 template <typename CalcParam>
 class TLSCalcWorkingUnknown {
@@ -83,7 +83,7 @@ public:
 
 protected:
 
-	hash_map<string, typename list<CalcParam>::iterator> calcParamsMap;
+    stdext::hash_map<string, typename list<CalcParam>::iterator> calcParamsMap;
 
 	list<CalcParam>	paramsList; /*!< list of calc parameters */
 

@@ -10,7 +10,7 @@
 
 #include <list>
 #include <string>
-using namespace std;
+//using namespace std;
 
 #include "TSpatialPoint.h"
 #include "TSpatialPosition.h"

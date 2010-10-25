@@ -28,7 +28,7 @@
 #include  "TModifiedLocalGeodeticRF.h"
 
 
-using namespace std;
+//using namespace std;
 //#include  "TLocalAstronomicalRefFrame.h"
 // typedefs
 //

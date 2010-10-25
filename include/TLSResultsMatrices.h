@@ -23,7 +23,7 @@
 #include "UEOIndices.h"
 
 
-using namespace std;
+//using namespace std;
 
 
 //!Class for result matrices of a least squares calculation

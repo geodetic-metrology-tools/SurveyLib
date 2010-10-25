@@ -31,7 +31,7 @@ class  TColumnVector;
 class  TDouble;
 #include	<list>
 
-using namespace std;
+//using namespace std;
 //
 #include  "TANumericValue.h"
 class TSparseMatrix;
@@ -166,7 +166,7 @@ public:
 		void clear();
 			
 		/*! Returns the error message */
-		string	getError() const { return fError; }
+		std::string	getError() const { return fError; }
 
 		/*! decompose square matrix N */
 		//virtual TMatrix dfact(int* n_pivot,int* pivot_i,int* pivot_j);
@@ -179,7 +179,7 @@ public:
 
 private:
 	TMatrixImpl * fImpl;
-	string			fError; /*!< errors generated from nagc functions */
+	std::string			fError; /*!< errors generated from nagc functions */
 };
 
 /*@}*/

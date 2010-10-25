@@ -13,7 +13,7 @@
 #include "TheodoliteStationROM.h"
 
 #include <list>
-using namespace std;
+//using namespace std;
 
 class TheodoliteStation : public Station
 {

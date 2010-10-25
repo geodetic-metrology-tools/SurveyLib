@@ -27,7 +27,7 @@ class    TReferenceEllipsoid;
 class	 TCoordinateSystem;
 #include	"TReferenceFrame.h"
 #include    <string>
-using namespace std;
+//using namespace std;
 // typedefs
 
 ////////////////////////////////////////////////////////////////

@@ -30,7 +30,7 @@ Copyright 2002 CERN EST/SU. All rights reserved.
 #include  "TXYHeProjection.h"
 #include  "TAReferenceFrame.h"
 
-using namespace std;
+//using namespace std;
 // typedefs
 //
 //

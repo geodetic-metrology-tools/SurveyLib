@@ -34,7 +34,7 @@
 //
 class  TAngle;
 #include "TRefSystemFactory.h"
-using namespace std;
+//using namespace std;
 //#include  "TVReferenceEllipsoid.h"
 //
 // typedefs

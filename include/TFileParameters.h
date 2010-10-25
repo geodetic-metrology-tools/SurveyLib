@@ -27,7 +27,7 @@
 // Forward declarations
 //
 #include  <string>
-using namespace std;
+//using namespace std;
 //
 //#include  "TAQtStreamFormatter.h"
 // typedefs
@@ -75,19 +75,19 @@ public:
 		TFileParameters& operator=( const TFileParameters& );
 		
 		//! set the full filename, both path and name
-		bool  setFileName( const string& name );
-		bool  setFilePath( const string& path );
+        bool  setFileName( const std::string& name );
+		bool  setFilePath( const std::string& path );
 		//! set the file type
-		bool  setTypeFormat( const string& );
+		bool  setTypeFormat( const std::string& );
 		//! clear the file parameters and set the default values 
 		void  defaultValues();
 
 		//! get the full filename, both path and name
-		string  getFileName()  const;  
+		std::string  getFileName()  const;  
 		//! get the name of the file
-		string  getName()  const  { return fName; }
+		std::string  getName()  const  { return fName; }
 		//! get the path for the file
-		string  getPath()  const  { return fPath; }
+		std::string  getPath()  const  { return fPath; }
 		//! get the file type
 		EFileType  getType()  const  { return fType; }
 		//! get the text stream's format
@@ -101,18 +101,18 @@ private:
 	/*!@name private member functions */
 	//@{	
 		//! convert a file type from string form to enumerator form 
-		EFileType  toType( const string& format );
+		EFileType  toType( const std::string& format );
 
 		//! convert a format from string form to enumerator form 
-		ETextFormat  toFormat( const string& format );
+		ETextFormat  toFormat( const std::string& format );
 
 	//@}
 
 
 private:
 
-	string  fName;
-	string  fPath;
+    std::string  fName;
+    std::string  fPath;
 	EFileType  fType;
 	ETextFormat  fFormat;
 

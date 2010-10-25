@@ -26,7 +26,7 @@ The last transformation added is applied first in the transformation of an objec
 // Forward declarations
 //
 #include <list>
-using namespace std;
+//using namespace std;
 
 #include  "TAffineTransformWrapper.h"
 #include  "TAAffineTransformation.h"
@@ -43,7 +43,7 @@ class  TCompositeAffTransform : public TAAffineTransformation//, virtual public 
 {
 public:
 	//typedefs
-	typedef list<TAffineTransformWrapper> CompositeTransformationSet;
+    typedef std::list<TAffineTransformWrapper> CompositeTransformationSet;
 	typedef CompositeTransformationSet::iterator CompositeIterator;
 	typedef CompositeTransformationSet::const_iterator ConstCompositeIter;
 

@@ -67,7 +67,7 @@ void TCoordSysFactory::deleteCoordSysFactory()
 	{
 		if(fCoordSysList.size() != 0)
 		{
-			vector<TVCoordinateSystem*>::iterator iter; 
+			std::vector<TVCoordinateSystem*>::iterator iter; 
 			while(fCoordSysList.begin() != fCoordSysList.end())
 			{
 				iter = fCoordSysList.begin();
@@ -114,8 +114,8 @@ void	TCoordSysFactory::init()
 
 TVCoordinateSystem* TCoordSysFactory::getCoordSys(const ECoordSys coordSysId)
 {// return a pointer to the coordinate system askes for
-	vector<TVCoordinateSystem*>::iterator iter = fCoordSysList.begin();
-	vector<TVCoordinateSystem*>::iterator iterEnd = fCoordSysList.end();
+	std::vector<TVCoordinateSystem*>::iterator iter = fCoordSysList.begin();
+	std::vector<TVCoordinateSystem*>::iterator iterEnd = fCoordSysList.end();
 	
 	while (iter != iterEnd)
 	{
@@ -125,7 +125,7 @@ TVCoordinateSystem* TCoordSysFactory::getCoordSys(const ECoordSys coordSysId)
 	}
 
 
-	cerr << "Error : Id. not in CoordSysList";
+	std::cerr << "Error : Id. not in CoordSysList";
 	exit(EXIT_FAILURE);
 
 	//modif du 25/10 (INSURE)

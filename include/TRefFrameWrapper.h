@@ -30,7 +30,7 @@
 //
 #include  <string>
 #include  <set>
-using namespace std;
+//using namespace std;
 //
 //class  TVReferenceFrame;
 class	TVTransformation;
@@ -67,7 +67,7 @@ public:
 	/**@name Member Functions */
 	//@{
 		/// Return the name of the reference frame
-		string  getName() const;
+		std::string  getName() const;
 
 		/// Copy Assignment Operator 
 		TRefFrameWrapper& operator=( const TRefFrameWrapper& );

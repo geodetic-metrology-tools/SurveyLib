@@ -32,7 +32,7 @@
 // Forward declarations
 //
 #include  <string>
-using namespace std;
+//using namespace std;
 //
 class		TAReferenceFrame;
 #include	"TAReferenceFrame.h"

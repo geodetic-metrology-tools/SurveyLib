@@ -18,7 +18,7 @@
 class TMatrix;
 class TLSInputMatrices;
 class TLSResultsMatrices;
-using namespace std;
+//using namespace std;
 
 //! Class for a least squares computer used when there are only observation equations
 class TLSParametricMtdComputer {
@@ -42,11 +42,11 @@ public:
 	bool computeFreeOrConstrainedResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*, bool isCombinedCase, bool isFreeNetworkOrECHO);
 
 	/*! Access to eventual error */
-	string		getError() const { return fError; }
+    std::string		getError() const { return fError; }
 
 private:
 
-	string			fError;		/*!< errors during calculation */
+	std::string			fError;		/*!< errors during calculation */
 	int				count;
 };
 

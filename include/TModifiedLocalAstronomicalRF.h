@@ -26,7 +26,7 @@
 
 #include  "TAModifiedLocalAstronomicalRF.h"
 
-using namespace std;
+//using namespace std;
 // typedefs
 //
 //

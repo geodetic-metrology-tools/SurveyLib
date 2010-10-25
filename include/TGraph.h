@@ -27,7 +27,7 @@
 #include <iomanip>
 
 #include <stddef.h>
-using namespace std;
+//using namespace std;
 
 class TAGeoidModel;
 class TReferenceEllipsoid;
@@ -52,9 +52,9 @@ public:
 
 		/*!@typedef Graph Structure type definition*/
 		//@{
-			typedef map<int, TTransformWrapper, less<int> > Successor;
-			typedef pair<TRefFrameWrapper, Successor> RefFrame;
-			typedef vector<RefFrame> GraphType;
+    typedef std::map<int, TTransformWrapper, std::less<int> > Successor;
+            typedef std::pair<TRefFrameWrapper, Successor> RefFrame;
+			typedef std::vector<RefFrame> GraphType;
 			typedef GraphType::iterator RefFrameIterator;
 			typedef GraphType::const_iterator RefFrameConstIterator;
 		//@}
@@ -69,7 +69,7 @@ public:
 		
 
 			/*! Display of the TGraph structure */
-			friend ostream& operator <<(ostream& os, TGraph& graph)
+			friend std::ostream& operator <<(std::ostream& os, TGraph& graph)
 			{//dislay of vertices with successors
 				for (unsigned int i = 0; i < graph.size(); ++i)
 				{
@@ -89,7 +89,7 @@ public:
 
 			/*! Return the transformation between two reference frames
 				\return a vector of Reference Frame transformations */
-			vector<TARefFrameTransformation*> getTransform(TRefFrameWrapper& from, TRefFrameWrapper& to);
+			std::vector<TARefFrameTransformation*> getTransform(TRefFrameWrapper& from, TRefFrameWrapper& to);
 		//@}	
 	
 		static void deleteGraph();	
@@ -142,10 +142,10 @@ private:
 			\param pred vector of integer containing indexes of the transformation just before
 			\param tranform
 			\param start the index of the reference frame from which the tranformation is wanted*/
-		void path(vector<int>& trans, vector<int>& pred, vector<TTransformWrapper>& transform, int start);
+		void path(std::vector<int>& trans, std::vector<int>& pred, std::vector<TTransformWrapper>& transform, int start);
 
 		/*! fill the last transformation object with the current transformation*/
-		void fillLastTransformation(const string from, const string to, const vector<TARefFrameTransformation*> lastTransform);
+		void fillLastTransformation(const std::string from, const std::string to, const std::vector<TARefFrameTransformation*> lastTransform);
 	//@}
 
 
@@ -157,13 +157,13 @@ private:
 	GraphType							C;
 
 	/*! last transformation asked for */
-	vector<TARefFrameTransformation*>	fLastTransformation;
+	std::vector<TARefFrameTransformation*>	fLastTransformation;
 
 	/*!name of the source referenece frame of the last transformation */
-	string								fLastFrom;
+	std::string								fLastFrom;
 
 	/*!name of the destination referenece frame of the last transformation */
-	string								fLastTo;
+	std::string								fLastTo;
 };
 /*@}*/
 

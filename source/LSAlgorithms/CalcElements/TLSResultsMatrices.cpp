@@ -40,7 +40,7 @@ TLSResultsMatrices::TLSResultsMatrices(TColumnVector* solut, TColumnVector* resi
 									   TReal sigm2)
 {// constructor setting the results
 
-	cout<<(double) sigm2<<endl<<endl;
+	std::cout<<(double) sigm2<<std::endl<<std::endl;
 	fSolutionVctr = new TColumnVector (*solut);
 	fResidualsVctr = new TColumnVector (*resid);
 	fSigmaZero2 = sigm2;

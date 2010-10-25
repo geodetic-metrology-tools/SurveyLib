@@ -84,7 +84,7 @@ public:
 		/*!Gets the constraint's point name*/
 		TSpatialPointName				getPoint() const;
 		/*!Gets the constraint's name */
-		string							getName() const;
+		std::string							getName() const;
 
 	//@}
 
@@ -95,7 +95,7 @@ public:
 		virtual void				ifNotDoneSetCnstrBearing(TAngle cBear);
 		/*!Sets the constraint's name if it isn't done yet
 		\param name the constraint's name to set */
-		virtual void				ifNotDoneSetName(const string name);
+		virtual void				ifNotDoneSetName(const std::string name);
 	//@}
 
 	/*!@name Comments methods*/
@@ -107,16 +107,16 @@ public:
 		virtual void				setId(int id) { fIdentifier = id; return;}
 
 		/*!@return the comment of the constraint*/
-		virtual string				getComment() const { return fComment;}
+		virtual std::string				getComment() const { return fComment;}
 		/*!sets the comment of the constraint
 		\param com a string*/
-		virtual void				setComment(string com) { fComment = com; return;}
+		virtual void				setComment(std::string com) { fComment = com; return;}
 
 		/*!@return the head comment of the constraint*/
-		virtual string				getHeaderComment() const { return fHeaderComment;}
+		virtual std::string				getHeaderComment() const { return fHeaderComment;}
 		/*!sets the head comment of the constraint
 		\param com the comment line as a string*/
-		virtual void				setHeaderComment(string com) { fHeaderComment = com; return;}
+		virtual void				setHeaderComment(std::string com) { fHeaderComment = com; return;}
 
 		int getObservationID() const { return observationID; }
 
@@ -125,12 +125,12 @@ public:
 private:
 
 	TSpatialPointName				fRefPoint;/*!<constraint's point name*/
-	string							fName; /*!< name of the constrained point */
+	std::string							fName; /*!< name of the constrained point */
 	TAngle							fConstraintBearing; /*!< bearing of the radial constraint */
 
 	int								fIdentifier; /*< identifier from geode */
-	string							fComment; /*< comment from geode*/
-	string							fHeaderComment; /*< head comment line (starting with % in input file)*/
+	std::string							fComment; /*< comment from geode*/
+	std::string							fHeaderComment; /*< head comment line (starting with % in input file)*/
 
 	int observationID;
 
@@ -141,7 +141,7 @@ private:
 	/*!@name Typedefs*/
 	//@{
 		/*!Type of the container storing the radial offset constraints */
-		typedef list< TOrientationCnstr > OrieCnstrContainer;
+		typedef std::list< TOrientationCnstr > OrieCnstrContainer;
 		/*!Type of the iterators pointing to radial offset constraints */
 		typedef OrieCnstrContainer::iterator OrieCnstrIterator;
 		/*! Type of the constant iterators pointing to radial offset constraints */

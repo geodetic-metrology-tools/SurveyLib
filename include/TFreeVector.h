@@ -33,7 +33,7 @@ class TDouble;
 class TScalar;
 
 #include "TACoordSysVector.h"
-using namespace std;
+//using namespace std;
 
 //
 //
