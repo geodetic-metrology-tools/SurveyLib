@@ -32,4 +32,18 @@ namespace tut
         //std::cout << test_value << std::endl;        
         //std::cout << TAngle::decDegsToRadsFactor() << std::endl;
     }
+
+    template<>
+    template<>
+    void object::test<2>()
+    {
+        set_test_name("getSecondsValue and getMinutesValue test (changed while refactoring the Quad)");
+        TAngle angle1(0.987654321);
+        ensure_equals("getMinutesValue", angle1.getMinutesValue(), 35);
+        ensure_distance("getSecondsValue", angle1.getSecondsValue(), TReal(18.3271602), TReal(1e-5));
+
+        TAngle angle2(-0.01);
+        ensure_equals("getMinutesValue", angle2.getMinutesValue(), -34);
+        ensure_distance("getSecondsValue", angle2.getSecondsValue(), TReal(22.6480625), TReal(1e-5));
+    }
 }

@@ -172,13 +172,8 @@ Minutes	TAngle::getMinutesValue() const
 	
 	// determine the degrees and minutes values
     decDegs = fValue * radsToDecDegsFactor(); 
-#if _DEBUG && __INTEL_COMPILER
-	decMins = LITERAL(60.0)*modfq(decDegs, degs);	// if the decimal degrees are negative
-										// BOTH the degrees and minutes will be negative
-#else
 	decMins = LITERAL(60.0)*modfq(decDegs, &degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
-#endif
 
 	// determine the minutes value with the appropriate sign
 	if (int(degs) == 0)
@@ -204,17 +199,10 @@ Seconds	TAngle::getSecondsValue() const
 
 	// determine the degrees, minutes, and seconds values
     decDegs = fValue * radsToDecDegsFactor(); 
-#if _DEBUG && __INTEL_COMPILER
-	decMins = LITERAL(60.0)*modfq(decDegs, degs);	// if the decimal degrees are negative
-										// BOTH the degrees and minutes will be negative
-	seconds = LITERAL(60.0)*modfq(decMins, mins);	// if the decimal minutes are negative
-										// BOTH the minutes and seconds will be negative
-#else
 	decMins = LITERAL(60.0)*modfq(decDegs, &degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
 	seconds = LITERAL(60.0)*modfq(decMins, &mins);	// if the decimal minutes are negative
 										// BOTH the minutes and seconds will be negative
-#endif
 
 	// return the seconds value with the appropriate sign
 	if (int(degs) == 0  &&  int(mins) == 0)

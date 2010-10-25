@@ -15,8 +15,9 @@ include_directories (
 
 set(UnitTests_SOURCES
 
-        testTAngle.cpp
+    testTAngle.cpp
 	testTMatrix.cpp
+	testQuadSupport.cpp
 
 	testTransformations.cpp
 	
