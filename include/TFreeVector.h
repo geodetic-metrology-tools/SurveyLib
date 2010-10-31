@@ -23,11 +23,7 @@
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-#if __INTEL_COMPILER
-#include	<mathimf.h>
-#else
 #include <math.h>
-#endif
 
 class TDouble;
 class TScalar;

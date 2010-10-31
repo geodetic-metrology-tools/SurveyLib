@@ -20,12 +20,8 @@
 // other forward declarations
 #include  "TAReferenceFrame.h"
 #include  "TSpatialVectorError.h"
-#if __INTEL_COMPILER
-#include	<mathimf.h>
-#else
-#include <math.h>
-#endif
 #include  "TAngle.h"
+#include <math.h>
 //#include  "TReferenceEllipsoid.h"
 ////////////////////////////////////////////////////////////////
 

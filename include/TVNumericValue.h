@@ -19,11 +19,7 @@
 #endif // _MSC_VER >= 1000
 
 #include "Quad.h"
-#if __INTEL_COMPILER
-#include	<mathimf.h>
-#else
 #include <math.h>
-#endif
 
 ////////////////////////////////////////////////////////////////
 // Forward declarations

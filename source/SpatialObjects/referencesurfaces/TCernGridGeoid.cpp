@@ -5,11 +5,7 @@
 
 #include "TCernGridGeoid.h"
 
-#if __INTEL_COMPILER
-#include	<mathimf.h>
-#else
 #include <math.h>
-#endif
 #include <valarray>
 #include <vector>
 

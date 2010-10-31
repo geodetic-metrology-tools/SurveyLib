@@ -17,13 +17,9 @@
 #include  "TAReferenceFrame.h"
 #include  "TReferenceEllipsoid.h"
 #include  "TSpatialPosition.h"
-#if __INTEL_COMPILER
-#include	<mathimf.h>
-#else
-#include <math.h>
-#endif
 #include  "TLength.h"
 #include  "TAngle.h"
+#include  <math.h>
 ////////////////////////////////////////////////////////////////
 
 

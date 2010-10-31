@@ -72,13 +72,13 @@ void TAngle::normaliseAngle()
 {
 	//modification du 08/05/2003 pour le calcul les angles seront exprimes entre -pi et pi
 
-    while (fValue > IPP_PI - seuil())
+    while (fValue > M_PI - seuil())
 	{
-        fValue -= IPP_2PI;
+        fValue -= 2*M_PI;
 	}
-    while (fValue < -IPP_PI + seuil())
+    while (fValue < -M_PI + seuil())
 	{
-        fValue += IPP_2PI;
+        fValue += 2*M_PI;
 	}
 }
 

@@ -24,11 +24,7 @@
 // Forward declarations
 //
 //#include	<float.h>
-#if __INTEL_COMPILER
-#include	<mathimf.h>
-#else
-#include <math.h>
-#endif
+#include    <math.h>
 //#include	<assert.h>
 #include    <string>
 //

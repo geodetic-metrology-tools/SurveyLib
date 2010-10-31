@@ -92,9 +92,11 @@ namespace tut
         foo = value;
         ensure_distance("Assignment operator (TReal) ", foo, value, TReal(1e-9));
 
+#ifdef __INTEL_COMPILER
         // Assignment operator (from _Quad)
         foo = _Quad(5.25);
         ensure_distance("Assignment operator (_Quad) ", foo, TReal(5.25), TReal(1e-9));
+#endif
 
         // Assignment operator (from double)
         foo = 6.24424;
@@ -158,7 +160,9 @@ namespace tut
     }
 
     int fun(TReal val) {return 1;}
+#ifdef __INTEL_COMPILER
     int fun(double val) {return 2;}
+#endif
     int fun(long double val) {return 2;}
     int fun(int val) {return 4;}
     template<>

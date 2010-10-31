@@ -211,7 +211,7 @@ private:
 
 namespace std {
     template<>
-    void swap(TDataParameters & lhs, TDataParameters & rhs)
+    inline void swap(TDataParameters & lhs, TDataParameters & rhs)
     {
         lhs.swap(rhs);
     }
