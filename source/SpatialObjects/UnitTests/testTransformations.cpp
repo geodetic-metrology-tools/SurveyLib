@@ -231,7 +231,7 @@ namespace tut
 		
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
-        position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95));
+        ensure("Transformation OK", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95)));
         ensure_distance("LV95 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
 		ensure_distance("LV95 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
 		ensure_distance("LV95 H", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
@@ -249,7 +249,7 @@ namespace tut
 		
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
-        position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
+        ensure("Transformation OK", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus)));
         
 
         ensure_equals("CH1903+ Phi (Deg)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getDegreesValue(), 47);
@@ -263,4 +263,5 @@ namespace tut
         ensure_distance("CH1903+ H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<TReal>(457.138), static_cast<TReal>(1e-3));
 
 	}
+
 }
