@@ -19,7 +19,7 @@ TALSCalcParameter::TALSCalcParameter(const TALSCalcParameter& source) {
 
 
 // Constructor using an identifier
-TALSCalcParameter::TALSCalcParameter(string name) : fName(name) 
+TALSCalcParameter::TALSCalcParameter(const std::string & name) : fName(name) 
 {
 }
 
@@ -39,7 +39,7 @@ bool  TALSCalcParameter::operator==(const TALSCalcParameter& right) const {
 }
 
 // Returns the parameter's name
-string TALSCalcParameter::getName() const {
+std::string TALSCalcParameter::getName() const {
 
 	return fName;
 }

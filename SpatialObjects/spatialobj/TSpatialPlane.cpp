@@ -13,7 +13,7 @@
 TSpatialPlane::TSpatialPlane()
 {//default comstructor
 
-	string name = "";
+	std::string name = "";
 	TSpatialPointName sPname (name);
 	fFirstPointName = sPname;
 	fSecondPointName = sPname;
@@ -42,15 +42,15 @@ TSpatialPlane::TSpatialPlane(const TSpatialPointName firstPointName, const TAngl
 {//constructor for a vertical plane
 
 	fFirstPointName = firstPointName;
-	string name = "";
+	std::string name = "";
 	TSpatialPointName sPname (name);
 	fSecondPointName = sPname;
 
 	fAngle = angle;
 
-	string str = firstPointName.getName()+"orientationRadians";
-	real i = angle.getRadiansValue();
-	ostringstream oss;
+	std::string str = firstPointName.getName()+"orientationRadians";
+	TReal i = angle.getRadiansValue();
+	std::ostringstream oss;
 	oss << str << (double) i;
 	fName = oss.str();
 }
@@ -111,15 +111,15 @@ bool	TSpatialPlane::ifNotDoneDefinePlane(const TSpatialPointName firstPointName,
 	if(!(isDefine()))
 	{
 		fFirstPointName = firstPointName;
-		string name = "";
+		std::string name = "";
 		TSpatialPointName sPname (name);
 		fSecondPointName = sPname;
 
 		fAngle = angle;
 
-		string str = firstPointName.getName()+"orientationRadians";
-		real i = angle.getRadiansValue();
-		ostringstream oss;
+		std::string str = firstPointName.getName()+"orientationRadians";
+		TReal i = angle.getRadiansValue();
+		std::ostringstream oss;
 		oss << str << (double) i;
 		fName = oss.str();
 
@@ -142,7 +142,7 @@ TSpatialPointName TSpatialPlane::getSecondPointName() const
 }
 
 
-string	TSpatialPlane::getName() const
+std::string	TSpatialPlane::getName() const
 {// gets the Plane's name
 	return fName;
 }

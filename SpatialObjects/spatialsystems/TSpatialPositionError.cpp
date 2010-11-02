@@ -20,15 +20,11 @@
 // other forward declarations
 #include  "TAReferenceFrame.h"
 #include  "TSpatialPositionError.h"
-#if __INTEL_COMPILER
-#include	<mathimf.h>
-#else
-#include <math.h>
-#endif
 #include  "TLength.h"
 #include  "TAngle.h"
 //#include  "TReferenceEllipsoid.h"
 #include  "TSpatialPosition.h"
+#include <math.h>
 ////////////////////////////////////////////////////////////////
 
 

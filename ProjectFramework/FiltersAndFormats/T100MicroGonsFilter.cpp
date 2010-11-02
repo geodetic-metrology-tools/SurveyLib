@@ -60,7 +60,7 @@ T100MicroGonsFilter *T100MicroGonsFilter::instance()
 void	T100MicroGonsFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 {	// function to get a gons angle from a QTextStream object
 	// and set the value in a TAngle object
-	real	gons;
+	TReal	gons;
 
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')

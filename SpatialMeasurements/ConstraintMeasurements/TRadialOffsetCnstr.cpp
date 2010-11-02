@@ -131,7 +131,7 @@ TSpatialPointName TRadialOffsetCnstr::getPoint() const
 	return fPoint;
 }
 
-string TRadialOffsetCnstr::getName() const
+std::string TRadialOffsetCnstr::getName() const
 {
 	return fName;
 }
@@ -156,7 +156,7 @@ void	TRadialOffsetCnstr::ifNotDoneSetCnstrBearing(TAngle cBear)
 }
 
 
-void	TRadialOffsetCnstr::ifNotDoneSetName(string name)
+void	TRadialOffsetCnstr::ifNotDoneSetName(std::string name)
 {//Sets the constraint's width if it isn't done yet
 
 	if ( fName == "")

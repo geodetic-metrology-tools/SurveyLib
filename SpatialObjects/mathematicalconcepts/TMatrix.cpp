@@ -10,25 +10,12 @@ Designed to be easiliy usable with matrix functions of the NagC math library */
 //////////////////////////////////////////////////////////////////////
 
 
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
 #include "TDouble.h"
-#include  "TMatrix.h"
+#include "TMatrix.h"
 #include "TColumnVector.h"
 #include "TSparseMatrix.h"
 
-//#include	"vecmatdefs.h"
-//#include	"errmesg.h"
-//#include	"geo_utils.h"
-//#include	"vecmat.h"
-//#include	"ptcovdefs.h"
-//#include	"primtvdefs.h"
-//#include	"libgenmat.h"
-//#include	"liblsapps.h"
-//#include	"libgeofit.h"
+#include <TMatrixImpl.h>
 
 #include <iostream>
 using namespace std;
@@ -43,228 +30,180 @@ using namespace std;
 //////////////////////////////////////////////////////////////////////
 
 TMatrix::TMatrix()
+: fImpl(new TMatrixImpl)
 {//default constructor
-	fMatrix = 0;
-	fNbRows = 0;
-	fNbCols = 0;
-	fError = "";
 	setStatus( TANumericValue::kNull );
 }
 
-TMatrix::TMatrix(const TDouble& value)
+// TODO: Check who is using that
+TMatrix::TMatrix(const TDouble & value)
+: fImpl(new TMatrixImpl(1,1,value.getValue()))
 {//Constructor return the matrice (1,1) with (1,1)=value ..... 
-	fNbRows = 1;
-	fNbCols = 1;
-	fError = "";
-	fMatrix = new double [1];
-	*fMatrix = value.getValue();
 	setStatus( TANumericValue::kKnown );
 }
 
 
-TMatrix::TMatrix(int nRows,int nCols):fNbRows(nRows), fNbCols(nCols)
+TMatrix::TMatrix(int nRows, int nCols)
+: fImpl(new TMatrixImpl(nRows, nCols, 0.0))
 {//Constructor setting the dimensions of the matrix
-
-	if( (fNbRows > 0) && (fNbCols > 0) )
-	{
-		fMatrix = new double [fNbRows * fNbCols];
-		(*this) = LITERAL(0.0);
-		setStatus( TANumericValue::kKnown );
-	}
-	else
-	{
-		fNbRows = 1;
-		fNbCols = 1;
-		fMatrix = new double [fNbRows * fNbCols];
-		(*this) = LITERAL(0.0);
-		fError = "Invalid dimension" + '\n';
-		setStatus( TANumericValue::kNull );
-	}
+    setStatus( TANumericValue::kKnown );	
+	//{
+	//	fNbRows = 1;
+	//	fNbCols = 1;
+	//	fMatrix = new double [fNbRows * fNbCols];
+	//	(*this) = LITERAL(0.0);
+	//	fError = "Invalid dimension" + '\n';
+	//	setStatus( TANumericValue::kNull );
+	//}
 }	
 		
 
-TMatrix::TMatrix( const  TMatrix& source ):fNbRows(source.fNbRows), fNbCols(source.fNbCols)
+TMatrix::TMatrix(const TMatrix & source)
+: fImpl(new TMatrixImpl(*(source.fImpl))),
+  fError(source.fError)
 {//!Copy constructor
-	//dimensioning of the matrix
-	fMatrix = new double [fNbRows * fNbCols];
-
-	//copy the matrix coefficients
-	for (int i = 0; i<(fNbRows * fNbCols); i++)
-		fMatrix[i] = source.fMatrix[i];
-
 	//copy the status
 	setStatus( source.getStatus() );
-
-	//copy error message
-	fError = source.fError;
 }
 
+void TMatrix::swap(TMatrix & other) throw()
+{
+    using std::swap;
+    swap(fImpl, other.fImpl);
+    swap(fError, other.fError);
+}
 
 TMatrix::~TMatrix()
 {//!Destructor
-	delete[] fMatrix;
+    delete fImpl;
 }
 
 //////////////////////////////////////////////////////////////////////
 ///operator Functions
 //////////////////////////////////////////////////////////////////////
 
-TMatrix&  TMatrix::operator=(const TMatrix& right)
+// the copy assignment operator takes its argument by value, 
+// eliminating the need to explicitly create a copy of the other object.
+TMatrix & TMatrix::operator=(TMatrix other)
 {//Copy assignement operator	
-	if (this != &right)
-	{
-		if ((numCols() == right.numCols()) && (numRows() == right.numRows()) && numCols()!=0 && numRows()!=0)
-		{
-			for (int i=0; i<fNbRows; i++)
-			{
-				for (int j=0; j<fNbCols; j++)
-				{(const_cast<TMatrix*>(this))->operator()(i,j) = right(i,j);}
-				setStatus(right.getStatus());
-				fError = right.fError;
-			}
-		}
-		else
-		{
-			this->setDimensions(0,0);
-			this->setStatus(kNull);
-		}
-	}
-	return *this;
+	this->swap(other);
+    return *this;
 }
 
 
 void TMatrix::operator=(const double& value)
 {//inits all the matrix coefficients to a common value
-	for (int i = 0; i<(fNbRows * fNbCols); i++)
-	{fMatrix[i] = value;}
+	fImpl->setConstant(value);
 }
 
-
-TMatrix TMatrix::operator +(const TMatrix& right) const
-{//returns the sum of this matrix and a second one
-	TMatrix resultat (numRows(), numCols());
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(right);
-	if (status!= kNull && (numCols() == right.numCols()) && (numRows() == right.numRows()))
-	{
-		for (int i=0; i<fNbRows; i++)
-		{
-			for (int j=0; j<fNbCols; j++)
-			{
-				resultat(i,j) = (*this)(i,j) + right(i,j);
-			}
-		}
-	resultat.setStatus(status);
-	}
-return resultat;	
-}
-
-
-TMatrix& TMatrix::operator +=(const TMatrix& right)
+// TODO: Dimension checks?
+TMatrix & TMatrix::operator+=(const TMatrix & right)
 {//replaces this matrix by its sum with a second one
-*this=(*this)+right;
-return *this;
+    setStatus(this->testStatus(right));
+    if(numRows()!=right.numRows() || numCols()!=right.numCols()) {
+        setStatus(kNull);
+        fError += "Cannot add matrices of a different sizes";
+    }
+    if(getStatus()!=kNull)
+    {
+        fImpl->operator+=(*right.fImpl);
+    }
+    return *this;
 }
 
-
-TMatrix TMatrix::operator -(const TMatrix& right) const
-{//returns the difference of this matrix and a second one
-	TMatrix resultat (numRows(), numCols());
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(right);
-	if (status!= kNull && (numCols() == right.numCols()) && (numRows() == right.numRows()))
-	{
-		for (int i=0; i<fNbRows; i++)
-		{
-			for (int j=0; j<fNbCols; j++)
-			{
-				resultat(i,j) = (*this)(i,j) - right(i,j);
-			}
-		}
-	resultat.setStatus(status);
-	}
-return resultat;	
+// TODO: Could be a nonmember function
+TMatrix TMatrix::operator+(const TMatrix & right) const
+{//returns the sum of this matrix and a second one
+	TMatrix result(*this);
+    return result += right;
 }
 
-
-TMatrix& TMatrix::operator -=(const TMatrix& right)
+// TODO: Dimension checks?
+TMatrix & TMatrix::operator-=(const TMatrix& right)
 {//replaces this matrix by its difference with a second one
-*this=(*this)-right;
-return *this;
+    setStatus(this->testStatus(right));
+    if(numRows()!=right.numRows() || numCols()!=right.numCols()) {
+        setStatus(kNull);
+        fError += "Cannot calculate a difference between the matrices of a different sizes";
+    }
+    if(getStatus()!=kNull)
+    {
+        fImpl->operator-=(*right.fImpl);
+    }
+    return *this;
 }
 
 
-TMatrix TMatrix::operator*(const TMatrix& right) const
-{//returns the product of this matrix and a second one
-	TMatrix resultat (numRows(), right.numCols());
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(right);
-	if (status!=kNull && numCols() == right.numRows())
-	{
-			dgemm(NoTranspose, NoTranspose, resultat.numRows(), resultat.numCols(), numCols(), LITERAL(1.0), getFirstEltAdr(),
-			numCols(), right.getFirstEltAdr(), right.numCols(), LITERAL(0.0), resultat.getFirstEltAdr(), resultat.numCols());
-	resultat.setStatus(status);
-	}
-	return resultat;
+// TODO: Could be a nonmember function
+TMatrix TMatrix::operator-(const TMatrix& right) const
+{//returns the difference of this matrix and a second one
+	TMatrix result(*this);
+    return result -= right;
 }
 
-TMatrix& TMatrix::operator *=(const TMatrix& right)
+TMatrix & TMatrix::operator*=(const TMatrix & right)
 {//replaces this matrix by its product with a second one
-*this=(*this)*right;
-return *this;
+    setStatus(this->testStatus(right));
+    if(getStatus()!=kNull && numCols() == right.numRows())
+    {
+        fImpl->operator*=(*right.fImpl);
+    }
+    return *this;
+}
+
+TMatrix TMatrix::operator*(const TMatrix & right) const
+{//returns the product of this matrix and a second one
+	TMatrix result(*this);
+    return result *= right;
 }
 
 TColumnVector TMatrix::operator*(const TColumnVector& right) const
 {//returns the product of this matrix by a column vector
-	TColumnVector resultat (numRows());
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(right);
-	if (status!=kNull && numCols() == right.dimension())
+    TColumnVector result(numRows());
+	result.setStatus(this->testStatus(right));
+    if (result.getStatus()!=kNull && numCols() == right.dimension())
 	{
-		dgemv(NoTranspose, numRows(), numCols(), LITERAL(1.0), getFirstEltAdr(), numCols(), (double *) right.getFirstEltAdr(), 
-		1, LITERAL(0.0), (double *) resultat.getFirstEltAdr(), 1);
-		resultat.setStatus(status);
-	}
-	return resultat;	
-}
+        TMatrixImpl tmp(numCols(),1,0.0);
+        for(std::size_t i=0; i!=numCols(); ++i)
+            tmp(i,0) = right(i);
 
-
-TMatrix TMatrix::operator*( const double& k)
-{//multiplies the Matrix by a scalar
-	TMatrix result (numRows(), numCols());
-	for (int i=0; i<fNbRows; i++)
-	{
-		for (int j=0; j<fNbCols; j++)
-		{
-			result(i,j) = (*this)(i,j)*k;
-		}
+        TMatrixImpl res = *this->fImpl * tmp;
+        for(std::size_t i=0; i!=numCols(); ++i)
+            result(i) = res(i,0);
 	}
-	result.setStatus(getStatus());
 	return result;
 }
 
+TMatrix & TMatrix::operator*=(double value)
+{
+    if(getStatus()!=kNull)
+    {
+        fImpl->operator*=(value);
+    }
+    return *this;
+}
 
-TMatrix TMatrix::operator*( const TDouble& k)
+TMatrix TMatrix::operator*(double value)
+{//multiplies the Matrix by a scalar
+    TMatrix result(*this);
+    return result *= value;
+}
+
+
+TMatrix & TMatrix::operator*=(const TDouble & right)
+{
+    setStatus(this->testStatus(right));
+    if(getStatus()!=kNull)
+    {
+        fImpl->operator*=(right.getValue());
+    }
+    return *this;
+}
+
+TMatrix TMatrix::operator*(const TDouble & right)
 {//multiplies the Matrix by a TDouble
-	TMatrix resultat (numRows(), numCols());
-	TANumericValue::EStatus status;
-	status=this->testStatus(k);
-	if (status!=kNull)
-	{
-		for (int i=0; i<fNbRows; i++)
-		{
-			for (int j=0; j<fNbCols; j++)
-			{
-				resultat(i,j) = (*this)(i,j)*k.getValue();
-			}
-		}
-	}
-	resultat.setStatus(status);
-	return resultat;
+	TMatrix result(*this);
+    return result *= right;
 }
 
 
@@ -274,161 +213,80 @@ TMatrix TMatrix::operator*( const TDouble& k)
 
 TMatrix TMatrix::transposed() const
 {//return the tranposed matrix of this one
-	TMatrix result (numCols(), numRows());
-	for (int i=0; i<numRows(); i++)
-	{
-		for (int j=0; j<numCols(); j++)
-		{
-			result(j,i) = (*this)(i,j);
-		}
-	}
-	result.setStatus(getStatus());
-	return result;
+    TMatrix result(*this);
+    result.fImpl->transpose();
+    return result;
 }
 
 
 TColumnVector TMatrix::eqnSolve(const TColumnVector& B) 
 {//returns the solution of the system this*X = B
+    TColumnVector result(numRows());
+	result.setStatus(this->testStatus(B));
+    if (result.getStatus()!=kNull && numCols() == B.dimension())
+	{
+        TMatrixImpl tmp(numCols(),1,0.0);
+        for(std::size_t i=0; i!=numCols(); ++i)
+            tmp(i,0) = B(i);
 
-	//this matrix has to be copied otherwise it is overwritten
-	TMatrix* thisCopy = new TMatrix(*this);
-	// nagc error message, to be set if there is a problem. 
-	// It should not be printed on the screen
-	static NagError fail;
-	fail.print = false;
-
-	//computation of the solution vector X
-	TColumnVector solution (numRows());
-	nag_real_lin_eqn(numRows(), thisCopy->getFirstEltAdr(), numCols(), (double *) B.getFirstEltAdr(), (double *) solution.getFirstEltAdr(), &fail);
-
-	// Possible errors: input unconsistency, matrix singularity, or memory allocation failure
-	if ((fail.code == NE_INT_ARG_LT) || (fail.code == NE_2_INT_ARG_LT) || 
-		(fail.code == NE_SINGULAR) || (fail.code == NE_ALLOC_FAIL)) {
-		fError += fail.message + '\n';
-		solution.setStatus(TANumericValue::kNull);
-	}
-
-	delete thisCopy;
-	return solution;
+        TMatrixImpl res = this->fImpl->solve(tmp);
+        for(std::size_t i=0; i!=numCols(); ++i)
+            result(i) = res(i,0);
+    }
+    return result;
 }
 
 
-bool TMatrix::initDiag( const double& comVal)
+// TODO: Is this used in the intermediate calculations?
+// Maybe it would be better to make it a constructor.
+bool TMatrix::initDiag(double value)
 {//inits all the matrix diagonal coefficients to a common value
-
-	if (fNbRows == fNbCols)
+    if(fImpl->rows() == fImpl->cols())
 	{
-		for (int i = 0; i<fNbRows ; i++)
-		{
-			for (int j=0; j<fNbCols; j++)
-			{
-				if (i == j)
-				{(*this)(i,j) = comVal;}
-				else
-				{(*this)(i,j) = LITERAL(0.0);}
-			}
-		}
-	return true;
+        fImpl->initDiag(value);
+		return true;
 	}
 	else
-	{return false;}
+    {
+        // TODO: Are we sure that we don't want rectangular matrices as well?
+        return false;
+    }
 }
 
-
-void TMatrix::setDimensions( const int& nRows,  const int& nCols)
+// TODO: Is this used in the intermediate calculations?
+// Maybe it would be better to use only constructors
+void TMatrix::setDimensions(int nRows, int nCols)
 {//Sets the dimensions of the matrix
-	
-	//destroy the previous values
-	if (fMatrix != 0)
-	{
-		delete[] fMatrix;
-	}
-	
-	
-	if( (nRows >= 0) && (nCols >= 0) )
-	{
-		//creates the new Matrix
-		fNbRows = nRows;
-		fNbCols = nCols;
-		fMatrix = new double [fNbRows * fNbCols];
-		(*this) = LITERAL(0.0);
-	}
-	else
-	{
-		fNbRows = 1;
-		fNbCols = 1;
-		fMatrix = new double [fNbRows * fNbCols];
-		(*this) = LITERAL(0.0);
-		fError = "Invalid dimension" + '\n';
-		setStatus( TANumericValue::kNull );
-	}
+    fImpl->resize(nRows, nCols);
+	//{
+	//	fNbRows = 1;
+	//	fNbCols = 1;
+	//	fMatrix = new double [fNbRows * fNbCols];
+	//	(*this) = LITERAL(0.0);
+	//	fError = "Invalid dimension" + '\n';
+	//	setStatus( TANumericValue::kNull );
+	//}
 }
 
 
 int TMatrix::numRows() const
 {//returns the number of rows
-	return fNbRows;
+	return fImpl->rows();
 }
 
 
 int TMatrix::numCols() const
 {//returns the number of Columns
-	return fNbCols;
+	return fImpl->cols();
 }
 
 
 bool TMatrix::invert()
 {//Overwrites this Matrix by its inverse
 //checks if the Matrix can be inverted
-	if(getStatus() != TVNumericValue::kNull)
+	if(getStatus() != TVNumericValue::kNull && numRows() == numCols())
 	{
-		if (fNbCols == fNbRows)
-		{
-			TMatrix* copyMat = new TMatrix(*this);
-			
-			long* pivot = new long[fNbCols];
-			long dete;
-			double detf;
-			// nagc error message, to be set if there is a problem. 
-			// It should not be printed on the screen
-			static NagError fail;
-			fail.print = false;
-
-			//LU factorization of the matrix
-			nag_real_lu(fNbCols, copyMat->getFirstEltAdr(), fNbCols, pivot, &detf, &dete, &fail);
-			
-			// Possible errors: matrix singularity, input unconsistency, or memory allocation failure
-			if ((fail.code == NE_SINGULAR) || (fail.code == NE_INT_ARG_LT) || 
-				(fail.code == NE_2_INT_ARG_LT) || (fail.code == NE_ALLOC_FAIL)) {
-				fError += fail.message + '\n';
-				return false;
-			}
-
-			//right hand side 
-			TMatrix rhs (fNbCols, fNbCols);
-			rhs.initDiag(LITERAL(1.0));
-
-			//Computation of the inverse
-			nag_real_lu_solve_mult_rhs(fNbCols, fNbCols, copyMat->getFirstEltAdr(), fNbCols, pivot, rhs.getFirstEltAdr(),
-				fNbCols, &fail);
-			
-			// possible errors: input unconsistency
-			if ((fail.code == NE_INT_ARG_LT) || (fail.code == NE_2_INT_ARG_LT)) {
-				fError += fail.message + '\n';
-				return false;
-			}
-
-			//copyMat and pivot are no longer needed
-			delete copyMat;
-			delete[] pivot;
-			*this=rhs;
-
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+	    return fImpl->invert();
 	}
 	else
 	{
@@ -440,63 +298,71 @@ bool TMatrix::invert()
 	
 
 TMatrix TMatrix::inverse()
-{//Returns the inverse of this matrix (the latter isn't affected) using nagc lib.
+{//Returns the inverse of this matrix (the latter isn't affected)
 
-	TMatrix  copy(*this);
-	bool inverted = copy.invert();
-	if (inverted)
-	{
-		return copy;
-	}
-	else
-	{
-		copy.setStatus(TANumericValue::kNull);
-		return copy;
-	}
+	TMatrix result(*this);
+	bool inverted = result.invert();
+    if(!inverted)
+        result.setStatus(TANumericValue::kNull);
+    return result;
 }
 
 
 void TMatrix::clear()
-{//return a matrice (i,j)=0, status kNull
-	for (int i=0; i< fNbRows; i++)
-	{
-		for (int j=0; j< fNbCols; j++)
-		{(*this)(i,j)=0;}
-	}
+{//return a matrice (i,j)=0
+    fImpl->setConstant(0.0);
 }
 
-double& TMatrix::operator()(const int&  row, const int& col)
+double & TMatrix::operator()(int row, int col)
 {//returns a reference to a matrix coefficient
-
-	if( (row<0) || (row>=fNbRows) || (col<0) || (col>=fNbCols) )
-	{
-		double NaN = 0;
-		NaN = 1/NaN;
-		double* p = &NaN;
-		return (*p);
-	}
-	else
-	{
-		return fMatrix[(row)*fNbCols + col];
-	}
+    return fImpl->operator()(row,col);
 }
 
 
-double TMatrix::operator()(const int& row, const int& col) const
+double TMatrix::operator()(int row, int col) const
 {//returns a copy of a matrix coefficient (const version of the previous method
-	if( (row<0) || (row>=fNbRows) || (col<0) || (col>=fNbCols) )
-	{
-		double NaN = 0;
-		NaN = 1/NaN;
-		double* p = &NaN;
-		return (*p);
-	}
-	else
-	{
-		return fMatrix[(row)*fNbCols + col];
-	}
+	return fImpl->operator()(row,col);
 }
 
+
+TSparseMatrix* TMatrix::toSparse() const
+{
+	int nnz = 0;
+	int rowStart;
+
+	for (int i = 0; i < numRows(); i++)
+	{
+		rowStart = i * numCols();
+		for (int j = 0; j < numCols(); j++)
+		{
+			if ( *(fImpl->data() + rowStart + j) != 0)
+			{
+				nnz++;
+			}
+		}
+	}
+
+	TReal* vs = new TReal[nnz];
+	int* rs = new int[nnz];	
+	int* cs = new int[numCols() + 1];
+	cs[0] = 0;
+	nnz = 0;
+
+	for (int i = 0; i < numCols(); i++)
+	{
+		for (int j = 0; j < numRows(); j++)
+		{
+			if ( *( fImpl->data() + i + j * numCols() ) != 0)
+			{
+				vs[nnz] = *( fImpl->data() + i + j * numCols() );
+				rs[nnz++] = j;
+			}
+		}
+		cs[i + 1] = nnz;
+	}
+
+	return new TSparseMatrix(numRows(), numCols(), vs, rs, cs);
+}
 
 
 
@@ -504,193 +370,155 @@ double TMatrix::operator()(const int& row, const int& col) const
 ///Private Function
 ////////////////////////////////////////////////
 
-double* TMatrix::getFirstEltAdr() const
-{//returns the adress of the matrix's first element
-	return fMatrix;
-}
+//double* TMatrix::getFirstEltAdr() const
+//{//returns the adress of the matrix's first element
+//	return fMatrix;
+//}
 
 
 
-TMatrix TMatrix::dfact(int* n_pivot,int* pivot_i,int* pivot_j)
-{	// LU decomposition, returns the decomposition in one matrix and the pivots.
-	// allways comes first, before dfeqn or dfinv.
-	TMatrix res (*this);
-	int n(this->numRows()-1);
-	
+//TMatrix TMatrix::dfact(int* n_pivot,int* pivot_i,int* pivot_j)
+//{	// LU decomposition, returns the decomposition in one matrix and the pivots.
+//	// allways comes first, before dfeqn or dfinv.
+//	TMatrix res (*this);
+//	int n(this->numRows()-1);
+//	
+//
+//	int i(0),j(0),k(0),l(0),jp1(0),jm1(0);
+//	double zero(LITERAL(0.0)),one(LITERAL(1.0)),x(LITERAL(0.0)),y(LITERAL(0.0)),tf(LITERAL(0.0)),s11(LITERAL(0.0)),s12(LITERAL(0.0));
+//	double g1(1.0e-19),g2(1.0e19),p(LITERAL(0.0)),q(LITERAL(0.0)),t(LITERAL(0.0));
+//	
+//	int nxch(-1);
+//
+//	for (j=0;j<=n;j++)
+//	{
+//		k=j;
+//		p= (double) fabsq((res)(j,j));
+//		if (j<n)
+//		{
+//			jp1 = j+1;
+//			for (i=jp1;i<=n;i++)
+//			{
+//				q=(double) fabsq((res)(i,j));
+//				if (q>p)
+//				{
+//					k=i;
+//					p=q;
+//				}
+//			} // label 121
+//			if(k==j)
+//			{
+//				if (p==LITERAL(0.0)) // pivot == 0 ->singularity
+//				{
+//					return TMatrix(); // error handling
+//				}
+//				(res)(j,j) = one/(res)(j,j);
+//			}
+//			else
+//			{
+//				for (l=0;l<=n;l++)
+//				{
+//					tf = (res)(j,l);
+//					(res)(j,l)=(res)(k,l);
+//					(res)(k,l)=tf;
+//				} // label 124
+//
+//				nxch += 1;
+//
+//				pivot_i[nxch] = j;
+//				pivot_j[nxch] = k;
+//				
+//				(res)(j,j) = one/(res)(j,j);
+//
+//			}
+//		}
+//		else //j==n 
+//		{
+//			if (p==LITERAL(0.0))
+//			{
+//				return TMatrix();
+//			}
+//			(res)(j,j) = one/(res)(j,j);
+//		}
+//		if (j<n)
+//		{
+//			jm1 = j-1;
+//			jp1 = j+1;
+//			for (k=jp1;k<=n;k++)
+//			{
+//				s11 = -(res)(j,k);
+//				s12 = -(res)(k,j+1);
+//				if (j>0)
+//				{
+//					for (i=0;i<=jm1;i++)
+//					{
+//						s11 += (res)(i,k)*(res)(j,i);
+//						s12 += (res)(i,j+1)*(res)(k,i);
+//					} // label 141
+//				}
+//				(res)(j,k) = -s11*(res)(j,j);
+//				(res)(k,j+1) = -(s12+(res)(j,j+1)*(res)(k,j));
+//			} // label 143
+//		} // label 144
+//	} // label 144
+//
+//	*n_pivot = nxch;
+//
+//	return res;
+//}
+//
+//
+//TColumnVector TMatrix::dfeqn(TColumnVector* B,int n_pivot,int* pivot_i,int* pivot_j) 
+//{// resolution of equations system. It must be applied on the matrix returned by dfact(...)
+//
+//	int n(this->numRows()-1);
+//	int i(0),j(0),m(0),im1(0),nm1(0),nmi(0),nmjp1(0);
+//	double x(LITERAL(0.0)),y(LITERAL(0.0)),te(LITERAL(0.0)),s21(LITERAL(0.0)),s22(LITERAL(0.0));
+//
+//	if (n_pivot>-1)
+//	{
+//		for (m=0;m<=n_pivot;m++)
+//		{
+//			i=pivot_i[m];
+//			j=pivot_j[m];
+//			te=(*B)(i);
+//			(*B)(i)=(*B)(j);
+//			(*B)(j)=te;
+//		}
+//	} //label 220
+//	
+//	(*B)(0)=(*this)(0,0) * (*B)(0);
+//
+//	if (n>0)
+//	{
+//		for (i=1;i<=n;i++)
+//		{
+//			im1=i-1;
+//			s21=-(*B)(i);
+//			for (j=0;j<=im1;j++)
+//			{
+//				s21 += (*this)(i,j) * (double) (*B)(j);
+//			}
+//			(*B)(i) = -(*this)(i,i) * s21;
+//		} //label 232
+//
+//		nm1 = n-1;
+//		for (i=0;i<=nm1;i++)
+//		{
+//			nmi = n-i-1;
+//			s22 = -(*B)(nmi);
+//			for (j=0;j<=i;j++)
+//			{
+//				nmjp1 = n-j;
+//				s22 += (*this)(nmi,nmjp1) * (double) (*B)(nmjp1);
+//			}
+//			(*B)(nmi) = -s22;
+//		} // label 242 (i-loop)
+//	} // label 299 (endif)
+//
+//	return *B;
+//}
 
-	int i(0),j(0),k(0),l(0),jp1(0),jm1(0);
-	double zero(LITERAL(0.0)),one(LITERAL(1.0)),x(LITERAL(0.0)),y(LITERAL(0.0)),tf(LITERAL(0.0)),s11(LITERAL(0.0)),s12(LITERAL(0.0));
-	double g1(1.0e-19),g2(1.0e19),p(LITERAL(0.0)),q(LITERAL(0.0)),t(LITERAL(0.0));
-	
-	int nxch(-1);
-
-	for (j=0;j<=n;j++)
-	{
-		k=j;
-		p= (double) fabsq((res)(j,j));
-		if (j<n)
-		{
-			jp1 = j+1;
-			for (i=jp1;i<=n;i++)
-			{
-				q=(double) fabsq((res)(i,j));
-				if (q>p)
-				{
-					k=i;
-					p=q;
-				}
-			} // label 121
-			if(k==j)
-			{
-				if (p==LITERAL(0.0)) // pivot == 0 ->singularity
-				{
-					return TMatrix(); // error handling
-				}
-				(res)(j,j) = one/(res)(j,j);
-			}
-			else
-			{
-				for (l=0;l<=n;l++)
-				{
-					tf = (res)(j,l);
-					(res)(j,l)=(res)(k,l);
-					(res)(k,l)=tf;
-				} // label 124
-
-				nxch += 1;
-
-				pivot_i[nxch] = j;
-				pivot_j[nxch] = k;
-				
-				(res)(j,j) = one/(res)(j,j);
-
-			}
-		}
-		else //j==n 
-		{
-			if (p==LITERAL(0.0))
-			{
-				return TMatrix();
-			}
-			(res)(j,j) = one/(res)(j,j);
-		}
-		if (j<n)
-		{
-			jm1 = j-1;
-			jp1 = j+1;
-			for (k=jp1;k<=n;k++)
-			{
-				s11 = -(res)(j,k);
-				s12 = -(res)(k,j+1);
-				if (j>0)
-				{
-					for (i=0;i<=jm1;i++)
-					{
-						s11 += (res)(i,k)*(res)(j,i);
-						s12 += (res)(i,j+1)*(res)(k,i);
-					} // label 141
-				}
-				(res)(j,k) = -s11*(res)(j,j);
-				(res)(k,j+1) = -(s12+(res)(j,j+1)*(res)(k,j));
-			} // label 143
-		} // label 144
-	} // label 144
-
-	*n_pivot = nxch;
-
-	return res;
-}
-
-
-TColumnVector TMatrix::dfeqn(TColumnVector* B,int n_pivot,int* pivot_i,int* pivot_j) 
-{// resolution of equations system. It must be applied on the matrix returned by dfact(...)
-
-	int n(this->numRows()-1);
-	int i(0),j(0),m(0),im1(0),nm1(0),nmi(0),nmjp1(0);
-	double x(LITERAL(0.0)),y(LITERAL(0.0)),te(LITERAL(0.0)),s21(LITERAL(0.0)),s22(LITERAL(0.0));
-
-	if (n_pivot>-1)
-	{
-		for (m=0;m<=n_pivot;m++)
-		{
-			i=pivot_i[m];
-			j=pivot_j[m];
-			te=(*B)(i);
-			(*B)(i)=(*B)(j);
-			(*B)(j)=te;
-		}
-	} //label 220
-	
-	(*B)(0)=(*this)(0,0) * (*B)(0);
-
-	if (n>0)
-	{
-		for (i=1;i<=n;i++)
-		{
-			im1=i-1;
-			s21=-(*B)(i);
-			for (j=0;j<=im1;j++)
-			{
-				s21 += (*this)(i,j) * (double) (*B)(j);
-			}
-			(*B)(i) = -(*this)(i,i) * s21;
-		} //label 232
-
-		nm1 = n-1;
-		for (i=0;i<=nm1;i++)
-		{
-			nmi = n-i-1;
-			s22 = -(*B)(nmi);
-			for (j=0;j<=i;j++)
-			{
-				nmjp1 = n-j;
-				s22 += (*this)(nmi,nmjp1) * (double) (*B)(nmjp1);
-			}
-			(*B)(nmi) = -s22;
-		} // label 242 (i-loop)
-	} // label 299 (endif)
-
-	return *B;
-}
-
-TSparseMatrix* TMatrix::toSparse() const
-{
-	int nnz = 0;
-	int rowStart;
-
-	for (int i = 0; i < fNbRows; i++)
-	{
-		rowStart = i * fNbCols;
-		for (int j = 0; j < fNbCols; j++)
-		{
-			if (fMatrix[rowStart + j] != 0)
-			{
-				nnz++;
-			}
-		}
-	}
-
-	real* vs = new real[nnz];
-	int* rs = new int[nnz];	
-	int* cs = new int[fNbCols + 1];
-	cs[0] = 0;
-	nnz = 0;
-
-	for (int i = 0; i < fNbCols; i++)
-	{
-		for (int j = 0; j < fNbRows; j++)
-		{
-			if (fMatrix[i + j * fNbCols] != 0)
-			{
-				vs[nnz] = fMatrix[i + j * fNbCols];
-				rs[nnz++] = j;
-			}
-		}
-		cs[i + 1] = nnz;
-	}
-
-	return new TSparseMatrix(fNbRows, fNbCols, vs, rs, cs);
-}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

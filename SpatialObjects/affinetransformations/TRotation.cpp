@@ -48,7 +48,7 @@ TRotation::TRotation( const TRotationMatrix matrix)
 
 
 
-TRotation::TRotation(TRotationMatrix::ERotationType kR, real omega, real phi, real kappa)
+TRotation::TRotation(TRotationMatrix::ERotationType kR, TReal omega, TReal phi, TReal kappa)
 : fRotationMatrix(kR, omega, phi, kappa)
 {//Constructor taking the radians values of the angles in the specified order
 	this->setStatus( TVNumericValue::kKnown );
@@ -93,12 +93,12 @@ TRotation TRotation::operator*( const TRotation & right )
 }
 
 
-real TRotation::operator()(int i, int j) const
+TReal TRotation::operator()(int i, int j) const
 {// return the ri, cj element with 0<=i,j<=2
 	return fRotationMatrix.getElt(i,j);
 }
 
-void TRotation::setAllRotations(TRotationMatrix::ERotationType kR, real om, real p, real k)
+void TRotation::setAllRotations(TRotationMatrix::ERotationType kR, TReal om, TReal p, TReal k)
 {// set the 3 rotations taking angles values in the order specified by the enumerator
 	fRotationMatrix.setAllRotations(kR,om,p,k);
 }
@@ -224,7 +224,7 @@ void TRotation::invert()
 //////////////////////////////////////////////////////////////////////
 // Private Member Functions
 //////////////////////////////////////////////////////////////////////
-void TRotation::fillRotationMatrix(TRotationMatrix::ERotationType kR, real om, real p, real k)
+void TRotation::fillRotationMatrix(TRotationMatrix::ERotationType kR, TReal om, TReal p, TReal k)
 {
 	fRotationMatrix.setAllRotations(kR,om,p,k);
 	return;

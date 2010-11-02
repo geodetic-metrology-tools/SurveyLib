@@ -18,7 +18,7 @@ TLSCalcLengthParam::TLSCalcLengthParam():TALSCalcParameter("") {
 }
 
 // Constructor taking a provisional value and parameter status as argument
-TLSCalcLengthParam::TLSCalcLengthParam(TLength lobs,TALSCalcParameter::ELSStatus els,string name):
+TLSCalcLengthParam::TLSCalcLengthParam(TLength lobs,TALSCalcParameter::ELSStatus els, std::string name):
 fProvisionalValue(lobs),TALSCalcParameter(name) {
 
 	fCorrection = TLength(LITERAL(0.0));

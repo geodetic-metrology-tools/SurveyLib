@@ -27,9 +27,6 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
 // other forward declarations
 #include	"TAngle.h"
 #include	"TDouble.h"
@@ -38,19 +35,6 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 
 
 //ClassImp(TAngle)
-
-
-//////////////////////////////////////////////////////////////////////
-// Definitions and Initialisations
-//////////////////////////////////////////////////////////////////////
-
-const real	TAngle::kPi = acosq(-LITERAL(1.0));  // Pi = LITERAL(3.14159265358979323844);
-const real	TAngle::kRadiansToGons = LITERAL(200.0)/kPi;
-const real	TAngle::kGonsToRadians = kPi/LITERAL(200.0);
-const real	TAngle::kRadiansToDecDegs = LITERAL(180.0)/kPi;
-const real	TAngle::kDecDegsToRadians = kPi/LITERAL(180.0);
-const real	TAngle::seuil = LITERAL(0.00000000001);
-
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -79,66 +63,6 @@ TAngle::TAngle(const TAngle& angle)
 	fValue=angle.fValue;
 	setStatus( angle.getStatus() );
 }
-//////////////////////////////////////////////////////////////////////
-// Static Member Functions (multiples de pi comme TAngle)
-//////////////////////////////////////////////////////////////////////
-
- 
-const TAngle TAngle::pi()
-{	// Defines the angle Pi
-	TAngle pi(kPi);
-	return pi;
-}
-
-
-const TAngle TAngle::twoPi()
-{   // Defines the angle 2*Pi 
-	TAngle twoPi(LITERAL(2.0)*kPi);
-	return twoPi;
-}
-
-
-const TAngle TAngle::piBy2()
-{   // Defines the angle Pi/2
-	TAngle piBy2(kPi/LITERAL(2.0));
-	return piBy2;
-}
-
-
-const TAngle TAngle::piBy4()
-{   // Defines the angle Pi/4
-	TAngle piBy4(kPi/LITERAL(4.0));
-	return piBy4;
-}
-
-
-const real  TAngle::radsToGonsFactor()
-{   // Provides a scale factor to convert from angles 
-	//in radians to angles in gons
-	return  kRadiansToGons;
-}
-
-
-const real  TAngle::gonsToRadsFactor()
-{   // Provides a scale factor to convert from angles 
-	// in gons to angles in radians
-	return  kGonsToRadians;
-}
-
-
-const real  TAngle::radsToDecDegsFactor()
-{   // Provides a scale factor to convert from angles 
-	// in radians to angles in decimal degrees
-	return  kRadiansToDecDegs;
-}
-
-
-const real  TAngle::decDegsToRadsFactor()
-{   // Provides a scale factor to convert from angles 
-	// in decimal degrees to angles in radians
-	return  kDecDegsToRadians;
-}
-
 
 //////////////////////////////////////////////////////////////////////
 // Member Functions
@@ -148,13 +72,13 @@ void TAngle::normaliseAngle()
 {
 	//modification du 08/05/2003 pour le calcul les angles seront exprimes entre -pi et pi
 
-	while (fValue > kPi - seuil)
+    while (fValue > M_PI - seuil())
 	{
-		fValue -= LITERAL(2.0) * kPi;
+        fValue -= 2*M_PI;
 	}
-	while (fValue < -kPi + seuil)
+    while (fValue < -M_PI + seuil())
 	{
-		fValue += LITERAL(2.0) * kPi;
+        fValue += 2*M_PI;
 	}
 }
 
@@ -178,7 +102,7 @@ bool	TAngle::setGonsValue(const AngleValue value)
 {	// set the angle value to the given gons value
 	
 	// convert the given value to radians
-	fValue = value * kGonsToRadians;
+    fValue = value * gonsToRadsFactor();
 
 	//normalise the radians value
 	normaliseAngle();
@@ -227,7 +151,7 @@ bool	TAngle::setDMSValue(const	Degrees	degs,
 
 
 	// convert the given values to radians
-	fValue = angleSign * (real(absDegs) + ((real(absMins))/LITERAL(60.0)) + (absSecs/LITERAL(3600.0))) * kDecDegsToRadians;
+    fValue = angleSign * (TReal(absDegs) + ((TReal(absMins))/LITERAL(60.0)) + (absSecs/LITERAL(3600.0))) * decDegsToRadsFactor();
 
 	//normalise the radians value
 	normaliseAngle();
@@ -242,19 +166,14 @@ bool	TAngle::setDMSValue(const	Degrees	degs,
 Minutes	TAngle::getMinutesValue() const
 {	// get the integer minutes of the angular value
 	
-	real	decDegs;
-	real	degs;
-	real	decMins;
+	TReal	decDegs;
+	TReal	degs;
+	TReal	decMins;
 	
 	// determine the degrees and minutes values
-	decDegs = fValue * kRadiansToDecDegs; 
-#if _DEBUG && __INTEL_COMPILER
-	decMins = LITERAL(60.0)*modfq(decDegs, degs);	// if the decimal degrees are negative
-										// BOTH the degrees and minutes will be negative
-#else
+    decDegs = fValue * radsToDecDegsFactor(); 
 	decMins = LITERAL(60.0)*modfq(decDegs, &degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
-#endif
 
 	// determine the minutes value with the appropriate sign
 	if (int(degs) == 0)
@@ -272,25 +191,18 @@ Minutes	TAngle::getMinutesValue() const
 Seconds	TAngle::getSecondsValue() const
 {	// get the decimal seconds of the angular value
 	
-	real	decDegs;
-	real	degs;
-	real	decMins;
-	real	mins;
-	real	seconds;
+	TReal	decDegs;
+	TReal	degs;
+	TReal	decMins;
+	TReal	mins;
+	TReal	seconds;
 
 	// determine the degrees, minutes, and seconds values
-	decDegs = fValue * kRadiansToDecDegs; 
-#if _DEBUG && __INTEL_COMPILER
-	decMins = LITERAL(60.0)*modfq(decDegs, degs);	// if the decimal degrees are negative
-										// BOTH the degrees and minutes will be negative
-	seconds = LITERAL(60.0)*modfq(decMins, mins);	// if the decimal minutes are negative
-										// BOTH the minutes and seconds will be negative
-#else
+    decDegs = fValue * radsToDecDegsFactor(); 
 	decMins = LITERAL(60.0)*modfq(decDegs, &degs);	// if the decimal degrees are negative
 										// BOTH the degrees and minutes will be negative
 	seconds = LITERAL(60.0)*modfq(decMins, &mins);	// if the decimal minutes are negative
 										// BOTH the minutes and seconds will be negative
-#endif
 
 	// return the seconds value with the appropriate sign
 	if (int(degs) == 0  &&  int(mins) == 0)
@@ -380,7 +292,7 @@ TAngle TAngle::operator-(const TAngle &angle) const
 }
 
 	
-TAngle TAngle::operator*(const real factor) const
+TAngle TAngle::operator*(const TReal factor) const
 {// Multiplies the angle by a scale factor
 	TAngle resultat;
 	if (isNull()!=true)
@@ -428,7 +340,7 @@ TDouble TAngle::operator/(const TAngle& div) const
 }
 
 
-TAngle	operator*(const real factor, const TAngle &angle )
+TAngle	operator*(const TReal factor, const TAngle &angle )
 {// Multiplies a TAngle by a scale factor
 	TAngle resultat;
 	if (angle.isNull()!=true)
@@ -464,7 +376,7 @@ return (*this)=(*this)-angle;
 }
 
 
-TAngle& TAngle::operator*=(const real factor)
+TAngle& TAngle::operator*=(const TReal factor)
 {// Multiply the angle by a scale factor
 return (*this)=(*this)*factor;
 }
@@ -479,43 +391,43 @@ return (*this)=(*this)*factor;
 // trigonometric functions
 //////////////////////////////////////////////////////////////////////
 
-real TAngle::cosine() const
+TReal TAngle::cosine() const
 {//cosine of the angle
 	return cosq(this->getRadiansValue());
 }
 
 
-real TAngle::sine() const
+TReal TAngle::sine() const
 {//sine of the angle
 	return sinq(this->getRadiansValue());
 }
 
 
-real TAngle::tangent() const
+TReal TAngle::tangent() const
 {//tangent of the angle
 	return tanq(this->getRadiansValue());
 }
 
 
-real TAngle::cosineh() const
+TReal TAngle::cosineh() const
 {//hyperbolic cosine of the angle
 	return coshq(this->getRadiansValue());
 }
 
 
-real TAngle::sineh() const
+TReal TAngle::sineh() const
 {//hyperbolic sine of the angle
 	return sinhq(this->getRadiansValue());
 }
 
 
-real TAngle::tangenth() const
+TReal TAngle::tangenth() const
 {//hyperbolic tangent of the angle
 	return tanhq(this->getRadiansValue());
 }
 
-TAngle TAngle::aCos(const real x)
-{//determines the arccosine of a real as a TAngle
+TAngle TAngle::aCos(const TReal x)
+{//determines the arccosine of a TReal as a TAngle
 	if (-LITERAL(1.0)>x  ||  x>LITERAL(1.0)) throw "incorrect value";
 
 	TAngle angle(acosq(x));
@@ -523,8 +435,8 @@ TAngle TAngle::aCos(const real x)
 }
 
 
-TAngle TAngle::aSin(const real x)
-{//determines the arcsine of a real as a TAngle
+TAngle TAngle::aSin(const TReal x)
+{//determines the arcsine of a TReal as a TAngle
 	if (-LITERAL(1.0)>x  ||  x>LITERAL(1.0)) throw "incorrect value";
 
 	TAngle angle(asinq(x));
@@ -532,14 +444,14 @@ TAngle TAngle::aSin(const real x)
 }
 
 
-TAngle TAngle::aTan(const real x)
-{//determines the arctan of a real as a TAngle
+TAngle TAngle::aTan(const TReal x)
+{//determines the arctan of a TReal as a TAngle
 	TAngle angle(atanq(x));
 	return angle;
 }
 
 
-TAngle TAngle::aTan2(const real x, const real y)
+TAngle TAngle::aTan2(const TReal x, const TReal y)
 {//determines the arctan(x/y) as a TAngle
 	TAngle angle(atan2q(x, y));
 	return angle;
@@ -552,12 +464,12 @@ TAngle TAngle::aTan2(const real x, const real y)
 
 
 	
-TAngle::ENumberSign		TAngle::sign(real	number) const
+TAngle::ENumberSign		TAngle::sign(TReal	number) const
 {	// return the sign of the number entered
 
 	ENumberSign	sign;
 
-	// divide the real by its absolute value
+	// divide the TReal by its absolute value
 	// the result should be -1, or 1, for numbers 
 	// not equal to 0
 	if(number / fabsq(number) < LITERAL(0.0))

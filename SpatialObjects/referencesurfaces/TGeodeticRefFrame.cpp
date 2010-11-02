@@ -35,8 +35,8 @@
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
-const real TGeodeticRefFrame::precisionH = LITERAL(0.0000001); //precision calcul h
-const real TGeodeticRefFrame::precisionPhi = LITERAL(0.00000000000001); //precision calcul phi
+const TReal TGeodeticRefFrame::precisionH = LITERAL(0.0000001); //precision calcul h
+const TReal TGeodeticRefFrame::precisionPhi = LITERAL(0.00000000000001); //precision calcul phi
 
 
 
@@ -126,20 +126,20 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TSpatialPosition* 
 TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv, const TReferenceEllipsoid* ellipsoid )  const
 {
 	// get the Cartesian coordinates of the position
-	real  x = pv.getX().getMetresValue();
-	real  y = pv.getY().getMetresValue();
-	real  z = pv.getZ().getMetresValue();
-	//real  x = getX1( posn );
-	//real  y = getX2( posn );
-	//real  z = getX3( posn );
+	TReal  x = pv.getX().getMetresValue();
+	TReal  y = pv.getY().getMetresValue();
+	TReal  z = pv.getZ().getMetresValue();
+	//TReal  x = getX1( posn );
+	//TReal  y = getX2( posn );
+	//TReal  z = getX3( posn );
 
 	//get a copy of the parameters of the ellipsoid
-	real  a = ellipsoid->getA();
-	real  b = ellipsoid->getB();
-	real  eSquared = ellipsoid->getESquared();
+	TReal  a = ellipsoid->getA();
+	TReal  b = ellipsoid->getB();
+	TReal  eSquared = ellipsoid->getESquared();
 
-	real p;
-	real nu;
+	TReal p;
+	TReal nu;
 	AngleValue phi, tempphi, lambda;
 	LengthValue h, temph;
 	TPositionVector  geodpv(TCoordSysFactory::kGeodetic);
@@ -199,18 +199,18 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 
 TPositionVector  TGeodeticRefFrame::getCartesianCoords( TPositionVector posvec, const TReferenceEllipsoid* ellipsoid )
 {
-	// get coordinates of posvec as real
-	real phi = posvec.getPhiEllipsoid().getRadiansValue();
-	real lambda = posvec.getLambdaEllipsoid().getRadiansValue();
-	real he = posvec.getH().getMetresValue();
+	// get coordinates of posvec as TReal
+	TReal phi = posvec.getPhiEllipsoid().getRadiansValue();
+	TReal lambda = posvec.getLambdaEllipsoid().getRadiansValue();
+	TReal he = posvec.getH().getMetresValue();
 
 	//get a copy of the parameters of the ellipsoid
-	real a = ellipsoid->getA();
-	real b = ellipsoid->getB();
-	real nu = ellipsoid->getNu( phi );
+	TReal a = ellipsoid->getA();
+	TReal b = ellipsoid->getB();
+	TReal nu = ellipsoid->getNu( phi );
 
 	//retablissement XYZ
-	real x((nu+he)*cosq(phi)*cosq(lambda)),
+	TReal x((nu+he)*cosq(phi)*cosq(lambda)),
 		y((nu+he)*cosq(phi)*sinq(lambda)),
 		z( (nu*b*b/(a*a) + he)*sinq(phi));
 	TPositionVector pv(x,y,z,TCoordSysFactory::k3DCartesian);

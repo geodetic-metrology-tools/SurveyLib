@@ -2,6 +2,7 @@
 
 #include <tut/tut.hpp>
 
+#include <sstream>
 #include <stdexcept>
 
 
@@ -29,8 +30,12 @@ namespace tut
 		ensure(set.count(TRefSystemFactory::kITRF97));
 		ensure(set.count(TRefSystemFactory::kCCS));
 		// Example
+        std::stringstream out;
 		for(TRefFrameInfo::RefFrameSet::const_iterator it = set.begin(); it!=set.end(); ++it)
-			std::cout << *it << std::endl;
+        {
+			out << *it << std::endl;
+        }
+        //std::cout << out.str() << std::endl;
 	}
 
 	template<>

@@ -5,24 +5,24 @@
 
 #include "TAFreeInstrument.h"
 
-TAFreeInstrument::TAFreeInstrument(const string& id, const TLength* ics)
+TAFreeInstrument::TAFreeInstrument(const std::string& id, const TLength* ics)
 {
 	fSetup = "";
 	instrumentID = id;
 	instrumentCenteringSigma = ics;
 }
 
-const string& TAFreeInstrument::getSetup() const
+const std::string& TAFreeInstrument::getSetup() const
 {
 	return fSetup;
 }
 
-void TAFreeInstrument::setSetup(string setup)
+void TAFreeInstrument::setSetup(std::string setup)
 {
 	fSetup = setup;
 }
 
-const string& TAFreeInstrument::getInstrumentID() const
+const std::string& TAFreeInstrument::getInstrumentID() const
 {
 	return instrumentID;
 }

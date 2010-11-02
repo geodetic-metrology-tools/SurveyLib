@@ -15,7 +15,7 @@ TSpatialLine::TSpatialLine()
 
 TSpatialLine::TSpatialLine(const TSpatialPointName firstEndName)
 {//constructor vertical line
-	string nullName ="";
+	std::string nullName ="";
 	TSpatialPointName secondEndName (nullName);
 
 	fFirstEndName = firstEndName;
@@ -82,7 +82,7 @@ bool	TSpatialLine::ifNotDoneDefinePlane(const TSpatialPointName firstEndName)
 
 	if(!(isDefine()))
 	{
-		string nullName ="";
+		std::string nullName ="";
 		TSpatialPointName secondEndName (nullName);
 
 		fFirstEndName = firstEndName;
@@ -124,7 +124,7 @@ TSpatialPointName	TSpatialLine::getSecondEndName() const
 }
 
 
-string TSpatialLine::getName() const
+std::string TSpatialLine::getName() const
 {//gets the line's name
 	return fName;
 }

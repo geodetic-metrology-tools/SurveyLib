@@ -14,7 +14,7 @@ EDM::EDM(const string& id, const TLength* ih, const TLength* sih, const TLength*
 
 EDM::~EDM()
 {
-	hash_map<string, const EDMTarget*>::iterator iter = targets.begin();
+	stdext::hash_map<string, const EDMTarget*>::iterator iter = targets.begin();
 
 	while (iter != targets.end())
 	{

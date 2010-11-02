@@ -63,7 +63,7 @@ TCCsFilter *TCCsFilter::instance()
 void	TCCsFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 {	// function to get a gons angle from a QTextStream object
 	// and set the value in a TAngle object
-	real	ccs;
+	TReal	ccs;
 
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')
