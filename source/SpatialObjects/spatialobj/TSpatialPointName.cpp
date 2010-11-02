@@ -35,13 +35,13 @@ TSpatialPointName::TSpatialPointName()
 }
 
 
-TSpatialPointName::TSpatialPointName(  const string &name )
+TSpatialPointName::TSpatialPointName(  const std::string &name )
 	: fName(name), fClassification(""), fElement(""), /*fMultiPart(false),*/ fPointId(), fPointComment("")
 {//constructor of a point name with just the name
 }
 
 
-TSpatialPointName::TSpatialPointName(  const string &name, const string &classifier, const string &element )
+TSpatialPointName::TSpatialPointName(  const std::string &name, const std::string &classifier, const std::string &element )
 	: fName(name), fClassification(classifier), fElement(element),  /*fMultiPart(true),*/ fPointId(), fPointComment("")
 {//constructor of a point name with all three components
 	fNamingConvention=kDBName;
@@ -91,7 +91,7 @@ TSpatialPointName& TSpatialPointName::operator=(const TSpatialPointName& name)
 }*/
 
 
-void	TSpatialPointName::setName( const string &name )
+void	TSpatialPointName::setName( const std::string &name )
 {
 	if (fNamingConvention == kDBName)
 	{
@@ -126,7 +126,7 @@ void	TSpatialPointName::setName( const string &name )
 	return;
 }
 	
-string	TSpatialPointName::getName() const
+std::string	TSpatialPointName::getName() const
 {
 
 	if (fNamingConvention == kDBName)
@@ -136,7 +136,7 @@ string	TSpatialPointName::getName() const
 			||  fName.length() > 1)
 		throw "point name conversion not possible";
 
-		string s(fClassification);
+		std::string s(fClassification);
 		if (fClassification.length() <6) s.resize(6,'_');
 		if (fElement.length() <6) 
 		{

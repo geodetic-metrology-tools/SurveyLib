@@ -15,7 +15,7 @@ TSpatialLineName::TSpatialLineName() : fName(""), fFirstEndName(), fSecondEndNam
 
 TSpatialLineName::TSpatialLineName(const TSpatialPointName firstEndName)
 {//constructor vertical line
-	string nullName ="";
+	std::string nullName ="";
 	TSpatialPointName secondEndName (nullName);
 
 	fFirstEndName = firstEndName;
@@ -98,7 +98,7 @@ bool	TSpatialLineName::ifNotDoneDefineLine(const TSpatialPointName firstEndName)
 
 	if(!(isDefine()))
 	{
-		string nullName ="";
+		std::string nullName ="";
 		TSpatialPointName secondEndName (nullName);
 
 		fFirstEndName = firstEndName;
@@ -140,7 +140,7 @@ TSpatialPointName	TSpatialLineName::getSecondEndName() const
 }
 
 
-string TSpatialLineName::getName() const
+std::string TSpatialLineName::getName() const
 {//gets the line's name
 	return fName;
 }

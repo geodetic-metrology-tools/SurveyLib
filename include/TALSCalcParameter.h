@@ -16,7 +16,7 @@
 #endif // _MSC_VER >= 1000
 
 #include <string>
-using namespace std;
+//using namespace std;
 
 //! Abstract class for ls calc parameters 
 class TALSCalcParameter {
@@ -30,7 +30,7 @@ public:
 	//@{
 	/*! Constructor
 	\param name parameter's identifier */
-	explicit TALSCalcParameter(string name);
+    explicit TALSCalcParameter(const std::string & name);
 	/*! Destructor */
 	virtual ~TALSCalcParameter();
 	//@}
@@ -41,9 +41,9 @@ public:
 	virtual bool  operator==(const TALSCalcParameter& right) const;
 
 	/*! Returns the parameter's identifier as a string */
-	string getName() const;
+	std::string getName() const;
 
-	void setName(string n) { fName = n; }
+	void setName(const std::string & n) { fName = n; }
 
 
 private:
@@ -54,7 +54,7 @@ private:
 	TALSCalcParameter&	operator=(const TALSCalcParameter& right);
 
 
-	string fName;	/*!< string identifying the parameter */
+	std::string fName;	/*!< string identifying the parameter */
 
 };
 

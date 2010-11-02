@@ -1,6 +1,6 @@
 // T3DMatrix.h
 /*!
-	Class for a general 3x3 real matrix
+	Class for a general 3x3 TReal matrix
 
 	Patterns:
 
@@ -26,15 +26,11 @@
 //#include  <**classname**>
 //
 //class  **classname**;
-#include <nag.h>
-#include <nagf03.h>
-#include <nagf04.h>
-#include <nagf06.h>
 #include "TACoordSysMatrix.h"
 #include "TFreeVector.h"
 #include "TPositionVector.h"
 #include "TCoordSysFactory.h"
-using namespace std;
+//using namespace std;
 // typedefs
 //
 //
@@ -43,7 +39,7 @@ using namespace std;
 /*! \ingroup spatialobjects
 	@{*/
 
-//! Class for a general 3x3 real matrix
+//! Class for a general 3x3 TReal matrix
 class  T3DMatrix : public TACoordSysMatrix//: public TObject  
 {
 public:
@@ -66,7 +62,7 @@ public:
 
 	/*!Initializes all the matrice's elements to a common value
 	\param comVal the common value of all the matrice's elements*/
-	virtual void	operator=(const real&);
+	virtual void	operator=(const TReal&);
 	
 	/*!\return the sum of this matrix and a second one*/
 	T3DMatrix		operator+(const T3DMatrix&) const;
@@ -96,7 +92,7 @@ public:
 	virtual TFreeVector		operator*(const TFreeVector& right) const;
 
 	/*!\return the product of this matrix by a scalar*/
-	virtual T3DMatrix	operator*(const real&);
+	virtual T3DMatrix	operator*(const TReal&);
 
 	/*!\return the product of this matrix by TDouble*/
 	virtual T3DMatrix	operator*(const TDouble&);
@@ -116,17 +112,17 @@ public:
 	/*!Initializes all the matrice's diagonal elements to a common value.
 	The non-diagonal elements are set to zero.
 	\param comVal the common value of all the matrice's diagonal elements*/
-	virtual bool	initDiag( const real&);
+	virtual bool	initDiag( const TReal&);
 	
 	/*!inverse and rewrite this
 	\return true if possible*/
 	bool	invert();
 	
 	//!set a element into a 3D matrix
-	bool setElt(const int, const int, const real);
+	bool setElt(const int, const int, const TReal);
 
 	//!get a element of a 3D matrix
-	real getElt(const int, const int) const;
+	TReal getElt(const int, const int) const;
 
 	
 	//@}

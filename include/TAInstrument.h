@@ -16,7 +16,7 @@
 
 //include files
 #include <string>
-using namespace std;
+//using namespace std;
 
 #include "TAFreeInstrument.h"
 
@@ -36,7 +36,7 @@ public:
 
 protected:
 
-	TAInstrument(const string& id, const TLength* ics, const TLength* ih, const TLength* ihs);
+	TAInstrument(const std::string& id, const TLength* ics, const TLength* ih, const TLength* ihs);
 
 	const TLength* instrumentHeight;
 	const TLength* instrumentHeightSigma;		

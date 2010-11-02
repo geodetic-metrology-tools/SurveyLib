@@ -73,7 +73,7 @@ TGeoidValues& TGeoidValues::operator=(const TGeoidValues& tgv)
 
 GeoidValue	TGeoidValues::getXiAzimuth(TAngle azimuth)
 {//
-	real  az = azimuth.getRadiansValue();
+	TReal  az = azimuth.getRadiansValue();
 	GeoidValue	XiAzimuthValue;
 	XiAzimuthValue = fXiValue*cosq(az) + fEtaValue*sinq(az);
 	return XiAzimuthValue;
@@ -82,7 +82,7 @@ GeoidValue	TGeoidValues::getXiAzimuth(TAngle azimuth)
 
 GeoidValue	TGeoidValues::getEtaAzimuth(TAngle azimuth)
 {//
-	real  az = azimuth.getRadiansValue();
+	TReal  az = azimuth.getRadiansValue();
 	GeoidValue	EtaAzimuthValue;
 	EtaAzimuthValue = fEtaValue*cosq(az) - fXiValue*sinq(az);
 	return EtaAzimuthValue;

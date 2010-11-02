@@ -30,14 +30,10 @@ class TPositionVector;
 #include "TCoordSysFactory.h"
 #include  "TAngle.h"
 #include  "TACoordSysMatrix.h"
-#include <nag.h>
-#include  <nagf06.h>
-#include <nagf03.h>
-#include <nagf04.h>
 #include <string>
 #include <iostream>
 
-using namespace std;
+//using namespace std;
 
 //
 //typedefs
@@ -65,11 +61,11 @@ public:
 		
 		/*! Constructor taking the radians value of the angles in the specified order
 			\param RotationType enum type for the order of filling rotation matrix
-			\param real omega radian value of the rotation angle around the X axis
-			\param real phi radian value of the rotation angle around the Y axis
-			\param real kappa radian value of the rotation angle around the Z axis
+			\param TReal omega radian value of the rotation angle around the X axis
+			\param TReal phi radian value of the rotation angle around the Y axis
+			\param TReal kappa radian value of the rotation angle around the Z axis
 			\param TVCoordinateSystem* */
-		TRotationMatrix(ERotationType kR, real, real, real);
+		TRotationMatrix(ERotationType kR, TReal, TReal, TReal);
 
 		
 		//! Copy Constructor 
@@ -114,7 +110,7 @@ public:
 			\param omega radian value for the rotation angle around X axis
 			\param phi radian value for the rotation angle around Y axis
 			\param kappa radian value for the rotation angle around Z axis */
-		bool setAllRotations(ERotationType kR, real&, real&, real&);
+		bool setAllRotations(ERotationType kR, TReal&, TReal&, TReal&);
 
 		
 		
@@ -133,7 +129,7 @@ public:
 		virtual TRotationMatrix		transposed() const;
 
 		//!get a element of a rotation matrix
-		real getElt(const int, const int) const;
+		TReal getElt(const int, const int) const;
 
 
 	

@@ -20,7 +20,7 @@
 #endif // _MSC_VER >= 1000
 
 #include <hash_map>
-using namespace stdext;
+//using namespace stdext;
 
 #include "TAInstrument.h"
 #include "EDMTarget.h"
@@ -38,7 +38,7 @@ public:
 	const EDMTarget* getDefaultTarget() const { return defaultTarget; }
 	const EDMTarget* getTargetNamed(const string& targetName) const
 	{
-		hash_map<string, const EDMTarget*>::const_iterator i = targets.find(targetName);
+		stdext::hash_map<string, const EDMTarget*>::const_iterator i = targets.find(targetName);
 		if (i == targets.end())
 		{
 			return NULL;
@@ -52,7 +52,7 @@ private:
 
 	const EDMTarget* defaultTarget;
 
-	hash_map<string, const EDMTarget*> targets; // target name to target pairs
+	stdext::hash_map<string, const EDMTarget*> targets; // target name to target pairs
 
 };
 

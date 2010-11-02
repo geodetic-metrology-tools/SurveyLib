@@ -26,7 +26,7 @@ class TFreeVector;
 class TPositionVector;
 //
 #include  "TAngle.h"
-using namespace std;
+//using namespace std;
 
 //
 //typedefs

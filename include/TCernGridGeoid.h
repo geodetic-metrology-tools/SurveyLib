@@ -34,7 +34,7 @@ class	TRefSystemFactory;
 #include	"TAGeoidModel.h"
 #include	"TMatrix.h"
 
-using namespace std;
+//using namespace std;
 // typedefs
 //
 //
@@ -117,7 +117,7 @@ private:
 	/**@name Private Functions */
 	//@{
 		/*!used to interpolate N*/
-		real splineInterpolation(const TMatrix& mat, const TSpatialPosition& spos) const;
+		TReal splineInterpolation(const TMatrix& mat, const TSpatialPosition& spos) const;
 	//@}
 	
 	/**@name Member Attributes */

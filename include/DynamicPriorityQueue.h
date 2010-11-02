@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <stddef.h>
 #include <string>
-using namespace std;
+//using namespace std;
 
 #include "PtrGreater.h"
 
@@ -31,11 +31,11 @@ template <class T>
 class DynamicPriorityQueue
 {
 public:
-	typename typedef vector<T>::size_type Size;
-	typename typedef vector<T>::difference_type index;
+	typename typedef std::vector<T>::size_type Size;
+	typename typedef std::vector<T>::difference_type index;
 	
 	// constructor
-	DynamicPriorityQueue(vector<T>& trans)
+	DynamicPriorityQueue(std::vector<T>& trans)
 		: Indices(trans.size()), c(trans.size()), first(&*trans.begin()), csize(trans.size())
 	{
 		//index i;
@@ -138,8 +138,8 @@ public:
 
 
 private:
-	vector<index> Indices;
-	vector<T*> c;
+	std::vector<index> Indices;
+	std::vector<T*> c;
 	T* first;
 	PtrGreater<T*> comp;
 	Size csize;

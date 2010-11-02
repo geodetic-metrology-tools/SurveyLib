@@ -38,7 +38,7 @@ class  TVReferenceFrame;
 using namespace std;
 
 // typedefs
-typedef  real  Component;
+typedef  TReal  Component;
 typedef  bool  CompKnown;
 //
 //
@@ -155,17 +155,17 @@ protected:
 private:
 	//private functions
 	//! sets the sigma11 error
-//	void  setSigma11( real x )  { fSigmaMtrx(1,1) = x;  return; }
+//	void  setSigma11( TReal x )  { fSigmaMtrx(1,1) = x;  return; }
 	//! sets the sigma22 error
-//	void  setSigma22( real x )  { fSigmaMtrx(2,2) = x; return; }
+//	void  setSigma22( TReal x )  { fSigmaMtrx(2,2) = x; return; }
 	//! sets the sigma33 error
-//	void  setSigma33( real x )  { fSigmaMtrx(3,3) = x; return; }
+//	void  setSigma33( TReal x )  { fSigmaMtrx(3,3) = x; return; }
 	//! sets the sigma12 (and sigma 21) error
-//	void  setSigma12( real x ) { fSigmaMtrx(1,2) = x; fSigmaMtrx(2,1) = x; return;}
+//	void  setSigma12( TReal x ) { fSigmaMtrx(1,2) = x; fSigmaMtrx(2,1) = x; return;}
 	//! sets the sigma13 (and sigma 31) error
-//	void  setSigma13( real x ) { fSigmaMtrx(1,3) = x; fSigmaMtrx(3,1) = x; return;}
+//	void  setSigma13( TReal x ) { fSigmaMtrx(1,3) = x; fSigmaMtrx(3,1) = x; return;}
 	//! sets the sigma23 (and sigma 32) error
-//	void  setSigma23( real x ) { fSigmaMtrx(2,3) = x; fSigmaMtrx(3,2) = x; return;}
+//	void  setSigma23( TReal x ) { fSigmaMtrx(2,3) = x; fSigmaMtrx(3,2) = x; return;}
 
 	
 	//! gets the sigma11

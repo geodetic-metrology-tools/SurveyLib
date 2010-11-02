@@ -133,7 +133,7 @@ TSpatialPointName TOrientationCnstr::getPoint() const
 }
 
 
-string TOrientationCnstr::getName() const
+std::string TOrientationCnstr::getName() const
 {
 	return fName;
 }
@@ -150,7 +150,7 @@ void	TOrientationCnstr::ifNotDoneSetCnstrBearing(TAngle cBear)
 }
 
 
-void	TOrientationCnstr::ifNotDoneSetName(string name)
+void	TOrientationCnstr::ifNotDoneSetName(std::string name)
 {//Sets the constraint's width if it isn't done yet
 
 	if ( fName == "")

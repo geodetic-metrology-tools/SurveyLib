@@ -74,16 +74,16 @@ protected:
 	/*!\name member protected functions*/
 	//@{
 	//!get the (i,j) value
-	real getC(const int& i, const int& j) const;
+	TReal getC(const int& i, const int& j) const;
 
 	//!set value to (i,j)
-	void setC(const int& i, const int& j, real value);
+	void setC(const int& i, const int& j, TReal value);
 	//@}
 
 
 private:
 	
-	real					mx[3][3]; /*!< élément of the 3*3 matrix */
+	TReal					mx[3][3]; /*!< élément of the 3*3 matrix */
 	TVCoordinateSystem*		fCoordSys; /*!< coordinate system */
 		
 	

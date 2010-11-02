@@ -27,7 +27,7 @@
 // Forward declarations
 //
 #include  <string>
-using namespace std;
+//using namespace std;
 
 class  TSpatialPosition;
 class  TSpatialVector;
@@ -94,8 +94,8 @@ private:
 	//@}
 	
 	// constants
-	static const real precisionH;
-	static const real precisionPhi;
+	static const TReal precisionH;
+	static const TReal precisionPhi;
 
 	/**@name Private Functions*/
 	//@{

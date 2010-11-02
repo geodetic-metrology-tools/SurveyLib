@@ -609,12 +609,12 @@ Quad::operator _Quad*()
 	return &value;
 }
 
-std::ostream& operator<<(std::ostream& stream, const real & value) 
+std::ostream& operator<<(std::ostream& stream, const TReal & value) 
 {
     return stream << (long double)value.value;
 }
 
-std::istream& operator>>(std::istream& stream, real & value) 
+std::istream& operator>>(std::istream& stream, TReal & value) 
 {
 	long double foo;
 	stream >> foo;
@@ -626,12 +626,12 @@ std::istream& operator>>(std::istream& stream, real & value)
 
 #elif __INTEL_COMPILER
 
-std::ostream& operator<<(std::ostream& stream, const real & value) 
+std::ostream& operator<<(std::ostream& stream, const TReal & value) 
 {
     return stream << (long double)value;
 }
 
-std::istream& operator>>(std::istream& stream, real & value) 
+std::istream& operator>>(std::istream& stream, TReal & value) 
 {
 	long double foo;
 	stream >> foo;

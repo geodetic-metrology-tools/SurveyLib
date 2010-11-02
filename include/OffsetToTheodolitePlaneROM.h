@@ -19,7 +19,7 @@
 #endif // _MSC_VER >= 1000
 
 #include <list>
-using namespace std;
+//using namespace std;
 
 #include "TOffsetToTheoPlaneMeasurement.h"
 

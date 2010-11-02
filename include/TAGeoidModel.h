@@ -27,7 +27,7 @@ class  TSpatialPosition;
 #include "TLength.h"
 #include "TAngle.h"
 #include "TRefSystemFactory.h"
-using namespace std;
+//using namespace std;
 ////////////////////////////////////////////////////////////////
 
 /*! \ingroup spatialobjects

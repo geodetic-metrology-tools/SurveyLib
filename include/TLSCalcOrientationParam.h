@@ -11,7 +11,7 @@
 
 #include <list>
 #include <string>
-using namespace std;
+//using namespace std;
 
 #include "TRotationMatrix.h"
 #include "UEOIndices.h"
@@ -29,7 +29,7 @@ public:
 		/*! Constructor
 		\param provAng provisional value for the orientation
 		\param ems orientation status for calculation */
-		explicit TLSCalcOrientationParam(struct Angles& provAng,struct LSParaStatus ems,string name);
+		explicit TLSCalcOrientationParam(struct Angles& provAng,struct LSParaStatus ems, std::string name);
 		/*! Copy constructor */
 		TLSCalcOrientationParam(const TLSCalcOrientationParam& source);
 		/*! Destructor */
@@ -105,7 +105,7 @@ private:
 /*!@name Constants definition */
 //@{
 /*! List of ls calc orientation observations  */
-typedef list< TLSCalcOrientationParam >		LSOrientContainer;
+typedef std::list< TLSCalcOrientationParam >		LSOrientContainer;
 /*! Iterator of the list of ls calc orientation observations */
 typedef LSOrientContainer::iterator			LSOrientIter;
 /*! Constant iterator of the list of ls calc orientation observations */

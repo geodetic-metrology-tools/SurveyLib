@@ -33,7 +33,7 @@ class	TRefSystemFactory;
 #include	"TPositionVector.h"
 #include	"TAGeoidModel.h"
 
-using namespace std;
+//using namespace std;
 // typedefs
 //
 //

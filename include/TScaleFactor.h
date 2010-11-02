@@ -43,8 +43,8 @@ public:
 		//! Default Constructor, factor initialized to 1 
 		TScaleFactor();
 
-		//! Constructor taking a scale factor as a real
-		explicit TScaleFactor(real);
+		//! Constructor taking a scale factor as a TReal
+		explicit TScaleFactor(TReal);
 
 		//! Constructor taking a scale factor as a TDouble
 		explicit TScaleFactor(TScalar);
@@ -69,7 +69,7 @@ public:
 		TScaleFactor operator * ( const TScaleFactor & );
 		
 		//! Set the factor of ScaleFactor
-		void setScaleFactor( real );
+		void setScaleFactor( TReal );
 
 		//! Set the factor of ScaleFactor
 		void setScaleFactor( TScalar );
@@ -121,7 +121,7 @@ private:
 // Inline Definitions
 //////////////////////////////////////////////////////////////////////
 
-inline void TScaleFactor::setScaleFactor( real fact) {fScaleFactor.setValue( fact ); return;}
+inline void TScaleFactor::setScaleFactor( TReal fact) {fScaleFactor.setValue( fact ); return;}
 
 inline void TScaleFactor::setScaleFactor( TScalar fact) {fScaleFactor = fact; return;}
 

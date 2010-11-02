@@ -16,18 +16,14 @@
 // Forward declarations
 //
 #include	<float.h>
-#if __INTEL_COMPILER
-#include	<mathimf.h>
-#else
 #include <math.h>
-#endif
 //#include	<assert.h>
 class    TSpatialPoint;
 class    TReferenceEllipsoid;
 class	 TCoordinateSystem;
 #include	"TReferenceFrame.h"
 #include    <string>
-using namespace std;
+//using namespace std;
 // typedefs
 
 ////////////////////////////////////////////////////////////////

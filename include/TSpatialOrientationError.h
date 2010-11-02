@@ -35,10 +35,10 @@ class  TVReferenceFrame;
 #include "TGraph.h"
 #include  "TSpatialStatus.h"
 
-using namespace std;
+//using namespace std;
 
 // typedefs
-typedef  real  Component;
+typedef  TReal  Component;
 typedef  bool  CompKnown;
 //
 //

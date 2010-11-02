@@ -18,7 +18,7 @@ Copyright 1999,2000, CERN, EST/SU. All rights reserved.
 #pragma once
 #endif // _MSC_VER >= 1000
 #include <string>
-using namespace std;
+//using namespace std;
 
 /*!\ingroup spatialobjects
 	@{*/
@@ -42,13 +42,13 @@ public:
 
 		//!Constructor
 		/*!@param name a string that will be assigned to the name component of this object*/
-		explicit  TSpatialPointName( const string& name );
+		explicit  TSpatialPointName( const std::string& name );
 
 		//!Constructor
 		/*!@param name the Name component of this object
 		@param element the Element component of this object
 		@param classifier the Classifier component of this object*/
-		TSpatialPointName( const string& name, const string& classifier, const string& element );
+		TSpatialPointName( const std::string& name, const std::string& classifier, const std::string& element );
 
 		//! Copy constructor
 		TSpatialPointName( const TSpatialPointName& );
@@ -70,15 +70,15 @@ public:
 
 		//!Sets the name component
 		/*!@param name string assigned to the Name component of this object*/
-		void	setName( const string& name );
+		void	setName( const std::string& name );
 
 		//!Sets the element component
 		/*!@param elt string assigned to the Element component of this object*/
-		void	setElement( const string& elt);
+		void	setElement( const std::string& elt);
 
 		//!Sets the classifier component
 		/*!@param clsfr string assigned to the Classifier component of this object*/
-		void	setClassifier( const string& clsfr);
+		void	setClassifier( const std::string& clsfr);
 
 		//!Sets the name type
 		/*!@param nameType enum corresponding to the naming convention used*/
@@ -95,22 +95,22 @@ public:
 
 		/*!Sets the point's comment (for file from geode)
 		\param id the point's comment as a string*/
-		virtual  void  setComment( const string& id) {fPointComment = id; return;};
+		virtual  void  setComment( const std::string& id) {fPointComment = id; return;};
 	
 		/*!@return the Name component as a string*/
-		string	getName() const;
+		std::string	getName() const;
 
 		/*!@return the Element component as a string*/
-		string	getElement() const;
+		std::string	getElement() const;
 
 		/*!@return the Classifier component as a string*/
-		string	getClassifier() const;
+		std::string	getClassifier() const;
 
 		/*!Returns the point's Id */
 		virtual  long int  getId()  const {return fPointId;};
 
 		/*!Returns the point's comment */
-		virtual  string  getComment()  const {return fPointComment;};
+		virtual  std::string  getComment()  const {return fPointComment;};
 
 		//!Returns the name type*/
 		ENameType	getNamingConvention() const {return fNamingConvention;};
@@ -119,12 +119,12 @@ public:
 
 private:
 	
-	string				fName;
-	string				fElement;
-	string				fClassification;
+	std::string				fName;
+	std::string				fElement;
+	std::string				fClassification;
 
 	long int			fPointId; /*!< identifier of the point */
-	string				fPointComment; /*!< comments on the point */
+	std::string				fPointComment; /*!< comments on the point */
 
 	static ENameType	fNamingConvention; /*!< indicate if the point is named with DB's convention or not */
 	//bool			fMultiPart;     // indicates that the point name has more than the name component
@@ -141,15 +141,15 @@ private:
 
 //inline void TSpatialPointName::setName( const string &n ) {fName = n; return;} //set the name of the point
 
-inline void TSpatialPointName::setClassifier( const string &c ) {fClassification = c; /*fMultiPart = true;*/ return;}//set the classe of the point
+inline void TSpatialPointName::setClassifier( const std::string &c ) {fClassification = c; /*fMultiPart = true;*/ return;}//set the classe of the point
 
-inline void TSpatialPointName::setElement( const string &e ) {fElement = e; /*fMultiPart = true;*/ return;}//set the type of the point 
+inline void TSpatialPointName::setElement( const std::string &e ) {fElement = e; /*fMultiPart = true;*/ return;}//set the type of the point 
 
 //inline string	TSpatialPointName::getName() const {return fName;}//return the name of the point
 
-inline string	TSpatialPointName::getClassifier() const {return fClassification;}//return the classe of the point
+inline std::string	TSpatialPointName::getClassifier() const {return fClassification;}//return the classe of the point
 
-inline string	TSpatialPointName::getElement() const {return fElement;}//return the type of the point
+inline std::string	TSpatialPointName::getElement() const {return fElement;}//return the type of the point
 
 //inline bool	TSpatialPointName::composite() const {return fMultiPart;}
 

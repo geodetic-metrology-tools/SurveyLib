@@ -11,7 +11,7 @@
 
 //include files
 #include <list>
-using namespace std;
+//using namespace std;
 
 #include "TVSpatialPtListener.h"
 

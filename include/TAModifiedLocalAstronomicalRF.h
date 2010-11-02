@@ -39,7 +39,7 @@ class	TGraph;
 #include  "TSpatialOrientation.h"
 
 
-using namespace std;
+//using namespace std;
 
 
 

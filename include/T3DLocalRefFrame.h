@@ -21,7 +21,7 @@
 // Forward declarations
 //
 #include  <string>
-using namespace std;
+//using namespace std;
 //
 class  TSpatialPosition;
 class  TSpatialVector;

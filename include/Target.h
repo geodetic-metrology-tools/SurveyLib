@@ -14,14 +14,14 @@ class Target {
 
 public:
 
-	const string& getTargetID() const { return targetID; }
+	const std::string& getTargetID() const { return targetID; }
 	const TLength* getTargetHeight() const { return targetHeight; }
 	const TLength* getTargetHeightSigma() const { return targetHeightSigma; }
 	const TLength* getTargetCenteringSigma() const { return targetCenteringSigma; }
 
 protected:	
 
-	Target(const string& tID, const TLength* tcs, const TLength* th, const TLength* ths)
+	Target(const std::string& tID, const TLength* tcs, const TLength* th, const TLength* ths)
 	{
 		targetID = tID;
 		targetHeight = th;
@@ -36,7 +36,7 @@ protected:
 		delete targetCenteringSigma;
 	}
 
-	string targetID;
+	std::string targetID;
 	const TLength* targetHeight;
 	const TLength* targetHeightSigma;
 	const TLength* targetCenteringSigma;

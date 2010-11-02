@@ -1,6 +1,6 @@
 //	TScalar.h 
 /*!
-The TScalar class represents a real numerical value in real precision.
+The TScalar class represents a TReal numerical value in TReal precision.
 
  
 Patterns:
@@ -35,7 +35,7 @@ class TDouble;
 #include "TColumnVector.h"
 
 //!Type Definition
-typedef	real	ScalarValue;	// the value for Scalar
+typedef	TReal	ScalarValue;	// the value for Scalar
 //
 ////////////////////////////////////////////////////////////////
 
@@ -54,7 +54,7 @@ public:
 	//! Default Constructor
 	TScalar();
 	//! constructor taking a given Scalar value
-	TScalar(real value);
+	TScalar(TReal value);
 	//! constructor taking a given Scalar value
 	TScalar(TDouble& value);
 	//! copy constructor

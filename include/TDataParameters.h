@@ -32,7 +32,7 @@
 // Forward declarations
 //
 #include  <string>
-using namespace std;
+//using namespace std;
 //
 class		TAReferenceFrame;
 #include	"TAReferenceFrame.h"
@@ -211,7 +211,7 @@ private:
 
 namespace std {
     template<>
-    void swap(TDataParameters & lhs, TDataParameters & rhs)
+    inline void swap(TDataParameters & lhs, TDataParameters & rhs)
     {
         lhs.swap(rhs);
     }

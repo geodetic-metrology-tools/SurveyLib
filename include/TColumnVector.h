@@ -26,7 +26,7 @@ Designed to be easiliy usable with matrix/vector functions of the NagC math libr
 ////////////////////////////////////////////////////////////////
 //
 #include  <list>
-using namespace std;
+//using namespace std;
 //
 //class  **classname**;
 class TDouble;
@@ -88,7 +88,7 @@ public:
 	virtual TColumnVector&	operator-=(const TColumnVector&);
 
 	//!return the product of this vector by a scalar
-	virtual TColumnVector	operator*(const real k);
+	virtual TColumnVector	operator*(const TReal k);
 
 	//!return the product of this vector by TDouble
 	virtual TColumnVector	operator*(const TDouble k);
@@ -98,15 +98,15 @@ public:
 
 	//!* Initializes all the vector's elements to a common value
 	/*!	\param comVal the common value of all the vector's elements*/
-	virtual void	operator=(const real comVal);
+	virtual void	operator=(const TReal comVal);
 
 	//!Vector element access operator (non-const version). Indices start at 1.
 	/*!\param row the row of the desired element*/
-	virtual real&		operator()(const int row);
+	virtual TReal&		operator()(const int row);
 
 	//!Vector element access operator (const version). Indices start at 1.
 	/*!\param row the row of the desired element*/
-	virtual real		operator()(const int row) const;
+	virtual TReal		operator()(const int row) const;
 
 	
 	//@}
@@ -131,9 +131,9 @@ public:
 private:
 
 	//!return the adress of the vector's first element
-	virtual real *	getFirstEltAdr() const;
+	virtual TReal *	getFirstEltAdr() const;
 
-	real*			fVector;
+	TReal*			fVector;
 	int				fNbRows;
 
 };

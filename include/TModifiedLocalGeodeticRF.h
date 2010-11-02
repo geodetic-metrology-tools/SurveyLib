@@ -27,7 +27,7 @@
 // Forward declarations
 //
 #include  <string>
-using namespace std;
+//using namespace std;
 //
 class  TSpatialPosition;
 //class  TGraph;
@@ -109,11 +109,11 @@ private:
 	TModifiedLocalGeodeticRF& operator=( const TModifiedLocalGeodeticRF& );
 	
 	// constants
-	static const real precisionH;
-	static const real precisionPhi;
+	static const TReal precisionH;
+	static const TReal precisionPhi;
 
 	//typedef
-	typedef struct {real phi; real lambda; real h;} TGeodeticCoords;
+	typedef struct {TReal phi; TReal lambda; TReal h;} TGeodeticCoords;
 
 	
 

@@ -27,9 +27,9 @@ namespace tut
         TLV95Transformation trans(true);
         ensure("Transform returns true", trans.transform(position));
 
-        ensure_distance("LV95 X", position.getX().getMetresValue(), static_cast<real>(1268507.870), static_cast<real>(0.001));
-		ensure_distance("LV95 Y", position.getY().getMetresValue(), static_cast<real>(2617306.920), static_cast<real>(0.001));
-		ensure_distance("LV95 H", position.getH().getMetresValue(), static_cast<real>(457.138 - 1.2233), static_cast<real>(0.001));
+        ensure_distance("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
+		ensure_distance("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
+		ensure_distance("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
 	}
 
     template<>
@@ -51,20 +51,20 @@ namespace tut
     void object::test<4>()
     {
         set_test_name("Transforming a TSpatialPosition from LV95 into CH1903+");
-        TPositionVector position(1268507.870, 2617306.920, (457.138 - 1.2233), TCoordSysFactory::k2DPlusH);
+        TPositionVector position(1268507.870, 2617306.920, (457.138 /*- 1.2233*/), TCoordSysFactory::k2DPlusH);
         
         TLV95Transformation trans(false);
         ensure("Transform returns true", trans.transform(position));
 
         ensure_equals("CH1903+ Phi (Deg)", position.getPhiEllipsoid().getDegreesValue(), 47);
         ensure_equals("CH1903+ Phi (Min)", position.getPhiEllipsoid().getMinutesValue(), 34);
-        ensure_distance("CH1903+ Phi (Sec)", position.getPhiEllipsoid().getSecondsValue(), static_cast<real>(6.404965), static_cast<real>(1e-4));
+        ensure_distance("CH1903+ Phi (Sec)", position.getPhiEllipsoid().getSecondsValue(), static_cast<TReal>(6.404965), static_cast<TReal>(1e-4));
 
         ensure_equals("CH1903+ Lam (Deg)", position.getLambdaEllipsoid().getDegreesValue(), 7);
         ensure_equals("CH1903+ Lam (Min)", position.getLambdaEllipsoid().getMinutesValue(), 40);
-        ensure_distance("CH1903+ Lam (Sec)", position.getLambdaEllipsoid().getSecondsValue(), static_cast<real>(10.574820), static_cast<real>(1e-4)); 
+        ensure_distance("CH1903+ Lam (Sec)", position.getLambdaEllipsoid().getSecondsValue(), static_cast<TReal>(10.574820), static_cast<TReal>(1e-4)); 
 
-        ensure_distance("CH1903+ H", position.getH().getMetresValue(), static_cast<real>(457.138), static_cast<real>(1e-3));
+        ensure_distance("CH1903+ H", position.getH().getMetresValue(), static_cast<TReal>(457.138), static_cast<TReal>(1e-3));
 	}
 
     template<>

@@ -6,7 +6,7 @@
 #include <string>
 //#include <windows.h>
 
-using namespace std;
+//using namespace std;
 #include "TGlobalDefs.h"
 
 

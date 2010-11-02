@@ -18,7 +18,7 @@
 #endif // _MSC_VER >= 1000
 
 #include <string>
-using namespace std;
+//using namespace std;
 
 /*! \ingroup spatialmeasurements
 	@{*/
@@ -43,17 +43,17 @@ public:
 	void				setId(int id);
 
 	/*!@return the comment of the measurement*/
-	string				getComment() const { return fComment; }
+	std::string				getComment() const { return fComment; }
 	/*!sets the comment of the measurement
 	@param com a string*/
-	void				setComment(string com) { fComment = com; }
+	void				setComment(std::string com) { fComment = com; }
 	
 	/*!@return the head comment of the measurement*/
-	string				getHeaderComment() const { return fHeaderComment; }
+	std::string				getHeaderComment() const { return fHeaderComment; }
 	
 	/*!sets the head comment of the measurement
 	@param com the comment line as a string*/
-	void				setHeaderComment(string com) { fHeaderComment = com; }
+	void				setHeaderComment(std::string com) { fHeaderComment = com; }
 
 	/*! Indicate if the id is frome Geode or not*/
 	bool				isGeodeIdUsed() const { return fHasAGeodeId; }
@@ -69,8 +69,8 @@ protected:
 	int observationID;
 	int								fIdentifier; /*< identifier from geode */
 	bool							fHasAGeodeId; /*< indicating if it use a Geode identifier or not */
-	string							fComment; /*< comment from geode*/
-	string							fHeaderComment; /*< head comment line (starting with % in input file)*/	
+	std::string						fComment; /*< comment from geode*/
+	std::string						fHeaderComment; /*< head comment line (starting with % in input file)*/	
 
 };
 #endif
