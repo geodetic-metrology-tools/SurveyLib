@@ -6,6 +6,14 @@
 	ProjectGUID="{143F6029-4033-421C-B763-00C9E6CA9994}"
 	VCNestedProjectGUID="{9FA305B9-A12F-47CA-8FA2-05C86E8CB1B1}"
 	VCNestedProjectFileName="StreamFormattersTest.vcproj">
-	<Configurations/>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				GenerateAlternateCodePaths="0"
+				UseProcessorExtensions="0"/>
+		</Configuration>
+	</Configurations>
 	<Files/>
 </VisualStudioProject>

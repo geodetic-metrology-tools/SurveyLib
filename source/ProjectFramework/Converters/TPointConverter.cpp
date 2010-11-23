@@ -397,10 +397,50 @@ void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus
 
 
 
+void	TPointConverter::writeTwoCoordParam(	const TSpatialStatus::ESpatialStatus status,
+												const int width,
+												const int precision,
+												const TLength::EUnits unit,
+												const string separator,
+												const TLength XYparam,
+												const TLength XZparam,
+												const TLength YZparam,
+												const string Dparam)
+{
+	TAStreamFormatter*	stream = getStream();
+
+	stream->setLengthUnits(unit);
+	stream->setWidthFormat(width);
+	stream->setPrecisionFormat(precision);
+
+	//write X
+	if(status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy)
+		(*stream)<<(XYparam);	
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
 
 
+	//write Y
+	if(status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxz)
+		(*stream)<<(XZparam);
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
 
 
+	//write Z
+	if(status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVyz)
+		(*stream)<<(YZparam);
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
+
+	return;
+}
 
 
 

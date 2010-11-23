@@ -14,8 +14,8 @@
 				Optimization="1000"
 				GlobalOptimizations="true"
 				FloatingPointSpeculation="3"
-				GenerateAlternateCodePaths="1"
-				UseProcessorExtensions="1"
+				GenerateAlternateCodePaths="0"
+				UseProcessorExtensions="0"
 				UseIntelOptimizedHeaders="false"/>
 		</Configuration>
 		<Configuration

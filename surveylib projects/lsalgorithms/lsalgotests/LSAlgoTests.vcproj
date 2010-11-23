@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="LSAlgoTests"
 	ProjectGUID="{53F86087-1B36-4029-8430-4C3BAD5F28AC}"
+	RootNamespace="LSAlgoTests"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>

@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="CalcParams"
 	ProjectGUID="{408EF4A9-8BD7-4E46-AAF5-60B87A9EE51D}"
+	RootNamespace="CalcParams"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -44,7 +45,7 @@
 				AdditionalOptions="-Qoption,cpp,--extended_float_type"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\..\..\include;.\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc;&quot;C:\Program Files\Intel\Compiler\11.1\054\Include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_BIND_TO_CURRENT_VCLIBS_VERSION=1"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="true"
 				RuntimeLibrary="3"
@@ -201,7 +202,7 @@
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories=".\..\..\..\include;.\..\..\..\..\SurveyLib\include;.\..\..\..\..\SEAL_Libraries\nagc;&quot;C:\Program Files\Intel\Compiler\11.1\054\Include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_BIND_TO_CURRENT_VCLIBS_VERSION=1"
 				StringPooling="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="0"

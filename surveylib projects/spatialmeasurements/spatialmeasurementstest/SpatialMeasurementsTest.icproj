@@ -6,6 +6,14 @@
 	ProjectGUID="{19DC978A-5A82-496F-89B4-C8E2A15EF5F4}"
 	VCNestedProjectGUID="{AC5DBA06-9D46-4C9D-9148-589A9A33DFB1}"
 	VCNestedProjectFileName="SpatialMeasurementsTest.vcproj">
-	<Configurations/>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				GenerateAlternateCodePaths="0"
+				UseProcessorExtensions="0"/>
+		</Configuration>
+	</Configurations>
 	<Files/>
 </VisualStudioProject>

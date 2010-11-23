@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="StreamFormattersTest"
 	ProjectGUID="{9FA305B9-A12F-47CA-8FA2-05C86E8CB1B1}"
+	RootNamespace="StreamFormattersTest"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>

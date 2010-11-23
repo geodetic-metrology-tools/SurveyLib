@@ -124,6 +124,17 @@ public:
 											const TDouble Zparam,
 											const string Dparam);
 
+			void	writeTwoCoordParam(		const TSpatialStatus::ESpatialStatus status,
+											const int width,
+											const int precision,
+											const TLength::EUnits unit,
+											const string separator,
+											const TLength XYparam,
+											const TLength XZparam,
+											const TLength YZparam,
+											const string Dparam);
+
+	
 			bool	isInLocalSystem() const {return	fLocalSys;}
 
 		//@}

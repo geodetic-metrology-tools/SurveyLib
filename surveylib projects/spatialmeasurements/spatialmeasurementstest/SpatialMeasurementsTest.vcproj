@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="SpatialMeasurementsTest"
 	ProjectGUID="{AC5DBA06-9D46-4C9D-9148-589A9A33DFB1}"
+	RootNamespace="SpatialMeasurementsTest"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>

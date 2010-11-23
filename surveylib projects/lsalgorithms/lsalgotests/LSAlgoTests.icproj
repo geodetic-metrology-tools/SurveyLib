@@ -6,6 +6,21 @@
 	ProjectGUID="{598E460F-57A6-43DA-94DF-09179AEBC8FA}"
 	VCNestedProjectGUID="{53F86087-1B36-4029-8430-4C3BAD5F28AC}"
 	VCNestedProjectFileName="LSAlgoTests.vcproj">
-	<Configurations/>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				GenerateAlternateCodePaths="0"
+				UseProcessorExtensions="0"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				GenerateAlternateCodePaths="0"
+				UseProcessorExtensions="0"/>
+		</Configuration>
+	</Configurations>
 	<Files/>
 </VisualStudioProject>
