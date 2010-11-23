@@ -33,7 +33,7 @@ SET(SURVEYLIB_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/../include")
 # Set the paths to the libraries
 # SET(NAGC_INCLUDE_PATH "G:/Support/SurveyingEng/software/nagc/include")
 SET(TUT_INCLUDE_PATH "C:/lib/tut-2009-08-30")
-SET(REFRAME_INCLUDE_PATH "C:/TestProject/DLLfile")
+SET(REFRAME_INCLUDE_PATH "C:/Lib/reframe")
 SET(EIGEN_INCLUDE_PATH "C:/lib/eigen/eigen-2.0.15")
 
 # Where to look for the libraries to link against
