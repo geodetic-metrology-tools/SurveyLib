@@ -3,6 +3,7 @@ include_directories (
 	.
 	${SURVEYLIB_INCLUDE_PATH}
 	${NAGC_INCLUDE_PATH}
+        ${REFRAME_INCLUDE_PATH}
 )
 
 
@@ -31,6 +32,7 @@ set(RefFrameTransformations_SOURCES
 	
 	TLV95Transformation.cpp
 	TLV03Transformation.cpp
+	TRGF93ZoneTransformation.cpp
 )
 
 # Create a variable containing all .h files:
@@ -56,6 +58,7 @@ set(RefFrameTransformations_HEADERS
 	
 	${SURVEYLIB_INCLUDE_PATH}/TLV95Transformation.h
 	${SURVEYLIB_INCLUDE_PATH}/TLV03Transformation.h
+	${SURVEYLIB_INCLUDE_PATH}/TRGF93ZoneTransformation.h
 )
 
 # Create a static library from sources:

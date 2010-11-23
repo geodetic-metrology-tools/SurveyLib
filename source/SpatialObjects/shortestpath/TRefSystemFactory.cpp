@@ -34,6 +34,7 @@
 #include "T3DLocalRefFrame.h"
 #include "TLV95ReferenceFrame.h"
 #include "TLV03ReferenceFrame.h"
+#include "TRGF93ZoneReferenceFrame.h"
 
 #include "TMLA2GCTransformation.h"
 #include "TGC2MLATransformation.h"
@@ -53,6 +54,7 @@
 #include "TXYHe2XYHgTransformation.h"
 #include "TLV95Transformation.h"
 #include "TLV03Transformation.h"
+#include "TRGF93ZoneTransformation.h"
 
 
 #include "TRefSystemFactory.h"
@@ -147,7 +149,12 @@ void	TRefSystemFactory::init()
 	pITRF97->setRefFrameId(kITRF97);
 	fRefFrameList.push_back(pITRF97);
 
-		// ETRF93
+		// FrenchRGF93 zone 5
+    TAReferenceFrame* pFrenchRGF93Zone5 = new TRGF93ZoneReferenceFrame("FrenchRGF93Zone5");
+    pFrenchRGF93Zone5->setRefFrameId(kFrenchRGF93Zone5);
+    fRefFrameList.push_back(pFrenchRGF93Zone5);
+
+        // ETRF93
 	TGeodeticRefFrame* pETRF93 = new TGeodeticRefFrame(etrf, pGRS80);
 	pETRF93->setRefFrameId(kETRF93);
 	fRefFrameList.push_back(pETRF93);
@@ -162,7 +169,7 @@ void	TRefSystemFactory::init()
     pLV95->setRefFrameId(kSwissLV95);
     fRefFrameList.push_back(pLV95);
 
-    // Swiss LV03
+        // Swiss LV03
     TAReferenceFrame* pLV03 = new TLV03ReferenceFrame("LV03");
     pLV03->setRefFrameId(kSwissLV03);
     fRefFrameList.push_back(pLV03);
@@ -737,6 +744,19 @@ void	TRefSystemFactory::init()
 		//Inverse
 		TARefFrameTransformation* pInverse = pTrans->inverse();
         pInverse->setTransformId(kSwissLV032SwissLV95);
+        fTransformList.push_back(pInverse);
+	}
+
+    {
+        ////////////////////////////////////////////////////////////////
+		// Transformation between ETRF93 and RGF93
+        ////////////////////////////////////////////////////////////////
+        TRGF93ZoneTransformation * pTrans = new TRGF93ZoneTransformation(true);
+        pTrans->setTransformId(kETRF932FrenchRGF93);
+		fTransformList.push_back(pTrans);
+		//Inverse
+		TARefFrameTransformation* pInverse = pTrans->inverse();
+        pInverse->setTransformId(kFrenchRGF932ETRF93);
         fTransformList.push_back(pInverse);
 	}
             

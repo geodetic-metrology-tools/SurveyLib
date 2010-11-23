@@ -264,4 +264,22 @@ namespace tut
 
 	}
 
+    template<>
+	template<>
+	void object::test<10>()
+	{
+        set_test_name("Transforming Bellegard from ETRF93 into RGF93 CC46");
+        TPositionVector pv(4407040.76287, 449723.28541, 4573892.46194, TCoordSysFactory::k3DCartesian);
+      
+        TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
+		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
+
+        position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93Zone5));     
+
+        ensure_distance("RGF93 CC46 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1918471.0676), static_cast<TReal>(0.0001));
+		ensure_distance("RGF93 CC46 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(5215917.6067), static_cast<TReal>(0.0001));
+		ensure_distance("RGF93 CC46 H", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<TReal>(400.157 /*- 1.2233*/), static_cast<TReal>(0.001));
+        
+    }
+
 }

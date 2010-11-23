@@ -25,6 +25,8 @@ set(UnitTests_SOURCES
 	
 	testTLV03Transformation.cpp
 	
+	testTRGF93Transformation.cpp
+	
 	testTRefFrameInfo.cpp
 
 	main.cpp
