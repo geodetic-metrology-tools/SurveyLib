@@ -1,4 +1,4 @@
-#include <TRGF93Transformation.h>
+#include <TRGF93ZoneTransformation.h>
 #include <TRefFrameInfo.h>
 
 #include <tut/tut.hpp>
