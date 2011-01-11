@@ -30,6 +30,7 @@ set(ShortestPath_HEADERS
 	${SURVEYLIB_INCLUDE_PATH}/TRefFrameWrapper.h
 	${SURVEYLIB_INCLUDE_PATH}/TRefSystemFactory.h
 	${SURVEYLIB_INCLUDE_PATH}/TTransformWrapper.h
+	${SURVEYLIB_INCLUDE_PATH}/TNotInGraphException.h
 )
 
 # Create a static library from sources:

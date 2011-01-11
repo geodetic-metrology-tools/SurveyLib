@@ -56,14 +56,8 @@ namespace tut
         TRGF93ZoneTransformation trans(false);
         ensure("Transform returns true", trans.transform(position));
 
-        ensure_equals("RGF93 CC46 Phi (Deg)", position.getPhiEllipsoid().getDegreesValue(), 46);
-        ensure_equals("RGF93 CC46 Phi (Min)", position.getPhiEllipsoid().getMinutesValue(), 6);
-        ensure_distance("RGF93 CC46 Phi (Sec)", position.getPhiEllipsoid().getSecondsValue(), static_cast<TReal>(30.0003), static_cast<TReal>(1e-4));
-
-        ensure_equals("RGF93 CC46 Lam (Deg)", position.getLambdaEllipsoid().getDegreesValue(), 5);
-        ensure_equals("RGF93 CC46 Lam (Min)", position.getLambdaEllipsoid().getMinutesValue(), 49);
-        ensure_distance("RGF93 CC46 Lam (Sec)", position.getLambdaEllipsoid().getSecondsValue(), static_cast<TReal>(36.0008), static_cast<TReal>(1e-4)); 
-
-        ensure_distance("RGF93 CC46 H", position.getH().getMetresValue(), static_cast<TReal>(400.157), static_cast<TReal>(1e-3));
+        ensure_distance("RGF93 CC46 X", position.getX().getMetresValue(), static_cast<TReal>(4407040.76287), static_cast<TReal>(1e-4));
+        ensure_distance("RGF93 CC46 Y", position.getY().getMetresValue(), static_cast<TReal>(449723.28541), static_cast<TReal>(1e-4)); 
+        ensure_distance("RGF93 CC46 Z", position.getZ().getMetresValue(), static_cast<TReal>(4573892.46194), static_cast<TReal>(1e-3));
 	}
 }

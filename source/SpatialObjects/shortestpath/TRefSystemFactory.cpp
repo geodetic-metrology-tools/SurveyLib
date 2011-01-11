@@ -58,6 +58,8 @@
 
 
 #include "TRefSystemFactory.h"
+
+#include "TNotInGraphException.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -956,8 +958,12 @@ TAGeoidModel*  TRefSystemFactory::getGeoid(const EGeoid geoidId)
 		iter++;
 	}
 
-	cerr << "Id. not in GeoidList";
-	exit(EXIT_FAILURE);
+	cerr << "Error : Id. not in GeoidList" << endl;
+	throw TNotInGraphException("TNotInGraphException");
+	///
+	//TODO@*@
+	///
+	//exit(EXIT_FAILURE);
 
 	
 
@@ -978,9 +984,14 @@ TReferenceEllipsoid* TRefSystemFactory::getEllipsoid(const ERefEll ellId)
 		iter++;
 	}
 
+	cerr << "Error : Id. not in RefEllList" << endl;
+	throw TNotInGraphException("TNotInGraphException");
 
-	cerr << "Error : Id. not in RefEllList";
-	exit(EXIT_FAILURE);
+	//cerr << "Error : Id. not in RefEllList";
+	///
+	//TODO@*@
+	///
+	//exit(EXIT_FAILURE);
 }
 
 
@@ -997,8 +1008,14 @@ TAReferenceFrame* TRefSystemFactory::getRefFrame(const ERefFrame refFrameId)
 		iter++;
 	}
 
-	cerr << "Error : Id. not in RefFrameList";
-	exit(EXIT_FAILURE);
+	cerr << "Error : Id. not in RefFrameList" << endl;
+	throw TNotInGraphException("TNotInGraphException");
+
+	//cerr << "Error : Id. not in RefFrameList";
+	///
+	//TODO@*@
+	///
+	//exit(EXIT_FAILURE);
 }
 
 
@@ -1010,8 +1027,14 @@ TGeodeticRefFrame* TRefSystemFactory::getGeoRefFrame(const ERefFrame refFrameId)
 	if( refFrameId == kCGRF )
 		return fCGRF;
 
-	cerr << "Error : Id. not in RefFrameList";
-	exit(EXIT_FAILURE);
+	cerr << "Error : Id. not in RefFrameList" << endl;
+	throw TNotInGraphException("TNotInGraphException");
+
+	//cerr << "Error : Id. not in RefFrameList";
+	///
+	//TODO@*@
+	///
+	//exit(EXIT_FAILURE);
 }
 
 
@@ -1028,9 +1051,15 @@ TARefFrameTransformation* TRefSystemFactory::getTransformation(const ERefFrameTr
 		iter++;
 	}
 
+	cerr << "Error : Id. not in TransformationList" << endl;
+	throw TNotInGraphException("TNotInGraphException");
+ 
 
-	cerr << "Error : Id. not in TransformationList";
-	exit(EXIT_FAILURE);
+	//cerr << "Error : Id. not in TransformationList";
+	///
+	//TODO@*@
+	///
+	//exit(EXIT_FAILURE);
 }
 
 

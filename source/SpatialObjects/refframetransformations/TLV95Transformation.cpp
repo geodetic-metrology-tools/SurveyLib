@@ -143,7 +143,14 @@ bool TLV95Transformation::transformToCH1903plus(TPositionVector & pv) const
             break;
     }
 
-    pv = TPositionVector(phi, lambda, h, TCoordSysFactory::kGeodetic);
-
+    //pv = TPositionVector(phi, lambda, h, TCoordSysFactory::kGeodetic);
+	// We can't leave it in the Geodetic form. Other code expects to get Cartesian
+    TPositionVector tmp = TPositionVector(phi, lambda, h, TCoordSysFactory::kGeodetic);
+	TSpatialPosition outpos(getDestinationFrame());
+	if(!outpos.setCoordinates(tmp))
+        return false;
+	// Project to Carthesian
+	pv = outpos.getCoordinates(TCoordSysFactory::k3DCartesian);
+	
     return true;
 }

@@ -28,6 +28,8 @@ set(UnitTests_SOURCES
 	testTRGF93Transformation.cpp
 	
 	testTRefFrameInfo.cpp
+	
+	testTCernGridGeoid.cpp
 
 	main.cpp
 )

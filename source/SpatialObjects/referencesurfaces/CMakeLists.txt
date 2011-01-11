@@ -43,6 +43,8 @@ set_source_files_properties(
 
 # Create a variable containing all .h files:
 set(ReferenceSurfaces_HEADERS 
+	${SURVEYLIB_INCLUDE_PATH}/TNotInLepGridException.h
+
 	${SURVEYLIB_INCLUDE_PATH}/T3DLocalRefFrame.h
 	${SURVEYLIB_INCLUDE_PATH}/TA2DPlus1MapProjection.h
 	${SURVEYLIB_INCLUDE_PATH}/TA2DXYRefFrame.h

@@ -82,4 +82,20 @@ namespace tut
             TLV95Transformation(false).getDestinationFrame(), TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
     }
 
+	//template<>
+ //   template<>
+ //   void object::test<6>()
+ //   {
+ //       set_test_name("Transforming a TSpatialPosition from LV95 into ETRF93");
+ //       //TPositionVector position(1918471.0676, 5215917.6066, (400.157), TCoordSysFactory::k2DPlusH);
+	//	TPositionVector position(1268507.870, 2617306.920, (457.138), TCoordSysFactory::k2DPlusH);
+
+ //       TRGF93ZoneTransformation trans(false);
+ //       ensure("Transform returns true", trans.transform(position));
+
+ //       ensure_distance("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(4407040.76287), static_cast<TReal>(1e-4));
+ //       ensure_distance("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(449723.28541), static_cast<TReal>(1e-4)); 
+ //       ensure_distance("LV95 Z", position.getZ().getMetresValue(), static_cast<TReal>(4573892.46194), static_cast<TReal>(1e-3));
+	//}
+
 }
