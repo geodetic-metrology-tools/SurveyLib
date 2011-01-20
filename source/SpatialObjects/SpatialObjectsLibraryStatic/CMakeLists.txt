@@ -2,7 +2,7 @@
 
 set(COMBINED_LIBRARY_FILES)
 FOREACH(subproject ${SPATIALOBJECTS_LIB_SUBPROJECTS})
-    list(APPEND COMBINED_LIBRARY_FILES "${CMAKE_BINARY_DIR}/SpatialObjects/${subproject}/${CMAKE_BUILD_TYPE}/${subproject}.lib")
+    list(APPEND COMBINED_LIBRARY_FILES "${STAGING_DIRECTORY}/${subproject}.lib")
 ENDFOREACH(subproject) 
 
 
