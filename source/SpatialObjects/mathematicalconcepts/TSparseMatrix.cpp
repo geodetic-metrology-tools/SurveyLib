@@ -1,4 +1,6 @@
 #include "TSparseMatrix.h"
+#include <iostream>
+#include <vector>
 
 TSparseMatrix::TSparseMatrix(int rows, int columns, real* vals, int* rowInds, int* colPtr)
 {
@@ -435,8 +437,11 @@ TSparseMatrix* TSparseMatrix::deep_copy(const TSparseMatrix* matrix)
 TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lower_triangular() const
 {
 	real* resultColumn = new real[cols];
-	Vector<real> results(cols * cols / 2);
-	Vector<int> rowInds(cols * cols / 2);
+	//Vector<real> results(cols * (cols) / 2);
+	//Vector<int> rowInds(cols * (cols) / 2);
+
+	std::vector<real> results;
+	std::vector<int> rowInds;
 
 	int* colWhereTo = new int[cols];
 
@@ -449,13 +454,14 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 		resultColumn[i] = 0;
 	}
 
-	for (int i = 0; i < cols; i++)
+	for (int i = 0; i < cols; i++) // This loop populates one COLUMN of the result
 	{
 		colWhereTo[i] = results.size() + 1;
 
 		int column = 0;
-		int col = result->colptr[column + 1];
+		int col = result->colptr[column + 1]; // Reading uninitialised value on first pass??
 
+		//Not initialized
 		int count;
 
 		while (column < i) // going through all the computed columns
@@ -481,9 +487,10 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 					colWhereTo[column] = -1;
 				}
 			}
-			col = result->colptr[++column + 1];
+			col = result->colptr[++column + 1]; // Reading uninitialised value
 		}
 
+		// Read the first value from the next column - it is on the diagonal!
 		col = colptr[i];
 
 		resultColumn[i] += vals[col];
@@ -493,23 +500,24 @@ TSparseMatrix* TSparseMatrix::cholesky_decompose_lower_triangular_returning_lowe
 			delete[] colWhereTo;
 			delete result;
 			return NULL;
+			//resultColumn[i] = -resultColumn[i];
 		}
 		resultColumn[i] = sqrtq(resultColumn[i]);
-		rowInds.add(i);
-		results.add(resultColumn[i]);
+		rowInds.push_back(i);
+		results.push_back(resultColumn[i]);
 		col++;
 
 		for (int j = i + 1; j < cols; j++)
 		{
 			real val = resultColumn[j];
-			if (j == rowind[col] && col < colptr[i + 1])
+			if (j == rowind[col] && col < colptr[i + 1]) // if elements present in input
 			{
 				val += vals[col++];
 			}
 			if (val < -THRESHOLD || val > THRESHOLD)
 			{
-				rowInds.add(j);
-				results.add(val / resultColumn[i]);
+				rowInds.push_back(j);
+				results.push_back(val / resultColumn[i]);
 			}
 			resultColumn[j] = 0;
 		}
