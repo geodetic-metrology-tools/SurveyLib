@@ -106,7 +106,7 @@ TLength TCernGridGeoid::getN ( const TSpatialPosition& sp) const
 
 	else
 	{
-		cerr << "Error : spatial position not in the LEP grid" << endl;
+		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid" << endl;
 		throw TNotInLepGridException("TNotInLepGridException: getN function problem.");
 		//exit(EXIT_FAILURE);
 	}
@@ -157,7 +157,7 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 
 	else
 	{
-		cerr << "Error : spatial position not in the LEP grid" << endl;
+		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid" << endl;
 		throw TNotInLepGridException("TNotInLepGridException: getEta function problem.");
 		
 		//cerr << endl << "Error : spatial position not in the LEP grid" << endl;
@@ -214,7 +214,7 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 
 	else
 	{
-		cerr << "Error : spatial position not in the LEP grid" << endl;
+		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid" << endl;
 		throw TNotInLepGridException("TNotInLepGridException: getXi function problem.");
 		
 		//cerr << endl << "Error : spatial position not in the LEP grid" << endl;
@@ -272,7 +272,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 
 	else
 	{
-		cerr << "Error : spatial position not in the LEP grid" << endl;
+		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid" << endl;
 		throw TNotInLepGridException("TNotInLepGridException: getDAlpha function problem.");
 		
 		//cerr << "Error : spatial position not in the LEP grid" << endl;
@@ -314,7 +314,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& lat
 
 	else
 	{
-		cerr << "Error : spatial position not in the LEP grid" << endl;
+		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid" << endl;
 		throw TNotInLepGridException("TNotInLepGridException: getDAlpha function problem.");
 		
 		//cerr << "Error : spatial position not in the LEP grid" << endl;

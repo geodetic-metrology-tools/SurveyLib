@@ -35,9 +35,10 @@
 #include "TLV95ReferenceFrame.h"
 #include "TLV03ReferenceFrame.h"
 #include "TRGF93ZoneReferenceFrame.h"
+#include "TLambert93ReferenceFrame.h"
 
 #include "TMLA2GCTransformation.h"
-#include "TGC2MLATransformation.h"
+#include "TGC2MLATransformation.h"7
 #include "TXYHs2MLATransformation.h"
 #include "TMLA2XYHsTransformation.h"
 #include "TLA2LGTransformation.h"
@@ -55,6 +56,7 @@
 #include "TLV95Transformation.h"
 #include "TLV03Transformation.h"
 #include "TRGF93ZoneTransformation.h"
+#include "TLambert93Transformation.h"
 
 
 #include "TRefSystemFactory.h"
@@ -155,6 +157,11 @@ void	TRefSystemFactory::init()
     TAReferenceFrame* pFrenchRGF93Zone5 = new TRGF93ZoneReferenceFrame("FrenchRGF93Zone5");
     pFrenchRGF93Zone5->setRefFrameId(kFrenchRGF93Zone5);
     fRefFrameList.push_back(pFrenchRGF93Zone5);
+
+	// Lambert93
+	TAReferenceFrame* pLambert93 = new TLambert93ReferenceFrame("Lambert93");
+	pLambert93->setRefFrameId(kLambert93);
+    fRefFrameList.push_back(pLambert93);
 
         // ETRF93
 	TGeodeticRefFrame* pETRF93 = new TGeodeticRefFrame(etrf, pGRS80);
@@ -759,6 +766,19 @@ void	TRefSystemFactory::init()
 		//Inverse
 		TARefFrameTransformation* pInverse = pTrans->inverse();
         pInverse->setTransformId(kFrenchRGF932ETRF93);
+        fTransformList.push_back(pInverse);
+	}
+
+	{
+        ////////////////////////////////////////////////////////////////
+		// Transformation between ETRF93 and Lambert93
+        ////////////////////////////////////////////////////////////////
+        TLambert93Transformation * pTrans = new TLambert93Transformation(true);
+        pTrans->setTransformId(kETRF932kLambert93);
+		fTransformList.push_back(pTrans);
+		//Inverse
+		TARefFrameTransformation* pInverse = pTrans->inverse();
+        pInverse->setTransformId(kLambert932ETRF93);
         fTransformList.push_back(pInverse);
 	}
             

@@ -27,6 +27,8 @@ set(UnitTests_SOURCES
 	
 	testTRGF93Transformation.cpp
 	
+	testTLambert93Transformation.cpp
+	
 	testTRefFrameInfo.cpp
 	
 	testTCernGridGeoid.cpp
@@ -45,7 +47,7 @@ target_link_libraries (UnitTests
 #	DESTINATION ${STAGING_DIRECTORY}
 #)
 # Copy the test files to the right path
-#install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_files
-#	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}
-#)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_files
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+)
 #####

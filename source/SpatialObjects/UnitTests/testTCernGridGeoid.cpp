@@ -31,10 +31,11 @@ namespace tut
 		try
 		{
 			position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCernXYHg00Machine));
+			ensure("Should not get to this point", false);
 		}
 		catch(std::runtime_error const & e)
 		{
-			std::cerr << "(EE) Exception while transforming point: "<< e.what()<<std::endl;
+			//std::cerr << "(EE) Exception while transforming point: "<< e.what()<<std::endl;
 		}
 	}
 }
