@@ -32,7 +32,7 @@ set(RefFrameTransformations_SOURCES
 	
 	TLV95Transformation.cpp
 	TLV03Transformation.cpp
-	TRGF93ZoneTransformation.cpp
+	TRGF93CC46Transformation.cpp
 	TLambert93Transformation.cpp
 )
 
