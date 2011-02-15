@@ -491,9 +491,61 @@ namespace tut
 			++iterat;
 		}*/
 
+
+
+		/*
+		*
+		*Transform coordinates to Lambert93
+		*
+		*/
+		std::map<std::string, TSpatialPosition> afterTransformationLambert93;
+		for (std::map<std::string, TSpatialPosition>::iterator iter = beforeTransformation.begin(); iter != beforeTransformation.end(); iter++)
+		{
+			try 
+			{
+				bool result = iter->second.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93)); 
+				ensure("Transformation should return true", result);
+			} catch (const std::logic_error & e)
+			{
+				ensure("There shouldn't be any exceptions",false);
+			}
+			afterTransformationLambert93.insert(std::pair<std::string, TSpatialPosition>(iter->first, iter->second));
+		}
+
+		/*
+		*
+		*Read the file with coordinates in Lambert93 transformed on Swisstopo web site
+		*
+		*/
+
+		std::ifstream indataLambert93; 
+		indata.open(".\\test_files\\RGF93Labbert93.txt");
+		ensure("Could not open the test file",indataLambert93);
+		
+		std::string lineLambert93;
+
+		while(std::getline(indataLambert93, lineLambert93)) {
+			std::string pointName;
+			double xCoordLambert93, yCoordLambert93;
+			indata >> pointName >> xCoordLambert93 >> yCoordLambert93;
+			if(indata.fail()) continue;
+
+			std::map<std::string, TSpatialPosition>::const_iterator it = afterTransformation95.find(pointName);
+			if(it != afterTransformation95.end())
+			{
+				ensure_distance("Swiss Lambert93 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(xCoordLambert93), static_cast<TReal>(0.001));
+				ensure_distance("Swiss Lambert93 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(yCoordLambert93), static_cast<TReal>(0.001));
+			}
+			else
+			{
+				ensure("Missing point",false);
+			}
+		}
+
 		
 		indata.close();
 		indataLV95.close();
+		indataLambert93.close();
 		//indataLV03.close();
 
 	}		
