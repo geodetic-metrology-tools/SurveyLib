@@ -32,10 +32,10 @@
 #include "TCernParabolicGeoid.h"
 #include "TCernSphereGeoid.h"
 #include "T3DLocalRefFrame.h"
-#include "TLV95ReferenceFrame.h"
-#include "TLV03ReferenceFrame.h"
-#include "TRGF93ZoneReferenceFrame.h"
-#include "TLambert93ReferenceFrame.h"
+#include "TLV95Projection.h"
+#include "TLV03Projection.h"
+#include "TRGF93CC46Projection.h"
+#include "TLambert93Projection.h"
 
 #include "TMLA2GCTransformation.h"
 #include "TGC2MLATransformation.h"7
@@ -55,7 +55,7 @@
 #include "TXYHe2XYHgTransformation.h"
 #include "TLV95Transformation.h"
 #include "TLV03Transformation.h"
-#include "TRGF93ZoneTransformation.h"
+#include "TRGF93CC46Transformation.h"
 #include "TLambert93Transformation.h"
 
 
@@ -154,12 +154,12 @@ void	TRefSystemFactory::init()
 	fRefFrameList.push_back(pITRF97);
 
 		// FrenchRGF93 zone 5
-    TAReferenceFrame* pFrenchRGF93Zone5 = new TRGF93ZoneReferenceFrame("FrenchRGF93Zone5");
+    TAReferenceFrame* pFrenchRGF93Zone5 = new TRGF93CC46Projection("FrenchRGF93Zone5");
     pFrenchRGF93Zone5->setRefFrameId(kFrenchRGF93Zone5);
     fRefFrameList.push_back(pFrenchRGF93Zone5);
 
 	// Lambert93
-	TAReferenceFrame* pLambert93 = new TLambert93ReferenceFrame("Lambert93");
+	TAReferenceFrame* pLambert93 = new TLambert93Projection("Lambert93");
 	pLambert93->setRefFrameId(kLambert93);
     fRefFrameList.push_back(pLambert93);
 
@@ -174,12 +174,12 @@ void	TRefSystemFactory::init()
 	fRefFrameList.push_back(pCH1903plus);
 
         // Swiss LV95
-    TAReferenceFrame* pLV95 = new TLV95ReferenceFrame("LV95");
+    TAReferenceFrame* pLV95 = new TLV95Projection("LV95");
     pLV95->setRefFrameId(kSwissLV95);
     fRefFrameList.push_back(pLV95);
 
         // Swiss LV03
-    TAReferenceFrame* pLV03 = new TLV03ReferenceFrame("LV03");
+    TAReferenceFrame* pLV03 = new TLV03Projection("LV03");
     pLV03->setRefFrameId(kSwissLV03);
     fRefFrameList.push_back(pLV03);
 

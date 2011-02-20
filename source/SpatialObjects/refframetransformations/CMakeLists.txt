@@ -59,7 +59,7 @@ set(RefFrameTransformations_HEADERS
 	
 	${SURVEYLIB_INCLUDE_PATH}/TLV95Transformation.h
 	${SURVEYLIB_INCLUDE_PATH}/TLV03Transformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TRGF93ZoneTransformation.h
+	${SURVEYLIB_INCLUDE_PATH}/TRGF93CC46Transformation.h
 	${SURVEYLIB_INCLUDE_PATH}/TLambert93Transformation.h
 )
 

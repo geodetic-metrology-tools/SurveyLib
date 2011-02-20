@@ -3,20 +3,25 @@
 
 #include <TAngle.h>
 #include <TSpatialPosition.h>
+#include <TSpatialPoint.h>
 
 class TLocalSystemOrigin
 {
 public:
-    TLocalSystemOrigin(const TSpatialPosition & origin, const TAngle & gisement, const TAngle & slope);
+	//@*@
+	TLocalSystemOrigin(const TSpatialPosition & origin, const TAngle & gisement, const TAngle & slope, const std::string & name="ORIGIN");
     bool operator==(const TLocalSystemOrigin & rhs) const;
     
-    TSpatialPosition origin() const {return fOrigin;}
+	//@*@
+	TSpatialPosition origin() const {return fOrigin;}
     TAngle gisement() const {return fGisement;}
     TAngle slope() const {return fSlope;}
+	const std::string & name() const {return fName;}
 private:
     const TSpatialPosition fOrigin; 
     const TAngle fGisement; 
     const TAngle fSlope;
+	const std::string fName;
 };
 
 #endif

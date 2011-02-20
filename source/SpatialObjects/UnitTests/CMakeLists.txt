@@ -32,6 +32,8 @@ set(UnitTests_SOURCES
 	testTRefFrameInfo.cpp
 	
 	testTCernGridGeoid.cpp
+	
+	testAllTransformations.cpp
 
 	main.cpp
 )

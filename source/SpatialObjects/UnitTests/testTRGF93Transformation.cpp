@@ -1,4 +1,4 @@
-#include <TRGF93ZoneTransformation.h>
+#include <TRGF93CC46Transformation.h>
 #include <TRefFrameInfo.h>
 
 #include <tut/tut.hpp>
@@ -6,14 +6,14 @@
 
 namespace tut
 {
-    struct test_TRGF93ZoneTransformation{};
-    typedef test_group<test_TRGF93ZoneTransformation> factory;
+    struct test_TRGF93CC46Transformation{};
+    typedef test_group<test_TRGF93CC46Transformation> factory;
     typedef factory::object object;
 }
 
 namespace
 {
-    tut::factory tf("Test TRGF93ZoneTransformation class");
+    tut::factory tf("Test TRGF93CC46Transformation class");
 }
 
 namespace tut

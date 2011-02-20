@@ -98,7 +98,7 @@ bool TLV03Transformation::computeSwissRefFrame(double & coordinate_x, double & c
 
 	    // Transform LV95 coordinates to LV03 and Bessel height to Bessel
         result = pReframe->ComputeReframe(
-            &coordinate_x, &coordinate_y, &coordinate_z, 
+            &coordinate_y, &coordinate_x, &coordinate_z, 
             reframe_in,reframe_out,
             compute_reframe_alt::BESSEL,
             compute_reframe_alt::BESSEL);

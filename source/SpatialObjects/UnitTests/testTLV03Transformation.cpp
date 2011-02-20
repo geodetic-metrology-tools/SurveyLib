@@ -24,12 +24,12 @@ namespace tut
     {
         set_test_name("Transforming a TSpatialPosition from LV95 into LV03");
 
-        TPositionVector position(2617306.920, 1268507.870, 0, TCoordSysFactory::k2DPlusH);
+        TPositionVector position(1268507.870, 2617306.920, 0, TCoordSysFactory::k2DPlusH);
         TLV03Transformation trans(true);
         ensure("Transform returns true", trans.transform(position));
 
-        ensure_distance("LV03 X", position.getX().getMetresValue(), static_cast<TReal>(617306.300), static_cast<TReal>(0.001));
-		ensure_distance("LV03 Y", position.getY().getMetresValue(), static_cast<TReal>(268507.300), static_cast<TReal>(0.001));
+        ensure_distance("LV03 X", position.getX().getMetresValue(), static_cast<TReal>(268507.300), static_cast<TReal>(0.001));
+		ensure_distance("LV03 Y", position.getY().getMetresValue(), static_cast<TReal>(617306.300), static_cast<TReal>(0.001));
 		ensure_distance("LV03 H", position.getH().getMetresValue(), static_cast<TReal>(0.0), static_cast<TReal>(0.001));
     }
 
@@ -39,12 +39,12 @@ namespace tut
     {
         set_test_name("Transforming a TSpatialPosition from LV03 into LV95");
 
-        TPositionVector position(617306.300, 268507.300, 0, TCoordSysFactory::k2DPlusH);
+        TPositionVector position(268507.300, 617306.300, 0, TCoordSysFactory::k2DPlusH);
         TLV03Transformation trans(false);
         ensure("Transform returns true", trans.transform(position));
 
-        ensure_distance("LV03 X", position.getX().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
-		ensure_distance("LV03 Y", position.getY().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
+        ensure_distance("LV03 X", position.getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
+		ensure_distance("LV03 Y", position.getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
 		ensure_distance("LV03 H", position.getH().getMetresValue(), static_cast<TReal>(0.0), static_cast<TReal>(0.001));
     }
 
