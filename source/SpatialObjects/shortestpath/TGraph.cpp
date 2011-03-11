@@ -232,7 +232,7 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 			vector<int> precedent(transfo.size(), -1);
 			precedent[0] = pr[end];
 	
-			for (i = 1; i < transfo.size(); i++)
+			for (unsigned int i = 1; i < transfo.size(); i++)
 			{
 				precedent[i] = pr[precedent[i-1]];
 				transfo[i] = transform[precedent[i-1]].getTransformation();

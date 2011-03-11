@@ -1,130 +1,192 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9.00"
 	Name="LSAlgoTests"
-	SccProjectName="&lt;[SU Source] SurveyLib|SurveyLib&gt;SurveyLib\SurveyLib Projects\LSAlgorithms\LSAlgoTests"
-	SccLocalPath=".">
+	ProjectGUID="{53F86087-1B36-4029-8430-4C3BAD5F28AC}"
+	TargetFrameworkVersion="131072"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory=".\Debug"
 			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName=".\Debug/LSAlgoTests.tlb"
+				HeaderFileName=""
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
-				UsePrecompiledHeader="2"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/LSAlgoTests.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="1"/>
+				SuppressStartupBanner="true"
+				DebugInformationFormat="1"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile=".\Debug/LSAlgoTests.exe"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				GenerateDebugInformation="TRUE"
+				SuppressStartupBanner="true"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/LSAlgoTests.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/LSAlgoTests.tlb"
-				HeaderFileName=""/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory=".\Release"
 			IntermediateDirectory=".\Release"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName=".\Release/LSAlgoTests.tlb"
+				HeaderFileName=""
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				StringPooling="TRUE"
-				RuntimeLibrary="4"
-				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="2"
+				StringPooling="true"
+				RuntimeLibrary="0"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/LSAlgoTests.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"/>
+				SuppressStartupBanner="true"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile=".\Release/LSAlgoTests.exe"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
+				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\Release/LSAlgoTests.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/LSAlgoTests.tlb"
-				HeaderFileName=""/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -132,138 +194,180 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+			>
 			<File
-				RelativePath="..\..\..\source\LSAlgorithms\LSAlgoTests\ErelExtractTest.cpp">
+				RelativePath="..\..\..\source\LSAlgorithms\LSAlgoTests\ErelExtractTest.cpp"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\LSAlgorithms\LSAlgoTests\LSAlgoTests.cpp">
+				RelativePath="..\..\..\source\LSAlgorithms\LSAlgoTests\LSAlgoTests.cpp"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl">
+			Filter="h;hpp;hxx;hm;inl"
+			>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+			>
 		</Filter>
 		<File
-			RelativePath="..\..\SpatialObjects\AffineTransformations\Debug\AffineTransformations.lib">
+			RelativePath="..\..\SpatialObjects\AffineTransformations\Debug\AffineTransformations.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\CalcElements.lib">
+			RelativePath="..\..\..\..\lib\CalcElements.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\ConstraintMeasurements.lib">
+			RelativePath="..\..\..\..\lib\ConstraintMeasurements.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\ContributionsGenerators.lib">
+			RelativePath="..\..\..\..\lib\ContributionsGenerators.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\FiltersAndFormats.lib">
+			RelativePath="..\..\..\..\lib\FiltersAndFormats.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\CtoCPP\genmat.lib">
+			RelativePath="..\..\..\..\CtoCPP\genmat.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\CtoCPP\geodefs.lib">
+			RelativePath="..\..\..\..\CtoCPP\geodefs.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\geodeticsystemcg\Debug\GeodeticSystemCG.lib">
+			RelativePath="..\geodeticsystemcg\Debug\GeodeticSystemCG.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\InstrumentStations.lib">
+			RelativePath="..\..\..\..\lib\InstrumentStations.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\lgcProject.lib">
+			RelativePath="..\..\..\..\lib\lgcProject.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\LocalSystemCG.lib">
+			RelativePath="..\..\..\..\lib\LocalSystemCG.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\CtoCPP\lsapps.lib">
+			RelativePath="..\..\..\..\CtoCPP\lsapps.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\LGC++\LGCppVCppProjects\LSCalcObservations\Debug\LSCalcObservations.lib">
+			RelativePath="..\..\..\..\LGC++\LGCppVCppProjects\LSCalcObservations\Debug\LSCalcObservations.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\LGC++\LGCppVCppProjects\LSCalcObservationSet\Debug\LSCalcObservationSet.lib">
+			RelativePath="..\..\..\..\LGC++\LGCppVCppProjects\LSCalcObservationSet\Debug\LSCalcObservationSet.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\SpatialObjects\MathematicalConcepts\Debug\MathematicalConcepts.lib">
+			RelativePath="..\..\SpatialObjects\MathematicalConcepts\Debug\MathematicalConcepts.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\MeasurementConstants.lib">
+			RelativePath="..\..\..\..\lib\MeasurementConstants.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\Measurements.lib">
+			RelativePath="..\..\..\..\lib\Measurements.lib"
+			>
 		</File>
 		<File
-			RelativePath="G:\Support\SurveyingEng\software\nagc\dll\nagc.lib">
+			RelativePath="G:\Support\SurveyingEng\software\nagc\dll\nagc.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\LGC++\LGCppVCppProjects\Observations\Debug\Observations.lib">
+			RelativePath="..\..\..\..\LGC++\LGCppVCppProjects\Observations\Debug\Observations.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\LGC++\LGCppVCppProjects\ObservationSet\Debug\ObservationSet.lib">
+			RelativePath="..\..\..\..\LGC++\LGCppVCppProjects\ObservationSet\Debug\ObservationSet.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\ProjectData.lib">
+			RelativePath="..\..\..\..\lib\ProjectData.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\SpatialObjects\ReferenceSurfaces\Debug\ReferenceSurfaces.lib">
+			RelativePath="..\..\SpatialObjects\ReferenceSurfaces\Debug\ReferenceSurfaces.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\SpatialObjects\RefFrameTransformations\Debug\RefFrameTransformations.lib">
+			RelativePath="..\..\SpatialObjects\RefFrameTransformations\Debug\RefFrameTransformations.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\ROMs.lib">
+			RelativePath="..\..\..\..\lib\ROMs.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\SpatialObjects\ShortestPath\Debug\ShortestPath.lib">
+			RelativePath="..\..\SpatialObjects\ShortestPath\Debug\ShortestPath.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\SpatialMeas.lib">
+			RelativePath="..\..\..\..\lib\SpatialMeas.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\SpatialObjects\SpatialObjs\Debug\SpatialObjs.lib">
+			RelativePath="..\..\SpatialObjects\SpatialObjs\Debug\SpatialObjs.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\SpatialObjects\SpatialSystems\Debug\SpatialSystems.lib">
+			RelativePath="..\..\SpatialObjects\SpatialSystems\Debug\SpatialSystems.lib"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\lib\StreamFormatters.lib">
+			RelativePath="..\..\..\..\lib\StreamFormatters.lib"
+			>
 		</File>
 	</Files>
 	<Globals>

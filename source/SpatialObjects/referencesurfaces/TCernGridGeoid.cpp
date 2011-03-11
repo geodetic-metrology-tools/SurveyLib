@@ -322,7 +322,8 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 
 	
 	// coordinates from the interpolated point
-	for(int i = 0; i<matrix.numRows(); i++)
+	int i;
+	for(i = 0; i<matrix.numRows(); i++)
 	{
 		y[i] = (i-1)-Yo;
 		absy[i] = fabs(y[i]);
@@ -429,10 +430,11 @@ double TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatial
 
 	if ( (x[J] != 0) && (y[I] != 0) )
 	{	
+		int j;
 		// interpolation
 		for(i = 0; i < 4; i++)
 		{
-			for(int j = 0; j < 4; j++)
+			for(j = 0; j < 4; j++)
 			{
 				c(j,0) = x[L[j]]+Xo;
 				c(j,1) = y[K[i]]+Yo;
