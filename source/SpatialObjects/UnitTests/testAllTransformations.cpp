@@ -356,12 +356,6 @@ namespace tut
 			}
 		}
 	}
-	template<>
-	template<>
-	void object::test<6>()
-	{
-		set_test_name("Test of LV95 [CCS->LV95; LV95 ->CCS]");
-	}
 
 
 
@@ -433,11 +427,5 @@ namespace tut
 				ensure("Missing point",false);
 			}
 		}
-	}
-	template<>
-	template<>
-	void object::test<8>()
-	{
-		set_test_name("Test of LV95 [CCS->LV95; LV95 ->CCS]");
 	}
 }
