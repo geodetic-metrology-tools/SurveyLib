@@ -34,6 +34,8 @@ set(UnitTests_SOURCES
 	testTCernGridGeoid.cpp
 	
 	testAllTransformations.cpp
+	
+	testTCoordSysInfo.cpp
 
 	main.cpp
 )
