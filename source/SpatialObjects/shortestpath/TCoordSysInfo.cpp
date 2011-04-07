@@ -29,19 +29,20 @@ bool TCoordSysInfo::isValidNumber (int system)
 
 }
 
-std::string TCoordSysInfo::fromString (const std::string & systemName)
+TCoordSysFactory::ECoordSys TCoordSysInfo::fromString (const std::string & systemName)
 {
 	CoordMapType::const_iterator it = getCoordSysMap().begin();
 	while(it != getCoordSysMap().end())
 	{
 		if (systemName==it->second)
-			return it->second;
+			return static_cast<TCoordSysFactory::ECoordSys>(it->first);
 		++it;
 	}
 	
 	throw std::invalid_argument("Unknown Coordinate System");
 
 }
+
 std::string TCoordSysInfo::toString (TCoordSysFactory::ECoordSys number)
 {
 	CoordMapType::const_iterator it = getCoordSysMap().find(number);

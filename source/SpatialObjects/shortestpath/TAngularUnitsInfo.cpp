@@ -29,13 +29,13 @@ bool TAngularUnitsInfo::isValidNumber (int number)
 
 }
 
-std::string TAngularUnitsInfo::fromString (const std::string & unitsName)
+TAngle::EUnits TAngularUnitsInfo::fromString (const std::string & unitsName)
 {
 	AngleUnitsMapType::const_iterator it = getAngleUnitsMap().begin();
 	while(it != getAngleUnitsMap().end())
 	{
 		if (unitsName==it->second)
-			return it->second;
+			return static_cast<TAngle::EUnits>(it->first);
 		++it;
 	}
 	throw std::invalid_argument("Unknown Angular Units");
