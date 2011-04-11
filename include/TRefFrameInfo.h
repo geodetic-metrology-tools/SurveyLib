@@ -88,6 +88,7 @@ public:
 	 */
 	static TRefSystemFactory::ERefFrame fromNumber(int frame);
 	static TRefSystemFactory::ERefFrame fromString(const std::string & s);
+	static std::string getEnumString(TRefSystemFactory::ERefFrame frame);
 
 	/**
 	 *  Retrieve a user friendly name of the ERefFrame.
@@ -96,7 +97,7 @@ public:
 	 *  \return A user friendly name associated with the given reference frame
 	 *  \throw std::invalid_argument If the input parameter is not valid
 	 */
-	static const std::string & getName(int frame);
+	static std::string getName(int frame);
 
 	/**
 	 *  Retrieve a default coordinate system for the ERefFrame.

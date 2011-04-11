@@ -134,6 +134,16 @@ TRefSystemFactory::ERefFrame TRefFrameInfo::fromNumber(int frame)
 		throw std::invalid_argument("Unknown ERefFrame value");
 }
 
+std::string TRefFrameInfo::getEnumString(TRefSystemFactory::ERefFrame frame)
+{
+	MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
+	if(iter!=getMapping().end())
+	{
+		return iter->second.fRefFrameName;
+	}
+	throw std::invalid_argument("Unknown ERefFrame value");
+}
+
 TRefSystemFactory::ERefFrame TRefFrameInfo::fromString(const std::string & s)
 {
 	StringMappingType::const_iterator it = getStringMapping().find(s);
@@ -142,7 +152,7 @@ TRefSystemFactory::ERefFrame TRefFrameInfo::fromString(const std::string & s)
 	return it->second;
 }
 
-const std::string & TRefFrameInfo::getName(int frame)
+std::string TRefFrameInfo::getName(int frame)
 {
 	MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
 	if(iter!=getMapping().end())
