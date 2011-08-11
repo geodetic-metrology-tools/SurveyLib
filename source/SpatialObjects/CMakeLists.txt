@@ -18,5 +18,7 @@ ADD_SUBDIRECTORY(SpatialObjectsLibraryStatic)
 SET_PROPERTY(TARGET SpatialObjectsLibrary PROPERTY FOLDER "SpatialObjects")
 install(FILES SpatialObjects-config.cmake DESTINATION ${INSTALL_PREFIX})
 
+ADD_SUBDIRECTORY(SpatialObjects)
+
 ADD_SUBDIRECTORY(UnitTests)
 SET_PROPERTY(TARGET UnitTests PROPERTY FOLDER "SpatialObjects")

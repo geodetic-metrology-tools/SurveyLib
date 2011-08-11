@@ -106,6 +106,7 @@ bool TLV03Transformation::computeSwissRefFrame(double & coordinate_x, double & c
     catch (HRESULT hr)
     {
         std::cerr << "Reframe DLL - CoInitialize failed. DLL is not registered" << std::endl;
+		throw std::logic_error("Reframe DLL - CoInitialize failed. DLL is not registered");
 	    return false;
     }
 	if (result==1)
@@ -115,49 +116,60 @@ bool TLV03Transformation::computeSwissRefFrame(double & coordinate_x, double & c
 	else if (result== -1)
 	{
 		std::cerr<<"Error: 1 specified point outside of the CHENyx06 triangular network (input coordinates outside boundaries)"<<std::endl;
+		throw std::logic_error("Error: 1 specified point outside of the CHENyx06 triangular network (input coordinates outside boundaries)");
 	}
 	else if (result== -2)
 	{
 		std::cerr<<"Error: 2 specified point outside of the HTRANS or CHGeo2004 grid (input coordinates outside boundaries)"<<std::endl;
+		throw std::logic_error("Error: 2 specified point outside of the HTRANS or CHGeo2004 grid (input coordinates outside boundaries)");
 	}
 	else if (result== -3)
 	{
 		std::cerr<<"Error: 3 problem occurred when reading a binary file. Check that all the binary files(datasets definitions) are correctly installed and valid (try to recover/recopy the original"
 					"versions). Reinstall the REFRAME DLL if the problem persists."<<std::endl;
+		throw std::logic_error("Error: 3 problem occurred when reading a binary file. Check that all the binary files(datasets definitions) are correctly installed and valid (try to recover/recopy the original"
+					"versions). Reinstall the REFRAME DLL if the problem persists.");
 	}
 	
 	else if (result== -4)
 	{
 		std::cerr<<"Error: 4 unsupported value for \"plaFrameIn\" or \"plaFrameOut\" argument (only \"0\" or \"1\" are allowed)"<<std::endl;
+		throw std::logic_error("Error: 4 unsupported value for \"plaFrameIn\" or \"plaFrameOut\" argument (only \"0\" or \"1\" are allowed)");
 	}
 	
 	else if (result== -5)
 	{
 		std::cerr<<"Error: 5 unsupported value for \"altFrameIn\" or \"altFrameOut\" argument (only \"0\", \"1\" or \"2\"7 are allowed)"<<std::endl;
+		throw std::logic_error("Error: 5 unsupported value for \"altFrameIn\" or \"altFrameOut\" argument (only \"0\", \"1\" or \"2\"7 are allowed)");
 	}
 	
 	else if (result== -6)
 	{
 		std::cerr<<"Error: 6 input and output reference frames (planimetry and altimetry) are the same, there isn’t any transformation to do!"<<std::endl;
+		throw std::logic_error("Error: 6 input and output reference frames (planimetry and altimetry) are the same, there isn’t any transformation to do!");
 	}
 	
 	else if (result== -10)
 	{
 		std::cerr<<"Error: 10 Check if the path defined in the \"datasetsDir\" property (or with the \"SetDatasetsDir\" method) is correct and that the file is accessible (enough rights)."<<std::endl;
+		throw std::logic_error("Error: 10 Check if the path defined in the \"datasetsDir\" property (or with the \"SetDatasetsDir\" method) is correct and that the file is accessible (enough rights).");
 	}
 	
 	else if (result== -11)
 	{
 		std::cerr<<" Error: 11 Check if the path defined in the \"binaryDataDir\" is correct and thatthe file is accessible (enough rights)."<<std::endl;
+		throw std::logic_error(" Error: 11 Check if the path defined in the \"binaryDataDir\" is correct and thatthe file is accessible (enough rights).");
 	}
 	
 	else if (result== -12)
 	{
 		std::cerr<<"Error: 12 CHGeo2004 dataset is inaccessible (binary file \"CHGEO04.grd\" not found)."<<std::endl;
+		throw std::logic_error("Error: 12 CHGeo2004 dataset is inaccessible (binary file \"CHGEO04.grd\" not found).");
 	}
 	else
 	{
 		std::cerr<<"Error: unknown error code: " << result << std::endl;
+		throw std::logic_error("Error: unknown error code: ");
 	}
     return false;
 
