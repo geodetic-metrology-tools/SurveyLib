@@ -11,11 +11,11 @@ const TAngularUnitsInfo::AngleUnitsMapType & TAngularUnitsInfo::getAngleUnitsMap
 	if(mapping.get()==NULL)
 	{
 		MapPtr tmp = MapPtr(new AngleUnitsMapType);
-		tmp->insert(std::make_pair(0, "kRadians"));
-		tmp->insert(std::make_pair(1, "kGons"));
-		tmp->insert(std::make_pair(2, "k100MicroGons"));
-		tmp->insert(std::make_pair(3, "kDMS"));
-		tmp->insert(std::make_pair(4, "kCCs"));
+		tmp->insert(std::make_pair(0, std::make_pair("kRadians", "Radians")));
+		tmp->insert(std::make_pair(1, std::make_pair("kGons", "Gons")));
+		tmp->insert(std::make_pair(2, std::make_pair("k100MicroGons", "100MicroGons")));
+		tmp->insert(std::make_pair(3, std::make_pair("kDMS", "DMS")));
+		tmp->insert(std::make_pair(4, std::make_pair("kCCs", "CCs")));
 
 		mapping = tmp;
 	}
@@ -34,7 +34,7 @@ TAngle::EUnits TAngularUnitsInfo::fromString (const std::string & unitsName)
 	AngleUnitsMapType::const_iterator it = getAngleUnitsMap().begin();
 	while(it != getAngleUnitsMap().end())
 	{
-		if (unitsName==it->second)
+		if (unitsName==it->second.first)
 			return static_cast<TAngle::EUnits>(it->first);
 		++it;
 	}
@@ -46,7 +46,16 @@ std::string TAngularUnitsInfo::toString (TAngle::EUnits number)
 { 
 	AngleUnitsMapType::const_iterator it = getAngleUnitsMap().find(number);
 	if(it != getAngleUnitsMap().end())
-		return (it->second);
+		return (it->second.first);
+	throw std::invalid_argument("Unknown Angular Units");
+
+}
+
+std::string TAngularUnitsInfo::toUserFrendlyString (TAngle::EUnits number)
+{ 
+	AngleUnitsMapType::const_iterator it = getAngleUnitsMap().find(number);
+	if(it != getAngleUnitsMap().end())
+		return (it->second.second);
 	throw std::invalid_argument("Unknown Angular Units");
 
 }

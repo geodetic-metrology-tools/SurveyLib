@@ -11,11 +11,11 @@ const TCoordSysInfo::CoordMapType & TCoordSysInfo::getCoordSysMap()
 	if(mapping.get()==NULL)
 	{
 		MapPtr tmp = MapPtr(new CoordMapType);
-		tmp->insert(std::make_pair(1, "k3DCartesian"));
-		tmp->insert(std::make_pair(2, "kGeodetic"));
-		tmp->insert(std::make_pair(4, "k2DPlusH"));
-		tmp->insert(std::make_pair(8, "k2DCartesian"));
-		tmp->insert(std::make_pair(16, "kGeodeticSphere"));
+		tmp->insert(std::make_pair(1, std::make_pair("k3DCartesian", "3DCartesian")));
+		tmp->insert(std::make_pair(2, std::make_pair("kGeodetic", "Geodetic")));
+		tmp->insert(std::make_pair(4, std::make_pair("k2DPlusH", "2DPlusH")));
+		tmp->insert(std::make_pair(8, std::make_pair("k2DCartesian", "2DCartesian")));
+		tmp->insert(std::make_pair(16, std::make_pair("kGeodeticSphere", "GeodeticSphere")));
 
 		mapping = tmp;
 	}
@@ -34,7 +34,7 @@ TCoordSysFactory::ECoordSys TCoordSysInfo::fromString (const std::string & syste
 	CoordMapType::const_iterator it = getCoordSysMap().begin();
 	while(it != getCoordSysMap().end())
 	{
-		if (systemName==it->second)
+		if (systemName==it->second.first)
 			return static_cast<TCoordSysFactory::ECoordSys>(it->first);
 		++it;
 	}
@@ -47,7 +47,17 @@ std::string TCoordSysInfo::toString (TCoordSysFactory::ECoordSys number)
 {
 	CoordMapType::const_iterator it = getCoordSysMap().find(number);
 	if(it != getCoordSysMap().end())
-		return (it->second);
+		return (it->second.first);
+
+	throw std::invalid_argument("Unknown Coordinate System");
+
+}
+
+std::string TCoordSysInfo::toUserFrendlyString (TCoordSysFactory::ECoordSys number)
+{
+	CoordMapType::const_iterator it = getCoordSysMap().find(number);
+	if(it != getCoordSysMap().end())
+		return (it->second.second);
 
 	throw std::invalid_argument("Unknown Coordinate System");
 

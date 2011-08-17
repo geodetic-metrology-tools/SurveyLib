@@ -11,7 +11,8 @@ class TAngularUnitsInfo
 	TAngularUnitsInfo(const TAngularUnitsInfo & other); // non construction-copyable
     const TAngularUnitsInfo & operator=(const TAngularUnitsInfo &); // non copyable
 
-	typedef std::map<int, std::string> AngleUnitsMapType;
+	//typedef std::map<int, std::string> AngleUnitsMapType;
+	typedef std::map<int, std::pair<std::string, std::string>> AngleUnitsMapType;
 
 	static const AngleUnitsMapType & getAngleUnitsMap();
 
@@ -20,6 +21,7 @@ public:
 	static bool isValidNumber (int number);
 	static TAngle::EUnits fromString (const std::string & unitsName);
 	static std::string toString (TAngle::EUnits number);
+	static std::string toUserFrendlyString (TAngle::EUnits number);
 
 };
 
