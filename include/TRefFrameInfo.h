@@ -109,6 +109,7 @@ public:
 	static TCoordSysFactory::ECoordSys getDefaultCoordSys(int frame);
 
     static bool isCoordSysAllowed(int frame, TCoordSysFactory::ECoordSys sys);
+	static int getAllowedCoordSysCount(int frame);
 
     static bool isLocalRefFrame(int frame);
 

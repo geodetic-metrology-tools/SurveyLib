@@ -182,6 +182,20 @@ bool TRefFrameInfo::isCoordSysAllowed(int frame, TCoordSysFactory::ECoordSys sys
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
 
+int TRefFrameInfo::getAllowedCoordSysCount(int frame)
+{
+	MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
+	if(iter!=getMapping().end())
+	{
+		int v = iter->second.fAllowedCoordSys;
+		// count bits in an int:
+		v = v - ((v >> 1) & 0x55555555);                    // reuse input as temporary
+		v = (v & 0x33333333) + ((v >> 2) & 0x33333333);     // temp
+		return ((v + (v >> 4) & 0xF0F0F0F) * 0x1010101) >> 24; // count
+	}
+	throw std::invalid_argument("Unknown ERefFrame value");
+}
+
 bool TRefFrameInfo::isLocalRefFrame(int frame)
 {
     MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
