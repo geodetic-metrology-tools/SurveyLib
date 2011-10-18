@@ -71,6 +71,12 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("kFrenchRGF93Zone5","French RGF93zone5 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kLambert93,
 			TDetails("kLambert93","French Lambert93", TCoordSysFactory::k2DPlusH)));
+		//RGF93 CHTRF95
+		tmp->insert(std::make_pair(TRefSystemFactory::kRGF93,
+            TDetails("kRGF93","RGF93", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kCHTRF95,
+            TDetails("kCHTRF95","CHTRF95", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+		//
 
 
         tmp->insert(std::make_pair(TRefSystemFactory::kMLA1985Machine, 
