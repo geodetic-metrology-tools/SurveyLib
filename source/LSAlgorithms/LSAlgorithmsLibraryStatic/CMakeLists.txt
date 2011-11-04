@@ -6,7 +6,7 @@ FOREACH(subproject ${LSALGORITHMS_LIB_SUBPROJECTS})
 ENDFOREACH(subproject) 
 
 
-add_library(LSAlgorithmsLibrary STATIC  ${COMBINED_LIBRARY_FILES})
+add_library(LSAlgorithmsLibrary STATIC ${COMBINED_LIBRARY_FILES})
 add_dependencies(LSAlgorithmsLibrary ${LSALGORITHMS_LIB_SUBPROJECTS})
 
 SET_SOURCE_FILES_PROPERTIES(
@@ -22,8 +22,4 @@ SET_TARGET_PROPERTIES(
   LINKER_LANGUAGE CXX
 )
 
-install(TARGETS LSAlgorithmsLibrary 
-	DESTINATION ${INSTALL_PREFIX}
-	EXPORT LSAlgorithmsLibrary-targets)
-install(EXPORT LSAlgorithmsLibrary-targets 
-	DESTINATION ${INSTALL_PREFIX})
+install(TARGETS LSAlgorithmsLibrary DESTINATION ${INSTALL_PREFIX})

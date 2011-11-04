@@ -8,8 +8,8 @@
 
 namespace tut
 {
-    struct test_TRefFrameInfo{};
-    typedef test_group<test_TRefFrameInfo> factory;
+    struct test_TCoordSysInfo{};
+    typedef test_group<test_TCoordSysInfo> factory;
     typedef factory::object object;
 }
 

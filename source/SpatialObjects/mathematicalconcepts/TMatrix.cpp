@@ -168,7 +168,7 @@ TColumnVector TMatrix::operator*(const TColumnVector& right) const
             tmp(i,0) = right(i);
 
         TMatrixImpl res = *this->fImpl * tmp;
-        for(std::size_t i=0; i!=numCols(); ++i)
+        for(std::size_t i=0; i!=numRows(); ++i)
             result(i) = res(i,0);
 	}
 	return result;

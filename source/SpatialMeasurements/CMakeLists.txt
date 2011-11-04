@@ -14,4 +14,3 @@ ENDFOREACH(subproject)
 
 ADD_SUBDIRECTORY(SpatialMeasurementsLibraryStatic)
 SET_PROPERTY(TARGET SpatialMeasurementsLibrary PROPERTY FOLDER "SpatialMeasurements")
-install(FILES SpatialMeasurements-config.cmake DESTINATION ${INSTALL_PREFIX})

@@ -22,8 +22,4 @@ SET_TARGET_PROPERTIES(
   LINKER_LANGUAGE CXX
 )
 
-install(TARGETS SpatialMeasurementsLibrary 
-	DESTINATION ${INSTALL_PREFIX}
-	EXPORT SpatialMeasurementsLibrary-targets)
-install(EXPORT SpatialMeasurementsLibrary-targets 
-	DESTINATION ${INSTALL_PREFIX})
+install(TARGETS SpatialMeasurementsLibrary DESTINATION ${INSTALL_PREFIX})
