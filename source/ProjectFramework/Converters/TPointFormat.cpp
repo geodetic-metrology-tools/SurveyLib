@@ -108,6 +108,33 @@ TPointFormat::ECoordPrecision TPointFormat::getCoordErrorPrecision() const{
 	return fCoordErrorPrecision;
 }
 
+/////////////////////////////////////////
+// returns the double value of the precision
+/////////////////////////////////////////
+double TPointFormat::getPrecision(ECoordPrecision currPrec)
+{
+	switch(currPrec){
+	
+		case TPointFormat::kMetre:
+			return 0.1;
+		case TPointFormat::k100Millimetres:
+			return 0.01;
+		case TPointFormat::k10Millimetres:
+			return 0.001 ;
+		case TPointFormat::kMillimetre:
+			return 0.0001;
+		case  TPointFormat::k100Micrometres:
+			return 0.00001;
+		case TPointFormat::k10Micrometres:
+			return 0.000001;
+		case TPointFormat::kMicrometre:
+			return 0.0000001;
+		case TPointFormat::k100Nanometres:
+			return 0.00000001;
+		default:
+			return 0.000001;
+		}
+}
 
 
 

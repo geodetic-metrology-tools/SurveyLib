@@ -118,6 +118,9 @@ public:
 	virtual void  setCoordErrorPrecision(ECoordPrecision e) {fCoordErrorPrecision = e; return;}
 
 	//@}
+	//JH@@
+	static double getPrecision(ECoordPrecision currPrec);
+
 
 
 private:
@@ -131,6 +134,7 @@ private:
 	TSpatialStatus::ESpatialStatus	fStatus;				/*!<point's spatial status*/
 
 	//ClassDef(TPointFormat, 1)
+
 };
 
 /*@}*/

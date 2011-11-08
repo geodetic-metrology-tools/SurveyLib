@@ -14,3 +14,8 @@ ENDFOREACH(subproject)
 
 ADD_SUBDIRECTORY(ProjectFrameworkLibraryStatic)
 SET_PROPERTY(TARGET ProjectFrameworkLibrary PROPERTY FOLDER "ProjectFramework")
+
+ADD_SUBDIRECTORY(UnitTests)
+SET_PROPERTY(TARGET UnitTests PROPERTY FOLDER "ProjectFramework")
+
+
