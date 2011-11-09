@@ -12,6 +12,7 @@
 
 //#include  "TTLength.h"
 
+typedef double real;
 
 // N value for CG2000 at 0-level
 int DLLAPI  getCG2000N0( real  x, real  y, real* N)

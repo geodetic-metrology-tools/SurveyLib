@@ -11,4 +11,3 @@ ENDFOREACH(subproject)
 
 ADD_SUBDIRECTORY(LSAlgorithmsLibraryStatic)
 SET_PROPERTY(TARGET LSAlgorithmsLibrary PROPERTY FOLDER "LSAlgorithms")
-install(FILES LSAlgorithms-config.cmake DESTINATION ${INSTALL_PREFIX})

@@ -2,7 +2,6 @@
 include_directories (
 	.
 	${SURVEYLIB_INCLUDE_PATH}
-	${NAGC_INCLUDE_PATH}
 )
 
 
