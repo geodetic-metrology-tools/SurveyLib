@@ -30,7 +30,8 @@ TLSComputer::~TLSComputer()
 
 
 
-bool TLSComputer::computeResults(const TLSInputMatrices* im , TLSResultsMatrices* rm)
+//bool TLSComputer::computeResults(const TLSInputMatrices* im , TLSResultsMatrices* rm)
+bool TLSComputer::computeResults(TLSInputMatrices* im , TLSResultsMatrices* rm)
 {
 	bool result;
 	int nbCnstr = im->getNbrConstraints();
@@ -38,11 +39,11 @@ bool TLSComputer::computeResults(const TLSInputMatrices* im , TLSResultsMatrices
 	{
 		if(nbCnstr == 0)
 		{
-			result = computeResultsMtrs(im, rm);
+			result = computeResultsByParametricMethod(im, rm);
 		}
 		else
 		{
-			result = computeFreeResultsMtrs( im, rm);
+			result = computeResultsByParametricMethodWithMeislBordering( im, rm);
 		}
 	}
 	else
@@ -59,7 +60,7 @@ bool TLSComputer::computeResults(const TLSInputMatrices* im , TLSResultsMatrices
 ////////////////////////////////////////////////////////////////
 //COMPUTES THE RESULTS MATRICES
 ////////////////////////////////////////////////////////////////
-bool TLSComputer::computeResultsMtrs(const TLSInputMatrices* im, TLSResultsMatrices* rm)
+bool TLSComputer::computeResultsByParametricMethod(TLSInputMatrices* im, TLSResultsMatrices* rm)
 {
 	/* in this method, the solution is computed with a numeric equations solver method (nagc lib).
 	   The unknown variance-covariance matrix is thus not computed here. 
@@ -113,7 +114,7 @@ bool TLSComputer::computeResultsMtrs(const TLSInputMatrices* im, TLSResultsMatri
 ////////////////////////////////////////////////////////////////
 //COMPUTES THE RESULTS MATRICES FOR FREE CALCULATION
 ////////////////////////////////////////////////////////////////
-bool TLSComputer::computeFreeResultsMtrs(const TLSInputMatrices* im, TLSResultsMatrices* rm){
+bool TLSComputer::computeResultsByParametricMethodWithMeislBordering(TLSInputMatrices* im, TLSResultsMatrices* rm){
 
 //	cout << "Entered computer\n";
 

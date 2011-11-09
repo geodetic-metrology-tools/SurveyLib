@@ -33,15 +33,20 @@ public:
 	virtual ~TLSComputer();
 
 
-	virtual bool computeResults(const TLSInputMatrices*, TLSResultsMatrices*);
+	//virtual bool computeResults(const TLSInputMatrices*, TLSResultsMatrices*);
+	virtual bool computeResults(TLSInputMatrices*, TLSResultsMatrices*);
 
 	//!Computes the results matrices
 	/*!@param im a pointer to the LS input matrices*/
-	virtual bool computeResultsMtrs(const TLSInputMatrices*, TLSResultsMatrices*);
+	virtual bool computeResultsByParametricMethod (TLSInputMatrices*, TLSResultsMatrices*);
+	//virtual bool computeResultsMtrs(const TLSInputMatrices*, TLSResultsMatrices*);
+
 
 	//!Computes the results matrices for a free calculation
 	/*!\param im a pointer to the LS input matrices*/
-	virtual bool computeFreeResultsMtrs(const TLSInputMatrices*, TLSResultsMatrices*);
+	virtual bool computeResultsByParametricMethodWithMeislBordering (TLSInputMatrices*, TLSResultsMatrices*);
+	//virtual bool computeFreeResultsMtrs(const TLSInputMatrices*, TLSResultsMatrices*);
+
 
 	/*! Access to eventual error */
 	string		getError() const { return fError; }
