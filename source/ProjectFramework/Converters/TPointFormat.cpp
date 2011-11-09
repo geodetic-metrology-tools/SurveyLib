@@ -136,5 +136,32 @@ double TPointFormat::getPrecision(ECoordPrecision currPrec)
 		}
 }
 
+TPointFormat::ECoordPrecision TPointFormat::getPrecisionFromNumber(int prec)
+{
+
+	switch(prec){
+	
+		case 0:
+			return TPointFormat::ECoordPrecision::kMetre;
+		case 1:
+			return TPointFormat::ECoordPrecision::k100Millimetres;
+		case 2:
+			return TPointFormat::ECoordPrecision::k10Millimetres;
+		case 3:
+			return TPointFormat::ECoordPrecision::kMillimetre;
+		case 4:
+			return TPointFormat::ECoordPrecision::k100Micrometres;
+		case 5:
+			return TPointFormat::ECoordPrecision::k10Micrometres;
+		case 6:
+			return TPointFormat::ECoordPrecision::kMicrometre;
+		case 7:
+			return TPointFormat::ECoordPrecision::k100Nanometres;
+		default:
+			return TPointFormat::ECoordPrecision::k10Micrometres;
+
+	}
+}
+
 
 

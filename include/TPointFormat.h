@@ -120,6 +120,7 @@ public:
 	//@}
 	//JH@@
 	static double getPrecision(ECoordPrecision currPrec);
+	static ECoordPrecision getPrecisionFromNumber(int prec);
 
 
 
