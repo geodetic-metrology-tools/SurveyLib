@@ -31,6 +31,7 @@ private:
 	{
         /**
          *  Initialise the Reference Frame information structure.
+		 *  \param[in] reference frame enum name
          *  \param[in] name user friendly name (for GUI, help, etc) of the refFrame
          *  \param[in] defaultCoordSys Default coordinate system for the refFrame.
          *               It is automatically added to the list of allowed coordinate systems.
@@ -40,7 +41,14 @@ private:
          *  \param[in] local optional parameter for specifying whether we are dealing with
          *               a local reference frame (e.g. MLA)
          */
-		TDetails(const std::string & name, TCoordSysFactory::ECoordSys defaultCoordSys, int allowedCoordSys=0, bool local=false);
+		TDetails(
+			const std::string & refFrameName,
+			const std::string & name, 
+			TCoordSysFactory::ECoordSys defaultCoordSys,
+			int allowedCoordSys=0, 
+			bool local=false);
+
+		const std::string fRefFrameName;
 		const std::string fName;
 		const TCoordSysFactory::ECoordSys fDefaultCoordSys;
         const int fAllowedCoordSys;
@@ -52,6 +60,9 @@ private:
      * http://www.parashift.com/c++-faq-lite/ctors.html#faq-10.12
      */
 	static const MappingType & getMapping();
+
+	typedef std::map<std::string, TRefSystemFactory::ERefFrame> StringMappingType;
+	static const StringMappingType & getStringMapping();
 public:
 	typedef std::set<TRefSystemFactory::ERefFrame> RefFrameSet;
 
@@ -76,6 +87,8 @@ public:
 	 *  \throw std::invalid_argument If the input parameter is not valid
 	 */
 	static TRefSystemFactory::ERefFrame fromNumber(int frame);
+	static TRefSystemFactory::ERefFrame fromString(const std::string & s);
+	static std::string getEnumString(TRefSystemFactory::ERefFrame frame);
 
 	/**
 	 *  Retrieve a user friendly name of the ERefFrame.
@@ -84,7 +97,7 @@ public:
 	 *  \return A user friendly name associated with the given reference frame
 	 *  \throw std::invalid_argument If the input parameter is not valid
 	 */
-	static const std::string & getName(int frame);
+	static std::string getName(int frame);
 
 	/**
 	 *  Retrieve a default coordinate system for the ERefFrame.
@@ -96,6 +109,7 @@ public:
 	static TCoordSysFactory::ECoordSys getDefaultCoordSys(int frame);
 
     static bool isCoordSysAllowed(int frame, TCoordSysFactory::ECoordSys sys);
+	static int getAllowedCoordSysCount(int frame);
 
     static bool isLocalRefFrame(int frame);
 

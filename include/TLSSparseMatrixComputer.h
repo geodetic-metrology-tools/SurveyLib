@@ -1,7 +1,7 @@
 
 
-#ifndef SU_TLS_PARAM_MTD_COMPUTER
-#define SU_TLS_PARAM_MTD_COMPUTER
+#ifndef SU_TLS_SPARSE_MATRIX_COMPUTER
+#define SU_TLS_SPARSE_MATRIX_COMPUTER
 
 
 #if _MSC_VER >= 1000
@@ -16,30 +16,30 @@
 #include <iostream>
 #include "UEOIndices.h"
 class TMatrix;
-class TLSInputMatrices;
-class TLSResultsMatrices;
+class TLSInputSparseMatrices;
+class TLSResultsSparseMatrices;
 //using namespace std;
 
 //! Class for a least squares computer used when there are only observation equations
-class TLSParametricMtdComputer {
+class TLSSparseMatrixComputer {
 
 public:
 
 	//!Constructor
-	TLSParametricMtdComputer();
+	TLSSparseMatrixComputer();
 	//!Destructor
-	~TLSParametricMtdComputer();
+	~TLSSparseMatrixComputer();
 
 
-	bool computeResults(TLSInputMatrices*, TLSResultsMatrices*, bool isCombinedCase, bool isFreeNetworkOrECHO, bool hasConstraints);
+	bool computeResults(TLSInputSparseMatrices*, TLSResultsSparseMatrices*, bool isCombinedCase, bool isFreeNetworkOrECHO, bool hasConstraints);
 
 	//!Computes the results matrices
 	/*!@param im a pointer to the LS input matrices*/
-	bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*, bool isCombinedCase);
+	bool computeResultsMtrs(TLSInputSparseMatrices*, TLSResultsSparseMatrices*, bool isCombinedCase);
 
 	//!Computes the results matrices for a free calculation
 	/*!\param im a pointer to the LS input matrices*/
-	bool computeFreeOrConstrainedResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*, bool isCombinedCase, bool isFreeNetworkOrECHO);
+	bool computeFreeOrConstrainedResultsMtrs(TLSInputSparseMatrices*, TLSResultsSparseMatrices*, bool isCombinedCase, bool isFreeNetworkOrECHO);
 
 	/*! Access to eventual error */
     std::string		getError() const { return fError; }

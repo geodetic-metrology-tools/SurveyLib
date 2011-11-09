@@ -2,7 +2,6 @@
 include_directories (
 	.
 	${SURVEYLIB_INCLUDE_PATH}
-	${NAGC_INCLUDE_PATH}
 )
 
 
@@ -14,19 +13,29 @@ include_directories (
 set(CalcElements_SOURCES 
 	TALSCalcParameter.cpp
 	TALSComputer.cpp
+	
 	TLSInputMatrices.cpp
-	TLSParametricMtdComputer.cpp
 	TLSResultsMatrices.cpp
+	TLSComputer.cpp
+	
+	TLSInputSparseMatrices.cpp
+	TLSResultsSparseMatrices.cpp
+	TLSSparseMatrixComputer.cpp
 )
 
 # Create a variable containing all .h files:
 set(CalcElements_HEADERS 
 	${SURVEYLIB_INCLUDE_PATH}/TALSCalcParameter.h
 	${SURVEYLIB_INCLUDE_PATH}/TALSComputer.h
-	${SURVEYLIB_INCLUDE_PATH}/TLSInputMatrices.h
-	${SURVEYLIB_INCLUDE_PATH}/TLSParametricMtdComputer.h
-	${SURVEYLIB_INCLUDE_PATH}/TLSResultsMatrices.h
 	${SURVEYLIB_INCLUDE_PATH}/UEOIndices.h
+	
+	${SURVEYLIB_INCLUDE_PATH}/TLSInputMatrices.h
+	${SURVEYLIB_INCLUDE_PATH}/TLSResultsMatrices.h
+	${SURVEYLIB_INCLUDE_PATH}/TLSComputer.h
+	
+	${SURVEYLIB_INCLUDE_PATH}/TLSInputSparseMatrices.h
+	${SURVEYLIB_INCLUDE_PATH}/TLSResultsSparseMatrices.h
+	${SURVEYLIB_INCLUDE_PATH}/TLSSparseMatrixComputer.h
 )
 
 # Create a static library from sources:

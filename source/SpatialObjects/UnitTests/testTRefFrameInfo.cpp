@@ -136,4 +136,16 @@ namespace tut
 			// std::cout << e.what() << std::endl;
 		}
 	}
+
+	template<>
+    template<>
+    void object::test<12>()
+    {
+        set_test_name("Check whether the number of allowed coordinate systems is correct");
+
+		ensure_equals(TRefFrameInfo::getAllowedCoordSysCount(TRefSystemFactory::kCCS), 1);
+        ensure_equals(TRefFrameInfo::getAllowedCoordSysCount(TRefSystemFactory::kITRF97), 2);
+		ensure_equals(TRefFrameInfo::getAllowedCoordSysCount(TRefSystemFactory::kSwissLV03), 1);
+    }
+
 }

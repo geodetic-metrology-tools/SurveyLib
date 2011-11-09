@@ -1,31 +1,31 @@
 //
-// TLSParametricMtdComputer.cpp : implementation file
+// TLSSparseMatrixComputer.cpp : implementation file
 // class for a least squares computer producing the results matrices 
 // using the parametric method (case where 2nd dgn mtrx = -I)
 //
 
 
-#include "TLSParametricMtdComputer.h"
-#include "TLSResultsMatrices.h"
-#include "TLSInputMatrices.h"
+#include "TLSSparseMatrixComputer.h"
+#include "TLSResultsSparseMatrices.h"
+#include "TLSInputSparseMatrices.h"
 
 //////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR
 //////////////////////////////////////////////////////////
-TLSParametricMtdComputer::TLSParametricMtdComputer():
+TLSSparseMatrixComputer::TLSSparseMatrixComputer():
 fError("")/*, fS0PostUpLimit(LITERAL(0.0)), fS0PostLoLimit(LITERAL(0.0)), fSigmaZero2(LITERAL(0.0))*/
 {//default constructor
 	count = 1;
 }
 
 
-TLSParametricMtdComputer::~TLSParametricMtdComputer()
+TLSSparseMatrixComputer::~TLSSparseMatrixComputer()
 {//destructor
 }
 
 
 
-bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsMatrices* rm, bool isCombinedCase, bool isFreeNetworkOrECHO, bool hasConstraints)
+bool TLSSparseMatrixComputer::computeResults(TLSInputSparseMatrices* im , TLSResultsSparseMatrices* rm, bool isCombinedCase, bool isFreeNetworkOrECHO, bool hasConstraints)
 {
 	bool result;
 	//int nbCnstr = im->getNbrConstraints();
@@ -54,7 +54,7 @@ bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsM
 ////////////////////////////////////////////////////////////////
 //COMPUTES THE RESULTS MATRICES
 ////////////////////////////////////////////////////////////////
-bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm, bool isCombinedCase)
+bool TLSSparseMatrixComputer::computeResultsMtrs(TLSInputSparseMatrices* im, TLSResultsSparseMatrices* rm, bool isCombinedCase)
 {
 	/* in this method, the solution is computed with a numeric equations solver method (nagc lib).
 	   The unknown variance-covariance matrix is thus not computed here. 
@@ -190,7 +190,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 ////////////////////////////////////////////////////////////////
 //COMPUTES THE RESULTS MATRICES FOR FREE CALCULATION
 ////////////////////////////////////////////////////////////////
-bool TLSParametricMtdComputer::computeFreeOrConstrainedResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm, bool isCombinedCase, bool isFreeNetworkOrECHO)
+bool TLSSparseMatrixComputer::computeFreeOrConstrainedResultsMtrs(TLSInputSparseMatrices* im, TLSResultsSparseMatrices* rm, bool isCombinedCase, bool isFreeNetworkOrECHO)
 {
 	if (isCombinedCase)
 	{

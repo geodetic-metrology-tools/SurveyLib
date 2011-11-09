@@ -22,8 +22,4 @@ SET_TARGET_PROPERTIES(
 )
 
 
-install(TARGETS ProjectFrameworkLibrary 
-	DESTINATION ${INSTALL_PREFIX}
-	EXPORT ProjectFrameworkLibrary-targets)
-install(EXPORT ProjectFrameworkLibrary-targets 
-	DESTINATION ${INSTALL_PREFIX})
+install(TARGETS ProjectFrameworkLibrary DESTINATION ${INSTALL_PREFIX})

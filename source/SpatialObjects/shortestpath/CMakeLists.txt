@@ -2,7 +2,6 @@
 include_directories (
 	.
 	${SURVEYLIB_INCLUDE_PATH}
-	${NAGC_INCLUDE_PATH}
 )
 
 
@@ -18,6 +17,8 @@ set(ShortestPath_SOURCES
 	TRefFrameWrapper.cpp
 	TRefSystemFactory.cpp
 	TTransformWrapper.cpp
+	TCoordSysInfo.cpp
+	TAngularUnitsInfo.cpp
 )
 
 # Create a variable containing all .h files:
@@ -30,6 +31,9 @@ set(ShortestPath_HEADERS
 	${SURVEYLIB_INCLUDE_PATH}/TRefFrameWrapper.h
 	${SURVEYLIB_INCLUDE_PATH}/TRefSystemFactory.h
 	${SURVEYLIB_INCLUDE_PATH}/TTransformWrapper.h
+	${SURVEYLIB_INCLUDE_PATH}/TNotInGraphException.h
+	${SURVEYLIB_INCLUDE_PATH}/TCoordSysInfo.h
+	${SURVEYLIB_INCLUDE_PATH}/TAngularUnitsInfo.h
 )
 
 # Create a static library from sources:

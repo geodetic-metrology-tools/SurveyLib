@@ -22,8 +22,4 @@ SET_TARGET_PROPERTIES(
   LINKER_LANGUAGE CXX
 )
 
-install(TARGETS SpatialObjectsLibrary 
-	DESTINATION ${INSTALL_PREFIX}
-	EXPORT SpatialObjectsLibrary-targets)
-install(EXPORT SpatialObjectsLibrary-targets 
-	DESTINATION ${INSTALL_PREFIX})
+install(TARGETS SpatialObjectsLibrary DESTINATION ${INSTALL_PREFIX})

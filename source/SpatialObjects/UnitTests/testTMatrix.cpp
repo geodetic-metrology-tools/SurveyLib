@@ -579,6 +579,25 @@ namespace tut
         ensure_not("There should be and error message", result.getError().empty());
     }
 
+	template<>
+    template<>
+    void object::test<20>()
+    {
+		set_test_name("Adding matrixes of wrong sizes");
+        TMatrix A(2,3);
+        A(0,0) = 3;  A(0,1) = 2; A(0, 2) = 9;
+        A(1,0) = -3; A(1,1) = 5; A(1, 2) = 1;
 
+		TColumnVector v(3);
+        v(0) = 2;
+        v(1) = -6;
+        v(2) = 1;
+
+		TColumnVector result = A*v;
+
+		TColumnVector expected(2);
+		ensure_distance("result(0)", result(0), 3.0, 1e-7);
+		ensure_distance("result(1)", result(1), -35.0, 1e-7);
+	}
 
 }

@@ -93,6 +93,13 @@ public:
 			kCGRFSphere          = 108,
             kSwissLV95           = 109,
             kSwissLV03           = 110,
+            kFrenchRGF93Zone5    = 205,
+			kLambert93			 = 206,
+			//
+			//The same as ETRF93
+			kRGF93               = 207,
+			kCHTRF95             = 208,
+			//
             // Local Reference Frames:
             kMLA1985Machine      = 1000,
             kMLA2000Machine      = 1001,
@@ -115,7 +122,12 @@ public:
 									kITRF972ETRF93, kETRF932ITRF97,
                                     kETRF932CH1903plus, kCH1903plus2ETRF93,
                                     kCH1903plus2SwissLV95, kSwissLV952CH1903plus,
-                                    kSwissLV952SwissLV03, kSwissLV032SwissLV95};
+                                    kSwissLV952SwissLV03, kSwissLV032SwissLV95,
+                                    kETRF932FrenchRGF93, kFrenchRGF932ETRF93,
+									kETRF932kLambert93, kLambert932ETRF93,
+									kETRF932kCHTRF95, kCHTRF952kETRF93,
+									kETRF932kRGF93, kRGF932kETRF93
+		};
 	//@}
 	
 

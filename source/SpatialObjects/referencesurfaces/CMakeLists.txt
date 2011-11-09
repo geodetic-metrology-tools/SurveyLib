@@ -2,7 +2,6 @@
 include_directories (
 	.
 	${SURVEYLIB_INCLUDE_PATH}
-	${NAGC_INCLUDE_PATH}
 )
 
 
@@ -43,6 +42,8 @@ set_source_files_properties(
 
 # Create a variable containing all .h files:
 set(ReferenceSurfaces_HEADERS 
+	${SURVEYLIB_INCLUDE_PATH}/TNotInLepGridException.h
+
 	${SURVEYLIB_INCLUDE_PATH}/T3DLocalRefFrame.h
 	${SURVEYLIB_INCLUDE_PATH}/TA2DPlus1MapProjection.h
 	${SURVEYLIB_INCLUDE_PATH}/TA2DXYRefFrame.h
@@ -66,8 +67,10 @@ set(ReferenceSurfaces_HEADERS
 	${SURVEYLIB_INCLUDE_PATH}/TX0Y0HeProjection.h
 	${SURVEYLIB_INCLUDE_PATH}/TXYHeProjection.h
 	${SURVEYLIB_INCLUDE_PATH}/TXYHgProjection.h
-	${SURVEYLIB_INCLUDE_PATH}/TLV95ReferenceFrame.h
-	${SURVEYLIB_INCLUDE_PATH}/TLV03ReferenceFrame.h
+	${SURVEYLIB_INCLUDE_PATH}/TLV95Projection.h
+	${SURVEYLIB_INCLUDE_PATH}/TLV03Projection.h
+	${SURVEYLIB_INCLUDE_PATH}/TRGF93CC46Projection.h
+	${SURVEYLIB_INCLUDE_PATH}/TLambert93Projection.h
 	
 	${SURVEYLIB_INCLUDE_PATH}/TA2DXYRefFrame.h
 )

@@ -20,6 +20,8 @@
 #include "T2DCartesianPlusHSys.h"
 
 #include "TCoordSysFactory.h"
+
+#include "TNotInGraphException.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -124,9 +126,14 @@ TVCoordinateSystem* TCoordSysFactory::getCoordSys(const ECoordSys coordSysId)
 		iter++;
 	}
 
+	cerr << "Error : Id. not in CoordSysList" << endl;
+	throw TNotInGraphException("TNotInGraphException");
 
-	std::cerr << "Error : Id. not in CoordSysList";
-	exit(EXIT_FAILURE);
+	//std::cerr << "Error : Id. not in CoordSysList";
+	///
+	//TODO@*@
+	///
+	//exit(EXIT_FAILURE);
 
 	//modif du 25/10 (INSURE)
 	return *iterEnd;

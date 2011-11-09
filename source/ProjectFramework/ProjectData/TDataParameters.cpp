@@ -158,9 +158,11 @@ bool  TDataParameters::setRefFrame(TRefSystemFactory::ERefFrame rf)
     if( rf != TRefSystemFactory::kNotInGraph && fRefFrame == 0)
 	{
 		fRefFrameEnum = rf;
+		fLSO.reset();
 		
 		if(	fRefFrameEnum != TRefSystemFactory::kCGRF && fRefFrameEnum != TRefSystemFactory::kWGS84 && 
-			fRefFrameEnum != TRefSystemFactory::kROMA40 && fRefFrameEnum != TRefSystemFactory::kITRF97)
+			fRefFrameEnum != TRefSystemFactory::kROMA40 && fRefFrameEnum != TRefSystemFactory::kITRF97 &&
+			fRefFrameEnum != TRefSystemFactory::kETRF93)
 		{//set automatically metric
 			setUnits(TDataParameters::kMetric );
 		}
@@ -195,11 +197,12 @@ bool  TDataParameters::setUnits( const TDataParameters::ECoordUnit& units )
 {//! set the coordinate units
 	// returns "true" if the parameters are set correctly
 	bool  retVal = true;
-
+	
 	fCoordUnit= units;
 
 	if(	fRefFrameEnum == TRefSystemFactory::kCGRF || fRefFrameEnum == TRefSystemFactory::kWGS84 || 
-		fRefFrameEnum == TRefSystemFactory::kROMA40 || fRefFrameEnum == TRefSystemFactory::kITRF97)
+		fRefFrameEnum == TRefSystemFactory::kROMA40 || fRefFrameEnum == TRefSystemFactory::kITRF97 ||
+		fRefFrameEnum == TRefSystemFactory::kETRF93 || fRefFrameEnum == TRefSystemFactory::kCH1903plus)
 	{
 		if ( units == kDMS )
 		{
