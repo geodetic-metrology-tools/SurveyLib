@@ -378,7 +378,7 @@ protected:
 	stringstream*							fSStream;
 	fstream*								fFStream;
 	iostream*								fIOStream;
-	const char*								fName;
+	string   								fName;
 	EIOType									fIOType;
 	string									fError;
 	string									fWarning;
