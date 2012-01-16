@@ -57,10 +57,10 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 
 	if ((fNbUnk == unknowns) && (fNbObs == observations) && (fNbEqn == equations)){
 
-		*fFirstDesignMtrx = 0.0;	
-		*fSecondDesignMtrx = 0.0;
-		*fMisclosureVector = 0.0;
-		*fWeightMtrx = 0.0;
+		*fFirstDesignMtrx = TReal(0.0);	
+		*fSecondDesignMtrx = TReal(0.0);
+		*fMisclosureVector = TReal(0.0);
+		*fWeightMtrx = TReal(0.0);
 	}
 	else{
 
@@ -76,17 +76,17 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	
 		//debug
 		fFirstDesignMtrx = new TMatrix(equations, unknowns);
-		*fFirstDesignMtrx = 0.0;
+		*fFirstDesignMtrx = TReal(0.0);
 
 	
 		fSecondDesignMtrx = new TMatrix(equations, observations /*+ cnstrObs*/);
-		*fSecondDesignMtrx = 0.0;
+		*fSecondDesignMtrx = TReal(0.0);
 	
 		fMisclosureVector = new TColumnVector(equations);
-		*fMisclosureVector = 0.0;
+		*fMisclosureVector = TReal(0.0);
 	
 		fWeightMtrx = new TMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
-		*fWeightMtrx = 0.0;
+		*fWeightMtrx = TReal(0.0);
 	}
 	return;
 }
@@ -99,13 +99,13 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 		(fNbEqn == equations) && (fNbCnstr == constraints))
 	{
 
-		*fFirstDesignMtrx = 0.0;	
-		*fSecondDesignMtrx = 0.0;
-		*fMisclosureVector = 0.0;
-		*fWeightMtrx = 0.0;
+		*fFirstDesignMtrx = TReal(0.0);	
+		*fSecondDesignMtrx = TReal(0.0);
+		*fMisclosureVector = TReal(0.0);
+		*fWeightMtrx = TReal(0.0);
 
-		*fCnstrFirstDesignMtrx = 0.0;	
-		*fCnstrMisclosureVector = 0.0;
+		*fCnstrFirstDesignMtrx = TReal(0.0);	
+		*fCnstrMisclosureVector = TReal(0.0);
 	}
 	else
 	{
@@ -125,22 +125,22 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 
 	
 		fFirstDesignMtrx = new TMatrix(equations, unknowns);
-		*fFirstDesignMtrx = 0.0;
+		*fFirstDesignMtrx = TReal(0.0);
 	
 		fSecondDesignMtrx = new TMatrix(equations, observations /*+ nbCnstrObs*/);
-		*fSecondDesignMtrx = 0.0;
+		*fSecondDesignMtrx = TReal(0.0);
 	
 		fMisclosureVector = new TColumnVector(equations);
-		*fMisclosureVector = 0.0;
+		*fMisclosureVector = TReal(0.0);
 	
 		fWeightMtrx = new TMatrix(observations /*+ nbCnstrObs*/, observations /*+ nbCnstrObs*/);
-		*fWeightMtrx = 0.0;
+		*fWeightMtrx = TReal(0.0);
 
 		fCnstrFirstDesignMtrx = new TMatrix(constraints, unknowns);
-		*fFirstDesignMtrx = 0.0;
+		*fFirstDesignMtrx = TReal(0.0);
 
 		fCnstrMisclosureVector = new TColumnVector(constraints);
-		*fMisclosureVector = 0.0;
+		*fMisclosureVector = TReal(0.0);
 
 	}
 
