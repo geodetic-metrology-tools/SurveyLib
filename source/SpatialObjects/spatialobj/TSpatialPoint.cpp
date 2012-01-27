@@ -131,24 +131,30 @@ TSpatialPoint::~TSpatialPoint()
 //////////////////////////////////////////////////////////////////////
 TSpatialPoint&  TSpatialPoint::operator=(const TSpatialPoint& tsp)
 {
-	if (this != &tsp)
-	{
-		//fUsedInCalc = tsp.fUsedInCalc;
-		*fName = tsp.getName();
-		fPointDist = tsp.fPointDist;
-		fHeaderComment = tsp.fHeaderComment;
-		fEOLComment = tsp.fEOLComment;
-		fPosition = tsp.fPosition;
-		flistener = tsp.flistener;
-		fPointStatus = tsp.fPointStatus;
-		fNameSet = tsp.fNameSet;
-		fXSet = tsp.fXSet;
-		fYSet = tsp.fYSet;
-		fZSet = tsp.fZSet;
-		updateNeededEquations();
-	}
+	TSpatialPoint copy(tsp);
+	swap(copy);
 	return *this;
 }
+
+void TSpatialPoint::swap(TSpatialPoint & other) {
+	using std::swap;
+	swap(fUsedInCalc, other.fUsedInCalc);
+	swap(fName, other.fName);
+	swap(fPointDist, other.fPointDist);
+	swap(fHeaderComment, other.fHeaderComment);
+	swap(fEOLComment, other.fEOLComment);
+	swap(fPosition, other.fPosition);
+	swap(fEqCount, other.fEqCount);
+	swap(fNeededEquations, other.fNeededEquations);
+	swap(fPtListeners, other.fPtListeners);
+	swap(flistener, other.flistener);
+	swap(fPointStatus, other.fPointStatus);
+	swap(fNameSet, other.fNameSet);
+	swap(fXSet, other.fXSet);
+	swap(fYSet, other.fYSet);
+	swap(fZSet, other.fZSet);
+}
+
 
 
 //////////////////////////////////////////////

@@ -96,7 +96,7 @@ bool TLSComputer::computeResultsByParametricMethod(TLSInputMatrices* im, TLSResu
 	/**************************/
 	/*gets to here and crashes*/
 	/**************************/
-	*solution = 0.0;
+	*solution = TReal(0.0);
 	// computes solution using a equations system solver (Nx = B)
 	*solution = firstDM.transposed() * weightM * misclV * -1.0;	
 	*solution = fAtPA->eqnSolve(*solution);
@@ -195,9 +195,9 @@ bool TLSComputer::computeResultsByParametricMethodWithMeislBordering(TLSInputMat
 			 (cnstrMisclV ) )
 	*/
 	TColumnVector Cbig ( nbUnk + nbCnstr);
-	Cbig = 0.0;
+	Cbig = TReal(0.0);
 	TColumnVector C ( nbUnk);
-	C = 0.0;
+	C = TReal(0.0);
 	C = firstDM.transposed() * weightM * misclV*(-1.0);
 
 	//insert C in Cbig
@@ -236,7 +236,7 @@ bool TLSComputer::computeResultsByParametricMethodWithMeislBordering(TLSInputMat
 	}
 
 	TColumnVector* solution = rm->getSolutionVctr();
-	(*solution) = 0.0;
+	(*solution) = TReal(0.0);
 	// extraction of solution from solutionBig
 	i = 0;
 	while( i < nbUnk)

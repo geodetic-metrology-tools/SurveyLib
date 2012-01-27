@@ -374,14 +374,14 @@ int	TSeparatedFormatTStream::width() const
 
 int	TSeparatedFormatTStream::width(int w)
 {
-	return (*fIOStream).width(0);
+	return (*fIOStream).width(w);
 	//return 0;
 }
 
 int	TSeparatedFormatTStream::setWidthFormat(const int width)
 {
 	int oldWidth = fWidth;
-	fWidth = 0;
+	fWidth = width;
 	return oldWidth;
 }
 

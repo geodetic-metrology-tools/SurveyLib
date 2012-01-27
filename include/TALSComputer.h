@@ -29,7 +29,7 @@ public:
 	//!Computes the results matrices
 	/*!@param im a pointer to the LS input matrices
 	!@param rm a pointer to the LS results matrices*/
-	virtual bool computeResultsMtrs(const TLSInputMatrices* im, TLSResultsMatrices* rm) = 0;
+	virtual bool computeResultsByParametricMethod(TLSInputMatrices* im, TLSResultsMatrices* rm) = 0;
 	//!Sets the scale factor for the sigma zero a priori
 //	virtual void				setS0APrioriScaleFactor(TReal scalefac);
 

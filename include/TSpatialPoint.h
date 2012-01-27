@@ -60,6 +60,8 @@ public:
 		TSpatialPoint( const TSpatialPoint& );
 		//TSpatialPoint( const string& name, const char point, const string& classifier );
 		//TSpatialPoint( const string& name, const char point, const string& classifier, TSpatialPosition * );
+
+		void swap(TSpatialPoint &) throw();
 		
 		/*!Destructor */
 		virtual  ~TSpatialPoint();
@@ -246,6 +248,12 @@ protected:
 	typedef SpatialPointContainer::const_iterator PointConstIter;
 //@}
 
-
+namespace std {
+template <>
+inline void swap(TSpatialPoint & first, TSpatialPoint & second)
+{
+	first.swap(second);
+}
+}
 
 #endif

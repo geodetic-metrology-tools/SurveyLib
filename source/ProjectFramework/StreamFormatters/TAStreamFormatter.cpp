@@ -106,16 +106,16 @@ TAStreamFormatter::TAStreamFormatter(const string& input, TDataParameters& dp)
 TAStreamFormatter::TAStreamFormatter(EIOType io, TFileParameters& fp, TDataParameters& dp)
 {
 	init();
-	fName= fp.getFileName().c_str();
+	fName= fp.getFileName();
 	fSStream=0;
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(fName, ios_base::in);
+		fFStream = new fstream(fName.c_str(), ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(fName, ios_base::out);
+		fFStream = new fstream(fName.c_str(), ios_base::out);
 	}
 
 	if(fFStream->fail())
@@ -147,16 +147,16 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds)
 {
 
 	init();
-	fName=ds.getFileName().c_str();
+	fName=ds.getFileName();
 	fSStream=0;
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::in);
+		fFStream = new fstream(fName.c_str(), ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::out);
+		fFStream = new fstream(fName.c_str(), ios_base::out);
 	}
 
 	if(fFStream->fail())
@@ -187,16 +187,16 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds)
 TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds, TPointFormat& pf)
 {
 	init();
-	fName=ds.getFileName().c_str();
+	fName=ds.getFileName();
 	fSStream=0;
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::in);
+		fFStream = new fstream(fName.c_str(), ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::out);
+		fFStream = new fstream(fName.c_str(), ios_base::out);
 		fPointFormat =pf;
 		setPrecisionFormat(fPointFormat.getCoordPrecision());
 		setWidthFormat(fPointFormat.getCoordWidth());
@@ -231,16 +231,16 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds, TPointFormat& pf
 TAStreamFormatter::TAStreamFormatter(const EIOType io, TADataSet& ds, const TPointFormat& pf, const TObservationFormat& obsFor)
 {
 	init();
-	fName=ds.getFileName().c_str();
+	fName=ds.getFileName();
 	fSStream=0;
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::in);
+		fFStream = new fstream(fName.c_str(), ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(ds.getFileName().c_str(), ios_base::out);
+		fFStream = new fstream(fName.c_str(), ios_base::out);
 		fPointFormat =pf;
 		fObservationFormat = obsFor;
 		setPrecisionFormat(fPointFormat.getCoordPrecision());
@@ -293,7 +293,7 @@ void TAStreamFormatter::init()
 	fSStream = 0;//stringstream*
 	fFStream = 0;//fstream*
 	fIOStream = 0;//iostream*
-	fName =0;//const char*	
+	fName ="";//const char*	
 	fError="";//string	
 
 	fAngFilter =0;//TAngleFilter*
@@ -1134,7 +1134,7 @@ void  TAStreamFormatter::skipCommentLines()
 void TAStreamFormatter::openIn()
 {
 	if (fIOType != kRead && fSStream==0)
-	{fFStream ->open(fName);}
+	{fFStream ->open(fName.c_str());}
 return;
 }
 
@@ -1142,7 +1142,7 @@ return;
 void TAStreamFormatter::openOutApp()
 {
 	if (fIOType != kWrite && fSStream==0)
-	{fFStream->open(fName, ios::out| ios::app);}
+	{fFStream->open(fName.c_str(), ios::out| ios::app);}
 return;
 }
 

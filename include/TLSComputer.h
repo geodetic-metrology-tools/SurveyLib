@@ -38,7 +38,7 @@ public:
 
 	//!Computes the results matrices
 	/*!@param im a pointer to the LS input matrices*/
-	virtual bool computeResultsByParametricMethod (TLSInputMatrices*, TLSResultsMatrices*);
+	virtual bool computeResultsByParametricMethod(TLSInputMatrices*, TLSResultsMatrices*);
 	//virtual bool computeResultsMtrs(const TLSInputMatrices*, TLSResultsMatrices*);
 
 
