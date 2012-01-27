@@ -199,6 +199,21 @@ PointConstIter TWorkingPoints::getPoint(string spn) const{
 PointConstIter TWorkingPoints::getPoint(TSpatialPointName spn) const {
 	return getPoint(spn.getName());
 }
+///////////////////////////////////////////////////////////////////////////
+PointIterator TWorkingPoints::getPoint(int pos)
+{
+	PointIterator it = fWorkingPoints.begin();
+	std::advance(it, pos);
+	return it;
+}
+
+PointConstIter TWorkingPoints::getPoint(int pos) const
+{
+	PointConstIter it = fWorkingPoints.begin();
+	std::advance(it, pos);
+	return it;
+}
+//////////////////////////////////////////////////////////////////////////
 
 void TWorkingPoints::headerChanged(TSpatialPointName name)
 {

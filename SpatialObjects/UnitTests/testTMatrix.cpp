@@ -596,8 +596,8 @@ namespace tut
 		TColumnVector result = A*v;
 
 		TColumnVector expected(2);
-		ensure_distance("result(0)", result(0), 3.0, 1e-7);
-		ensure_distance("result(1)", result(1), -35.0, 1e-7);
+		ensure_distance("result(0)", (double)result(0), 3.0, 1e-7);
+		ensure_distance("result(1)", (double)result(1), -35.0, 1e-7);
 	}
 
 }
