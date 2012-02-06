@@ -17,7 +17,7 @@
 //#endif
 
 
-#define DLLAPI __cdecl
+#define DLLAPI __stdcall
 
 
 //Doxygen documentation: modules definition

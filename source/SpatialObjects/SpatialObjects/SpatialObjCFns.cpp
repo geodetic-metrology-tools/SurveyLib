@@ -38,6 +38,12 @@ int DLLAPI getCG1985NMachine( real  x, real  y, real* N)
 	return SpatialObjFns::getCG1985NMachine(x,y,N);
 }
 
+int DLLAPI transformToMLA(real x0, real y0, real z0,
+					real* x, real* y, real* z, char* geoid)
+{
+	return SpatialObjFns::transformToMLA(x0,y0,z0,x,y,z,geoid);
+}
+
 // coordinates transformation from MLA system to CCS
 int DLLAPI transformFromMLA(real x0, real y0, real z0,
 					  real* x, real* y, real* z, char* geoid)
