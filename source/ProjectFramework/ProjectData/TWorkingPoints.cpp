@@ -75,8 +75,11 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 
 		sp->setListener(this);
 		
-		PointIterator iter = fWorkingPoints.insert(iter, *sp);
-		pointsMap[sp->getName().getName()] = iter;
+		PointIterator it = fWorkingPoints.begin();
+		std::advance(it, pos);
+
+		PointIterator inserted = fWorkingPoints.insert(it, *sp);
+		pointsMap[sp->getName().getName()] = inserted;
 			
 		insert_ok = true;
 	}
