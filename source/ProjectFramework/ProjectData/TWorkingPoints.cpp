@@ -117,13 +117,14 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 
 bool TWorkingPoints::deletePoint(PointIterator iter)
 {
-	hash_map<string, PointIterator>::iterator i = pointsMap.find(iter->getName().getName());
+	std::string pName = iter->getName().getName();
+	hash_map<string, PointIterator>::iterator i = pointsMap.find(pName);
 	if (i == pointsMap.end())
 	{
 		return false;
 	}
-	fWorkingPoints.erase(i->second);
-	pointsMap.erase(iter->getName().getName());
+	fWorkingPoints.erase(iter);
+	pointsMap.erase(i);
 	return true;
 }
 
