@@ -5,6 +5,7 @@
 #include <TCoInitializer.h>
 
 #include <iostream>
+#include <sstream>
 
 
 namespace compute_gps_ref_modes {
@@ -103,6 +104,14 @@ bool TLV03Transformation::computeSwissRefFrame(double & coordinate_x, double & c
             compute_reframe_alt::BESSEL,
             compute_reframe_alt::BESSEL);
     }
+	catch (const _com_error & e)
+	{
+		std::stringstream s;
+		s << "Reframe DLL unavailable, detailed error: " << e.ErrorMessage();
+		std::cerr << s.str() << std::endl;
+		throw std::logic_error(s.str());
+	    return false;
+	}
     catch (HRESULT hr)
     {
         std::cerr << "Reframe DLL - CoInitialize failed. DLL is not registered" << std::endl;
