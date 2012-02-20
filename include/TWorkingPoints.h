@@ -84,7 +84,7 @@ public:
 	PointIterator getPoint(int pos);
 	PointConstIter getPoint(int pos) const;
 
-
+	bool renamePoint(const std::string & oldName, const std::string & newName);
 
 	/*!@initiates broadcaster if the header of a spatial point is changed*/
 	void headerChanged(TSpatialPointName name);

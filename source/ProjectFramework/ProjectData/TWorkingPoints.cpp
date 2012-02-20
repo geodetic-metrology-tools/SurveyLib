@@ -217,6 +217,28 @@ PointConstIter TWorkingPoints::getPoint(int pos) const
 	std::advance(it, pos);
 	return it;
 }
+
+
+bool TWorkingPoints::renamePoint(const std::string & oldName, const std::string & newName)
+{
+	PointIterator p = getPoint(oldName);
+	if(p==getPointsEndIterator())
+		return false; // No such point
+	if(getPoint(newName)!=getPointsEndIterator())
+		return false; // Cannot rename - would create a duplicate
+	hash_map<string, PointIterator>::iterator iter = pointsMap.find(oldName);
+	if(iter==pointsMap.end())
+		return false; // Something wrong with this TWorkingPoints
+
+	// Rename the point:
+	p->setPtName(newName);
+
+	// Update the mapping:
+	pointsMap.erase(iter);
+	pointsMap[newName] = p;
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 void TWorkingPoints::headerChanged(TSpatialPointName name)
