@@ -39,6 +39,8 @@ public:
 		//!Default constructor
 		TWorkingPoints();
 
+		TWorkingPoints(const TWorkingPoints & ori);
+
 		//!Destructor
 		virtual ~TWorkingPoints();
 	//@}

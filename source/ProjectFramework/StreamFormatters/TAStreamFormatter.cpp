@@ -851,6 +851,11 @@ TAStreamFormatter& TAStreamFormatter::seekg(streamoff off, ios_base::seekdir dir
 	return *this;
 }
 
+std::streampos TAStreamFormatter::tellg()
+{
+	return fIOStream->tellg();
+}
+
 string TAStreamFormatter::readLine() 
 {/*
   Reads a line from the stream and returns a string containing the text.

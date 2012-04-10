@@ -59,15 +59,17 @@ TMatrix::TMatrix(int nRows, int nCols)
 		
 
 TMatrix::TMatrix(const TMatrix & source)
-: fImpl(new TMatrixImpl(*(source.fImpl))),
-  fError(source.fError)
+: TANumericValue(source)
+,  fImpl(new TMatrixImpl(*(source.fImpl)))
+,  fError(source.fError)
 {//!Copy constructor
 	//copy the status
-	setStatus( source.getStatus() );
+	//setStatus( source.getStatus() );
 }
 
 void TMatrix::swap(TMatrix & other) throw()
 {
+	TANumericValue::swap(other);
     using std::swap;
     swap(fImpl, other.fImpl);
     swap(fError, other.fError);

@@ -50,6 +50,7 @@ class  TANumericValue : virtual public TVNumericValue//: public TObject
 public:
 	
 	TANumericValue();
+	void swap(TANumericValue & other) throw();
 
 	virtual ~TANumericValue() { }
 

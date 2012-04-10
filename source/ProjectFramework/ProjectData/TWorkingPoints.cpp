@@ -25,6 +25,16 @@ TWorkingPoints::~TWorkingPoints()
 	}
 }
 
+TWorkingPoints::TWorkingPoints(const TWorkingPoints & ori)
+: fLastPtNbr(ori.fLastPtNbr)
+, pointsMap(ori.pointsMap)
+, fBroadcaster(new TPtListBroadcaster(*ori.fBroadcaster))
+, fWorkingPoints(ori.fWorkingPoints)
+{
+	fLastPtNbr = ori.fLastPtNbr;
+	fWorkingPoints = ori.fWorkingPoints;
+
+}
 
 /////////////////////////////////////////////////////////////
 // Adding a Spatial point to the pointsSet member variable

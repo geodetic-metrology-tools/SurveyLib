@@ -366,6 +366,7 @@ public:
 	/*!@ set a space between the data*/
 	void TAStreamFormatter::setGapBetweenData();
 
+	std::streampos tellg();
 	TAStreamFormatter& seekg(streamoff off, ios_base::seekdir dir);
 
 
