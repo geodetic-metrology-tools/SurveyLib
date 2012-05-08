@@ -14,4 +14,3 @@ ENDFOREACH(subproject)
 
 ADD_SUBDIRECTORY(ProjectFrameworkLibraryStatic)
 SET_PROPERTY(TARGET ProjectFrameworkLibrary PROPERTY FOLDER "ProjectFramework")
-install(FILES ProjectFramework-config.cmake DESTINATION ${INSTALL_PREFIX})
