@@ -1,5 +1,5 @@
 # declare a project
-PROJECT(SurveyLib_OLD)
+PROJECT(SurveyLib_LGC)
 
 # Minimum version of CMake needed to process the configuration files
 cmake_minimum_required(VERSION 2.8.4)
@@ -47,7 +47,7 @@ SET(REFRAME_INCLUDE_PATH "C:/TestProject/DLLfile")
 #SET(EIGEN_INCLUDE_PATH "C:/lib/eigen/eigen-2.0.15")
 
 # Where to look for the libraries to link against
-SET(NAGC_LIBRARY_DIR "G:/Support/SurveyingEng/software/nagc/dll")
+SET(NAGC_LIBRARY_DIR "G:/Support/SurveyingEng/Computing/Software/nagc/dll")
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 #######################################################################

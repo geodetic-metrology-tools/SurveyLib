@@ -17,5 +17,5 @@ ENDFOREACH(subproject)
 ADD_SUBDIRECTORY(SpatialObjectsLibraryStatic)
 SET_PROPERTY(TARGET SpatialObjectsLibrary PROPERTY FOLDER "SpatialObjects")
 
-#ADD_SUBDIRECTORY(UnitTests)
-#SET_PROPERTY(TARGET UnitTests PROPERTY FOLDER "SpatialObjects")
+ADD_SUBDIRECTORY(UnitTests)
+SET_PROPERTY(TARGET UnitTests PROPERTY FOLDER "SpatialObjects")
