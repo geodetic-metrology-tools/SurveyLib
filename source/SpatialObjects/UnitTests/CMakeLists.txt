@@ -17,6 +17,7 @@ link_directories (
 set(UnitTests_SOURCES
 
     testTSparseMatrix.cpp
+	testTMatrix.cpp
 
 	main.cpp
 )
