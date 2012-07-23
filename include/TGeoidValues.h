@@ -23,7 +23,7 @@ class	TAngle;
 
 
 // typedefs
-typedef	real	GeoidValue;	
+typedef	TReal	GeoidValue;	
 
 
 ////////////////////////////////////////////////////////////////

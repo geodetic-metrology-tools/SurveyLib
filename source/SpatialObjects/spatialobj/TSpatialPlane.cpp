@@ -49,7 +49,7 @@ TSpatialPlane::TSpatialPlane(const TSpatialPointName firstPointName, const TAngl
 	fAngle = angle;
 
 	string str = firstPointName.getName()+"orientationRadians";
-	real i = angle.getRadiansValue();
+	TReal i = angle.getRadiansValue();
 	ostringstream oss;
 	oss << str << (double) i;
 	fName = oss.str();
@@ -118,7 +118,7 @@ bool	TSpatialPlane::ifNotDoneDefinePlane(const TSpatialPointName firstPointName,
 		fAngle = angle;
 
 		string str = firstPointName.getName()+"orientationRadians";
-		real i = angle.getRadiansValue();
+		TReal i = angle.getRadiansValue();
 		ostringstream oss;
 		oss << str << (double) i;
 		fName = oss.str();

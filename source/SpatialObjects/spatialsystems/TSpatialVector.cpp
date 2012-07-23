@@ -48,7 +48,7 @@ TSpatialVector::TSpatialVector(TAReferenceFrame* frame)
 
 
 TSpatialVector::TSpatialVector(TAReferenceFrame* rf,
-							   const real x, const real y, const real z,
+							   const TReal x, const TReal y, const TReal z,
 							   TCoordSysFactory::ECoordSys cs )
 {
 	fFv = new TFreeVector(x,y,z,cs);
@@ -119,7 +119,7 @@ TSpatialVector& TSpatialVector::operator-( const TSpatialVector& second)
 }
 
 
-TSpatialVector& TSpatialVector::operator*( const real factor)
+TSpatialVector& TSpatialVector::operator*( const TReal factor)
 {	/// Multiplication by a constant
 	*fFv = *fFv *  factor;
 	return *this;

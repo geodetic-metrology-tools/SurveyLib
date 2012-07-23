@@ -3,6 +3,7 @@ include_directories (
 	.
 	${SURVEYLIB_INCLUDE_PATH}
 	${NAGC_INCLUDE_PATH}
+	${EIGEN_INCLUDE_PATH}
 )
 
 
@@ -34,6 +35,7 @@ set(MathematicalConcepts_SOURCES
 	TRotationMatrix.cpp
 	TScalar.cpp
 	TSparseMatrix.cpp
+	TMatrixImpl.cpp
 )
 
 # Create a variable containing all .h files:
@@ -62,6 +64,7 @@ set(MathematicalConcepts_HEADERS
 	${SURVEYLIB_INCLUDE_PATH}/TSparseMatrix.h
 	${SURVEYLIB_INCLUDE_PATH}/TVCoordinateSystem.h
 	${SURVEYLIB_INCLUDE_PATH}/TVNumericValue.h
+	${SURVEYLIB_INCLUDE_PATH}/TMatrixImpl.h
 )
 
 # Create a static library from sources:

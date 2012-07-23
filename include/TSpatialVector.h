@@ -38,7 +38,7 @@ class  TModifiedLocalAstronomicalRF;
 using namespace std;
 
 
-typedef real Component;
+typedef TReal Component;
 ////////////////////////////////////////////////////////////////
 
 /*!\ingroup spatialobjects 
@@ -63,7 +63,7 @@ public:
 		//TSpatialVector(TRefSurfServer::ERefFrame frame);
 	
 		//! Constructor taking 3 TLength and the RF
-		TSpatialVector(TAReferenceFrame*, const real, const real, const real, TCoordSysFactory::ECoordSys );
+		TSpatialVector(TAReferenceFrame*, const TReal, const TReal, const TReal, TCoordSysFactory::ECoordSys );
 
 		//! Constructor taking a free vector and the RF
 		//TSpatialVector(const TFreeVector& fv, TVReferenceFrame* frame);
@@ -92,7 +92,7 @@ public:
 		TSpatialVector& operator-( const TSpatialVector& );
 
 		//! Multiplication by a constant
-		TSpatialVector& operator*( const real );
+		TSpatialVector& operator*( const TReal );
 
 		//! Access to the coordinates of the vector as a free vector
 		TFreeVector getElements(TCoordSysFactory::ECoordSys) const;

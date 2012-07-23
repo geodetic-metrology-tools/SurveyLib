@@ -24,23 +24,23 @@
 	\param TLength y1, coordinate  y of the first point
 	\param TLength x2, coordinate  x of the second point
 	\param TLength y2, coordinate  y of the second point
-	\return Distance as real
+	\return Distance as TReal
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	real	dist(TLength x1, TLength y1, TLength x2, TLength y2);
+	TReal	dist(TLength x1, TLength y1, TLength x2, TLength y2);
 	/*@}*/
 
 /*! computation of the distance from 2D coordinates
-	\param real x1, coordinate  x of the first point
-	\param real y1, coordinate  y of the first point
-	\param real x2, coordinate  x of the second point
-	\param real y2, coordinate  y of the second point
-	\return Distance as real
+	\param TReal x1, coordinate  x of the first point
+	\param TReal y1, coordinate  y of the first point
+	\param TReal x2, coordinate  x of the second point
+	\param TReal y2, coordinate  y of the second point
+	\return Distance as TReal
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	real	dist(real x1, real y1, real x2, real y2);
+	TReal	dist(TReal x1, TReal y1, TReal x2, TReal y2);
 	/*@}*/
 
 
@@ -52,25 +52,25 @@
 	\param TLength x2, coordinate  x of the second point
 	\param TLength y2, coordinate  y of the second point
 	\param TLength z2, coordinate  z of the second point
-	\return Distance as real
+	\return Distance as TReal
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	real	dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2);
+	TReal	dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2);
 	/*@}*/
 
 /*! computation of the distance from 3D coordinates
-	\param real x1, coordinate  x of the first point
-	\param real y1, coordinate  y of the first point
-	\param real z1, coordinate  z of the first point
-	\param real x2, coordinate  x of the second point
-	\param real y2, coordinate  y of the second point
-	\param real z2, coordinate  z of the second point
-	\return Distance as real
+	\param TReal x1, coordinate  x of the first point
+	\param TReal y1, coordinate  y of the first point
+	\param TReal z1, coordinate  z of the first point
+	\param TReal x2, coordinate  x of the second point
+	\param TReal y2, coordinate  y of the second point
+	\param TReal z2, coordinate  z of the second point
+	\return Distance as TReal
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	real	dist3D(real x1, real y1, real z1, real x2, real y2, real z2);
+	TReal	dist3D(TReal x1, TReal y1, TReal z1, TReal x2, TReal y2, TReal z2);
 	/*@}*/
 
 

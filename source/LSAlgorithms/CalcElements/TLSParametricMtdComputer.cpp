@@ -101,7 +101,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 
 	rm->setL(L);
 
-	real* solutionVectorb = *aTransTimesW * misclV;
+	TReal* solutionVectorb = *aTransTimesW * misclV;
 	for (int i = 0; i < aTransTimesW->rowsCount(); i++)
 	{
 		solutionVectorb[i] = -solutionVectorb[i];
@@ -111,7 +111,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	}
 	delete aTransTimesW;
 
-	real* solution = L->solve_eqn(solutionVectorb);
+	TReal* solution = L->solve_eqn(solutionVectorb);
 
 	delete[] solutionVectorb;
 
@@ -143,7 +143,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
 
 	TSparseMatrix* temp = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
-	real* aTransTimesWTimesMiscVec = *aTransTimesW * misclV;
+	TReal* aTransTimesWTimesMiscVec = *aTransTimesW * misclV;
 	int solVecRows = aTransTimesW->rowsCount();
 
 #if _DEBUG
@@ -161,7 +161,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 
     int nnz = temp->columnPointers()[temp->columnsCount()] + constraintFirstDM->columnPointers()[constraintFirstDM->columnsCount()];
     int cols = temp->columnsCount() + constraintFirstDM->rowsCount();
-    real* bigValues = new real[nnz];
+    TReal* bigValues = new TReal[nnz];
     int* bigRowind = new int[nnz];
     int* bigColptr = new int[cols + 1];
     bigColptr[0] = 0;
@@ -193,7 +193,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	bigMatrix->write_matrix_file("C:\\bigOld.txt");
 #endif
 
-	real* bigSolutionVector = new real[cols];
+	TReal* bigSolutionVector = new TReal[cols];
 	for (int i = 0; i < solVecRows; i++)
 	{
 		bigSolutionVector[i] = -aTransTimesWTimesMiscVec[i];
@@ -208,7 +208,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	{
 		delete rm->getBigMatrix();
 	}
-	real* D;
+	TReal* D;
 	TSparseMatrix* ldlt = bigMatrix->ldlt_decompose_lower_triangular_returning_lower_triangular(D);
 	if (ldlt == NULL)
 	{
@@ -218,7 +218,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	}
 	rm->setBigMatrix(bigMatrix);
 
-	real* solution = ldlt->solve_ldlt(D, bigSolutionVector);
+	TReal* solution = ldlt->solve_ldlt(D, bigSolutionVector);
 	delete[] bigSolutionVector;
 
 	TColumnVector* s = rm->getSolutionVctr();

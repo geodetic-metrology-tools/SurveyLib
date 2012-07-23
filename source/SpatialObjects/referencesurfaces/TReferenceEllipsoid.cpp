@@ -78,20 +78,20 @@ void TReferenceEllipsoid::setDerivedParameters()
 // at a given latitude.
 EllipseParameter  TReferenceEllipsoid::getNu( const TAngle& phi )  const
 {
-	real sinP = sinq( phi.getRadiansValue() );
+	TReal sinP = sinq( phi.getRadiansValue() );
 	
-	real nu = fA / sqrtq( LITERAL(1.0) - (fESquared * sinP * sinP) );
+	TReal nu = fA / sqrtq( LITERAL(1.0) - (fESquared * sinP * sinP) );
 	return nu;
 }
 
 
 // Get the Radius of Curvature of the Ellipsoid in the Prime Vertical
 // at a given latitude given in radians.
-EllipseParameter  TReferenceEllipsoid::getNu( const real phi )  const
+EllipseParameter  TReferenceEllipsoid::getNu( const TReal phi )  const
 {
-	real sinP = sinq( phi );
+	TReal sinP = sinq( phi );
 	
-	real nu = fA / sqrtq( LITERAL(1.0) - (fESquared * sinP * sinP) );
+	TReal nu = fA / sqrtq( LITERAL(1.0) - (fESquared * sinP * sinP) );
 	return nu;
 }
 
@@ -100,20 +100,20 @@ EllipseParameter  TReferenceEllipsoid::getNu( const real phi )  const
 //	at a given latitude.
 EllipseParameter  TReferenceEllipsoid::getRho( const TAngle& phi )  const
 {
-	real sinP = sinq( phi.getRadiansValue() );
+	TReal sinP = sinq( phi.getRadiansValue() );
 	
-	real rho = fA * (LITERAL(1.0) - fESquared) / powq(( LITERAL(1.0) - (fESquared * sinP * sinP) ), LITERAL(3.0)/LITERAL(2.0));
+	TReal rho = fA * (LITERAL(1.0) - fESquared) / powq(( LITERAL(1.0) - (fESquared * sinP * sinP) ), LITERAL(3.0)/LITERAL(2.0));
 	return rho;
 }
 
 
 // Get the Radius of Curvature of the Ellipsoid in the Meridian
 //	at a given latitude given in radians.
-EllipseParameter  TReferenceEllipsoid::getRho( const real phi )  const
+EllipseParameter  TReferenceEllipsoid::getRho( const TReal phi )  const
 {
-	real sinP = sinq( phi );
+	TReal sinP = sinq( phi );
 	
-	real rho = fA * (LITERAL(1.0) - fESquared) / powq(( LITERAL(1.0) - (fESquared * sinP * sinP) ), LITERAL(3.0)/LITERAL(2.0));
+	TReal rho = fA * (LITERAL(1.0) - fESquared) / powq(( LITERAL(1.0) - (fESquared * sinP * sinP) ), LITERAL(3.0)/LITERAL(2.0));
 	return rho;
 }
 
@@ -122,24 +122,24 @@ EllipseParameter  TReferenceEllipsoid::getRho( const real phi )  const
 //	at a given latitude, and azimuth.
 EllipseParameter  TReferenceEllipsoid::getEuler( const TAngle& phi, const TAngle& alpha )  const
 {
-	real cosP = cosq( phi.getRadiansValue() );
-	real cosA = cosq( alpha.getRadiansValue() );
-	real nu = getNu( phi );
+	TReal cosP = cosq( phi.getRadiansValue() );
+	TReal cosA = cosq( alpha.getRadiansValue() );
+	TReal nu = getNu( phi );
 	
-	real euler = nu / ( LITERAL(1.0) + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
+	TReal euler = nu / ( LITERAL(1.0) + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
 	return euler;
 }
 
 
 // Get the Euler's Radius of Curvature of the Ellipsoid
 //	at a given latitude, and azimuth given in radians.
-EllipseParameter  TReferenceEllipsoid::getEuler( const real phi, const real alpha )  const
+EllipseParameter  TReferenceEllipsoid::getEuler( const TReal phi, const TReal alpha )  const
 {
-	real cosP = cosq( phi );
-	real cosA = cosq( alpha );
-	real nu = getNu( phi );
+	TReal cosP = cosq( phi );
+	TReal cosA = cosq( alpha );
+	TReal nu = getNu( phi );
 	
-	real euler = nu / ( LITERAL(1.0) + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
+	TReal euler = nu / ( LITERAL(1.0) + ( fEPrimeSquared * cosP * cosP * cosA * cosA ) );
 	return euler;
 }
 

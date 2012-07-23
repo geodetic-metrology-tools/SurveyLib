@@ -73,7 +73,7 @@ T3DMatrix&  T3DMatrix::operator=(const T3DMatrix& right)
 }
 
 
-void T3DMatrix::operator=(const real& value)
+void T3DMatrix::operator=(const TReal& value)
 {//inits all the matrix coefficients to a common value
 	for (int i = 0; i<3; i++)
 	{	for(int j=0; j<3; j++)
@@ -143,7 +143,7 @@ T3DMatrix T3DMatrix::operator *(const T3DMatrix& right) const
 		{
 		for (int k=0; k<3 ;k++)
 			{
-			real a=0;
+			TReal a=0;
 			for (int j=0; j<3; j++)
 				{
 				a=a+getC(i,j)*right.getC(j,k);
@@ -197,7 +197,7 @@ TFreeVector T3DMatrix::operator*(const TFreeVector& fv) const
 	return resultat;
 }
 
-T3DMatrix T3DMatrix::operator*( const real& k)
+T3DMatrix T3DMatrix::operator*( const TReal& k)
 {//multiplies the Matrix by a scalar
 	T3DMatrix resultat (*this);
 	for (int i=0; i<3; i++)
@@ -271,7 +271,7 @@ void T3DMatrix::clear()
 }
 
 
-bool T3DMatrix::initDiag( const real& comVal)
+bool T3DMatrix::initDiag( const TReal& comVal)
 {//inits all the matrix diagonal coefficients to a common value
 	for (int i = 0; i<3 ; i++)
 		{
@@ -295,13 +295,13 @@ bool T3DMatrix::invert()
 	if (this->getStatus()!= kNull)	
 	{
 		//calcul du determinant
-		real det=0;
+		TReal det=0;
 		det=getC(0,0)*getC(1,1)*getC(2,2)-getC(0,0)*getC(1,2)*getC(2,1)
 			-getC(0,1)*getC(1,0)*getC(2,2)+getC(0,1)*getC(1,2)*getC(2,0)
 			+getC(0,2)*getC(1,0)*getC(2,1)-getC(0,2)*getC(1,1)*getC(2,0);
 
 		if(det!=0)
-		{real d=1/det;
+		{TReal d=1/det;
 			resultat.setC(0,0,d*(getC(1,1)*getC(2,2)-getC(2,1)*getC(1,2)));
 			resultat.setC(1,0,-d*(getC(1,0)*getC(2,2)-getC(2,0)*getC(1,2)));
 			resultat.setC(2,0,d*(getC(1,0)*getC(2,1)-getC(2,0)*getC(1,1)));
@@ -331,12 +331,12 @@ bool T3DMatrix::invert()
 }
 
 	
-bool T3DMatrix::setElt(const int i, const int j, const real value)
+bool T3DMatrix::setElt(const int i, const int j, const TReal value)
 {//set a element into a 3D matrix
 return this->getCoordSysPtr()->setElt(this, i, j, value);
 }	
 
-real T3DMatrix::getElt(const int i, const int j) const
+TReal T3DMatrix::getElt(const int i, const int j) const
 {//set a element into a 3D matrix
 return this->getCoordSysPtr()->getElt(this, i, j);
 }

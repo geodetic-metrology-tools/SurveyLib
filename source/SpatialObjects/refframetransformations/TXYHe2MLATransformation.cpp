@@ -107,7 +107,7 @@ void TXYHe2MLATransformation::setSourceFrame( TXYHeProjection* xyhe )
 
 bool  TXYHe2MLATransformation::transform(TPositionVector& pv) const
 {// Transformation of a position vector using the parameters of the two reference frames	
-	real dx, dy, he, d, d0, Dzh;
+	TReal dx, dy, he, d, d0, Dzh;
 
 	// distance from P0 in XY-plane
 	dx = pv.getX().getMetresValue() - fTo->getFalseOrigin().getX().getMetresValue();
@@ -132,16 +132,16 @@ bool  TXYHe2MLATransformation::transform(TPositionVector& pv) const
 	
 	TAngle phiP0;
 	phiP0 = fTo->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid(/*fEllipsoid, &falseOrigin*/);
-	real nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
+	TReal nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
 
-	real rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
+	TReal rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
 		*powq( (phiP0.cosine()) * (azimuth.cosine()) ,2 ) );
 
 	// angle between point and z-axis
 	TAngle omega = TAngle::aSin( d / (rhoalpha + he) );
 
 	// scale factor
-	real k = rhoalpha  / (rhoalpha + he);
+	TReal k = rhoalpha  / (rhoalpha + he);
 
 	d0 = k*d;
 

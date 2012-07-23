@@ -38,7 +38,7 @@ using namespace std;
 //#include  "TVReferenceEllipsoid.h"
 //
 // typedefs
-typedef real EllipseParameter;
+typedef TReal EllipseParameter;
 
 ////////////////////////////////////////////////////////////////
 
@@ -120,7 +120,7 @@ public:
 
 			@param  phi the latitude in radians
 		 */
-		virtual EllipseParameter  getNu( const real phi )  const;
+		virtual EllipseParameter  getNu( const TReal phi )  const;
 
 		/** Get the Radius of Curvature of the Ellipsoid in the Meridian
 		    at a given latitude.
@@ -134,7 +134,7 @@ public:
 
 			@param  phi the latitude in radians
 		 */
-		virtual EllipseParameter  getRho( const real phi )  const;
+		virtual EllipseParameter  getRho( const TReal phi )  const;
 
 		/** Get the Euler's Radius of Curvature of the Ellipsoid
 		    at a given latitude, and azimuth.
@@ -150,7 +150,7 @@ public:
 			@param  phi the latitude in radians
 			@param  alpha the azimuth in radians
 		 */
-		virtual EllipseParameter  getEuler( const real phi, const real alpha )  const;
+		virtual EllipseParameter  getEuler( const TReal phi, const TReal alpha )  const;
 
 
 		virtual void setEllId(const TRefSystemFactory::ERefEll ellId);

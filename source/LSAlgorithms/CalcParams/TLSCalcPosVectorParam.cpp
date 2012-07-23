@@ -311,10 +311,10 @@ TLength		TLSCalcPosVectorParam::getNEstValue(const TRefSystemFactory::EGeoid	geo
 
 TLength		TLSCalcPosVectorParam::getErrorEllMajorAxis() const
 {
-	real vxy = getXYCovar().getMMetresValue();
-	real sx2 = pow(getXSigma().getMMetresValue(), 2) ;
-	real sy2 = pow(getYSigma().getMMetresValue(), 2) ;
-	real gdAxe = (LITERAL(1.0)/sqrtq(LITERAL(2.0))) * sqrtq( sx2 + sy2 + sqrtq( pow((sy2 - sx2), 2) + (LITERAL(4.0) * vxy * vxy) ) );
+	TReal vxy = getXYCovar().getMMetresValue();
+	TReal sx2 = pow(getXSigma().getMMetresValue(), 2) ;
+	TReal sy2 = pow(getYSigma().getMMetresValue(), 2) ;
+	TReal gdAxe = (LITERAL(1.0)/sqrtq(LITERAL(2.0))) * sqrtq( sx2 + sy2 + sqrtq( pow((sy2 - sx2), 2) + (LITERAL(4.0) * vxy * vxy) ) );
 	
 	TLength res;
 	res.setMMetresValue(gdAxe);
@@ -324,10 +324,10 @@ TLength		TLSCalcPosVectorParam::getErrorEllMajorAxis() const
 	
 TLength		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
 {
-	real vxy = getXYCovar().getMMetresValue();
-	real sx2 = pow(getXSigma().getMMetresValue(), 2) ;
-	real sy2 = pow(getYSigma().getMMetresValue(), 2) ;
-	real ptAxe = (LITERAL(1.0)/sqrtq(LITERAL(2.0))) * sqrtq( sx2 + sy2 - sqrtq( pow((sy2 - sx2), 2) + (LITERAL(4.0) * vxy *vxy) ) );
+	TReal vxy = getXYCovar().getMMetresValue();
+	TReal sx2 = pow(getXSigma().getMMetresValue(), 2) ;
+	TReal sy2 = pow(getYSigma().getMMetresValue(), 2) ;
+	TReal ptAxe = (LITERAL(1.0)/sqrtq(LITERAL(2.0))) * sqrtq( sx2 + sy2 - sqrtq( pow((sy2 - sx2), 2) + (LITERAL(4.0) * vxy *vxy) ) );
 	
 	TLength res;
 	res.setMMetresValue(ptAxe);
@@ -337,12 +337,12 @@ TLength		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
 	
 TAngle		TLSCalcPosVectorParam::getErrorEllGis() const
 {
-	real vxy = getXYCovar().getMMetresValue();
-	real sx2 = pow(getXSigma().getMMetresValue(), 2) ;
-	real sy2 = pow(getYSigma().getMMetresValue(), 2) ;
+	TReal vxy = getXYCovar().getMMetresValue();
+	TReal sx2 = pow(getXSigma().getMMetresValue(), 2) ;
+	TReal sy2 = pow(getYSigma().getMMetresValue(), 2) ;
 	TAngle gis (( LITERAL(0.5)) * TAngle::aTan2(2*vxy , (sy2 - sx2) ) );
 	
-	real testAffichage = gis.getGonsValue();
+	TReal testAffichage = gis.getGonsValue();
 	TAngle deuxCentGrad;
 	deuxCentGrad.setGonsValue(200);
 	if(testAffichage > 200)

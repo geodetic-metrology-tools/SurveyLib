@@ -63,7 +63,7 @@ TRadiansFilter *TRadiansFilter::instance()
 void	TRadiansFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 {	// function to get a radians angle from a QTextStream object
 	// and set the value in a TAngle object
-	real	rads;
+	TReal	rads;
 
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')

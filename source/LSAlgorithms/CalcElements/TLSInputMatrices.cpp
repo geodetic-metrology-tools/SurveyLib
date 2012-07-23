@@ -16,15 +16,15 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////////
 TLSInputMatrices::TLSInputMatrices()
 {//Constructor
-	firstDesignMatrixTransposedValues = new list<real>();
+	firstDesignMatrixTransposedValues = new list<TReal>();
 	firstDesignMatrixTransposedColPtr = new list<int>();
 	firstDesignMatrixTransposedRowInd = new list<int>();
 
-	secondDesignMatrixTransposedValues = new list<real>();
+	secondDesignMatrixTransposedValues = new list<TReal>();
 	secondDesignMatrixTransposedColPtr = new list<int>();
 	secondDesignMatrixTransposedRowInd = new list<int>();
 
-	weightMatrixValues = new list<real>();
+	weightMatrixValues = new list<TReal>();
 
 	firstDesignMatrixTransposed = NULL;
 	secondDesignMatrixTransposed = NULL;
@@ -105,7 +105,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	fMisclosureVector = new TColumnVector(fNbObs);
 	fCnstrMisclosureVector = new TColumnVector(fNbCnstr);
 
-	constraintFirstDesignMatrixValues = new list<real>();
+	constraintFirstDesignMatrixValues = new list<TReal>();
 	constraintFirstDesignMatrixColPtr = new list<int>();
 	constraintFirstDesignMatrixRowInd = new list<int>();
 }
@@ -113,7 +113,7 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 
 
 /*
-void TLSInputMatrices::setS0APrioriScaleFactor(real scalefac)
+void TLSInputMatrices::setS0APrioriScaleFactor(TReal scalefac)
 {//sets the scale factor for the S0 a priori
 	fS0APrioriScaleFactor = scalefac;
 }*/
@@ -173,7 +173,7 @@ void TLSInputMatrices::clearMatrices()
 }
 
 
-bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, real coeff)
+bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {//sets an element of the first design matrix
 	bool successfullySet = true;
 	if (coeff != 0)
@@ -186,7 +186,7 @@ bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 }
 
 
-bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex column, real coeff)
+bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {//sets an element of the second design matrix
 	bool successfullySet = true;
 	if (coeff != 0)
@@ -199,7 +199,7 @@ bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex colu
 }
 
 
-bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, real coeff)
+bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {//sets an element of the misclosure vector
 	bool successfullySet = true;
 	if (row <= fNbEqn)
@@ -211,7 +211,7 @@ bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, real coeff)
 }
 
 
-bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, real coeff)
+bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {//sets en element of the weight matrix
 	bool successfullySet = true;
 	if (coeff != 0)
@@ -223,7 +223,7 @@ bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column,
 }
 
 
-bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, real coeff)
+bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, TReal coeff)
 {//sets an element of the constraint first design matrix
 	bool successfullySet = true;
 	if (coeff != 0)
@@ -235,7 +235,7 @@ bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, real coeff)
 }
 
 
-bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, real coeff)
+bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {//sets an element of the constraint misclosure vector
 	bool successfullySet = true;
 	if (row <= fNbCnstr)
@@ -262,10 +262,10 @@ void TLSInputMatrices::setConstraintNewColumn()
 
 void TLSInputMatrices::finishedFillingMatrices()
 {
-	real* vals = new real[firstDesignMatrixTransposedValues->size()];
+	TReal* vals = new TReal[firstDesignMatrixTransposedValues->size()];
 	int* cols = new int[firstDesignMatrixTransposedColPtr->size()];
 	int* rows = new int[firstDesignMatrixTransposedRowInd->size()];
-	list<real>::const_iterator iter = firstDesignMatrixTransposedValues->begin();
+	list<TReal>::const_iterator iter = firstDesignMatrixTransposedValues->begin();
 	list<int>::const_iterator iterRows = firstDesignMatrixTransposedRowInd->begin();
 	int i = 0;
 	while (iter != firstDesignMatrixTransposedValues->end())
@@ -289,11 +289,11 @@ void TLSInputMatrices::finishedFillingMatrices()
 	}
 	firstDesignMatrixTransposedColPtr->clear();
 
-	real* vals2 = new real[secondDesignMatrixTransposedValues->size()];
+	TReal* vals2 = new TReal[secondDesignMatrixTransposedValues->size()];
 	int* cols2 = new int[secondDesignMatrixTransposedColPtr->size()];
 	int* rows2 = new int[secondDesignMatrixTransposedRowInd->size()];
 
-	list<real>::const_iterator iter2 = secondDesignMatrixTransposedValues->begin();
+	list<TReal>::const_iterator iter2 = secondDesignMatrixTransposedValues->begin();
 	list<int>::const_iterator iterRows2 = secondDesignMatrixTransposedRowInd->begin();
 	i = 0;
 	while (iter2 != secondDesignMatrixTransposedValues->end())
@@ -327,8 +327,8 @@ void TLSInputMatrices::finishedFillingMatrices()
 		rowinds[i] = i;
 	}
 
-	real* vals3 = new real[weightMatrixValues->size()];
-	list<real>::const_iterator iter3 = weightMatrixValues->begin();
+	TReal* vals3 = new TReal[weightMatrixValues->size()];
+	list<TReal>::const_iterator iter3 = weightMatrixValues->begin();
 	i = 0;
 	while (iter3 != weightMatrixValues->end())
 	{
@@ -348,10 +348,10 @@ void TLSInputMatrices::finishedFillingMatrices()
 			setConstraintNewColumn();
 		}
 
-        real* vals4 = new real[constraintFirstDesignMatrixValues->size()];
+        TReal* vals4 = new TReal[constraintFirstDesignMatrixValues->size()];
         int* cols4 = new int[constraintFirstDesignMatrixColPtr->size()];
         int* rows4 = new int[constraintFirstDesignMatrixRowInd->size()];
-        list<real>::const_iterator iter4 = constraintFirstDesignMatrixValues->begin();
+        list<TReal>::const_iterator iter4 = constraintFirstDesignMatrixValues->begin();
         list<int>::const_iterator iterRows4 = constraintFirstDesignMatrixRowInd->begin();
         i = 0;
         while (iter4 != constraintFirstDesignMatrixValues->end())

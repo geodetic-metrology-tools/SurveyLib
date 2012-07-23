@@ -63,7 +63,7 @@ TKilometresFilter *TKilometresFilter::instance()
 void	TKilometresFilter::input(TAStreamFormatter&	iStream, TLength& length)const
 {	// function to get a kilometre length from a QTextStream object
 	// and set the value in a TLength object
-	real	lenVal;
+	TReal	lenVal;
 
 	iStream >> lenVal;
 	if(!(iStream.fail()))

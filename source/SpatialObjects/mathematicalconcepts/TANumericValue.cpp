@@ -24,6 +24,7 @@ Copyright 2002 CERN EST/SU. All rights reserved.
 // other forward declarations
 //
 #include	"TANumericValue.h"
+#include <utility>
 ////////////////////////////////////////////////////////////////
 
 
@@ -55,4 +56,9 @@ TVNumericValue::EStatus TANumericValue::testStatus( const TVNumericValue & obj )
 	{
 		return TVNumericValue::kKnown;
 	}	
+}
+
+void TANumericValue::swap(TANumericValue & other) throw()
+{
+	std::swap(fStatus, other.fStatus);
 }

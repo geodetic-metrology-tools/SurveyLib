@@ -65,12 +65,12 @@ return true;
 //////////////////////////////////////////////////////////////////////////////////
 
 
-bool T3DCartesianCoordSys::setAllRotations(TRotationMatrix* mx, TRotationMatrix::ERotationType kR, real &omega, real &phi, real &kappa)
+bool T3DCartesianCoordSys::setAllRotations(TRotationMatrix* mx, TRotationMatrix::ERotationType kR, TReal &omega, TReal &phi, TReal &kappa)
 {//create a TRotationMatrix default def: return false
 
 	//computation of sine and cosine from the angle and setting the value to 0 when less than 2 epsilon
 	TAngle om(omega), p(phi), k(kappa);
-	real xcos, xsin, ycos, ysin, zcos, zsin;
+	TReal xcos, xsin, ycos, ysin, zcos, zsin;
 
 	xcos = om.cosine();
 	if (fabsq(xcos) <= 2*DBL_EPSILON)
@@ -131,7 +131,7 @@ bool T3DCartesianCoordSys::setAllRotations(TRotationMatrix* mx, TRotationMatrix:
 
 struct Angles T3DCartesianCoordSys::getAngles(const TRotationMatrix* mx, const TRotationMatrix::ERotationType kR) const
 {//get angles of a TRotationMatrix return a structure (omega, phi, kappa), default def return false
-	real omega, phi, kappa;
+	TReal omega, phi, kappa;
 	TAngle ang, om, p, k;
 	Angles xyz;
 
@@ -249,20 +249,20 @@ return true;
 }
 
 
-bool T3DCartesianCoordSys::setElt(T3DMatrix* mx, const int i, const int j, const real value)
+bool T3DCartesianCoordSys::setElt(T3DMatrix* mx, const int i, const int j, const TReal value)
 {//set a element into a 3D matrix
 setC(mx, i, j, value);
 return true;
 }
 
 
-real T3DCartesianCoordSys::getElt(const T3DMatrix* mx, const int i, const int j) const
+TReal T3DCartesianCoordSys::getElt(const T3DMatrix* mx, const int i, const int j) const
 {//get a element from a 3D matrix
 return getC(mx, i, j);
 }
 
 
-real T3DCartesianCoordSys::getElt(const TRotationMatrix* mx, const int i, const int j) const
+TReal T3DCartesianCoordSys::getElt(const TRotationMatrix* mx, const int i, const int j) const
 {//get a element from a 3D matrix
 return getC(mx, i, j);
 }

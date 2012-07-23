@@ -125,7 +125,7 @@ void TX0Y0He2XYHeTransformation::setEllipsoid( TReferenceEllipsoid* ellipsoid )
 
 bool  TX0Y0He2XYHeTransformation::transform(TPositionVector& pv) const
 {// Transformation of a spatial position using the parameters of the two reference frames
-	real Dx, dx, Dy, dy, he, d, falseX, falseY;
+	TReal Dx, dx, Dy, dy, he, d, falseX, falseY;
 
 	// distance from p0 in X0Y0-plane
 	dx = pv.getX().getMetresValue() - fTo->getMLARefFrame()->getFalseOrigin().getX().getMetresValue();
@@ -152,13 +152,13 @@ bool  TX0Y0He2XYHeTransformation::transform(TPositionVector& pv) const
 	TAngle phiP0;
 	phiP0 = fTo->getMLARefFrame()->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid(/*fEllipsoid, &falseOrigin*/);
 	
-	real nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
+	TReal nuP0 = fEllipsoid->getNu(phiP0.getRadiansValue());
 
-	real rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
+	TReal rhoalpha = nuP0 / (1 + fEllipsoid->getEPrimeSquared()
 		*powq( (phiP0.cosine()) * (azimuth.cosine()) ,2 ) );
 	
 	// scale factor
-	real k = (rhoalpha + he) / rhoalpha ;
+	TReal k = (rhoalpha + he) / rhoalpha ;
 	
 	//Deltas to be added on X0 and Y0 coordinates, using the scale factor
  	Dx = k * dx;

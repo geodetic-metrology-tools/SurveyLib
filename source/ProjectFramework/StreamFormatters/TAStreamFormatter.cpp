@@ -588,15 +588,15 @@ TAStreamFormatter&	TAStreamFormatter::operator<<(const TPositionVector& pos)
 
 
 TAStreamFormatter  &TAStreamFormatter::operator<<( const TDouble& db )
-{//output a real object to the text stream	
+{//output a TReal object to the text stream	
 
-	// extract the real object as a real value and output to the text stream
+	// extract the TReal object as a TReal value and output to the text stream
 	this->width(fWidth);
 	this->precision(fPrecision);
 	(*this)<<right;
 	if(db.getStatus() != TVNumericValue::kNull)
 	{
-		real d = db.getValue();
+		TReal d = db.getValue();
 		(*this)<<d;
 	}
 
@@ -606,13 +606,13 @@ TAStreamFormatter  &TAStreamFormatter::operator<<( const TDouble& db )
 TAStreamFormatter  &TAStreamFormatter::operator<<( const TScalar& db )
 {//output a scalar object to the text stream	
 
-	// extract the scalar object as a real value and output to the text stream
+	// extract the scalar object as a TReal value and output to the text stream
 	this->width(fWidth);
 	this->precision(fPrecision);
 	(*this)<<right;
 	if(db.getStatus() != TVNumericValue::kNull)
 	{
-		real d = db.getValue();
+		TReal d = db.getValue();
 		(*this)<<d;
 	}
 
@@ -676,7 +676,7 @@ TAStreamFormatter &TAStreamFormatter::operator>>( float &f )
 {   (*fIOStream)>>( f ); return *this; }
 
 
-TAStreamFormatter &TAStreamFormatter::operator>>( real &d )
+TAStreamFormatter &TAStreamFormatter::operator>>( TReal &d )
 {
 #if __INTEL_COMPILER
 
@@ -776,7 +776,7 @@ TAStreamFormatter &TAStreamFormatter::operator<<( float f )
 {   (*fIOStream)<<( f ); return *this; }
 
 
-TAStreamFormatter &TAStreamFormatter::operator<<( real d )
+TAStreamFormatter &TAStreamFormatter::operator<<( TReal d )
 {   (*fIOStream)<<( (double) d ); return *this; }
 
 
@@ -1365,7 +1365,7 @@ void	TAStreamFormatter::writeStringLeft(const int width, const string data)
 	return;
 }
 
-void	TAStreamFormatter::writeDouble(const int width, const int pres, const real data)
+void	TAStreamFormatter::writeDouble(const int width, const int pres, const TReal data)
 {
 	this->width(width);
 	this->precision(pres);

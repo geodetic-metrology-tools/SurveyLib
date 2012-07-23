@@ -104,12 +104,12 @@ void TXYHs2MLATransformation::setSourceFrame( TXYHeProjection* XYHs )
 
 bool  TXYHs2MLATransformation::transform(TPositionVector& pv) const
 {// Transformation of a position vector using the parameters of the two reference frames
-	real dx, dy, hs, d;
-	real d0, omega;
+	TReal dx, dy, hs, d;
+	TReal d0, omega;
 	// radius of the sphere
-	real R = LITERAL(6371000.0);
+	TReal R = LITERAL(6371000.0);
 	// transform TPositionVector
-	real Z;
+	TReal Z;
 
 	// distance from P0 in XY-plane
 	dx = pv.getX().getMetresValue() - fTo->getFalseOrigin().getX().getMetresValue();

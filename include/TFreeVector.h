@@ -54,8 +54,8 @@ public:
 		//!Default Constructor 
 		TFreeVector(TCoordSysFactory::ECoordSys);
 	
-		//!Constructor taking 3 real (value in meter)
-		TFreeVector(const real&, const real&, const real&, TCoordSysFactory::ECoordSys);
+		//!Constructor taking 3 TReal (value in meter)
+		TFreeVector(const TReal&, const TReal&, const TReal&, TCoordSysFactory::ECoordSys);
 
 		//!Copy Constructor 
 		TFreeVector( const TFreeVector&);
@@ -89,14 +89,14 @@ public:
 		//!Multiplication by a TScalar
 		TFreeVector operator*( const TScalar& );
 
-		//!Multiplication by a real 
-		TFreeVector operator*( const real& );
+		//!Multiplication by a TReal 
+		TFreeVector operator*( const TReal& );
 
 		//!Multiply this vector by a TScalar
 		TFreeVector & operator *= ( const TScalar& );
 
-		//!Multiply this vector by a real 
-		TFreeVector & operator *= ( const real& );
+		//!Multiply this vector by a TReal 
+		TFreeVector & operator *= ( const TReal& );
 
 		//!Copy Assignment Operator 
 		TFreeVector& operator=( const TFreeVector& );

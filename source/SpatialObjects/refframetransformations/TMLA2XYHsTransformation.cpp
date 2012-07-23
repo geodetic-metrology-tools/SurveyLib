@@ -99,12 +99,12 @@ TARefFrameTransformation*  TMLA2XYHsTransformation::inverse() const
 bool  TMLA2XYHsTransformation::transform(TPositionVector& pv) const
 {// Transformation of a position vector using the parameters of the two reference frames
 	
-	real dx, dy, dz, d;
-	real d0, omega;
+	TReal dx, dy, dz, d;
+	TReal d0, omega;
 	// radius of the sphere
-	real R = 6371000;	
+	TReal R = 6371000;	
 	// transform TPositionVector
-	real H;
+	TReal H;
 
 	//distance from P0 in XY-plane
 	dx = pv.getX().getMetresValue() - fFrom->getFalseOrigin().getX().getMetresValue();

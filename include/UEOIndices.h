@@ -11,7 +11,7 @@
 //matrix index type
 typedef int MatrixIndex;
 //matrix element type
-typedef real MatrixElmt;
+typedef TReal MatrixElmt;
 
 
 //structure for unknowns, equations and observations indicies

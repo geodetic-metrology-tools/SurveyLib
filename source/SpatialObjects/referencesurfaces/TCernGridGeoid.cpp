@@ -90,7 +90,7 @@ TLength TCernGridGeoid::getN ( const TSpatialPosition& sp) const
 
 
 	// the spatial position must be in the LEP grid
-	real x,y,xdl,ydl,xur,yur;
+	TReal x,y,xdl,ydl,xur,yur;
 	x = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	y = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
 	xdl = fDownLeft.getX().getMetresValue();
@@ -131,7 +131,7 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 
 
 	// the spatial position must be in the LEP grid
-	real x,y,xdl,ydl,xur,yur;
+	TReal x,y,xdl,ydl,xur,yur;
 	x = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	y = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
 	xdl = fDownLeft.getX().getMetresValue();
@@ -143,12 +143,12 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
 	{
 		// round to LITERAL(0.01) cc 
-		real interpolated = splineInterpolation(fEtaMatrix, spos) * 100;
+		TReal interpolated = splineInterpolation(fEtaMatrix, spos) * 100;
 		int temp = (int) interpolated;
 		if ( ( interpolated - temp ) >= LITERAL(0.5))
 			temp += 1;
 
-		real newTemp = temp;
+		TReal newTemp = temp;
 		newTemp = newTemp/100;
 
 		eta.setGonsValue( newTemp * LITERAL(0.0001) );
@@ -181,7 +181,7 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 
 
 	// the spatial position must be in the LEP grid
-	real x,y,xdl,ydl,xur,yur;
+	TReal x,y,xdl,ydl,xur,yur;
 	x = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	y = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
 	xdl = fDownLeft.getX().getMetresValue();
@@ -193,12 +193,12 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
 	{
 		// round to LITERAL(0.01) cc 
-		real interpolated = splineInterpolation(fXiMatrix, spos) * 100;
+		TReal interpolated = splineInterpolation(fXiMatrix, spos) * 100;
 		int temp = (int) interpolated;
 		if ( ( interpolated - temp ) >= LITERAL(0.5))
 			temp += 1;
 
-		real newTemp = temp;
+		TReal newTemp = temp;
 		newTemp = newTemp/100;
 
 		xsi.setGonsValue( newTemp * LITERAL(0.0001) );
@@ -228,7 +228,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 	
 	// computation of phi (latitude for the spatial position)
 	TAngle latitude;
-	real phi;
+	TReal phi;
 	TAngle eta, fDAlphaValue;
 	
 	latitude = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();
@@ -240,7 +240,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 
 
 	// the spatial position must be in the LEP grid
-	real x,y,xdl,ydl,xur,yur;
+	TReal x,y,xdl,ydl,xur,yur;
 	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
 	xdl = fDownLeft.getX().getMetresValue();
@@ -271,7 +271,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& lat
 	// deep copy of TSpatialPosition
 	TSpatialPosition position(sp);
 
-	real phi;
+	TReal phi;
 	TAngle eta, fDAlphaValue;
 	
 	phi = latitude.getRadiansValue();
@@ -313,14 +313,14 @@ void TCernGridGeoid::setGeoidId(const TRefSystemFactory::EGeoid geoidId)
 // Private Member Functions
 //////////////////////////////////////////////////////////////////////
 
-real TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialPosition& spos) const
+TReal TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialPosition& spos) const
 {
 
 	
-	real N;
-	real Xo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getKMetresValue()), Yo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getKMetresValue());
-	valarray<real> x(matrix.numCols()), y(matrix.numRows()), absx(matrix.numCols()), absy(matrix.numRows());
-	real xmin, ymin, t;
+	TReal N;
+	TReal Xo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getKMetresValue()), Yo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getKMetresValue());
+	valarray<TReal> x(matrix.numCols()), y(matrix.numRows()), absx(matrix.numCols()), absy(matrix.numRows());
+	TReal xmin, ymin, t;
 	int I,J;
 	TMatrix base(4,4), c(4,3), T(1,4), q(1,3), Q(4,3);
 	vector<int> L(4), K(4);

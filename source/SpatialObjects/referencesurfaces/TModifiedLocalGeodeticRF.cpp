@@ -42,8 +42,8 @@
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
-const real TModifiedLocalGeodeticRF::precisionH = LITERAL(0.0000001); //precision calcul h
-const real TModifiedLocalGeodeticRF::precisionPhi = LITERAL(0.00000000000001); //precision calcul phi
+const TReal TModifiedLocalGeodeticRF::precisionH = LITERAL(0.0000001); //precision calcul h
+const TReal TModifiedLocalGeodeticRF::precisionPhi = LITERAL(0.00000000000001); //precision calcul phi
 
 
 
