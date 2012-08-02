@@ -13,17 +13,9 @@
 /////////////////////////////////////////////////////
 // Forward declarations
 /////////////////////////////////////////////////////
-#include "TDouble.h"
-#include "TMatrix.h"
+
 #include "TSparseMatrix.h"
-#include "TColumnVector.h"
-#include <fstream>
-#include <sstream>
-//#include <iostream.h>
 #include "UEOIndices.h"
-
-
-using namespace std;
 
 
 //!Class for result matrices of a least squares calculation
@@ -65,13 +57,13 @@ public:
 	/*!@return an element of the unknowns covariance matrix
 	@param row the desired element's row index
 	@param column the desired element's column index*/
-	virtual MatrixElmt	getUnknownsCovarMtrxElmt(MatrixIndex row, MatrixIndex column) const {return (*fUnknownsCovarianceMtrx)(row, column);}
+	virtual MatrixElmt	getUnknownsCovarMtrxElmt(MatrixIndex row, MatrixIndex column) const {return (*fUnknownsCovarianceMtrx).coeff(row, column);}
 
 	/*!@return a pointer to the Solution Vector*/
-	virtual TColumnVector*		getSolutionVctr() const {return fSolutionVctr;}
+	virtual TVector*		getSolutionVctr() const {return fSolutionVctr;}
 
 	/*!@return a pointer to the Residuals Vector*/
-	virtual TColumnVector*		getResidualsVctr() const {return fResidualsVctr;}
+	virtual TVector*		getResidualsVctr() const {return fResidualsVctr;}
 
 	/*!@return a pointer to the unknowns covariance matrix*/
 	virtual TSparseMatrix*		getUnkCovarMtrx() const {return fUnknownsCovarianceMtrx;}
@@ -93,36 +85,38 @@ public:
 	void			saveMatricesToFile(int nbIter) const;
 
 	/*! compute and return a vector of observations variances */
-	TColumnVector	computeVarObs(const TSparseMatrix& A, const TSparseMatrix& ATransposed);
+	TVector	computeVarObs(const TSparseMatrix& A);
 
+	/*
 	TSparseMatrix* getL() const { return L; }
 	void setL(TSparseMatrix* l) { L = l; }
 	TSparseMatrix* getBigMatrix() const { return bigMatrix; }
 	void setBigMatrix(TSparseMatrix* l) { bigMatrix = l; }
+	*/
 
 private:
-	//mj2008
-	//!Default constructor
-	TLSResultsMatrices();
-	//!Constructor
-	/*!The passed pointers are stored. The pointed to matrices musn't be deleted
-	@param solut a pointer to the solution vector
-	@param solut a pointer to the residuals vector
-	@param sigm2 the estimated square of the sigma zero
-	@param unkcov a pointer to the unknowns covariance matrix */
-	TLSResultsMatrices(TColumnVector* solut, TColumnVector* resid, TReal sigm2, TMatrix* unkcov);
-	TLSResultsMatrices(int solut, int resid, int unkcov);
-	//mj
+	////mj2008
+	////!Default constructor
+	//TLSResultsMatrices();
+	////!Constructor
+	///*!The passed pointers are stored. The pointed to matrices musn't be deleted
+	//@param solut a pointer to the solution vector
+	//@param solut a pointer to the residuals vector
+	//@param sigm2 the estimated square of the sigma zero
+	//@param unkcov a pointer to the unknowns covariance matrix */
+	//TLSResultsMatrices(TVector* solut, TVector* resid, TReal sigm2, TMatrix* unkcov);
+	//TLSResultsMatrices(int solut, int resid, int unkcov);
+	////mj
 	
 
 
-	TColumnVector*	fSolutionVctr; /*!< vector (u x 1) containing the calculated parameters */
-	TColumnVector*	fResidualsVctr; /*!< vector (o x 1) containing the calculated residues on observations */
+	TVector*	fSolutionVctr; /*!< vector (u x 1) containing the calculated parameters */
+	TVector*	fResidualsVctr; /*!< vector (o x 1) containing the calculated residues on observations */
 	TSparseMatrix*	fUnknownsCovarianceMtrx; /*!< matrix (u x u) containing the variances and covariances for parameters */
 	TReal			fSigmaZero2; /*!< calculated "average variance" on residues */
 	bool			fS0APosterioriVariances; /*!< indicates if the s0 a posteriori should be applied */
-	TSparseMatrix* L;
-	TSparseMatrix* bigMatrix;
+	//TSparseMatrix* L;
+	//TSparseMatrix* bigMatrix;
 };
 
 /////////////////////

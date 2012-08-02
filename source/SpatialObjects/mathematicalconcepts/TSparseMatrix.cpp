@@ -1,27 +1,63 @@
 #include "TSparseMatrix.h"
+//#include <Eigen/Cholesky>
+//
+//TSparseMatrix::TSparseMatrix(int rows, int cols)
+//	: fMatrix(Eigen::MatrixXd::Constant(rows, cols, 0))
+//{
+//}
+//
+//TSparseMatrix::TSparseMatrix(const Eigen::MatrixXd & m)
+//	: fMatrix(m)
+//{
+//}
+//
+//TSparseMatrix::TSparseMatrix(int rows, int cols, TReal * vals, int * rowInds, int * colPtr)
+//{
+//	// TODO
+//}
+//
+//TSparseMatrix TSparseMatrix::transposed() const 
+//{ 
+//	TSparseMatrix tmp(*this); 
+//	tmp.fMatrix.transposeInPlace(); 
+//	return tmp; 
+//}
+//
+//TSparseMatrix TSparseMatrix::symmetric_lower_inverse() const
+//{
+//	TSparseMatrix tmp(*this);
+//	tmp.fMatrix.marked<Eigen::LowerTriangular>().solveTriangularInPlace(tmp.fMatrix);
+//	return tmp;
+//}
+//
+//TSparseMatrix TSparseMatrix::symmetric_lower_inverse_saving_L(TSparseMatrix & L) const
+//{
+//	//TODO L
+//	//L = this->cholesky_decompose_lower_triangular_returning_lower_triangular();
+//	//TSparseMatrix* inverse = L->invert_lower_triangular_cholesky_decomposed_returning_lower_triangular();
+//
+//	Eigen::VectorXd fVector;
+//
+//	L.fMatrix.llt().solveInPlace(fVector); // using a LLT factorization
+//	L.fMatrix.inverse();
+//
+//
+//	///////////////////////////////////////////////////////////////////////////////////////////
+//
+//	TSparseMatrix tmp(*this);
+//	tmp.fMatrix.marked<Eigen::LowerTriangular>().solveTriangularInPlace(tmp.fMatrix);
+//	return tmp;
+//}
+//TSparseMatrix TSparseMatrix::multiply_F(const TSparseMatrix& second) const
+//{
+	//TODO
+	// multiplies a general sparse matrix with another. The F stands for Fast. The routines with LM take Less Memory but are slower.
 
-TSparseMatrix::TSparseMatrix(int rows, int cols)
-	: fMatrix(Eigen::MatrixXd::Constant(rows, cols, 0))
-{
-}
+//}
+//TSparseMatrix multiply_LM(const TSparseMatrix& second) const
+//{
 
-TSparseMatrix::TSparseMatrix(const Eigen::MatrixXd & m)
-	: fMatrix(m)
-{
-}
-
-TSparseMatrix::TSparseMatrix(int rows, int cols, TReal * vals, int * rowInds, int * colPtr)
-{
-	// TODO
-}
-
-TSparseMatrix TSparseMatrix::transposed() const 
-{ 
-	TSparseMatrix tmp(*this); 
-	tmp.fMatrix.transposeInPlace(); 
-	return tmp; 
-}
-
+//}
 //
 //TSparseMatrix::TSparseMatrix(int rows, int columns, TReal* vals, int* rowInds, int* colPtr)
 //{

@@ -40,7 +40,7 @@ SET(TUT_INCLUDE_PATH "C:/lib/tut-2009-08-30")
 SET(REFRAME_INCLUDE_PATH "C:/TestProject/DLLfile")
 
 # Paths to external libraries (headers and libraries):
-SET(EIGEN_INCLUDE_PATH "C:/lib/eigen/eigen-2.0.15")
+SET(EIGEN_INCLUDE_PATH "C:/lib/eigen/eigen-eigen-43d9075b23ef")
 
 
 

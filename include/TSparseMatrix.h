@@ -1,28 +1,41 @@
 #ifndef SPARSE_MATRIX_H
 #define SPARSE_MATRIX_H
 
-#include <Quad.h>
+#include <Eigen/Sparse>
 
-#include <Eigen/Core>
+typedef Eigen::SparseMatrix<double> TSparseMatrix;
+typedef Eigen::VectorXd TVector;
+typedef Eigen::Triplet<double> TTriplet;
 
-// Wrapped plain Eigen matrix to minimise the changes
-class TSparseMatrix // No longer sparse
-{
-public:
-	TSparseMatrix(int rows, int cols);
-	TSparseMatrix(const Eigen::MatrixXd & m);
-	// For compatibility with old code
-	// NOTE: Memory in the arrays will be freed immediately!
-	TSparseMatrix(int rows, int cols, TReal * vals, int * rowInds, int * colPtr);
-
-	TSparseMatrix transposed() const;
-
-	inline int columnsCount() const { return fMatrix.cols(); }
-	inline int rowsCount() const { return fMatrix.rows(); }
-
-private:
-	Eigen::MatrixXd fMatrix;
-};
+//#include <Quad.h>
+//
+//#include <Eigen/Core>
+//
+//
+//// Wrapped plain Eigen matrix to minimise the changes
+//class TSparseMatrix // No longer sparse
+//{
+//public:
+//	TSparseMatrix(int rows, int cols);
+//	TSparseMatrix(const Eigen::MatrixXd & m);
+//	// For compatibility with old code
+//	// NOTE: Memory in the arrays will be freed immediately!
+//	TSparseMatrix(int rows, int cols, TReal * vals, int * rowInds, int * colPtr);
+//
+//	TSparseMatrix transposed() const;
+//	TSparseMatrix symmetric_lower_inverse() const;
+//	TSparseMatrix symmetric_lower_inverse_saving_L(TSparseMatrix & L) const;
+//	//TSparseMatrix multiply_F(const TSparseMatrix & second) const;
+//	//TSparseMatrix multiply_LM(const TSparseMatrix& second) const;
+//
+//	inline int columnsCount() const { return fMatrix.cols(); }
+//	inline int rowsCount() const { return fMatrix.rows(); }
+//
+//private:
+//	Eigen::MatrixXd fMatrix;
+//	//Eigen::VectorXf fVector;
+//	
+//};
 
 //#define THRESHOLD LITERAL(0.0000000001)
 //

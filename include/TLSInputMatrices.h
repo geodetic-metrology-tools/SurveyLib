@@ -27,14 +27,8 @@
 /////////////////////////////////////////////////////
 // Forward declarations
 /////////////////////////////////////////////////////
-#include "TMatrix.h"
 #include "TSparseMatrix.h"
-#include "TColumnVector.h"
-#include <fstream>
-#include <sstream>
-//#include <iostream>
 #include "UEOIndices.h"
-using namespace std;
 
 
 //! class for input matrices used in the ls-calculation
@@ -78,7 +72,7 @@ public:
 		//!Sets a coefficient of the weight matrix
 		virtual bool				setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 		//!Sets a coefficient of the constraint first design matrix
-		virtual bool				setCnstrFirstDgnMtrxElement(MatrixIndex row, TReal coefficient);
+		virtual bool				setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 		//!Sets a coefficient of the constraint misclosure vector
 		virtual bool				setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff);
 	//@}
@@ -96,33 +90,33 @@ public:
 //		virtual TReal					getS0APrioriScaleFactor() const;
 
 		/*!@return a const reference to the first design matrix*/
-		const TSparseMatrix* getFirstDgnMtrxTransposed() const;
+		const TSparseMatrix* getFirstDgnMtrx() const;
 		/*!@return a const reference to the second design matrix*/
-		const TSparseMatrix* getSecondDgnMtrxTransposed() const;
+		const TSparseMatrix* getSecondDgnMtrx() const;
 		/*!@return a const reference to the weight design matrix*/
 		const TSparseMatrix* getWeightMtrx() const;
 		/*!@return a const reference to the misclosure vector*/
-		const TColumnVector&	getMisclosureVctr() const;
+		const TVector&	getMisclosureVctr() const;
 		/*!@return a const reference to the constraint first design matrix*/
 		const TSparseMatrix*	getCnstrFirstDgnMtrx() const;
 		/*!@return a const reference to the constraint misclosure vector*/
-		const TColumnVector&	getCnstrMisclosureVctr() const;
+		const TVector&	getCnstrMisclosureVctr() const;
 	//@}
 
 
 	//!Debug method
 	void						saveMatricesToFile(int nbIter) const;
 
-	void setNewRow();
-	void setConstraintNewColumn();
-	void finishedFillingMatrices();
+	//void setNewRow();
+	//void setConstraintNewColumn();
+	//void finishedFillingMatrices();
 
 	void setFirstDesignMatrix(TSparseMatrix* f) { firstDesignMatrix = f; };
 	TSparseMatrix* getFirstDesignMatrix() const { return firstDesignMatrix; };
-	void setWeightMatrixInverted(TSparseMatrix* f) { weightMatrixInverted = f; };
-	TSparseMatrix* getWeightMatrixInverted() const { return weightMatrixInverted; };
-	void setBTimesWInvTimesBTransInverted(TSparseMatrix* f) { bTimesWInvTimesBTransInverted = f; };
-	TSparseMatrix* getBTimesWInvTimesBTransInverted() const { return bTimesWInvTimesBTransInverted; };
+	//void setWeightMatrixInverted(TSparseMatrix* f) { weightMatrixInverted = f; };
+	//TSparseMatrix* getWeightMatrixInverted() const { return weightMatrixInverted; };
+	//void setBTimesWInvTimesBTransInverted(TSparseMatrix* f) { bTimesWInvTimesBTransInverted = f; };
+	//TSparseMatrix* getBTimesWInvTimesBTransInverted() const { return bTimesWInvTimesBTransInverted; };
 
 	void clearMatrices();
 
@@ -135,32 +129,16 @@ private:
 	int				fNbCnstrObs; /*!< number of constraint observations */
 	MatrixIndex		fNbCnstr;/*!<number of constraint: c */
 
-	list<TReal>*	firstDesignMatrixTransposedValues; /*!< matrix (u x e) for the parametric part of the model */
-	list<int>*		firstDesignMatrixTransposedColPtr;
-	list<int>*		firstDesignMatrixTransposedRowInd;
 
-	list<TReal>*	secondDesignMatrixTransposedValues; /*!< matrix (o x e) for the conditional part of the model  */
-	list<int>*		secondDesignMatrixTransposedColPtr;
-	list<int>*		secondDesignMatrixTransposedRowInd;
-
-	list<TReal>*	    constraintFirstDesignMatrixValues; /*!< matrix (u x c) for the parametric part of the model  */
-	list<int>*		constraintFirstDesignMatrixColPtr;
-	list<int>*		constraintFirstDesignMatrixRowInd;
-
-	list<TReal>*	weightMatrixValues; /*!< matrix (o x o) for observations weights */
-
-	TColumnVector*	fMisclosureVector; /*!< vector (u) for misclosure errors */
+	TVector*	fMisclosureVector; /*!< vector (u) for misclosure errors */
 //	TReal			fS0APrioriScaleFactor; /*!< indicates if there is a priori scale factor or not */
 
 	TSparseMatrix*	fCnstrFirstDesignMtrx; /*!< matrix (u x c) for the parametric part of the model */
-	TColumnVector*	fCnstrMisclosureVector; /*!< vector for misclosure errors */
+	TVector*	fCnstrMisclosureVector; /*!< vector for misclosure errors */
 
-	TSparseMatrix*	firstDesignMatrix;
-	TSparseMatrix*	firstDesignMatrixTransposed;
-	TSparseMatrix*	secondDesignMatrixTransposed;
-	TSparseMatrix*	weightMatrix;
-	TSparseMatrix*	weightMatrixInverted;
-	TSparseMatrix*	bTimesWInvTimesBTransInverted;
+	TSparseMatrix*	firstDesignMatrix; /*!< matrix (u x e) for the parametric part of the model */
+	TSparseMatrix*	secondDesignMatrix; /*!< matrix (o x e) for the conditional part of the model  */
+	TSparseMatrix*	weightMatrix; /*!< matrix (o x o) for observations weights */
 
 
 };

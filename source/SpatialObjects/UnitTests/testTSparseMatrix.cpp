@@ -15,26 +15,83 @@ namespace
 
 namespace tut
 {
-	template<>
-    template<>
-    void object::test<1>()
-    {
-		set_test_name("Transposition");
-		TSparseMatrix input(3,2);
-		//input(0,0) = 1; input(0,1) = 2;
-		//input(1,0) = 3; input(1,1) = 4;
-		//input(2,0) = 5; input(2,1) = 6;
-
-		//TSparseMatrix expected(2,3);
-		//expected(0,0) = 1; expected(0,1) = 3; expected(0,2) = 5;
-		//expected(1,0) = 2; expected(1,1) = 4; expected(1,2) = 6;
-
-		TSparseMatrix output = input.transposed();
-		
-		ensure_equals("Transposed dimensions", output.columnsCount(), 3);
-		ensure_equals("Transposed dimensions", output.rowsCount(), 2);
-		//ensure("Matrices are equal", expected==output);
-	}
+//	template<>
+//    template<>
+//    void object::test<1>()
+//    {
+//		set_test_name("Transposition");
+//		TSparseMatrix input(3,2);
+//		//input(0,0) = 1; input(0,1) = 2;
+//		//input(1,0) = 3; input(1,1) = 4;
+//		//input(2,0) = 5; input(2,1) = 6;
+//
+//		//TSparseMatrix expected(2,3);
+//		//expected(0,0) = 1; expected(0,1) = 3; expected(0,2) = 5;
+//		//expected(1,0) = 2; expected(1,1) = 4; expected(1,2) = 6;
+//
+//		TSparseMatrix output = input.transposed();
+//		
+//		ensure_equals("Transposed dimensions", output.columnsCount(), 3);
+//		ensure_equals("Transposed dimensions", output.rowsCount(), 2);
+//		//ensure("Matrices are equal", expected==output);
+//	}
+//
+//	template<>
+//    template<>
+//    void object::test<2>()
+//    {
+//		set_test_name("symmetric_lower_inverse");
+//
+//
+//		TSparseMatrix input(3,3);
+//		input(0,0)=64; input(0,1)=0; input(0,2)=0;
+//		input(1,0)=24; input(1,1)=34; input(1,2)=0;
+//		input(2,0)=32; input(2,1)=57; input(2,2)=101;		
+//		
+//		TSparseMatrix output = input.symmetric_lower_inverse();
+//
+//		TMatrix expected(3,3);
+//		expected(0,0)= 0.028906250000000; expected(0,1)= -0.093750000000000; expected(0,2)= 0.043750000000000;
+//		expected(1,0)= -0.093750000000000; expected(1,1)= 0.850000000000000; expected(1,2)= -0.450000000000000;
+//		expected(2,0)= 0.043750000000000; expected(2,1)=  -0.450000000000000; expected(2,2)=  0.250000000000000;
+//
+//		for(int i=0; i!=simpleTrans->rowsCount(); ++i)
+//		{
+//            for(int j=0; j!=simpleTrans->columnsCount(); ++j)
+//            {
+//                std::stringstream msg;
+//                msg << "Value mismatch at (" << i << "," << j << ")";
+//                ensure_distance(msg.str(), (double)simpleTrans->operator()(i,j), expected(i,j), 1e-5);
+//            }
+//		}
+//
+//		
+//	//	ensure_equals("Transposed dimensions", output.columnsCount(), 3);
+//	//	ensure_equals("Transposed dimensions", output.rowsCount(), 2);
+//		//ensure("Matrices are equal", expected==output);
+//	}
+//
+//	template<>
+//    template<>
+//    void object::test<3>()
+//    {
+//		set_test_name("");
+//		//TSparseMatrix input(3,2);
+//		//input(0,0) = 1; input(0,1) = 2;
+//		//input(1,0) = 3; input(1,1) = 4;
+//		//input(2,0) = 5; input(2,1) = 6;
+//
+//		//TSparseMatrix expected(2,3);
+//		//expected(0,0) = 1; expected(0,1) = 3; expected(0,2) = 5;
+//		//expected(1,0) = 2; expected(1,1) = 4; expected(1,2) = 6;
+////
+//	//	TSparseMatrix output = input.transposed();
+//		
+//	//	ensure_equals("Transposed dimensions", output.columnsCount(), 3);
+//	//	ensure_equals("Transposed dimensions", output.rowsCount(), 2);
+//		//ensure("Matrices are equal", expected==output);
+//	}
+//
 }
 
 //#include <iomanip>
