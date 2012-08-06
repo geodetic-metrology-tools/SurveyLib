@@ -13,12 +13,10 @@
 /////////////////////////////////////////////////////
 // Forward declarations
 /////////////////////////////////////////////////////
-#include <iostream>
 #include "UEOIndices.h"
-class TMatrix;
+#include <string>
 class TLSInputMatrices;
 class TLSResultsMatrices;
-using namespace std;
 
 //! Class for a least squares computer used when there are only observation equations
 class TLSParametricMtdComputer {
@@ -42,11 +40,11 @@ public:
 	bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
 
 	/*! Access to eventual error */
-	string		getError() const { return fError; }
+	std::string		getError() const { return fError; }
 
 private:
 
-	string			fError;		/*!< errors during calculation */
+	std::string			fError;		/*!< errors during calculation */
 	int				count;
 };
 

@@ -1,4 +1,40 @@
 #include "TSparseMatrix.h"
+#include <sstream>
+#include <vector>
+
+namespace TSparseUtil {
+TSparseMatrix inverse(const TSparseMatrix & sparse, std::string & error)
+{
+	Eigen::SimplicialLDLT<TSparseMatrix> chol(sparse);
+    if(chol.info() != Eigen::Success)
+    {
+		std::ostringstream foo;
+		foo << "Cholesky decomposition failed, error code: " << chol.info();
+        error = foo.str();
+        return TSparseMatrix();
+    }
+
+	std::vector<TTriplet> coeffs;
+	coeffs.reserve(sparse.nonZeros()*5);
+	
+	TSparseMatrix result;
+
+    for(int col=0 ; col!=sparse.cols(); ++col)
+    {
+        TVector help = TVector::Zero(sparse.rows());
+        help(col) = 1.0;
+        TVector result = chol.solve(help);
+        for(int idx=0; idx!=result.size(); ++idx)
+        {
+            if(fabs(result(idx))>1e-8)
+                coeffs.push_back(TTriplet(idx,col,result(idx)));
+        }
+    }
+    result.setFromTriplets(coeffs.begin(), coeffs.end());
+	return result;
+}
+
+}
 //#include <Eigen/Cholesky>
 //
 //TSparseMatrix::TSparseMatrix(int rows, int cols)

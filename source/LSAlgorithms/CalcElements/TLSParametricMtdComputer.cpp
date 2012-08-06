@@ -8,9 +8,9 @@
 #include "TLSParametricMtdComputer.h"
 #include "TLSResultsMatrices.h"
 #include "TLSInputMatrices.h"
+#include "TSparseMatrix.h"
+#include <vector>
 
-#include	<nag.h>
-#include	<nagg01.h>
 //////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR
 //////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsM
 {
 	bool result;
 	int nbCnstr = im->getNbrConstraints();
-	if(rm->getSolutionVctr()->dimension() != 0)
+	if(rm->getSolutionVctr()->size() != 0)
 	{
 		if(nbCnstr == 0)
 		{
@@ -63,7 +63,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	   The fAtPAInv attribute contains the AtPA product, and is updated during each iteration.
 	   It is finally inverted outside the method, when there are no iterations left to
 	   be performed (in TLSCalculation). */
-
+	/*
 	const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 	const TSparseMatrix* weightM = im->getWeightMtrx();
 	const TColumnVector& misclV = im->getMisclosureVctr();
@@ -123,6 +123,21 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	}
 
 	return true;
+	*/
+	
+	const TSparseMatrix * A = im->getFirstDesignMatrix();
+	const TSparseMatrix * W = im->getWeightMtrx();
+	const TVector & misclV = im->getMisclosureVctr();
+	Eigen::SimplicialLDLT<TSparseMatrix> chol( A->transpose() * (*W) * (*A) );
+	if(chol.info() != Eigen::Success)
+	{
+		fError += "Eigen Cholesky decomposition failed";
+		return false;
+	}
+	//rm->setCholesky(chol);
+
+	*(rm->getSolutionVctr()) = chol.solve( -A->transpose() * (*W) * misclV );
+	return true;
 }
 
 
@@ -130,7 +145,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 //COMPUTES THE RESULTS MATRICES FOR FREE CALCULATION
 ////////////////////////////////////////////////////////////////
 bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm){
-
+	/*
 	const TSparseMatrix* firstDMTransposed = im->getFirstDgnMtrxTransposed();
 	const TSparseMatrix* constraintFirstDM = im->getCnstrFirstDgnMtrx();
 	const TSparseMatrix* weightM = im->getWeightMtrx();
@@ -229,6 +244,55 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 
 	delete[] solution;
 
+	return true;
+	*/
+	int nbUnk = im->getNbrUnknowns();
+	int nbCnstr = im->getNbrConstraints();
+
+	const TSparseMatrix * A1 = im->getFirstDesignMatrix();
+	const TSparseMatrix * W  = im->getWeightMtrx();
+	const TVector & misclV = im->getMisclosureVctr();
+
+	TSparseMatrix N = A1->transpose() * (*W) * (*A1);
+	TVector B1 = - A1->transpose() * (*W) * misclV;
+
+	const TSparseMatrix * A2 = im->getCnstrFirstDgnMtrx();
+	const TVector & cMisclV = im->getCnstrMisclosureVctr();
+
+	TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
+	std::vector<TTriplet> coeffs;
+	coeffs.reserve(N.nonZeros() + 2*A2->nonZeros());
+	// Fill in the N part
+	for(int k=0; k<N.outerSize(); ++k)
+	{
+		for(TSparseMatrix::InnerIterator it(N,k); it; ++it)
+		{
+			coeffs.push_back(TTriplet(it.row(), it.col(), it.value()));
+		}
+	}
+	// Fill the A2 and A2T
+	for(int k=0; k<A2->outerSize(); ++k)
+	{
+		for(TSparseMatrix::InnerIterator it(*A2,k); it; ++it)
+		{
+			coeffs.push_back(TTriplet(it.row() + N.rows(), it.col(), it.value())); //A2
+			coeffs.push_back(TTriplet(it.col(), it.row() + N.cols(), it.value())); // A2T
+		}
+	}
+	NBig.setFromTriplets(coeffs.begin(), coeffs.end());
+	Eigen::SimplicialLDLT<TSparseMatrix> chol( NBig );
+	if(chol.info() != Eigen::Success)
+	{
+		fError += "Eigen Cholesky decomposition failed";
+		return false;
+	}
+	//rm->setCholesky(chol);
+
+	TVector b;
+	b << -A1->transpose() * (*W) * misclV , cMisclV;
+	TVector xBig = chol.solve(b);
+
+	*(rm->getSolutionVctr()) = xBig.head(nbUnk);
 	return true;
 }
 
