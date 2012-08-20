@@ -87,6 +87,9 @@ public:
 	/*! compute and return a vector of observations variances */
 	TVector	computeVarObs(const TSparseMatrix& A);
 
+
+	const TSparseMatrix & getIntermediateMatrix() const {return fIntermediateMatrix;}
+	void setIntermediateMatrix(const TSparseMatrix & matrix) { fIntermediateMatrix = matrix; }
 	/*
 	TSparseMatrix* getL() const { return L; }
 	void setL(TSparseMatrix* l) { L = l; }
@@ -115,6 +118,8 @@ private:
 	TSparseMatrix*	fUnknownsCovarianceMtrx; /*!< matrix (u x u) containing the variances and covariances for parameters */
 	TReal			fSigmaZero2; /*!< calculated "average variance" on residues */
 	bool			fS0APosterioriVariances; /*!< indicates if the s0 a posteriori should be applied */
+
+	TSparseMatrix fIntermediateMatrix;
 	//TSparseMatrix* L;
 	//TSparseMatrix* bigMatrix;
 };

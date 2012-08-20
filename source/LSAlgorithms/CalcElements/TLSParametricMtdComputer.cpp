@@ -10,6 +10,8 @@
 #include "TLSInputMatrices.h"
 #include "TSparseMatrix.h"
 #include <vector>
+#include <iostream>
+#include <sstream>
 
 //////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR
@@ -127,14 +129,21 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	
 	const TSparseMatrix * A = im->getFirstDesignMatrix();
 	const TSparseMatrix * W = im->getWeightMtrx();
+#ifdef _DEBUG
+	std::cout << "TLSParametricMtdComputer::computeResultsMtrs, A=\n " << *A << std::endl;
+	std::cout << "TLSParametricMtdComputer::computeResultsMtrs, W=\n " <<*W << std::endl;
+#endif
 	const TVector & misclV = im->getMisclosureVctr();
-	Eigen::SimplicialLDLT<TSparseMatrix> chol( A->transpose() * (*W) * (*A) );
+	TSparseMatrix N = A->transpose() * (*W) * (*A);
+	Eigen::SimplicialLDLT<TSparseMatrix> chol( N );
 	if(chol.info() != Eigen::Success)
 	{
-		fError += "Eigen Cholesky decomposition failed";
+		std::ostringstream foo;
+		foo << "TLSParametricMtdComputer::computeResultsMtrs:\n\tCholesky decomposition failed, error code: " << chol.info();
+		fError += foo.str();
 		return false;
 	}
-	//rm->setCholesky(chol);
+	rm->setIntermediateMatrix(N);
 
 	*(rm->getSolutionVctr()) = chol.solve( -A->transpose() * (*W) * misclV );
 	return true;
@@ -286,7 +295,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 		fError += "Eigen Cholesky decomposition failed";
 		return false;
 	}
-	//rm->setCholesky(chol);
+	rm->setIntermediateMatrix(NBig);
 
 	TVector b;
 	b << -A1->transpose() * (*W) * misclV , cMisclV;

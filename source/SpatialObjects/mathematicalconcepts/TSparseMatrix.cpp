@@ -2,7 +2,7 @@
 #include <sstream>
 #include <vector>
 
-namespace TSparseUtil {
+namespace TSparseUtils {
 TSparseMatrix inverse(const TSparseMatrix & sparse, std::string & error)
 {
 	Eigen::SimplicialLDLT<TSparseMatrix> chol(sparse);
@@ -16,8 +16,7 @@ TSparseMatrix inverse(const TSparseMatrix & sparse, std::string & error)
 
 	std::vector<TTriplet> coeffs;
 	coeffs.reserve(sparse.nonZeros()*5);
-	
-	TSparseMatrix result;
+	TSparseMatrix result(sparse.rows(), sparse.cols());
 
     for(int col=0 ; col!=sparse.cols(); ++col)
     {
