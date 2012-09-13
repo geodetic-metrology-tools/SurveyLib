@@ -7,7 +7,7 @@ FOREACH(subproject ${PROJECTFRAMEWORK_LIB_SUBPROJECTS})
 	set(STATIC_LIBS "${STATIC_LIBS} ${STAGING_DIRECTORY}/${subproject}.lib" )
 ENDFOREACH(subproject) 
 
-add_library(ProjectFrameworkLibrary STATIC ${COMBINED_LIBRARY_FILES} dummy.c)
+add_library(ProjectFrameworkLibrary STATIC ${COMBINED_LIBRARY_FILES})
 #add_dependencies(ProjectFrameworkLibrary ${PROJECTFRAMEWORK_LIB_SUBPROJECTS})
 target_link_libraries(ProjectFrameworkLibrary ${COMBINED_LIBRARY_FILES})
 
