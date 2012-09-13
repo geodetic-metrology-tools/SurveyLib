@@ -8,7 +8,7 @@ FOREACH(subproject ${SPATIALOBJECTS_LIB_SUBPROJECTS})
 ENDFOREACH(subproject) 
 
 
-add_library(SpatialObjectsLibrary STATIC ${COMBINED_LIBRARY_FILES} dummy.c)
+add_library(SpatialObjectsLibrary STATIC ${COMBINED_LIBRARY_FILES})
 #add_dependencies(SpatialObjectsLibrary ${SPATIALOBJECTS_LIB_SUBPROJECTS})
 target_link_libraries(SpatialObjectsLibrary ${COMBINED_LIBRARY_FILES})
 
