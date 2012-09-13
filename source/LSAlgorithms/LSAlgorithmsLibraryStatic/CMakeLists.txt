@@ -8,7 +8,7 @@ FOREACH(subproject ${LSALGORITHMS_LIB_SUBPROJECTS})
 ENDFOREACH(subproject) 
 
 
-add_library(LSAlgorithmsLibrary STATIC ${COMBINED_LIBRARY_FILES} dummy.c)
+add_library(LSAlgorithmsLibrary STATIC ${COMBINED_LIBRARY_FILES})
 #add_dependencies(LSAlgorithmsLibrary ${LSALGORITHMS_LIB_SUBPROJECTS})
 target_link_libraries(LSAlgorithmsLibrary ${COMBINED_LIBRARY_FILES})
 
