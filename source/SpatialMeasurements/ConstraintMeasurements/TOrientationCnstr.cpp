@@ -34,7 +34,7 @@ fConstraintBearing(LITERAL(0.0)), fRefPoint()
 }
 
 
-TOrientationCnstr::TOrientationCnstr(int obsID, TSpatialPointName refPtName, TAngle cBearing):
+TOrientationCnstr::TOrientationCnstr(TSpatialPointName refPtName, TAngle cBearing):
 fConstraintBearing(cBearing)
 {//Constructor
 	fRefPoint = refPtName;
@@ -42,8 +42,6 @@ fConstraintBearing(cBearing)
 	fIdentifier = 0;
 	fComment = ""; 
 	fHeaderComment = "";
-
-	observationID = obsID;
 }
 
 
@@ -133,7 +131,7 @@ TSpatialPointName TOrientationCnstr::getPoint() const
 }
 
 
-std::string TOrientationCnstr::getName() const
+string TOrientationCnstr::getName() const
 {
 	return fName;
 }
@@ -150,9 +148,11 @@ void	TOrientationCnstr::ifNotDoneSetCnstrBearing(TAngle cBear)
 }
 
 
-void	TOrientationCnstr::ifNotDoneSetName(std::string name)
+void	TOrientationCnstr::ifNotDoneSetName(string name)
 {//Sets the constraint's width if it isn't done yet
 
 	if ( fName == "")
 		fName = name;
 }
+
+	

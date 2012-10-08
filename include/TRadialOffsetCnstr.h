@@ -54,7 +54,7 @@ public:
 		/*!@param cPtName the name of the constrained point
 		@param cWidth the width of the radial constraint
 		@param cBearing the bearing of the radial constraint*/
-		TRadialOffsetCnstr(int obsID, TSpatialPointName cPtName, TLength cWidth, TAngle cBearing);
+		TRadialOffsetCnstr(TSpatialPointName cPtName, TLength cWidth, TAngle cBearing);
 
 		/*! Copy Constructor */
 		TRadialOffsetCnstr(const  TRadialOffsetCnstr&);
@@ -84,7 +84,7 @@ public:
 		/*!Gets the constraint's point name*/
 		TSpatialPointName				getPoint() const;
 		/*!Gets the constraint's name */
-		std::string							getName() const;
+		string							getName() const;
 
 	//@}
 
@@ -98,7 +98,7 @@ public:
 		virtual void				ifNotDoneSetCnstrBearing(TAngle cBear);
 		/*!Sets the constraint's name if it isn't done yet
 		\param name the constraint's name to set */
-		virtual void				ifNotDoneSetName(const std::string name);
+		virtual void				ifNotDoneSetName(const string name);
 	//@}
 
 	/*!@name Comments methods*/
@@ -110,32 +110,28 @@ public:
 		virtual void				setId(int id) { fIdentifier = id; return;}
 
 		/*!@return the comment of the constraint*/
-		virtual std::string				getComment() const { return fComment;}
+		virtual string				getComment() const { return fComment;}
 		/*!sets the comment of the constraint
 		\param com a string*/
-		virtual void				setComment(std::string com) { fComment = com; return;}
+		virtual void				setComment(string com) { fComment = com; return;}
 
 		/*!@return the head comment of the constraint*/
-		virtual std::string				getHeaderComment() const { return fHeaderComment;}
+		virtual string				getHeaderComment() const { return fHeaderComment;}
 		/*!sets the head comment of the constraint
 		\param com the comment line as a string*/
-		virtual void				setHeaderComment(std::string com) { fHeaderComment = com; return;}
-
-		int getObservationID() const { return observationID; }
+		virtual void				setHeaderComment(string com) { fHeaderComment = com; return;}
 
 
 
 private:
 
 	TSpatialPointName				fPoint;/*!<constraint's point name*/
-	std::string						fName; /*!< name of the constrained point */
+	string							fName; /*!< name of the constrained point */
 	TLength							fConstraintWidth; /*!< width of the radial constraint */
 	TAngle							fConstraintBearing; /*!< bearing of the radial constraint */
 	int								fIdentifier; /*< identifier from geode */
-	std::string						fComment; /*< comment from geode*/
-	std::string						fHeaderComment; /*< head comment line (starting with % in input file)*/
-
-	int observationID;
+	string							fComment; /*< comment from geode*/
+	string							fHeaderComment; /*< head comment line (starting with % in input file)*/
 
 	//ClassDef(TRadialOffsetCnstr, 1)
 };
@@ -144,7 +140,7 @@ private:
 	/*!@name Typedefs*/
 	//@{
 		/*!Type of the container storing the radial offset constraints */
-		typedef std::list< TRadialOffsetCnstr > RadOffCnstrContainer;
+		typedef list< TRadialOffsetCnstr > RadOffCnstrContainer;
 		/*!Type of the iterators pointing to radial offset constraints */
 		typedef RadOffCnstrContainer::iterator RadOffCnstrIterator;
 		/*! Type of the constant iterators pointing to radial offset constraints */

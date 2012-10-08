@@ -33,8 +33,8 @@ class  TDouble;
 
 //using namespace std;
 //
-#include  "TANumericValue.h"
-class TSparseMatrix;
+#include "TANumericValue.h"
+#include "TSparseMatrix.h"
 
 class TMatrixImpl;
 
@@ -174,7 +174,8 @@ public:
 		/*! resolve equations system */
 		//virtual TColumnVector dfeqn(TColumnVector* B,int n_pivot,int* pivot_i,int* pivot_j);
 
-		TSparseMatrix * toSparse() const;
+		//TODO
+		TSparseMatrix toSparse() const;
 	//@}
 
 private:

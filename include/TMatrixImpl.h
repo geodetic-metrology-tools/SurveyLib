@@ -1,6 +1,7 @@
 #ifndef TMATRIX_IMPL_79CFF806_6A12_46e0_BC89_66C513C8875F
 #define TMATRIX_IMPL_79CFF806_6A12_46e0_BC89_66C513C8875F
 
+#include <TSparseMatrix.h>
 #include <Eigen/Core>
 
 class TMatrixImpl
@@ -33,6 +34,8 @@ public:
 
     // TODO: Temporary access to internal representation - needed for toSparse
     const double * data() const;
+
+	TSparseMatrix toSparse() const;
 
 private:
     Eigen::MatrixXd fMatrix;

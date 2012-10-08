@@ -17,50 +17,92 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
+/////////////////////////////////
+// Forward declarations
+//
+class THorAngleROM;
+
 #include "TAPointMeasurement.h"
-#include "TheodoliteTarget.h"
 #include "TAngle.h"
-#include "TLength.h"
+
+/////////////////////////////////
+/*! \ingroup spatialmeasurements
+	@{*/
 
 //! Class for a horizontal angle measurement
-class THorAngleMeasurement : public TAPointMeasurement
-{
+class	THorAngleMeasurement : public TAPointMeasurement{
 
-public:
+public :
 
-	THorAngleMeasurement(int obsID, const TSpatialPoint* trgt, const TheodoliteTarget* polarTarget, const TAngle* obsAngle,
-		const TAngle* sigma, const TLength* tcs) : TAPointMeasurement(obsID, trgt)
-	{
-		observedValue = obsAngle;
-		fSigmaAPriori = sigma;
-		target = polarTarget;
-		targetCenteringSigma = tcs;
-	}
+	/*!@name Constructors / Destructor*/
+	//@{
+	//!Default constructor
+	THorAngleMeasurement();
+	/*!Constructor
+	@param parent a reference to the THorAngleROM from which this measurement is part
+	@param iterTg an iterator pointing to the target TSpatialPoint
+	@param obsAngle a TAngle object representing the measured angle
+	@param sigma a TAngle object representing the measurement's a priori precision*/
+	THorAngleMeasurement(/*THorAngleROM& parent,*/ TSpatialPointName iterTg, TAngle obsAngle, TAngle sigma);
+	/*!Constructor
+	@param refName the measurement's station's setup point's name
+	@param tgfName the measurement's target point's name
+	@param obsDist the observed horizontal direction as a TAngle
+	@param sigma the observed angle's precision as a TAngle*/
+//	THorAngleMeasurement(/*TSpatialPointName stName, */TSpatialPointName tgName, TAngle obsAng, TAngle sigma);
+	/*!Copy constructor */
+	THorAngleMeasurement(const THorAngleMeasurement &source);
+	/*!Destructor */
+	virtual ~THorAngleMeasurement();
+	//@}
 
-	~THorAngleMeasurement()
-	{
-		delete observedValue;
-		delete fSigmaAPriori;
-		delete targetCenteringSigma;
-	}
+	/*!@name Overloaded operators */
+	//@{
+	/*! Copy assignement operator */
+	THorAngleMeasurement&		operator=(const THorAngleMeasurement& source);
+	//to be used carefully : shallow copy (see NetworkSurveyMeas)
+	/*! Equality operator */
+	virtual bool				operator==(const THorAngleMeasurement& right) const;
+	//@}
 
-	const TLength* getTargetCenteringSigma() const { return targetCenteringSigma; }
+	/*! returns a pointer to this THorAngleMeasurement */
+	virtual THorAngleMeasurement*			getPointer() const;
 
-	const TAngle* getObservedValue() const { return observedValue; }
+	/*!@return a string indicating this measurement is a hor. angle measurement*/
+	virtual string							getMeasKind() const;
 
-	const TAngle* getSigma() const { return fSigmaAPriori; }
+	/*!@return the observed angle's value as a TAngle instance*/
+	virtual TAngle							getAngleValue() const;
+	/*!@return the observed angle's precision as a TAngle instance*/
+	virtual TAngle							getSigma() const;
+	
+	/*!Sets the sigma a priori if it isn't done yet */
+	virtual void				ifNotDoneSetSigma(TAngle sigma);
 
-	const TheodoliteTarget* getTarget() const { return target; }
+	
+protected:
+
 
 private:
 
-	const TAngle* observedValue; /*!< measured angle */
-	const TAngle* fSigmaAPriori; /*!< estimated error on the angle measurement*/
+	TAngle								fMeasuredAngle; /*!< measured angle */
+	TAngle								fSigmaAPriori; /*!< estimated error on the angle measurement*/
 
-	const TheodoliteTarget* target;
-	const TLength* targetCenteringSigma;
+//	TSpatialPointName					fStPtName;
+
 
 };
+/*@}*/
+
+	/*!@name Typedefs*/
+	//@{
+	//! Type of the container used to store the hor. angle measurements
+	typedef list< THorAngleMeasurement > HorAngleContainer;
+	//! Type of the iterator pointing to an element of the hor. angles container
+	typedef HorAngleContainer::iterator HorAngMeasIterator;
+	//! Type of the const iterator pointing to an element of the hor. angles container
+	typedef HorAngleContainer::const_iterator HorAngMeasConstIter;
+	//@}
 
 #endif
 

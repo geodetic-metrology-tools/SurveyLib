@@ -20,10 +20,11 @@
 
 
 
+class  TZenithDistROM;
+
 #include  "TAPointMeasurement.h"
 #include  "TAngle.h"
 #include  "TLength.h"
-#include  "TheodoliteTarget.h"
 
 ////////////////////////////////////////////////////////////////
 
@@ -34,49 +35,86 @@
 class  TZenithDistMeasurement : public TAPointMeasurement  
 {
 public:
+
+	/*!@name Constructors and Destructors */
+	//@{
+	/*! Default Constructor */
+	TZenithDistMeasurement();
+	/*!Constructor
+	\param stName the measurement's station's setup point's name
+	\param tgName the measurement's target point's name
+	\param obsAng the observed zenithal distance as a TAngle
+	\param sigma the observed angle's precision as a TAngle*/
+	TZenithDistMeasurement(TSpatialPointName tgName, TAngle obsAng, TAngle sigma);
+	/*!Constructor
+	\param stName the measurement's station's setup point's name
+	\param tgName the measurement's target point's name
+	\param obsAng the observed zenithal distance as a TAngle
+	\param sigma the observed angle's precision as a TAngle
+	\param hp the height of the prisme, supposed to be fixed*/
+	TZenithDistMeasurement(TSpatialPointName tgName, TAngle obsAng, TAngle sigma, TLength hp);
+	/*! Copy Constructor */
+	TZenithDistMeasurement(const TZenithDistMeasurement &source);
+	/*! Destructor */
+	virtual  ~TZenithDistMeasurement();
+	//@}
 	
-	TZenithDistMeasurement(int obsID, const TSpatialPoint* trgt, const TheodoliteTarget* polarTarget, const TAngle* obsAngle,
-		const TAngle* sigma, const TLength* th, const TLength* ths, const TLength* tcs) : TAPointMeasurement(obsID, trgt)
-	{
-		observedValue = obsAngle;
-		fSigmaAPriori = sigma;
-		target = polarTarget;
-		targetHeight = th;
-		targetHeightSigma = ths;
-		targetCenteringSigma = tcs;
-	}
+	/*!@name methods used in the facade ZenithDistObservation */
+	//@{
+	/*! returns the observed angle's value as a TAngle instance*/
+	virtual TAngle							getAngleValue() const;
+	/*! returns the observed angle's precision as a TAngle instance*/
+	virtual TAngle							getSigma() const;
+	/*! returns the prisme height as a TLength instance*/
+	virtual TLength							getPrismeHeight() const;
+	/*! returns the prisme height's status*/
+	virtual ECalcStatus						getPrismeHeightStatus() const;
+	//@}
 
-	~TZenithDistMeasurement()
-	{
-		delete observedValue;
-		delete fSigmaAPriori;
-		delete targetHeight;
-		delete targetHeightSigma;
-		delete targetCenteringSigma;
-	}
+	/*! sets the prisme height as a TLength instance*/
+	virtual void							setPrismeHeight(TLength hp);
+	/*! sets the prisme height's status*/
+	virtual void							setPrismeHeightStatus(ECalcStatus status);
 
-	const TLength* getTargetCenteringSigma() const { return targetCenteringSigma; }
+	//! Copy Assignment Operator 
+	TZenithDistMeasurement& operator=( const TZenithDistMeasurement& source);
 
-	const TAngle* getObservedValue() const { return observedValue; }
+	/*! returns a pointer to this TZenithDistMeasurement */
+	virtual TZenithDistMeasurement*			getPointer() const;
 
-	const TAngle* getSigma() const { return fSigmaAPriori; }
+	/*! returns a string indicating this measurement is a zenithal distance measurement*/
+	virtual string							getMeasKind() const;
+	
+	//!Sets the sigma a priori if it isn't done yet
+	virtual void				ifNotDoneSetSigma(TAngle sigma);
+	
 
-	const TheodoliteTarget* getTarget() const { return target; }
+protected:
 
-	const TLength* getTargetHeight() const { return targetHeight; }
-
-	const TLength* getTargetHeightSigma() const { return targetHeightSigma; }
+	
 
 private:
 
-	const TAngle* observedValue; /*!< measured angle */
-	const TAngle* fSigmaAPriori; /*!< estimated error on the angle measurement*/
+	TAngle								fMeasuredAngle; /*!< measured angle */
+	TAngle								fSigmaAPriori;	/*!< angle measurement error */
 
-	const TheodoliteTarget* target;
-	const TLength* targetCenteringSigma;
-	const TLength* targetHeight;
-	const TLength* targetHeightSigma;
+	TLength								fPrismeHeight;	/*!< prisme height */
+	ECalcStatus							fHeightStatus;	/*!< prisme height status : variable or fixed*/
+
+
 };
+/*@}*/
+
+
+	/*!@name Typedef */
+	//@{
+	/*! Type of the container used to store the zenithal distance measurements */
+	typedef list<TZenithDistMeasurement> ZenithDistContainer;
+	/*! Type of the iterator pointing to an element of the zenithal distances container */
+	typedef ZenithDistContainer::iterator ZenithDistMeasIterator;
+	/*! Type of the const_iterator pointing to an element of the zenithal distances container */
+	typedef ZenithDistContainer::const_iterator ZenithDistMeasConstIter;
+	//@}
 
 #endif  //SU_ZENITH_DIST_MEASUREMENT
 
