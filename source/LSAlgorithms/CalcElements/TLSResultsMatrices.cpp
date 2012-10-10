@@ -30,8 +30,8 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 	fSolutionVctr = new TVector(ueoi.UIndex);
 	fResidualsVctr = new TVector(ueoi.OIndex);
 	fSigmaZero2 = LITERAL(0.0);
-	//fUnknownsCovarianceMtrx = new TMatrix(ueoi.UIndex, ueoi.UIndex);
-	fUnknownsCovarianceMtrx = NULL;
+	fUnknownsCovarianceMtrx = new TSparseMatrix(ueoi.UIndex, ueoi.UIndex);
+	//fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
 	//L = NULL;
 	//bigMatrix = NULL;
@@ -43,8 +43,8 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi, int numConstraints)
 	fSolutionVctr = new TVector(ueoi.UIndex);
 	fResidualsVctr = new TVector(ueoi.OIndex);
 	fSigmaZero2 = LITERAL(0.0);
-	//fUnknownsCovarianceMtrx = new TMatrix(ueoi.UIndex + numConstraints, ueoi.UIndex + numConstraints);
-	fUnknownsCovarianceMtrx = NULL;
+	fUnknownsCovarianceMtrx = new TSparseMatrix(ueoi.UIndex + numConstraints, ueoi.UIndex + numConstraints);
+	//fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
 	//L = NULL;
 	//bigMatrix = NULL;
@@ -73,8 +73,8 @@ TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations)
 	fSolutionVctr = new TVector (numUnknowns);
 	fResidualsVctr = new TVector (numEquations);
 	fSigmaZero2 = LITERAL(0.0);
-	//fUnknownsCovarianceMtrx = new TMatrix(numUnknowns,numUnknowns);
-	fUnknownsCovarianceMtrx = NULL;
+	fUnknownsCovarianceMtrx = new TSparseMatrix(numUnknowns,numUnknowns);
+	//fUnknownsCovarianceMtrx = NULL;
 	fS0APosterioriVariances = false;
 	//L = NULL;
 	//bigMatrix = NULL;
