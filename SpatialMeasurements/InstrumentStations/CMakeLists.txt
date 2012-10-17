@@ -2,6 +2,7 @@
 include_directories (
 	.
 	${SURVEYLIB_INCLUDE_PATH}
+	${NAGC_INCLUDE_PATH}
 )
 
 
@@ -11,32 +12,24 @@ include_directories (
 
 # Create a variable containing all .cpp files:
 set(InstrumentStations_SOURCES 
-	EDM.cpp
-	Level.cpp
-	Scale.cpp
-	TAFreeInstrument.cpp
-	TAInstrument.cpp
-	TTheodolite.cpp
+	TAFreeInstrumentStation.cpp
+	TAInstrumentStation.cpp
+	TDistMeasStation.cpp
+	TLevelStation.cpp
+	TTheodoliteStation.cpp
+	TWPSStation.cpp
+	TWTWDistStation.cpp
 )
 
 # Create a variable containing all .h files:
 set(InstrumentStations_HEADERS 
-	${SURVEYLIB_INCLUDE_PATH}/EDM.h
-	${SURVEYLIB_INCLUDE_PATH}/EDMStation.h
-	${SURVEYLIB_INCLUDE_PATH}/EDMTarget.h
-	${SURVEYLIB_INCLUDE_PATH}/Gyroscope.h
-	${SURVEYLIB_INCLUDE_PATH}/GyroscopeStation.h
-	${SURVEYLIB_INCLUDE_PATH}/Level.h
-	${SURVEYLIB_INCLUDE_PATH}/LevelStation.h
-	${SURVEYLIB_INCLUDE_PATH}/Scale.h
-	${SURVEYLIB_INCLUDE_PATH}/Staff.h
-	${SURVEYLIB_INCLUDE_PATH}/Station.h
-	${SURVEYLIB_INCLUDE_PATH}/TAFreeInstrument.h
-	${SURVEYLIB_INCLUDE_PATH}/TAInstrument.h
-	${SURVEYLIB_INCLUDE_PATH}/Target.h
-	${SURVEYLIB_INCLUDE_PATH}/TheodoliteStation.h
-	${SURVEYLIB_INCLUDE_PATH}/TheodoliteTarget.h
-	${SURVEYLIB_INCLUDE_PATH}/TTheodolite.h
+	${SURVEYLIB_INCLUDE_PATH}/TAFreeInstrumentStation.h
+	${SURVEYLIB_INCLUDE_PATH}/TAInstrumentStation.h
+	${SURVEYLIB_INCLUDE_PATH}/TDistMeasStation.h
+	${SURVEYLIB_INCLUDE_PATH}/TLevelStation.h
+	${SURVEYLIB_INCLUDE_PATH}/TTheodoliteStation.h
+	${SURVEYLIB_INCLUDE_PATH}/TWPSStation.h
+	${SURVEYLIB_INCLUDE_PATH}/TWTWDistStation.h
 )
 
 # Create a static library from sources:

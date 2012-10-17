@@ -21,7 +21,6 @@ set(ProjectData_SOURCES
 	TWorkingLines.cpp
 	TWorkingPlanes.cpp
 	TWorkingPoints.cpp
-	TWorkingROMs.cpp
 	TWorkingStations.cpp
 	
 	TWorkingTargetObjects.cpp

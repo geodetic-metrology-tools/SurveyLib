@@ -1,22 +1,107 @@
 //
-// TAFreeInstrument.cpp : implementation file
+// TAFreeInstrumentStation.cpp : implementation file
 // abstract base class holding what the behaviour common to all
 // instrument stations without setup point
 
-#include "TAInstrument.h"
+#include "TAFreeInstrumentStation.h"
 
-TAInstrument::TAInstrument(const std::string& id, const TLength* ics, const TLength* ih, const TLength* ihs)
-	: TAFreeInstrument(id, ics)
+//////////////////////
+// default constructor
+//////////////////////
+TAFreeInstrumentStation::TAFreeInstrumentStation(){
+
+	//fUsedInCalc = false;
+/*	fUsedInCalc = true;
+	fActiveMeasCount = 0;
+	fActiveEqCount = 0;
+	fActiveUnkCount = 0;
+
+	fTotalEqnNumber = 0;
+	fReadyToActivateEqns = 0;
+*/
+	fSetup = "";
+	fInstrumentNumber = "";
+}
+
+///////////////////
+// copy constructor
+///////////////////
+TAFreeInstrumentStation::TAFreeInstrumentStation(const TAFreeInstrumentStation& source) :
+/*fUsedInCalc(source.fUsedInCalc), fActiveMeasCount(source.fActiveMeasCount),
+fActiveEqCount(source.fActiveEqCount), fActiveUnkCount(source.fActiveUnkCount),
+fReadyToActivateEqns(source.fReadyToActivateEqns), fTotalEqnNumber(source.fTotalEqnNumber),*/
+fSetup(source.fSetup), fInstrumentNumber(source.fInstrumentNumber)
 {
-	instrumentHeight = ih;
-	instrumentHeightSigma = ihs;
+
+}
+
+	
+
+/////////////
+// destructor
+/////////////
+TAFreeInstrumentStation::~TAFreeInstrumentStation(){
+
+}
+//////////////////////////////
+// returns the station's setup
+//////////////////////////////
+string TAFreeInstrumentStation::getSetup() const{
+
+	return fSetup;
+}
+
+///////////////////////////
+// sets the station's setup
+///////////////////////////
+void TAFreeInstrumentStation::setSetup(string setup){
+
+	fSetup = setup;
+}
+
+//////////////////////////////
+// returns instrument number
+//////////////////////////////
+InstNb TAFreeInstrumentStation::getInstrumentNumber() const {
+
+	return fInstrumentNumber;
+}
+
+/////////////
+// < operator
+/////////////
+bool TAFreeInstrumentStation::operator<(const TAFreeInstrumentStation& right) const{
+
+	if (fInstrumentNumber < (right.fInstrumentNumber))
+		return true;
+	else {
+		if (fInstrumentNumber==right.fInstrumentNumber){
+			if (fSetup<right.fSetup)
+				return true;
+			else
+				return false;
+		}
+		else
+			return false;
+	}
+}
+
+//////////////
+// == operator
+//////////////
+bool TAFreeInstrumentStation::operator==(const TAFreeInstrumentStation& right) const{
+
+	if ((fInstrumentNumber==right.fInstrumentNumber)/* &&
+		(fSetup==right.fSetup)*/)
+		return true;
+	else return false;
 }
 
 /*
 ///////////////////////////////////////
 // returns the station's equation count
 ///////////////////////////////////////
-int TAFreeInstrument::equationsCount() const{
+int TAFreeInstrumentStation::equationsCount() const{
 
 	return fActiveEqCount;
 }
@@ -24,7 +109,7 @@ int TAFreeInstrument::equationsCount() const{
 //////////////////////////////////////////
 // returns the station's measurement count
 //////////////////////////////////////////
-int TAFreeInstrument::measurementsCount() const{
+int TAFreeInstrumentStation::measurementsCount() const{
 
 	return fActiveMeasCount;
 }
@@ -32,7 +117,7 @@ int TAFreeInstrument::measurementsCount() const{
 ///////////////////////////////////////
 // returns the station's unknowns count
 ///////////////////////////////////////
-int TAFreeInstrument::unknownsCount() const{
+int TAFreeInstrumentStation::unknownsCount() const{
 
 	return fActiveUnkCount;
 }
@@ -40,7 +125,7 @@ int TAFreeInstrument::unknownsCount() const{
 /////////////////////////////////////////////////////////////////////////////////
 // tells if the station has enough  (active or inactive) equations for its setup point to be determined
 /////////////////////////////////////////////////////////////////////////////////
-bool TAFreeInstrument::enoughTotalEqns() const{
+bool TAFreeInstrumentStation::enoughTotalEqns() const{
 
 //	if (fTotalEqnNumber >= fStationedPoint->getVariableDimension())
 		return true;
@@ -51,7 +136,7 @@ bool TAFreeInstrument::enoughTotalEqns() const{
 ///////////////////////////////////////////////////////////////////////////
 // updates the stations counts (used when a meas is inserted in a child ROM
 ///////////////////////////////////////////////////////////////////////////
-void TAFreeInstrument::updateCounts(int measUpd, int eqUpd, int unkUpd){
+void TAFreeInstrumentStation::updateCounts(int measUpd, int eqUpd, int unkUpd){
 
 	fActiveMeasCount += measUpd;
 	fActiveEqCount += eqUpd;
@@ -61,7 +146,7 @@ void TAFreeInstrument::updateCounts(int measUpd, int eqUpd, int unkUpd){
 /////////////////////////////////////////////////////////////
 // updates the total number of (active or inactive) equations
 /////////////////////////////////////////////////////////////
-void TAFreeInstrument::updateTotalEqCount(int totECUpdt){
+void TAFreeInstrumentStation::updateTotalEqCount(int totECUpdt){
 
 	fTotalEqnNumber += totECUpdt;
 
@@ -75,7 +160,7 @@ void TAFreeInstrument::updateTotalEqCount(int totECUpdt){
 /////////////////////////////////////
 // returns the active/inactive status
 /////////////////////////////////////
-bool TAFreeInstrument::isActive() const{
+bool TAFreeInstrumentStation::isActive() const{
 
 	return fUsedInCalc;
 }
@@ -83,7 +168,7 @@ bool TAFreeInstrument::isActive() const{
 ///////////////////////////////////
 // adds a listener to the container
 ///////////////////////////////////
-void TAFreeInstrument::addListener(TVStationListener* stListnr){
+void TAFreeInstrumentStation::addListener(TVStationListener* stListnr){
 
 	fStListeners.push_back(stListnr);
 }
@@ -91,7 +176,7 @@ void TAFreeInstrument::addListener(TVStationListener* stListnr){
 ///////////////////////////
 // disactivates the station
 ///////////////////////////
-void TAFreeInstrument::disactivate(){
+void TAFreeInstrumentStation::disactivate(){
 
 	//no reaction if !fUsedInCalc
 
@@ -114,7 +199,7 @@ void TAFreeInstrument::disactivate(){
 //////////////////////////
 // reactivates the station
 //////////////////////////
-void TAFreeInstrument::activate(){
+void TAFreeInstrumentStation::activate(){
 
 	//no reaction if fUsedInCalc
 
@@ -138,7 +223,7 @@ void TAFreeInstrument::activate(){
 ///////////////////////////////////////////
 // response to the disactivation of a child
 ///////////////////////////////////////////
-void TAFreeInstrument::childDisactivated(int measCount, int eqCount, int unkCount){
+void TAFreeInstrumentStation::childDisactivated(int measCount, int eqCount, int unkCount){
 
 
 	//No message sent to the setup pt nor to the children
@@ -188,7 +273,7 @@ void TAFreeInstrument::childDisactivated(int measCount, int eqCount, int unkCoun
 //////////////////////////////////////////
 // responds to the reactivation of a child
 //////////////////////////////////////////
-void TAFreeInstrument::childActivated(int measCount, int eqCount, int unkCount){
+void TAFreeInstrumentStation::childActivated(int measCount, int eqCount, int unkCount){
 
 	bool fWasUsedInCalc = fUsedInCalc;
 
@@ -247,15 +332,15 @@ void TAFreeInstrument::childActivated(int measCount, int eqCount, int unkCount){
 /////////
 // pipeau
 /////////
-void TAFreeInstrument::sendEnoughTotalEqns() {
+void TAFreeInstrumentStation::sendEnoughTotalEqns() {
 
 }
 
-void TAFreeInstrument::childReadyToActivate(int a, int b, int c){
+void TAFreeInstrumentStation::childReadyToActivate(int a, int b, int c){
 
 }
 
-void TAFreeInstrument::activateReadyChildren() {
+void TAFreeInstrumentStation::activateReadyChildren() {
 
 }
 
