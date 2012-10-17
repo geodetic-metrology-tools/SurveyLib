@@ -136,6 +136,7 @@ int SpatialObjFns::transformToMLA(double x0, double y0, double z0,
 			return 0;
 
 
+	//DIF *1
 	TAngle gis, slope(0);
 	gis = gis.aTan2( (x0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue()),
 		(y0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue()) );
@@ -197,7 +198,7 @@ int SpatialObjFns::transformFromMLA(double x0, double y0, double z0,
 		else 
 			return 0;
 
-
+	// DIF *2
 	TAngle gis, slope(0);
 	gis = gis.aTan2( (x0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue()),
 		(y0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue()) );
@@ -266,7 +267,7 @@ int SpatialObjFns::transformToMLA2(double x0, double y0, double z0,
 			return 0;
 		}
 
-
+	//DIF *1
 	TAngle gis(0), slope(0);
 	
 	
@@ -327,7 +328,7 @@ int SpatialObjFns::transformFromMLA2(double x0, double y0, double z0,
 		else 
 			return 0;
 
-
+	//DIF *2
 	TAngle gis(0), slope(0);
 	
 

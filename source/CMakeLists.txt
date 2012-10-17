@@ -28,7 +28,8 @@ ENDIF()
 # Paths to external libraries (headers and libraries):
 SET(TUT_INCLUDE_PATH "C:/lib/tut-2009-08-30")
 SET(REFRAME_INCLUDE_PATH "C:/Lib/reframe")
-SET(EIGEN_INCLUDE_PATH "C:/lib/eigen/eigen-2.0.15")
+#SET(EIGEN_INCLUDE_PATH "C:/lib/eigen/eigen-2.0.15")
+SET(EIGEN_INCLUDE_PATH "C:/lib/eigen/eigen-eigen-43d9075b23ef")
 
 # Installation path prefix
 # All the header and library files will be copied to that location
@@ -86,6 +87,7 @@ ELSE()
     MESSAGE(STATUS "[STATUS] Found reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
 ENDIF()
 
+include_directories (${EIGEN_INCLUDE_PATH})
 
 ADD_SUBDIRECTORY(LSAlgorithms)
 ADD_SUBDIRECTORY(SpatialMeasurements)

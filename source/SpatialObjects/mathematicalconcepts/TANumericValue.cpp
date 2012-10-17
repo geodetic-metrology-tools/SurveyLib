@@ -24,6 +24,7 @@ Copyright 2002 CERN EST/SU. All rights reserved.
 // other forward declarations
 //
 #include	"TANumericValue.h"
+#include <utility>
 ////////////////////////////////////////////////////////////////
 
 
@@ -35,6 +36,10 @@ TANumericValue::TANumericValue()
 	fStatus = kNull;
 }
 
+void TANumericValue::swap(TANumericValue & other) throw()
+{
+	std::swap(fStatus, other.fStatus);
+}
 
 //////////////
 // Test Status

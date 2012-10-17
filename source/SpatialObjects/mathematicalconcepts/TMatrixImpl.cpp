@@ -76,7 +76,7 @@ TMatrixImpl & TMatrixImpl::transpose()
 
 bool TMatrixImpl::invert()
 {
-    Eigen::LU<Eigen::MatrixXd> lu(fMatrix);
+	Eigen::FullPivLU<Eigen::MatrixXd> lu(fMatrix);
     if(lu.isInvertible())
     {
         fMatrix = lu.inverse();
@@ -89,12 +89,24 @@ TMatrixImpl TMatrixImpl::solve(const TMatrixImpl & b) const
 {
     TMatrixImpl result;
     // TODO: Report if can be solved
-    Eigen::LU<Eigen::MatrixXd> lu(fMatrix);
-    lu.solve(b.fMatrix, &result.fMatrix);
+    Eigen::FullPivLU<Eigen::MatrixXd> lu(fMatrix);
+    lu.solve(b.fMatrix);
     return result;
 }
 
 const double * TMatrixImpl::data() const
 {
     return fMatrix.data();
+}
+
+TSparseMatrix TMatrixImpl::toSparse() const
+{
+	TSparseMatrix result(fMatrix.rows(), fMatrix.cols());
+	result.reserve(Eigen::VectorXi::Constant(fMatrix.cols(),10));
+	for(auto r=0; r!=fMatrix.rows(); ++r)
+		for(auto c=0; c!=fMatrix.cols(); ++c)
+			if(fMatrix(r,c)!=0)
+				result.insert(r,c) = fMatrix(r,c);
+	result.makeCompressed();
+	return result;
 }

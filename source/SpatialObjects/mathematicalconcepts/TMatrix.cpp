@@ -59,15 +59,17 @@ TMatrix::TMatrix(int nRows, int nCols)
 		
 
 TMatrix::TMatrix(const TMatrix & source)
-: fImpl(new TMatrixImpl(*(source.fImpl))),
-  fError(source.fError)
+: TANumericValue(source)
+,  fImpl(new TMatrixImpl(*(source.fImpl)))
+,  fError(source.fError)
 {//!Copy constructor
 	//copy the status
-	setStatus( source.getStatus() );
+	//setStatus( source.getStatus() );
 }
 
 void TMatrix::swap(TMatrix & other) throw()
 {
+	TANumericValue::swap(other);
     using std::swap;
     swap(fImpl, other.fImpl);
     swap(fError, other.fError);
@@ -325,43 +327,9 @@ double TMatrix::operator()(int row, int col) const
 }
 
 
-TSparseMatrix* TMatrix::toSparse() const
+TSparseMatrix TMatrix::toSparse() const
 {
-	int nnz = 0;
-	int rowStart;
-
-	for (int i = 0; i < numRows(); i++)
-	{
-		rowStart = i * numCols();
-		for (int j = 0; j < numCols(); j++)
-		{
-			if ( *(fImpl->data() + rowStart + j) != 0)
-			{
-				nnz++;
-			}
-		}
-	}
-
-	TReal* vs = new TReal[nnz];
-	int* rs = new int[nnz];	
-	int* cs = new int[numCols() + 1];
-	cs[0] = 0;
-	nnz = 0;
-
-	for (int i = 0; i < numCols(); i++)
-	{
-		for (int j = 0; j < numRows(); j++)
-		{
-			if ( *( fImpl->data() + i + j * numCols() ) != 0)
-			{
-				vs[nnz] = *( fImpl->data() + i + j * numCols() );
-				rs[nnz++] = j;
-			}
-		}
-		cs[i + 1] = nnz;
-	}
-
-	return new TSparseMatrix(numRows(), numCols(), vs, rs, cs);
+	return fImpl->toSparse();
 }
 
 

@@ -18,7 +18,7 @@
 #endif // _MSC_VER >= 1000
 
 #include <string>
-//using namespace std;
+using namespace std;
 
 /*! \ingroup spatialmeasurements
 	@{*/
@@ -28,52 +28,60 @@ class TAMeasurement
 {
 public:
 
-	virtual ~TAMeasurement() { }
-
 	/*!@name Enum Type Definition*/
 	//@{
-	enum ECalcStatus { kVariable, kFixed };
+	enum ECalcStatus {kVariable, kFixed};
 	//@}
 
 
 	/*!@return the identifier of the measurement*/
-	int					getId() const { return fIdentifier; }
+	virtual int					getId() const { return fIdentifier;}
 	/*!sets the identifier of the measurement
 	@param id an int*/
-	void				setId(int id);
+	virtual void				setId(int id);
 
 	/*!@return the comment of the measurement*/
-	std::string				getComment() const { return fComment; }
+	virtual string				getComment() const { return fComment;}
 	/*!sets the comment of the measurement
 	@param com a string*/
-	void				setComment(std::string com) { fComment = com; }
+	virtual void				setComment(string com) { fComment = com; return;}
 	
 	/*!@return the head comment of the measurement*/
-	std::string				getHeaderComment() const { return fHeaderComment; }
+	virtual string				getHeaderComment() const { return fHeaderComment;}
 	
 	/*!sets the head comment of the measurement
 	@param com the comment line as a string*/
-	void				setHeaderComment(std::string com) { fHeaderComment = com; }
+	virtual void				setHeaderComment(string com) { fHeaderComment = com; return;}
 
 	/*! Indicate if the id is frome Geode or not*/
-	bool				isGeodeIdUsed() const { return fHasAGeodeId; }
+	virtual bool				isGeodeIdUsed() const { return fHasAGeodeId; }
 
-	int	getObservationID() const { return observationID; }
-	
-	virtual bool operator ==(const TAMeasurement& right) const { return observationID == right.observationID; }
 
 protected:
 
-	TAMeasurement(int obsID) { observationID = obsID; }
+	/*!@name Constructors / Destructor*/
+	//@{
+	//!Default constructor
+	TAMeasurement();
+	/*! Copy constructor */
+	TAMeasurement(const TAMeasurement& source);
+	/*! Destructor */
+	~TAMeasurement();
+	//@}
 
-	int observationID;
+	
+	
+	
 	int								fIdentifier; /*< identifier from geode */
 	bool							fHasAGeodeId; /*< indicating if it use a Geode identifier or not */
-	std::string						fComment; /*< comment from geode*/
-	std::string						fHeaderComment; /*< head comment line (starting with % in input file)*/	
+	string							fComment; /*< comment from geode*/
+	string							fHeaderComment; /*< head comment line (starting with % in input file)*/
+	
 
 };
 #endif
+
+/*@}*/
 
 
 

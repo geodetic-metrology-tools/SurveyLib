@@ -185,10 +185,10 @@ public:
 		virtual int					getVariableDimension() const;
 
 	
-		virtual bool getXSet(){return fXSet;};
-		virtual bool getYSet(){return fYSet;};
-		virtual bool getZSet(){return fZSet;};
-		virtual bool getNameSet(){return fNameSet;};
+		virtual bool getXSet() const {return fXSet;};
+		virtual bool getYSet() const {return fYSet;};
+		virtual bool getZSet() const {return fZSet;};
+		virtual bool getNameSet() const {return fNameSet;};
 
 		virtual void setXSet(bool state);
 		virtual void setYSet(bool state);

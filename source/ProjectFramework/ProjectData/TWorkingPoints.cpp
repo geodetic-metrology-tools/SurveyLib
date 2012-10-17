@@ -25,6 +25,16 @@ TWorkingPoints::~TWorkingPoints()
 	}
 }
 
+TWorkingPoints::TWorkingPoints(const TWorkingPoints & ori)
+: fLastPtNbr(ori.fLastPtNbr)
+, pointsMap(ori.pointsMap)
+, fBroadcaster(new TPtListBroadcaster(*ori.fBroadcaster))
+, fWorkingPoints(ori.fWorkingPoints)
+{
+	fLastPtNbr = ori.fLastPtNbr;
+	fWorkingPoints = ori.fWorkingPoints;
+
+}
 
 /////////////////////////////////////////////////////////////
 // Adding a Spatial point to the pointsSet member variable
@@ -75,8 +85,11 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 
 		sp->setListener(this);
 		
-		PointIterator iter = fWorkingPoints.insert(iter, *sp);
-		pointsMap[sp->getName().getName()] = iter;
+		PointIterator it = fWorkingPoints.begin();
+		std::advance(it, pos);
+
+		PointIterator inserted = fWorkingPoints.insert(it, *sp);
+		pointsMap[sp->getName().getName()] = inserted;
 			
 		insert_ok = true;
 	}
@@ -114,13 +127,14 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 
 bool TWorkingPoints::deletePoint(PointIterator iter)
 {
-	hash_map<string, PointIterator>::iterator i = pointsMap.find(iter->getName().getName());
+	std::string pName = iter->getName().getName();
+	hash_map<string, PointIterator>::iterator i = pointsMap.find(pName);
 	if (i == pointsMap.end())
 	{
 		return false;
 	}
-	fWorkingPoints.erase(i->second);
-	pointsMap.erase(iter->getName().getName());
+	fWorkingPoints.erase(iter);
+	pointsMap.erase(i);
 	return true;
 }
 
@@ -213,6 +227,28 @@ PointConstIter TWorkingPoints::getPoint(int pos) const
 	std::advance(it, pos);
 	return it;
 }
+
+
+bool TWorkingPoints::renamePoint(const std::string & oldName, const std::string & newName)
+{
+	PointIterator p = getPoint(oldName);
+	if(p==getPointsEndIterator())
+		return false; // No such point
+	if(getPoint(newName)!=getPointsEndIterator())
+		return false; // Cannot rename - would create a duplicate
+	hash_map<string, PointIterator>::iterator iter = pointsMap.find(oldName);
+	if(iter==pointsMap.end())
+		return false; // Something wrong with this TWorkingPoints
+
+	// Rename the point:
+	p->setPtName(newName);
+
+	// Update the mapping:
+	pointsMap.erase(iter);
+	pointsMap[newName] = p;
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 void TWorkingPoints::headerChanged(TSpatialPointName name)

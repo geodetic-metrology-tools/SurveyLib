@@ -79,8 +79,9 @@ TSpatialPoint::TSpatialPoint( const TSpatialPointName&  name, TSpatialPosition* 
 }
 
 
-TSpatialPoint::TSpatialPoint(const TSpatialPoint& tsp) : fPtListeners(tsp.fPtListeners),
-fPosition(new TSpatialPosition(*(tsp.fPosition)))
+TSpatialPoint::TSpatialPoint(const TSpatialPoint& tsp) 
+: fPtListeners(/*tsp.fPtListeners*/),
+  fPosition(new TSpatialPosition(*(tsp.fPosition)))
 {
 	fName = new TSpatialPointName( *(tsp.fName) );
 
@@ -89,7 +90,7 @@ fPosition(new TSpatialPosition(*(tsp.fPosition)))
 	fEOLComment = tsp.fEOLComment;
 	fUsedInCalc = tsp.fUsedInCalc;
 	fEqCount = tsp.fEqCount;
-	flistener = tsp.flistener;
+	flistener = NULL;/*tsp.flistener;*/
 	fPointStatus = tsp.fPointStatus;
 //	updateNeededEquations();
 	fNameSet = tsp.fNameSet;

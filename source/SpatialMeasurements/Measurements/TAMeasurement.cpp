@@ -5,6 +5,42 @@
 
 #include "TAMeasurement.h"
 
+//////////////////////
+// default constructor
+//////////////////////
+TAMeasurement::TAMeasurement()
+{
+
+	fIdentifier = 0;
+	fHasAGeodeId = false;
+	fComment = "";
+	fHeaderComment = "";
+
+}
+
+
+///////////////////
+// copy constructor
+///////////////////
+TAMeasurement::TAMeasurement(const TAMeasurement& source)
+{
+
+fIdentifier = source.fIdentifier;
+fHasAGeodeId = false;
+fComment = source.fComment;
+fHeaderComment = source.fHeaderComment;
+
+}
+
+/////////////
+// destructor
+/////////////
+TAMeasurement::~TAMeasurement(){
+
+}
+
+
+
 
 /////////////////////////////////////////
 // sets the identifier of the measurement

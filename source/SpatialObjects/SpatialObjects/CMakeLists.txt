@@ -11,7 +11,7 @@ ADD_DEFINITIONS("-DSPATIALOBJECTS_EXPORTS")
 ##### This will correspond to one VS project!
 
 set(SurveyLibDLL_SOURCES
-	SpatialObjCFns.Cpp
+	SpatialObjCFns.cpp
 	SpatialObjFns.cpp
 	test.def
 )
@@ -24,9 +24,9 @@ set(SurveyLibDLL_HEADERS
 #${SURVEYLIB_INCLUDE_PATH}/SpatialObjJFns.h
 
 # Create a SHARED library from sources:
-add_library(SurveyLibDLL SHARED ${SurveyLibDLL_SOURCES} ${SurveyLibDLL_HEADERS})
+add_library(SurveyLib SHARED ${SurveyLibDLL_SOURCES} ${SurveyLibDLL_HEADERS})
 
 # Specify the libraries to link against
-target_link_libraries (SurveyLibDLL SpatialObjectsLibrary)
+target_link_libraries (SurveyLib SpatialObjectsLibrary)
 
 #####

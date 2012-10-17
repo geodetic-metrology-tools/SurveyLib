@@ -17,32 +17,73 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
+//include files
 #include <list>
-//using namespace std;
+using namespace std;
 
 #include "TAMeasurement.h"
-#include "TSpatialPoint.h"
+#include "TSpatialPointName.h"
+
+//typedefs
+typedef string Series;
+
+/*! \ingroup spatialmeasurements
+	@{*/
 
 //! Abstract Base Class. Defines the methods common to all survey measurements having a target point
 class TAPointMeasurement : public TAMeasurement 
 {
 public:
-	using TAMeasurement::operator ==;
 
-	const TSpatialPoint* getTargetPoint() const { return targetPoint; }	
+	
+	/*!@name Overloaded operators*/
+	//@{
+	//! Less than operator
+	virtual bool		operator<(const TAPointMeasurement& right) const;
+	//! Equality operator
+	virtual bool		operator==(const TAPointMeasurement& right) const;
+	//@}
 
-	virtual bool operator ==(const TAPointMeasurement& right) const
-	{
-		return *targetPoint == *right.getTargetPoint();
-	}
+	
+	/*!@return the name the target TSpatialPoint*/
+	virtual TSpatialPointName	getTargetPoint() const;
+	/*!sets the name of the target point from the latter's name
+	@param wp a pointer to the working points object*/
+	//virtual bool				setTargetPoint(TSpatialPointName wp);
 
-	virtual ~TAPointMeasurement() { }
 
 protected:
 
-	TAPointMeasurement(int obsID, const TSpatialPoint* tg) : TAMeasurement(obsID) { targetPoint = tg; }
+	/*!@name Constructors / Destructor*/
+	//@{
+	//!Default constructor
+	TAPointMeasurement();
+	/*!Constructor
+	@param parent a pointer to the parent meas tree node
+	@param target an iterator pointing to the target TSpatialPoint*/
+	//TAPointMeasurement(TVParentMeasTreeNode* parent, TWorkingPoints::PointIterator target);
+	/*! Constructor setting the target point's name
+	@param tgName the target point's name */
+	explicit TAPointMeasurement(TSpatialPointName tgName);
+	/*! Copy constructor */
+	TAPointMeasurement(const TAPointMeasurement& source);
+	/*! Destructor */
+	~TAPointMeasurement();
+	//@}
 
-	const TSpatialPoint* targetPoint;
+	
+	
+	
+	TSpatialPointName				fTargetPtName; /*!< name of the target point */
+
 
 };
 #endif
+
+/*@}*/
+
+
+
+
+
+
