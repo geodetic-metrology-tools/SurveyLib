@@ -25,11 +25,9 @@ ELSE()
     MESSAGE(STATUS "[DISABLED] - Intel compiler specific options")
 ENDIF()
 
-# Paths to external libraries (headers and libraries):
-SET(TUT_INCLUDE_PATH "C:/lib/tut-2009-08-30")
-SET(REFRAME_INCLUDE_PATH "C:/Lib/reframe")
-#SET(EIGEN_INCLUDE_PATH "C:/lib/eigen/eigen-2.0.15")
-SET(EIGEN_INCLUDE_PATH "C:/lib/eigen/eigen-eigen-43d9075b23ef")
+# Paths to external libraries to keep them out of svn (headers and libraries):
+# Must set the variables TUT_INCLUDE_PATH REFRAME_INCLUDE_PATH and EIGEN_INCLUDE_PATH
+INCLUDE(ext_libs.txt)
 
 # Installation path prefix
 # All the header and library files will be copied to that location
