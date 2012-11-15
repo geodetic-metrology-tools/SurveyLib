@@ -27,7 +27,7 @@ ENDIF()
 
 # Paths to external libraries to keep them out of svn (headers and libraries):
 # Must set the variables TUT_INCLUDE_PATH REFRAME_INCLUDE_PATH and EIGEN_INCLUDE_PATH
-INCLUDE(ext_libs.txt)
+INCLUDE(../../ext_libs.txt)
 
 # Installation path prefix
 # All the header and library files will be copied to that location
