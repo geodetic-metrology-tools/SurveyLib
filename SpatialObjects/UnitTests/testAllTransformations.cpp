@@ -9,6 +9,8 @@
 #include <map>
 #include <string>
 
+#include "testdata.h"
+
 namespace tut
 {
     struct test_AllTransformations{};
@@ -22,22 +24,17 @@ namespace
 }
 
 typedef std::map<std::string, TSpatialPosition> TPointsMap;
-TPointsMap readPoints(const std::string & path, TRefSystemFactory::ERefFrame frame)
+//TPointsMap readPoints(const std::string & path, TRefSystemFactory::ERefFrame frame)
+TPointsMap readPoints(TrafoTestPoints::TTestPoints& refpt, TRefSystemFactory::ERefFrame frame)
 {
 	std::stringstream log;
-	
-	std::ifstream indata; 
-	indata.open(path.c_str());
-	log << "Could not open the test file: " << path;
-	tut::ensure(log.str(),indata);
-
 	TPointsMap result;
-	std::string line;
-	while(std::getline(indata, line)) {
+	
+	for (auto& line = refpt.begin(); line != refpt.end(); line++) {
+		std::stringstream indata(*line);
 		std::string pointName;
 		double xCoord, yCoord, zCoord;
 		indata >> pointName >> xCoord >> yCoord >> zCoord;
-		if(indata.fail()) continue;
 		TSpatialPosition position(
 			TRefFrameInfo::getReferenceFrame(frame),
 			xCoord, yCoord, zCoord,
@@ -45,6 +42,7 @@ TPointsMap readPoints(const std::string & path, TRefSystemFactory::ERefFrame fra
 			
 		result.insert(std::pair<std::string, TSpatialPosition>(pointName, position));
 	}
+
 	return result;
 }
 
@@ -84,14 +82,12 @@ namespace tut
 
 		/*
 		*
-		*Read from a file original data in CCS coordinate system
+		*Read original data in CCS coordinate system
 		*
 		*/
 
-		std::string path = ".\\test_files\\LHC_CHpts.txt";
 		TRefSystemFactory::ERefFrame frame = TRefSystemFactory::kCCS;
-
-		TPointsMap beforeTransformation = readPoints(path, frame);
+		TPointsMap beforeTransformation = readPoints(TrafoTestPoints::LHC_CHpts, frame);
 
 		/*
 		*
@@ -119,13 +115,9 @@ namespace tut
 		*
 		*/
 
-		std::ifstream indataLV95; 
-		indataLV95.open(".\\test_files\\_swisstopo_transformation_LV95.txt");
-		ensure("Could not open the test file",indataLV95);
-		
-		std::string lineLV95;
-
-		while(std::getline(indataLV95, lineLV95)) {
+		TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::_swisstopo_transformation_LV95;
+		for (auto& line = refpt.begin(); line != refpt.end(); line++) {
+			std::stringstream indataLV95(*line);
 			std::string pointName;
 			double xCoordLV95, yCoordLV95;
 			indataLV95 >> pointName >> xCoordLV95 >> yCoordLV95;
@@ -152,14 +144,12 @@ namespace tut
 
 		/*
 		*
-		*Read from a file original data in LV95 coordinate system
+		*Read original data in LV95 coordinate system
 		*
 		*/
 
-		std::string path = ".\\test_files\\_swisstopo_transformation_LV95.txt";
 		TRefSystemFactory::ERefFrame frame = TRefSystemFactory::kSwissLV95;
-
-		TPointsMap beforeTransformation = readPoints(path, frame);
+		TPointsMap beforeTransformation = readPoints(TrafoTestPoints::_swisstopo_transformation_LV95, frame);
 
 
 		/*
@@ -188,13 +178,9 @@ namespace tut
 		*
 		*/
 
-		std::ifstream indataCCS; 
-		indataCCS.open(".\\test_files\\LHC_CHpts.txt");
-		ensure("Could not open the test file",indataCCS);
-		
-		std::string lineCCS;
-
-		while(std::getline(indataCCS, lineCCS)) {
+		TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::LHC_CHpts;
+		for (auto& line = refpt.begin(); line != refpt.end(); line++) {
+			std::stringstream indataCCS(*line);
 			std::string pointName;
 			double xCoordCCS, yCoordCCS;
 			indataCCS >> pointName >> xCoordCCS >> yCoordCCS;
@@ -221,14 +207,12 @@ namespace tut
 
 		/*
 		*
-		*Read from a file original data in CCS coordinate system
+		*Read original data in CCS coordinate system
 		*
 		*/
 
-		std::string path = ".\\test_files\\LHC_CHpts.txt";
 		TRefSystemFactory::ERefFrame frame = TRefSystemFactory::kCCS;
-
-		TPointsMap beforeTransformation = readPoints(path, frame);
+		TPointsMap beforeTransformation = readPoints(TrafoTestPoints::LHC_CHpts, frame);
 
 		/*
 		*
@@ -256,18 +240,12 @@ namespace tut
 		*
 		*/
 
-		std::ifstream indataLV03; 
-		indataLV03.open(".\\test_files\\_swisstopo_transformation_LV03.txt");
-		ensure("Could not open the test file",indataLV03);
-		
-		std::string lineLV03;
-
-		while(std::getline(indataLV03, lineLV03)) {
+		TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::_swisstopo_transformation_LV03;
+		for (auto& line = refpt.begin(); line != refpt.end(); line++) {
+			std::stringstream indataLV03(*line);
 			std::string pointName;
 			double xCoordLV03, yCoordLV03;
 			indataLV03 >> pointName >> xCoordLV03 >> yCoordLV03;
-			if(indataLV03.fail()) continue;
-
 			std::map<std::string, TSpatialPosition>::const_iterator it = afterTransformation03.find(pointName);
 			if(it != afterTransformation03.end())
 			{
@@ -300,10 +278,8 @@ namespace tut
 		*
 		*/
 
-		std::string path = ".\\test_files\\LHC_CHpts.txt";
 		TRefSystemFactory::ERefFrame frame = TRefSystemFactory::kCCS;
-
-		TPointsMap beforeTransformation = readPoints(path, frame);
+		TPointsMap beforeTransformation = readPoints(TrafoTestPoints::LHC_CHpts, frame);
 
 		/*
 		*
@@ -331,15 +307,12 @@ namespace tut
 		*and compare with transformation from CSGEO
 		*
 		*/
-
-		std::ifstream indataRGF93CC46; 
-		indataRGF93CC46.open(".\\test_files\\_circe_CC46_transformation.txt");
-		ensure("Could not open the test file",indataRGF93CC46);
 		
-		std::string lineRGF93CC46;
-
-		while(std::getline(indataRGF93CC46, lineRGF93CC46)) {
+		TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::_circe_CC46_transformation;
+		for (auto& line = refpt.begin(); line != refpt.end(); line++) {
+			std::stringstream indataRGF93CC46(*line);
 			std::string pointName;
+
 			double xCoordRGF93CC46, yCoordRGF93CC46;
 			indataRGF93CC46 >> pointName >> xCoordRGF93CC46 >> yCoordRGF93CC46;
 			if(indataRGF93CC46.fail()) continue;
@@ -372,10 +345,8 @@ namespace tut
 		*
 		*/
 
-		std::string path = ".\\test_files\\LHC_CHpts.txt";
 		TRefSystemFactory::ERefFrame frame = TRefSystemFactory::kCCS;
-
-		TPointsMap beforeTransformation = readPoints(path, frame);
+		TPointsMap beforeTransformation = readPoints(TrafoTestPoints::LHC_CHpts, frame);
 
 		/*
 		*
@@ -404,13 +375,9 @@ namespace tut
 		*
 		*/
 
-		std::ifstream indataLambert93; 
-		indataLambert93.open(".\\test_files\\_circe_Lambert93_transformation.txt");
-		ensure("Could not open the test file",indataLambert93);
-		
-		std::string lineLambert93;
-
-		while(std::getline(indataLambert93, lineLambert93)) {
+		TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::_circe_Lambert93_transformation;
+		for (auto& line = refpt.begin(); line != refpt.end(); line++) {
+			std::stringstream indataLambert93(*line);
 			std::string pointName;
 			double xCoordLambert93, yCoordLambert93;
 			indataLambert93 >> pointName >> xCoordLambert93 >> yCoordLambert93;
