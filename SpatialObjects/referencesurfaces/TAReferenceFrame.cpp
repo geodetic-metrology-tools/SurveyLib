@@ -150,303 +150,138 @@ bool TAReferenceFrame::setOrientation(TSpatialOrientation* so, const TRotationMa
 }
 
 
-
 bool TAReferenceFrame::transform(TSpatialPosition *sp, TAReferenceFrame* rf)
 {//transforms a spatial position from a rf to another
 	TPositionVector position(sp->getCoordinates(sp->getCoordSys()));
-	TRefFrameWrapper from, to;
+	TRefFrameWrapper from(this);
+	TRefFrameWrapper to(rf);
+	TARefFrameTransformation *postGraphTrafo(0);
 
-	if ( this->isInGraph() && !(rf->isInGraph()) )
-	{//transformation to a MLA not in graph
+	if (! this->isInGraph()) {
+		// transform to CGRF manually
+		TARefFrameTransformation* toGRF = this->getRFTransfo2CGRF();
+		toGRF->transform(position);
 
-		//transform to CGRF (LEP or SPS)
-		TGeodeticRefFrame* tempGeoRF =rf->getGeodeticRF();//utilise new 
-		string geoRFName = tempGeoRF->getEllipsoid()->getName();
-	//	if(tempGeoRF != 0) {delete tempGeoRF;}
-
-		if(geoRFName == "SphereSPS")
-		{
-			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
-		}
-		else
-		{
-			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
-		}
-
-		from.setFrame(this);
-
-		if (from.getFrame() != to.getFrame() )
-		{
-			vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
-		
-			if (transfo[0] == 0)
-			{return false;}
-
-			// reverse the order of the vector to have transformations as applicated to the point
-			reverse(transfo.begin(), transfo.end());
-			
-
-			// application of the successive transformations
-			vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
-			vector<TARefFrameTransformation*>::iterator iterEnd = transfo.end();
-
-			while (iter != iterEnd )
-			{
-				(*iter)->transform(position);
-				iter++;
-			}
-
-			sp->changeRefFrameTo(to.getFrame());
-			sp->setCoordinates(position);
-			
-		}
-
-		//CGRF to MLA
-		TARefFrameTransformation* temp1 = rf->getRFTransfo2CGRF();//utilise new
-		TARefFrameTransformation* temp2 = temp1->inverse();//utilise new
-		temp2->transform(position);
-		sp->changeRefFrameTo(rf);
-		sp->setCoordinates(position);
-	//	if(temp1 != 0) {delete temp1;} //temp1 est detruit dans le destructeur de rf
-		if(temp2 != 0) {delete temp2;}
-
-	}
-	else if( !(this->isInGraph()) && rf->isInGraph() )
-	{//transformation from a MLA not in graph
-
-		//MLA to CGRF
-		TARefFrameTransformation* temp1 = this->getRFTransfo2CGRF();//utilise new
-		temp1->transform(position);
 		sp->changeRefFrameTo(this);
 		sp->setCoordinates(position);
-	//	if(temp1 != 0) {delete temp1;}
 
-		//CGRF to rf
-		TGeodeticRefFrame* tempGeoRF =this->getGeodeticRF();//utilise new 
-		string geoRFName = tempGeoRF->getEllipsoid()->getName();
-	//	if(tempGeoRF != 0) {delete tempGeoRF;}
-
-		if(geoRFName == "SphereSPS")
-		{
+		if (this->getGeodeticRF()->getEllipsoid()->getName() == "SphereSPS")
 			from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
-		}
 		else
-		{
 			from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
-		}
-
-		to.setFrame(rf);
-
-		if (from.getFrame() != to.getFrame() )
-		{
-			vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
-		
-			if (transfo[0] == 0)
-			{return false;}
-
-			// reverse the order of the vector to have transformations as applicated to the point
-			reverse(transfo.begin(), transfo.end());
-			
-
-			// application of the successive transformations
-			vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
-			vector<TARefFrameTransformation*>::iterator iterEnd = transfo.end();
-
-			while (iter != iterEnd )
-			{
-				(*iter)->transform(position);
-				iter++;
-			}
-
-			sp->changeRefFrameTo(to.getFrame());
-			sp->setCoordinates(position);
-			
-		}
 	}
-	else
-	{
-		from.setFrame(this);
-		to.setFrame(rf);
 
-		if (from.getFrame() != to.getFrame() )
-		{
-			vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
-		
-			if (transfo[0] == 0)
-			{return false;}
+	if (! rf->isInGraph()) {
+		// destination system is a local system
+		// transform from CGRF manually
+		postGraphTrafo = rf->getRFTransfo2CGRF()->inverse();
 
-			// reverse the order of the vector to have transformations as applicated to the point
-			reverse(transfo.begin(), transfo.end());
-			
-
-			// application of the successive transformations
-			vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
-			vector<TARefFrameTransformation*>::iterator iterEnd = transfo.end();
-
-			while (iter != iterEnd )
-			{
-				(*iter)->transform(position);
-				iter++;
-			}
-
-			sp->changeRefFrameTo(to.getFrame());
-			sp->setCoordinates(position);
-			
-		}
+		if (rf->getGeodeticRF()->getEllipsoid()->getName() == "SphereSPS")
+			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
+		else
+			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
 	}
+
+	if (! (from == to)) {
+		vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
+		
+		if (transfo[0] == 0)
+		{return false;}
+
+		// reverse the order of the vector to have transformations as applicated to the point
+		reverse(transfo.begin(), transfo.end());
+			
+
+		// application of the successive transformations
+		for (vector<TARefFrameTransformation*>::iterator iter = transfo.begin(); 
+			 iter != transfo.end(); 
+			 iter++)
+			(*iter)->transform(position);
+		
+		sp->changeRefFrameTo(to.getFrame());
+		sp->setCoordinates(position);
+	}
+
+	if (postGraphTrafo != 0) {
+		// The destination system is not in the graph
+		postGraphTrafo->transform(position);
+		sp->changeRefFrameTo(rf);
+		sp->setCoordinates(position);
+	}
+		
 	return true;
 }
 
-
-
+// TODO: merge with the function above, same content, only signature differences
+// between  TSpatialVector an TSpatialPosition
 bool TAReferenceFrame::transform( TSpatialVector* sv, TAReferenceFrame* rf ) 
-{// transform a vector from a reference frame to another
+{
+	// transform a vector from a reference frame to another
 	TFreeVector freeVector(sv->getElements(sv->getCoordSys()));
-	TRefFrameWrapper from, to;
 
-	if ( this->isInGraph() && !(rf->isInGraph()) )
-	{//transformation to a MLA not in graph
+	TRefFrameWrapper from(this);
+	TRefFrameWrapper to(rf);
+	TARefFrameTransformation *postGraphTrafo(0);
 
-		//transform to CGRF (LEP or SPS)
-		TGeodeticRefFrame* tempGeoRF =rf->getGeodeticRF();//utilise new 
-		string geoRFName = tempGeoRF->getEllipsoid()->getName();
-	//	if(tempGeoRF != 0) {delete tempGeoRF;}
+	if (! this->isInGraph()) {
+		// transform to CGRF manually
+		TARefFrameTransformation* toGRF = this->getRFTransfo2CGRF();
+		toGRF->transform(freeVector);
 
-		if(geoRFName == "SphereSPS")
-		{
-			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
-		}
-		else
-		{
-			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
-		}
-
-		from.setFrame(this);
-
-		if (from.getFrame() != to.getFrame() )
-		{
-			vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
-		
-			if (transfo[0] == 0)
-			{return false;}
-
-			// reverse the order of the vector to have transformations as applicated to the point
-			reverse(transfo.begin(), transfo.end());
-			
-
-			// application of the successive transformations
-			vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
-			vector<TARefFrameTransformation*>::iterator iterEnd = transfo.end();
-
-			while (iter != iterEnd )
-			{
-				(*iter)->transform(freeVector);
-				iter++;
-			}
-
-			sv->changeRefFrameTo(to.getFrame());
-			sv->setElements(freeVector);		
-		}
-
-		//CGRF to MLA
-		TARefFrameTransformation* temp1 = rf->getRFTransfo2CGRF(); //utilise new
-		TARefFrameTransformation* temp2 = temp1->inverse(); //utilise new
-		temp2->transform(freeVector);
-		sv->changeRefFrameTo(rf);
-		sv->setElements(freeVector);
-	//	if(temp1 != 0) {delete temp1;} //temp1 est detruit dans le destructeur de rf
-		if(temp2 != 0) {delete temp2;}
-
-	}
-	else if( !(this->isInGraph()) && rf->isInGraph() )
-	{//transformation from a MLA not in graph
-
-		//MLA to CGRF
-		TARefFrameTransformation* temp1 = this->getRFTransfo2CGRF(); //utilise new
-		temp1->transform(freeVector);
 		sv->changeRefFrameTo(this);
 		sv->setElements(freeVector);
-		if(temp1 != 0) {delete temp1;}
 
-		//CGRF to rf
-		TGeodeticRefFrame* tempGeoRF =this->getGeodeticRF();//utilise new 
-		string geoRFName = tempGeoRF->getEllipsoid()->getName();
-	//	if(tempGeoRF != 0) {delete tempGeoRF;}
-
-		if(geoRFName == "SphereSPS")
-		{
+		if (this->getGeodeticRF()->getEllipsoid()->getName() == "SphereSPS")
 			from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
-		}
 		else
-		{
 			from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
-		}
-
-		to.setFrame(rf);
-
-		if (from.getFrame() != to.getFrame() )
-		{
-			vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
-		
-			if (transfo[0] == 0)
-			{return false;}
-
-			// reverse the order of the vector to have transformations as applicated to the point
-			reverse(transfo.begin(), transfo.end());
-			
-
-			// application of the successive transformations
-			vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
-			vector<TARefFrameTransformation*>::iterator iterEnd = transfo.end();
-
-			while (iter != iterEnd )
-			{
-				(*iter)->transform(freeVector);
-				iter++;
-			}
-
-			sv->changeRefFrameTo(to.getFrame());
-			sv->setElements(freeVector);
-			
-		}
 	}
-	else
-	{
-		from.setFrame(this);
-		to.setFrame(rf);
 
-		if (from.getFrame() != to.getFrame() )
-		{
-			vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
+	if (! rf->isInGraph()) {
+		// destination system is a local system
+		// transform from CGRF manually
+		postGraphTrafo = rf->getRFTransfo2CGRF()->inverse();
+
+		if (rf->getGeodeticRF()->getEllipsoid()->getName() == "SphereSPS")
+			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
+		else
+			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
+	}
+
+	if (! (from == to)) {
+		vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
 		
-			if (transfo[0] == 0)
-			{return false;}
+		if (transfo[0] == 0)
+		{return false;}
 
-			// reverse the order of the vector to have transformations as applicated to the point
-			reverse(transfo.begin(), transfo.end());
+		// reverse the order of the vector to have transformations as applicated to the point
+		reverse(transfo.begin(), transfo.end());
 			
 
-			// application of the successive transformations
-			vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
-			vector<TARefFrameTransformation*>::iterator iterEnd = transfo.end();
-
-			while (iter != iterEnd )
-			{
-				(*iter)->transform(freeVector);
-				iter++;
-			}
-
-			sv->changeRefFrameTo(to.getFrame());
-			sv->setElements(freeVector);		
-		}
+		// application of the successive transformations
+		for (vector<TARefFrameTransformation*>::iterator iter = transfo.begin(); 
+			 iter != transfo.end(); 
+			 iter++)
+			(*iter)->transform(freeVector);
+		
+		sv->changeRefFrameTo(to.getFrame());
+		sv->setElements(freeVector);
 	}
+
+	if (postGraphTrafo != 0) {
+		// The destination system is not in the graph
+		postGraphTrafo->transform(freeVector);
+		sv->changeRefFrameTo(rf);
+		sv->setElements(freeVector);
+	}
+		
 	return true;
 }
 
 
 
 
-TARefFrameTransformation*   TAReferenceFrame::getRFTransfo2CGRF()
+TARefFrameTransformation* TAReferenceFrame::getRFTransfo2CGRF()
 {// transformation from this reference frame to CGRF (in case of a reference frame not included in TGraph)
 	return new THelmertRefFrameTransform();
 }

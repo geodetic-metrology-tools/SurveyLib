@@ -189,6 +189,12 @@ namespace tut
 			std::map<std::string, TSpatialPosition>::const_iterator it = afterTransformationCCS.find(pointName);
 			if(it != afterTransformationCCS.end())
 			{
+#ifdef _DEBUG
+				// test fails, distance to reference is 3.1278 ( > 1 mm)
+				// Uses reframe DLL, needs investigation
+				std::cout << "\nDistance CSS_X: " << fabs(it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() - xCoordCCS) << std::endl;
+				std::cout << "\nDistance CSS_Y: " << fabs(it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() - yCoordCCS) << std::endl;
+#endif
 				ensure_distance("CCS X", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(xCoordCCS), static_cast<TReal>(0.001));
 				ensure_distance("CCS Y", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(yCoordCCS), static_cast<TReal>(0.001));
 			}

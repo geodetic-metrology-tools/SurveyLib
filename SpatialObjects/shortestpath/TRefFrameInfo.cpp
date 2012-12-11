@@ -83,6 +83,24 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("kMLA1985Machine","MLA (1985)", TCoordSysFactory::k3DCartesian, 0, true)));
         tmp->insert(std::make_pair(TRefSystemFactory::kMLA2000Machine, 
             TDetails("kMLA2000Machine","MLA (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kMLASphere, 
+            TDetails("kMLASphere","MLA (Sphere)", TCoordSysFactory::k3DCartesian, 0, true)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kLA1985Machine, 
+            TDetails("kLA1985Machine","LA (1985)", TCoordSysFactory::k3DCartesian, 0, true)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kLA2000Machine, 
+            TDetails("kLA2000Machine","LA (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kLASphere, 
+            TDetails("kLASphere","LA (Sphere)", TCoordSysFactory::k3DCartesian, 0, true)));
+
+		
+		tmp->insert(std::make_pair(TRefSystemFactory::kMLGGRS80, 
+			TDetails("kMLGGRS80","MLG", TCoordSysFactory::k3DCartesian, 0, true)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kMLGSphere, 
+			TDetails("kMLGSphere","MLG (Sphere)", TCoordSysFactory::k3DCartesian, 0, true)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kLGGRS80, 
+			TDetails("kLGGRS80","LG ", TCoordSysFactory::k3DCartesian, 0, true)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kLGSphere, 
+			TDetails("kLGSphere","LG (Sphere)", TCoordSysFactory::k3DCartesian, 0, true)));
 
         tmp->insert(std::make_pair(TRefSystemFactory::kLocalRefFrame, 
             TDetails("kLocalRefFrame","LocalRefFrame (RESERVED)", TCoordSysFactory::k3DCartesian, 0, true)));
@@ -214,25 +232,43 @@ bool TRefFrameInfo::isLocalRefFrame(int frame)
 
 TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso)
 {
+	bool isdefinedlocal = false;
+	TRefSystemFactory::EGeoid localgeoid = TRefSystemFactory::kNoGeoid;
     TRefSystemFactory::ERefFrame refFrame = fromNumber(frame);
-    if(refFrame==TRefSystemFactory::kMLA1985Machine || refFrame==TRefSystemFactory::kMLA2000Machine)
-    {
-        if(lso == NULL)
-            throw std::invalid_argument("LocalSystemOrigin required for the MLA reference frames!");
-        if(refFrame==TRefSystemFactory::kMLA1985Machine)
-            return TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(*lso, TRefSystemFactory::kCG1985Machine);
-        if(refFrame==TRefSystemFactory::kMLA2000Machine)
-            return TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(*lso, TRefSystemFactory::kCG2000Machine);
-    }
-    else if(refFrame==TRefSystemFactory::kLocalRefFrame)
-    {
+
+	if (refFrame >= TRefSystemFactory::kMLA1985Machine && 
+		refFrame <= TRefSystemFactory::kLGSphere) isdefinedlocal = true;
+
+	if (isdefinedlocal && lso == NULL) 
+		throw std::invalid_argument("LocalSystemOrigin required for the local reference frames!");
+	else if (!isdefinedlocal && lso != NULL)
+		throw std::invalid_argument("LocalSystemOrigin parameter is not needed for the non-*LA reference frames!");
+
+	// determine the geoid of the predefined local frame
+	switch (frame)
+	{
+		case TRefSystemFactory::kMLA1985Machine:
+		case TRefSystemFactory::kLA1985Machine:
+			localgeoid = TRefSystemFactory::kCG1985Machine;
+			break;
+		case TRefSystemFactory::kMLA2000Machine:
+		case TRefSystemFactory::kLA2000Machine:
+			localgeoid = TRefSystemFactory::kCG2000Machine;
+			break;
+		case TRefSystemFactory::kMLASphere:
+		case TRefSystemFactory::kMLGSphere:
+		case TRefSystemFactory::kLASphere:
+		case TRefSystemFactory::kLGSphere:
+			localgeoid = TRefSystemFactory::kCGSphere;
+			break;
+	}
+
+
+	// return an appropriate instance
+	if (isdefinedlocal)
+		return TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(*lso, localgeoid, refFrame);
+	else if(refFrame==TRefSystemFactory::kLocalRefFrame)
         return TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame();
-    }
-    else
-    {
-        if(lso != NULL)
-            throw std::invalid_argument("LocalSystemOrigin parameter is not needed for the non-MLA reference frames!");
-        return TRefSystemFactory::getRefSystemFactory()->getRefFrame(refFrame);
-    }
-    throw std::invalid_argument("Could not get the TAReferenceFrame for the given input");
+	else
+		return TRefSystemFactory::getRefSystemFactory()->getRefFrame(refFrame);
 }

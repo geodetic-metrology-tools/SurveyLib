@@ -225,6 +225,34 @@ TLength TFreeVector::length() const
 }
 
 
+TFreeVector& TFreeVector::normalize() 
+{
+	TLength norml = length();
+	if (norml.getStatus() != TANumericValue::kNull) {
+		TReal norm = norml.getMetresValue();
+		setX(0, getX(0)/norm);
+		setX(1, getX(1)/norm);
+		setX(2, getX(2)/norm);
+	}
+	return *this;
+}
+
+
+TFreeVector TFreeVector::cross(const TFreeVector& b) {
+	TFreeVector resultat (getCoordSys());
+	TANumericValue::EStatus status = this->testStatus(b);
+	if (status != kNull && testCoordSysCart(b.getCoordSys())==true)
+	{	
+		resultat.setX(0, getX(1)*b.getX(2) - getX(2)*b.getX(1));
+		resultat.setX(1, getX(2)*b.getX(0) - getX(0)*b.getX(2));
+		resultat.setX(2, getX(0)*b.getX(1) - getX(1)*b.getX(0));
+	
+	}
+	else{status=TVNumericValue::kNull;}
+	resultat.setStatus(status);
+	return resultat;
+}
+
 
 TLength TFreeVector::getHorDist() const
 {///give the length of a TFreeVector (meters)
