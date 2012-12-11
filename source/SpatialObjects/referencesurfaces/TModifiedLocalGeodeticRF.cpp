@@ -52,7 +52,7 @@ const TReal TModifiedLocalGeodeticRF::precisionPhi = LITERAL(0.00000000000001); 
 //////////////////////////////////////////////////////////////////////
 TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name ) 
 	: TA3DEuclideanRefFrame( name ), fOrientationMatrix(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kLGp0)),
-	fOrigin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF)), fFalseOrigin(TCoordSysFactory::k3DCartesian)
+	fOrigin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF)), fFalseOrigin(TCoordSysFactory::k3DCartesian),fTrafoCGRF(0)
 {	//default constructor
 }
 
@@ -62,7 +62,7 @@ TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 											   TGeodeticRefFrame* GRF) 
 	: TA3DEuclideanRefFrame( name ), /*fEllipsoid( ellipsoid ),*/ fOrigin( spos ),
 	fGeodeticSys( GRF ),fFalseOrigin(0,0,0, TCoordSysFactory::k3DCartesian),
-	fOrientationMatrix(GRF)
+	fOrientationMatrix(GRF),fTrafoCGRF(0)
 {	
 	TRotationMatrix id;
 	id.identity();
@@ -76,15 +76,15 @@ TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 											   const TSpatialOrientation orientation,
 											   TGeodeticRefFrame* GRF) 
 	: TA3DEuclideanRefFrame( name ), /*fEllipsoid( ellipsoid ),*/ fOrigin( spos ),
-	fFalseOrigin( falseOrigin ), fOrientationMatrix( orientation ), fGeodeticSys( GRF )
+	fFalseOrigin( falseOrigin ), fOrientationMatrix( orientation ), fGeodeticSys( GRF ),fTrafoCGRF(0)
 {	// constructor taking the name of the reference frame
 }
 
 
 TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 								   TSpatialPosition origin, TFreeVector falseOrigin, 
-								   const TAngle gis, const TAngle slope)
-	: TA3DEuclideanRefFrame(name), fOrigin(origin), fFalseOrigin(falseOrigin), fOrientationMatrix(0)
+								   const TAngle gis, const TAngle slope, TGeodeticRefFrame* GRF)
+	: TA3DEuclideanRefFrame(name), fOrigin(origin), fFalseOrigin(falseOrigin), fOrientationMatrix(0), fGeodeticSys( GRF ), fTrafoCGRF(0)
 
 {
 	// geodetic reference frame
@@ -133,33 +133,21 @@ TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 	
 }
 
-
-
-//TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const  TModifiedLocalGeodeticRF& original )
-//{// **Deliberately not implemented**
-	// copy constructor
-//}
-
-
-TModifiedLocalGeodeticRF::~TModifiedLocalGeodeticRF()
-{
+TModifiedLocalGeodeticRF::~TModifiedLocalGeodeticRF() {
+	if (fTrafoCGRF != 0)
+		delete fTrafoCGRF;
 }
-
 
 //////////////////////////////////////////////////////////////////////
 // Member Functions
 //////////////////////////////////////////////////////////////////////
-//TModifiedLocalGeodeticRF&  TModifiedLocalGeodeticRF::operator=(const TModifiedLocalGeodeticRF& right)
-//{	
-// **Deliberately not implemented**
-// Copy Assignment operator
-//
-//	if (this != &right)
-//	{
-//	}
-//	return *this;
-//}
 
+TARefFrameTransformation* TModifiedLocalGeodeticRF::getRFTransfo2CGRF() {
+	if (fTrafoCGRF == 0)
+		fTrafoCGRF = new TLG2GCTransformation(this);
+
+	return fTrafoCGRF;
+}
 
 //////////////////////////////////////////////////////////////////////
 //END

@@ -1135,26 +1135,55 @@ TAReferenceFrame*	TRefSystemFactory::getNewLocalRefFrame()
 	return pLocalRF;
 }
 
+TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigin & LSO, EGeoid geoid,  ERefFrame frame) {
+	TSpatialPosition lsoCG = LSO.origin();
+	TAReferenceFrame *pRF(0);
+	TGeodeticRefFrame *pXGRF(fCGRF);
+	TFreeVector falseOrigin(0,0,0, TCoordSysFactory::k3DCartesian);
+	// north-orientation by rotating negative by std angle
+	TAngle gisnorth =  TAngle(-LITERAL(37.77864) * TAngle::gonsToRadsFactor());
+	TAngle gis = gisnorth + LSO.gisement();
+	TAngle slope = LSO.slope();
 
-TAReferenceFrame*	TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigin & LSO, EGeoid geoid)
-{
-	TModifiedLocalAstronomicalRF* pMLA = 0;
+	// transform the origin to the correct CGRF system
+	if (frame == kLASphere || frame == kMLASphere || 
+		frame == kLGSphere || frame == kMLGSphere)
+		lsoCG.transform(getRefFrame(kCGRFSphere));
 
-	//if(fLSO.origin != 0)
-	//{
-	//	TSpatialPosition* originPointer = fLSO.origin;
-	//	TSpatialPosition origin (*originPointer);
-		TAngle gis = LSO.gisement();
-		TAngle slope = LSO.slope();
+	else if (frame ==  kLA1985Machine  || frame ==  kLA2000Machine  || 
+			 frame ==  kMLA1985Machine || frame ==  kMLA2000Machine || 
+			 frame ==  kLGGRS80        || frame ==  kMLGGRS80 )
+		lsoCG.transform(getRefFrame(kCGRF));
+		
+	lsoCG.setStatus(TVNumericValue::kKnown);
 
-		TFreeVector falseOrigin (0,0,0, TCoordSysFactory::k3DCartesian);
-
-		//pMLA = new TModifiedLocalAstronomicalRF("mla", geoid, origin,falseOrigin, gis, slope);
-        pMLA = new TModifiedLocalAstronomicalRF("mla", geoid, LSO.origin(), falseOrigin, gis, slope);
-		fLocalRefFrameList.push_back(pMLA);
-	//}
-
-	return pMLA;
+	switch (frame) {
+		case kLASphere:
+		case kLA1985Machine:
+		case kLA2000Machine:
+			pRF = new TModifiedLocalAstronomicalRF("la", geoid, lsoCG, falseOrigin, gisnorth, TAngle(0));
+			break;
+		case kMLASphere:
+		case kMLA1985Machine:
+		case kMLA2000Machine:
+			pRF = new TModifiedLocalAstronomicalRF("mla", geoid, lsoCG, falseOrigin, gis, slope);
+			break;
+		case kLGSphere:
+			pXGRF = fCGRFSphere;
+		case kLGGRS80:
+			pRF = new TModifiedLocalGeodeticRF("lg", lsoCG, pXGRF);
+			break;
+		case kMLGSphere:
+			pXGRF = fCGRFSphere;
+		case kMLGGRS80:
+			pRF = new TModifiedLocalGeodeticRF("mlg", lsoCG, falseOrigin, TSpatialOrientation(TRotationMatrix::kRzyx, TAngle(0), LSO.slope(), LSO.gisement(), pXGRF, TCoordSysFactory::k3DCartesian), pXGRF);
+			break;
+		default:
+			throw std::invalid_argument("Desired reference frame is non-local.");
+	}
+	
+	fLocalRefFrameList.push_back(pRF);
+	return pRF;
 }
 
 

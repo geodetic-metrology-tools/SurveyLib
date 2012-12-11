@@ -103,6 +103,16 @@ public:
             // Local Reference Frames:
             kMLA1985Machine      = 1000,
             kMLA2000Machine      = 1001,
+            kMLASphere           = 1002,
+            kLA1985Machine       = 1010,
+            kLA2000Machine       = 1011,
+            kLASphere            = 1012,
+
+            kMLGGRS80            = 2000,
+            kMLGSphere           = 2001,
+            kLGGRS80             = 2010,
+            kLGSphere            = 2011,
+
             // Reserved value:
 			kNotInGraph			 = -1,
             kLocalRefFrame       = -2 /*!< This was present in the TDataParameters variant. Referenced in LGC in few places */
@@ -172,9 +182,7 @@ public:
 		TAReferenceFrame* getNewLocalRefFrame();
 
 		//return a pointer to a new Modified Local Astronomic ref Frame and put it in a list in order to be deleted
-		TAReferenceFrame* getNewLocalRefFrame(const TLocalSystemOrigin & LSO, EGeoid);
-
-
+		TAReferenceFrame* getNewLocalRefFrame(const TLocalSystemOrigin & LSO, EGeoid geoid, ERefFrame frame);
 	//@}
 
 

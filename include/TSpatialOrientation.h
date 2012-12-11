@@ -51,7 +51,7 @@ public:
 	/*!@name Constructors and Destructors */
 	//@{
 		/// Default Constructor 
-		TSpatialOrientation(TAReferenceFrame*);
+		explicit TSpatialOrientation(TAReferenceFrame*);
 
 		/// Constructor takink the angles in the choosen order
 		TSpatialOrientation(TRotationMatrix::ERotationType,
@@ -87,6 +87,9 @@ public:
 
 
 private:
+	// No one must construct an orientation without a reference frame
+	TSpatialOrientation() {}
+
 	/*!@name Access methods*/
 	//@{
 		//! Return the orientation matrix

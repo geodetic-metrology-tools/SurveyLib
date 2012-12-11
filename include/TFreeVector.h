@@ -106,6 +106,10 @@ public:
 		//!give the horizontal distance of a TFreeVector (meters)
 		TLength getHorDist() const;
 		
+		// normalize the vector to length 1.0
+		TFreeVector& normalize();
+
+		TFreeVector cross(const TFreeVector& b);
 	//@}
 
 

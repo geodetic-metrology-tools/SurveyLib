@@ -33,6 +33,7 @@ class  TSpatialPosition;
 //class  TGraph;
 class  TReferenceEllipsoid;
 class TGeodeticRefFrame;
+class TLG2GCTransformation;
 #include  "TA3DEuclideanRefFrame.h"
 #include  "TSpatialOrientation.H"
 
@@ -67,7 +68,7 @@ public:
 		/// Constructor taking the name of the reference frame, the geoid id.,
 		/// the origin and the false origin in CCS and the beam gis. and slope
 		TModifiedLocalGeodeticRF( const string& name, TSpatialPosition origin,
-			TFreeVector falseOrigin, const TAngle gis, const TAngle slope);
+			TFreeVector falseOrigin, const TAngle gis, const TAngle slope, TGeodeticRefFrame* GRF);
 
 		/// Destructor
 		virtual  ~TModifiedLocalGeodeticRF();
@@ -83,6 +84,10 @@ public:
 
 		//! Returns the origin of the local RF
 		virtual TSpatialPosition getOrigin() const { return fOrigin; }
+		
+		virtual bool isInGraph() const { return false; }
+
+		virtual TARefFrameTransformation* getRFTransfo2CGRF();
 
 		//! Returns a pointer to the references ellipsoid
 		//TReferenceEllipsoid* getReferenceEllipsoid() const;
@@ -124,7 +129,7 @@ private:
 
 	TFreeVector					fFalseOrigin; /*!< false origin */
 	TSpatialOrientation			fOrientationMatrix; /*!< orientation matrix */
-
+	TLG2GCTransformation*       fTrafoCGRF;
 
 };
 
