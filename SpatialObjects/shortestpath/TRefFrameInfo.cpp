@@ -230,6 +230,15 @@ bool TRefFrameInfo::isLocalRefFrame(int frame)
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
 
+bool TRefFrameInfo::isRotatedLocalRefFrame(int frame) {
+    MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
+    if(iter!=getMapping().end())
+	{
+		// if the name starts with ML, it is a local modiefeid (i.e. rotated) frame
+		return (iter->second.fRefFrameName.find("kML") == 0);
+	}
+	throw std::invalid_argument("Unknown ERefFrame value");}
+
 TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso)
 {
 	bool isdefinedlocal = false;
