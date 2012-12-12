@@ -110,8 +110,9 @@ public:
 
     static bool isCoordSysAllowed(int frame, TCoordSysFactory::ECoordSys sys);
 	static int getAllowedCoordSysCount(int frame);
-
+	
     static bool isLocalRefFrame(int frame);
+    static bool isRotatedLocalRefFrame(int frame);
 
     static TAReferenceFrame * getReferenceFrame(int frame, const TLocalSystemOrigin * lso = NULL);
 };
