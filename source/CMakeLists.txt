@@ -1,5 +1,14 @@
 # Project name - (corresponds to solution name in visual studio)
-PROJECT(SurveyLib_V3)
+PROJECT(SurveyLib)
+
+# Set version number and provide a header file with corresponding defines
+set (SurveyLib_VERSION_MAJOR 3)
+set (SurveyLib_VERSION_MINOR 2)
+set (SurveyLib_VERSION_PATCH 0)
+configure_file (
+  "${CMAKE_SOURCE_DIR}/SurveryLibVersion.in"
+  "${CMAKE_SOURCE_DIR}/../include/SurveryLibVersion.h"
+  )
 
 # Minimum version of CMake needed to process the configuration files
 cmake_minimum_required(VERSION 2.8.4)

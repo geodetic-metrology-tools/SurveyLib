@@ -1,0 +1,8 @@
+#ifndef SURVEYLIB_VERSION_H
+#define SURVEYLIB_VERSION_H
+
+#define SurveyLib_VERSION_MAJOR @SurveyLib_VERSION_MAJOR@
+#define SurveyLib_VERSION_MINOR @SurveyLib_VERSION_MINOR@
+#define SurveyLib_VERSION_PATCH @SurveyLib_VERSION_PATCH@
+
+#endif
