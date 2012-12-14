@@ -183,47 +183,6 @@ private:
 	std::string			fError; /*!< errors generated from nagc functions */
 };
 
-/*@}*/
-
-//////////////////////////////////////////////////////////////////////
-// Inline Definitions
-//////////////////////////////////////////////////////////////////////
-
-//inline double&	TMatrix::operator ()(const int& row, const int& col) {return fMatrix[(row)*fNbCols + col];}
-//inline double	TMatrix::operator ()(const int& row, const int& col) const {return fMatrix[(row)*fNbCols + col];}
-
 #endif // SU_TMatrix
-
-
-
-
-//////////////////////////////////////////////////////////////////////
-//to be deleted
-//////////////////////////////////////////////////////////////////////
-	/*!Inverts this matrix (the matrix is overwritten by its inverse)*/
-//	virtual  bool		invertSym();
-
-	/*!\return the inverse of this matrix*/
-//	virtual TMatrix			inverseSym();
-
-	/*! return the inverse of this matrix */
-//	virtual TMatrix		inverseAasen2();
-
-	/*! return the inverse of this matrix (methods aasen, calls C functions) */
-//	virtual TMatrix		inverseAasen();
-
-	/*! inverts this matrix */
-//	virtual TMatrix	aasen_inv2();
-
-	/*! decomposes this matrix */
-//	virtual void	aasen_dcmp2(TMatrix*,TMatrix*,TMatrix*,valarray<double> *swap);
-		
-	/*! invert matrix */
-//	virtual TMatrix dfinv(int* n_pivot,int* pivot_i,int* pivot_j);
-
-
-
-
-
 
 

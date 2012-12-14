@@ -11,6 +11,11 @@ TMatrixImpl::TMatrixImpl(int rows, int cols, double value)
 {
 }
 
+TMatrixImpl::TMatrixImpl(const Eigen::MatrixXd& m) :
+	fMatrix(m)
+{
+}
+
 void TMatrixImpl::setConstant(double value)
 {
     fMatrix.setConstant(value);
@@ -87,11 +92,9 @@ bool TMatrixImpl::invert()
 
 TMatrixImpl TMatrixImpl::solve(const TMatrixImpl & b) const
 {
-    TMatrixImpl result;
     // TODO: Report if can be solved
     Eigen::FullPivLU<Eigen::MatrixXd> lu(fMatrix);
-    lu.solve(b.fMatrix);
-    return result;
+    return TMatrixImpl(lu.solve(b.fMatrix));
 }
 
 const double * TMatrixImpl::data() const

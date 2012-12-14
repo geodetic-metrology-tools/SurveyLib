@@ -38,6 +38,9 @@ public:
 	TSparseMatrix toSparse() const;
 
 private:
+	// construct a new TMatrixImpl object from an Eigen matrix
+    TMatrixImpl(const Eigen::MatrixXd& m);
+
     Eigen::MatrixXd fMatrix;
 };
 
