@@ -130,7 +130,16 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
     : TAModifiedLocalAstronomicalRF(name),
 	fOrigin (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS), 0, 0, 0, TCoordSysFactory::k3DCartesian), fGeodeticSys(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
 	fOrientationMatrix(fGeodeticSys), fGis(0), fSlope(0)
-{
+{	
+	//identify geodetic system 
+	if( geoid == TRefSystemFactory::kCGSphere)
+	{
+		fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getGeoRefFrame(TRefSystemFactory::kCGRFSphere);
+	}
+	else
+	{
+		fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getGeoRefFrame(TRefSystemFactory::kCGRF);
+	}
 	fOriginDefined = false;
 
 	//false origin
@@ -154,7 +163,17 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 	fOrigin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()), 
 	fOrientationMatrix(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
 	fGis(0), fSlope(0)
-{
+{	
+	//identify geodetic system 
+	if( geoid == TRefSystemFactory::kCGSphere)
+	{
+		fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getGeoRefFrame(TRefSystemFactory::kCGRFSphere);
+	}
+	else
+	{
+		fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getGeoRefFrame(TRefSystemFactory::kCGRF);
+	}
+
 	// origin
 	fOrigin = origin;
 	fOriginDefined = true;

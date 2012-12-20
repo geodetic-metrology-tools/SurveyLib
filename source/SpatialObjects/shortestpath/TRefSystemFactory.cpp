@@ -1140,9 +1140,7 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 	TAReferenceFrame *pRF(0);
 	TGeodeticRefFrame *pXGRF(fCGRF);
 	TFreeVector falseOrigin(0,0,0, TCoordSysFactory::k3DCartesian);
-	// north-orientation by rotating negative by std angle
-	TAngle gisnorth =  TAngle(-LITERAL(37.77864) * TAngle::gonsToRadsFactor());
-	TAngle gis = gisnorth + LSO.gisement();
+	TAngle gis = LSO.gisement();
 	TAngle slope = LSO.slope();
 
 	// transform the origin to the correct CGRF system
@@ -1161,7 +1159,7 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 		case kLASphere:
 		case kLA1985Machine:
 		case kLA2000Machine:
-			pRF = new TModifiedLocalAstronomicalRF("la", geoid, lsoCG, falseOrigin, gisnorth, TAngle(0));
+			pRF = new TModifiedLocalAstronomicalRF("la", geoid, lsoCG);
 			break;
 		case kMLASphere:
 		case kMLA1985Machine:
@@ -1176,7 +1174,7 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 		case kMLGSphere:
 			pXGRF = fCGRFSphere;
 		case kMLGGRS80:
-			pRF = new TModifiedLocalGeodeticRF("mlg", lsoCG, falseOrigin, TSpatialOrientation(TRotationMatrix::kRzyx, TAngle(0), LSO.slope(), LSO.gisement(), pXGRF, TCoordSysFactory::k3DCartesian), pXGRF);
+			pRF = new TModifiedLocalGeodeticRF("mlg", lsoCG, falseOrigin, gis, slope, pXGRF);
 			break;
 		default:
 			throw std::invalid_argument("Desired reference frame is non-local.");

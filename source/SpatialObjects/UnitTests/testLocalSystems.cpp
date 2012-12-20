@@ -217,7 +217,7 @@ namespace tut
 		};
 
 		// Construct an LG whith its origin at p0 and a rotation of 18 gons around Z
-		TLocalSystemOrigin lso(p_trafo[0], TAngle(18*TAngle::gonsToRadsFactor()),TAngle(0), "LSO GISEMENT 18");
+		TLocalSystemOrigin lso(p_trafo[0], TAngle((18.0-37.77864)*TAngle::gonsToRadsFactor()),TAngle(0), "LSO GISEMENT 18");
 		TAReferenceFrame *MLG(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kMLGGRS80));
 		PTheo p_theo(MLG);
 		
@@ -227,9 +227,9 @@ namespace tut
 		for (int i = 0; i < 4; i++) {
 			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo[i].getCoordinates(k3D)).getMetresValue() ;
 			//std::cout << "Analyzing point " << i << "(MLG)\n"
-					  //<< p_trafo[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
-					  //<< p_trafo[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
-					  //<< p_trafo[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
+			//		  << p_trafo[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
+			//		  << p_trafo[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
+			//		  << p_trafo[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
 			//std::cout << "Difference between points (MLG): " << d << std::endl;
 			ensure_distance("Testing distance between expected and calculated points (at p0)", TReal(0), d, TReal(1e-5));
 		}
@@ -241,7 +241,7 @@ namespace tut
 			TAReferenceFrame *LG = TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso2, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kLGGRS80);
 
 			// build a rotated system at the same point
-			TLocalSystemOrigin lso3(p_trafo2base, TAngle(18*TAngle::gonsToRadsFactor()),TAngle(0), "LSO GISEMENT 18 P1000");
+			TLocalSystemOrigin lso3(p_trafo2base, TAngle((18-37.77864)*TAngle::gonsToRadsFactor()),TAngle(0), "LSO GISEMENT 18 P1000");
 			TAReferenceFrame *MLG2(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso3, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kMLGGRS80));
 
 			TSpatialPosition unrotated[4] = {
@@ -256,9 +256,9 @@ namespace tut
 				unrotated[i].transform(MLG2);
 				TReal d = p_theo.data[i]->getCoordinates(k3D).dist(unrotated[i].getCoordinates(k3D)).getMetresValue() ;
 				//std::cout << "Analyzing point " << i << "(MLG2)\n"
-						  //<< unrotated[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
-						  //<< unrotated[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
-						  //<< unrotated[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
+				//		  << unrotated[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
+				//		  << unrotated[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
+				//		  << unrotated[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
 				//std::cout << "Difference between points (MLG2): " << d << std::endl;
 				ensure_distance("Testing distance between expected and calculated points (manual system)", TReal(0), d, TReal(1e-1));
 			}
@@ -319,8 +319,9 @@ namespace tut
     void object::test<4>()
     {	
 		set_test_name("Modified Local Geodetic Spherical System: MLGs (Simple test == LG at P0)");
-
+		
 		TAReferenceFrame *CCS(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+		TAReferenceFrame *GRF(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
 		
 		// test points in CCS
 		TSpatialPosition p_trafo[4] = {
@@ -330,25 +331,54 @@ namespace tut
 			TSpatialPosition(CCS, 2000.00000000005,	2097.79264999995,	2533.65999999994 ,  k3D)
 		};
 
-		// Construct an LG whith its origin at p0 and a rotation of 18 gons around Z
-		TLocalSystemOrigin lso(p_trafo[0], TAngle(18*TAngle::gonsToRadsFactor()),TAngle(0), "LSO GISEMENT 18");
+		// Construct an LGs whith its origin at p0 and a rotation of 18 gons around Z
+		TLocalSystemOrigin lso(p_trafo[0], TAngle((18.0-37.77864)*TAngle::gonsToRadsFactor()),TAngle(0), "LSO GISEMENT 18");
 		TAReferenceFrame *MLGs(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kMLGSphere));
 		PTheo p_theo(MLGs);
-
+		
 		for (int i = 0; i < 4; i++)
 			p_trafo[i].transform(MLGs);
 
 		for (int i = 0; i < 4; i++) {
 			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo[i].getCoordinates(k3D)).getMetresValue() ;
-			//std::cout << "Analyzing point " << i << "(MLGs)\n"
-					  //<< p_trafo[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
-					  //<< p_trafo[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
-					  //<< p_trafo[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
-			//std::cout << "Difference between points (MLGs): " << d << std::endl;
-			ensure_distance("Testing distance between expected and calculated points", TReal(0), d, TReal(1e-5));
+			std::cout << "Analyzing point " << i << "(MLG)\n"
+					  << p_trafo[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
+					  << p_trafo[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
+					  << p_trafo[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
+			std::cout << "Difference between points (MLG): " << d << std::endl;
+			ensure_distance("Testing distance between expected and calculated points (at p0)", TReal(0), d, TReal(1e-5));
 		}
 
+		if (0 && test1_ok) {
+			// transform the manually rotated points from a north-LG to CGRF and test if they become the 0..100 points in the MLG
+			TSpatialPosition p_trafo2base(GRF, 4393822.13218031, 467629.008429449, 4584913.91387969, k3D);
+			TLocalSystemOrigin lso2(p_trafo2base, TAngle(0), TAngle(0), "LSO NOT p0 pt NORTH");
+			TAReferenceFrame *LG = TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso2, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kLGGRS80);
+
+			// build a rotated system at the same point
+			TLocalSystemOrigin lso3(p_trafo2base, TAngle((18-37.77864)*TAngle::gonsToRadsFactor()),TAngle(0), "LSO GISEMENT 18 P1000");
+			TAReferenceFrame *MLG2(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso3, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kMLGGRS80));
+
+			TSpatialPosition unrotated[4] = {
+				TSpatialPosition(LG, 0,0,0, k3D),
+				TSpatialPosition(LG, 96.0293685676943,	-27.8991106039229,	0, k3D),
+				TSpatialPosition(LG, 27.8991106039229,	 96.0293685676943,	0, k3D),
+				TSpatialPosition(LG, 0,0,100, k3D)
+			};
+
+			
+			for (int i = 0; i < 4; i++) {
+				unrotated[i].transform(MLG2);
+				TReal d = p_theo.data[i]->getCoordinates(k3D).dist(unrotated[i].getCoordinates(k3D)).getMetresValue() ;
+				//std::cout << "Analyzing point " << i << "(MLG2)\n"
+				//		  << unrotated[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
+				//		  << unrotated[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
+				//		  << unrotated[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
+				//std::cout << "Difference between points (MLG2): " << d << std::endl;
+				ensure_distance("Testing distance between expected and calculated points (manual system)", TReal(0), d, TReal(1e-1));
+			}
+
+		}
+		
 	}
-
-
 }
