@@ -84,20 +84,9 @@ TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 								   TSpatialPosition origin, TFreeVector falseOrigin, 
 								   const TAngle gis, const TAngle slope, TGeodeticRefFrame* GRF)
-	: TA3DEuclideanRefFrame(name), fOrigin(origin), fFalseOrigin(falseOrigin), fOrientationMatrix(0), fGeodeticSys( GRF ), fTrafoCGRF(0)
+	: TA3DEuclideanRefFrame(name), fOrigin(origin), fFalseOrigin(falseOrigin), fOrientationMatrix(GRF), fGeodeticSys( GRF ), fTrafoCGRF(0)
 
 {
-	// geodetic reference frame
-	fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF();
-	
-	// ellipsoid
-//	fEllipsoid = TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getLocalGeodeticRF()->getReferenceEllipsoid();
-
-	// origin
-	origin.transform(fGeodeticSys);
-	//fOrigin = origin;
-
-
 	// orientation angles
 	// orientation in CCS as a spatial vector
 	//TSpatialVector unitVector(TGraph::getGraph()->getRefFrame(TGraph::kCCS));
