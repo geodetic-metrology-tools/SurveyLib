@@ -133,15 +133,7 @@ bool  TDataParameters::defined()  const
 
 bool	TDataParameters::isOriginExpected() const
 {
-	bool retVal = false;
-
-//	if(fRefFrameEnum == TDataParameters::kMLA1985Machine)
-	if(fRefFrameEnum == TRefSystemFactory::kMLA2000Machine || fRefFrameEnum == TRefSystemFactory::kMLA1985Machine)
-	{
-		retVal = true;
-	}
-	
-	return retVal;
+	return TRefFrameInfo::isLocalRefFrame(fRefFrameEnum);
 }
 
 
