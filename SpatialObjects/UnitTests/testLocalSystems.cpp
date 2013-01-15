@@ -341,11 +341,11 @@ namespace tut
 
 		for (int i = 0; i < 4; i++) {
 			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo[i].getCoordinates(k3D)).getMetresValue() ;
-			std::cout << "Analyzing point " << i << "(MLG)\n"
-					  << p_trafo[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
-					  << p_trafo[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
-					  << p_trafo[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
-			std::cout << "Difference between points (MLG): " << d << std::endl;
+			//std::cout << "Analyzing point " << i << "(MLG)\n"
+			//		  << p_trafo[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
+			//		  << p_trafo[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
+			//		  << p_trafo[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
+			//std::cout << "Difference between points (MLG): " << d << std::endl;
 			ensure_distance("Testing distance between expected and calculated points (at p0)", TReal(0), d, TReal(1e-5));
 		}
 
