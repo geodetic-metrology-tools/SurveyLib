@@ -149,9 +149,8 @@ bool TAReferenceFrame::setOrientation(TSpatialOrientation* so, const TRotationMa
 	return so->setOrientation(rm);
 }
 
-
 bool TAReferenceFrame::transform(TSpatialPosition *sp, TAReferenceFrame* rf)
-{//transforms a spatial position from a rf to another
+{
 	TPositionVector position(sp->getCoordinates(sp->getCoordSys()));
 	TRefFrameWrapper from(this);
 	TRefFrameWrapper to(rf);
@@ -165,10 +164,7 @@ bool TAReferenceFrame::transform(TSpatialPosition *sp, TAReferenceFrame* rf)
 		sp->changeRefFrameTo(this);
 		sp->setCoordinates(position);
 
-		if (this->getGeodeticRF()->getEllipsoid()->getName() == "SphereSPS")
-			from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
-		else
-			from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
+		from.setFrame(this->getGeodeticRF());
 	}
 
 	if (! rf->isInGraph()) {
@@ -176,10 +172,7 @@ bool TAReferenceFrame::transform(TSpatialPosition *sp, TAReferenceFrame* rf)
 		// transform from CGRF manually
 		postGraphTrafo = rf->getRFTransfo2CGRF()->inverse();
 
-		if (rf->getGeodeticRF()->getEllipsoid()->getName() == "SphereSPS")
-			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
-		else
-			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
+		to.setFrame(rf->getGeodeticRF());
 	}
 
 	if (! (from == to)) {
@@ -230,22 +223,16 @@ bool TAReferenceFrame::transform( TSpatialVector* sv, TAReferenceFrame* rf )
 
 		sv->changeRefFrameTo(this);
 		sv->setElements(freeVector);
-
-		if (this->getGeodeticRF()->getEllipsoid()->getName() == "SphereSPS")
-			from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
-		else
-			from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
+		
+		from.setFrame(this->getGeodeticRF());
 	}
 
 	if (! rf->isInGraph()) {
 		// destination system is a local system
 		// transform from CGRF manually
 		postGraphTrafo = rf->getRFTransfo2CGRF()->inverse();
-
-		if (rf->getGeodeticRF()->getEllipsoid()->getName() == "SphereSPS")
-			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
-		else
-			to.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
+		
+		to.setFrame(rf->getGeodeticRF());
 	}
 
 	if (! (from == to)) {
@@ -277,9 +264,6 @@ bool TAReferenceFrame::transform( TSpatialVector* sv, TAReferenceFrame* rf )
 		
 	return true;
 }
-
-
-
 
 TARefFrameTransformation* TAReferenceFrame::getRFTransfo2CGRF()
 {// transformation from this reference frame to CGRF (in case of a reference frame not included in TGraph)
