@@ -111,7 +111,7 @@ bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 	{
 		firstDesignMatrix->insert(row,column) = coeff;
 #ifdef _DEBUG
-		std::cout << "TLSInputMatrices::setFirstDgnMtrxElement " << row << " " << column << " " << firstDesignMatrix->coeff(row,column) << std::endl;
+		//std::cout << "TLSInputMatrices::setFirstDgnMtrxElement " << row << " " << column << " " << firstDesignMatrix->coeff(row,column) << std::endl;
 #endif
 	}
 	return successfullySet;
@@ -125,7 +125,7 @@ bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex colu
 	{
 		secondDesignMatrix->insert(row,column) = coeff;
 #ifdef _DEBUG
-		std::cout << "TLSInputMatrices::setSecondDgnMtrxElement " << row << " " << column << " " << secondDesignMatrix->coeff(row,column) << std::endl;
+		//std::cout << "TLSInputMatrices::setSecondDgnMtrxElement " << row << " " << column << " " << secondDesignMatrix->coeff(row,column) << std::endl;
 #endif
 	}
 
@@ -152,7 +152,7 @@ bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column,
 	{
 		weightMatrix->insert(row,column) = coeff;
 #ifdef _DEBUG
-		std::cout << "TLSInputMatrices::setWeightMtrxElement " << row << " " << column << " " << weightMatrix->coeff(row,column) << std::endl;
+		//std::cout << "TLSInputMatrices::setWeightMtrxElement " << row << " " << column << " " << weightMatrix->coeff(row,column) << std::endl;
 #endif
 
 	}
