@@ -323,7 +323,8 @@ TAngle::EUnits TAStreamFormatter::setAngleUnits(const TAngle::EUnits units )
 	{
 		oldAng = units;
 	}
-	fAngFilter = getAngleFilter(units); //INSURE
+	// Assertion terminates the program if an unknown filter is requested
+	fAngFilter = getAngleFilter(units); 
 	return oldAng; 
 }
 
