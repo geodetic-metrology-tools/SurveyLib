@@ -13,7 +13,7 @@ ADD_DEFINITIONS("-DSPATIALOBJECTS_EXPORTS")
 set(SurveyLibDLL_SOURCES
 	SpatialObjCFns.cpp
 	SpatialObjFns.cpp
-	test.def
+	#test.def
 )
 #SpatialObjJFns.cpp
 
