@@ -291,7 +291,7 @@ void	TPointConverter::writeN( const int width,
 								 const TLength::EUnits unit,
 								 LSPosVecConstIter pt)
 {
-	TRefSystemFactory::EGeoid geoid;
+	TRefSystemFactory::EGeoid geoid(TRefSystemFactory::kNoGeoid);
 	if(fRefFrame ==	TRefSystemFactory::kCERNXYHsSphereSPS)
 	{geoid = TRefSystemFactory::kCGSphere;}
 	if(fRefFrame ==	TRefSystemFactory::kCernXYHg85Machine)
