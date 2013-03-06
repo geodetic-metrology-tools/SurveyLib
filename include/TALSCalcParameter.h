@@ -64,6 +64,15 @@ struct LSParaStatus {
 	TALSCalcParameter::ELSStatus first;
 	TALSCalcParameter::ELSStatus second;
 	TALSCalcParameter::ELSStatus third;
+
+	LSParaStatus(TALSCalcParameter::ELSStatus defStatus = TALSCalcParameter::kNull) :
+		first(defStatus),
+		second(defStatus),
+		third(defStatus) {}
+
+	void setAll(TALSCalcParameter::ELSStatus status) {
+		first = second = third = status;
+	}
 };
 	
 #endif //SU_ABS_PARA
