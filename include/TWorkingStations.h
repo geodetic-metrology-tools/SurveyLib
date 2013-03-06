@@ -75,10 +75,10 @@ public:
 	//! Adds a level station to the working stations
 	/*!@param lSt a pointer to the level station which will added by copy into the container
 	@return a pointer to the station stored in the container*/
-	virtual TLevelStation*		addLevelStation(TLevelStation* lSt);
+	virtual TLevelStation*		addLevelStation(TLevelStation* lSt, bool isDLEV);
 	/*!@return a true boolean if a copy of the pointed to station isn't stored in the container yet
 	@param lSt a pointer to the station object a copy of which will be looked for*/
-	virtual bool				notInContainer(TLevelStation* lSt) const;
+	virtual bool				notInContainer(TLevelStation* lSt, bool isDLEV) const;
 	//! Adds a WTW station to the working stations
 	/*!@param wtwSt a pointer to the WTW station which will added by copy into the container
 	@return a pointer to the station stored in the container*/
@@ -97,7 +97,7 @@ public:
 	/*!@return the number of stored WPS stations*/
 	virtual int			numberOfWPSStations();
 	/*!@return the number of stored level stations*/
-	virtual int			numberOfLevelStations();
+	virtual int			numberOfLevelStations(bool isDLEV);
 	/*!@return the number of stored WTW stations*/
 	virtual int			numberOfWTWStations();
 
@@ -143,13 +143,13 @@ public:
 	WPSStConstIter		getWPSStEndIterator() const;
 	
 	/*!@return an iterator pointing to the first element of the level stations container*/
-	LevelStIterator		getLevelStBeginIterator();
+	LevelStIterator		getLevelStBeginIterator(bool isDLEV);
 	/*!@return a const iterator pointing to the first element of the level stations container*/
-	LevelStConstIter	getLevelStBeginIterator() const;
+	LevelStConstIter	getLevelStBeginIterator(bool isDLEV) const;
 	/*!@return an iterator pointing one past the last element of the level stations container*/
-	LevelStIterator		getLevelStEndIterator();
+	LevelStIterator		getLevelStEndIterator(bool isDLEV);
 	/*!@return a const iterator pointing one past the last element of the level stations container*/
-	LevelStConstIter	getLevelStEndIterator() const;
+	LevelStConstIter	getLevelStEndIterator(bool isDLEV) const;
 	
 	/*!@return an iterator pointing to the first element of the WTW stations container*/
 	WTWStIterator		getWTWStBeginIterator();
@@ -172,6 +172,8 @@ private :
 	int					fLastWPSNbr;
 	LevelStContainer	fLevelStations;
 	int					fLastLevelNbr;
+	LevelStContainer	fDigiLevelStations;
+	int					fLastDigiLevelNbr;
 	WTWStContainer		fWTWStations;
 	int					fLastWTWNbr;
 

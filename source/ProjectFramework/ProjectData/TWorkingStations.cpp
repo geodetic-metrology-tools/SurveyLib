@@ -33,10 +33,12 @@ TWorkingStations::TWorkingStations(const TWorkingStations & source){
 	fLastTheodNbr = source.fLastTheodNbr;
 	fLastWPSNbr = source.fLastWPSNbr;
 	fLastLevelNbr = source.fLastLevelNbr;
+	fLastDigiLevelNbr = source.fLastDigiLevelNbr;
 	fDistStations = source.fDistStations;
 	fTheodStations = source.fTheodStations;
 	fWPSStations = source.fWPSStations;
 	fLevelStations = source.fLevelStations;
+	fDigiLevelStations = source.fDigiLevelStations;
 	fWTWStations = source.fWTWStations;
 }
 
@@ -228,33 +230,45 @@ WPSStConstIter TWorkingStations::getWPSStEndIterator() const{
 ///////////////////////////////////////////////////////////////////////////////////
 // Return an iterator pointing to the first element of the Level stations container
 ///////////////////////////////////////////////////////////////////////////////////
-LevelStIterator TWorkingStations::getLevelStBeginIterator() {
+LevelStIterator TWorkingStations::getLevelStBeginIterator(bool isDLEV) {
 
-	return fLevelStations.begin();
+	if (isDLEV)
+		return fDigiLevelStations.begin();
+	else
+		return fLevelStations.begin();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Return a const iterator pointing to the first element of the Level stations container
 ////////////////////////////////////////////////////////////////////////////////////////
-LevelStConstIter TWorkingStations::getLevelStBeginIterator() const{
-
-	return fLevelStations.begin();
+LevelStConstIter TWorkingStations::getLevelStBeginIterator(bool isDLEV) const{
+	
+	if (isDLEV)
+		return fDigiLevelStations.begin();
+	else
+		return fLevelStations.begin();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 // Return an iterator pointing to one past the last element of the Level stations container
 ///////////////////////////////////////////////////////////////////////////////////////////
-LevelStIterator TWorkingStations::getLevelStEndIterator() {
-
-	return fLevelStations.end();
+LevelStIterator TWorkingStations::getLevelStEndIterator(bool isDLEV) {
+	
+	if (isDLEV)
+		return fDigiLevelStations.end();
+	else
+		return fLevelStations.end();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Return a const iterator pointing to one past the last element of the Level stations container
 ////////////////////////////////////////////////////////////////////////////////////////////////
-LevelStConstIter TWorkingStations::getLevelStEndIterator() const{
-
-	return fLevelStations.end();
+LevelStConstIter TWorkingStations::getLevelStEndIterator(bool isDLEV) const{
+	
+	if (isDLEV)
+		return fDigiLevelStations.end();
+	else
+		return fLevelStations.end();
 }
 
 
@@ -444,7 +458,7 @@ bool TWorkingStations::notInContainer(TWPSStation* wpsSt) const{
 /////////////////////////////////
 // Adds an Level station to the container
 /////////////////////////////////
-TLevelStation* TWorkingStations::addLevelStation(TLevelStation *levelSt){
+TLevelStation* TWorkingStations::addLevelStation(TLevelStation *levelSt, bool isDLEV){
 
 	//possible attribution of a default fSetup string
 	string empty("");
@@ -457,8 +471,11 @@ TLevelStation* TWorkingStations::addLevelStation(TLevelStation *levelSt){
 	
 	//insertion in the container
 	//if (notInContainer(levelSt)){
-		fLevelStations.push_back(*levelSt);
-		return &(*(--fLevelStations.end()));
+		LevelStContainer &levelcontainer =  isDLEV ? 
+											fDigiLevelStations : 
+											fLevelStations;
+		levelcontainer.push_back(*levelSt);
+		return &(*(--levelcontainer.end()));
 	//}
 	//else{
 	//	cerr << "Level station not inserted : already in container\n";
@@ -470,10 +487,10 @@ TLevelStation* TWorkingStations::addLevelStation(TLevelStation *levelSt){
 ////////////////////////////////////////////////////////
 // checks if the Level station is already in the container
 ////////////////////////////////////////////////////////
-bool TWorkingStations::notInContainer(TLevelStation* levelSt) const{
+bool TWorkingStations::notInContainer(TLevelStation* levelSt, bool isDLEV) const{
 
-	LevelStConstIter iter = getLevelStBeginIterator();
-	LevelStConstIter iterEnd = getLevelStEndIterator();
+	LevelStConstIter iter = getLevelStBeginIterator(isDLEV);
+	LevelStConstIter iterEnd = getLevelStEndIterator(isDLEV);
 
 	bool notPresent = true;
 
@@ -569,9 +586,12 @@ int TWorkingStations::numberOfWPSStations(){
 /////////////////////////////////////////////
 // Return the number of stored Level stations
 /////////////////////////////////////////////
-int TWorkingStations::numberOfLevelStations(){
+int TWorkingStations::numberOfLevelStations(bool isDLEV){
 
-	return fLevelStations.size();
+	if (isDLEV)
+		return fDigiLevelStations.size();
+	else
+		return fLevelStations.size();
 }
 
 ///////////////////////////////////////////
