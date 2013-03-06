@@ -111,7 +111,7 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 			sp->setDuplicatePtName(oss.str());
 			sp->setListener(this);
 		
-			PointIterator iter = fWorkingPoints.insert(iter, *sp);
+			PointIterator iter = fWorkingPoints.insert(fWorkingPoints.end(), *sp);
 			pointsMap[sp->getName().getName()] = iter;
 				
 			insert_ok = true;
