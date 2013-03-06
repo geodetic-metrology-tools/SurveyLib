@@ -227,7 +227,7 @@ string TAConverter::readOptional(const string& keyword)
 		
 		if (word != keyword)
 		{
-			fStream->seekg(-word.length(), ios_base::cur);
+			fStream->seekg(-static_cast<std::streamoff>(word.length()), ios_base::cur);
 			return "";
 		}
 
@@ -251,7 +251,7 @@ bool TAConverter::readOptionalExists(const string& keyword)
 			return true;
 		}
 
-		fStream->seekg(-word.length(), ios_base::cur);
+		fStream->seekg(-static_cast<std::streamoff>(word.length()), ios_base::cur);
 	}
 	return false;
 }
