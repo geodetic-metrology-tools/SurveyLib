@@ -75,10 +75,10 @@ public:
 	//! Adds a level station to the working stations
 	/*!@param lSt a pointer to the level station which will added by copy into the container
 	@return a pointer to the station stored in the container*/
-	virtual TLevelStation*		addLevelStation(TLevelStation* lSt, bool isDLEV);
+	virtual TLevelStation*		addLevelStation(TLevelStation* lSt, bool isDLEV = false);
 	/*!@return a true boolean if a copy of the pointed to station isn't stored in the container yet
 	@param lSt a pointer to the station object a copy of which will be looked for*/
-	virtual bool				notInContainer(TLevelStation* lSt, bool isDLEV) const;
+	virtual bool				notInContainer(TLevelStation* lSt, bool isDLEV = false) const;
 	//! Adds a WTW station to the working stations
 	/*!@param wtwSt a pointer to the WTW station which will added by copy into the container
 	@return a pointer to the station stored in the container*/
