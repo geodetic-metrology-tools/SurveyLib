@@ -46,6 +46,21 @@ TSpatialPosition::TSpatialPosition( TAReferenceFrame* trf )
 }
 
 
+TSpatialPosition::TSpatialPosition(TAReferenceFrame* rf, const TPositionVector& pv) :
+	fX(new TPositionVector(pv)) {	
+	if(fX == 0)
+	{
+		// object not created properly
+		// reagi
+		setObjectStatus(TSpatialStatus::kPosNull);
+	}
+	else
+	{
+		setObjectStatus(TSpatialStatus::kCala);
+	}
+	setRefFrame(rf);
+}
+
 TSpatialPosition::TSpatialPosition( TAReferenceFrame* trf,
 								   const TReal x, const TReal y, const TReal z,
 								   TCoordSysFactory::ECoordSys cs )
@@ -95,6 +110,7 @@ TSpatialPosition::~TSpatialPosition()
 	if (fX != 0)
 	{
 		delete fX;
+		fX = 0;
 	}
 }
 
