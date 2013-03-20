@@ -21,8 +21,8 @@ TSparseMatrix inverse(const TSparseMatrix & sparse, std::string & error)
 	std::vector<TTriplet> coeffs;
 	for (int i = 0; i < inv.rows(); i++) {
 		for (int j = 0; j < inv.cols(); j++) {
-			TReal v(inv(i,j));
-			if (fabsq(v) > 1e-12)
+			double v(inv(i,j));
+			if (fabs(v) > 1e-12)
 				coeffs.push_back(std::move(TTriplet(i, j, v)));
 		}
 	}
