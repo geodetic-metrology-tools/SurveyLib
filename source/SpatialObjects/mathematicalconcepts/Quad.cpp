@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#if _DEBUG && __INTEL_COMPILER
+#if _DEBUG && USE_QUAD
 
 Quad::Quad()
 {
@@ -624,7 +624,7 @@ std::istream& operator>>(std::istream& stream, TReal & value)
 }
 
 
-#elif __INTEL_COMPILER
+#elif USE_QUAD
 
 std::ostream& operator<<(std::ostream& stream, const TReal & value) 
 {

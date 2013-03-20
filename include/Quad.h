@@ -8,7 +8,9 @@
 
 #include <iosfwd>
 
-#if __INTEL_COMPILER
+#define USE_QUAD __INTEL_COMPILER && ENABLE_QUAD
+
+#if USE_QUAD
 // We need to bring a handful of Intel _Quad functions in:
 extern "C" {
 	_Quad __ceilq(_Quad);
@@ -107,7 +109,7 @@ inline _Quad tanhq(_Quad _X) {return (__tanhq(_X)); }
 #endif
 
 
-#if _DEBUG && __INTEL_COMPILER
+#if _DEBUG && USE_QUAD
 
 class Quad
 {
@@ -251,7 +253,7 @@ typedef Quad TReal;
 std::ostream& operator<<(std::ostream& stream, const TReal & value);
 std::istream& operator>>(std::istream& stream, TReal & value);
 
-#elif __INTEL_COMPILER
+#elif USE_QUAD
 
 typedef _Quad TReal;
 std::ostream& operator<<(std::ostream& stream, const TReal & value);

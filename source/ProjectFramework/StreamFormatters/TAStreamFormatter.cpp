@@ -680,7 +680,7 @@ TAStreamFormatter &TAStreamFormatter::operator>>( float &f )
 
 TAStreamFormatter &TAStreamFormatter::operator>>( TReal &d )
 {
-#if __INTEL_COMPILER
+#if __INTEL_COMPILER && USE_QUAD
 
 	string str;
 	(*fIOStream) >> str;
