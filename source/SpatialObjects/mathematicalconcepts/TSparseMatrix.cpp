@@ -1,34 +1,33 @@
+#include <Eigen/LU>
 #include "TSparseMatrix.h"
+#include <iostream>
 #include <sstream>
 #include <vector>
 
 namespace TSparseUtils {
 TSparseMatrix inverse(const TSparseMatrix & sparse, std::string & error)
 {
-	Eigen::SimplicialLDLT<TSparseMatrix> chol(sparse);
-    if(chol.info() != Eigen::Success)
-    {
-		std::ostringstream foo;
-		foo << "Cholesky decomposition failed, error code: " << chol.info();
-        error = foo.str();
+	typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
+	Eigen::FullPivLU<TMat> lu(sparse);
+
+	if (! lu.isInvertible()) {
+		error == "Matrix could not be inverted.";
         return TSparseMatrix();
-    }
+	}
 
+	TMat inv(lu.inverse());
+
+	// create a sparse matrix from the non-zero coefficients
 	std::vector<TTriplet> coeffs;
-	coeffs.reserve(sparse.nonZeros()*5);
-	TSparseMatrix result(sparse.rows(), sparse.cols());
+	for (int i = 0; i < inv.rows(); i++) {
+		for (int j = 0; j < inv.cols(); j++) {
+			TReal v(inv(i,j));
+			if (fabsq(v) > 1e-12)
+				coeffs.push_back(std::move(TTriplet(i, j, v)));
+		}
+	}
 
-    for(int col=0 ; col!=sparse.cols(); ++col)
-    {
-        TVector help = TVector::Zero(sparse.rows());
-        help(col) = 1.0;
-        TVector result = chol.solve(help);
-        for(int idx=0; idx!=result.size(); ++idx)
-        {
-            if(fabs(result(idx))>1e-8)
-                coeffs.push_back(TTriplet(idx,col,result(idx)));
-        }
-    }
+	TSparseMatrix result(sparse.rows(), sparse.cols());
     result.setFromTriplets(coeffs.begin(), coeffs.end());
 	return result;
 }
