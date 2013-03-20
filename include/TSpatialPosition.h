@@ -66,6 +66,8 @@ public:
 	//@{
 		explicit  TSpatialPosition( TAReferenceFrame* rf );
 
+		TSpatialPosition(TAReferenceFrame* rf, const TPositionVector& pv);
+
 		TSpatialPosition(TAReferenceFrame*, const TReal, const TReal, const TReal, TCoordSysFactory::ECoordSys );
 
 		TSpatialPosition(TAReferenceFrame*, counted_ptr< TSpatialStatus >);
