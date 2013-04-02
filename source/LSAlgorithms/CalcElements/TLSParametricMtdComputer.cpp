@@ -12,6 +12,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <Eigen/LU>
 
 //////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR
@@ -138,15 +139,29 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	Eigen::SimplicialLDLT<TSparseMatrix> chol( N );
 	if(chol.info() != Eigen::Success)
 	{
-		std::ostringstream foo;
-		foo << "TLSParametricMtdComputer::computeResultsMtrs:\n\tCholesky decomposition failed, error code: " << chol.info();
-		fError += foo.str();
-		return false;
-	}
-	rm->setIntermediateMatrix(N);
+		// colesky did not work, try fullPiv
+		typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
+		Eigen::FullPivLU<TMat> lu(N);
 
-	*(rm->getSolutionVctr()) = chol.solve( -A->transpose() * (*W) * misclV );
-	return true;
+		if (! lu.isInvertible()) {
+			std::ostringstream foo;
+			foo << "TLSParametricMtdComputer::computeResultsMtrs:\n\tsolution failed.";
+			fError += foo.str();
+			return false;
+		}
+				
+		rm->setIntermediateMatrix(N);
+
+		*(rm->getSolutionVctr()) = lu.solve( -A->transpose() * (*W) * misclV );
+		return true;
+
+	} 
+	else {
+		rm->setIntermediateMatrix(N);
+
+		*(rm->getSolutionVctr()) = chol.solve( -A->transpose() * (*W) * misclV );
+		return true;
+	}
 }
 
 
