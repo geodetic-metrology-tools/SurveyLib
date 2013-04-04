@@ -1,14 +1,3 @@
-# Setting the include path - to include a given directory
-include_directories (
-	.
-	${SURVEYLIB_INCLUDE_PATH}
-)
-
-
-
-
-##### This will correspond to one VS project!
-
 # Create a variable containing all .cpp files:
 set(SpatialObj_SOURCES 
 	TASpatialPtListener.cpp
@@ -37,4 +26,3 @@ set(SpatialObj_HEADERS
 # Create a static library from sources:
 add_library(SpatialObj STATIC ${SpatialObj_SOURCES} ${SpatialObj_HEADERS})
 install(FILES ${SpatialObj_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
-#####

@@ -1,14 +1,3 @@
-# Setting the include path - to include a given directory
-include_directories (
-	.
-	${SURVEYLIB_INCLUDE_PATH}
-)
-
-
-
-
-##### This will correspond to one VS project!
-
 # Create a variable containing all .cpp files:
 set(ShortestPath_SOURCES 
 	TGraph.cpp
@@ -39,4 +28,3 @@ set(ShortestPath_HEADERS
 # Create a static library from sources:
 add_library(ShortestPath STATIC ${ShortestPath_SOURCES} ${ShortestPath_HEADERS})
 install(FILES ${ShortestPath_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
-#####

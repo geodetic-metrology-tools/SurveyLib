@@ -1,15 +1,3 @@
-# Setting the include path - to include a given directory
-include_directories (
-	.
-	${SURVEYLIB_INCLUDE_PATH}
-    ${REFRAME_INCLUDE_PATH}
-)
-
-
-
-
-##### This will correspond to one VS project!
-
 # Create a variable containing all .cpp files:
 set(RefFrameTransformations_SOURCES 
 	TARefFrameTransformation.cpp

@@ -1,14 +1,3 @@
-# Setting the include path - to include a given directory
-include_directories (
-	.
-	${SURVEYLIB_INCLUDE_PATH}
-)
-
-
-
-
-##### This will correspond to one VS project!
-
 # Create a variable containing all .cpp files:
 set(FiltersAndFormats_SOURCES 
 	T100MicroGonsFilter.cpp
@@ -24,30 +13,13 @@ set(FiltersAndFormats_SOURCES
 	TMillimetresFilter.cpp
 	TRadiansFilter.cpp
 	
-	TWPS2DFilter.cpp
-	TWPSTFilter.cpp
-	TWPSVFilter.cpp
-	TWTW2DFilter.cpp
-	TWTWHFilter.cpp
-	TWTWVFilter.cpp
+	# TWPS2DFilter.cpp
+	# TWPSTFilter.cpp
+	# TWPSVFilter.cpp
+	# TWTW2DFilter.cpp
+	# TWTWHFilter.cpp
+	# TWTWVFilter.cpp
 )
-
-# We want these files to appear in the VS project, but not take place in the compilation
-set_source_files_properties(
-	TWPS2DFilter.cpp
-	TWPSTFilter.cpp
-	TWPSVFilter.cpp
-	TWTW2DFilter.cpp
-	TWTWHFilter.cpp
-	TWTWVFilter.cpp
-	${SURVEYLIB_INCLUDE_PATH}/TWPS2DFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TWPSTFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TWPSVFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TWTW2DFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TWTWHFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TWTWVFilter.h
-	PROPERTIES HEADER_FILE_ONLY TRUE)
-
 
 # Create a variable containing all .h files:
 set(FiltersAndFormats_HEADERS 
@@ -67,15 +39,14 @@ set(FiltersAndFormats_HEADERS
 	${SURVEYLIB_INCLUDE_PATH}/TRadiansFilter.h
 	${SURVEYLIB_INCLUDE_PATH}/TSpatialPositionFilter.h
 	
-	${SURVEYLIB_INCLUDE_PATH}/TWPS2DFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TWPSTFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TWPSVFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TWTW2DFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TWTWHFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TWTWVFilter.h
+	# ${SURVEYLIB_INCLUDE_PATH}/TWPS2DFilter.h
+	# ${SURVEYLIB_INCLUDE_PATH}/TWPSTFilter.h
+	# ${SURVEYLIB_INCLUDE_PATH}/TWPSVFilter.h
+	# ${SURVEYLIB_INCLUDE_PATH}/TWTW2DFilter.h
+	# ${SURVEYLIB_INCLUDE_PATH}/TWTWHFilter.h
+	# ${SURVEYLIB_INCLUDE_PATH}/TWTWVFilter.h
 )
 
 # Create a static library from sources:
 add_library(FiltersAndFormats STATIC ${FiltersAndFormats_SOURCES} ${FiltersAndFormats_HEADERS})
 install(FILES ${FiltersAndFormats_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
-#####

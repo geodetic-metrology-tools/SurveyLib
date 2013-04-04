@@ -3,8 +3,8 @@ PROJECT(SurveyLib)
 
 # Set version number and provide a header file with corresponding defines
 set (SurveyLib_VERSION_MAJOR 3)
-set (SurveyLib_VERSION_MINOR 2)
-set (SurveyLib_VERSION_PATCH 4)
+set (SurveyLib_VERSION_MINOR 3)
+set (SurveyLib_VERSION_PATCH 0)
 configure_file (
   "${CMAKE_SOURCE_DIR}/SurveryLibVersion.in"
   "${CMAKE_SOURCE_DIR}/../include/SurveryLibVersion.h"
@@ -43,9 +43,6 @@ INCLUDE(../../ext_libs.txt)
 SET(INSTALL_PREFIX "C:/lib/${PROJECT_NAME}")
 MESSAGE(STATUS "[INFO] - Install task configured to use ${INSTALL_PREFIX}")
 
-# Surveylib specific setting - needed as all the headers are in one dir
-SET(SURVEYLIB_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/../include")
-
 # Compiler options
 IF(WIN32)
 	# Maximum level (5) of warnings produces too many warnings
@@ -60,6 +57,7 @@ IF(WIN32)
 	ENDIF(USE_INTEL_COMPILER)
 ENDIF(WIN32)
 
+
 SET(STAGING_DIRECTORY ${CMAKE_BINARY_DIR}/staging)
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${STAGING_DIRECTORY})
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${STAGING_DIRECTORY})
@@ -68,35 +66,13 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${STAGING_DIRECTORY})
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${STAGING_DIRECTORY})
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${STAGING_DIRECTORY})
 
-# Check that we have the files we need
+# Check for TUT testing framework
 SET(CMAKE_REQUIRED_INCLUDES ${TUT_INCLUDE_PATH})
 CHECK_INCLUDE_FILE_CXX("tut.h" HAVE_TUT_H)
-SET(CMAKE_REQUIRED_INCLUDES "")
-SET(CMAKE_REQUIRED_INCLUDES ${EIGEN_INCLUDE_PATH})
-CHECK_INCLUDE_FILE_CXX("eigen/Core" HAVE_EIGEN_H)
-SET(CMAKE_REQUIRED_INCLUDES "")
-
 IF(NOT HAVE_TUT_H)
     MESSAGE(FATAL_ERROR "[ERROR] Cannot find tut.h. Set TUT_INCLUDE_PATH")
 ELSE()
     MESSAGE(STATUS "[STATUS] Found tut.h")
 ENDIF()
 
-IF(NOT HAVE_EIGEN_H)
-    MESSAGE(FATAL_ERROR "[ERROR] Cannot find eigen/Core. Set EIGEN_INCLUDE_PATH")
-ELSE()
-    MESSAGE(STATUS "[STATUS] Found eigen/Core")
-ENDIF()
-
-IF(NOT EXISTS "${REFRAME_INCLUDE_PATH}/reframeLib.tlb")
-    MESSAGE(FATAL_ERROR "[ERROR] Cannot find reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
-ELSE()
-    MESSAGE(STATUS "[STATUS] Found reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
-ENDIF()
-
-include_directories (${EIGEN_INCLUDE_PATH})
-
-ADD_SUBDIRECTORY(LSAlgorithms)
-ADD_SUBDIRECTORY(SpatialMeasurements)
-ADD_SUBDIRECTORY(SpatialObjects)
-ADD_SUBDIRECTORY(ProjectFramework)
+INCLUDE("${CMAKE_SOURCE_DIR}/SourceSurveyLib.cmake")

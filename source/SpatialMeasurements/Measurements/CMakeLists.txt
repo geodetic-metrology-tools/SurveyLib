@@ -1,15 +1,3 @@
-# Setting the include path - to include a given directory
-include_directories (
-	.
-	${SURVEYLIB_INCLUDE_PATH}
-	${NAGC_INCLUDE_PATH}
-)
-
-
-
-
-##### This will correspond to one VS project!
-
 # Create a variable containing all .cpp files:
 set(Measurements_SOURCES 
 	T2DOffsetMeasurement.cpp
@@ -61,4 +49,3 @@ set(Measurements_HEADERS
 # Create a static library from sources:
 add_library(Measurements STATIC ${Measurements_SOURCES} ${Measurements_HEADERS})
 install(FILES ${Measurements_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
-#####

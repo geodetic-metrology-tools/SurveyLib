@@ -1,16 +1,5 @@
-# Setting the include path - to include a given directory
-include_directories (
-	.
-	${SURVEYLIB_INCLUDE_PATH}
-)
-
-
-
-
-##### This will correspond to one VS project!
-
 # Create a variable containing all .cpp files:
-set(CalcParams_SOURCES 
+SET(CalcParams_SOURCES 
 	TLSCalcFreeVectorParam.cpp
 	TLSCalcLengthParam.cpp
 	TLSCalcOrientationParam.cpp
@@ -20,7 +9,7 @@ set(CalcParams_SOURCES
 )
 
 # Create a variable containing all .h files:
-set(CalcParams_HEADERS 
+SET(CalcParams_HEADERS 
 	${SURVEYLIB_INCLUDE_PATH}/TLSCalcFreeVectorParam.h
 	${SURVEYLIB_INCLUDE_PATH}/TLSCalcLengthParam.h
 	${SURVEYLIB_INCLUDE_PATH}/TLSCalcOrientationParam.h
@@ -30,7 +19,9 @@ set(CalcParams_HEADERS
 	${SURVEYLIB_INCLUDE_PATH}/TLSCalcWorkingUnknown.h
 )
 
-# Create a static library from sources:
-add_library(CalcParams STATIC ${CalcParams_SOURCES} ${CalcParams_HEADERS})
-install(FILES ${CalcParams_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#Create a static library from the object files
+ADD_LIBRARY(CalcParams STATIC ${CalcParams_SOURCES} ${CalcParams_HEADERS})
+
+# Install the header files to the given destination
+INSTALL(FILES ${CalcParams_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

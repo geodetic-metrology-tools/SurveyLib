@@ -1,25 +1,6 @@
-# add subdirectories that are a part of the library
-SET(SPATIALOBJECTS_LIB_SUBPROJECTS
-	AffineTransformations
-	MathematicalConcepts
-	ReferenceSurfaces
-	RefFrameTransformations
-	ShortestPath
-	SpatialObj
-	SpatialSystems
-)
+FOREACH(lib ${SPATIAL_LIBRARIES})
+	ADD_SUBDIRECTORY(${lib})
+ENDFOREACH(lib)
 
-FOREACH(subproject ${SPATIALOBJECTS_LIB_SUBPROJECTS})
-    ADD_SUBDIRECTORY(${subproject})
-	SET_PROPERTY(TARGET ${subproject} PROPERTY FOLDER "SpatialObjects")
-ENDFOREACH(subproject) 
-
-ADD_SUBDIRECTORY(SpatialObjectsLibraryStatic)
-SET_PROPERTY(TARGET SpatialObjectsLibrary PROPERTY FOLDER "SpatialObjects")
-
+# This is the DLL project to access spatial objects as C-style functions through a DLL
 ADD_SUBDIRECTORY(SpatialObjects)
-
-ADD_SUBDIRECTORY(UnitTests)
-SET_PROPERTY(TARGET UnitTests PROPERTY FOLDER "SpatialObjects")
-ADD_SUBDIRECTORY(SurveyLibDllTest)
-SET_PROPERTY(TARGET SurveyLibDllTest PROPERTY FOLDER "SpatialObjects")

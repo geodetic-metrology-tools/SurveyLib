@@ -1,14 +1,3 @@
-# Setting the include path - to include a given directory
-include_directories (
-	.
-	${SURVEYLIB_INCLUDE_PATH}
-)
-
-
-
-
-##### This will correspond to one VS project!
-
 # Create a variable containing all .cpp files:
 set(Converters_SOURCES 
 	TAConverter.cpp
@@ -16,7 +5,6 @@ set(Converters_SOURCES
 	TPointConverter.cpp
 	TPointFormat.cpp
 )
-
 
 # Create a variable containing all .h files:
 set(Converters_HEADERS 
@@ -29,5 +17,3 @@ set(Converters_HEADERS
 # Create a static library from sources:
 add_library(Converters STATIC ${Converters_SOURCES} ${Converters_HEADERS})
 install(FILES ${Converters_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
-
-#####
