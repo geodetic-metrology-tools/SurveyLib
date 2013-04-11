@@ -121,43 +121,24 @@ TLSResultsMatrices::~TLSResultsMatrices()
 
 TVector	TLSResultsMatrices::computeVarObs(const TSparseMatrix& A) 
 {
-	int nobs = A.rows();// rowsCount(); //number of observations
-	int nunk = A.cols(); // columnsCount(); //number of observations
-/*
-	TReal* vals = new TReal[fUnknownsCovarianceMtrx->columnPointers()[nunk]];
-	int* rows = new int[fUnknownsCovarianceMtrx->columnPointers()[nunk]];
-	int* cols = new int[nunk + 1];
-	cols[0] = 0;
-	int count = 0;
-	for (int i = 0; i < nunk; i++)
-	{
-		for (int j = fUnknownsCovarianceMtrx->columnPointers()[i];
-			j < fUnknownsCovarianceMtrx->columnPointers()[i + 1] && fUnknownsCovarianceMtrx->rowIndices()[j] < nunk;
-			j++)
-		{
-			vals[count] = fUnknownsCovarianceMtrx->values()[j];
-			rows[count++] = fUnknownsCovarianceMtrx->rowIndices()[j];
-		}
-		cols[i + 1] = count;
-	}
-	TSparseMatrix* ucm = new TSparseMatrix(nunk, nunk, vals, rows, cols);
-*/
-	TSparseMatrix ucm = *fUnknownsCovarianceMtrx;
-	ucm.resize(nunk, nunk);
+	// number of unknowns
+	int u = A.cols(); 
 
-	//TReal *result = A*(*ucm)*ATransposed; //.multiply_three_returning_diagonal(*ucm, ATransposed);
+
+	TSparseMatrix ucm(u, u);
+	std::vector<TTriplet> QxxEntries;
+	// Iterate over sparse outside
+	for(int k = 0; k < fUnknownsCovarianceMtrx->outerSize(); k++) {
+		// Iterate over inside
+		for(TSparseMatrix::InnerIterator it(*fUnknownsCovarianceMtrx , k); it; ++it) {
+			QxxEntries.push_back(std::move(TTriplet( it.row(),  it.col(), it.value())));
+		}
+	}
+	ucm.setFromTriplets(QxxEntries.begin(), QxxEntries.end());
+
 	TSparseMatrix result = A*(ucm)*A.transpose();
 
-	/*
-	TVector var(nobs);
-	for (int i = 0; i < nobs; i++)
-	{
-		var(i) = result[i];
-	}
-	*/
-	//delete result;
-
-	return result.diagonal();//var;
+	return result.diagonal();
 }
 
 
