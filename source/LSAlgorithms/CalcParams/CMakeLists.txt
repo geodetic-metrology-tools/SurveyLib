@@ -23,5 +23,5 @@ SET(CalcParams_HEADERS
 ADD_LIBRARY(CalcParams STATIC ${CalcParams_SOURCES} ${CalcParams_HEADERS})
 
 # Install the header files to the given destination
-INSTALL(FILES ${CalcParams_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${CalcParams_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

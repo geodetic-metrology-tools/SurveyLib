@@ -12,4 +12,4 @@ set(ConstraintMeasurements_HEADERS
 
 # Create a static library from sources:
 add_library(ConstraintMeasurements STATIC ${ConstraintMeasurements_SOURCES} ${ConstraintMeasurements_HEADERS})
-install(FILES ${ConstraintMeasurements_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${ConstraintMeasurements_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)

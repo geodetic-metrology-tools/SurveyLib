@@ -27,4 +27,4 @@ set(ShortestPath_HEADERS
 
 # Create a static library from sources:
 add_library(ShortestPath STATIC ${ShortestPath_SOURCES} ${ShortestPath_HEADERS})
-install(FILES ${ShortestPath_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${ShortestPath_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)

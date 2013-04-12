@@ -48,4 +48,4 @@ set(Measurements_HEADERS
 
 # Create a static library from sources:
 add_library(Measurements STATIC ${Measurements_SOURCES} ${Measurements_HEADERS})
-install(FILES ${Measurements_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${Measurements_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)

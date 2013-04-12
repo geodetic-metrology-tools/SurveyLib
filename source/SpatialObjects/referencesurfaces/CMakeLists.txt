@@ -60,4 +60,4 @@ set(ReferenceSurfaces_HEADERS
 
 # Create a static library from sources:
 add_library(ReferenceSurfaces STATIC ${ReferenceSurfaces_SOURCES} ${ReferenceSurfaces_HEADERS})
-install(FILES ${ReferenceSurfaces_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${ReferenceSurfaces_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)

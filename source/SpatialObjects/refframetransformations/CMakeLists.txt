@@ -52,5 +52,5 @@ set(RefFrameTransformations_HEADERS
 
 # Create a static library from sources:
 add_library(RefFrameTransformations STATIC ${RefFrameTransformations_SOURCES} ${RefFrameTransformations_HEADERS})
-install(FILES ${RefFrameTransformations_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${RefFrameTransformations_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

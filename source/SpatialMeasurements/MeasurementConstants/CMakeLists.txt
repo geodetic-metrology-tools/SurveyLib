@@ -12,5 +12,5 @@ set(MeasurementConstants_HEADERS
 
 # Create a static library from sources:
 add_library(MeasurementConstants STATIC ${MeasurementConstants_SOURCES} ${MeasurementConstants_HEADERS})
-install(FILES ${MeasurementConstants_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${MeasurementConstants_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

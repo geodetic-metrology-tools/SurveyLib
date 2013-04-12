@@ -27,5 +27,5 @@ set(SpatialSystems_HEADERS
 
 # Create a static library from sources:
 add_library(SpatialSystems STATIC ${SpatialSystems_SOURCES} ${SpatialSystems_HEADERS})
-install(FILES ${SpatialSystems_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${SpatialSystems_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

@@ -21,5 +21,5 @@ SET(CalcElements_HEADERS
 ADD_LIBRARY(CalcElements STATIC ${CalcElements_SOURCES} ${CalcElements_HEADERS})
 
 # Install the header files to the given destination
-INSTALL(FILES ${CalcElements_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${CalcElements_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

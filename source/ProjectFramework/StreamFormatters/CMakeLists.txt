@@ -28,5 +28,5 @@ set(StreamFormatters_HEADERS
 add_library(StreamFormatters STATIC ${StreamFormatters_SOURCES} ${StreamFormatters_HEADERS})
 
 # Install the header files to the given destination
-install(FILES ${StreamFormatters_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${StreamFormatters_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

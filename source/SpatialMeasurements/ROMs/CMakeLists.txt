@@ -30,5 +30,5 @@ set(ROMs_HEADERS
 
 # Create a static library from sources:
 add_library(ROMs STATIC ${ROMs_SOURCES} ${ROMs_HEADERS})
-install(FILES ${ROMs_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${ROMs_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

@@ -25,4 +25,4 @@ set(SpatialObj_HEADERS
 
 # Create a static library from sources:
 add_library(SpatialObj STATIC ${SpatialObj_SOURCES} ${SpatialObj_HEADERS})
-install(FILES ${SpatialObj_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${SpatialObj_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)

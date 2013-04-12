@@ -56,5 +56,5 @@ set(MathematicalConcepts_HEADERS
 
 # Create a static library from sources:
 add_library(MathematicalConcepts STATIC ${MathematicalConcepts_SOURCES} ${MathematicalConcepts_HEADERS})
-install(FILES ${MathematicalConcepts_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${MathematicalConcepts_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

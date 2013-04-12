@@ -25,5 +25,5 @@ set(AffineTransformations_HEADERS
 
 # Create a static library from sources:
 add_library(AffineTransformations STATIC ${AffineTransformations_SOURCES} ${AffineTransformations_HEADERS})
-install(FILES ${AffineTransformations_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+#install(FILES ${AffineTransformations_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####
