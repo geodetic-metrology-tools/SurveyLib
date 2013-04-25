@@ -172,6 +172,8 @@ TAStreamFormatter  &TSeparatedFormatTStream::operator>>( TSpatialPoint &point )
 			}
 		}
 	
+		this->skipWhiteSpace();
+
 		while(!this->atEndCom() && this->getError() == "" && !(this->TAStreamFormatter::peek()=='\n') 
 				&& !(this->TAStreamFormatter::peek()=='%' || this->peek()=='#'))
 		{//read data base comments until the end of line or an end line comments
