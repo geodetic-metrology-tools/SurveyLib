@@ -1,12 +1,4 @@
-# Setting the include path - to include a given directory (our library)
-include_directories (
-	${TUT_INCLUDE_PATH}
-	${SURVEYLIB_INCLUDE_PATH}
-	)
-
-
-
-##### This will correspond to one VS project!
+include_directories ({TUT_INCLUDE_PATH})
 
 set(UnitTests_SOURCES
 
