@@ -121,26 +121,9 @@ TLSResultsMatrices::~TLSResultsMatrices()
 
 TVector	TLSResultsMatrices::computeVarObs(const TSparseMatrix& A) 
 {
-	// number of unknowns
-	int u = A.cols(); 
-
-
-	TSparseMatrix ucm(u, u);
-	std::vector<TTriplet> QxxEntries;
-	// Iterate over sparse outside
-	for(int k = 0; k < fUnknownsCovarianceMtrx->outerSize(); k++) {
-		// Iterate over inside
-		for(TSparseMatrix::InnerIterator it(*fUnknownsCovarianceMtrx , k); it; ++it) {
-			QxxEntries.push_back(std::move(TTriplet( it.row(),  it.col(), it.value())));
-		}
-	}
-	ucm.setFromTriplets(QxxEntries.begin(), QxxEntries.end());
-
-	TSparseMatrix result = A*(ucm)*A.transpose();
-
-	return result.diagonal();
+	TVector res;
+	return TSparseUtils::multABATasDiag(res, A, *fUnknownsCovarianceMtrx);
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //DEBUG METHOD 

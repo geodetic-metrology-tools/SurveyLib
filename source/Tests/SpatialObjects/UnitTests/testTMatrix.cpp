@@ -1,4 +1,5 @@
 #include <TMatrix.h>
+#include <TSparseMatrix.h>
 #include <TRefFrameInfo.h>
 
 #include <tut/tut.hpp>
@@ -578,7 +579,7 @@ namespace tut
         ensure_equals("Status should be kNull", result.getStatus(), TVNumericValue::kNull);
         ensure_not("There should be and error message", result.getError().empty());
     }
-
+	
 	template<>
     template<>
     void object::test<20>()
@@ -598,6 +599,53 @@ namespace tut
 		TColumnVector expected(2);
 		ensure_distance("result(0)", (double)result(0), 3.0, 1e-7);
 		ensure_distance("result(1)", (double)result(1), -35.0, 1e-7);
+	}
+
+	template<>
+    template<>
+    void object::test<21>()
+    {
+		set_test_name("Specialized memory-friendly method to get main diagonal of A*P*AT");
+		
+		const int n(8);
+		const int u(6);
+		
+		std::vector<TTriplet> entriesA;
+		std::vector<TTriplet> entriesP;
+		
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < u; j++) {
+				entriesA.push_back(TTriplet(i,j,100*i+j));
+			}
+		}
+		for (int i = 0; i < u; i++) {
+			for (int j = 0; j < u; j++) {
+				entriesP.push_back(TTriplet(i,j,200*i+j));
+			}
+		}
+		
+		TSparseMatrix A(n,u);
+		TSparseMatrix P(u,u);
+		
+		A.setFromTriplets(entriesA.begin(), entriesA.end());
+		P.setFromTriplets(entriesP.begin(), entriesP.end());
+
+		// calculate reference result
+		TSparseMatrix res = A*P*A.transpose();
+		TVector ref = res.diagonal();
+
+		// use new function
+		TVector newres(n);
+		TSparseUtils::multABATasDiag(newres, A, P);
+std::cout << "\n" << ref <<"\n\n";
+std::cout << newres<<"\n\n";
+
+		// compare result vectors
+		for (int i = 0; i < n; i++)
+			ensure_distance("Difference in result for optimized matrix multiplication: ", ref(i)-newres(i), 0.0, 1e-8);
+		
+
+
 	}
 
 }

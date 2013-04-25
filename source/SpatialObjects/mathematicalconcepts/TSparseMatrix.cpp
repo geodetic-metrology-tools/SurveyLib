@@ -1,4 +1,7 @@
 #include <Eigen/LU>
+#include <windows.h>
+#include <ppl.h>
+
 #include "TSparseMatrix.h"
 #include <iostream>
 #include <sstream>
@@ -32,7 +35,46 @@ TSparseMatrix inverse(const TSparseMatrix & sparse, std::string & error)
 	return result;
 }
 
+inline double ABij(const TSparseMatrix& A, const TSparseMatrix& B, int i, int j)
+{
+	typedef Eigen::SparseVector<double> TSparseVector;
+
+	// cache the row in a seperate vector and multiply by column vector
+	const int u(A.cols());
+	TSparseVector Arow(u);
+
+	for (int r = 0; r < u; r++) {
+		Arow.coeffRef(r) = A.coeff(i,r);
+	}
+
+	return Arow.dot(B.innerVector(j));
 }
+
+TVector& multABATasDiag(TVector& res, const TSparseMatrix& A, const TSparseMatrix& B)
+{
+	const int obs(A.rows());
+	const int ukn(A.cols());
+
+	res.resize(obs);
+	res.setZero();
+
+	//TSparseMatrix AB(A*B);
+
+	Concurrency::parallel_for(int(0), obs, [&](int n) {
+	//for (int n = 0; n < obs; n++) {
+		for (int u = 0; u < ukn; u++) {
+			// for unknowns (u= num unknowns)
+			//double abij = AB.coeff(n,u) ;
+			double abij = ABij(A, B, n, u);
+			res(n) += abij*A.coeff(n,u);
+		}
+	//}
+	});
+	return res;
+}
+
+} // namespace
+
 //#include <Eigen/Cholesky>
 //
 //TSparseMatrix::TSparseMatrix(int rows, int cols)
