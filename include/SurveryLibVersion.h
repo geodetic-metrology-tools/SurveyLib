@@ -6,7 +6,7 @@
 
 #define SurveyLib_VERSION_MAJOR 3
 #define SurveyLib_VERSION_MINOR 3
-#define SurveyLib_VERSION_PATCH 1
+#define SurveyLib_VERSION_PATCH 2
 
 static std::string getSurveyLibVersion(void) {
 	static char str[128];
