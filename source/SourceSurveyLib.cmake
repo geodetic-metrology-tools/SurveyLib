@@ -5,7 +5,7 @@ INCLUDE(CheckIncludeFileCXX)
 INCLUDE(${SURVEYLIB_ROOT}/source/SubLibraries.cmake)
 
 IF(CMAKE_PROJECT_NAME STREQUAL "SurveyLib")
-	SET(${SURVEYLIB_ROOT} "${CMAKE_SOURCE_DIR}/..")
+	SET(SURVEYLIB_ROOT "${CMAKE_SOURCE_DIR}/..")
 	message("Building Surveylib in tree.")
 ENDIF()
 
