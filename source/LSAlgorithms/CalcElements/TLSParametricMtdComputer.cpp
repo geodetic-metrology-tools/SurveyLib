@@ -137,6 +137,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	const TVector & misclV = im->getMisclosureVctr();
 	TSparseMatrix N = A->transpose() * (*W) * (*A);
 	Eigen::SimplicialLDLT<TSparseMatrix> chol( N );
+	std::cout << "TLSParametricMtdComputer::computeResultsMtrs, det(N)=\n " << chol.determinant() << std::endl;
 	if(chol.info() != Eigen::Success)
 	{
 		// colesky did not work, try fullPiv
@@ -151,6 +152,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 		}
 				
 		rm->setIntermediateMatrix(N);
+		
 
 		*(rm->getSolutionVctr()) = lu.solve( -A->transpose() * (*W) * misclV );
 		return true;
