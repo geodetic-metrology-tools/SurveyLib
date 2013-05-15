@@ -11,7 +11,8 @@ SET(MEASUREMENT_LIBRARIES
 	InstrumentStations 
 	MeasurementConstants 
 	Measurements 
-	ROMs 
+	ROMs
+	BCAM
 )
 
 SET(SPATIAL_LIBRARIES 

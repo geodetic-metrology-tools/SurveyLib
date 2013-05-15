@@ -1,9 +1,10 @@
 include_directories ({TUT_INCLUDE_PATH})
 
 set(UnitTests_SOURCES
+	testTAngle.cpp
 
-    testTAngle.cpp
 	testTMatrix.cpp
+
 	testQuadSupport.cpp
 
 	testTransformations.cpp
@@ -26,12 +27,14 @@ set(UnitTests_SOURCES
 
 	testLocalSystems.cpp
 
+	testBCAM.cpp
+
 	main.cpp
 )
 
 add_executable(UnitTests ${UnitTests_SOURCES}) 
 # Specify the libraries to link against
-target_link_libraries (UnitTests ${SPATIAL_LIBRARIES})
+target_link_libraries (UnitTests ${SPATIAL_LIBRARIES} BCAM ${PROJECTFRAMEWORK_LIBRARIES})
 
 # Copy the test files to the right path
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_files
