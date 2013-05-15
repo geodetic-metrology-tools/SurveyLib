@@ -26,6 +26,49 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
 
+inline bool isDelim(const char c, const char* delims, int ndelims) {
+	for (int i = 0; i < ndelims; i++) {
+		if (c == delims[i]) return true;
+	}
+	return false;
+}
+
+
+vector<string> TAConverter::tokenizeString(const string& str, const char* delims) {
+	enum {
+		STATE_TOKEN,
+		STATE_DELIM
+	};
+
+	size_t len(str.size());
+	size_t delimlen(strlen(delims));
+	vector<string> result(0);
+	
+	size_t start(0);
+	size_t end(0);
+	int state(STATE_DELIM);
+
+	do {
+		switch (state) {
+			case STATE_DELIM:
+				if (! isDelim(str[end], delims, delimlen+1)) {
+					start = end;
+					state = STATE_TOKEN;
+				}
+			break;
+			case STATE_TOKEN:
+				if (isDelim(str[end], delims, delimlen+1)) {
+					result.push_back(str.substr(start, end-start));
+					state = STATE_DELIM;
+				}
+			break;
+		}
+		end++;
+	} while (str[end-1] != 0);
+
+	return result;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 //constructor / destructor
 /////////////////////////////////////////////////////////////////////////////
