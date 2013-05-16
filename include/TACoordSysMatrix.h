@@ -69,9 +69,6 @@ public:
 	void setCoordSysTRotation(TRotationMatrix*, TCoordSysFactory::ECoordSys);
 	//@}
 	
-
-protected:
-	/*!\name member protected functions*/
 	//@{
 	//!get the (i,j) value
 	TReal getC(const int& i, const int& j) const;

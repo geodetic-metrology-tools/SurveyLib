@@ -73,9 +73,12 @@ public:
 		
 		//!add a PositionVector  and FreeVector, return a PositionVector
 		TPositionVector operator+(const TFreeVector& );
-
+		TPositionVector operator-(const TFreeVector& );
+		
 		//!add a PositionVector  and FreeVector, replace this
 		TPositionVector& operator+=(const TFreeVector& );
+		//!substract a FreeVector from aPositionVector and replace this
+		TPositionVector& operator-=(const TFreeVector& );
 
 		//!substract two TPositionVector objects and return a FreeVector
 		TFreeVector operator-(const TPositionVector& );
