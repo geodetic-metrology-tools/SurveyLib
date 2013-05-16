@@ -6,7 +6,7 @@
 
 using namespace std;
 
-TBCAMData::TBCAMData(const std::string& filelocation) {
+void TBCAMData::readLWDAQFile(const std::string& filelocation) {
 	ifstream infile(filelocation);
 	if (! infile.is_open())
 		throw runtime_error("BCAM data file \'" + filelocation + "\' not found");

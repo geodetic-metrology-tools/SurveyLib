@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "Quad.h"
+
 class TBCAMCalibrationDB {
 	public:
 		// Possible types of a BCAM and masks to work with te patterns
@@ -50,7 +52,7 @@ class TBCAMCalibrationDB {
 			std::string timestamp;
 			std::string description;
 			int  type;
-			float values[BC_NUM_CAM_PARAMETERS];
+			TReal values[BC_NUM_CAM_PARAMETERS];
 
 			bool operator==(const DBEntry& other) const {
 				return (this->serial == other.serial &&

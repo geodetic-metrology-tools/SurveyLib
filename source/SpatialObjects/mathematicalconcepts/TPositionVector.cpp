@@ -96,10 +96,30 @@ TPositionVector TPositionVector::operator+(const TFreeVector& second)
 	return resultat;		
 }
 
+TPositionVector TPositionVector::operator-(const TFreeVector& second)
+{//!add a PositionVector  and FreeVector, return a PositionVector
+	TPositionVector resultat (getCoordSys());
+	TANumericValue::EStatus status = this->testStatus(second);
+	if ( status!= kNull && testCoordSysCart(second.getCoordSys())==true)
+	{
+		resultat.setX(getX() - second.getX());
+		resultat.setY(getY() - second.getY());
+		resultat.setZ(getZ() - second.getZ());
+	}
+	else{status=TVNumericValue::kNull;}
+	resultat.setStatus(status);
+	return resultat;		
+}
+
 
 TPositionVector& TPositionVector::operator+=(const TFreeVector& second)
 {//!add a PositionVector  and FreeVector, replace this
 	*this=(*this)+second;
+	return *this;
+}
+
+TPositionVector& TPositionVector::operator-=(const TFreeVector& second) {
+	*this=(*this)-second;
 	return *this;
 }
 

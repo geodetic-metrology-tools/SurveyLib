@@ -7,16 +7,17 @@
 
 #include "Quad.h"
 
-
 class TBCAMData {
 	public:
-		TBCAMData(const std::string& filelocation);
-
+		void readLWDAQFile(const std::string& filelocation);
 		int getNumCoords(const std::string& serial);
 		void getImagePoint(TReal& x, TReal& y, const std::string& serial, int idx);
+		inline void clear() {
+			fPoints.clear();
+		}
 
 	private:
-		std::map< std::string, std::vector<float> > fPoints;
+		std::map<std::string, std::vector<float>> fPoints;
 };
 
 #endif

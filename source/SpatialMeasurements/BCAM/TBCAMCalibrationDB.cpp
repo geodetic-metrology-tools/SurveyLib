@@ -137,8 +137,8 @@ void TBCAMCalibrationDB::openDB(const std::string& DBlocation) {
 		size_t numValues;
 		if (linedata.type & BC_CAM) {
 			numValues = BC_NUM_CAM_PARAMETERS-2;
-			linedata.values[BC_CCD_CX] = 1.720f;
-			linedata.values[BC_CCD_CX] = 1.220f;
+			linedata.values[BC_CCD_CX] = 1.720;
+			linedata.values[BC_CCD_CX] = 1.220;
 		}
 		else if (linedata.type & BC_SRC) {
 			numValues = BC_NUM_SOURCE_COORDS;
@@ -151,7 +151,7 @@ void TBCAMCalibrationDB::openDB(const std::string& DBlocation) {
 			throw std::runtime_error("Error in calibration file " + DBlocation + " at line "  + to_string(nline) + ": Not enough calibration values");
 
 		for (size_t i = 0; i < numValues; i++)
-			linedata.values[i] = stof(linestrings[i+3]);
+			linedata.values[i] = stod(linestrings[i+3]);
 
 		// check if the exact device is already stored
 		// replace with the newer calibration if this is the case

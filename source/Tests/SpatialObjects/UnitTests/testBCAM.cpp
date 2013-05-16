@@ -103,23 +103,23 @@ namespace tut
 		cfg.openDB("c:/temp/bcamdata.txt");
 		ensure(cfg.isOpen());
 
-		const float refvalues_rc[8] = {
-			-1.257600e+01f,
-			-3.513800e+01f,
-			-8.192200e+01f,
-			 2.692000e-03f,
-			 2.480000e-03f,
-			-1.000000e+00f,
-			 7.501800e+01f,
-			 3.146395e+00f
+		const TReal refvalues_rc[8] = {
+			-1.257600e+01,
+			-3.513800e+01,
+			-8.192200e+01,
+			 2.692000e-03,
+			 2.480000e-03,
+			-1.000000e+00,
+			 7.501800e+01,
+			 3.146395e+00
 		};
-		const float refvalues_fs[6] = {
-			 4.705000e+00f,
-			-3.670700e+01f,
-			 3.600000e-01f,
-			 2.073500e+01f,
-			-3.667300e+01f,
-			 3.600000e-01f
+		const TReal refvalues_fs[6] = {
+			 4.705000e+00,
+			-3.670700e+01,
+			 3.600000e-01,
+			 2.073500e+01,
+			-3.667300e+01,
+			 3.600000e-01
 		};
 
 		const TBCAMCalibrationDB::DBEntry& entry_rc(cfg.getDevice("20MABNDM000112", TBCAMCalibrationDB::getTypeIDfromStr("blue_polar_rc")));
@@ -130,9 +130,9 @@ namespace tut
 		ensure(entry_rc.timestamp == "20080618135439");
 		
 		for (int i = 0; i < 8; i++)
-			ensure_distance(refvalues_rc[i], entry_rc.values[i], 1e-3f);
+			ensure_distance(refvalues_rc[i], entry_rc.values[i], 1e-3);
 		for (int i = 0; i < 6; i++)
-			ensure_distance(refvalues_fs[i], entry_fs.values[i], 1e-3f);
+			ensure_distance(refvalues_fs[i], entry_fs.values[i], 1e-3);
 
 	}
 
@@ -150,12 +150,14 @@ namespace tut
 		};
 
 		try {
-			TBCAMData xx("C:/xxx.txt");
+			TBCAMData xx;
+			xx.readLWDAQFile("C:/xxx.txt");
 		} catch (std::exception& e) {
 			cout << "\nSuccessfully caught expected exception when opening a non-existing data file: " << e.what();
 		}
 
-		TBCAMData data("C:/temp/bcammeasure.txt");
+		TBCAMData data;
+		data.readLWDAQFile("C:/temp/bcammeasure.txt");
 		ensure(data.getNumCoords("20MABNDM000165") == 20);
 
 		TReal x,y;
