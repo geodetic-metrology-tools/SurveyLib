@@ -1,11 +1,14 @@
 #include <fstream>
 #include <bitset>
 #include <stdexcept>
+#include <algorithm>
 
 #include "TAConverter.h"
 #include "TBCAMCalibrationDB.h"
 
 using namespace std;
+
+char const *const TBCAMCalibrationDB::INFILE_DELIMS = " \t";
 
 const int TBCAMCalibrationDB::fBlueAzi[2] = {
 	BC_BLUE|BC_AZI|BC_SRC,
@@ -60,8 +63,8 @@ const std::string TBCAMCalibrationDB::fAllNames[12] = {
 //  -1: a is newer than b
 //   1: a is older than b
 //   0: a exactly as old as b
-int TBCAMCalibrationDB::compareTimes(const char* a, const char* b) {
-	int len = min(strlen(a), strlen(b));
+int TBCAMCalibrationDB::compareTimes(const std::string& a, const std::string& b) {
+	int len = min(a.size(), b.size());
     for (int i = 0; i < len; i++) {
         if (a[i] > b[i])
             return -1;
@@ -120,24 +123,41 @@ void TBCAMCalibrationDB::openDB(const std::string& DBlocation) {
 	while (getline(infile, line)) {
 		nline++;
 
-		// 3 descriptions in the front, then 6 to 8 float values
-		static_assert(DESCR_BUF_LEN == 64, "Change sscanf buffer size");
-		int numArgs = sscanf(line.c_str(), "%64s %64s %64s %f %f %f %f %f %f %f %f",
-								linedata.timestamp, linedata.description, linedata.ID,
-								linedata.values+0, linedata.values+1, linedata.values+2, linedata.values+3, 
-								linedata.values+4, linedata.values+5, linedata.values+6, linedata.values+7);
-
-		if (numArgs < 9)
+		vector<string> linestrings(TAConverter::tokenizeString(line, INFILE_DELIMS));
+		if (linestrings.size() < 9)
 			throw std::runtime_error("Error while reading calibration file " + DBlocation + " at line " + to_string(nline));
 
-		// store the type also in numeric form
-		linedata.type = getTypeIDfromStr(linedata.description);
+		// 3 descriptions in the front, then 6 to 8 float values
+		linedata.timestamp   = linestrings[0];
+		linedata.description = linestrings[1];
+		linedata.serial      = linestrings[2];
+		linedata.type        = getTypeIDfromStr(linedata.description);
+
+		// TODO: ADD HBCAM support with different ccd center values (e.g depending on serial)
+		size_t numValues;
+		if (linedata.type & BC_CAM) {
+			numValues = BC_NUM_CAM_PARAMETERS-2;
+			linedata.values[BC_CCD_CX] = 1.720f;
+			linedata.values[BC_CCD_CX] = 1.220f;
+		}
+		else if (linedata.type & BC_SRC) {
+			numValues = BC_NUM_SOURCE_COORDS;
+		}
+		else {
+			throw std::runtime_error("Error in calibration file " + DBlocation + " at line "  + to_string(nline) + ": Device is neither camera nor source");
+		}
+
+		if (numValues > linestrings.size()-3)
+			throw std::runtime_error("Error in calibration file " + DBlocation + " at line "  + to_string(nline) + ": Not enough calibration values");
+
+		for (size_t i = 0; i < numValues; i++)
+			linedata.values[i] = stof(linestrings[i+3]);
 
 		// check if the exact device is already stored
 		// replace with the newer calibration if this is the case
 		bool overwritten(false);
 		for (DBEntry& entry : fEntries) {
-			if (strcmp(entry.ID, linedata.ID) == 0 && 
+			if (entry.serial == linedata.serial && 
 				entry.type == linedata.type && 
 				compareTimes(linedata.timestamp, entry.timestamp) == -1) {
 					// linedata is newer than entry
@@ -155,18 +175,11 @@ void TBCAMCalibrationDB::openDB(const std::string& DBlocation) {
 	fIsOpen = true;
 }
 
-long TBCAMCalibrationDB::findDevice(const std::string& ID, int type) {
-	for (long i = 0; i < (long)fEntries.size(); i++) {
-		if (strcmp(fEntries[i].ID, ID.c_str()) == 0 && fEntries[i].type == type)
-			return i;
-	}
+const TBCAMCalibrationDB::DBEntry& TBCAMCalibrationDB::getDevice(const std::string& serial, int type) {
+	auto entry(find(fEntries.begin(), fEntries.end(), DBEntry(serial, type)));
 
-	throw std::runtime_error("Cannot find device with ID " + ID + " and type " + getNameFromType(type));
-}
+	if (entry == fEntries.end())
+		throw std::runtime_error("Could not find device with serial " + serial + " (" + getNameFromType(type) + ")");
 
-TBCAMCalibrationDB::DBEntry TBCAMCalibrationDB::getDevice(long idx) {
-	if (idx < 0 && idx > getNumDevices())
-		throw std::runtime_error("Device index " + to_string(idx) + " out of range");
-
-	return fEntries[idx];
+	return *entry;
 }

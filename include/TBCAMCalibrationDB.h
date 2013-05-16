@@ -2,9 +2,6 @@
 #include <vector>
 
 class TBCAMCalibrationDB {
-	private:
-		static const int DESCR_BUF_LEN = 64;
-
 	public:
 		// Possible types of a BCAM and masks to work with te patterns
 		enum eCamBits {
@@ -40,17 +37,35 @@ class TBCAMCalibrationDB {
 			BC_PP_X,   BC_PP_Y,  BC_PP_Z,  // Coordinates of Pivot Point
 			BC_AD_X ,  BC_AD_Y,  BC_AD_Z,  // Direction of optical axis
 			BC_CCD_PP, BC_ROT_CCD,         // camera constant and CCD rotation
-			BC_CCD_CX, BC_CCD_CY,          // x and y center of CCD
+			BC_CCD_CX, BC_CCD_CY,          // theoretical x and y center of CCD
 			BC_NUM_CAM_PARAMETERS
 		};
 
 		// data transfer object
 		struct DBEntry {
-			char ID[DESCR_BUF_LEN];
-			char timestamp[DESCR_BUF_LEN];
-			char description[DESCR_BUF_LEN];
+			std::string serial;
+			std::string timestamp;
+			std::string description;
 			int  type;
 			float values[BC_NUM_CAM_PARAMETERS];
+
+			bool operator==(const DBEntry& other) const {
+				return (this->serial == other.serial &&
+						this->type   == other.type);
+			}
+			
+			DBEntry() :
+				serial(""),
+				timestamp(""),
+				description(""),
+				type(-1) {}
+			// incomplete constructor to build an object that serves for 
+			// comparision in seach algorithms
+			DBEntry(const std::string& serial, int type) :
+				serial(serial),
+				timestamp(""),
+				description(""),
+				type(type) {}
 		};
 
 		TBCAMCalibrationDB() : 
@@ -58,8 +73,15 @@ class TBCAMCalibrationDB {
 
 		// get the integer encoding of a sting like "black_azimuthal_c"
 		static int getTypeIDfromStr(const std::string& name);
+
 		// get the descriptive name  like "black_azimuthal_c" from a bit pattern
 		static std::string getNameFromType(int type);
+
+		// returns:
+		//  -1: a is newer than b
+		//   1: a is older than b
+		//   0: a exactly as old as b
+		static int compareTimes(const std::string& a, const std::string& b);
 
 		// read the information DO THIS BEFORE ANY OPERATION
 		void openDB(const std::string& DBlocation);
@@ -73,24 +95,12 @@ class TBCAMCalibrationDB {
 			return fEntries.size();
 		}
 
-		// get the lookup index for a device by its serial number and a bit combination that describes the type.
+		// get a device by its serial number and a bit combination that describes the type.
 		// Each serial number consists of up to 4 devices that have calibration data
-		long findDevice(const std::string& ID, int type);
-		// finally get the device by its lookup index
-		DBEntry getDevice(long idx);
-
-		// convinience function when the lookup key is not of interest (e.g. for reuse)
-		inline DBEntry getDevice(const std::string& ID, int type) {
-			return getDevice(findDevice(ID, type));
-		}
-
-		// returns:
-		//  -1: a is newer than b
-		//   1: a is older than b
-		//   0: a exactly as old as b
-		static int compareTimes(const char* a, const char* b);
+		const DBEntry& getDevice(const std::string& ID, int type);
 
 	private:
 		bool fIsOpen;
 		std::vector<DBEntry> fEntries;
+		static char const *const INFILE_DELIMS;
 };
