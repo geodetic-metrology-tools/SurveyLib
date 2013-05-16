@@ -1,3 +1,6 @@
+#ifndef _TBCAMCALIBRATIONDB_H_
+#define _TBCAMCALIBRATIONDB_H_
+
 #include <string>
 #include <vector>
 
@@ -104,3 +107,5 @@ class TBCAMCalibrationDB {
 		std::vector<DBEntry> fEntries;
 		static char const *const INFILE_DELIMS;
 };
+
+#endif

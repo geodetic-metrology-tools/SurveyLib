@@ -135,4 +135,34 @@ namespace tut
 			ensure_distance(refvalues_fs[i], entry_fs.values[i], 1e-3f);
 
 	}
+
+	template<>
+    template<>
+    void object::test<4>()
+    {
+        set_test_name("Testing BCAM observation file reader");
+
+		TReal refCoords[4][2] = {
+			{2084.28, 1899.55},
+			{2660.52, 1894.91},
+			{2084.24, 1899.50},
+			{2660.64, 1894.95}
+		};
+
+		try {
+			TBCAMData xx("C:/xxx.txt");
+		} catch (std::exception& e) {
+			cout << "\nSuccessfully caught expected exception when opening a non-existing data file: " << e.what();
+		}
+
+		TBCAMData data("C:/temp/bcammeasure.txt");
+		ensure(data.getNumCoords("20MABNDM000165") == 20);
+
+		TReal x,y;
+		for (int i = 0; i < 4; i++) {
+			data.getImagePoint(x, y, "20MABNDM000165", i);
+			ensure_distance(x, refCoords[i][0], 1e-3);
+			ensure_distance(y, refCoords[i][1], 1e-3);
+		}
+	}
 }
