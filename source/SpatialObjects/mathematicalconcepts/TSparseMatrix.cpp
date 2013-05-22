@@ -1,6 +1,5 @@
 #include <Eigen/LU>
 #include <windows.h>
-#include <ppl.h>
 
 #include "TSparseMatrix.h"
 #include <iostream>
@@ -37,17 +36,15 @@ TSparseMatrix inverse(const TSparseMatrix & sparse, std::string & error)
 
 inline double ABij(const TSparseMatrix& A, const TSparseMatrix& B, int i, int j)
 {
-	typedef Eigen::SparseVector<double> TSparseVector;
-
-	// cache the row in a seperate vector and multiply by column vector
 	const int u(A.cols());
-	TSparseVector Arow(u);
-
+	double sum(0.0);
+	
+	#pragma omp parallel for reduction(+ : sum)
 	for (int r = 0; r < u; r++) {
-		Arow.coeffRef(r) = A.coeff(i,r);
+		sum +=  A.coeff(i,r)*B.coeff(r,j);
 	}
 
-	return Arow.dot(B.innerVector(j));
+	return sum;
 }
 
 TVector& multABATasDiag(TVector& res, const TSparseMatrix& A, const TSparseMatrix& B)
@@ -59,17 +56,15 @@ TVector& multABATasDiag(TVector& res, const TSparseMatrix& A, const TSparseMatri
 	res.setZero();
 
 	//TSparseMatrix AB(A*B);
-
-	Concurrency::parallel_for(int(0), obs, [&](int n) {
-	//for (int n = 0; n < obs; n++) {
+	#pragma omp parallel for
+	for (int n = 0; n < obs; n++) {
 		for (int u = 0; u < ukn; u++) {
 			// for unknowns (u= num unknowns)
 			//double abij = AB.coeff(n,u) ;
 			double abij = ABij(A, B, n, u);
 			res(n) += abij*A.coeff(n,u);
 		}
-	//}
-	});
+	}
 	return res;
 }
 
