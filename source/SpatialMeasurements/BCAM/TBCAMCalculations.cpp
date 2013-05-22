@@ -65,3 +65,31 @@ TPositionVector& TBCAMCalculations::BCAMToExt(TPositionVector& p) {
 	p = mm*p;
 	return p;
 }
+
+TPositionVector TBCAMCalculations::imageToBCAM(TReal img[2], const TBCAMCalibrationDB::DBEntry& cam) {
+	enum {X, Y, Z};
+	TPositionVector dst(k3D);
+	TReal q[2] = {
+            img[X] - cam.values[TBCAMCalibrationDB::BC_CCD_CX],
+            img[Y] - cam.values[TBCAMCalibrationDB::BC_CCD_CY]
+    };
+
+    // pivot point
+    Vec3 pp(cam.values+TBCAMCalibrationDB::BC_PP_X);
+    // optical axis
+    Vec3 axis(cam.values+TBCAMCalibrationDB::BC_AD_X);
+    // ccd center in mount
+    Vec3 cc = pp+(axis * -cam.values[TBCAMCalibrationDB::BC_CCD_PP]);
+    // ccd rotation angle
+    TReal cr = cam.values[TBCAMCalibrationDB::BC_ROT_CCD];
+
+    if (axis[Z] > 0.0)
+		dst.setX(TLength(cc[X]+q[X]*cosq(cr)-q[Y]*sinq(cr)));
+    else
+        dst.setX(TLength(cc[X]-q[X]*cosq(cr)+q[Y]*sinq(cr)));
+
+    dst.setY(TLength(cc[Y]+q[Y]*cosq(cr)+q[X]*sinq(cr)));
+    dst.setZ(TLength(cc[Z]));
+
+    return dst;
+}
