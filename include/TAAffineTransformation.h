@@ -60,8 +60,6 @@ public:
 	//@{
 		using TVAffineTransformation::operator();
 		using TVAffineTransformation::transform;
-		using TVAffineTransformation::clone;
-		using TVAffineTransformation::inverse;
 
 		//! Create a composite transformation by applying this transformation to an affine transformation
 		virtual  TCompositeAffTransform & operator() ( TCompositeAffTransform & ) const;

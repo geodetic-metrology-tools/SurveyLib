@@ -110,9 +110,8 @@ bool TLV03Transformation::computeSwissRefFrame(double & coordinate_x, double & c
 		s << "Reframe DLL unavailable, detailed error: " << e.ErrorMessage();
 		std::cerr << s.str() << std::endl;
 		throw std::logic_error(s.str());
-	    return false;
 	}
-    catch (HRESULT hr)
+    catch (HRESULT&)
     {
         std::cerr << "Reframe DLL - CoInitialize failed. DLL is not registered" << std::endl;
 		throw std::logic_error("Reframe DLL - CoInitialize failed. DLL is not registered");
@@ -180,7 +179,6 @@ bool TLV03Transformation::computeSwissRefFrame(double & coordinate_x, double & c
 		std::cerr<<"Error: unknown error code: " << result << std::endl;
 		throw std::logic_error("Error: unknown error code: ");
 	}
-    return false;
 
 }
 

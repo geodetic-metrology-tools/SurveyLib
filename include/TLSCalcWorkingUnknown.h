@@ -78,7 +78,7 @@ public:
 	}
 
 	/*! Returns the size of the list*/
-	int								size() const { return paramsList.size(); }
+	size_t size() const { return paramsList.size(); }
 	//@}
 
 protected:

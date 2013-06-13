@@ -112,6 +112,8 @@ bool TReflection::transform(TFreeVector & rightV) const
 		
 bool TReflection::transform(TRotationMatrix& rm) const
 {/// Transform a TRotationMatrix
+	// TODO: why is the other object unused here?
+	ignoring(rm);
 	bool trans = false;
 	if (isNull() == false)
 		trans = true;

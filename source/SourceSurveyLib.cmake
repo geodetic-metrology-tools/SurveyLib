@@ -13,8 +13,6 @@ SET(SURVEYLIB_INCLUDE_PATH "${SURVEYLIB_ROOT}/include")
 
 # Compiler options
 IF(WIN32)
-	# Maximum level (5) of warnings produces too many warnings
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3")
     IF(MSVC)
         ADD_DEFINITIONS(-D_SCL_SECURE_NO_WARNINGS)
         ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)

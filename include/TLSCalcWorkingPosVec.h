@@ -15,7 +15,7 @@ class TLSCalcWorkingPosVec : public TLSCalcWorkingUnknown<TLSCalcPosVectorParam>
 
 public:
 
-	LSPosVecIter		insert(LSPosVecIter, TLSCalcPosVectorParam& posVec);
+	LSPosVecIter		insert(const LSPosVecIter, const TLSCalcPosVectorParam& posVec);
 
 	/*!\return an iterator pointing to a point specified through its name*/
 	LSPosVecIter		getPoint(const string);
@@ -25,7 +25,7 @@ public:
 
 	/*!function used for order posVecParam like points in thr input file
 	Move Pos2 to pos1*/
-	void				splice(LSPosVecIter pos1, LSPosVecIter pos2) { paramsList.splice(pos1, paramsList, pos2); }
+	void				splice(const LSPosVecIter pos1, const LSPosVecIter pos2) { paramsList.splice(pos1, paramsList, pos2); }
 
 	/*!reverse the list*/
 	void				reverse() { paramsList.reverse(); }

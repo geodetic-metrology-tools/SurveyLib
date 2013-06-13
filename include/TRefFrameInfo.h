@@ -23,9 +23,9 @@ class TRefFrameInfo
 {
 private:
 	/*! Constructor is private and has no definition. This class cannot be instantiated. */
-	TRefFrameInfo();
-    TRefFrameInfo(const TRefFrameInfo & other); // non construction-copyable
-    const TRefFrameInfo & operator=(const TRefFrameInfo &); // non copyable
+	TRefFrameInfo() {}
+	TRefFrameInfo(const TRefFrameInfo&) {} // non construction-copyable
+	const TRefFrameInfo & operator=(const TRefFrameInfo &) {} // non copyable
 
 	struct TDetails
 	{
@@ -53,6 +53,9 @@ private:
 		const TCoordSysFactory::ECoordSys fDefaultCoordSys;
         const int fAllowedCoordSys;
         const bool fLocal;
+
+		private:
+			TDetails & operator=(const TDetails &) {} // non copyable
 	};
 	typedef std::map<TRefSystemFactory::ERefFrame, TDetails> MappingType;
     /**

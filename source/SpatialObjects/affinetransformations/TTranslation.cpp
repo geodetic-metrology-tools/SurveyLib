@@ -118,6 +118,7 @@ bool TTranslation::transform(TPositionVector& pv)const
 
 bool TTranslation::transform(TFreeVector& fv)const
 {// Transform a free vector
+	ignoring(fv);
 	if (isNull() == false)
 	{
 		return true;
@@ -131,6 +132,7 @@ bool TTranslation::transform(TFreeVector& fv)const
 
 bool TTranslation::transform(TRotationMatrix& rm)const
 {// Transform a rotation matrix
+	ignoring(rm);
 	if (isNull() == false)
 	{
 		return true;

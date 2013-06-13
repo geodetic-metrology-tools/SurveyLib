@@ -40,7 +40,6 @@ vector<string> TAConverter::tokenizeString(const string& str, const char* delims
 		STATE_DELIM
 	};
 
-	size_t len(str.size());
 	size_t delimlen(strlen(delims));
 	vector<string> result(0);
 	

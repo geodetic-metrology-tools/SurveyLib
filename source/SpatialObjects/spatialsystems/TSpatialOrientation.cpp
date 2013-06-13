@@ -41,6 +41,7 @@ TSpatialOrientation::TSpatialOrientation(TRotationMatrix::ERotationType kR,
 										 TAReferenceFrame* frame,
 										 TCoordSysFactory::ECoordSys cs)
 {//Constructor takink the angles in the order omega-phi-kappa
+	ignoring(cs);
 	TReal omega, phi, kappa;
 	omega = om.getRadiansValue();
 	phi = p.getRadiansValue();
@@ -68,6 +69,7 @@ TSpatialOrientation::TSpatialOrientation(TRotationMatrix::ERotationType kR,
 										 TReal& om, TReal& p, TReal& k,
 										 TAReferenceFrame* frame, TCoordSysFactory::ECoordSys cs)
 {
+	ignoring(cs);
 	fRotationMatrix =  new TRotationMatrix(kR, om, p, k);
 	if(fRotationMatrix == 0)
 	{

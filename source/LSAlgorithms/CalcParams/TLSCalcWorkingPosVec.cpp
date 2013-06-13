@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////
 // PUBLIC METHODS		
 ////////////////////////////////////////////////////////////////
-LSPosVecIter TLSCalcWorkingPosVec::insert(LSPosVecIter it, TLSCalcPosVectorParam& posVec)
+LSPosVecIter TLSCalcWorkingPosVec::insert(const LSPosVecIter it, const TLSCalcPosVectorParam& posVec)
 {
 	stdext::hash_map<string, LSPosVecIter>::iterator iter = calcParamsMap.find(posVec.getName());
 	LSPosVecIter lsPVIter;

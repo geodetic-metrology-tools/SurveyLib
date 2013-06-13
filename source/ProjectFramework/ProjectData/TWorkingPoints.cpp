@@ -70,7 +70,7 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 	
 	string empty("");
 	bool insert_ok = false;
-	int origNumPoints = fWorkingPoints.size();
+	size_t origNumPoints = fWorkingPoints.size();
 	
 	// check that the point is not already in the list
 	if (pointsMap.find(sp->getName().getName()) == pointsMap.end())

@@ -30,7 +30,7 @@ TLSCalcOrientationParam::TLSCalcOrientationParam():TALSCalcParameter("") {
 }
 
 // Constructor using a structure angle (provisional value) and parameter status as argument
-TLSCalcOrientationParam::TLSCalcOrientationParam(struct Angles& provAng,struct LSParaStatus ems, std::string name):
+TLSCalcOrientationParam::TLSCalcOrientationParam(const struct Angles& provAng,struct LSParaStatus ems, std::string name):
 fProvisionalValue(provAng), fStatus(ems), TALSCalcParameter(name) {
 	fCorrection.omega = TAngle(LITERAL(0.0));
 	fCorrection.phi = TAngle(LITERAL(0.0));

@@ -18,6 +18,8 @@ public:
     TAngle slope() const {return fSlope;}
 	const std::string & name() const {return fName;}
 private:
+	// Cannot copy const members, so assignment is private
+	TLocalSystemOrigin& operator=(const TLocalSystemOrigin&) {}
     const TSpatialPosition fOrigin; 
     const TAngle fGisement; 
     const TAngle fSlope;

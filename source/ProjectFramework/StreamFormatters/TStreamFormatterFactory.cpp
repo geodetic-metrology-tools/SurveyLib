@@ -114,7 +114,7 @@ TAStreamFormatter *TStreamFormatterFactory::getFormatter(TADataSet* ds, TAStream
 
 TAStreamFormatter *TStreamFormatterFactory::getFormatter( TAStreamFormatter::ETextFormat  format, const string& str) 
 {	// Function to obtain a pointer instance of the requested text stream formatter
-	
+	ignoring(str);
 	TAStreamFormatter *formatter = 0;
 
 	switch( format )

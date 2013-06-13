@@ -23,6 +23,8 @@ private:
     bool transformToCH1903plus(TPositionVector & pv) const;
 
     const bool fFromCH1903plus;
+	
+	TLV95Transformation & operator=(const TLV95Transformation&) {} // non copyable
 };
 
 #endif

@@ -61,7 +61,7 @@ TAObjectMeasurement::TAObjectMeasurement(TVParentMeasTreeNode* parent)
 }
 */
 // **This needs to be implemented**
-TAObjectMeasurement::TAObjectMeasurement( const  TAObjectMeasurement& source )//:
+TAObjectMeasurement::TAObjectMeasurement( const  TAObjectMeasurement& )//:
 /*fUsedInCalc(source.fUsedInCalc), fParentUsedInCalc(source.fParentUsedInCalc),
 fActiveMeasCount(source.fActiveMeasCount), fActiveEqCount(source.fActiveEqCount),
 fActiveUnkCount(source.fActiveUnkCount), fParent(source.fParent) 

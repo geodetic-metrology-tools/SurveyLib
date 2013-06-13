@@ -370,13 +370,13 @@ int TSeparatedFormatTStream::ajustAnglePrecTo100MicroGons(const TObservationForm
 
 int	TSeparatedFormatTStream::width() const
 {
-	return (*fIOStream).width();
+	return (int)fIOStream->width();
 	//return 0;
 }
 
 int	TSeparatedFormatTStream::width(int w)
 {
-	return (*fIOStream).width(w);
+	return (int)fIOStream->width(w);
 	//return 0;
 }
 

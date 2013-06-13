@@ -125,6 +125,7 @@ bool  TScaleFactor::transform(TFreeVector& fv) const
 	
 bool TScaleFactor::transform(TRotationMatrix& rm) const
 {/// Return a transformed rotation matrix
+	ignoring(rm);
 	bool trans = false;
 	if (isNull()==false)
 	{

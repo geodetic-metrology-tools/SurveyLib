@@ -19,6 +19,7 @@ public:
     bool transform( TPositionVector & pv) const;
 
 private:
+	TLV03Transformation & operator=(const TLV03Transformation &) {} // non copyable
     bool computeSwissRefFrame(double & coordinate_x, double & coordinate_y, double & coordinate_z, int reframe_in, int reframe_out) const;
 
     const bool fFromLV95;

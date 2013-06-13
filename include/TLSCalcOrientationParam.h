@@ -29,7 +29,7 @@ public:
 		/*! Constructor
 		\param provAng provisional value for the orientation
 		\param ems orientation status for calculation */
-		explicit TLSCalcOrientationParam(struct Angles& provAng,struct LSParaStatus ems, std::string name);
+		explicit TLSCalcOrientationParam(const struct Angles& provAng,struct LSParaStatus ems, std::string name);
 		/*! Copy constructor */
 		TLSCalcOrientationParam(const TLSCalcOrientationParam& source);
 		/*! Destructor */

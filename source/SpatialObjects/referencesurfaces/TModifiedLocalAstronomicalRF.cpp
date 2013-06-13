@@ -211,6 +211,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 	fOrientationMatrix(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
 	fGis(0), fSlope(0)
 {
+	ignoring(ell);
 	// origin
 	fOrigin = origin;
 	fOriginDefined = true;

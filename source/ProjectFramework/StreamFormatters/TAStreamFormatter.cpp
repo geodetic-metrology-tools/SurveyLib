@@ -536,7 +536,7 @@ TAStreamFormatter  &TAStreamFormatter::operator>>( TSpatialPosition &position )
 }
 
 
-TAStreamFormatter  &TAStreamFormatter::operator>>(TSpatialPoint &point)
+TAStreamFormatter  &TAStreamFormatter::operator>>(TSpatialPoint&)
 {//Default function
 	return *this;
 }
@@ -579,12 +579,14 @@ TAStreamFormatter  &TAStreamFormatter::operator<<( const TSpatialPointName &ptNa
 
 TAStreamFormatter&	TAStreamFormatter::operator<<(const TSpatialPosition& SpPos)
 {//Default function
+	ignoring(SpPos);
 	return *this;
 }
 
 
 TAStreamFormatter&	TAStreamFormatter::operator<<(const TPositionVector& pos)
-{//Default function
+{//Default function	
+	ignoring(pos);
 	return *this;
 }
 
@@ -623,12 +625,14 @@ TAStreamFormatter  &TAStreamFormatter::operator<<( const TScalar& db )
 
 TAStreamFormatter&	TAStreamFormatter::operator<<(const TFreeVector& pos)
 {//Default function
+	ignoring(pos);
 	return *this;
 }
 
 
 TAStreamFormatter&	TAStreamFormatter::operator<<(const TSpatialPoint& SpPoint)
 {//Default function
+	ignoring(SpPoint);
 	return *this;
 }
 
@@ -935,7 +939,7 @@ inline string TAStreamFormatter::read()
 */
 
 char TAStreamFormatter::readChar()
-{return (char) (*fIOStream).get();
+{return (char) fIOStream->get();
 }
 
 void TAStreamFormatter::skipWhiteSpace() 
@@ -959,62 +963,62 @@ void TAStreamFormatter::skipWhiteSpace()
 
 TAStreamFormatter&	TAStreamFormatter::get(char& c)
 {//reads and returns a character from the stream and puts it back
-	(*fIOStream).get(c);
+	fIOStream->get(c);
 	return (*this);
 }
 
 
 char	TAStreamFormatter::peek()
 {//reads and returns a character from the stream and puts it back
-return (char) (*fIOStream).peek();
+return (char) fIOStream->peek();
 }
 
 
 TAStreamFormatter &TAStreamFormatter::readRawBytes(char *s, streamsize n)
 {//extracts up to n elements and stores them in the array beginning at s
-	(*fIOStream).read(s, n);
+	fIOStream->read(s, n);
 	return *this;
 }
 
 bool TAStreamFormatter::fail() const
 {//return true if an error has occured (failbit or badbit is set)
-return  (*fIOStream).fail();
+return  fIOStream->fail();
 }
 
 void TAStreamFormatter::clear() const
 {//return true if an error has occured (failbit or badbit is set)
-	(*fIOStream).clear(fIOStream->rdstate() & ~std::ios::failbit);
+	fIOStream->clear(fIOStream->rdstate() & ~std::ios::failbit);
 	return;
 }
 
 
 int TAStreamFormatter::flags() const
 {//returns all set format flags
-return (*fIOStream).flags();
+return fIOStream->flags();
 }
 
 
 int TAStreamFormatter::flags( int f )
 {//sets flags as the new format flags and returns the prvious state of all flags
-return (*fIOStream).flags( f );
+return fIOStream->flags( f );
 }
 
 
 int TAStreamFormatter::setf( int bits )
 {//sets flags "bits" as additional format flags and return the previous state of all flags
-return (*fIOStream).setf( bits );
+return fIOStream->setf( bits );
 }
 
 
 int TAStreamFormatter::setf( int bits, int mask )
 {//sets flags as the new format flags of the group identified by mask and returns the previous state of all flags
-return (*fIOStream).setf( bits, mask );
+return fIOStream->setf( bits, mask );
 }
 
 
 void TAStreamFormatter::unsetf( int bits )
 {//clears flags
-(*fIOStream).unsetf( bits );
+fIOStream->unsetf( bits );
 return;
 }
 
@@ -1023,54 +1027,53 @@ void TAStreamFormatter::reset()
 {
 	char* c=" ";
 
-	(*fIOStream).unsetf(fIOStream->flags());
-	(*fIOStream).width(0);
-	(*fIOStream).fill(*c);
-	(*fIOStream).precision(6);
+	fIOStream->unsetf(fIOStream->flags());
+	fIOStream->width(0);
+	fIOStream->fill(*c);
+	fIOStream->precision(6);
 	return;
 }
 
 
  int TAStreamFormatter::width() const
 {//Returns the field width
-return (*fIOStream).width();
+	return (int)fIOStream->width();
 }
 
 
  int  TAStreamFormatter::width(int w)
 {//sets the field width to w and returns the previous field width
-return (*fIOStream).width(w);
-//	return 0;
+	return (int)fIOStream->width(w);
 }
 
 
 int TAStreamFormatter::fill() const
 {//return the current fill character
-return (*fIOStream).fill();
+return fIOStream->fill();
 }
 
 
 int TAStreamFormatter::fill(int f)
 {//defines f as the fill character and returns the previous fill character
-return (*fIOStream).fill(f);
+return fIOStream->fill((char)f);
 }
 
 
 int TAStreamFormatter::precision() const
 {//return the current precision of floating-point values
-	return (*fIOStream).precision();
+	return (int)fIOStream->precision();
 }
 
 int TAStreamFormatter::precision(int p)
 {//sets p as the new precision of floating-point values and returns the old
-(*fIOStream)<<std::fixed; /*modif du 28/10/03 pour chaba*/
-return (*fIOStream).precision(p);
+	(*fIOStream)<<std::fixed; /*modif du 28/10/03 pour chaba*/
+	return (int)fIOStream->precision(p);
 }
 
 
 TAStreamFormatter &TAStreamFormatter::writeRawBytes(const char* s, streamsize n)
 {//inserts the sequence of n elements beginning at s
-	(*fIOStream).write(s, n);
+	fIOStream->write(s, n);
 	return *this;
 }
 

@@ -166,11 +166,11 @@ TColumnVector TMatrix::operator*(const TColumnVector& right) const
     if (result.getStatus()!=kNull && numCols() == right.dimension())
 	{
         TMatrixImpl tmp(numCols(),1,0.0);
-        for(std::size_t i=0; i!=numCols(); ++i)
+        for(int i=0; i!=numCols(); ++i)
             tmp(i,0) = right(i);
 
         TMatrixImpl res = *this->fImpl * tmp;
-        for(std::size_t i=0; i!=numRows(); ++i)
+        for(int i=0; i!=numRows(); ++i)
             result(i) = res(i,0);
 	}
 	return result;
@@ -228,11 +228,11 @@ TColumnVector TMatrix::eqnSolve(const TColumnVector& B)
     if (result.getStatus()!=kNull && numCols() == B.dimension())
 	{
         TMatrixImpl tmp(numCols(),1,0.0);
-        for(std::size_t i=0; i!=numCols(); ++i)
+        for(int i=0; i!=numCols(); ++i)
             tmp(i,0) = B(i);
 
         TMatrixImpl res = this->fImpl->solve(tmp);
-        for(std::size_t i=0; i!=numCols(); ++i)
+        for(int i=0; i!=numCols(); ++i)
             result(i) = res(i,0);
     }
     return result;

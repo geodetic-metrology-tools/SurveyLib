@@ -135,7 +135,6 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 
 	//get a copy of the parameters of the ellipsoid
 	TReal  a = ellipsoid->getA();
-	TReal  b = ellipsoid->getB();
 	TReal  eSquared = ellipsoid->getESquared();
 
 	TReal p;

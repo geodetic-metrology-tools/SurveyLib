@@ -104,14 +104,14 @@ return false;
 //////////////////////////////////////////////////////////////////////////////////
 
 
-bool TACoordinateSystem::setAllRotations( TRotationMatrix* mat, TRotationMatrix::ERotationType kR, TReal &om, TReal &p, TReal &k)
+bool TACoordinateSystem::setAllRotations( TRotationMatrix* mat, TRotationMatrix::ERotationType , TReal &, TReal &, TReal &)
 {//create a TRotationMatrix default def: return false
 	mat->setStatus(TVNumericValue::kNull);
 	return false;
 }
 
 
-struct Angles TACoordinateSystem::getAngles(const TRotationMatrix*, const TRotationMatrix::ERotationType kR) const
+struct Angles TACoordinateSystem::getAngles(const TRotationMatrix*, const TRotationMatrix::ERotationType) const
 {//get angles of a TRotationMatrix return a structure (omega, phi, kappa), default def return false
 	TAngle om;
 	TAngle p;
@@ -140,22 +140,24 @@ return false;
 
 
 
-bool TACoordinateSystem::setElt(T3DMatrix* mx, const int i, const int j, const TReal value)
+bool TACoordinateSystem::setElt(T3DMatrix* mx, const int, const int, const TReal)
 {//set a element into a 3D matrix
 mx->setStatus(TVNumericValue::kNull);
 return false;
 }
 
 
-TReal TACoordinateSystem::getElt(const T3DMatrix* mx, const int i, const int j) const
+TReal TACoordinateSystem::getElt(const T3DMatrix* , const int , const int ) const
 {//get a element from a 3D matrix
-return 0;
+	assert(false);
+	return -1.0;
 }
 
-TReal TACoordinateSystem::getElt(const TRotationMatrix* mx, const int i, const int j) const
+TReal TACoordinateSystem::getElt(const TRotationMatrix*, const int , const int) const
 {//get a element from a rotation matrix
 return 0;
 }
+
 ////////////////////////////////////////////////////////////////
 ///Public Member function
 ////////////////////////////////////////////////////////////////

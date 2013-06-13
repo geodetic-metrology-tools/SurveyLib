@@ -342,11 +342,11 @@ TReal TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialP
 {
 
 	
-	TReal N;
+	TReal N = std::numeric_limits<TReal>::infinity();
 	TReal Xo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getKMetresValue()), Yo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getKMetresValue());
 	valarray<TReal> x(matrix.numCols()), y(matrix.numRows()), absx(matrix.numCols()), absy(matrix.numRows());
 	TReal xmin, ymin, t;
-	int I,J;
+	int I(-1),J(-1);
 	TMatrix base(4,4), c(4,3), T(1,4), q(1,3), Q(4,3);
 	vector<int> L(4), K(4);
 

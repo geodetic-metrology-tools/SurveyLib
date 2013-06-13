@@ -128,15 +128,6 @@ TVCoordinateSystem* TCoordSysFactory::getCoordSys(const ECoordSys coordSysId)
 
 	cerr << "Error : Id. not in CoordSysList" << endl;
 	throw TNotInGraphException("TNotInGraphException");
-
-	//std::cerr << "Error : Id. not in CoordSysList";
-	///
-	//TODO@*@
-	///
-	//exit(EXIT_FAILURE);
-
-	//modif du 25/10 (INSURE)
-	return *iterEnd;
 }
 
 
