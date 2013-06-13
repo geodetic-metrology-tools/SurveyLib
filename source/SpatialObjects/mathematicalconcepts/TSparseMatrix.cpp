@@ -1,5 +1,4 @@
 #include <Eigen/LU>
-#include <windows.h>
 
 #include "TSparseMatrix.h"
 #include <iostream>
@@ -13,7 +12,7 @@ TSparseMatrix inverse(const TSparseMatrix & sparse, std::string & error)
 	Eigen::FullPivLU<TMat> lu(sparse);
 
 	if (! lu.isInvertible()) {
-		error == "Matrix could not be inverted.";
+		error = "Matrix could not be inverted.";
         return TSparseMatrix();
 	}
 
