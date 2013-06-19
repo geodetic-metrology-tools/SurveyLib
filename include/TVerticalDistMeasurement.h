@@ -52,8 +52,6 @@ public:
 	@param obsDist the observed vertical distance as a TLength
 	@param sigma the observed dist's precision as a TLength*/
 	TVerticalDistMeasurement(/*TSpatialPointName refName,*/ TSpatialPointName tgName, TLength obsDist, TLength sigma);
-	/*! Copy Constructor */
-	TVerticalDistMeasurement(const  TVerticalDistMeasurement&);
 	/*! Destructor */
 	virtual  ~TVerticalDistMeasurement();
 	//@}

@@ -1,5 +1,6 @@
 #include <TAngularUnitsInfo.h>
 
+#include <stdexcept>
 #include <memory> // for std::auto_ptr
 #include <utility> // for std::make_pair
 

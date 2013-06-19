@@ -15,6 +15,7 @@
 //#include	"TROOT.h"
 //
 // other forward declarations
+#include	<cstdio>
 #include	<sstream>
 #include	"TFileParameters.h"
 ////////////////////////////////////////////////////////////////

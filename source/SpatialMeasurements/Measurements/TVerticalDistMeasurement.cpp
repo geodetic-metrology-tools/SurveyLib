@@ -49,16 +49,6 @@ TAPointMeasurement(tgName),fMeasuredDist(obsDist), fSigmaAPriori(sigma), fMeasCo
 
 }
 
-
-// **This needs to be implemented**
-///////////////////
-// Copy constructor
-///////////////////
-TVerticalDistMeasurement::TVerticalDistMeasurement(const  TVerticalDistMeasurement& source)
-{	
-	*this = source;
-}
-
 /////////////
 // Destructor
 /////////////

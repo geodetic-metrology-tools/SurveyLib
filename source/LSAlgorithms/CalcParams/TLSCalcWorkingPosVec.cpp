@@ -7,7 +7,7 @@
 ////////////////////////////////////////////////////////////////
 LSPosVecIter TLSCalcWorkingPosVec::insert(const LSPosVecIter it, const TLSCalcPosVectorParam& posVec)
 {
-	stdext::hash_map<string, LSPosVecIter>::iterator iter = calcParamsMap.find(posVec.getName());
+	std::unordered_map<string, LSPosVecIter>::iterator iter = calcParamsMap.find(posVec.getName());
 	LSPosVecIter lsPVIter;
 
 	// if the observation isn't in the container -> insert
@@ -26,7 +26,7 @@ LSPosVecIter TLSCalcWorkingPosVec::insert(const LSPosVecIter it, const TLSCalcPo
 
 LSPosVecIter TLSCalcWorkingPosVec::getPoint(const string name)
 {//returns an iterator on a point, given its Name
-    stdext::hash_map<string, LSPosVecIter>::iterator iter = calcParamsMap.find(name);
+    std::unordered_map<string, LSPosVecIter>::iterator iter = calcParamsMap.find(name);
 	if (iter == calcParamsMap.end())
 	{
 		return paramsList.end();
@@ -38,7 +38,7 @@ LSPosVecIter TLSCalcWorkingPosVec::getPoint(const string name)
 
 LSPosVecConstIter	TLSCalcWorkingPosVec::getPoint(const string name) const
 {//returns a const iterator on a point, given its Name
-    stdext::hash_map<string, LSPosVecIter>::const_iterator iter = calcParamsMap.find(name);
+    std::unordered_map<string, LSPosVecIter>::const_iterator iter = calcParamsMap.find(name);
 	if (iter == calcParamsMap.end())
 	{
 		return paramsList.end();

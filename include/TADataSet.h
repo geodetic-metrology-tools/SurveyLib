@@ -127,7 +127,7 @@ public:
 		//!set the point name's width
 		void	setPointNameWidth(const int);
 
-		bool	setLocalSystemOrigin(std::tr1::shared_ptr<TLocalSystemOrigin>);
+		bool	setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin>);
 	
 
 		//! get the reference system identifier
@@ -158,7 +158,7 @@ public:
 		int										getPointNameWidth() const;
 
 
-        std::tr1::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
+        std::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
 	//@}
 	
 		
@@ -213,17 +213,17 @@ public:
 		virtual string getPunchSeparator();
 
 		/*!@ get the format for the spacing between the data*/
-		bool TADataSet::isSpaceBetweenData();
+		bool isSpaceBetweenData();
 		
 		/*!@ set no space between the data*/
-		void TADataSet::setNoSpaceBetweenData();
+		void setNoSpaceBetweenData();
 
 		/*!@ set a space between the data*/
-		void TADataSet::setSpaceBetweenData();
+		void setSpaceBetweenData();
 
-		void TADataSet::setFormatType(string fmtType);
+		void setFormatType(string fmtType);
 
-		string TADataSet::getFormatType();
+		string getFormatType();
 	//@}
 
 

@@ -124,7 +124,7 @@ public:
 		void	setPointNameWidth(const int);
 
         bool	setLocalSystemOrigin(const TLocalSystemOrigin &);
-        bool    setLocalSystemOrigin(std::tr1::shared_ptr<TLocalSystemOrigin> lso);
+        bool    setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> lso);
 	
 
 		//! get the reference system identifier
@@ -154,7 +154,7 @@ public:
 		//! get the point name's width 
 		int										getPointNameWidth() const;
 
-        std::tr1::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
+        std::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
 			
 	//@}
 	/*!@output stream format access methods*/
@@ -189,8 +189,8 @@ private:
 
 	mutable TAReferenceFrame*					fRefFrame;
     TRefSystemFactory::ERefFrame			    fRefFrameEnum;
-	TDataParameters::ECoordUnit					fCoordUnit;
-    std::tr1::shared_ptr<TLocalSystemOrigin>    fLSO;
+	ECoordUnit									fCoordUnit;
+    std::shared_ptr<TLocalSystemOrigin>			fLSO;
 	TCoordSysFactory::ECoordSys					fCoordSys;
 
 	TAngle::EUnits								fAngleUnits;
@@ -206,7 +206,6 @@ private:
 	TAStreamFormatter::ETextFormat resultsFileFormat;
 	string punchSeparator;
 	string resultsSeparator;
-	//ClassDef(TDataParameters, 1)
 };
 
 namespace std {

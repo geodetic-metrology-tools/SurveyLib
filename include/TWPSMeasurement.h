@@ -45,8 +45,6 @@ public :
 	\param obsVOffset vertical offset measurement
 	\param vSigma vertical offset measurement sigma a priori*/
 	TWPSMeasurement(string wireName, string setupName, TLength obsTOffset, TLength tSigma, TLength obsVOffset, TLength vSigma /*TSpatialPointName end1Name, TSpatialPointName end2Name, TSpatialPointName setupName,*/);
-	/*! Copy constructor */
-	TWPSMeasurement(const TWPSMeasurement &source);
 	/*! Destructor */
 	virtual ~TWPSMeasurement();
 	//@}

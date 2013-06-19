@@ -125,13 +125,12 @@ void TX0Y0He2XYHeTransformation::setEllipsoid( TReferenceEllipsoid* ellipsoid )
 
 bool  TX0Y0He2XYHeTransformation::transform(TPositionVector& pv) const
 {// Transformation of a spatial position using the parameters of the two reference frames
-	TReal Dx, dx, Dy, dy, he, d, falseX, falseY;
+	TReal Dx, dx, Dy, dy, he, falseX, falseY;
 
 	// distance from p0 in X0Y0-plane
 	dx = pv.getX().getMetresValue() - fTo->getMLARefFrame()->getFalseOrigin().getX().getMetresValue();
 	dy = pv.getY().getMetresValue() - fTo->getMLARefFrame()->getFalseOrigin().getY().getMetresValue();
 	he = pv.getH().getMetresValue();
-	d = sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 	
 	// bearing from p0 in the X0Y0-plane
 	TAngle beta = TAngle::aTan2(dx,dy);

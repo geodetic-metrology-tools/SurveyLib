@@ -55,8 +55,6 @@ public:
 	/*!Constructor 
 	\param setupPt station's setup point's name */
 	TDistMeasStation(TSpatialPointName setupPt);
-	/*!Copy constructor  */
-	TDistMeasStation(const TDistMeasStation& source);
 	/*!Destructor */
 	~TDistMeasStation();
 	//@}

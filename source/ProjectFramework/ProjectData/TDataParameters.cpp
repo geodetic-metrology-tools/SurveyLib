@@ -341,7 +341,7 @@ bool TDataParameters::setLocalSystemOrigin(const TLocalSystemOrigin & LSO)
 	}
 	return false;
 }
-bool TDataParameters::setLocalSystemOrigin(std::tr1::shared_ptr<TLocalSystemOrigin> lso)
+bool TDataParameters::setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> lso)
 {
     if(TRefFrameInfo::isLocalRefFrame(fRefFrameEnum)
 		&& fRefFrame == 0)
@@ -541,7 +541,7 @@ int  TDataParameters::getPointNameWidth() const
 }
 
 
-std::tr1::shared_ptr<TLocalSystemOrigin> TDataParameters::getLocalSystemOrigin() const
+std::shared_ptr<TLocalSystemOrigin> TDataParameters::getLocalSystemOrigin() const
 {
 	return fLSO;
 }

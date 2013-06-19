@@ -8,6 +8,8 @@
 #endif
 
 #include <vector>
+#include <stdexcept>
+#include <iostream>
 #include <algorithm>
 #include <stddef.h>
 #include <string>
@@ -31,8 +33,8 @@ template <class T>
 class DynamicPriorityQueue
 {
 public:
-	typename typedef std::vector<T>::size_type Size;
-	typename typedef std::vector<T>::difference_type index;
+	typedef typename std::vector<T>::size_type Size;
+	typedef typename std::vector<T>::difference_type index;
 	
 	// constructor
 	DynamicPriorityQueue(std::vector<T>& trans)
@@ -60,7 +62,7 @@ public:
 		index i;
 
 		for(i=0; i<csize; i++)
-			cout << Indices[i] << endl;
+			std::cout << Indices[i] << std::endl;
 	}
 
 	index getIndice(int i)
@@ -76,7 +78,7 @@ public:
 		// value still present in the queue?
 		assert(idx < (signed)csize);
 
-		if (*c[idx] != trans)
+		if (*c[idx] != trans) {
 			if (comp(&trans, c[idx]))
 			{
 				*c[idx] = trans;
@@ -87,6 +89,7 @@ public:
 				*c[idx] = trans;
 				goUp(idx);
 			}
+		}
 	}
 
 

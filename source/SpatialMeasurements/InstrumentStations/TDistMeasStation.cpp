@@ -30,12 +30,6 @@ fLastSpatialDistSeriesNbr(0), fECVE(),  fECSP(), fECHO(), fECTH(), fInstrumentHe
 }
 
 
-TDistMeasStation::TDistMeasStation(const TDistMeasStation& source)
-{//copy constructor
-	*this = source;
-}
-
-
 TDistMeasStation::~TDistMeasStation()
 {//destructor
 }
@@ -395,7 +389,7 @@ T2DOffsetROM* TDistMeasStation::add2DOffsetROM(T2DOffsetROM* orom){
 //////////////////////////////////////////////////////////
 // checks if the 2D offset ROM is already in the container
 //////////////////////////////////////////////////////////
-bool TDistMeasStation::notInContainer(T2DOffsetROM* or) const{
+bool TDistMeasStation::notInContainer(T2DOffsetROM* orm) const {
 
 	Off2DROMConstIter iter = get2DOffsetROMBeginIterator();
 	Off2DROMConstIter iterEnd = get2DOffsetROMEndIterator();
@@ -404,11 +398,14 @@ bool TDistMeasStation::notInContainer(T2DOffsetROM* or) const{
 
 	while (iter != iterEnd){
 
-		if ((*or) == (*iter)){
+		if ((*orm) == (*iter)){
 			notPresent = false;
 			iter  =iterEnd;
 		}
 		else
+		{
+			 
+		}
 			iter ++;
 	}
 

@@ -63,14 +63,9 @@ public:
 		/// Destructor
 		virtual ~TASpatialAttribute();
 	//@}
-
-
-	/**@name Member Functions */
-	//@{
-		/// Copy Assignment Operator 
-		TASpatialAttribute& operator=( const TASpatialAttribute& );
-	//@}
-
+		
+	TASpatialAttribute&  operator=(const TASpatialAttribute& right);
+		
 	/**@name Set Status Functions */
 	//@{
 		/// Set the global status of the spatial object

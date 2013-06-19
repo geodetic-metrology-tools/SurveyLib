@@ -70,14 +70,6 @@ TASpatialAttribute::TASpatialAttribute( TAReferenceFrame* rf, counted_ptr<TSpati
 	fSpatialStatus = cp;
 }
 
-
-TASpatialAttribute::TASpatialAttribute( const  TASpatialAttribute& original )
-{	// copy constructor
-	fSpatialStatus = original.fSpatialStatus;
-	fRefFrame = original.fRefFrame;
-}
-
-
 TASpatialAttribute::~TASpatialAttribute()
 {//destructor
 }

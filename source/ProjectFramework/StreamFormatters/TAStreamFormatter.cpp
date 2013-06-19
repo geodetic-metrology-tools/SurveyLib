@@ -1000,32 +1000,32 @@ return fIOStream->flags();
 
 int TAStreamFormatter::flags( int f )
 {//sets flags as the new format flags and returns the prvious state of all flags
-return fIOStream->flags( f );
+return fIOStream->flags( ios_base::fmtflags(f) );
 }
 
 
 int TAStreamFormatter::setf( int bits )
 {//sets flags "bits" as additional format flags and return the previous state of all flags
-return fIOStream->setf( bits );
+return fIOStream->setf( ios_base::fmtflags(bits) );
 }
 
 
 int TAStreamFormatter::setf( int bits, int mask )
 {//sets flags as the new format flags of the group identified by mask and returns the previous state of all flags
-return fIOStream->setf( bits, mask );
+return fIOStream->setf( ios_base::fmtflags(bits), ios_base::fmtflags(mask) );
 }
 
 
 void TAStreamFormatter::unsetf( int bits )
 {//clears flags
-fIOStream->unsetf( bits );
+fIOStream->unsetf( ios_base::fmtflags(bits) );
 return;
 }
 
 
 void TAStreamFormatter::reset()
 {
-	char* c=" ";
+	const char* c=" ";
 
 	fIOStream->unsetf(fIOStream->flags());
 	fIOStream->width(0);

@@ -38,12 +38,6 @@ TALineMeasurement::TALineMeasurement(const TSpatialLineName tgName, const TLengt
 }
 
 
-TALineMeasurement::TALineMeasurement(const TALineMeasurement& source)
-{//copy constructor
-	(*this) = source;
-}
-
-
 TALineMeasurement::~TALineMeasurement()
 {//destructor
 }

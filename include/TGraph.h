@@ -13,11 +13,8 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif
-
 #pragma warning (disable:4786)
-
-
+#endif
 
 #include <string>
 #include <map>

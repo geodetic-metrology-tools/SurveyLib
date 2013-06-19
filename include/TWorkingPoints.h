@@ -14,9 +14,8 @@
 #include <list>
 #include <algorithm>
 #include <sstream>
-#include <hash_map>
+#include <unordered_map>
 using namespace std;
-using namespace stdext;
 
 
 #include "TSpatialPoint.h"
@@ -109,7 +108,7 @@ public:
 private:
 	
 	int						fLastPtNbr;
-	hash_map<string, PointIterator> pointsMap;
+	std::unordered_map<string, PointIterator> pointsMap;
 	TPtListBroadcaster*	fBroadcaster;
 	SpatialPointContainer fWorkingPoints;
 

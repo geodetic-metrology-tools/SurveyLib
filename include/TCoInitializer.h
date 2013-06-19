@@ -1,3 +1,6 @@
+#ifndef CCOINITIALIZER_h
+#define CCOINITIALIZER_h
+
 class CCoInitializer
 {
 public:
@@ -29,3 +32,5 @@ private:
    CCoInitializer(const CCoInitializer&);
    CCoInitializer& operator=(const CCoInitializer&);
 };
+
+#endif

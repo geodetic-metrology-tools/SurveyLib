@@ -22,5 +22,4 @@ set(InstrumentStations_HEADERS
 
 # Create a static library from sources:
 add_library(InstrumentStations STATIC ${InstrumentStations_SOURCES} ${InstrumentStations_HEADERS})
-#install(FILES ${InstrumentStations_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

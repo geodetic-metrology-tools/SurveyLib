@@ -46,7 +46,7 @@ class  TColumnVector : public  TANumericValue//: public TObject
 {
 public:
 
-	friend TMatrix;
+	friend class TMatrix;
 
 
 	/*!\name Constructors and Destructors */

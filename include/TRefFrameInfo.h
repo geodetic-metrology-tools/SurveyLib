@@ -25,7 +25,7 @@ private:
 	/*! Constructor is private and has no definition. This class cannot be instantiated. */
 	TRefFrameInfo() {}
 	TRefFrameInfo(const TRefFrameInfo&) {} // non construction-copyable
-	const TRefFrameInfo & operator=(const TRefFrameInfo &) {} // non copyable
+	const TRefFrameInfo & operator=(const TRefFrameInfo &); // non copyable
 
 	struct TDetails
 	{
@@ -55,7 +55,7 @@ private:
         const bool fLocal;
 
 		private:
-			TDetails & operator=(const TDetails &) {} // non copyable
+			TDetails & operator=(const TDetails &);  // non copyable
 	};
 	typedef std::map<TRefSystemFactory::ERefFrame, TDetails> MappingType;
     /**

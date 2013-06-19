@@ -19,8 +19,7 @@
 
 #endif // _MSC_VER >= 1000
 
-#include <hash_map>
-//using namespace stdext;
+#include <unordered_map>
 
 #include "TAFreeInstrument.h"
 #include "Staff.h"
@@ -38,7 +37,7 @@ public:
 	const Staff* getDefaultStaff() const { return defaultStaff; }
 	const Staff* getStaffNamed(const string& staffName) const
 	{
-		stdext::hash_map<string, const Staff*>::const_iterator i = staffs.find(staffName);
+		auto i = staffs.find(staffName);
 		if (i == staffs.end())
 		{
 			return NULL;
@@ -52,7 +51,7 @@ private:
 
 	const Staff* defaultStaff;
 
-    stdext::hash_map<string, const Staff*> staffs; // target name to target pairs
+    std::unordered_map<string, const Staff*> staffs; // target name to target pairs
 
 };
 

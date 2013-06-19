@@ -40,15 +40,6 @@ THorAngleMeasurement::~THorAngleMeasurement()
 
 }
 
-
-///////////////////
-// copy constructor
-///////////////////
-THorAngleMeasurement::THorAngleMeasurement(const THorAngleMeasurement& source)
-{
-	*this = source;
-}
-
 ////////////////////////////
 // copy assignement operator
 ////////////////////////////

@@ -16,12 +16,20 @@ set(RefFrameTransformations_SOURCES
 	TXYHe2XYHgTransformation.cpp
 	TXYHg2XYHeTransformation.cpp
 	TXYHs2MLATransformation.cpp
-	
-	TLV95Transformation.cpp
-	TLV03Transformation.cpp
 	TRGF93CC46Transformation.cpp
 	TLambert93Transformation.cpp
+	TLV95Transformation.cpp
 )
+
+IF(USE_SWISSTOPO)
+set(RefFrameTransformations_SOURCES 
+	${RefFrameTransformations_SOURCES}
+	TLV03Transformation.cpp)
+ELSE(USE_SWISSTOPO)
+set(RefFrameTransformations_SOURCES 
+	${RefFrameTransformations_SOURCES}
+	TLV03TransformationStub.cpp)
+ENDIF(USE_SWISSTOPO)
 
 # Create a variable containing all .h files:
 set(RefFrameTransformations_HEADERS 
@@ -52,5 +60,4 @@ set(RefFrameTransformations_HEADERS
 
 # Create a static library from sources:
 add_library(RefFrameTransformations STATIC ${RefFrameTransformations_SOURCES} ${RefFrameTransformations_HEADERS})
-#install(FILES ${RefFrameTransformations_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

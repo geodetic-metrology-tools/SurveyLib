@@ -134,7 +134,7 @@ private:
 
 	// Private Member Functions
 	// Copy Assignment Operator
-	TAReferenceFrame&  TAReferenceFrame::operator=( const TAReferenceFrame& );
+	TAReferenceFrame&  operator=( const TAReferenceFrame& );
 
 	//void setIdentifier( TRefSurfServer::ERefFrame id ) { fRefFrameId = id; return; }
 

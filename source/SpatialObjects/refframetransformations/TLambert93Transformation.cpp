@@ -125,7 +125,7 @@ bool TLambert93Transformation::transformToETRF93(TPositionVector & pv) const
 	double L = -1/n * log(abs(R/C));
 
 
-	double phi_0 = 2 * atan (exp(L)) - M_PI/2;
+	double phi_0 = 2 * atan (exp(L)) - TAngle::piBy2().getRadiansValue();
 	double phi = phi_0;
 
 	for (int i = 0; i != kMaxIter; i++)

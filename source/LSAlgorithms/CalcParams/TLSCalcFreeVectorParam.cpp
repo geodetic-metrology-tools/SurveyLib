@@ -7,13 +7,13 @@
 //////////////////////////////////////////////////////////////////////
 
 // Default constructor
-TLSCalcFreeVectorParam::TLSCalcFreeVectorParam():
+TLSCalcFreeVectorParam::TLSCalcFreeVectorParam(): TALSCalcParameter(""),
 fProvisionalValue(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
 fCorrection(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
 fEstimatedValue(fProvisionalValue),
 fEstimatedPrecision(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
-fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
-TALSCalcParameter("") {
+fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian)
+ {
 	for (int i=0;i<3;i++)
 		fFreeVectorIndices[i] = 0;
 	fStatus.first = TALSCalcParameter::kVariable;
@@ -23,13 +23,13 @@ TALSCalcParameter("") {
 
 // Constructor taking provisional value and parameter status as argument
 TLSCalcFreeVectorParam::TLSCalcFreeVectorParam(TFreeVector pos,struct LSParaStatus status,
-											 string name ):
+											 string name ): TALSCalcParameter(name),
 fProvisionalValue(pos),
-fStatus(status),TALSCalcParameter(name),
 fCorrection(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
 fEstimatedValue(fProvisionalValue),
 fEstimatedPrecision(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
-fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian)
+fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
+fStatus(status)
 {
 	for (int i=0;i<3;i++)
 		fFreeVectorIndices[i] = 0;
@@ -38,13 +38,12 @@ fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesia
 
 
 // Copy constructor 
-TLSCalcFreeVectorParam::TLSCalcFreeVectorParam(const TLSCalcFreeVectorParam& source):
+TLSCalcFreeVectorParam::TLSCalcFreeVectorParam(const TLSCalcFreeVectorParam& source): TALSCalcParameter(source.getName()),
 fProvisionalValue(source.fProvisionalValue),
 fCorrection(source.fCorrection),
 fEstimatedValue(source.fEstimatedValue),
 fEstimatedPrecision(source.fEstimatedPrecision),
-fCovariance(source.fCovariance),
-TALSCalcParameter(source.getName()){
+fCovariance(source.fCovariance){
 	
 	fStatus = source.fStatus; 
 	for (int i=0;i<3;i++)

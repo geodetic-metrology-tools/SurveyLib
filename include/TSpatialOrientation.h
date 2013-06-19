@@ -45,7 +45,7 @@ class  TSpatialOrientation : public TASpatialAttribute //: public TObject
 {
 public:
 
-	friend TAReferenceFrame;
+	friend class TAReferenceFrame;
 	//constants
 
 	/*!@name Constructors and Destructors */

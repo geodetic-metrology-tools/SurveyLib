@@ -17,9 +17,9 @@
 
 #if _MSC_VER >= 1000
 #pragma once
+#pragma warning(disable:4786)
 #endif // _MSC_VER >= 1000
 
-#pragma warning(disable:4786)
 
 
 ////////////////////////////////////////////////////////////////
@@ -358,13 +358,13 @@ public:
 
 
 	/*!@ set the format for the spacing between the data*/
-	void TAStreamFormatter::setDataSpacing();
+	void setDataSpacing();
 		
 	/*!@ set no space between the data*/
-	void TAStreamFormatter::setNoGapBetweenData();
+	void setNoGapBetweenData();
 
 	/*!@ set a space between the data*/
-	void TAStreamFormatter::setGapBetweenData();
+	void setGapBetweenData();
 
 	std::streampos tellg();
 	TAStreamFormatter& seekg(streamoff off, ios_base::seekdir dir);

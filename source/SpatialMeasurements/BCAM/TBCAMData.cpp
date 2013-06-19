@@ -1,10 +1,19 @@
 #include <fstream>
+#include <stdexcept>
 
 #include "TAConverter.h"
 
 #include "TBCAMData.h"
 
 using namespace std;
+
+#ifdef __MINGW32__
+namespace {
+	float stof(const string& s) {
+		return atof(s.c_str());
+	}
+}
+#endif
 
 void TBCAMData::readLWDAQFile(const std::string& filelocation) {
 	ifstream infile(filelocation);

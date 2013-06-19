@@ -50,8 +50,6 @@ public :
 	@param obsDist the observed horizontal direction as a TAngle
 	@param sigma the observed angle's precision as a TAngle*/
 //	THorAngleMeasurement(/*TSpatialPointName stName, */TSpatialPointName tgName, TAngle obsAng, TAngle sigma);
-	/*!Copy constructor */
-	THorAngleMeasurement(const THorAngleMeasurement &source);
 	/*!Destructor */
 	virtual ~THorAngleMeasurement();
 	//@}

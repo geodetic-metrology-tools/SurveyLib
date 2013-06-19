@@ -19,9 +19,6 @@
 
 #endif // _MSC_VER >= 1000
 
-#include <hash_map>
-//using namespace stdext;
-
 #include "TAFreeInstrument.h"
 #include "TAngleConstants.h"
 #include "TLength.h"

@@ -127,7 +127,6 @@ void TRefFrameWrapper::setFrame( TAReferenceFrame* frame )
 void TRefFrameWrapper::setIdentifier(int i)
 {
 	// Why is this unused?
-	assert(false);
 //	fFrame->setIdentifier(i);
 	return;
 }

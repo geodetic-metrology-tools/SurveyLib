@@ -19,8 +19,7 @@
 
 #endif // _MSC_VER >= 1000
 
-#include <hash_map>
-using namespace stdext;
+#include <unordered_map>
 
 #include "TAInstrument.h"
 #include "TheodoliteTarget.h"
@@ -41,7 +40,7 @@ public:
 	const TheodoliteTarget* getDefaultTarget() const { return defaultTarget; }
 	const TheodoliteTarget* getTargetNamed(const string& targetName) const
 	{		
-		hash_map<string, const TheodoliteTarget*>::const_iterator i = targets.find(targetName);
+		auto i = targets.find(targetName);
 		if (i == targets.end())
 		{
 			return NULL;
@@ -57,7 +56,7 @@ private:
 
 	const TAngleConstants* angleConstant; // angle constant for horizontal angle measurements
 
-	hash_map<string, const TheodoliteTarget*> targets; // target name to target pairs
+	std::unordered_map<string, const TheodoliteTarget*> targets; // target name to target pairs
 
 };
 

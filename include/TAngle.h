@@ -95,17 +95,17 @@ public:
 	/*! Defines the angle 2xPi */
     static const TAngle twoPi() { return TAngle(2*M_PI); }
 	/*! Defines the angle Pi/2 */
-    static const TAngle piBy2() { return TAngle(M_PI_2); }
+    static const TAngle piBy2() { return TAngle(M_PI*0.5); }
 	/*! Defines the angle Pi/4 */
-    static const TAngle piBy4() { return TAngle(M_PI_4); }
+    static const TAngle piBy4() { return TAngle(M_PI*0.25); }
 	/*! Provides a scale factor to convert from angles in radians to angles in gons */
-    static const TReal  radsToGonsFactor() { return 200.0 / M_PI; }	
+    static TReal  radsToGonsFactor() { return 200.0 / M_PI; }	
 	/*! Provides a scale factor to convert from angles in gons to angles in radians */
-    static const TReal  gonsToRadsFactor() { return M_PI / 200.0; }
+    static TReal  gonsToRadsFactor() { return M_PI / 200.0; }
 	/*! Provides a scale factor to convert from angles in radians to angles in degres */
-    static const TReal  radsToDecDegsFactor() { return 180.0 / M_PI; }
+    static TReal  radsToDecDegsFactor() { return 180.0 / M_PI; }
 	/*! Provides a scale factor to convert from angles in degres to angles in radians */
-    static const TReal  decDegsToRadsFactor() { return M_PI / 180.0; }
+    static TReal  decDegsToRadsFactor() { return M_PI / 180.0; }
 	//@}
 	
 	
@@ -193,7 +193,7 @@ private:
 	/*! Enumeration indicating the sign of an angle value */
 	enum			ENumberSign {kNegative=-1, kZero, kPositive}; 
 
-    static const TReal seuil() { return LITERAL(0.00000000001); }
+    static TReal seuil() { return LITERAL(0.00000000001); }
 
 	/*! normalise the angle value to lie between -2Pi and +2Pi */
 	void normaliseAngle();

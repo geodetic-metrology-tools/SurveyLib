@@ -11,10 +11,10 @@
 #ifndef SU_T_COORDSYS_FACTORY
 #define SU_T_COORDSYS_FACTORY
 
-#pragma warning (disable:4786)
 
 #if _MSC_VER >= 1000
 #pragma once
+#pragma warning (disable:4786)
 #endif
 
 

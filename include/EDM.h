@@ -19,8 +19,7 @@
 
 #endif // _MSC_VER >= 1000
 
-#include <hash_map>
-//using namespace stdext;
+#include <unordered_map>
 
 #include "TAInstrument.h"
 #include "EDMTarget.h"
@@ -38,7 +37,7 @@ public:
 	const EDMTarget* getDefaultTarget() const { return defaultTarget; }
 	const EDMTarget* getTargetNamed(const string& targetName) const
 	{
-		stdext::hash_map<string, const EDMTarget*>::const_iterator i = targets.find(targetName);
+		auto i = targets.find(targetName);
 		if (i == targets.end())
 		{
 			return NULL;
@@ -52,7 +51,7 @@ private:
 
 	const EDMTarget* defaultTarget;
 
-	stdext::hash_map<string, const EDMTarget*> targets; // target name to target pairs
+	std::unordered_map<string, const EDMTarget*> targets; // target name to target pairs
 
 };
 

@@ -59,7 +59,7 @@ private:
 	TA2DPlus1MapProjection(const TA2DPlus1MapProjection&);
 
 	// Copy Assignment Operator
-	TA2DPlus1MapProjection&  TA2DPlus1MapProjection::operator=( const TA2DPlus1MapProjection& );
+	TA2DPlus1MapProjection&  operator=( const TA2DPlus1MapProjection& );
 
 
 };

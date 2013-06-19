@@ -18,7 +18,7 @@ public:
     bool transform( TPositionVector & pv) const;
    
 private:
-	TLambert93Transformation& operator=(const TLambert93Transformation&) {}
+	TLambert93Transformation& operator=(const TLambert93Transformation&);
     enum { kMaxIter = 1000 };
     bool transformFromETRF93(TPositionVector & pv) const;
     bool transformToETRF93(TPositionVector & pv) const;

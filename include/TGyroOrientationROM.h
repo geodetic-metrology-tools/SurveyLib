@@ -45,8 +45,6 @@ public:
 	//@{
 		/*!Constructor*/
 		TGyroOrientationROM();
-		//!Copy constructor
-		explicit TGyroOrientationROM(const TGyroOrientationROM& source);
 		//!Destructor
 		virtual ~TGyroOrientationROM();
 	//@}

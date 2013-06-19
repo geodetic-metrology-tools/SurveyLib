@@ -246,7 +246,7 @@ void  TADataSet::setPointNameWidth(const int width )
 
 
 
-bool	TADataSet::setLocalSystemOrigin(std::tr1::shared_ptr<TLocalSystemOrigin> lso)
+bool	TADataSet::setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> lso)
 {
 	return fDataParams.setLocalSystemOrigin(lso);
 }
@@ -306,7 +306,7 @@ int  TADataSet::getPointNameWidth() const
 }
 
 
-std::tr1::shared_ptr<TLocalSystemOrigin> TADataSet::getLocalSystemOrigin() const
+std::shared_ptr<TLocalSystemOrigin> TADataSet::getLocalSystemOrigin() const
 {
 	return fDataParams.getLocalSystemOrigin();
 }

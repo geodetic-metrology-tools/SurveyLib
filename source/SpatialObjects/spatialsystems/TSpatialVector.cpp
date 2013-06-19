@@ -51,13 +51,6 @@ TSpatialVector::TSpatialVector(TAReferenceFrame* rf,
 	setObjectStatus(TSpatialStatus::kCala);
 }
 
-
-TSpatialVector::TSpatialVector( const TSpatialVector& original )
-{	// copy constructor
-	*this = original;	
-}
-
-
 TSpatialVector::~TSpatialVector()
 {//destructor
 	if(fFv != 0)

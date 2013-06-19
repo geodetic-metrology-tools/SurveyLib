@@ -212,6 +212,10 @@ string		TLSCalcPosVectorParam::getPosVecStatus() const
 		case TSpatialStatus::kCala :
 			res = "CALA";
 			break;
+
+		case TSpatialStatus::kPosNull :
+			res = "UNDEFINED";
+			break;
 	}
 
 

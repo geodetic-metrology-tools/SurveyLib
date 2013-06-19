@@ -109,11 +109,11 @@ bool TRGF93ZoneTransformation::transformToETRF93(TPositionVector & pv) const
     double LL = (-1/n)*log(abs(R/C));
 
 
-    double phi = 2*atan(exp(LL))-(M_PI_2);
+    double phi = 2*atan(exp(LL))-(TAngle::piBy2().getRadiansValue());
 
     for (int i = 0; i != kMaxIter; i++)
     {
-        double PHInew = 2 * atan(pow((1+e*sin(phi))/(1-e*sin(phi)),(e/2)) *exp(LL))-(M_PI_2);
+        double PHInew = 2 * atan(pow((1+e*sin(phi))/(1-e*sin(phi)),(e/2)) *exp(LL))-(TAngle::piBy2().getRadiansValue());
         double delta = abs(phi - PHInew);
         phi = PHInew;
 

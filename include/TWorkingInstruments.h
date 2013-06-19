@@ -22,8 +22,7 @@
 #include <list>
 using namespace std;
 
-#include <hash_map>
-using namespace stdext;
+#include <unordered_map>
 
 //!Class storing all the instruments
 class TWorkingInstruments
@@ -32,7 +31,7 @@ public:
 
 	TTheodolite* getTheodoliteNamed(const string& name)
 	{
-		hash_map<string, TTheodolite*>::iterator i = theodolitesMap.find(name);
+		std::unordered_map<string, TTheodolite*>::iterator i = theodolitesMap.find(name);
 		if (i == theodolitesMap.end())
 		{
 			return NULL;
@@ -48,7 +47,7 @@ public:
 	
 	Scale* getScaleNamed(const string& name)
 	{
-		hash_map<string, Scale*>::iterator i = scalesMap.find(name);
+		std::unordered_map<string, Scale*>::iterator i = scalesMap.find(name);
 		if (i == scalesMap.end())
 		{
 			return NULL;
@@ -64,7 +63,7 @@ public:
 	
 	EDM* getEDMNamed(const string& name)
 	{
-		hash_map<string, EDM*>::iterator i = edmsMap.find(name);
+		std::unordered_map<string, EDM*>::iterator i = edmsMap.find(name);
 		if (i == edmsMap.end())
 		{
 			return NULL;
@@ -80,7 +79,7 @@ public:
 	
 	Gyroscope* getGyroscopeNamed(const string& name)
 	{
-		hash_map<string, Gyroscope*>::iterator i = gyroscopesMap.find(name);
+		std::unordered_map<string, Gyroscope*>::iterator i = gyroscopesMap.find(name);
 		if (i == gyroscopesMap.end())
 		{
 			return NULL;
@@ -96,7 +95,7 @@ public:
 	
 	Level* getLevelNamed(const string& name)
 	{
-		hash_map<string, Level*>::iterator i = levelsMap.find(name);
+		std::unordered_map<string, Level*>::iterator i = levelsMap.find(name);
 		if (i == levelsMap.end())
 		{
 			return NULL;
@@ -128,11 +127,11 @@ private :
 	list<Gyroscope*> gyroscopesList;
 	list<Level*> levelsList;
 
-	hash_map<string, TTheodolite*> theodolitesMap;
-	hash_map<string, Scale*> scalesMap;
-	hash_map<string, EDM*> edmsMap;
-	hash_map<string, Gyroscope*> gyroscopesMap;
-	hash_map<string, Level*> levelsMap;
+	std::unordered_map<string, TTheodolite*> theodolitesMap;
+	std::unordered_map<string, Scale*> scalesMap;
+	std::unordered_map<string, EDM*> edmsMap;
+	std::unordered_map<string, Gyroscope*> gyroscopesMap;
+	std::unordered_map<string, Level*> levelsMap;
 
 };
 

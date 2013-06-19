@@ -12,8 +12,7 @@
 #include "TLSCalcFreeVectorParam.h"
 #include "TAMeasurement.h"
 
-#include <hash_map>
-//using namespace stdext;
+#include <unordered_map>
 
 template <typename CalcParam>
 class TLSCalcWorkingUnknown {
@@ -39,8 +38,8 @@ public:
 	\returns an iterator to the CalcParam wether it was already inserted or just being inserted */
 	typename list<CalcParam>::iterator			push_back(const CalcParam& param)
 	{
-		hash_map<string, list<CalcParam>::iterator>::iterator iter = calcParamsMap.find(param.getName());
-		list<CalcParam>::iterator result;
+		auto iter = calcParamsMap.find(param.getName());
+		typename list<CalcParam>::iterator result;
 		if (iter == calcParamsMap.end())
 		{
 			paramsList.push_back(param);
@@ -65,7 +64,7 @@ public:
 	/*! Erases the selected CalcParam and deletes its corresponding pointer from the list */
 	bool										erase(CalcParam& param)
 	{
-		hash_map<string, list<CalcParam>::iterator>::iterator iter = calcParamsMap.find(param.getName());
+		auto iter = calcParamsMap.find(param.getName());
 		if (iter != calcParamsMap.end())
 		{
 			paramsList.erase(iter->second);
@@ -83,7 +82,7 @@ public:
 
 protected:
 
-    stdext::hash_map<string, typename list<CalcParam>::iterator> calcParamsMap;
+    std::unordered_map<string, typename list<CalcParam>::iterator> calcParamsMap;
 
 	list<CalcParam>	paramsList; /*!< list of calc parameters */
 

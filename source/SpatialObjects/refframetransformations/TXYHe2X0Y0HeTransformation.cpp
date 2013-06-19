@@ -99,13 +99,12 @@ TARefFrameTransformation*  TXYHe2X0Y0HeTransformation::inverse() const
 
 bool  TXYHe2X0Y0HeTransformation::transform(TPositionVector& pv) const
 {// Transformation of a position vector using the parameters of the two reference frames
-	TReal Dx, dx, Dy, dy, he, d, falseX, falseY;
+	TReal Dx, dx, Dy, dy, he, falseX, falseY;
 
 	// distance from P0 in XY-plane
 	dx = pv.getX().getMetresValue() - fFrom->getMLARefFrame()->getFalseOrigin().getX().getMetresValue();
 	dy = pv.getY().getMetresValue() - fFrom->getMLARefFrame()->getFalseOrigin().getY().getMetresValue();
 	he = pv.getH().getMetresValue();
-	d = sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 
 	// bearing from P0 in the XY-plane
 	TAngle beta = TAngle::aTan2(dx,dy);

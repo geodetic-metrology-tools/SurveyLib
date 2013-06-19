@@ -15,13 +15,6 @@ TAUnreferencedROM()
 {//constructor
 }
 
-
-TGyroOrientationROM::TGyroOrientationROM(const TGyroOrientationROM &source)
-{//copy constructor
-	(*this)=source;
-}
-
-
 TGyroOrientationROM::~TGyroOrientationROM()
 {//destructor 
 }

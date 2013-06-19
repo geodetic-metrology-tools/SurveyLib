@@ -92,7 +92,7 @@ private:
 
 	// Private Member Functions
 	// Copy Assignment Operator
-	TA3DEuclideanRefFrame&  TA3DEuclideanRefFrame::operator=( const TA3DEuclideanRefFrame& );
+	TA3DEuclideanRefFrame& operator=( const TA3DEuclideanRefFrame& );
 
 
 private:

@@ -3,9 +3,9 @@
 
 #if _MSC_VER >= 1000
 #pragma once
+#pragma warning (disable:4786)
 #endif
 
-#pragma warning (disable:4786)
 
 template<class T>
 /*!\ingroup spatialobjects

@@ -46,16 +46,6 @@ fTUsedInCalc(true), fVUsedInCalc(true)
 */
 
 
-///////////////////
-// copy constructor
-///////////////////
-TWPSMeasurement::TWPSMeasurement(const TWPSMeasurement& source)
-{
-	*this = source;
-
-}
-
-
 /////////////
 // destructor
 /////////////

@@ -8,6 +8,21 @@
 
 using namespace std;
 
+#if (_MSC_VER < 1700) || (defined __MINGW32__)
+namespace {
+	string to_string(int n) {
+		char buf[128];
+		sprintf(buf, "%d", n);
+		return (buf);
+	}
+
+	double sTod(const string& s) {
+		return atof(s.c_str());
+	}
+}
+#endif
+
+
 char const *const TBCAMCalibrationDB::INFILE_DELIMS = " \t";
 
 const int TBCAMCalibrationDB::fBlueAzi[2] = {
@@ -151,12 +166,13 @@ void TBCAMCalibrationDB::openDB(const std::string& DBlocation) {
 			throw std::runtime_error("Error in calibration file " + DBlocation + " at line "  + to_string(nline) + ": Not enough calibration values");
 
 		for (size_t i = 0; i < numValues; i++)
-			linedata.values[i] = stod(linestrings[i+3]);
+			linedata.values[i] = sTod(linestrings[i+3]);
 
 		// check if the exact device is already stored
 		// replace with the newer calibration if this is the case
 		bool overwritten(false);
-		for (DBEntry& entry : fEntries) {
+		for (auto ientry = fEntries.begin(); ientry != fEntries.end(); ++ientry) {
+			DBEntry& entry = *ientry;
 			if (entry.serial == linedata.serial && 
 				entry.type == linedata.type && 
 				compareTimes(linedata.timestamp, entry.timestamp) == -1) {
