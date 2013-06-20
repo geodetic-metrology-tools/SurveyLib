@@ -51,30 +51,27 @@ public:
 		/*!@param nbUnknowns the survey network's number of unknowns
 		@param nbEquations the survey network's number of equations
 		@param nbObservations the survey network's number of observations*/
-		virtual void				setDimensions(int nbUnknowns, int nbEquations, int nbObservations, int nbCnstrObs);
+		virtual void setDimensions(int nbUnknowns, int nbEquations, int nbObservations, int nbCnstrObs);
 	
 		//!Sets the dimensions of the matrices
 		/*! \param nbUnknowns the survey network's number of unknowns
 			\param nbEquations the survey network's number of equations
 			\param nbObservations the survey network's number of observations
 			\param nbConstraints the free survey network's number of constraint*/
-		virtual void				setDimensions(int nbUnknowns, int nbEquations, int nbCnstrObs, int nbObservations, int nbConstraints);
-	
-		//!Sets the scale factor for the sigma zero a priori
-//		virtual void				setS0APrioriScaleFactor(TReal scalefac);
+		virtual void setDimensions(int nbUnknowns, int nbEquations, int nbCnstrObs, int nbObservations, int nbConstraints);
 	
 		//!Sets a coefficient of the first design matrix
-		virtual bool				setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+		virtual bool setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 		//!Sets a coefficient of the second design matrix
-		virtual bool				setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+		virtual bool setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 		//!Sets a coefficient of the misclosure vector
-		virtual bool				setMisclosureVectorElement(MatrixIndex row, TReal coeff);
+		virtual bool setMisclosureVectorElement(MatrixIndex row, TReal coeff);
 		//!Sets a coefficient of the weight matrix
-		virtual bool				setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+		virtual bool setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 		//!Sets a coefficient of the constraint first design matrix
-		virtual bool				setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+		virtual bool setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 		//!Sets a coefficient of the constraint misclosure vector
-		virtual bool				setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff);
+		virtual bool setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff);
 	//@}
 
 	 virtual int		getNbrUnknowns() const;
@@ -84,54 +81,31 @@ public:
 	 virtual int		getNbrConstraints()const;
 
 
-	/*!@name Acess methods*/
-	//@{
-		/*!@return the sigma zero a priori scale factor*/
-//		virtual TReal					getS0APrioriScaleFactor() const;
-
-		/*!@return a const reference to the first design matrix*/
-		const TSparseMatrix* getFirstDgnMtrx() const;
-		/*!@return a const reference to the second design matrix*/
-		const TSparseMatrix* getSecondDgnMtrx() const;
-		/*!@return a const reference to the weight design matrix*/
-		const TSparseMatrix* getWeightMtrx() const;
-		/*!@return a const reference to the misclosure vector*/
-		const TVector&	getMisclosureVctr() const;
-		/*!@return a const reference to the constraint first design matrix*/
-		const TSparseMatrix*	getCnstrFirstDgnMtrx() const;
-		/*!@return a const reference to the constraint misclosure vector*/
-		const TVector&	getCnstrMisclosureVctr() const;
-	//@}
-
-
+	/*!@return a const reference to the first design matrix*/
+	const TSparseMatrix* getFirstDgnMtrx() const;
+	/*!@return a const reference to the second design matrix*/
+	const TSparseMatrix* getSecondDgnMtrx() const;
+	/*!@return a const reference to the weight design matrix*/
+	const TSparseMatrix* getWeightMtrx() const;
+	/*!@return a const reference to the misclosure vector*/
+	const TVector&	getMisclosureVctr() const;
+	/*!@return a const reference to the constraint first design matrix*/
+	const TSparseMatrix*	getCnstrFirstDgnMtrx() const;
+	/*!@return a const reference to the constraint misclosure vector*/
+	const TVector&	getCnstrMisclosureVctr() const;
 	//!Debug method
-	void						saveMatricesToFile(int nbIter) const;
-
-	//void setNewRow();
-	//void setConstraintNewColumn();
-	//void finishedFillingMatrices();
-
-	void setFirstDesignMatrix(TSparseMatrix* f) { firstDesignMatrix = f; };
-	TSparseMatrix* getFirstDesignMatrix() const { return firstDesignMatrix; };
-	//void setWeightMatrixInverted(TSparseMatrix* f) { weightMatrixInverted = f; };
-	//TSparseMatrix* getWeightMatrixInverted() const { return weightMatrixInverted; };
-	//void setBTimesWInvTimesBTransInverted(TSparseMatrix* f) { bTimesWInvTimesBTransInverted = f; };
-	//TSparseMatrix* getBTimesWInvTimesBTransInverted() const { return bTimesWInvTimesBTransInverted; };
-
-	void clearMatrices();
-
+	void saveMatricesToFile(int nbIter) const;
 
 private:
 
 	MatrixIndex		fNbUnk; /*!< number of unknowns: u */
 	MatrixIndex		fNbObs; /*!< number of observations: o */
 	MatrixIndex		fNbEqn; /*!< number of equations: e */
-	int				fNbCnstrObs; /*!< number of constraint observations */
+	int fNbCnstrObs; /*!< number of constraint observations */
 	MatrixIndex		fNbCnstr;/*!<number of constraint: c */
 
 
 	TVector*	fMisclosureVector; /*!< vector (u) for misclosure errors */
-//	TReal			fS0APrioriScaleFactor; /*!< indicates if there is a priori scale factor or not */
 
 	TSparseMatrix*	fCnstrFirstDesignMtrx; /*!< matrix (u x c) for the parametric part of the model */
 	TVector*	fCnstrMisclosureVector; /*!< vector for misclosure errors */
@@ -140,7 +114,7 @@ private:
 	TSparseMatrix*	secondDesignMatrix; /*!< matrix (o x e) for the conditional part of the model  */
 	TSparseMatrix*	weightMatrix; /*!< matrix (o x o) for observations weights */
 
-
+	void clearMatrices();
 };
 
 

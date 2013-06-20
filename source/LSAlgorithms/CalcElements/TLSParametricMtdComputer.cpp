@@ -128,7 +128,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	return true;
 	*/
 	
-	const TSparseMatrix * A = im->getFirstDesignMatrix();
+	const TSparseMatrix * A = im->getFirstDgnMtrx();
 	const TSparseMatrix * W = im->getWeightMtrx();
 #ifdef _DEBUG
 	//std::cout << "TLSParametricMtdComputer::computeResultsMtrs, A=\n " << *A << std::endl;
@@ -277,7 +277,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	int nbUnk = im->getNbrUnknowns();
 	int nbCnstr = im->getNbrConstraints();
 
-	const TSparseMatrix * A1 = im->getFirstDesignMatrix();
+	const TSparseMatrix * A1 = im->getFirstDgnMtrx();
 	const TSparseMatrix * W  = im->getWeightMtrx();
 	const TVector & misclV = im->getMisclosureVctr();
 

@@ -1,8 +1,7 @@
-#import <reframeLib.tlb>
-
+#import <swisstopoReframeLib.tlb>
+#include <TCoInitializer.h>
 #include <TLV03Transformation.h>
 #include <TRefFrameInfo.h>
-#include <TCoInitializer.h>
 
 #include <iostream>
 #include <sstream>
@@ -93,9 +92,10 @@ bool TLV03Transformation::computeSwissRefFrame(double & coordinate_x, double & c
     int result = 1;
     try
     {
-        CCoInitializer coinit(COINIT_MULTITHREADED);
-        reframeLib::IReframePtr pReframe(__uuidof(reframeLib::reframeLib));
-        pReframe->SetDatasetsDir("C:\\Program Files\\swisstopo\\GeoSoftware\\Data\\");
+		CoInitialize(NULL);
+        //CCoInitializer coinit(COINIT_MULTITHREADED);
+        swisstopoReframeLib::IReframePtr pReframe(__uuidof(swisstopoReframeLib::Reframe));
+        pReframe->SetDatasetsDir("C:/Program Files (x86)/swisstopo/ReframeDLL/datasets");
 
 	    // Transform LV95 coordinates to LV03 and Bessel height to Bessel
         result = pReframe->ComputeReframe(

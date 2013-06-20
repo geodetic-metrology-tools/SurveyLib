@@ -40,7 +40,7 @@ TAModifiedLocalAstronomicalRF::~TAModifiedLocalAstronomicalRF()
 // return the geodetic ref frame
 TGeodeticRefFrame* TAModifiedLocalAstronomicalRF::getGeodeticRF() const
 {
- 	return new TGeodeticRefFrame("NULL");
+	return TGeodeticRefFrame::instance();
 }
 
 TSpatialOrientation TAModifiedLocalAstronomicalRF::getOrientation() const

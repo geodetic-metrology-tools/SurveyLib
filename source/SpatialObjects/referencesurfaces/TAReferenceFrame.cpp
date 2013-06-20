@@ -88,7 +88,7 @@ bool TAReferenceFrame::isInRFFactory() const
 
 TGeodeticRefFrame* TAReferenceFrame::getGeodeticRF() const 
 { 
-	return new TGeodeticRefFrame("NULL"); 
+	return TGeodeticRefFrame::instance();
 }
 
 /////////////////////////
@@ -267,6 +267,7 @@ bool TAReferenceFrame::transform( TSpatialVector* sv, TAReferenceFrame* rf )
 
 TARefFrameTransformation* TAReferenceFrame::getRFTransfo2CGRF()
 {// transformation from this reference frame to CGRF (in case of a reference frame not included in TGraph)
-	return new THelmertRefFrameTransform();
+	static THelmertRefFrameTransform* t = new THelmertRefFrameTransform();
+	return t; 
 }
 

@@ -80,6 +80,8 @@ public:
 
 	//@}
 
+		// returns a single standard-case instance, DO NOT delete the result
+		static TGeodeticRefFrame* instance();
 
 private:
 

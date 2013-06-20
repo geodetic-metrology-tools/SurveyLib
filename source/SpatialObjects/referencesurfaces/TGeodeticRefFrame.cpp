@@ -39,7 +39,6 @@ const TReal TGeodeticRefFrame::precisionH = LITERAL(0.0000001); //precision calc
 const TReal TGeodeticRefFrame::precisionPhi = LITERAL(0.00000000000001); //precision calcul phi
 
 
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -117,6 +116,11 @@ bool TGeodeticRefFrame::setCoordinates(TSpatialPosition* sp, const TPositionVect
 TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TSpatialPosition* pos, const TReferenceEllipsoid* ellipsoid )  const
 {
 	return getGeodeticCoords( getPositionVector(pos), ellipsoid );
+}
+
+TGeodeticRefFrame* TGeodeticRefFrame::instance() {
+	static TGeodeticRefFrame *grf = new TGeodeticRefFrame("NULL");
+	return grf;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

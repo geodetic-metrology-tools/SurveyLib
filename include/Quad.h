@@ -1,6 +1,7 @@
 #ifndef QUAD_H
 #define QUAD_H
 
+#include <limits>
 
 #if _MSC_VER >= 1000
 #pragma once
@@ -273,5 +274,13 @@ std::istream& operator>>(std::istream& stream, TReal & value);
 typedef double TReal;
 
 #endif
+
+static inline bool notZero(TReal v) {
+	return (fabsq(v) > std::numeric_limits<TReal>::epsilon());
+}
+
+static inline bool equalq(TReal a, TReal b) {
+	return (fabsq(a-b) < std::numeric_limits<TReal>::epsilon());
+}
 
 #endif  //QUAD_H
