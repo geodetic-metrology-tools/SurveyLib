@@ -23,7 +23,7 @@ void TBCAMData::readLWDAQFile(const std::string& filelocation) {
 	string line;
 	while (getline(infile, line)) {
 		// tokenize the line
-		vector<string> linestrings(TAConverter::tokenizeString(line, " \t"));
+		TStrTokens linestrings(TAConverter::tokenizeString(line, " \t"));
 		// for non-empty lines: use the serial number as key
 		if (linestrings.size() > 1) {
 			auto& pointvec(fPoints[linestrings[0]]);

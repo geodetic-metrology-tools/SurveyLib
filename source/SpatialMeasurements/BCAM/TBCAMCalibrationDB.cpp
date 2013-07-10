@@ -8,19 +8,23 @@
 
 using namespace std;
 
-#if (_MSC_VER < 1700) || (defined __MINGW32__)
 namespace {
+#if (_MSC_VER < 1700) || (defined __MINGW32__)
 	string to_string(int n) {
 		char buf[128];
 		sprintf(buf, "%d", n);
 		return (buf);
 	}
-
+#endif
 	double sTod(const string& s) {
+
+#if (_MSC_VER < 1700)
 		return atof(s.c_str());
+#else
+		return stod(s);
+#endif
 	}
 }
-#endif
 
 
 char const *const TBCAMCalibrationDB::INFILE_DELIMS = " \t";
@@ -93,7 +97,7 @@ int TBCAMCalibrationDB::getTypeIDfromStr(const string& name) {
     int type = 0;
 	string errmsg("Cannot convert device type " + name + " to number");
 
-	vector<string> typetokens(TAConverter::tokenizeString(name, "_"));
+	TStrTokens typetokens(TAConverter::tokenizeString(name, "_"));
 	if (typetokens.size() != 3)
 		 throw runtime_error(errmsg);
 
@@ -138,7 +142,7 @@ void TBCAMCalibrationDB::openDB(const std::string& DBlocation) {
 	while (getline(infile, line)) {
 		nline++;
 
-		vector<string> linestrings(TAConverter::tokenizeString(line, INFILE_DELIMS));
+		TStrTokens linestrings(TAConverter::tokenizeString(line, INFILE_DELIMS));
 		if (linestrings.size() < 9)
 			throw std::runtime_error("Error while reading calibration file " + DBlocation + " at line " + to_string(nline));
 
