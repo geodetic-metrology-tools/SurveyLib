@@ -24,6 +24,7 @@ class	TAStreamFormatter;
 #include "TLSCalcPosVectorParam.h"
 
 // typedefs
+typedef const vector<const string>&& TStrTokens;
 ////////////////////////////////////////////////////////////////
 
 /*!\ingroup ProjectFramework
@@ -50,7 +51,8 @@ public:
 
 	// Tokenizes a string into a vector of strings based on the delimiters given to delim
 	// e.g. " \t_" will split on every occurence of a blank, a tab or an underscore.
-	static vector<string> tokenizeString(const string& str, const char* delims);
+	//  Use the TStrTokens type to catch the return value avoiding copies
+	static const vector<const string> tokenizeString(const string& str, const char* delims);
 
 
 protected:
