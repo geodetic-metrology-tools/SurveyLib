@@ -35,7 +35,7 @@ class  TAReferenceFrame;
 /*!\ingroup spatialobjects
 	@{*/
 
-//! Class for a spatial point 
+//! Class for a spatial point. The current pointed-to spatial position will be deleted
 class	TSpatialPoint //: public TObject
 {
 
