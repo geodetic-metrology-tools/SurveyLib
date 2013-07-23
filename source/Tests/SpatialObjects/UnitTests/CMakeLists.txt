@@ -1,4 +1,4 @@
-include_directories ({TUT_INCLUDE_PATH})
+include_directories (${TUT_INCLUDE_PATH})
 
 set(UnitTests_SOURCES
 	testTAngle.cpp

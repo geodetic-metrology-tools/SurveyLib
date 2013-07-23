@@ -38,3 +38,5 @@ set(ProjectData_HEADERS
 add_library(ProjectData STATIC ${ProjectData_SOURCES} ${ProjectData_HEADERS})
 #install(FILES ${ProjectData_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####
+
+target_link_libraries(ProjectData ${PROJECTFRAMEWORK_LIBRARIES} ${SPATIAL_LIBRARIES})

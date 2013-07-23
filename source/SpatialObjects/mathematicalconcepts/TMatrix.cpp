@@ -238,6 +238,21 @@ TColumnVector TMatrix::eqnSolve(const TColumnVector& B)
     return result;
 }
 
+TReal TMatrix::eqnError(const TColumnVector& X, const TColumnVector& B)
+{//returns relative error of the solution above
+	if (X.dimension() != B.dimension() || X.dimension() != numCols())
+		return -1.0;
+
+	TColumnVector numerator = (*this)*X-B;
+	TReal num_sq = 0.0;
+	TReal den_sq = 0.0;
+	for (int i=0; i<X.dimension(); i++)
+	{
+		num_sq += numerator(i)*numerator(i);
+		den_sq += B(i)*B(i);
+	}
+	return sqrtq(num_sq/den_sq);
+}
 
 // TODO: Is this used in the intermediate calculations?
 // Maybe it would be better to make it a constructor.

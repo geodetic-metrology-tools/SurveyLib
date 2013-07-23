@@ -30,3 +30,5 @@ add_library(StreamFormatters STATIC ${StreamFormatters_SOURCES} ${StreamFormatte
 # Install the header files to the given destination
 #install(FILES ${StreamFormatters_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####
+
+target_link_libraries(StreamFormatters ${PROJECTFRAMEWORK_LIBRARIES} ${SPATIAL_LIBRARIES})

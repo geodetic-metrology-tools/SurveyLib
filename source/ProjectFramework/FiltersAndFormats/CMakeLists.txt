@@ -50,3 +50,5 @@ set(FiltersAndFormats_HEADERS
 # Create a static library from sources:
 add_library(FiltersAndFormats STATIC ${FiltersAndFormats_SOURCES} ${FiltersAndFormats_HEADERS})
 #install(FILES ${FiltersAndFormats_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
+
+target_link_libraries(FiltersAndFormats ${SPATIAL_LIBRARIES})
