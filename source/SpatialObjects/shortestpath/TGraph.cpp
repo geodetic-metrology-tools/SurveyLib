@@ -103,12 +103,13 @@ void	TGraph::init()
 
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932CH1903plus),
             TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCH1903plus2ETRF93));
-
+#ifdef USE_SWISSTOPO
     insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCH1903plus2SwissLV95),
             TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV952CH1903plus));
 
     insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV952SwissLV03),
             TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV032SwissLV95));
+#endif
 
     insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932FrenchRGF93),
             TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kFrenchRGF932ETRF93));

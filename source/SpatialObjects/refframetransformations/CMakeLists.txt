@@ -18,17 +18,15 @@ set(RefFrameTransformations_SOURCES
 	TXYHs2MLATransformation.cpp
 	TRGF93CC46Transformation.cpp
 	TLambert93Transformation.cpp
-	TLV95Transformation.cpp
+	#TLV95Transformation.cpp
 )
 
 IF(USE_SWISSTOPO)
 set(RefFrameTransformations_SOURCES 
 	${RefFrameTransformations_SOURCES}
-	TLV03Transformation.cpp)
-ELSE(USE_SWISSTOPO)
-set(RefFrameTransformations_SOURCES 
-	${RefFrameTransformations_SOURCES}
-	TLV03TransformationStub.cpp)
+	TLV03Transformation.cpp
+	TLV95Transformation.cpp
+	)
 ENDIF(USE_SWISSTOPO)
 
 # Create a variable containing all .h files:

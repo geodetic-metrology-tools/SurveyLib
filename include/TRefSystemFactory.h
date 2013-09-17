@@ -91,8 +91,10 @@ public:
 			kCernXYHg85Machine   = 106, 
 			kCERNXYHsSphereSPS   = 107, 
 			kCGRFSphere          = 108,
+#ifdef USE_SWISSTOPO
             kSwissLV95           = 109,
             kSwissLV03           = 110,
+#endif
             kFrenchRGF93Zone5    = 205,
 			kLambert93			 = 206,
 			//
@@ -131,8 +133,10 @@ public:
 									kCGRFSphere2CCS, kITRF972CGRF, kCGRF2ITRF97, 
 									kITRF972ETRF93, kETRF932ITRF97,
                                     kETRF932CH1903plus, kCH1903plus2ETRF93,
+#ifdef USE_SWISSTOPO
                                     kCH1903plus2SwissLV95, kSwissLV952CH1903plus,
                                     kSwissLV952SwissLV03, kSwissLV032SwissLV95,
+#endif
                                     kETRF932FrenchRGF93, kFrenchRGF932ETRF93,
 									kETRF932kLambert93, kLambert932ETRF93,
 									kETRF932kCHTRF95, kCHTRF952kETRF93,

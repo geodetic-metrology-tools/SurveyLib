@@ -63,10 +63,12 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("kCERNXYHsSphereSPS","CERN XYHs (SPS)", TCoordSysFactory::k2DPlusH)));
         tmp->insert(std::make_pair(TRefSystemFactory::kCGRFSphere,
             TDetails("kCGRFSphere","CERN GRF sphere", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+#ifdef USE_SWISSTOPO
         tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV95,
             TDetails("kSwissLV95","Swiss LV95 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
         tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV03,
             TDetails("kSwissLV03","Swiss LV03 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
+#endif
         tmp->insert(std::make_pair(TRefSystemFactory::kFrenchRGF93Zone5,
             TDetails("kFrenchRGF93Zone5","French RGF93zone5 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kLambert93,

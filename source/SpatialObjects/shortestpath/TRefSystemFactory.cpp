@@ -182,7 +182,7 @@ void	TRefSystemFactory::init()
 	TGeodeticRefFrame* pCH1903plus = new TGeodeticRefFrame("CH1903plus", pBessel1841);
 	pCH1903plus->setRefFrameId(kCH1903plus);
 	fRefFrameList.push_back(pCH1903plus);
-
+#ifdef USE_SWISSTOPO
         // Swiss LV95
     TAReferenceFrame* pLV95 = new TLV95Projection("LV95");
     pLV95->setRefFrameId(kSwissLV95);
@@ -192,7 +192,7 @@ void	TRefSystemFactory::init()
     TAReferenceFrame* pLV03 = new TLV03Projection("LV03");
     pLV03->setRefFrameId(kSwissLV03);
     fRefFrameList.push_back(pLV03);
-
+#endif
 		// WGS84
 	TGeodeticRefFrame* pWGS = new TGeodeticRefFrame(wgs, pWGSEll);
 	pWGS->setRefFrameId(kWGS84);
@@ -757,7 +757,7 @@ void	TRefSystemFactory::init()
 		pCH1903plus2ETRF93->setTransformId(kCH1903plus2ETRF93);
 		fTransformList.push_back(pCH1903plus2ETRF93);
 	}
-
+#ifdef USE_SWISSTOPO
     {
         ////////////////////////////////////////////////////////////////
 		// Transformation between CH1903plus and LV95
@@ -782,7 +782,7 @@ void	TRefSystemFactory::init()
         pInverse->setTransformId(kSwissLV032SwissLV95);
         fTransformList.push_back(pInverse);
 	}
-
+#endif
     {
         ////////////////////////////////////////////////////////////////
 		// Transformation between ETRF93 and RGF93
