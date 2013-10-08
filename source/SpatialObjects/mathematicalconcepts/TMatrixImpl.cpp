@@ -1,6 +1,7 @@
 #include <TMatrixImpl.h>
 
 #include <Eigen/LU>
+#include <Eigen/Cholesky>
 
 TMatrixImpl::TMatrixImpl()
 {
@@ -95,6 +96,16 @@ TMatrixImpl TMatrixImpl::solve(const TMatrixImpl & b) const
     // TODO: Report if can be solved
     Eigen::FullPivLU<Eigen::MatrixXd> lu(fMatrix);
     return TMatrixImpl(lu.solve(b.fMatrix));
+}
+
+TMatrixImpl TMatrixImpl::solveLdlt(const TMatrixImpl & b) const
+{// returns an empty matrix is decomposition not successful
+    Eigen::LDLT<Eigen::MatrixXd> ldlt(fMatrix);
+	TMatrixImpl ret(ldlt.solve(b.fMatrix));
+	if (ldlt.info() == Eigen::Success)
+		return ret;
+	else
+		return TMatrixImpl();
 }
 
 const double * TMatrixImpl::data() const

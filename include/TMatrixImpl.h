@@ -31,6 +31,7 @@ public:
     TMatrixImpl & transpose();
     bool invert();
     TMatrixImpl solve(const TMatrixImpl & b) const;
+	TMatrixImpl solveLdlt(const TMatrixImpl & b) const;
 
     // TODO: Temporary access to internal representation - needed for toSparse
     const double * data() const;

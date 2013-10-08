@@ -138,11 +138,10 @@ public:
 		/*!\param B the right hand side vector of the system to solve
 			\return the X solution vector of the system AX = B*/
 		virtual TColumnVector		eqnSolve(const TColumnVector& B);
-
-		/*! \param X the solution from eqnSolve()
-			\param B the right hand side vector used in eqnSolve()
-			\return the relative error of the solution*/
-		virtual TReal		eqnError(const TColumnVector& X, const TColumnVector& B);
+		
+		/*!\param B the right hand side vector of the system to solve using LDLT
+			\return the X solution vector of the system AX = B*/
+		virtual TColumnVector		ldltSolve(const TColumnVector& B);
 
 		/*!Initializes all the matrice's diagonal elements to a common value.
 		The non-diagonal elements are set to zero.

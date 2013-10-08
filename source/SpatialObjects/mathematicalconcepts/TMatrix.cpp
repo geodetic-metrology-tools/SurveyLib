@@ -221,7 +221,7 @@ TMatrix TMatrix::transposed() const
 }
 
 
-TColumnVector TMatrix::eqnSolve(const TColumnVector& B) 
+TColumnVector TMatrix::eqnSolve(const TColumnVector& B)
 {//returns the solution of the system this*X = B
     TColumnVector result(numRows());
 	result.setStatus(this->testStatus(B));
@@ -238,20 +238,26 @@ TColumnVector TMatrix::eqnSolve(const TColumnVector& B)
     return result;
 }
 
-TReal TMatrix::eqnError(const TColumnVector& X, const TColumnVector& B)
-{//returns relative error of the solution above
-	if (X.dimension() != B.dimension() || X.dimension() != numCols())
-		return -1.0;
-
-	TColumnVector numerator = (*this)*X-B;
-	TReal num_sq = 0.0;
-	TReal den_sq = 0.0;
-	for (int i=0; i<X.dimension(); i++)
+TColumnVector TMatrix::ldltSolve(const TColumnVector& B)
+{//returns the solution of the system this*X = B, requires P(S)D matrix
+    TColumnVector result(numRows());
+	result.setStatus(this->testStatus(B));
+    if (result.getStatus()!=kNull && numCols() == B.dimension())
 	{
-		num_sq += numerator(i)*numerator(i);
-		den_sq += B(i)*B(i);
-	}
-	return sqrtq(num_sq/den_sq);
+        TMatrixImpl tmp(numCols(),1,0.0);
+        for(int i=0; i!=numCols(); ++i)
+            tmp(i,0) = B(i);
+
+        TMatrixImpl res = this->fImpl->solveLdlt(tmp);
+		if (res.rows() == 0)
+		{
+			result.setStatus(TVNumericValue::kNull);
+			return result;
+		}
+        for(int i=0; i!=numCols(); ++i)
+            result(i) = res(i,0);
+    }
+    return result;
 }
 
 // TODO: Is this used in the intermediate calculations?
