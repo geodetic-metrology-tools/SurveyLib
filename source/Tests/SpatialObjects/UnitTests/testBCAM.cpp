@@ -32,8 +32,7 @@ namespace tut
 
 		const char* delims = " \t_";
 		
-		std::vector<string> res; 
-		res = TAConverter::tokenizeString(strs[0], delims);
+		auto res = TAConverter::tokenizeString(strs[0], delims);
 		ensure(res.size() == 3);
 		ensure(res[0] == "black");
 		ensure(res[1] == "azi");
