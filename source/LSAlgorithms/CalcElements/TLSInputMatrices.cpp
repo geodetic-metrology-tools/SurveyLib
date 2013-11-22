@@ -82,6 +82,8 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 
 void TLSInputMatrices::clearMatrices()
 {
+	// TODO: gets deleted externally, change to internal deletion
+	/*
 	if (firstDesignMatrix != nullptr) {
 		delete firstDesignMatrix;
 		firstDesignMatrix = nullptr;
@@ -106,6 +108,7 @@ void TLSInputMatrices::clearMatrices()
 		delete fCnstrMisclosureVector;
 		fCnstrMisclosureVector = nullptr;
 	}
+	*/
 }
 
 

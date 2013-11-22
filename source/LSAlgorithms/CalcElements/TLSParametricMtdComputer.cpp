@@ -72,7 +72,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	const TColumnVector& misclV = im->getMisclosureVctr();
 
     TSparseMatrix* firstDM = firstDMTransposed->transposed();
-	im->setFirstDesignMatrix(firstDM);
+	im->setFirstDgnMtrx(firstDM);
 	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
 
 	TSparseMatrix* fAtPA = aTransTimesW->multiply_returning_lower_triangular_F(*firstDM);
@@ -181,7 +181,7 @@ bool TLSParametricMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSR
 	const TColumnVector& constraintMisclV = im->getCnstrMisclosureVctr();
 
 	TSparseMatrix* firstDM = firstDMTransposed->transposed();
-	im->setFirstDesignMatrix(firstDM);
+	im->setFirstDgnMtrx(firstDM);
 
 	TSparseMatrix* aTransTimesW = firstDMTransposed->multiply_F(*weightM);
 

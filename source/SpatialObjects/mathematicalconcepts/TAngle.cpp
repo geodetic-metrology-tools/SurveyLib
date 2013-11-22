@@ -78,20 +78,14 @@ TAngle::TAngle(const TAngle& angle)
 
 void TAngle::normaliseAngle()
 {
-	// impropable angle, throw.
-	long double val = fValue;
-	if (0&&fabsq(fValue) > 1e36*M_PI)
-		throw std::runtime_error("Impropable angle occured: " + to_string(val) + "rad.");
-
-	//modification du 08/05/2003 pour le calcul les angles seront exprimes entre -pi et pi
     while (fValue > M_PI - seuil())
-	{
+    {
         fValue -= 2*M_PI;
-	}
+    }
     while (fValue < -M_PI + seuil())
-	{
+    {
         fValue += 2*M_PI;
-	}
+    }
 }
 
 
