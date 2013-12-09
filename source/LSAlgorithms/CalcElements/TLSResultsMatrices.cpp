@@ -119,10 +119,10 @@ TLSResultsMatrices::~TLSResultsMatrices()
 //MEMBER FUNCTION
 //////////////////////////////////////////////////////////////////////////////////////////
 
-TVector	TLSResultsMatrices::computeVarObs(const TSparseMatrix& A) 
+TVector	TLSResultsMatrices::computeVarObs(const TSparseMatrix* A) 
 {
 	TVector res;
-	return TSparseUtils::multABATasDiag(res, A, *fUnknownsCovarianceMtrx);
+	return TSparseUtils::multABATasDiag(res, *A, *fUnknownsCovarianceMtrx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

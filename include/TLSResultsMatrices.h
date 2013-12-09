@@ -85,7 +85,7 @@ public:
 	void			saveMatricesToFile(int nbIter) const;
 
 	/*! compute and return a vector of observations variances */
-	TVector	computeVarObs(const TSparseMatrix& A);
+	TVector	computeVarObs(const TSparseMatrix* A);
 
 
 	const TSparseMatrix & getIntermediateMatrix() const {return fIntermediateMatrix;}
