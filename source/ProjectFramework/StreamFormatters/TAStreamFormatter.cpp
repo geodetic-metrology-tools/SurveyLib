@@ -637,14 +637,14 @@ TAStreamFormatter&	TAStreamFormatter::operator<<(const TSpatialPoint& SpPoint)
 }
 
 
-TAStreamFormatter& TAStreamFormatter::operator<<(TPointFormat& ptFormat)
+TAStreamFormatter& TAStreamFormatter::operator<<(const TPointFormat& ptFormat)
 {//sets the stream's point format
 	fPointFormat = ptFormat;
 	return *this;
 }
 
 
-TAStreamFormatter& TAStreamFormatter::operator<<(TObservationFormat& obsFormat)
+TAStreamFormatter& TAStreamFormatter::operator<<(const TObservationFormat& obsFormat)
 {//sets the stream's observation format
 	fObservationFormat = obsFormat;
 	return *this;

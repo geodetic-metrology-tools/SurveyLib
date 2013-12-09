@@ -106,8 +106,9 @@ TLength TCernGridGeoid::getN ( const TSpatialPosition& sp) const
 
 	else
 	{
-		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid (1)" << endl;
-		throw TNotInLepGridException("TNotInLepGridException: getN function problem.");
+		char posstr[512];
+		_snprintf(posstr, 512, " (%.3g,%.3g,%.3g) ",x, y, spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue());
+		throw TNotInLepGridException("TNotInLepGridException: getEta function problem with coordinate " + string(posstr) + ".");
 		//exit(EXIT_FAILURE);
 	}
 
@@ -158,7 +159,10 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 	else
 	{
 		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid (2)" << endl;
-		throw TNotInLepGridException("TNotInLepGridException: getEta function problem.");
+		
+		char posstr[512];
+		_snprintf(posstr, 512, " (%.3g,%.3g,%.3g) ",x, y, spos.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue());
+		throw TNotInLepGridException("TNotInLepGridException: getEta function problem with coordinate " + string(posstr) + ".");
 		
 		//cerr << endl << "Error : spatial position not in the LEP grid" << endl;
 
@@ -214,8 +218,9 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 
 	else
 	{
-		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid (3)" << endl;
-		throw TNotInLepGridException("TNotInLepGridException: getXi function problem.");
+		char posstr[512];
+		_snprintf(posstr, 512, " (%.3g,%.3g,%.3g) ",x, y, spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue());
+		throw TNotInLepGridException("TNotInLepGridException: getEta function problem with coordinate " + string(posstr) + ".");
 		
 		//cerr << endl << "Error : spatial position not in the LEP grid" << endl;
 		///
@@ -272,8 +277,9 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 
 	else
 	{
-		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid (4)" << endl;
-		throw TNotInLepGridException("TNotInLepGridException: getDAlpha function problem.");
+		char posstr[512];
+		_snprintf(posstr, 512, " (%.3g,%.3g,%.3g) ",position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue());
+		throw TNotInLepGridException("TNotInLepGridException: getEta function problem with coordinate " + string(posstr) + ".");
 		
 		//cerr << "Error : spatial position not in the LEP grid" << endl;
 		///
@@ -314,8 +320,12 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& lat
 
 	else
 	{
-		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid (5)" << endl;
-		throw TNotInLepGridException("TNotInLepGridException: getDAlpha function problem.");
+		char posstr[512];
+		_snprintf(posstr, 512, " (%.3g,%.3g,%.3g) ", 
+			position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), 
+			position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), 
+			position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue());
+		throw TNotInLepGridException("TNotInLepGridException: getEta function problem with coordinate " + string(posstr) + ".");
 		
 		//cerr << "Error : spatial position not in the LEP grid" << endl;
 		///

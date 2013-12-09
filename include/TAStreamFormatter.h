@@ -218,7 +218,7 @@ public:
 		virtual	TAStreamFormatter	&operator<<( const TSpatialPoint & );
 
 		/*!Output TPointFormat*/
-		virtual	 TAStreamFormatter& operator<<(TPointFormat& ptFormat);
+		virtual	 TAStreamFormatter& operator<<(const TPointFormat& ptFormat);
 
 		/*!Output TPositionVector object*/
 		virtual TAStreamFormatter&	operator<<(const TPositionVector&);
@@ -233,7 +233,7 @@ public:
 		virtual TAStreamFormatter&	operator<<(const TScalar&);
 		
 		/*!Output TObservationFormat*/
-		virtual	 TAStreamFormatter& operator<<(TObservationFormat& obsFormat);
+		virtual	 TAStreamFormatter& operator<<(const TObservationFormat& obsFormat);
 	//@}
 
 
