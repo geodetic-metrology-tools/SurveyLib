@@ -139,7 +139,6 @@ bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex colu
 bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {
 	try {
-	if (notZero(coeff))
 		(*fMisclosureVector)(row) = coeff;
 	} catch(...) {
 		return false;
@@ -175,7 +174,6 @@ bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex 
 bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {
 	try {
-	if (notZero(coeff))
 		(*fCnstrMisclosureVector)(row) = coeff;
 	} catch(...) {
 		return false;
