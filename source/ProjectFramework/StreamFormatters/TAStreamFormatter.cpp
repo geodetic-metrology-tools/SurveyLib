@@ -126,7 +126,7 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TFileParameters& fp, TDataParam
 		}
 		else
 		{
-			this->setError("No output file to open, check the path");
+			this->setError("Failed to open output file, check the path");
 		}
 		fFStream->clear();
 	}
