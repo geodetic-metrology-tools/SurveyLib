@@ -13,6 +13,12 @@
 
 #include <iosfwd>
 
+#if _MSC_VER
+#include <float.h>
+#else
+#include <cmath>
+#endif
+
 // explicitly ignore unused parameters
 template <typename T>
 void ignoring(T &&)
@@ -279,8 +285,20 @@ static inline bool notZero(TReal v) {
 	return (fabsq(v) > std::numeric_limits<TReal>::epsilon());
 }
 
+// squaring values is done frequently
+static inline TReal pow2(TReal v) {
+	return v*v;
+}
+
 static inline bool equalq(TReal a, TReal b) {
 	return (fabsq(a-b) < std::numeric_limits<TReal>::epsilon());
 }
 
+static inline bool isfiniteq(TReal v) {
+#if _MSC_VER
+	return _finite(v) != 0;
+#else
+	return isfinite(v);
+#endif
+}
 #endif  //QUAD_H
