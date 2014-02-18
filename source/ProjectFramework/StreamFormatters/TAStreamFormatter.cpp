@@ -18,6 +18,11 @@
 //
 // Other forward declarations
 
+#if _MSC_VER
+#include <float.h>
+#else
+#include <cmath>
+#endif
 
 #include	"TADataSet.h"
 #include	"TFileParameters.h"
@@ -47,6 +52,14 @@
 
 #include	"TAStreamFormatter.h"
 
+
+static inline bool isfiniteq(TReal v) {
+#if _MSC_VER
+	return _finite(v) != 0;
+#else
+	return isfinite(v);
+#endif
+}
 
 //////////////////////////////////////////////////////////////////////
 //ClassImp(TAStreamFormatter)
@@ -783,7 +796,17 @@ TAStreamFormatter &TAStreamFormatter::operator<<( float f )
 
 
 TAStreamFormatter &TAStreamFormatter::operator<<( TReal d )
-{   (*fIOStream)<<( (double) d ); return *this; }
+{   
+	string s("IND");
+	if((size_t)fWidth > s.size())
+    	s.insert(0, fWidth - s.size(), ' ');
+
+	if (isfiniteq(d))
+		(*fIOStream)<<( (double) d );
+	else
+		(*fIOStream)<<( s );
+	 return *this; 
+}
 
 
 TAStreamFormatter &TAStreamFormatter::operator<<( const char *s )
@@ -791,7 +814,10 @@ TAStreamFormatter &TAStreamFormatter::operator<<( const char *s )
 
 
 TAStreamFormatter &TAStreamFormatter::operator<<( const string &str )
-{   (*fIOStream)<<( str ); return *this; }
+{   
+	(*fIOStream)<<( str ); 
+	return *this; 
+}
 
 
 TAStreamFormatter &TAStreamFormatter::operator<<( void *v )

@@ -294,11 +294,4 @@ static inline bool equalq(TReal a, TReal b) {
 	return (fabsq(a-b) < std::numeric_limits<TReal>::epsilon());
 }
 
-static inline bool isfiniteq(TReal v) {
-#if _MSC_VER
-	return _finite(v) != 0;
-#else
-	return isfinite(v);
-#endif
-}
 #endif  //QUAD_H
