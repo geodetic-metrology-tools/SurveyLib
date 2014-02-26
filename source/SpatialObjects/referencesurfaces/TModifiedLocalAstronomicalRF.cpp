@@ -418,14 +418,11 @@ bool	TModifiedLocalAstronomicalRF::isOriginSet() const
 
 bool	TModifiedLocalAstronomicalRF::transform(TSpatialPosition* sp, TAReferenceFrame* rf)
 {//! transform a position from a reference frame to another
-
+	
 	TPositionVector position(sp->getCoordinates(sp->getCoordSys()));
-	TRefFrameWrapper from, to;
-
-	//MLA to CGRF
-	getRFTransfo2CGRF()->transform(position);
-	sp->changeRefFrameTo(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
-	sp->setCoordinates(position);
+	TRefFrameWrapper from(this);
+	TRefFrameWrapper to(rf);
+	TARefFrameTransformation *postGraphTrafo(0);
 
 
 	if(fGeoid == TRefSystemFactory::kCGSphere)
@@ -439,30 +436,62 @@ bool	TModifiedLocalAstronomicalRF::transform(TSpatialPosition* sp, TAReferenceFr
 		to.setFrame(rf);
 	}
 
+	if (! this->isInGraph()) {
+		// transform to CGRF manually
+		TARefFrameTransformation* toGRF = this->getRFTransfo2CGRF();
+		toGRF->transform(position);
 
-	if (from.getFrame() != to.getFrame() )
-	{
+		sp->changeRefFrameTo(this);
+		sp->setCoordinates(position);
+
+		from.setFrame(this->getGeodeticRF());
+	}
+
+	if (! rf->isInGraph()) {
+		// destination system is a local system
+		// transform from CGRF manually
+		postGraphTrafo = rf->getRFTransfo2CGRF()->inverse();
+
+		to.setFrame(rf->getGeodeticRF());
+	}
+
+	if (! (from == to)) {
 		vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
-	
+		
 		if (transfo[0] == 0)
 		{return false;}
 
 		// reverse the order of the vector to have transformations as applicated to the point
 		reverse(transfo.begin(), transfo.end());
+			
 
 		// application of the successive transformations
-		vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
-		vector<TARefFrameTransformation*>::iterator iterEnd = transfo.end();
-
-		while (iter != iterEnd )
-		{
+		for (vector<TARefFrameTransformation*>::iterator iter = transfo.begin(); 
+			 iter != transfo.end(); 
+			 iter++)
 			(*iter)->transform(position);
-			iter++;
-		}
-
+		
 		sp->changeRefFrameTo(to.getFrame());
 		sp->setCoordinates(position);
 	}
+
+	if (postGraphTrafo != 0) {
+		// The destination system is not in the graph
+		postGraphTrafo->transform(position);
+		sp->changeRefFrameTo(rf);
+		sp->setCoordinates(position);
+	}
+		
+	return true;
+
+
+
+
+
+
+
+
+
 
 	return true;
 }
