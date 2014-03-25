@@ -1,7 +1,0 @@
-// 
-// TWorkingROMs
-//
-//
-
-#include	"TWorkingROMs.h"
-

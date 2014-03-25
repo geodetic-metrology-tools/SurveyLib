@@ -2,17 +2,7 @@
 SET(SURVEYLIB_LIBRARIES
 	LSAlgorithms
 	ProjectFramework
-	SpatialMeasurements
 	SpatialObjects
-)
-
-SET(MEASUREMENT_LIBRARIES 
-	ConstraintMeasurements 
-	InstrumentStations 
-	MeasurementConstants 
-	Measurements 
-	ROMs
-	BCAM
 )
 
 SET(SPATIAL_LIBRARIES 
@@ -38,7 +28,6 @@ SET(LSALGO_LIBRARIES
 )
 
 SET(ALL_SURVEYLIB_LIBS
-	${MEASUREMENT_LIBRARIES}
 	${SPATIAL_LIBRARIES}
 	${PROJECTFRAMEWORK_LIBRARIES}
 	${LSALGO_LIBRARIES}
