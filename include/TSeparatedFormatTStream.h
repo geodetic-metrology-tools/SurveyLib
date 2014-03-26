@@ -59,7 +59,6 @@ class TWireToWireDistMeas;*/
 //#include "TWTWFilter.h"
 
 #include "TAStreamFormatter.h"
-#include "TSpatialDistMeasurement.h"
 // typedefs
 //
 //

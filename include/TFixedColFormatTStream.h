@@ -47,16 +47,7 @@ class TDistConstants;
 class TAngleConstants;
 
 
-/*class TWPSMeasurement;
-class TWireToWireDistMeas;*/
-
-//class TRadialOffsetCnstr;
-
-//#include "TWPSFilter.h"
-//#include "TWTWFilter.h"
-
 #include "TAStreamFormatter.h"
-#include "TSpatialDistMeasurement.h"
 // typedefs
 //
 //
