@@ -9,17 +9,14 @@ SET(CalcElements_SOURCES
 
 # Create a variable containing all .h files:
 SET(CalcElements_HEADERS 
-	${SURVEYLIB_INCLUDE_PATH}/TALSCalcParameter.h
-	${SURVEYLIB_INCLUDE_PATH}/TALSComputer.h
-	${SURVEYLIB_INCLUDE_PATH}/UEOIndices.h
-	${SURVEYLIB_INCLUDE_PATH}/TLSInputMatrices.h
-	${SURVEYLIB_INCLUDE_PATH}/TLSResultsMatrices.h
-	${SURVEYLIB_INCLUDE_PATH}/TLSParametricMtdComputer.h
+	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TALSCalcParameter.h
+	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TALSComputer.h
+	${SURVEYLIB_INCLUDE_PATH}/lsalgo/UEOIndices.h
+	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TLSInputMatrices.h
+	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TLSResultsMatrices.h
+	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TLSParametricMtdComputer.h
 )
 
 #Create a static library from the object files
 ADD_LIBRARY(CalcElements STATIC ${CalcElements_SOURCES} ${CalcElements_HEADERS})
-
-# Install the header files to the given destination
-#install(FILES ${CalcElements_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 #####

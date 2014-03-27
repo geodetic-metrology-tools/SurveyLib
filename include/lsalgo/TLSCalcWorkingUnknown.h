@@ -7,10 +7,9 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
-#include "TLSCalcLengthParam.h"
-#include "TLSCalcOrientationParam.h"
+#include "lsalgo/TLSCalcLengthParam.h"
+#include "lsalgo/TLSCalcOrientationParam.h"
 #include "TLSCalcFreeVectorParam.h"
-#include "TAMeasurement.h"
 
 #include <unordered_map>
 

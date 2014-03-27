@@ -9,7 +9,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "TLSInputMatrices.h"
+#include "lsalgo/TLSInputMatrices.h"
 
 
 /////////////////////////////////////////////////////////////////////////////////

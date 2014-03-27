@@ -346,9 +346,3 @@ double TMatrix::operator()(int row, int col) const
 {//returns a copy of a matrix coefficient (const version of the previous method
 	return fImpl->operator()(row,col);
 }
-
-
-TSparseMatrix TMatrix::toSparse() const
-{
-	return fImpl->toSparse();
-}

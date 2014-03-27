@@ -1,6 +1,6 @@
 // TLSCalcFreeVectorParam.cpp
 
-#include "TLSCalcFreeVectorParam.h"
+#include "lsalgo/TLSCalcFreeVectorParam.h"
 
 //////////////////////////////////////////////////////////////////////
 // CONSTRUCTORS / DESTRUCTOR

@@ -1,6 +1,6 @@
 // TLSCalcWorkingPosVec.cpp
 
-#include "TLSCalcWorkingPosVec.h"
+#include "lsalgo/TLSCalcWorkingPosVec.h"
 
 ////////////////////////////////////////////////////////////////
 // PUBLIC METHODS		

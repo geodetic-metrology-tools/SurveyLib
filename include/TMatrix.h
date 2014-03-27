@@ -34,7 +34,6 @@ class  TDouble;
 //using namespace std;
 //
 #include "TANumericValue.h"
-#include "TSparseMatrix.h"
 
 class TMatrixImpl;
 
@@ -171,15 +170,6 @@ public:
 			
 		/*! Returns the error message */
 		std::string	getError() const { return fError; }
-
-		/*! decompose square matrix N */
-		//virtual TMatrix dfact(int* n_pivot,int* pivot_i,int* pivot_j);
-
-		/*! resolve equations system */
-		//virtual TColumnVector dfeqn(TColumnVector* B,int n_pivot,int* pivot_i,int* pivot_j);
-
-		//TODO
-		TSparseMatrix toSparse() const;
 	//@}
 
 private:

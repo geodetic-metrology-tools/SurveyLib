@@ -732,7 +732,7 @@ TAStreamFormatter &TAStreamFormatter::operator>>( TReal &d )
 		fractionPart *= 10;
 		fractionPart += str[i++] - '0';
 	}
-	_Quad fraction = fractionPart / __powq(10.0q, len);
+	_Quad fraction = fractionPart / powq(10.0q, len);
 	d = sign * (wholePart + fraction);
 
 #else

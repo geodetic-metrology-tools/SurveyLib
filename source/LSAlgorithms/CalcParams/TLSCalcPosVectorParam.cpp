@@ -1,7 +1,7 @@
 // TLSCalcPosVectorParam.cpp
 #include <stdio.h>
 
-#include "TLSCalcPosVectorParam.h"
+#include "lsalgo/TLSCalcPosVectorParam.h"
 #include "TAGeoidModel.h"
 #include "TAReferenceFrame.h"
 

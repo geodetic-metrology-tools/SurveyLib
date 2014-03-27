@@ -18,13 +18,18 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 #pragma once
 #endif // _MSC_VER >= 1000
 
+#include <string>
+#include <vector>
+#include <Quad.h>
+#include <TLength.h>
+#include <TAngle.h>
+
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 class	TAStreamFormatter;
-#include "TLSCalcPosVectorParam.h"
 
 // typedefs
-typedef const vector<const string>&& TStrTokens;
+typedef const std::vector<const std::string>&& TStrTokens;
 ////////////////////////////////////////////////////////////////
 
 /*!\ingroup ProjectFramework
@@ -49,10 +54,10 @@ public:
 		virtual  ~TAConverter();
 	//@}
 
-	// Tokenizes a string into a vector of strings based on the delimiters given to delim
+	// Tokenizes a std::string into a std::vector of strings based on the delimiters given to delim
 	// e.g. " \t_" will split on every occurence of a blank, a tab or an underscore.
 	//  Use the TStrTokens type to catch the return value avoiding copies
-	static const vector<const string> tokenizeString(const string& str, const char* delims);
+	static const std::vector<const std::string> tokenizeString(const std::string& str, const char* delims);
 
 
 protected:
@@ -63,17 +68,17 @@ protected:
 		//! copy assignment operator
 		TAConverter& operator=(const TAConverter& source);
 
-		/*!write a string
-		\param int : width used to write the string
-		\param string : string to write*/
-		void	writeString(const int width, const string data);
-		void	writeStringLeft(const int width, const string data);
+		/*!write a std::string
+		\param int : width used to write the std::string
+		\param std::string : std::string to write*/
+		void	writeString(const int width, const std::string data);
+		void	writeStringLeft(const int width, const std::string data);
 
-		/*!write a string and add a separator
-		\param int : width used to write the string
-		\param string : string to write*/
-		void	writeStringSep(const int width, const string data);
-		void	writeStringLeftSep(const int width, const string data);
+		/*!write a std::string and add a separator
+		\param int : width used to write the std::string
+		\param std::string : std::string to write*/
+		void	writeStringSep(const int width, const std::string data);
+		void	writeStringLeftSep(const int width, const std::string data);
 
 		/*!write a TReal and
 		\param int : width used to write the TReal
@@ -91,9 +96,9 @@ protected:
 		void	writeAngle(const int width, const int pres, const TAngle::EUnits, const TAngle data);
 
 		void	writeInteger(const int width, const int data);
-		void	readP100Comment(string comments);
-		string	readOptional(const string& keyword);
-		bool	readOptionalExists(const string& keyword);
+		void	readP100Comment(std::string comments);
+		std::string	readOptional(const std::string& keyword);
+		bool	readOptionalExists(const std::string& keyword);
 
 	//@}
 	
@@ -137,7 +142,7 @@ protected:
 		int					getLengthResidualPrecision() const {return fLengthResidualPrecision;}
 
 		/*!get separator*/
-		string				getSeparator() const {return fSeparator;}
+		std::string				getSeparator() const {return fSeparator;}
 	//@}		
 
 
@@ -177,10 +182,10 @@ private:
 		int								fLengthResidualPrecision;
 
 		/*!Separator between two elements*/
-		string							fSeparator;
+		std::string							fSeparator;
 
 
-		/*string							fError;*/
+		/*std::string							fError;*/
 	//@}
 
 };

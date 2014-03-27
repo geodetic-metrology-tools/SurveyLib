@@ -3,7 +3,7 @@
 // abstract base class for a least squares computer 
 //
 
-#include "TALSComputer.h"
+#include "lsalgo/TALSComputer.h"
 
 //////////////////////////
 // no argument constructor

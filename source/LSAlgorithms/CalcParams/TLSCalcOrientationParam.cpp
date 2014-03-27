@@ -1,6 +1,6 @@
 // TLSCalcOrientationParam.cpp
 
-#include "TLSCalcOrientationParam.h"
+#include "lsalgo/TLSCalcOrientationParam.h"
 #include <iostream>
 #include <stdio.h>
 

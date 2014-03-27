@@ -23,6 +23,7 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 
 #include "TAConverter.h"
 #include "TRefSystemFactory.h"
+#include "lsalgo/TLSCalcPosVectorParam.h"
 
 // typedefs
 ////////////////////////////////////////////////////////////////

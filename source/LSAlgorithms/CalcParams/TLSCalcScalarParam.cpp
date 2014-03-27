@@ -1,6 +1,6 @@
 // TLSCalcScalarParam.cpp
 
-#include "TLSCalcScalarParam.h"
+#include "lsalgo/TLSCalcScalarParam.h"
 
 //////////////////////////////////////////////////////////////////////
 // CONSTRUCTORS / DESTRUCTOR

@@ -41,7 +41,7 @@ extern "C" {
 	_Quad __logq(_Quad);
 	_Quad __log10q(_Quad);
 
-	_Quad __powq(_Quad, _Quad);
+	_Quad powq(_Quad, _Quad);
 	_Quad __sqrtq(_Quad);
 	
 	_Quad __cosq(_Quad);
@@ -74,7 +74,7 @@ inline _Quad modfq(_Quad _X, _Quad * _Y) {return (__modfq(_X, _Y)); }
 inline _Quad logq(_Quad _X) {return (__logq(_X)); }
 inline _Quad log10q(_Quad _X) {return (__log10q(_X)); }
 
-inline _Quad powq(_Quad _X, _Quad _Y) {return (__powq(_X, _Y)); }
+inline _Quad powq(_Quad _X, _Quad _Y) {return (powq(_X, _Y)); }
 inline _Quad sqrtq(_Quad _X) {return (__sqrtq(_X)); }
 
 inline _Quad cosq(_Quad _X) {return (__cosq(_X)); }

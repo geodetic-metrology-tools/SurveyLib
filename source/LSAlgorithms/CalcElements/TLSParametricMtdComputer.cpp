@@ -5,9 +5,9 @@
 //
 
 
-#include "TLSParametricMtdComputer.h"
-#include "TLSResultsMatrices.h"
-#include "TLSInputMatrices.h"
+#include "lsalgo/TLSParametricMtdComputer.h"
+#include "lsalgo/TLSResultsMatrices.h"
+#include "lsalgo/TLSInputMatrices.h"
 #include "TSparseMatrix.h"
 #include <vector>
 #include <iostream>
