@@ -972,13 +972,13 @@ void TAStreamFormatter::skipWhiteSpace()
 {//positionthe read pointer at the first non-whitespace character
 
 	char c=this->peek();
-	char space = ' ';
 
-	if (c == space)
+	if (c == ' ')
 	{
 		//skips whitespace until c = first non-whitespace character
-		//while (c!=EOF && isspace(c))
-		while(c==space && c!=EOF)
+
+		//while (c!=EOF && isspace(c)) // DO NOT USE ISSPACE: TREATS '\n' as space!
+		while(c==' ' && c!=EOF)
 		{
 			c=(char) fIOStream->get();
 		}
@@ -1104,7 +1104,7 @@ TAStreamFormatter &TAStreamFormatter::writeRawBytes(const char* s, streamsize n)
 }
 
 
-string	TAStreamFormatter::getError() const
+const string&	TAStreamFormatter::getError() const
 {
 	return fError;
 }

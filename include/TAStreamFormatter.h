@@ -318,7 +318,7 @@ public:
     int					precision(int);
     TAStreamFormatter&	writeRawBytes(const char*, streamsize);
 
-	string				getError() const;
+	const string&		getError() const;
 	void				setError(const string);
 
 	string				getWarning() const;
