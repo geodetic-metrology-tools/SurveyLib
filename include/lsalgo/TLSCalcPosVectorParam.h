@@ -10,6 +10,7 @@
 
 #include <list>
 #include <string>
+#include <array>
 //using namespace std;
 
 #include "TRefSystemFactory.h"
@@ -121,6 +122,17 @@ public:
 		TLength				getErrorEllMinorAxis() const;
 
 		TAngle				getErrorEllGis() const;
+
+		// returns the three axes of the error ellipsoid
+		struct ErrorEllipsoid {
+			TReal vx[3]; // Direction (unit)vector of the x-semiaxis
+			TReal vy[3]; // Direction (unit)vector of the y-semiaxis
+			TReal vz[3]; // Direction (unit)vector of the z-semiaxis
+			TReal lx; // Length of the x-semiaxis
+			TReal ly; // Length of the y-semiaxis
+			TReal lz; // Length of the z-semiaxis
+		};
+		ErrorEllipsoid getErrorEllipsoid() const;
 
 		/*!Return the estimated X coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
 		TLength				getXEstValue() const {return getEstimatedValue().getX();}

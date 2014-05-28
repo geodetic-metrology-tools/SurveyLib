@@ -1,6 +1,10 @@
 // TLSCalcPosVectorParam.cpp
 #include <stdio.h>
 
+#include <Eigen/Core>
+#include <Eigen/Eigenvalues>
+
+
 #include "lsalgo/TLSCalcPosVectorParam.h"
 #include "TAGeoidModel.h"
 #include "TAReferenceFrame.h"
@@ -355,6 +359,46 @@ TAngle		TLSCalcPosVectorParam::getErrorEllGis() const
 	}
 
 	return gis;
+}
+
+
+TLSCalcPosVectorParam::ErrorEllipsoid TLSCalcPosVectorParam::getErrorEllipsoid() const {
+	Eigen::Matrix3d m;
+
+	m << pow2(getXSigma().getMMetresValue()),     getXYCovar().getMMetresValue(),     getXZCovar().getMMetresValue(),
+             getXYCovar().getMMetresValue(),  pow2(getYSigma().getMMetresValue()),    getYZCovar().getMMetresValue(),
+		     getXZCovar().getMMetresValue(),      getYZCovar().getMMetresValue(), pow2(getZSigma().getMMetresValue());
+
+	Eigen::EigenSolver<Eigen::Matrix3d> ev(m);
+	
+	const auto& evals(ev.eigenvalues());
+	const auto& evecs(ev.eigenvectors());
+	
+	/* The length of the semimajor axes of the 95% confidence ellipsoid are
+	   Fv * [eigenvalue_0, eigenvalue_1, eigenvalue_2] with Fv being the 95% 
+	   percentile of the Fisher distribution for three degrees of freedom (approx. 7.80).
+	   We are interested in the one-sigma-level, so our multiplier actualy is 1.0.
+
+	   We need the eigenvectors as well since they are the direction sof the ellipsoid's axes.
+	   
+	   Source:
+	   Parameter Estimation and Inverse Problems
+	   Richard C. Aster, Brian Borchers, Clifford H. Thurber
+	   Academic Press, 2013 - 360 pages
+	   (on page 36)
+	*/
+
+	ErrorEllipsoid ell = {
+		// Indexing is (row, column): Each column corresponds to one eigenvector
+		{evecs(0,0).real(), evecs(1,0).real(), evecs(2,0).real()},
+		{evecs(0,1).real(), evecs(1,1).real(), evecs(2,1).real()},
+		{evecs(0,2).real(), evecs(1,2).real(), evecs(2,2).real()},
+		sqrtq(evals(0).real()),
+		sqrtq(evals(1).real()),
+		sqrtq(evals(2).real()),
+	};
+
+	return ell;
 }
 
 
