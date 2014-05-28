@@ -5,6 +5,7 @@
 #include <string>
 
 typedef Eigen::SparseMatrix<double> TSparseMatrix;
+typedef Eigen::MatrixXd TDenseMatrix;
 typedef Eigen::VectorXd TVector;
 typedef Eigen::Triplet<double> TTriplet;
 
