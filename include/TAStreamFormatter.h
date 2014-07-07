@@ -297,6 +297,7 @@ public:
 	char				readChar();
     //non utilisee? string	read();
     void				skipWhiteSpace();
+    void				skipBOM(); // removes the byte order marks that is introduced by recent versions of notepad
 	TAStreamFormatter&	get(char&);
 	char				peek();
 	TAStreamFormatter&	readRawBytes(char*, streamsize);

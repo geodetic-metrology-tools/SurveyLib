@@ -973,18 +973,41 @@ void TAStreamFormatter::skipWhiteSpace()
 
 	char c=this->peek();
 
-	if (c == ' ')
+	if (c == ' ' || c == '\t')
 	{
 		//skips whitespace until c = first non-whitespace character
 
 		//while (c!=EOF && isspace(c)) // DO NOT USE ISSPACE: TREATS '\n' as space!
-		while(c==' ' && c!=EOF)
+		while((c==' '||c== '\t') && c!=EOF)
 		{
 			c=(char) fIOStream->get();
 		}
 		fIOStream->putback(c);
 	}
 	return;
+}
+
+
+void TAStreamFormatter::skipBOM() {
+	static const int NUM_BOMs(3);
+	static const int BOM_LEN(3);
+
+	// all widespread byte order marks
+	static const char boms[NUM_BOMs][BOM_LEN] = {
+		{239, 187, 191},
+		{254, 255,   0},
+		{255, 254,   0}
+	};
+	
+	char y;
+	for (int b=0; b < NUM_BOMs; b++) {
+		for (int c=0; c < BOM_LEN; c++) {
+			char x = peek();
+			// if the current character is a BOM character: remove it.
+			if (x == boms[b][c])
+				get(y);
+		}	
+	}
 }
 
 TAStreamFormatter&	TAStreamFormatter::get(char& c)

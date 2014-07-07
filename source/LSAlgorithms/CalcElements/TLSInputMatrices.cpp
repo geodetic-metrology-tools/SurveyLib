@@ -116,7 +116,7 @@ bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 {
 	try {
 	if (notZero(coeff))
-		firstDesignMatrix->insert(row,column) = coeff;
+		firstDesignMatrix->coeffRef(row,column) = coeff;
 	} catch(...) {
 		return false;
 	}

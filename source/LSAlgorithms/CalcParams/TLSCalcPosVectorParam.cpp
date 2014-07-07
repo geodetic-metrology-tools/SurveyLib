@@ -343,7 +343,7 @@ TLength		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
 }
 
 	
-TAngle		TLSCalcPosVectorParam::getErrorEllGis() const
+TAngle TLSCalcPosVectorParam::getErrorEllGis() const
 {
 	TReal vxy = getXYCovar().getMMetresValue();
 	TReal sx2 = powq(getXSigma().getMMetresValue(), 2) ;
