@@ -61,6 +61,9 @@ ELSE()
     MESSAGE(STATUS "[STATUS] Found tut.h")
 ENDIF()
 
+#Enable swisstopo transformations when compiling surveylib on its own.
+SET(USE_SWISSTOPO true)
+
 INCLUDE("${CMAKE_SOURCE_DIR}/SourceSurveyLib.cmake")
 
 ADD_SUBDIRECTORY(Tests/SpatialObjects/UnitTests)
