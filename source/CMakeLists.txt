@@ -4,7 +4,7 @@ PROJECT(SurveyLib)
 # Set version number and provide a header file with corresponding defines
 set (SurveyLib_VERSION_MAJOR 3)
 set (SurveyLib_VERSION_MINOR 3)
-set (SurveyLib_VERSION_PATCH 6)
+set (SurveyLib_VERSION_PATCH 7)
 configure_file (
   "${CMAKE_SOURCE_DIR}/SurveryLibVersion.in"
   "${CMAKE_SOURCE_DIR}/../include/SurveryLibVersion.h"

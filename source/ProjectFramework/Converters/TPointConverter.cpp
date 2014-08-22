@@ -313,16 +313,18 @@ void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus
 												const TLength Xparam,
 												const TLength Yparam,
 												const TLength Zparam,
-												const string Dparam)
+												const string Dparam,
+												bool isCovar)
 {
 	TAStreamFormatter*	stream = getStream();
 
 	stream->setLengthUnits(unit);
 	stream->setWidthFormat(width);
 	stream->setPrecisionFormat(precision);
-
+	
 	//write X
-	if(status == TSpatialStatus::kVx || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVxz)
+	if((isCovar &&  (status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy))  || 
+		!isCovar && (status == TSpatialStatus::kVx || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVxz))
 		(*stream)<<(Xparam);	
 	else
 		writeString(width, Dparam);
@@ -331,7 +333,8 @@ void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus
 
 
 	//write Y
-	if(status == TSpatialStatus::kVy || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVyz)
+	if((isCovar &&  (status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxz))  || 
+		!isCovar && (status == TSpatialStatus::kVy || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVyz))
 		(*stream)<<(Yparam);
 	else
 		writeString(width, Dparam);
@@ -340,7 +343,8 @@ void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus
 
 
 	//write Z
-	if(status == TSpatialStatus::kVz || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxz  || status == TSpatialStatus::kVyz)
+	if((isCovar &&  (status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVyz))  || 
+		!isCovar && (status == TSpatialStatus::kVz || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxz  || status == TSpatialStatus::kVyz))
 		(*stream)<<(Zparam);
 	else
 		writeString(width, Dparam);

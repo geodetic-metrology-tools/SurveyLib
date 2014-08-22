@@ -113,7 +113,8 @@ public:
 											const TLength Xparam,
 											const TLength Yparam,
 											const TLength Zparam,
-											const string Dparam);
+											const string Dparam,
+											bool isCovar = false);
 
 	
 			void	writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
