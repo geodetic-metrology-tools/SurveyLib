@@ -138,7 +138,7 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	TSparseMatrix N = A->transpose() * (*W) * (*A);
 	Eigen::SimplicialLDLT<TSparseMatrix> chol( N );
 #ifdef _DEBUG
-	std::cout << "TLSParametricMtdComputer::computeResultsMtrs, det(N)=\n " << chol.determinant() << std::endl;
+	//std::cout << "TLSParametricMtdComputer::computeResultsMtrs, det(N)=\n " << chol.determinant() << std::endl;
 #endif
 	if(chol.info() != Eigen::Success)
 	{
