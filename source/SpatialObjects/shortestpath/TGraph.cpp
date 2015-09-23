@@ -266,6 +266,7 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 			
 		}
 
+		
 
 		if (cgrfTransformation == "before")
 			transfo.push_back(transfoWithCGRF.getTransformation());
@@ -274,9 +275,10 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 			transfo.insert(transfo.begin(), transfoWithCGRF.getTransformation());
 		}
 
+
+		reverse(transfo.begin(), transfo.end());
 		fillLastTransformation(from.getName(), to.getName(), transfo);
 
-		
 		return transfo;
 	}
 

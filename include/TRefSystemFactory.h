@@ -170,7 +170,7 @@ public:
 
 		/*! Return the transformation between two reference frames
 			\return a vector of Reference Frame transformations */
-		vector<TARefFrameTransformation&> getTransform(const ERefFrame refFrameIdfrom, const ERefFrame refFrameIdto);
+		//vector<TARefFrameTransformation&> getTransform(const ERefFrame refFrameIdfrom, const ERefFrame refFrameIdto);
 	
 		/*! test if the reference frame is in graph or not 
 		\param pointer to a Ref. Frame

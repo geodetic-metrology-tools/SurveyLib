@@ -461,10 +461,6 @@ bool	TModifiedLocalAstronomicalRF::transform(TSpatialPosition* sp, TAReferenceFr
 		if (transfo[0] == 0)
 		{return false;}
 
-		// reverse the order of the vector to have transformations as applicated to the point
-		reverse(transfo.begin(), transfo.end());
-			
-
 		// application of the successive transformations
 		for (vector<TARefFrameTransformation*>::iterator iter = transfo.begin(); 
 			 iter != transfo.end(); 
@@ -527,9 +523,6 @@ bool	TModifiedLocalAstronomicalRF::transform(TSpatialVector* sv, TAReferenceFram
 	
 		if (transfo[0] == 0)
 		{return false;}
-
-		// reverse the order of the vector to have transformations as applicated to the point
-		reverse(transfo.begin(), transfo.end());
 
 		// application of the successive transformations
 		vector<TARefFrameTransformation*>::iterator iter = transfo.begin();

@@ -175,7 +175,14 @@ void TLSResultsMatrices::saveMatricesToFile(int nbIter) const
 	of << "* UNKNOWNS COVARIANCE MATRIX *" << std::endl;
 	of << "******************************" << std::endl << std::endl;
 
-	std::cout << *fUnknownsCovarianceMtrx << std::endl;
+	of << *fUnknownsCovarianceMtrx << std::endl;
+	of << std::endl << std::endl;
+
+	of << "******************************" << std::endl;
+	of << "* INTERMEDIATE MATRIX *" << std::endl;
+	of << "******************************" << std::endl << std::endl;
+
+	of << fIntermediateMatrix << std::endl;
 	of << std::endl << std::endl;
 
 	of.close();
