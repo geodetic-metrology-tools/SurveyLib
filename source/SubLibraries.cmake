@@ -12,7 +12,7 @@ SET(SPATIAL_LIBRARIES
 	ReferenceSurfaces 
 	RefFrameTransformations 
 	ShortestPath 
-	SpatialObjects 
+	SpatialObj 
 	SpatialSystems
 )
 

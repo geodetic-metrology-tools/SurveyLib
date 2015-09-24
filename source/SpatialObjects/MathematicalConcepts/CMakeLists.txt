@@ -38,7 +38,6 @@ set(MathematicalConcepts_HEADERS
 	TACoordinateSystem.h
 	TACoordSysMatrix.h
 	TACoordSysVector.h
-	TAFreeVector.h
 	TAngle.h
 	TANumericValue.h
 	TColumnVector.h
