@@ -1,23 +1,34 @@
-ADD_DEFINITIONS("-DSU_MAKEDLL")
-ADD_DEFINITIONS("-D_USRDLL")
-ADD_DEFINITIONS("-DSPATIALOBJECTS_EXPORTS")
-
-##### This will correspond to one VS project!
-
-set(SurveyLibDLL_SOURCES
+# Create a variable containing all .cpp files:
+set(SpatialObj_SOURCES 
 	SpatialObjCFns.cpp
 	SpatialObjFns.cpp
+	SpatialObjJFns.cpp
+	TASpatialPtListener.cpp
+	TSpatialLine.cpp
+	TSpatialLineName.cpp
+	TSpatialPlane.cpp
+	TSpatialPlaneName.cpp
+	TSpatialPoint.cpp
+	TSpatialPointName.cpp
+	TVMeasurableEntityLstnr.cpp
+	TVSpatialPtListener.cpp
+	TWire.cpp
 )
 
-set(SurveyLibDLL_HEADERS
+# Create a variable containing all .h files:
+set(SpatialObj_HEADERS 
 	${SURVEYLIB_INCLUDE_PATH}/SpatialObjCFns.h
 	${SURVEYLIB_INCLUDE_PATH}/SpatialObjFns.h
+	${SURVEYLIB_INCLUDE_PATH}/TASpatialPtListener.h
+	${SURVEYLIB_INCLUDE_PATH}/TPtrWrapper.h
+	${SURVEYLIB_INCLUDE_PATH}/TSpatialLine.h
+	${SURVEYLIB_INCLUDE_PATH}/TSpatialLineName.h
+	${SURVEYLIB_INCLUDE_PATH}/TSpatialPlane.h
+	${SURVEYLIB_INCLUDE_PATH}/TSpatialPlaneName.h
+	${SURVEYLIB_INCLUDE_PATH}/TSpatialPoint.h
+	${SURVEYLIB_INCLUDE_PATH}/TSpatialPointName.h
+	${SURVEYLIB_INCLUDE_PATH}/TVSpatialPtListener.h
 )
 
-# Create a SHARED library from sources:
-add_library(SurveyLib SHARED ${SurveyLibDLL_SOURCES} ${SurveyLibDLL_HEADERS})
-
-# Specify the libraries to link against
-target_link_libraries(SurveyLib ${SPATIAL_LIBRARIES})
-
-#####
+# Create a static library from sources:
+add_library(SpatialObj STATIC ${SpatialObj_SOURCES} ${SpatialObj_HEADERS})
