@@ -10,15 +10,13 @@ SET(CalcParams_SOURCES
 
 # Create a variable containing all .h files:
 SET(CalcParams_HEADERS 
-	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TLSCalcFreeVectorParam.h
-	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TLSCalcLengthParam.h
-	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TLSCalcOrientationParam.h
-	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TLSCalcPosVectorParam.h
-	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TLSCalcScalarParam.h
-	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TLSCalcWorkingPosVec.h
-	${SURVEYLIB_INCLUDE_PATH}/lsalgo/TLSCalcWorkingUnknown.h
+	TLSCalcFreeVectorParam.h
+	TLSCalcLengthParam.h
+	TLSCalcOrientationParam.h
+	TLSCalcPosVectorParam.h
+	TLSCalcScalarParam.h
+	TLSCalcWorkingPosVec.h
 )
 
 #Create a static library from the object files
 ADD_LIBRARY(CalcParams STATIC ${CalcParams_SOURCES} ${CalcParams_HEADERS})
-#####

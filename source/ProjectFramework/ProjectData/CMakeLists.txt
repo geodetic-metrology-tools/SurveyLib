@@ -9,17 +9,16 @@ set(ProjectData_SOURCES
 
 # Create a variable containing all .h files:
 set(ProjectData_HEADERS 
-	${SURVEYLIB_INCLUDE_PATH}/TADataSet.h
-	${SURVEYLIB_INCLUDE_PATH}/TDataParameters.h
-	${SURVEYLIB_INCLUDE_PATH}/TFileParameters.h
-	${SURVEYLIB_INCLUDE_PATH}/TPtListBroadcaster.h
-	${SURVEYLIB_INCLUDE_PATH}/TVPtListListener.h
-	${SURVEYLIB_INCLUDE_PATH}/TWorkingPoints.h
+	TADataSet.h
+	TDataParameters.h
+	TFileParameters.h
+	TPtListBroadcaster.h
+	TVPtListListener.h
+	TWorkingPoints.h
 )
 
 # Create a static library from sources:
 add_library(ProjectData STATIC ${ProjectData_SOURCES} ${ProjectData_HEADERS})
-#install(FILES ${ProjectData_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
-#####
 
+#link used libraries
 target_link_libraries(ProjectData ${PROJECTFRAMEWORK_LIBRARIES} ${SPATIAL_LIBRARIES})
