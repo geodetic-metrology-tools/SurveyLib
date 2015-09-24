@@ -5,57 +5,59 @@ set(RefFrameTransformations_SOURCES
 	TGC2MLATransformation.cpp
 	THelmertRefFrameTransform.cpp
 	TLA2LGTransformation.cpp
+	TLambert93Transformation.cpp
 	TLG2GCTransformation.cpp
 	TLG2LATransformation.cpp
 	TMLA2GCTransformation.cpp
 	TMLA2XYHeTransformation.cpp
 	TMLA2XYHsTransformation.cpp
+	TRGF93CC46Transformation.cpp
 	TX0Y0He2XYHeTransformation.cpp
 	TXYHe2MLATransformation.cpp
 	TXYHe2X0Y0HeTransformation.cpp
 	TXYHe2XYHgTransformation.cpp
 	TXYHg2XYHeTransformation.cpp
 	TXYHs2MLATransformation.cpp
-	TRGF93CC46Transformation.cpp
-	TLambert93Transformation.cpp
-	#TLV95Transformation.cpp
 )
-
-IF(USE_SWISSTOPO)
-set(RefFrameTransformations_SOURCES 
-	${RefFrameTransformations_SOURCES}
-	TLV03Transformation.cpp
-	TLV95Transformation.cpp
-	)
-ENDIF(USE_SWISSTOPO)
 
 # Create a variable containing all .h files:
 set(RefFrameTransformations_HEADERS 
-	${SURVEYLIB_INCLUDE_PATH}/TARefFrameTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TGC2LGTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TGC2MLATransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/THelmertRefFrameTransform.h
-	${SURVEYLIB_INCLUDE_PATH}/TLA2LGTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TLG2GCTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TLG2LATransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TMLA2GCTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TMLA2XYHeTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TMLA2XYHsTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TVRefFrameTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TVTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TX0Y0He2XYHeTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TXYHe2MLATransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TXYHe2X0Y0HeTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TXYHe2XYHgTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TXYHg2XYHeTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TXYHs2MLATransformation.h
-	
-	${SURVEYLIB_INCLUDE_PATH}/TLV95Transformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TLV03Transformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TRGF93CC46Transformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TLambert93Transformation.h
+	TARefFrameTransformation.h
+	TGC2LGTransformation.h
+	TGC2MLATransformation.h
+	THelmertRefFrameTransform.h
+	TLA2LGTransformation.h
+	TLambert93Transformation.h
+	TLG2GCTransformation.h
+	TLG2LATransformation.h
+	TMLA2GCTransformation.h
+	TMLA2XYHeTransformation.h
+	TMLA2XYHsTransformation.h
+	TRGF93CC46Transformation.h
+	TVRefFrameTransformation.h
+	TVTransformation.h
+	TX0Y0He2XYHeTransformation.h
+	TXYHe2MLATransformation.h
+	TXYHe2X0Y0HeTransformation.h
+	TXYHe2XYHgTransformation.h
+	TXYHg2XYHeTransformation.h
+	TXYHs2MLATransformation.h
 )
+
+#Add transformations if Swisstopo is used
+IF(USE_SWISSTOPO)
+	set(RefFrameTransformations_SOURCES 
+		${RefFrameTransformations_SOURCES}
+		TLV03Transformation.cpp
+		TLV03TransformationStub.cpp
+		TLV95Transformation.cpp
+	)
+	set(RefFrameTransformations_HEADERS 
+		${RefFrameTransformations_HEADERS}
+		TLV03Transformation.h
+		TLV95Transformation.h
+	)
+ENDIF(USE_SWISSTOPO)
 
 # Create a static library from sources:
 add_library(RefFrameTransformations STATIC ${RefFrameTransformations_SOURCES} ${RefFrameTransformations_HEADERS})
-#####

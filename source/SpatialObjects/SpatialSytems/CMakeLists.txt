@@ -1,22 +1,29 @@
 # Create a variable containing all .cpp files:
 set(SpatialSystems_SOURCES 
 	TASpatialAttribute.cpp
+	TPositionStatus.cpp
 	TSpatialOrientation.cpp
+	TSpatialOrientationError.cpp
 	TSpatialPosition.cpp
+	TSpatialPositionError.cpp
 	TSpatialStatus.cpp
 	TSpatialVector.cpp
+	TSpatialVectorError.cpp
+	TSpatialVectorStatus.cpp
 )
 
 # Create a variable containing all .h files:
 set(SpatialSystems_HEADERS 
-	${SURVEYLIB_INCLUDE_PATH}/TASpatialAttribute.h
-	${SURVEYLIB_INCLUDE_PATH}/TSpatialOrientation.h
-	${SURVEYLIB_INCLUDE_PATH}/TSpatialPosition.h
-	${SURVEYLIB_INCLUDE_PATH}/TSpatialStatus.h
-	${SURVEYLIB_INCLUDE_PATH}/TSpatialVector.h
+	TASpatialAttribute.h
+	TPositionStatus.cpp
+	TSpatialOrientation.h
+	TSpatialPosition.h
+	TSpatialPositionError.h
+	TSpatialStatus.h
+	TSpatialVector.h
+	TSpatialVectorError.h
+	TSpatialVectorStatus.h
 )
 
 # Create a static library from sources:
 add_library(SpatialSystems STATIC ${SpatialSystems_SOURCES} ${SpatialSystems_HEADERS})
-#install(FILES ${SpatialSystems_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
-#####

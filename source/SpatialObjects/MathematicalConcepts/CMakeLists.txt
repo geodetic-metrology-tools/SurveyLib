@@ -1,5 +1,6 @@
 # Create a variable containing all .cpp files:
 set(MathematicalConcepts_SOURCES 
+	dist3D.cpp
 	Quad.cpp
 	T2DCartesianCoordSys.cpp
 	T2DCartesianPlusHSys.cpp
@@ -8,8 +9,10 @@ set(MathematicalConcepts_SOURCES
 	TACoordinateSystem.cpp
 	TACoordSysMatrix.cpp
 	TACoordSysVector.cpp
+	TAFreeVector.cpp
 	TAngle.cpp
 	TANumericValue.cpp
+	TARotationMatrix.cpp
 	TColumnVector.cpp
 	TCoordSysFactory.cpp
 	TDist.cpp
@@ -27,34 +30,33 @@ set(MathematicalConcepts_SOURCES
 
 # Create a variable containing all .h files:
 set(MathematicalConcepts_HEADERS 
-	${SURVEYLIB_INCLUDE_PATH}/Quad.h
-	${SURVEYLIB_INCLUDE_PATH}/T2DCartesianCoordSys.h
-	${SURVEYLIB_INCLUDE_PATH}/T2DCartesianPlusHSys.h
-	${SURVEYLIB_INCLUDE_PATH}/T3DCartesianCoordSys.h
-	${SURVEYLIB_INCLUDE_PATH}/T3DMatrix.h
-	${SURVEYLIB_INCLUDE_PATH}/TACoordinateSystem.h
-	${SURVEYLIB_INCLUDE_PATH}/TACoordSysMatrix.h
-	${SURVEYLIB_INCLUDE_PATH}/TACoordSysVector.h
-	${SURVEYLIB_INCLUDE_PATH}/TAngle.h
-	${SURVEYLIB_INCLUDE_PATH}/TANumericValue.h
-	${SURVEYLIB_INCLUDE_PATH}/TColumnVector.h
-	${SURVEYLIB_INCLUDE_PATH}/TCoordSysFactory.h
-	${SURVEYLIB_INCLUDE_PATH}/TDist.h
-	${SURVEYLIB_INCLUDE_PATH}/TDouble.h
-	${SURVEYLIB_INCLUDE_PATH}/TFreeVector.h
-	${SURVEYLIB_INCLUDE_PATH}/TGeodeticCoordSys.h
-	${SURVEYLIB_INCLUDE_PATH}/TLength.h
-	${SURVEYLIB_INCLUDE_PATH}/TMatrix.h
-	${SURVEYLIB_INCLUDE_PATH}/TMatrixImpl.h
-	${SURVEYLIB_INCLUDE_PATH}/TPositionVector.h
-	${SURVEYLIB_INCLUDE_PATH}/TRotationMatrix.h
-	${SURVEYLIB_INCLUDE_PATH}/TScalar.h
-	${SURVEYLIB_INCLUDE_PATH}/TSparseMatrix.h
-	${SURVEYLIB_INCLUDE_PATH}/TVCoordinateSystem.h
-	${SURVEYLIB_INCLUDE_PATH}/TVNumericValue.h
+	Quad.h
+	T2DCartesianCoordSys.h
+	T2DCartesianPlusHSys.h
+	T3DCartesianCoordSys.h
+	T3DMatrix.h
+	TACoordinateSystem.h
+	TACoordSysMatrix.h
+	TACoordSysVector.h
+	TAFreeVector.h
+	TAngle.h
+	TANumericValue.h
+	TColumnVector.h
+	TCoordSysFactory.h
+	TDist.h
+	TDouble.h
+	TFreeVector.h
+	TGeodeticCoordSys.h
+	TLength.h
+	TMatrix.h
+	TMatrixImpl.h
+	TPositionVector.h
+	TRotationMatrix.h
+	TScalar.h
+	TSparseMatrix.h
+	TVCoordinateSystem.h
+	TVNumericValue.h
 )
 
 # Create a static library from sources:
 add_library(MathematicalConcepts STATIC ${MathematicalConcepts_SOURCES} ${MathematicalConcepts_HEADERS})
-#install(FILES ${MathematicalConcepts_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
-#####

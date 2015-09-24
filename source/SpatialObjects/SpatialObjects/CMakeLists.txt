@@ -17,17 +17,17 @@ set(SpatialObj_SOURCES
 
 # Create a variable containing all .h files:
 set(SpatialObj_HEADERS 
-	${SURVEYLIB_INCLUDE_PATH}/SpatialObjCFns.h
-	${SURVEYLIB_INCLUDE_PATH}/SpatialObjFns.h
-	${SURVEYLIB_INCLUDE_PATH}/TASpatialPtListener.h
-	${SURVEYLIB_INCLUDE_PATH}/TPtrWrapper.h
-	${SURVEYLIB_INCLUDE_PATH}/TSpatialLine.h
-	${SURVEYLIB_INCLUDE_PATH}/TSpatialLineName.h
-	${SURVEYLIB_INCLUDE_PATH}/TSpatialPlane.h
-	${SURVEYLIB_INCLUDE_PATH}/TSpatialPlaneName.h
-	${SURVEYLIB_INCLUDE_PATH}/TSpatialPoint.h
-	${SURVEYLIB_INCLUDE_PATH}/TSpatialPointName.h
-	${SURVEYLIB_INCLUDE_PATH}/TVSpatialPtListener.h
+	SpatialObjCFns.h
+	SpatialObjFns.h
+	TASpatialPtListener.h
+	TPtrWrapper.h
+	TSpatialLine.h
+	TSpatialLineName.h
+	TSpatialPlane.h
+	TSpatialPlaneName.h
+	TSpatialPoint.h
+	TSpatialPointName.h
+	TVSpatialPtListener.h
 )
 
 # Create a static library from sources:

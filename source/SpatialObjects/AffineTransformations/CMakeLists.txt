@@ -12,18 +12,16 @@ set(AffineTransformations_SOURCES
 
 # Create a variable containing all .h files:
 set(AffineTransformations_HEADERS 
-	${SURVEYLIB_INCLUDE_PATH}/TAAffineTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TAffineTransformWrapper.h
-	${SURVEYLIB_INCLUDE_PATH}/TCompositeAffTransform.h
-	${SURVEYLIB_INCLUDE_PATH}/THelmertTransformation.h
-	${SURVEYLIB_INCLUDE_PATH}/TReflection.h
-	${SURVEYLIB_INCLUDE_PATH}/TRotation.h
-	${SURVEYLIB_INCLUDE_PATH}/TScaleFactor.h
-	${SURVEYLIB_INCLUDE_PATH}/TTranslation.h
-	${SURVEYLIB_INCLUDE_PATH}/TVAffineTransformation.h
+	TAAffineTransformation.h
+	TAffineTransformWrapper.h
+	TCompositeAffTransform.h
+	THelmertTransformation.h
+	TReflection.h
+	TRotation.h
+	TScaleFactor.h
+	TTranslation.h
+	TVAffineTransformation.h
 )
 
 # Create a static library from sources:
 add_library(AffineTransformations STATIC ${AffineTransformations_SOURCES} ${AffineTransformations_HEADERS})
-#install(FILES ${AffineTransformations_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
-#####
