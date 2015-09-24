@@ -1,6 +1,5 @@
 # Create a variable containing all .cpp files:
 set(MathematicalConcepts_SOURCES 
-	dist3D.cpp
 	Quad.cpp
 	T2DCartesianCoordSys.cpp
 	T2DCartesianPlusHSys.cpp
@@ -9,10 +8,8 @@ set(MathematicalConcepts_SOURCES
 	TACoordinateSystem.cpp
 	TACoordSysMatrix.cpp
 	TACoordSysVector.cpp
-	TAFreeVector.cpp
 	TAngle.cpp
 	TANumericValue.cpp
-	TARotationMatrix.cpp
 	TColumnVector.cpp
 	TCoordSysFactory.cpp
 	TDist.cpp

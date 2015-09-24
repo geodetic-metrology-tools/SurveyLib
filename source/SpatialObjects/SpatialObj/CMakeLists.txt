@@ -2,7 +2,6 @@
 set(SpatialObj_SOURCES 
 	SpatialObjCFns.cpp
 	SpatialObjFns.cpp
-	SpatialObjJFns.cpp
 	TASpatialPtListener.cpp
 	TSpatialLine.cpp
 	TSpatialLineName.cpp
@@ -10,9 +9,7 @@ set(SpatialObj_SOURCES
 	TSpatialPlaneName.cpp
 	TSpatialPoint.cpp
 	TSpatialPointName.cpp
-	TVMeasurableEntityLstnr.cpp
 	TVSpatialPtListener.cpp
-	TWire.cpp
 )
 
 # Create a variable containing all .h files:
