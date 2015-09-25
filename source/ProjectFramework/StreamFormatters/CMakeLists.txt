@@ -3,7 +3,7 @@ CMAKE_POLICY(SET CMP0038 NEW)
 # Create a variable containing all .cpp files:
 set(StreamFormatters_SOURCES
 	#TAFixedColFormatTStream.cpp
-	TAQtStreamFormatter.cpp
+	#TAQtStreamFormatter.cpp
 	TAStreamFormatter.cpp
 	#TBDFixedColFormatTStream.cpp
 	TFixedColFormatTStream.cpp

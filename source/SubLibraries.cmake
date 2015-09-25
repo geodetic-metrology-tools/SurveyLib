@@ -8,7 +8,6 @@ SET(SURVEYLIB_LIBRARIES
 SET(SPATIAL_LIBRARIES 
 	AffineTransformations 
 	MathematicalConcepts
-	Measurments
 	ReferenceSurfaces 
 	RefFrameTransformations 
 	ShortestPath 
