@@ -1,10 +1,10 @@
 # Create a variable containing all .cpp files:
 SET(CalcElements_SOURCES 
 	TALSCalcParameter.cpp
-	#TALSComputer.cpp
+	TALSComputer.cpp
 	#TLSCalcDataSet.cpp
-	TLSCalculation.cpp
-	TLSComputer.cpp
+	#TLSCalculation.cpp
+	#TLSComputer.cpp
 	#TLSConstraintIdentifier.cpp
 	TLSInputMatrices.cpp
 	#TLSInputSparseMatrices.cpp
