@@ -20,7 +20,7 @@ set(ProjectData_HEADERS
 )
 
 # Create a static library from sources:
-#add_library(ProjectData STATIC ${ProjectData_SOURCES} ${ProjectData_HEADERS})
+add_library(ProjectData STATIC ${ProjectData_SOURCES} ${ProjectData_HEADERS})
 
 #link used libraries
 #target_link_libraries(ProjectData ${PROJECTFRAMEWORK_LIBRARIES} ${SPATIAL_LIBRARIES})

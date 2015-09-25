@@ -2,16 +2,16 @@ CMAKE_POLICY(SET CMP0038 NEW)
 
 # Create a variable containing all .cpp files:
 set(StreamFormatters_SOURCES
-	TAFixedColFormatTStream.cpp
+	#TAFixedColFormatTStream.cpp
 	TAQtStreamFormatter.cpp
 	TAStreamFormatter.cpp
-	TBDFixedColFormatTStream.cpp
+	#TBDFixedColFormatTStream.cpp
 	TFixedColFormatTStream.cpp
 	TFreeFormatTStream.cpp
-	TIStreamFormatterCatalogue.cpp
-	TLGCTStream.cpp
-	TQtFreeFormatTStream.cpp
-	TQtStreamFormatterFactory.cpp
+	#TIStreamFormatterCatalogue.cpp
+	#TLGCTStream.cpp
+	#TQtFreeFormatTStream.cpp
+	#TQtStreamFormatterFactory.cpp
 	TSeparatedFormatTStream.cpp
 	TStreamFormatterFactory.cpp
 )
@@ -26,7 +26,7 @@ set(StreamFormatters_HEADERS
 )
 
 # Create a static library from sources:
-#add_library(StreamFormatters STATIC ${StreamFormatters_SOURCES} ${StreamFormatters_HEADERS})
+add_library(StreamFormatters STATIC ${StreamFormatters_SOURCES} ${StreamFormatters_HEADERS})
 
 #link used libraries
 #target_link_libraries(StreamFormatters ${PROJECTFRAMEWORK_LIBRARIES} ${SPATIAL_LIBRARIES})
