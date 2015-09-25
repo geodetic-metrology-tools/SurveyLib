@@ -2,7 +2,7 @@
 SET(CalcElements_SOURCES 
 	TALSCalcParameter.cpp
 	TALSComputer.cpp
-	TLSCalcDataSet.cpp
+	#TLSCalcDataSet.cpp
 	TLSCalculation.cpp
 	TLSComputer.cpp
 	TLSConstraintIdentifier.cpp

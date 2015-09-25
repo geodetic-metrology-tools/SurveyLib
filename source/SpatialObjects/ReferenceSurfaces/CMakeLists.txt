@@ -2,7 +2,7 @@
 set(ReferenceSurfaces_SOURCES 
 	T3DLocalRefFrame.cpp
 	TA2DPlus1MapProjection.cpp
-	TA2DXYRefFrame.cpp
+	#TA2DXYRefFrame.cpp
 	TA3DEuclideanRefFrame.cpp
 	TAGeoidModel.cpp
 	TAModifiedLocalAstronomicalRF.cpp
@@ -10,19 +10,19 @@ set(ReferenceSurfaces_SOURCES
 	TCernGridGeoid.cpp
 	TCernParabolicGeoid.cpp
 	TCernSphereGeoid.cpp
-	TCoordinateSystem.cpp
-	TEuclideanRefFrame.cpp
-	TEuclidianReferenceFrame.cpp
+	#TCoordinateSystem.cpp
+	#TEuclideanRefFrame.cpp
+	#TEuclidianReferenceFrame.cpp
 	TGeodeticRefFrame.cpp
 	TGeoid.cpp
 	TGeoidValues.cpp
 	TGraphLocalAstronomicalRF.cpp
 	TGraphMLARF.cpp
-	TLocalGeodeticRefFrame.cpp
+	#TLocalGeodeticRefFrame.cpp
 	TModifiedLocalAstronomicalRF.cpp
 	TModifiedLocalGeodeticRF.cpp
 	TReferenceEllipsoid.cpp
-	TReferenceFrameServer.cpp
+	#TReferenceFrameServer.cpp
 	TX0Y0HeProjection.cpp
 	TXYHeProjection.cpp
 	TXYHgProjection.cpp
@@ -40,8 +40,8 @@ set(ReferenceSurfaces_HEADERS
 	TCernGridGeoid.h
 	TCernParabolicGeoid.h
 	TCernSphereGeoid.h
-	TCoordinateSystem.h
-	TEuclidianReferenceFrame.h
+	#TCoordinateSystem.h
+	#TEuclidianReferenceFrame.h
 	TGeodeticRefFrame.h
 	TGeoid.h
 	TGeoidValues.h

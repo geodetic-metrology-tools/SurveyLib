@@ -1,28 +1,28 @@
 # Create a variable containing all .cpp files:
 set(SpatialSystems_SOURCES 
 	TASpatialAttribute.cpp
-	TPositionStatus.cpp
+	#TPositionStatus.cpp
 	TSpatialOrientation.cpp
-	TSpatialOrientationError.cpp
+	#TSpatialOrientationError.cpp
 	TSpatialPosition.cpp
-	TSpatialPositionError.cpp
+	#TSpatialPositionError.cpp
 	TSpatialStatus.cpp
 	TSpatialVector.cpp
-	TSpatialVectorError.cpp
-	TSpatialVectorStatus.cpp
+	#TSpatialVectorError.cpp
+	#TSpatialVectorStatus.cpp
 )
 
 # Create a variable containing all .h files:
 set(SpatialSystems_HEADERS 
 	TASpatialAttribute.h
-	TPositionStatus.cpp
+	#TPositionStatus.h
 	TSpatialOrientation.h
 	TSpatialPosition.h
-	TSpatialPositionError.h
+	#TSpatialPositionError.h
 	TSpatialStatus.h
 	TSpatialVector.h
-	TSpatialVectorError.h
-	TSpatialVectorStatus.h
+	#TSpatialVectorError.h
+	#TSpatialVectorStatus.h
 )
 
 # Create a static library from sources:
