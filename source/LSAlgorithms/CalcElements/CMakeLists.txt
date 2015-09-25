@@ -1,20 +1,20 @@
 # Create a variable containing all .cpp files:
 SET(CalcElements_SOURCES 
 	TALSCalcParameter.cpp
-	TALSComputer.cpp
+	#TALSComputer.cpp
 	#TLSCalcDataSet.cpp
 	TLSCalculation.cpp
 	TLSComputer.cpp
-	TLSConstraintIdentifier.cpp
+	#TLSConstraintIdentifier.cpp
 	TLSInputMatrices.cpp
-	TLSInputSparseMatrices.cpp
+	#TLSInputSparseMatrices.cpp
 	TLSParametricMtdComputer.cpp
 	TLSResultsMatrices.cpp
-	TLSResultsSparseMatrices.cpp
-	TLSSparseMatrixComputer.cpp
-	TUnknownAngle.cpp
-	TUnknownLength.cpp
-	TUnknownParameter.cpp
+	#TLSResultsSparseMatrices.cpp
+	#TLSSparseMatrixComputer.cpp
+	#TUnknownAngle.cpp
+	#TUnknownLength.cpp
+	#TUnknownParameter.cpp
 )
 
 # Create a variable containing all .h files:
