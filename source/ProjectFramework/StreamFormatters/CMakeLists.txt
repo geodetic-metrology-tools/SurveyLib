@@ -1,3 +1,4 @@
+CMAKE_POLICY(SET CMP0022 NEW)
 CMAKE_POLICY(SET CMP0038 NEW)
 
 # Create a variable containing all .cpp files:
@@ -29,4 +30,4 @@ set(StreamFormatters_HEADERS
 add_library(StreamFormatters STATIC ${StreamFormatters_SOURCES} ${StreamFormatters_HEADERS})
 
 #link used libraries
-#target_link_libraries(StreamFormatters ${PROJECTFRAMEWORK_LIBRARIES} ${SPATIAL_LIBRARIES})
+target_link_libraries(StreamFormatters ${PROJECTFRAMEWORK_LIBRARIES} ${SPATIAL_LIBRARIES})
