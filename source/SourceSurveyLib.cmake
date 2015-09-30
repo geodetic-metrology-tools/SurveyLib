@@ -1,18 +1,17 @@
-
 # We need some CMake macros
 INCLUDE(CheckIncludeFileCXX)
 
+# Inlcude sublibraries
 INCLUDE(${SURVEYLIB_ROOT}/source/SubLibraries.cmake)
-
 
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
-configure_file(${SURVEYLIB_ROOT}/source/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-add_custom_target(doc
-${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-COMMENT "Generating API documentation with Doxygen" VERBATIM
+	configure_file(${SURVEYLIB_ROOT}/source/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+	add_custom_target(doc
+	${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
 endif(DOXYGEN_FOUND)
 
@@ -21,8 +20,6 @@ IF(CMAKE_PROJECT_NAME STREQUAL "SurveyLib")
 	SET(SURVEYLIB_ROOT "${CMAKE_SOURCE_DIR}/..")
 	message("Building Surveylib in tree.")
 ENDIF()
-
-SET(SURVEYLIB_INCLUDE_PATH "${SURVEYLIB_ROOT}/include")
 
 # Compiler options
 IF(WIN32)
