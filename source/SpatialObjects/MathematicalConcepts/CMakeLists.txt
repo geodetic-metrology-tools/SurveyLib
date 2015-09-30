@@ -1,3 +1,6 @@
+# set include directories needed by this library
+include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/ShortestPath)
+
 # Create a variable containing all .cpp files:
 set(MathematicalConcepts_SOURCES 
 	Quad.cpp

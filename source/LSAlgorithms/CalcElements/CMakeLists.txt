@@ -1,3 +1,6 @@
+# set include directories needed by this library
+include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/MathematicalConcepts)
+
 # Create a variable containing all .cpp files:
 SET(CalcElements_SOURCES 
 	TALSCalcParameter.cpp

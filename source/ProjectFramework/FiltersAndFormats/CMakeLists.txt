@@ -1,3 +1,14 @@
+# set include directories needed by this library
+include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/MathematicalConcepts
+					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialSystems
+					${SURVEYLIB_ROOT}/source/SpatialObjects/ShortestPath
+					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialObj
+					${SURVEYLIB_ROOT}/source/SpatialObjects/ReferenceSurfaces
+					${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformations
+					${SURVEYLIB_ROOT}/source/SpatialObjects/RefFrameTransformations
+					${SURVEYLIB_ROOT}/source/ProjectFramework/Converters
+					${SURVEYLIB_ROOT}/source/ProjectFramework/StreamFormatters)
+
 # Create a variable containing all .cpp files:
 set(FiltersAndFormats_SOURCES 
 	T100MicroGonsFilter.cpp

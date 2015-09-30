@@ -1,3 +1,11 @@
+# set include directories needed by this library
+include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/MathematicalConcepts
+					${SURVEYLIB_ROOT}/source/SpatialObjects/ShortestPath
+					${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformations
+					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialSystems
+					${SURVEYLIB_ROOT}/source/SpatialObjects/ReferenceSurfaces
+					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialObj) 
+
 # Create a variable containing all .cpp files:
 set(RefFrameTransformations_SOURCES 
 	TARefFrameTransformation.cpp

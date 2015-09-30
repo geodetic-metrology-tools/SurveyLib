@@ -3,13 +3,13 @@
 //TLSInputMatrices.h : implementation file
 // class for input matrices as defined for survey purposes
 // and for the least squares solving algorithm
-/***DEBUG*///
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
 
-#include "lsalgo/TLSInputMatrices.h"
+#include "TLSInputMatrices.h"
 
 
 /////////////////////////////////////////////////////////////////////////////////

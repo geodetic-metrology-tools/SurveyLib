@@ -32,7 +32,6 @@ class  TModifiedLocalAstronomicalRF;
 #include  "TLength.h"
 #include  "TSpatialStatus.h"
 #include  "TFreeVector.h"
-
 #include  "TVAffineTransformation.h"
 
 using namespace std;
