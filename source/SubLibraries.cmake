@@ -10,7 +10,8 @@ SET(SPATIAL_LIBRARIES
 	MathematicalConcepts
 	ReferenceSurfaces 
 	RefFrameTransformations 
-	ShortestPath 
+	ShortestPath
+	SpatialMeasurments
 	SpatialObj 
 	SpatialSystems
 )
