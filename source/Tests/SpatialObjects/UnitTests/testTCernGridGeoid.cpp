@@ -1,6 +1,5 @@
 #include <TRefFrameInfo.h>
 #include <TSpatialPosition.h>
-
 #include <TRefFrameInfo.h>
 #include <TRefSystemFactory.h>
 
