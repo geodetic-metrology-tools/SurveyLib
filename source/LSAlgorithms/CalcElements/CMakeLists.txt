@@ -1,5 +1,6 @@
 # set include directories needed by this library
-include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/MathematicalConcepts)
+include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/MathematicalConcepts
+					${SURVEYLIB_ROOT}/source/SpatialObjects/CalcParams)
 
 # Create a variable containing all .cpp files:
 SET(CalcElements_SOURCES 

@@ -6,7 +6,8 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialObj
 					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialSystems
 					${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformations
 					${SURVEYLIB_ROOT}/source/SpatialObjects/RefFrameTransformations
-					${SURVEYLIB_ROOT}/source/LSAlgorithms/CalcElements)
+					${SURVEYLIB_ROOT}/source/LSAlgorithms/CalcElements
+					${SURVEYLIB_ROOT}/source/LSAlgorithms/CalcParams)
 
 # Create a variable containing all .cpp files:
 SET(CalcParams_SOURCES 
