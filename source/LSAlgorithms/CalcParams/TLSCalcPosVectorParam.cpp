@@ -5,7 +5,7 @@
 #include <Eigen/Eigenvalues>
 
 
-#include "lsalgo/TLSCalcPosVectorParam.h"
+#include "TLSCalcPosVectorParam.h"
 #include "TAGeoidModel.h"
 #include "TAReferenceFrame.h"
 

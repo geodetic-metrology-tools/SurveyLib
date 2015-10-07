@@ -8,7 +8,7 @@
 #endif // _MSC_VER >= 1000
 
 #include "TLSCalcPosVectorParam.h"
-#include "lsalgo/TLSCalcWorkingUnknown.h"
+#include "TLSCalcWorkingUnknown.h"
 
 class TLSCalcWorkingPosVec : public TLSCalcWorkingUnknown<TLSCalcPosVectorParam> {
 

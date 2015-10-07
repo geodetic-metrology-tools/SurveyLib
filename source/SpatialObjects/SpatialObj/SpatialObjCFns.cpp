@@ -1,5 +1,3 @@
-
-
 #include  "SpatialObjCFns.h"
 #include  "SpatialObjFns.h"
 #include  "TSpatialPosition.h"

@@ -1,6 +1,6 @@
 // TLSCalcLengthParam.cpp
 
-#include "lsalgo/TLSCalcLengthParam.h"
+#include "TLSCalcLengthParam.h"
 
 ////////////////////////////////////////////////////////////////////////
 // CONSTRUCTORS / DESTRUCTOR

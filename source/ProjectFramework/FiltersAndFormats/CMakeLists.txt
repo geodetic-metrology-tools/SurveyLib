@@ -1,3 +1,14 @@
+# set include directories needed by this library
+include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/MathematicalConcepts
+					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialSystems
+					${SURVEYLIB_ROOT}/source/SpatialObjects/ShortestPath
+					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialObj
+					${SURVEYLIB_ROOT}/source/SpatialObjects/ReferenceSurfaces
+					${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformations
+					${SURVEYLIB_ROOT}/source/SpatialObjects/RefFrameTransformations
+					${SURVEYLIB_ROOT}/source/ProjectFramework/Converters
+					${SURVEYLIB_ROOT}/source/ProjectFramework/StreamFormatters)
+
 # Create a variable containing all .cpp files:
 set(FiltersAndFormats_SOURCES 
 	T100MicroGonsFilter.cpp
@@ -12,7 +23,6 @@ set(FiltersAndFormats_SOURCES
 	TMetresFilter.cpp
 	TMillimetresFilter.cpp
 	TRadiansFilter.cpp
-	
 	# TWPS2DFilter.cpp
 	# TWPSTFilter.cpp
 	# TWPSVFilter.cpp
@@ -23,32 +33,31 @@ set(FiltersAndFormats_SOURCES
 
 # Create a variable containing all .h files:
 set(FiltersAndFormats_HEADERS 
-	${SURVEYLIB_INCLUDE_PATH}/setformat.h
-	${SURVEYLIB_INCLUDE_PATH}/T100MicroGonsFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/T2DPlusHFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/T3DCartesianFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TAngleFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TCCsFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TDMSFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TGeodeticFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TGonsFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TKilometresFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TLengthFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TMetresFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TMillimetresFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TRadiansFilter.h
-	${SURVEYLIB_INCLUDE_PATH}/TSpatialPositionFilter.h
-	
-	# ${SURVEYLIB_INCLUDE_PATH}/TWPS2DFilter.h
-	# ${SURVEYLIB_INCLUDE_PATH}/TWPSTFilter.h
-	# ${SURVEYLIB_INCLUDE_PATH}/TWPSVFilter.h
-	# ${SURVEYLIB_INCLUDE_PATH}/TWTW2DFilter.h
-	# ${SURVEYLIB_INCLUDE_PATH}/TWTWHFilter.h
-	# ${SURVEYLIB_INCLUDE_PATH}/TWTWVFilter.h
+	#setformat.h
+	T100MicroGonsFilter.h
+	T2DPlusHFilter.h
+	T3DCartesianFilter.h
+	TAngleFilter.h
+	TCCsFilter.h
+	TDMSFilter.h
+	TGeodeticFilter.h
+	TGonsFilter.h
+	TKilometresFilter.h
+	TLengthFilter.h
+	TMetresFilter.h
+	TMillimetresFilter.h
+	TRadiansFilter.h
+	TSpatialPositionFilter.h
+	# TWPS2DFilter.h
+	# TWPSTFilter.h
+	# TWPSVFilter.h
+	# TWTW2DFilter.h
+	# TWTWHFilter.h
+	# TWTWVFilter.h
 )
 
 # Create a static library from sources:
 add_library(FiltersAndFormats STATIC ${FiltersAndFormats_SOURCES} ${FiltersAndFormats_HEADERS})
-#install(FILES ${FiltersAndFormats_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)
 
-target_link_libraries(FiltersAndFormats ${SPATIAL_LIBRARIES})
+#link used libraries
+target_link_libraries(FiltersAndFormats  ${SPATIAL_LIBRARIES})

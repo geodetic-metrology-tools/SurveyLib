@@ -1,3 +1,15 @@
+# set include directories needed by this library
+include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/MathematicalConcepts
+					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialObj
+					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialSystems
+					${SURVEYLIB_ROOT}/source/SpatialObjects/ShortestPath
+					${SURVEYLIB_ROOT}/source/SpatialObjects/ReferenceSurfaces
+					${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformations
+					${SURVEYLIB_ROOT}/source/SpatialObjects/RefFrameTransformations
+					${SURVEYLIB_ROOT}/source/ProjectFramework/StreamFormatters
+					${SURVEYLIB_ROOT}/source/LSAlgorithms/CalcParams
+					${SURVEYLIB_ROOT}/source/LSAlgorithms/CalcElements)
+
 # Create a variable containing all .cpp files:
 set(Converters_SOURCES 
 	TAConverter.cpp
@@ -8,12 +20,11 @@ set(Converters_SOURCES
 
 # Create a variable containing all .h files:
 set(Converters_HEADERS 
-	${SURVEYLIB_INCLUDE_PATH}/TAConverter.h
-	${SURVEYLIB_INCLUDE_PATH}/TObservationFormat.h
-	${SURVEYLIB_INCLUDE_PATH}/TPointConverter.h
-	${SURVEYLIB_INCLUDE_PATH}/TPointFormat.h
+	TAConverter.h
+	TObservationFormat.h
+	TPointConverter.h
+	TPointFormat.h
 )
 
 # Create a static library from sources:
 add_library(Converters STATIC ${Converters_SOURCES} ${Converters_HEADERS})
-#install(FILES ${Converters_HEADERS} DESTINATION ${INSTALL_PREFIX}/include)

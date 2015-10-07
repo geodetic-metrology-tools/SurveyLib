@@ -7,10 +7,11 @@ SET(SURVEYLIB_LIBRARIES
 
 SET(SPATIAL_LIBRARIES 
 	AffineTransformations 
-	MathematicalConcepts 
+	MathematicalConcepts
 	ReferenceSurfaces 
 	RefFrameTransformations 
-	ShortestPath 
+	ShortestPath
+	SpatialMeasurments
 	SpatialObj 
 	SpatialSystems
 )

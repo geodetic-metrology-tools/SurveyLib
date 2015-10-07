@@ -1,6 +1,6 @@
 // TALSCalcParameter.cpp
 
-#include "lsalgo/TALSCalcParameter.h"
+#include "TALSCalcParameter.h"
 
 /*
 // Default constructor

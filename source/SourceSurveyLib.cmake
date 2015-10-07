@@ -1,18 +1,17 @@
-
 # We need some CMake macros
 INCLUDE(CheckIncludeFileCXX)
 
+# Inlcude sublibraries
 INCLUDE(${SURVEYLIB_ROOT}/source/SubLibraries.cmake)
-
 
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
-configure_file(${SURVEYLIB_ROOT}/source/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-add_custom_target(doc
-${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-COMMENT "Generating API documentation with Doxygen" VERBATIM
+	configure_file(${SURVEYLIB_ROOT}/source/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+	add_custom_target(doc
+	${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
 endif(DOXYGEN_FOUND)
 
@@ -21,8 +20,6 @@ IF(CMAKE_PROJECT_NAME STREQUAL "SurveyLib")
 	SET(SURVEYLIB_ROOT "${CMAKE_SOURCE_DIR}/..")
 	message("Building Surveylib in tree.")
 ENDIF()
-
-SET(SURVEYLIB_INCLUDE_PATH "${SURVEYLIB_ROOT}/include")
 
 # Compiler options
 IF(WIN32)
@@ -48,34 +45,34 @@ ELSE()
 ENDIF()
 
 IF(USE_SWISSTOPO)
-MESSAGE(STATUS "[STATUS] Swisstopo transformations enabled.")
-IF(NOT EXISTS "${REFRAME_INCLUDE_PATH}/reframeLib.tlb")
-	# Try a different name
-	IF(NOT EXISTS "${REFRAME_INCLUDE_PATH}/swisstopoReframeLib.tlb")
-		MESSAGE(FATAL_ERROR "[ERROR] Cannot find reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
+	MESSAGE(STATUS "[STATUS] Swisstopo transformations enabled.")
+	IF(NOT EXISTS "${REFRAME_INCLUDE_PATH}/reframeLib.tlb")
+		# Try a different name
+		IF(NOT EXISTS "${REFRAME_INCLUDE_PATH}/swisstopoReframeLib.tlb")
+			MESSAGE(FATAL_ERROR "[ERROR] Cannot find reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
+		ELSE()
+			MESSAGE(STATUS "[STATUS] Found reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
+			LINK_DIRECTORIES(${REFRAME_LIBRARY_DIR})
+			INCLUDE_DIRECTORIES(${REFRAME_INCLUDE_PATH})
+		ENDIF()
 	ELSE()
 		MESSAGE(STATUS "[STATUS] Found reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
 		LINK_DIRECTORIES(${REFRAME_LIBRARY_DIR})
 		INCLUDE_DIRECTORIES(${REFRAME_INCLUDE_PATH})
 	ENDIF()
-ELSE()
-    MESSAGE(STATUS "[STATUS] Found reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
-	LINK_DIRECTORIES(${REFRAME_LIBRARY_DIR})
-	INCLUDE_DIRECTORIES(${REFRAME_INCLUDE_PATH})
-ENDIF()
-IF(NOT EXISTS "${REFRAME_LIBRARY_DIR}/reframeLib.dll")
-	# Try a different name
-	IF(NOT EXISTS "${REFRAME_INCLUDE_PATH}/swisstopoReframeLib.dll")
-		MESSAGE(FATAL_ERROR "[ERROR] Cannot find reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
+	IF(NOT EXISTS "${REFRAME_LIBRARY_DIR}/reframeLib.dll")
+		# Try a different name
+		IF(NOT EXISTS "${REFRAME_INCLUDE_PATH}/swisstopoReframeLib.dll")
+			MESSAGE(FATAL_ERROR "[ERROR] Cannot find reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
+		ELSE()
+			MESSAGE(STATUS "[STATUS] Found reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
+		ENDIF()
 	ELSE()
-		MESSAGE(STATUS "[STATUS] Found reframeLib.tlb in ${REFRAME_INCLUDE_PATH}")
+		MESSAGE(STATUS "[STATUS] Found reframeLib.dll in ${REFRAME_LIBRARY_DIR}")
 	ENDIF()
-ELSE()
-    MESSAGE(STATUS "[STATUS] Found reframeLib.dll in ${REFRAME_LIBRARY_DIR}")
-ENDIF()
-ADD_DEFINITIONS(-DUSE_SWISSTOPO)
+	ADD_DEFINITIONS(-DUSE_SWISSTOPO)
 ELSE(USE_SWISSTOPO)
-MESSAGE(STATUS "[STATUS] Swisstopo transformations disabled.")
+	MESSAGE(STATUS "[STATUS] Swisstopo transformations disabled.")
 ENDIF(USE_SWISSTOPO)
 
 IF(NOT EXISTS "${VCREDIST_INSTALLER_PATH}")
