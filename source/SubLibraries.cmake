@@ -11,7 +11,6 @@ SET(SPATIAL_LIBRARIES
 	ReferenceSurfaces 
 	RefFrameTransformations 
 	ShortestPath
-	SpatialMeasurments
 	SpatialObj 
 	SpatialSystems
 )
