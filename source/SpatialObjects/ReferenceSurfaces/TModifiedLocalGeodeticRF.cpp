@@ -111,12 +111,12 @@ TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 		TAngle::pi().getRadiansValue() - origin.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid(/*fEllipsoid*/).getRadiansValue() );
 	r3.invert();
 	r3.transform( vector );
-	TLength ycomp( - (vector.getY().getMetresValue()) );
+	TScalar ycomp( - (vector.getY().getValue()) );
 	vector.setY( ycomp );
 
 
-	TAngle bearing(TAngle::aTan2( vector.getY().getMetresValue(),
-		vector.getX().getMetresValue() ));
+	TAngle bearing(TAngle::aTan2( vector.getY().getValue(),
+		vector.getX().getValue() ));
 	TRotationMatrix orientation(TRotationMatrix::kRzyx, 0,0,bearing.getRadiansValue());
 	fOrientationMatrix.setElements(orientation);
 	

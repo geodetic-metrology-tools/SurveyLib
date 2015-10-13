@@ -128,9 +128,9 @@ bool  TX0Y0He2XYHeTransformation::transform(TPositionVector& pv) const
 	TReal Dx, dx, Dy, dy, he, falseX, falseY;
 
 	// distance from p0 in X0Y0-plane
-	dx = pv.getX().getMetresValue() - fTo->getMLARefFrame()->getFalseOrigin().getX().getMetresValue();
-	dy = pv.getY().getMetresValue() - fTo->getMLARefFrame()->getFalseOrigin().getY().getMetresValue();
-	he = pv.getH().getMetresValue();
+	dx = pv.getX().getValue() - fTo->getMLARefFrame()->getFalseOrigin().getX().getValue();
+	dy = pv.getY().getValue() - fTo->getMLARefFrame()->getFalseOrigin().getY().getValue();
+	he = pv.getH().getValue();
 	
 	// bearing from p0 in the X0Y0-plane
 	TAngle beta = TAngle::aTan2(dx,dy);
@@ -142,9 +142,9 @@ bool  TX0Y0He2XYHeTransformation::transform(TPositionVector& pv) const
 	// radius of the ellipsoid at azimuth and at phiP0
 	TSpatialPosition falseOrigin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
 	TLength xp, yp, zp;
-	xp.setMetresValue(fTo->getMLARefFrame()->getFalseOrigin().getX().getMetresValue());
-	yp.setMetresValue(fTo->getMLARefFrame()->getFalseOrigin().getY().getMetresValue());
-	zp.setMetresValue(fTo->getMLARefFrame()->getFalseOrigin().getZ().getMetresValue());
+	xp.setMetresValue(fTo->getMLARefFrame()->getFalseOrigin().getX().getValue());
+	yp.setMetresValue(fTo->getMLARefFrame()->getFalseOrigin().getY().getValue());
+	zp.setMetresValue(fTo->getMLARefFrame()->getFalseOrigin().getZ().getValue());
 	TPositionVector vector(xp.getMetresValue(),yp.getMetresValue(),zp.getMetresValue(),TCoordSysFactory::k3DCartesian);
 	falseOrigin.setCoordinates(vector);
 	
@@ -163,11 +163,11 @@ bool  TX0Y0He2XYHeTransformation::transform(TPositionVector& pv) const
  	Dx = k * dx;
 	Dy = k * dy;
 	
-	falseX = fTo->getMLARefFrame()->getFalseOrigin().getX().getMetresValue();
-	falseY = fTo->getMLARefFrame()->getFalseOrigin().getY().getMetresValue();
+	falseX = fTo->getMLARefFrame()->getFalseOrigin().getX().getValue();
+	falseY = fTo->getMLARefFrame()->getFalseOrigin().getY().getValue();
 
 	// transformation of tposition vector
-	TLength newX(falseX + Dx), newY(falseY + Dy);
+	TScalar newX(falseX + Dx), newY(falseY + Dy);
 	pv.setX(newX);
 	pv.setY(newY);
 

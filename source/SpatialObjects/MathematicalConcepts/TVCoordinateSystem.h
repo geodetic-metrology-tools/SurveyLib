@@ -41,7 +41,7 @@ class TPositionVector;
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Virtual class for Coordonate System
@@ -52,29 +52,29 @@ public:
 	
 	/*!\name Functions for Vector*/
 	//@{
-	virtual TLength getH(const TPositionVector*) const=0;
+	virtual TScalar getH(const TPositionVector*) const=0;
 
 	virtual TAngle getLambdaEllipsoid(const TPositionVector*) const=0;
 
 	virtual TAngle getPhiEllipsoid(const TPositionVector*) const=0;
 
-	virtual TLength getX(const TACoordSysVector*) const=0;
+	virtual TScalar getX(const TACoordSysVector*) const=0;
 
-	virtual TLength getY(const TACoordSysVector*) const=0;
+	virtual TScalar getY(const TACoordSysVector*) const=0;
 
-	virtual TLength getZ(const TACoordSysVector*) const=0;
+	virtual TScalar getZ(const TACoordSysVector*) const=0;
 
-	virtual bool setH(TPositionVector*, const TLength&)=0;
+	virtual bool setH(TPositionVector*, const TScalar&)=0;
 
 	virtual bool setLambdaEllipsoid(TPositionVector*, const TAngle&)=0;
 
 	virtual bool setPhiEllipsoid(TPositionVector*, const TAngle&)=0;
 
-	virtual bool setX(TACoordSysVector*, const TLength&)=0;
+	virtual bool setX(TACoordSysVector*, const TScalar&)=0;
 
-	virtual bool setY(TACoordSysVector*, const TLength&)=0;
+	virtual bool setY(TACoordSysVector*, const TScalar&)=0;
 
-	virtual bool setZ(TACoordSysVector*, const TLength&)=0;
+	virtual bool setZ(TACoordSysVector*, const TScalar&)=0;
 	//@}
 
 	/*!\name Functions for Matrix*/

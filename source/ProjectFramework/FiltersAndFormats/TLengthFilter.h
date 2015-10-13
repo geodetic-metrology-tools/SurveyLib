@@ -36,7 +36,7 @@ class	TObservationFormat;
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup projectframework
+/*!\ingroup FiltersAndFormats
 @{*/
 
 //Interface definition

@@ -58,7 +58,7 @@ class  TDataParameters //: public TObject
 {
 public:
 	
-	/*//!@name Constants
+	/*///@name Constants
 	//@{*/
 		
 		enum  ECoordUnit {kNotDefined, kMetric, kGons, kDMS};
@@ -68,90 +68,91 @@ public:
 
 	/*!@name Constructors and Destructors */
 	//@{
-		//! default constructor
+		/// default constructor
 		TDataParameters();
 
-		//! copy constructor
+		/// copy constructor
 		TDataParameters(const TDataParameters&);
 
-		//! destructor
+		/// destructor
 		virtual  ~TDataParameters();
 
 	//@}
 	/*!@name member functions */
 	//@{
-		//! copy assignment operator
+		/// copy assignment operator
 		TDataParameters& operator=(TDataParameters); // Pass-by-value, simpler and better in C++0x
         
         void swap(TDataParameters & other) throw();
 
-		//! equivalence operator
+		/// equivalence operator
 		bool	operator==(const TDataParameters& );
 
+		/// Returns "true" if the parameters are defined
 		bool	defined() const;
 
 		bool	isOriginExpected() const;
 
-		//! set the reference system identifier
+		/// set the reference system identifier
 		bool	setRefFrame(TRefSystemFactory::ERefFrame);
 
-		//!set the coordinate system
+		///set the coordinate system
 		bool	setCoordSys(const TCoordSysFactory::ECoordSys&);
 
-		//!set angle umits
+		///set angle umits
 		bool	setAngUnits(const TAngle::EUnits&);
 
-		//!setlength units
+		///setlength units
 		bool	setLenUnits(const TLength::EUnits&);
 	
-		//! set the coordinate units
+		/// set the coordinate units
 		bool	setUnits( const TDataParameters::ECoordUnit& );
 
-		//! set the angle precision
+		/// set the angle precision
 		void	setAnglePrecision(const TObservationFormat::EAnglePrecision precision );
 		
-		//! set the length precision 
+		/// set the length precision 
 		void	setLengthPrecision(const TObservationFormat::ELengthPrecision precision );
 		
-		//!set coordinate precision
+		///set coordinate precision
 		void	setCoordPrecision(const TPointFormat::ECoordPrecision precision);
 
-		//! set angle, length and coordinate precisions, based on the integer arguement
+		/// set angle, length and coordinate precisions, based on the integer arguement
 		void	setPrecision(int precision);
 
 
-		//!set the point name's width
+		///set the point name's width
 		void	setPointNameWidth(const int);
 
         bool	setLocalSystemOrigin(const TLocalSystemOrigin &);
         bool    setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> lso);
 	
 
-		//! get the reference system identifier
+		/// get the reference system identifier
 		TAReferenceFrame*	getRefFrame() const;
 
-		//! get the reference system identifier
+		/// get the reference system identifier
 		TRefSystemFactory::ERefFrame	getRefFrameEnumerator() const;
 
-		//! get the coordinate system for the RefSystem data
+		/// get the coordinate system for the RefSystem data
 		TCoordSysFactory::ECoordSys		getCoordinateSystem()  const;
 		
-		//! get the angle units
+		/// get the angle units
 		TAngle::EUnits		getAngleUnits() const;
 	
-		//! get the length units
+		/// get the length units
 		TLength::EUnits		getLengthUnits() const;
 	
-		//! get the angle precision
+		/// get the angle precision
 		TObservationFormat::EAnglePrecision		getAnglePrecision() const;
 
-		//! get the length precision 
+		/// get the length precision 
 		TObservationFormat::ELengthPrecision	getLengthPrecision() const;
 
-		//! get the coord precision 
+		/// get the coord precision 
 		TPointFormat::ECoordPrecision			getCoordPrecision() const;
 
-		//! get the point name's width 
+		/// get the point name's width 
 		int										getPointNameWidth() const;
 
         std::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;

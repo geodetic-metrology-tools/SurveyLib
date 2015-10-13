@@ -1,6 +1,6 @@
 // TPositionVector.h
 //
-/** 3D Vector used as a free vector only affected by rotations and scaling
+/** 3D Vector used to define position in a space
 //
 // Patterns:
 //
@@ -38,7 +38,7 @@
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! 3D Vector used as a position vector
@@ -100,15 +100,16 @@ public:
 
 		//!Copy Assignment Operator 
 		TPositionVector& operator=(const TPositionVector& );
+
 	//@}
 
 	/*!\name member Functions */
 	//@{
 		//!Give the distance between this and a second position vector
-		TLength dist(const TPositionVector& ) const;
+		TScalar dist(const TPositionVector& ) const;
 
 		//!get the H value of a TPositionVector if is defined
-		TLength getH() const;
+		TScalar getH() const;
 
 		//!get the lambda value of a TPositionVector if is defined
 		TAngle getLambdaEllipsoid() const;
@@ -117,7 +118,7 @@ public:
 		TAngle getPhiEllipsoid() const;
 
 		//!set the H coordinate of a vector in a specific Coordinate System return true if X is defined
-		bool setH(const TLength&);
+		bool setH(const TScalar&);
 
 		//!set the Lambda coordinate of a vector in a geodetic Coordinate System return true if X is defined
 		bool setLambdaEllipsoid(const TAngle&);

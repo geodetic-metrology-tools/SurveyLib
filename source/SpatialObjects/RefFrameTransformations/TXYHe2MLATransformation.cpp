@@ -27,6 +27,7 @@
 #include  "TReferenceEllipsoid.h"
 #include  "TMLA2XYHeTransformation.h"
 #include  "TXYHe2MLATransformation.h"
+#include  "GeodeticConstants.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -110,9 +111,9 @@ bool  TXYHe2MLATransformation::transform(TPositionVector& pv) const
 	TReal dx, dy, he, d, d0, Dzh;
 
 	// distance from P0 in XY-plane
-	dx = pv.getX().getMetresValue() - fTo->getFalseOrigin().getX().getMetresValue();
-	dy = pv.getY().getMetresValue() - fTo->getFalseOrigin().getY().getMetresValue();
-	he = pv.getH().getMetresValue();
+	dx = pv.getX().getValue() - fTo->getFalseOrigin().getX().getValue();
+	dy = pv.getY().getValue() - fTo->getFalseOrigin().getY().getValue();
+	he = pv.getH().getValue();
 	d=sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 
 	// bearing from P0 in the XY-plane
@@ -124,9 +125,9 @@ bool  TXYHe2MLATransformation::transform(TPositionVector& pv) const
 
 	// radius of the ellipsoid at azimuth and at phiP0
 	TSpatialPosition falseOrigin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-	TPositionVector vector(fTo->getFalseOrigin().getX().getMetresValue(),
-		fTo->getFalseOrigin().getY().getMetresValue(),
-		fTo->getFalseOrigin().getZ().getMetresValue(),
+	TPositionVector vector(fTo->getFalseOrigin().getX().getValue(),
+		fTo->getFalseOrigin().getY().getValue(),
+		fTo->getFalseOrigin().getZ().getValue(),
 		TCoordSysFactory::k3DCartesian);
 	falseOrigin.setCoordinates(vector);
 	
@@ -146,11 +147,13 @@ bool  TXYHe2MLATransformation::transform(TPositionVector& pv) const
 	d0 = k*d;
 
 	// transform TPositionVector
-	Dzh = fTo->getFalseOrigin().getZ().getMetresValue() - fTo->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getH(/*TGraph::getGraph()->getEllipsoid(TGraph::kGRS80)*/).getMetresValue();
+	//Again "fTo->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getH(/*TGraph::getGraph()->getEllipsoid(TGraph::kGRS80)*/).getValue()" does not return correct value
+	Dzh = fTo->getFalseOrigin().getZ().getValue() - HP0;
+//	Dzh = fTo->getFalseOrigin().getZ().getValue() - fTo->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getH(/*TGraph::getGraph()->getEllipsoid(TGraph::kGRS80)*/).getValue();
 
 	TAngle omegaBy2 = omega * LITERAL(0.5);
 
-	TLength newZ(Dzh + he * omega.cosine()
+	TScalar newZ(Dzh + he * omega.cosine()
 		- d0 * (omegaBy2.tangent()));
 
 	// change the H coordinate of the position vector into the third coordinate Z

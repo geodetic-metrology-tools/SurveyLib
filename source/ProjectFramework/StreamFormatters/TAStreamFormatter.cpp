@@ -315,7 +315,34 @@ void TAStreamFormatter::init()
 	fRefFrame=0;//TVReferenceFrame*
 	fPointFormat = TPointFormat();
 	fObservationFormat = TObservationFormat();
+	fNofSpaces = 0; // LEVEL 
+}
 
+void TAStreamFormatter::resetStreamName(std::string name){
+	fName= name;
+	if (fIOType == kRead)
+	{// extraction of a file from a stream, reading of a stream
+		fFStream = new fstream(fName.c_str(), ios_base::in);
+	}
+	else if(fIOType == kWrite)
+	{// insertion of a file into a stream, writing a stream
+		fFStream = new fstream(fName.c_str(), ios_base::out);
+	}
+
+	if(fFStream->fail())
+	{
+		if(fIOType == kRead)
+		{
+			this->setError("No input file to open, check the path");
+		}
+		else
+		{
+			this->setError("Failed to open output file, check the path");
+		}
+		fFStream->clear();
+	}
+
+	fIOStream = fFStream;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -432,6 +459,10 @@ int	TAStreamFormatter::setPrecisionFormat(const int precision)
 	return oldPrecision;
 }
 
+void TAStreamFormatter::setFileName(string const& name) 
+{
+	fName = name;
+}
 	
 TSpatialStatus::ESpatialStatus	TAStreamFormatter::setPointFormatStatus(const TSpatialStatus::ESpatialStatus status)
 {/*!set a spatial status for TPointFormat*/
@@ -619,6 +650,20 @@ TAStreamFormatter  &TAStreamFormatter::operator<<( const TDouble& db )
 
 	return *this;
 }
+
+#if 0
+TAStreamFormatter  &TAStreamFormatter::operator<<( const std::string& string )
+{//output a TReal object to the text stream	
+
+	// extract the TReal object as a TReal value and output to the text stream
+	this->width(fWidth);
+	(*this)<<right;
+
+	(*this)<<string;
+
+	return *this;
+}
+#endif
 
 TAStreamFormatter  &TAStreamFormatter::operator<<( const TScalar& db )
 {//output a scalar object to the text stream	
@@ -831,6 +876,14 @@ return *this; }
 
 
 
+string operator*(const string& s, unsigned int n) {
+        stringstream out;
+		while (n--)
+			out << s;
+		return out.str();
+	}
+
+string operator*(unsigned int n, const string& s) { return s * n; }
 
 //////////////////////////////////////////////////////////////////////
 //Member Function
@@ -994,9 +1047,9 @@ void TAStreamFormatter::skipBOM() {
 
 	// all widespread byte order marks
 	static const char boms[NUM_BOMs][BOM_LEN] = {
-		{239, 187, 191},
-		{254, 255,   0},
-		{255, 254,   0}
+		{char(239), char(187), char(191)},
+		{char(254), char(255), char(0)},
+		{char(255), char(254), char(0)}
 	};
 	
 	char y;

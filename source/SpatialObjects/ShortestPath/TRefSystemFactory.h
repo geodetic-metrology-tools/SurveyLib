@@ -44,25 +44,23 @@ class TARefFrameTransformation;
 class TSpatialPosition;
 
 #include <TLocalSystemOrigin.h>
+#include <TCCS2CGRFTransformation.h>
 //
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup spatialobjects
+/*!\ingroup ShortestPath
 	@{*/
 
 
-#define XP0 LITERAL(2000.00000);
-#define YP0 LITERAL(2097.79265);
-#define ZP0 LITERAL(2433.66000);
-#define HP0 LITERAL(433.65921);
-#define PHIP0 LITERAL(51.3692);
+
+//#define PHIP0 LITERAL(51.3692);
 
 //! Singleton class: produce one unique instance listing ref. surfaces, ref.frames and transformations
 class TRefSystemFactory
 {
 public:
-
+	
 	//!@name Constants
 	//@{
 		/*! Enumerator for ellipsoids implemented in the factory */
@@ -170,7 +168,7 @@ public:
 
 		/*! Return the transformation between two reference frames
 			\return a vector of Reference Frame transformations */
-		//vector<TARefFrameTransformation&> getTransform(const ERefFrame refFrameIdfrom, const ERefFrame refFrameIdto);
+		vector<TARefFrameTransformation&> getTransform(const ERefFrame refFrameIdfrom, const ERefFrame refFrameIdto);
 	
 		/*! test if the reference frame is in graph or not 
 		\param pointer to a Ref. Frame
@@ -187,6 +185,10 @@ public:
 
 		//return a pointer to a new Modified Local Astronomic ref Frame and put it in a list in order to be deleted
 		TAReferenceFrame* getNewLocalRefFrame(const TLocalSystemOrigin & LSO, EGeoid geoid, ERefFrame frame);
+
+		//return a CCS2CGRF transformation
+		TCCS2CGRFTransformation* getCCS2CGRFTransformation() {return &pCCS2CGRFTransformation;}
+
 	//@}
 
 
@@ -223,6 +225,8 @@ private:
 
 	vector<TARefFrameTransformation*> fTransformList; /*!< list of pointers to the to-be-defined Ref.Frame transformations */
 	//il est important que ce soit une classe TA plutot que TV pour avoir acces au destructeur
+
+	TCCS2CGRFTransformation pCCS2CGRFTransformation;
 
 
 	TGeodeticRefFrame *fCGRF, *fCGRFSphere;

@@ -104,15 +104,15 @@ TARefFrameTransformation*  TXYHe2XYHgTransformation::inverse() const
 bool  TXYHe2XYHgTransformation::transform( TPositionVector& pv ) const
 {// Transformation of a position vector using N (height above geoid)
 
-	TLength he(pv.getH());
+	TScalar he(pv.getH());
 	TReal x, y, h;
-	x = pv.getX().getMetresValue();
-	y = pv.getY().getMetresValue();
-	h = he.getMetresValue();
+	x = pv.getX().getValue();
+	y = pv.getY().getValue();
+	h = he.getValue();
 
 	// extraction of N using a tspatialposition of coordinates = pv, and reference frame = CCS
 	TSpatialPosition trick(fFrom->getMLARefFrame(), x, y, h, pv.getCoordSys()); 
-	TLength N = fGeoid->getN(trick);
+	TScalar N = fGeoid->getN(trick).getMetresValue();
 
 	pv.setH(he-N);
 	return true;

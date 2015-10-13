@@ -42,6 +42,7 @@ class	TPositionVector;
 
 
 //Interface definition
+/// \ingroup FiltersAndFormats
 class TSpatialPositionFilter //: public TObject  
 {
 public:

@@ -27,6 +27,7 @@
 #include  "TRotation.h"
 #include  "TSpatialPosition.h"
 #include  "TReflection.h"
+#include "TTranslation.h"
 #include  "THelmertTransformation.h"
 #include  "TLA2LGTransformation.h"
 #include  "TLG2LATransformation.h"
@@ -170,6 +171,8 @@ void  TLG2LATransformation::initialise()
 	// get the origin in the reference frame of the local astronomical system geoid
 	// and the geoid values at the origin
 	TSpatialPosition  origin = getLGRF()->getOrigin();
+
+
 
 	// establish the components of the transformation
 	TXAxisRotation  r1( getLARF()->getEta().getRadiansValue() );

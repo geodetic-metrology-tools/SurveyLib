@@ -29,8 +29,10 @@ class TVCoordinateSystem;
 
 #include "TANumericValue.h"
 #include "TLength.h"
+#include "TScalar.h"
 #include "TDouble.h"
 #include  "TCoordSysFactory.h"
+
 //using namespace std;
 //
 //
@@ -39,7 +41,7 @@ class TVCoordinateSystem;
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Abstract class use for explain TPositionVector and TFreeVector
@@ -60,25 +62,31 @@ public:
 
 		/*!test if two object have the same coordinate system
 		\return false if it s wrong*/
-		bool testCoordSysCart(TCoordSysFactory::ECoordSys);
+		bool testCoordSysCart(TCoordSysFactory::ECoordSys) const;
 		
 		//!get the X coordinate of a vector in a specific Coordinate System
-		TLength getX() const;
+		TScalar getX() const;
 
 		//!get the Y coordinate of a vector in a specific Coordinate System
-		TLength getY() const;
+		TScalar getY() const;
 
 		//!get the Z coordinate of a vector in a specific Coordinate System
-		TLength getZ() const;
+		TScalar getZ() const;
 
 		//!set the X coordinate of a vector in a specific Coordinate System return true if X is defined
-		bool setX(const TLength&);
+		bool setX(const TScalar&);
 
 		//!set the Y coordinate of a vector in a specific Coordinate System return true if Y is defined
-		bool setY(const TLength&);
+		bool setY(const TScalar&);
 
 		//!set the Z coordinate of a vector in a specific Coordinate System return true if Z is defined
-		bool setZ(const TLength&);
+		bool setZ(const TScalar&);
+
+		//! Allows to retrieve one of the coordinates of the vector
+		TReal operator[](int i) const;
+
+		//! Allows to retrieve one of the coordinates of the vector and to modify it
+		TReal& operator[](int i);
 
 		//!return fCoordSys
 		TVCoordinateSystem* getCoordSysPtr() const;

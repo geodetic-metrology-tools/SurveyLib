@@ -138,7 +138,7 @@ void	TGeodeticFilter::input(TAStreamFormatter& iStream, TSpatialPosition& positi
 				{
 					pv.setPhiEllipsoid(phi);
 					pv.setLambdaEllipsoid(lambda);
-					pv.setH(H);
+					pv.setH(H.getMetresValue());
 					pv.setStatus(TVNumericValue::kKnown);
 
 				}
@@ -240,7 +240,7 @@ void	TGeodeticFilter::input(TAStreamFormatter& iStream, TPositionVector& pv) con
 				{
 					pv.setPhiEllipsoid(phi);
 					pv.setLambdaEllipsoid(lambda);
-					pv.setH(H);
+					pv.setH(H.getMetresValue());
 					pv.setStatus(TVNumericValue::kKnown);
 
 				}

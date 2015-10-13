@@ -32,7 +32,7 @@
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects 
+/*! \ingroup MathematicalConcepts 
 	@{*/
 
 //! Abstract class for Coordonate System
@@ -43,7 +43,7 @@ public:
 	//@{
 		/*!get the H coordinate of a position vector, default def:
 		\return TLength Null*/
-		virtual TLength getH(const TPositionVector*) const;
+		virtual TScalar getH(const TPositionVector*) const;
 
 		/*!get the Lambda coordinate of a position vector, default def: 
 		\return TLength Null*/
@@ -55,19 +55,19 @@ public:
 
 		/*!get the X coordinate of a position vector or a free vector, default def: 
 		\return TLength Null*/
-		virtual TLength getX(const TACoordSysVector*) const;
+		virtual TScalar getX(const TACoordSysVector*) const;
 
 		/*!get the Y coordinate of a position vector or a free vector, default def: 
 		\return TLength Null*/
-		virtual TLength getY(const TACoordSysVector*) const;
+		virtual TScalar getY(const TACoordSysVector*) const;
 
 		/*!get the Z coordinate of a position vector or a free vector, default def: 
 		\return TLength Null*/
-		virtual TLength getZ(const TACoordSysVector*) const;
+		virtual TScalar getZ(const TACoordSysVector*) const;
 
 		/*!set the H Coordinate of a position vector, default def:
 		\return false*/
-		virtual bool setH(TPositionVector*, const TLength&);
+		virtual bool setH(TPositionVector*, const TScalar&);
 
 		/*!set the Lambda Coordinate of a position vector, default def:
 		\return false*/
@@ -79,15 +79,15 @@ public:
 
 		/*!set the X Coordinate of a position vector or a free vector, default def:
 		\return false*/
-		virtual bool setX(TACoordSysVector*, const TLength&);
+		virtual bool setX(TACoordSysVector*, const TScalar&);
 
 		/*!set the Y Coordinate of a position vector or a free vector, default def:
 		\return false*/
-		virtual bool setY(TACoordSysVector*, const TLength&);
+		virtual bool setY(TACoordSysVector*, const TScalar&);
 
 		/*!set the Z Coordinate of a position vector or a free vector, default def:
 		\return false*/
-		virtual bool setZ(TACoordSysVector*, const TLength&);
+		virtual bool setZ(TACoordSysVector*, const TScalar&);
 	//@}
 
 	/*!\name Functions for Matrix*/

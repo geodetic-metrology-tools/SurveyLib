@@ -39,7 +39,7 @@ typedef	TReal	ScalarValue;	// the value for Scalar
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Class for a Scalar
@@ -141,6 +141,10 @@ public:
 
 	//!multiply a TScalar object by a TFreeVector object
 	TFreeVector operator*(const TFreeVector);
+
+	//!multiply a TScalar object by a factor
+	TScalar operator*(const TReal );
+
 	//@}
 
 private:

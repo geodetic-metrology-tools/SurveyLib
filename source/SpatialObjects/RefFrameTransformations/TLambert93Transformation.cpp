@@ -114,9 +114,9 @@ bool TLambert93Transformation::transformToETRF93(TPositionVector & pv) const
 	if(!position.setCoordinates(pv))
         return false;
 
-    const double X = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
-    const double Y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
-    const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+    const double X = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getValue();
+    const double Y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getValue();
+    const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getValue();
 
 	double R = sqrt((X - XS)*(X - XS)+ (Y - YS)*(Y - YS));
     double gamma = atan((X - XS)/(YS - Y));
@@ -159,7 +159,7 @@ bool TLambert93Transformation::transformFromETRF93(TPositionVector & pv) const
 
     const double phi = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue();
     const double lambda = position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue();
-    const double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
+    const double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getValue();
 
 	double L = log(tan(M_PI/4 + phi/2) * pow(  ( (1-e * sin(phi))/(1+e * sin(phi)) ),(e/2)  ));
 

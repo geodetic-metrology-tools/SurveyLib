@@ -58,42 +58,52 @@ bool TACoordSysVector::operator==( const TACoordSysVector& right) const
 //////////////////////////////////////////////////////////////////////
 
 	
-bool TACoordSysVector::testCoordSysCart(TCoordSysFactory::ECoordSys en)
+bool TACoordSysVector::testCoordSysCart(TCoordSysFactory::ECoordSys en) const
 {//test if two object have the same coordinate system
-	if (getCoordSys()== en  && (en==TCoordSysFactory::k3DCartesian || en==TCoordSysFactory::k2DCartesian))
-	{return true;}
-else
-	{return false;}
+	return (getCoordSys()== en  && (en==TCoordSysFactory::k3DCartesian || en==TCoordSysFactory::k2DCartesian))
 }
 
 
-TLength TACoordSysVector::getX()const
+TScalar TACoordSysVector::getX()const
 {//!get the X coordinate of a vector in a specific Coordinate System
 	return fCoordSys->getX(this);
 }
 
-TLength TACoordSysVector::getY()const
+TScalar TACoordSysVector::getY()const
 {//!get the Y coordinate of a vector in a specific Coordinate System
 	return fCoordSys->getY(this);
 }
 
-TLength TACoordSysVector::getZ()const
+TScalar TACoordSysVector::getZ()const
 {//!get the Z coordinate of a vector in a specific Coordinate System
 	return fCoordSys->getZ(this);
 }
 
-bool TACoordSysVector::setX(const TLength& xc)
+TReal TACoordSysVector::operator[](int i) const
+{//! Allows to retrieve one of the coordinates of the vector
+	if(i >= 0 && i<= 3)
+		return fVector[i];
+	throw std::out_of_range("Try to access a TACoordSysVector with a wrong indice : "+i);
+}
+
+TReal& TACoordSysVector::operator[](int i)
+{//! Allows to retrieve one of the coordinates of the vector and to modify it
+	if(i >= 0 && i<= 3)
+		return fVector[i];
+	throw std::out_of_range("Try to access a TACoordSysVector with a wrong indice : "+i);
+}
+
+bool TACoordSysVector::setX(const TScalar& xc)
 {//!set the X coordinate of a vector in a specific Coordinate System return true if X is defined
 return fCoordSys->setX(this, xc);
 }
 
-
-bool TACoordSysVector::setY(const TLength& yc)
+bool TACoordSysVector::setY(const TScalar& yc)
 {//!set the Y coordinate of a vector in a specific Coordinate System return true if Y is defined
 return fCoordSys->setY(this, yc); 
 }
 
-bool TACoordSysVector::setZ(const TLength& zc)
+bool TACoordSysVector::setZ(const TScalar& zc)
 {//!set the Z coordinate of a vector in a specific Coordinate System return true if Z is defined
 return fCoordSys->setZ(this, zc);
 }

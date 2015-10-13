@@ -25,7 +25,7 @@
 //
 // other forward declarations
 #include  "THelmertTransformation.h"
-#include  "TCompositeAffTransform.h"
+//#include  "TCompositeAffTransform.h"
 #include  "THelmertRefFrameTransform.h"
 #include  "TAReferenceFrame.h"
 ////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ THelmertRefFrameTransform::THelmertRefFrameTransform( TAReferenceFrame* from,
 	fTransform = transform;
 }
 
-
+/*
 THelmertRefFrameTransform::THelmertRefFrameTransform( TAReferenceFrame* from, 
 													  TAReferenceFrame* to, 
 													  const TScaleFactor& enlarg, const TRotation& rot, const TTranslation& transl)
@@ -64,7 +64,7 @@ THelmertRefFrameTransform::THelmertRefFrameTransform( TAReferenceFrame* from,
 {
 	setTransform(enlarg, rot, transl);
 }
-
+*/
 
 
 THelmertRefFrameTransform::THelmertRefFrameTransform( const  THelmertRefFrameTransform& original )
@@ -171,7 +171,7 @@ void THelmertRefFrameTransform::setTransform(THelmertTransformation* helmert)
 	fTransform = helmert;
 }
 
-
+/*
 void THelmertRefFrameTransform::setTransform( const TScaleFactor& scale, const TRotation& rot, const TTranslation& transl )
 { 
 	if (fTransform != 0)
@@ -180,7 +180,7 @@ void THelmertRefFrameTransform::setTransform( const TScaleFactor& scale, const T
 	}
 	fTransform = new THelmertTransformation(scale, rot, transl);
 	return;
-}
+}*/
 
 
 

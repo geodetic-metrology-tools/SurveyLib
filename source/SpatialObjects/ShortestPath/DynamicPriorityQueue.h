@@ -28,7 +28,7 @@
 
 template <class T> 
 
-/*!\ingroup spatialobjects
+/*!\ingroup ShortestPath
 	@{*/
 class DynamicPriorityQueue
 {

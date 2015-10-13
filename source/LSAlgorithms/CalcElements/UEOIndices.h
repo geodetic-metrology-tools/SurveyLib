@@ -1,8 +1,3 @@
-//
-// Definition of the structure holding the 3 indices : 
-// unknown index, equation index and observation index
-//
-
 #ifndef SU_UEOINDICES
 #define SU_UEOINDICES
 
@@ -13,14 +8,14 @@ typedef int MatrixIndex;
 //matrix element type
 typedef TReal MatrixElmt;
 
-
-//structure for unknowns, equations and observations indicies
+/*!
+	\ingroup CalcElements
+	\brief Structure holding the 3 indices used in LS process: unknown, equation and observation index.
+*/
 struct UEOIndices{
-
-	MatrixIndex UIndex;
-	MatrixIndex EIndex;
-	MatrixIndex OIndex;
-
+	MatrixIndex UIndex; // number of unknowns
+	MatrixIndex EIndex; // number of equations
+	MatrixIndex OIndex;	// number of observations
 };
 
 #endif

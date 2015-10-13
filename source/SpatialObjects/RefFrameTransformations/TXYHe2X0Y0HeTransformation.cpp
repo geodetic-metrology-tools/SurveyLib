@@ -102,9 +102,9 @@ bool  TXYHe2X0Y0HeTransformation::transform(TPositionVector& pv) const
 	TReal Dx, dx, Dy, dy, he, falseX, falseY;
 
 	// distance from P0 in XY-plane
-	dx = pv.getX().getMetresValue() - fFrom->getMLARefFrame()->getFalseOrigin().getX().getMetresValue();
-	dy = pv.getY().getMetresValue() - fFrom->getMLARefFrame()->getFalseOrigin().getY().getMetresValue();
-	he = pv.getH().getMetresValue();
+	dx = pv.getX().getValue() - fFrom->getMLARefFrame()->getFalseOrigin().getX().getValue();
+	dy = pv.getY().getValue() - fFrom->getMLARefFrame()->getFalseOrigin().getY().getValue();
+	he = pv.getH().getValue();
 
 	// bearing from P0 in the XY-plane
 	TAngle beta = TAngle::aTan2(dx,dy);
@@ -115,9 +115,9 @@ bool  TXYHe2X0Y0HeTransformation::transform(TPositionVector& pv) const
 	
 	// radius of the ellipsoid at azimuth and at phiP0
 	TSpatialPosition falseOrigin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-	TPositionVector vector(fFrom->getMLARefFrame()->getFalseOrigin().getX().getMetresValue(),
-		fFrom->getMLARefFrame()->getFalseOrigin().getY().getMetresValue(),
-		fFrom->getMLARefFrame()->getFalseOrigin().getZ().getMetresValue(),
+	TPositionVector vector(fFrom->getMLARefFrame()->getFalseOrigin().getX().getValue(),
+		fFrom->getMLARefFrame()->getFalseOrigin().getY().getValue(),
+		fFrom->getMLARefFrame()->getFalseOrigin().getZ().getValue(),
 		TCoordSysFactory::k3DCartesian);
 	falseOrigin.setCoordinates(vector);
 	
@@ -136,11 +136,11 @@ bool  TXYHe2X0Y0HeTransformation::transform(TPositionVector& pv) const
  	Dx = k * dx;
 	Dy = k * dy;
 	
-	falseX = fFrom->getMLARefFrame()->getFalseOrigin().getX().getMetresValue();
-	falseY = fFrom->getMLARefFrame()->getFalseOrigin().getY().getMetresValue();
+	falseX = fFrom->getMLARefFrame()->getFalseOrigin().getX().getValue();
+	falseY = fFrom->getMLARefFrame()->getFalseOrigin().getY().getValue();
 	
 	// transform tpositionvector
-	TLength newX(falseX + Dx), newY(falseY + Dy);
+	TScalar newX(falseX + Dx), newY(falseY + Dy);
 	pv.setX(newX);
 	pv.setY(newY);
 

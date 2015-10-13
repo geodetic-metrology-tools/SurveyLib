@@ -131,9 +131,9 @@ void	T2DPlusHFilter::input(TAStreamFormatter& iStream, TSpatialPosition& positio
 				}
 				else
 				{
-					pv.setX(x);
-					pv.setY(y);
-					pv.setH(h);
+					pv.setX(x.getMetresValue());
+					pv.setY(y.getMetresValue());
+					pv.setH(h.getMetresValue());
 					pv.setStatus(TVNumericValue::kKnown);
 
 				}
@@ -225,9 +225,9 @@ void	T2DPlusHFilter::input(TAStreamFormatter& iStream, TPositionVector& pv) cons
 				}
 				else
 				{
-					pv.setX(x);
-					pv.setY(y);
-					pv.setH(h);
+					pv.setX(x.getMetresValue());
+					pv.setY(y.getMetresValue());
+					pv.setH(h.getMetresValue());
 					pv.setStatus(TVNumericValue::kKnown);
 
 				}

@@ -35,7 +35,7 @@ class TRotationMatrix;
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Abstract class use for explain T3DMatrix and TRotationMatrix

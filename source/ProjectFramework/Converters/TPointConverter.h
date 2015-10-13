@@ -1,35 +1,13 @@
-////////////////////////////////////////////////////////////////////
-// TPointConverter
-/*!
-Write point for an output LGC file
-and sends the appropriate messages
-
-Patterns:
-
- 
-Copyright 2003 CERN EST/SU. All rights reserved.
-*/
-/////////////////////////////////////////////////////////////////////
-
 #ifndef SU_TPTCONVERTER
 #define SU_TPTCONVERTER
 
-#if _MSC_VER >= 1000
-#pragma once
-#endif // _MSC_VER >= 1000
-
-////////////////////////////////////////////////////////////////
-// Forward declarations
-
 #include "TAConverter.h"
 #include "TRefSystemFactory.h"
-#include "TLSCalcPosVectorParam.h"
+#include "TLGCRefFrame.h"
+#include "TAdjustablePoint.h"
 
-// typedefs
-////////////////////////////////////////////////////////////////
-
-/*!\ingroup ????
-
+/*!\ingroup Converters
+ \brief Enables to write points in many different ways.
 @{*/
 
 //Class definition
@@ -40,8 +18,12 @@ public:
 	/*!@name Constructors and Destructors*/
 		//@{
 			//!constructor
+/*			TPointConverter(TAStreamFormatter* stream,
+							const TRefSystemFactory::ERefFrame	fRefFrame);*/
+
 			TPointConverter(TAStreamFormatter* stream,
-							const TRefSystemFactory::ERefFrame	fRefFrame);
+							const TLGCRefFrame::ERefs	fRefFrame);
+
 
 			//!Destructor
 			virtual  ~TPointConverter();
@@ -55,37 +37,41 @@ public:
 	/*!@name Public member functions*/
 		//@{
 
-			void	writeName(LSPosVecConstIter pt, int width);
+//			void	writeName(LSPosVecConstIter pt, int width);
 
 			void	writeName(string ptName, int width);
 
-			void	writeXYZandH(const LSPosVecConstIter pt);
+			void	writeXYZandH(const TAdjustablePoint& pt);
+
+			void	writeXYZandH(const TPositionVector& pt);
+			void	writeXYZandH(const TPositionVector& pt, TReal heightH);
+
 
 			void	writeXYZandH(	const int width,
 									const int precision,
 									const TLength::EUnits unit,
 									const string separator,
-									LSPosVecConstIter pt);
+									TAdjustablePoint pt);
 
 
-			void	writeXYZorH(	const int width,
+/*			void	writeXYZorH(	const int width,
 									const int precision,
 									const TLength::EUnits unit,
 									const string separator,
 									LSPosVecConstIter pt);
-
+*/
 			void	writeXYH(	const int width,
 								const int precision,
 								const TLength::EUnits unit,
 								const string separator,
-								LSPosVecConstIter pt);
+								TAdjustablePoint pt);
 
-			void	writeXYZ(	const int width,
+/*			void	writeXYZ(	const int width,
 								const int precision,
 								const TLength::EUnits unit,
 								const string separator,
 								LSPosVecConstIter pt);
-
+*/
 			void	writeXYZ(	const int width,
 								const int precision,
 								const TLength::EUnits unit,
@@ -94,7 +80,6 @@ public:
 
 			void	write3Coordinates(	const int width,
 										const int precision,
-										const TLength::EUnits unit,
 										const string separator,
 										const TPositionVector pt);
 
@@ -102,7 +87,7 @@ public:
 			void	writeN( const int width,
 							const int precision,
 							const TLength::EUnits unit,
-							LSPosVecConstIter pt);
+							TAdjustablePoint pt);
 
 
 			void	writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
@@ -113,6 +98,17 @@ public:
 											const TLength Xparam,
 											const TLength Yparam,
 											const TLength Zparam,
+											const string Dparam,
+											bool isCovar = false);
+
+
+			void	writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
+											const int width,
+											const int precision,
+											const string separator,
+											const TScalar Xparam,
+											const TScalar Yparam,
+											const TScalar Zparam,
 											const string Dparam,
 											bool isCovar = false);
 
@@ -142,7 +138,7 @@ private:
 
 		bool							fLocalSys;
 
-		TRefSystemFactory::ERefFrame	fRefFrame;
+		TLGCRefFrame::ERefs	fRefFrame;
 };
 
 /*@}*/

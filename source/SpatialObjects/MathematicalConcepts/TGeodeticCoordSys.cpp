@@ -40,10 +40,10 @@
 		return retVal;
 	}
 
-	TLength TGeodeticCoordSys::getH(const TPositionVector* vec) const
+	TScalar TGeodeticCoordSys::getH(const TPositionVector* vec) const
 	{//get the H coordinate of a position vector
-		TLength retVal;
-		retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 2));
+		TScalar retVal;
+		retVal.setValue(this->TACoordinateSystem::getX(vec, 2));
 		return retVal;
 	}
 

@@ -38,7 +38,7 @@ typedef	TReal	DoubleValue;	// the value for TReal
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Class for a TReal

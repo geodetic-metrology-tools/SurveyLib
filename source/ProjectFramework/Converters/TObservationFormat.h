@@ -33,7 +33,8 @@ Copyright 2000 CERN EST/SU. All rights reserved.
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup projectframework
+/*!\ingroup Converters
+	\brief Class used by a text stream to store and get all necessary formatting information for observations.
 @{*/
 
 //Class definition
@@ -57,14 +58,14 @@ public:
 	TObservationFormat();
 
 	/*!Constructor
-	\param name Width
-	\param obs Width
-	\param length Precision
-	\param angle Precision
-	\param obs Residual Width
-	\param length Residual Precision
-	\param angle Residual precision
-	\param show Sign (bool)
+		\param name Width
+		\param obs Width
+		\param length Precision
+		\param angle Precision
+		\param obs Residual Width
+		\param length Residual Precision
+		\param angle Residual precision
+		\param show Sign (bool)
 	*/
 	TObservationFormat(int nameWidth, int obsWidth, ELengthPrecision lengthPrecision, EAnglePrecision anglePrecision,
 			int obsResidualWidth, ELengthPrecision lengthResidualPrecision, EAnglePrecision angleResidualprecision, bool showSign);

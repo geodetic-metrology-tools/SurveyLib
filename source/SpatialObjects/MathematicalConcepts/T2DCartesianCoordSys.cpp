@@ -20,30 +20,30 @@
 //////////////////////////////////////////////////////////////////
 
 
-TLength T2DCartesianCoordSys::getX(const TACoordSysVector* vec) const
+TScalar T2DCartesianCoordSys::getX(const TACoordSysVector* vec) const
 {//get the X coordinate of a position vector or a free vector
-	TLength retVal;
-	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 0));
+	TScalar retVal;
+	retVal.setValue(this->TACoordinateSystem::getX(vec, 0));
 	return retVal;
 }
 
-TLength T2DCartesianCoordSys::getY(const TACoordSysVector* vec) const
+TScalar T2DCartesianCoordSys::getY(const TACoordSysVector* vec) const
 {//get the Y coordinate of a position vector or a free vector
-	TLength retVal;
-	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 1));
+	TScalar retVal;
+	retVal.setValue(this->TACoordinateSystem::getX(vec, 1));
 	return retVal;
 }
 
 
-bool T2DCartesianCoordSys::setX(TACoordSysVector* vec, const TLength& len)
+bool T2DCartesianCoordSys::setX(TACoordSysVector* vec, const TScalar& len)
 {//set the X in meters Coordinate of a position vector or a free vector 
-this->TACoordinateSystem::setX(vec,0,len.getMetresValue());
+this->TACoordinateSystem::setX(vec,0,len.getValue());
 return true; 
 }
 
-bool  T2DCartesianCoordSys::setY(TACoordSysVector* vec, const TLength& len)
+bool  T2DCartesianCoordSys::setY(TACoordSysVector* vec, const TScalar& len)
 {//set the Y Coordinate of a position vector or a free vector, default def: return false
-this->TACoordinateSystem::setX(vec,1,len.getMetresValue());
+this->TACoordinateSystem::setX(vec,1,len.getValue());
 return true;
 }
 

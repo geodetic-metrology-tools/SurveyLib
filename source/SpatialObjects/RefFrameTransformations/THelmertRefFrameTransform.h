@@ -32,9 +32,6 @@
 //using namespace std;
 //
 class  THelmertTransformation;
-class  TScaleFactor;
-class  TRotation;
-class  TTranslation;
 #include  "TARefFrameTransformation.h"
 #include  "TSpatialPosition.h"
 // typedefs
@@ -63,8 +60,9 @@ public:
 		/// Constructor taking pointers to the source and destination reference frames
 		THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, THelmertTransformation* );
 
+		//!!!DECIDE!!! eventually constructor taking concrete values
 		/// Constructor taking parameters of a THelmertTransformation
-		THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, const TScaleFactor&, const TRotation&, const TTranslation&);
+	//	THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, const TScaleFactor&, const TRotation&, const TTranslation&);
 
 		/// Copy Constructor 
 		THelmertRefFrameTransform(const  THelmertRefFrameTransform&);
@@ -107,7 +105,7 @@ public:
 		virtual void						setTransform( THelmertTransformation* helmert);
 
 		/// Set the helmert transformation using the parameters of the transformation
-		virtual void						setTransform( const TScaleFactor&, const TRotation&, const TTranslation& );
+		//virtual void						setTransform( const TScaleFactor&, const TRotation&, const TTranslation& );
 
 		/// transform a position vector
 		virtual  bool						transform( TPositionVector& pv ) const;

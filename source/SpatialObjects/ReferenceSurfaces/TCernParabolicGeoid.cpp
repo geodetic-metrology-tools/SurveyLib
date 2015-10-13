@@ -149,8 +149,8 @@ TLength	TCernParabolicGeoid::getN( const TSpatialPosition& position ) const
 	//GeoidValue fNValue;
 	TReal falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
 
-	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
+	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getValue();
+	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getValue();
 
 	dx = (x-falseOriginX)*scaleFactor;
 	dy = (y-falseOriginY)*scaleFactor;
@@ -190,8 +190,8 @@ TAngle	TCernParabolicGeoid::getXi( const TSpatialPosition& sp ) const
 	TAngle fXiValue;
 
 	//position = point.getPosition( modelSystem );
-	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
+	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getValue();
+	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getValue();
 
 	dx = (x-falseOriginX)*scaleFactor;
 	dy = (y-falseOriginY)*scaleFactor;
@@ -224,8 +224,8 @@ TAngle	TCernParabolicGeoid::getEta( const TSpatialPosition& sp ) const
 	TReal falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
 	TAngle fEtaValue;
 
-	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
+	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getValue();
+	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getValue();
 
 	dx = (x-falseOriginX)*scaleFactor;
 	dy = (y-falseOriginY)*scaleFactor;

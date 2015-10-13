@@ -34,7 +34,7 @@ class	TAStreamFormatter;
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup projectframework
+/*!\ingroup FiltersAndFormats
 @{*/
 
 //Interface definition

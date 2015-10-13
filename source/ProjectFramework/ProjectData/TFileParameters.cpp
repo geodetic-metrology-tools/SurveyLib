@@ -116,21 +116,9 @@ bool  TFileParameters::setFileName( const string& filename )
 bool  TFileParameters::setFileName( const std::string& filename )
 {	// Set the filename using the combined string
 	// returns "true" if the parameters are set correctly
-	bool retVal = true;
+	fName = filename;
 
-	// make sure the filename is not empty
-	if( !filename.empty() )
-	{
-		fName = filename;
-		retVal = true;
-	}
-	else
-	{
-		fName = filename;
-		retVal = false;
-	}
-
-	return retVal;
+	return filename.empty() ? false : true;
 }
 
 

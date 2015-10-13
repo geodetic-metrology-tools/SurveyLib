@@ -59,8 +59,8 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 
 	//create a spatial position for origin
 	TSpatialPosition sp(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-	TPositionVector pos(falseOrigin.getX().getMetresValue(), falseOrigin.getY().getMetresValue(),
-		falseOrigin.getZ().getMetresValue(), falseOrigin.getCoordSys());
+	TPositionVector pos(falseOrigin.getX().getValue(), falseOrigin.getY().getValue(),
+		falseOrigin.getZ().getValue(), falseOrigin.getCoordSys());
 	sp.setCoordinates(pos);
 
 	//get deviation of vertical values at principal point
@@ -113,7 +113,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 
 	//set spatial orientation
 	// azimut of the vector projection on the xy-plane
-	TReal x(vector.getX().getMetresValue()), y(vector.getY().getMetresValue());
+	TReal x(vector.getX().getValue()), y(vector.getY().getValue());
 	TAngle az, zero(LITERAL(0.0));
 	az.setRadiansValue((TAngle::aTan2(y,x).getRadiansValue()));
 	// construction of the orientation matrix
@@ -269,8 +269,8 @@ void	TModifiedLocalAstronomicalRF::initialiseMLA(TSpatialPosition origin)
 
 	//create a spatial position for origin
 	TSpatialPosition sp(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-	TPositionVector pos(falseOrigin.getX().getMetresValue(), falseOrigin.getY().getMetresValue(),
-		falseOrigin.getZ().getMetresValue(), falseOrigin.getCoordSys());
+	TPositionVector pos(falseOrigin.getX().getValue(), falseOrigin.getY().getValue(),
+		falseOrigin.getZ().getValue(), falseOrigin.getCoordSys());
 	sp.setCoordinates(pos);
 
 	//get deviation of vertical values at principal point
@@ -320,7 +320,7 @@ void	TModifiedLocalAstronomicalRF::initialiseMLA(TSpatialPosition origin)
 
 	//set spatial orientation
 	// azimut of the vector projection on the xy-plane
-	TReal x(vector.getX().getMetresValue()), y(vector.getY().getMetresValue());
+	TReal x(vector.getX().getValue()), y(vector.getY().getValue());
 	TAngle az, zero(LITERAL(0.0));
 	az.setRadiansValue((TAngle::aTan2(y,x).getRadiansValue()));
 	// construction of the orientation matrix
@@ -461,6 +461,10 @@ bool	TModifiedLocalAstronomicalRF::transform(TSpatialPosition* sp, TAReferenceFr
 		if (transfo[0] == 0)
 		{return false;}
 
+		// reverse the order of the vector to have transformations as applicated to the point
+		reverse(transfo.begin(), transfo.end());
+			
+
 		// application of the successive transformations
 		for (vector<TARefFrameTransformation*>::iterator iter = transfo.begin(); 
 			 iter != transfo.end(); 
@@ -478,17 +482,6 @@ bool	TModifiedLocalAstronomicalRF::transform(TSpatialPosition* sp, TAReferenceFr
 		sp->setCoordinates(position);
 	}
 		
-	return true;
-
-
-
-
-
-
-
-
-
-
 	return true;
 }
 
@@ -523,6 +516,9 @@ bool	TModifiedLocalAstronomicalRF::transform(TSpatialVector* sv, TAReferenceFram
 	
 		if (transfo[0] == 0)
 		{return false;}
+
+		// reverse the order of the vector to have transformations as applicated to the point
+		reverse(transfo.begin(), transfo.end());
 
 		// application of the successive transformations
 		vector<TARefFrameTransformation*>::iterator iter = transfo.begin();

@@ -1,50 +1,40 @@
-
-
 #ifndef SU_TLS_PARAM_MTD_COMPUTER
 #define SU_TLS_PARAM_MTD_COMPUTER
 
-
-#if _MSC_VER >= 1000
-#pragma once
-#pragma warning(disable:4786)
-
-#endif // _MSC_VER >= 1000
-
-/////////////////////////////////////////////////////
-// Forward declarations
-/////////////////////////////////////////////////////
 #include "UEOIndices.h"
 #include <string>
+#include "TALSComputer.h"
 class TLSInputMatrices;
 class TLSResultsMatrices;
 
-//! Class for a least squares computer used when there are only observation equations
-class TLSParametricMtdComputer {
+/*!
+	\ingroup CalcElements
+
+	\brief Least squares computer used when the obseved values can be separated from the unknowns of the model (parametric case), it should not be used if this condition is not fullfilled.
+*/
+class TLSParametricMtdComputer:public TALSComputer
+{
 
 public:
 
-	//!Constructor
+	///Constructor
 	TLSParametricMtdComputer();
-	//!Destructor
-	~TLSParametricMtdComputer();
+	///Destructor
+	virtual ~TLSParametricMtdComputer();
 
+	///Verify the number of unknowns and run the calculation
+	virtual bool computeResults(TLSInputMatrices*, TLSResultsMatrices*);
 
-	bool computeResults(TLSInputMatrices*, TLSResultsMatrices*);
+	///Computes the results matrices for the parametric case
+	virtual bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
 
-	//!Computes the results matrices
-	/*!@param im a pointer to the LS input matrices*/
-	bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
+	///Computes the results matrices for a free calculation
+	//bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
 
-	//!Computes the results matrices for a free calculation
-	/*!\param im a pointer to the LS input matrices*/
-	bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
-
-	/*! Access to eventual error */
-	std::string		getError() const { return fError; }
+	///Computes the residual vector and the varaiance covariance matrices
+	virtual void calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr,TLSResultsMatrices* rm	);
 
 private:
-
-	std::string			fError;		/*!< errors during calculation */
 	int				count;
 };
 

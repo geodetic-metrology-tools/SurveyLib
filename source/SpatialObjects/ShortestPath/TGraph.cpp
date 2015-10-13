@@ -11,7 +11,7 @@
 
 #include "TReferenceEllipsoid.h"
 #include "TGeodeticRefFrame.h"
-#include "TAModifiedLocalastronomicalRF.h"
+#include "TAModifiedLocalAstronomicalRF.h"
 #include "TGraphMLARF.h"
 #include "TXYHeProjection.h"
 #include "TX0Y0HeProjection.h"
@@ -266,7 +266,6 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 			
 		}
 
-		
 
 		if (cgrfTransformation == "before")
 			transfo.push_back(transfoWithCGRF.getTransformation());
@@ -275,10 +274,9 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 			transfo.insert(transfo.begin(), transfoWithCGRF.getTransformation());
 		}
 
-
-		reverse(transfo.begin(), transfo.end());
 		fillLastTransformation(from.getName(), to.getName(), transfo);
 
+		
 		return transfo;
 	}
 

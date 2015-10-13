@@ -1,23 +1,9 @@
-////////////////////////////////////////////////////////////////////
-// TAConverter
-/*!
-Write Observations for an output LGC file
-and send the appropriate messages
-
-Patterns:
-
- 
-Copyright 2003 CERN EST/SU. All rights reserved.
-*/
-/////////////////////////////////////////////////////////////////////
-
 #ifndef SU_TA_CONVERTER
 #define SU_TA_CONVERTER
 
 #if _MSC_VER >= 1000
 #pragma once
 #endif // _MSC_VER >= 1000
-
 #include <string>
 #include <vector>
 #include <Quad.h>
@@ -29,14 +15,12 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 class	TAStreamFormatter;
 
 // typedefs
-typedef const std::vector<const std::string>&& TStrTokens;
+typedef const std::vector<std::string>&& TStrTokens;
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup ProjectFramework
-
+/*!\ingroup Converters
+	\brief Base class for converting and writing functionalities, specific classes to output points, observations or other application-specific objects should inherit from this class.
 @{*/
-
-//Class definition
 class  TAConverter 
 {
 
@@ -57,7 +41,7 @@ public:
 	// Tokenizes a std::string into a std::vector of strings based on the delimiters given to delim
 	// e.g. " \t_" will split on every occurence of a blank, a tab or an underscore.
 	//  Use the TStrTokens type to catch the return value avoiding copies
-	static const std::vector<const std::string> tokenizeString(const std::string& str, const char* delims);
+	static const std::vector<std::string> tokenizeString(const std::string& str, const char* delims);
 
 
 protected:

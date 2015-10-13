@@ -31,7 +31,7 @@ class  TCompositeAffTransform;
 /*! \ingroup spatialobjects
 	@{*/
 
-//! Class for a translation
+/// Class for a translation
 class  TTranslation : public TAAffineTransformation  
 {
 public:
@@ -43,7 +43,7 @@ public:
 		TTranslation();
 
 		/// Translation taking 3 length as Tx, Ty, Tz
-		TTranslation(const TLength Tx, const TLength Ty, const TLength Tz);
+		TTranslation(const TScalar Tx, const TScalar Ty, const TScalar Tz);
 
 		/// Translation taking a free vector
 		TTranslation(TFreeVector);
@@ -61,49 +61,49 @@ public:
 		using TAAffineTransformation::operator();
 		using TAAffineTransformation::transform;
 
-		//! Copy Assignment Operator 
+		/// Copy Assignment Operator 
 		TTranslation& operator= ( const TTranslation & );
 
-		//! add two translation vectors
+		/// add two translation vectors
 		TTranslation  operator+ ( const TTranslation & );
 
-		/*//! Return element i
+		/* /// Return element i
 		TReal       operator[](int ) const;
 
-		//! Return element i
+		/// Return element i
 		TReal&      operator[](int );*/
 
-		//! Return the translation vector
+		/// Return the translation vector
 		TFreeVector   getVector() const;
 
-		//! Create a composite transformation by applying this transformation to an affine transformation
+		/// Create a composite transformation by applying this transformation to an affine transformation
 		//virtual  TCompositeAffTransform operator() ( const TAAffineTransformation & ) const;
 
-		//! Return a pointer to a clone of this transformation
+		/// Return a pointer to a clone of this transformation
 		virtual  TTranslation *  clone() const;
 
-		//! Transform a position vector 
+		/// Transform a position vector 
 		virtual  bool transform( TPositionVector & ) const;
 
-		//! Transform a free vector
+		/// Transform a free vector
 		virtual  bool transform( TFreeVector & ) const;
 
-		//! Transform a rotation matrix
+		/// Transform a rotation matrix
 		virtual  bool transform( TRotationMatrix & ) const;
 
-		//! apply this transformation to a position vector 
+		/// apply this transformation to a position vector 
 		virtual  TPositionVector &  operator() ( TPositionVector & ) const;
 
-		//! apply this transformation to a free vector 
+		/// apply this transformation to a free vector 
 		virtual  TFreeVector &  operator() ( TFreeVector & ) const;
 
-		//! apply this transformation to a Rotation Matrix 
+		/// apply this transformation to a Rotation Matrix 
 		virtual  TRotationMatrix &  operator() ( TRotationMatrix & ) const;
 
-		//! Return a pointer to the inverse of this transformation
+		/// Return a pointer to the inverse of this transformation
 		virtual  TTranslation * inverse() const;
 
-		//! Invert the transformation, replaces the current transformation parameters
+		/// Invert the transformation, replaces the current transformation parameters
 		virtual  void invert();
 	//@}
 

@@ -27,7 +27,7 @@
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Class for explain vector in a geodetic coordinate system
@@ -46,7 +46,7 @@ public:
 		virtual TAngle getLambdaEllipsoid(const TPositionVector*) const;
 		
 		//!get the H coordinate of a position vector
-		virtual TLength getH(const TPositionVector*) const;
+		virtual TScalar getH(const TPositionVector*) const;
 		
 		//!set the Phi Coordinate of a position vector
 		virtual bool setPhiEllipsoid(TPositionVector*, const TAngle&);

@@ -36,7 +36,7 @@ TTranslation::TTranslation() : fTranslationVector(TCoordSysFactory::k3DCartesian
 
 
 
-TTranslation::TTranslation(const TLength Tx, const TLength Ty, const TLength Tz)
+TTranslation::TTranslation(const TScalar Tx, const TScalar Ty, const TScalar Tz)
  : fTranslationVector(TCoordSysFactory::k3DCartesian)
 {
 	fTranslationVector.setX(Tx);

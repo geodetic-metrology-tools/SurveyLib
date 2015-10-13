@@ -313,6 +313,15 @@ resultat.setStatus(status);
 return resultat;
 }
 
+TScalar TScalar::operator*(const TReal factor)
+{//multiply a TLength object by a factor
+	TScalar resultat;
+	if(isNull()!=true)
+	{resultat.setValue(factor*(this->getValue()));}
+	resultat.setStatus(getStatus());
+	return resultat;
+}
+
 //////////////////////////////////////////////////////////////////////
 // Utility Member Functions
 //////////////////////////////////////////////////////////////////////

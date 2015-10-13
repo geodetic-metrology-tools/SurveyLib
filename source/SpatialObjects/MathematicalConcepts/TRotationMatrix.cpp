@@ -110,9 +110,9 @@ TFreeVector TRotationMatrix::operator*(const TFreeVector& fv) const
 	status=this->testStatus(fv);
 	if (status!= kNull && testCoordSysCart(fv.getCoordSys()))
 	{
-		resultat.setX(getC(0,0)*fv.getX()+getC(0,1)*fv.getY()+getC(0,2)*fv.getZ());
-		resultat.setY(getC(1,0)*fv.getX()+getC(1,1)*fv.getY()+getC(1,2)*fv.getZ());
-		resultat.setZ(getC(2,0)*fv.getX()+getC(2,1)*fv.getY()+getC(2,2)*fv.getZ());
+		resultat.setX(fv.getX()*getC(0,0)+fv.getY()*getC(0,1)+fv.getZ()*getC(0,2));
+		resultat.setY(fv.getX()*getC(1,0)+fv.getY()*getC(1,1)+fv.getZ()*getC(1,2));
+		resultat.setZ(fv.getX()*getC(2,0)+fv.getY()*getC(2,1)+fv.getZ()*getC(2,2));
 		resultat.setStatus(status);
 	}
 	return resultat;
@@ -127,9 +127,9 @@ TPositionVector TRotationMatrix::operator*(const TPositionVector& pv) const
 	status=this->testStatus(pv);
 	if (status!= kNull && testCoordSysCart(pv.getCoordSys())==true)
 	{
-		resultat.setX(getC(0,0)*pv.getX()+getC(0,1)*pv.getY()+getC(0,2)*pv.getZ());
-		resultat.setY(getC(1,0)*pv.getX()+getC(1,1)*pv.getY()+getC(1,2)*pv.getZ());
-		resultat.setZ(getC(2,0)*pv.getX()+getC(2,1)*pv.getY()+getC(2,2)*pv.getZ());
+		resultat.setX(pv.getX()*getC(0,0)+pv.getY()*getC(0,1)+pv.getZ()*getC(0,2));
+		resultat.setY(pv.getX()*getC(1,0)+pv.getY()*getC(1,1)+pv.getZ()*getC(1,2));
+		resultat.setZ(pv.getX()*getC(2,0)+pv.getY()*getC(2,1)+pv.getZ()*getC(2,2));
 		resultat.setStatus(status);
 	}
 	return resultat;

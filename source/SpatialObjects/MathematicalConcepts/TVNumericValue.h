@@ -35,6 +35,7 @@
 
 
 //Class definition
+/// \ingroup MathematicalConcepts
 class  TVNumericValue  //: public TObject
 
 {
@@ -51,12 +52,6 @@ public:
 	virtual bool isNull() const = 0;
 
 	virtual ~TVNumericValue() { }
-
-
-
-
-
-
 	//ClassDef(TVNumericValue, 1)
 };
 #endif // SU_V_NUMERIC_VALUE

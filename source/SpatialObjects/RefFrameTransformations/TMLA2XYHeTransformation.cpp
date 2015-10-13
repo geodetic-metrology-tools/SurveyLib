@@ -100,10 +100,10 @@ bool  TMLA2XYHeTransformation::transform(TPositionVector& pv) const
 	TReal dx, dy, dz, d, d0;
 
 	// distance from P0 in XY-plane
-	dx = pv.getX().getMetresValue() - fFrom->getFalseOrigin().getX().getMetresValue();
-	dy = pv.getY().getMetresValue() - fFrom->getFalseOrigin().getY().getMetresValue();
-	dz = pv.getZ().getMetresValue() - fFrom->getFalseOrigin().getZ().getMetresValue()
-		+ fTo->getMLARefFrame()->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getH(/*TGraph::getGraph()->getEllipsoid(TGraph::kGRS80)*/).getMetresValue();
+	dx = pv.getX().getValue() - fFrom->getFalseOrigin().getX().getValue();
+	dy = pv.getY().getValue() - fFrom->getFalseOrigin().getY().getValue();
+	dz = pv.getZ().getValue() - fFrom->getFalseOrigin().getZ().getValue()
+		+ fTo->getMLARefFrame()->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getH(/*TGraph::getGraph()->getEllipsoid(TGraph::kGRS80)*/).getValue();
 	d=sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 	// bearing from P0 in the XY-plane
 	TAngle beta = TAngle::aTan2(dx,dy);
@@ -114,10 +114,10 @@ bool  TMLA2XYHeTransformation::transform(TPositionVector& pv) const
 
 	// radius of the ellipsoid at azimuth and at phiP0
 	TSpatialPosition falseOrigin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-	TLength xp, yp, zp;
-	xp.setMetresValue(fFrom->getFalseOrigin().getX().getMetresValue());
-	yp.setMetresValue(fFrom->getFalseOrigin().getY().getMetresValue());
-	zp.setMetresValue(fFrom->getFalseOrigin().getZ().getMetresValue());
+	TScalar xp, yp, zp;
+	xp.setValue(fFrom->getFalseOrigin().getX().getValue());
+	yp.setValue(fFrom->getFalseOrigin().getY().getValue());
+	zp.setValue(fFrom->getFalseOrigin().getZ().getValue());
 	falseOrigin.getCoordinates(TCoordSysFactory::k3DCartesian).setX(xp);
 	falseOrigin.getCoordinates(TCoordSysFactory::k3DCartesian).setY(yp);
 	falseOrigin.getCoordinates(TCoordSysFactory::k3DCartesian).setZ(zp);
@@ -139,7 +139,7 @@ bool  TMLA2XYHeTransformation::transform(TPositionVector& pv) const
 
 	// transform TPositionVector
 	TAngle omegaBy2 = omega * LITERAL(0.5);
-	TLength newH( (dz + d0 * omegaBy2.tangent()) / omega.cosine() );
+	TScalar newH( (dz + d0 * omegaBy2.tangent()) / omega.cosine() );
 	
 	// Change the third dimension Z of the position vector into H
 //	pv.setZ(newH);

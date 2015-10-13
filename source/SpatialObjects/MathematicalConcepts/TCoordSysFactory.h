@@ -36,7 +36,7 @@ class TVCoordinateSystem;
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Singleton class: produce one unique instance listing coordinate systems

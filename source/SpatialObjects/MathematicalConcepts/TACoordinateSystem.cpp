@@ -26,9 +26,9 @@
 //////////////////////////////////////////////////////////////////
 
 	
-TLength TACoordinateSystem::getH(const TPositionVector*) const
+TScalar TACoordinateSystem::getH(const TPositionVector*) const
 {//get the H coordinate of a position vector, default def: \return TLength Null
-TLength null;
+TScalar null;
 null.setStatus(TVNumericValue::kNull);
 return null;
 }
@@ -47,29 +47,29 @@ null.setStatus(TVNumericValue::kNull);
 return null;
 }
 
-TLength TACoordinateSystem::getX(const TACoordSysVector*) const
+TScalar TACoordinateSystem::getX(const TACoordSysVector*) const
 {//get the X coordinate of a position vector or a free vector, default def: \return TLength Null
-TLength null;
+TScalar null;
 null.setStatus(TVNumericValue::kNull);
 return null;
 }
 
-TLength TACoordinateSystem::getY(const TACoordSysVector*) const
+TScalar TACoordinateSystem::getY(const TACoordSysVector*) const
 {//get the Y coordinate of a position vector or a free vector, default def: \return TLength Null
-TLength null;
+TScalar null;
 null.setStatus(TVNumericValue::kNull);
 return null;
 }
 
-TLength TACoordinateSystem::getZ(const TACoordSysVector*) const
+TScalar TACoordinateSystem::getZ(const TACoordSysVector*) const
 {//get the Z coordinate of a position vector or a free vector, default def: \return TLength Null
-TLength null;
+TScalar null;
 null.setStatus(TVNumericValue::kNull);
 return null;
 }
 
 
-bool TACoordinateSystem::setH(TPositionVector*, const TLength&)
+bool TACoordinateSystem::setH(TPositionVector*, const TScalar&)
 {//set the H Coordinate of a position vector, default def: return false
 return false;
 }
@@ -84,17 +84,17 @@ bool TACoordinateSystem::setPhiEllipsoid(TPositionVector*, const TAngle&)
 return false;
 }
 
-bool TACoordinateSystem::setX(TACoordSysVector*, const TLength&)
+bool TACoordinateSystem::setX(TACoordSysVector*, const TScalar&)
 {//set the X Coordinate of a position vector or a free vector, default def: return false
 return false;
 }
 
-bool TACoordinateSystem::setY(TACoordSysVector*, const TLength&)
+bool TACoordinateSystem::setY(TACoordSysVector*, const TScalar&)
 {//set the Y Coordinate of a position vector or a free vector, default def: return false
 return false;
 }
 
-bool TACoordinateSystem::setZ(TACoordSysVector*, const TLength&)
+bool TACoordinateSystem::setZ(TACoordSysVector*, const TScalar&)
 {//set the Z Coordinate of a position vector or a free vector, default def: return false
 return false;
 }

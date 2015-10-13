@@ -112,9 +112,9 @@ bool  TXYHs2MLATransformation::transform(TPositionVector& pv) const
 	TReal Z;
 
 	// distance from P0 in XY-plane
-	dx = pv.getX().getMetresValue() - fTo->getFalseOrigin().getX().getMetresValue();
-	dy = pv.getY().getMetresValue() - fTo->getFalseOrigin().getY().getMetresValue();
-	hs = pv.getH().getMetresValue();
+	dx = pv.getX().getValue() - fTo->getFalseOrigin().getX().getValue();
+	dy = pv.getY().getValue() - fTo->getFalseOrigin().getY().getValue();
+	hs = pv.getH().getValue();
 	d=sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 
 	//Z = sqrtq( (powq((R+hs),2) - (powq(d,2))) )-  R + LITERAL(2000.00079);
@@ -122,7 +122,7 @@ bool  TXYHs2MLATransformation::transform(TPositionVector& pv) const
 	omega = asinq(d0 / R);
 	Z = LITERAL(2000.00079) + (hs * cosq(omega)) - (d0 * tanq(omega/LITERAL(2.0)));
 
-	TLength newZ (Z);
+	TScalar newZ (Z);
 
 	// change the coordinate system of the position vector
 	pv.setCoordSys(TCoordSysFactory::k3DCartesian);

@@ -112,16 +112,16 @@ bool  TXYHg2XYHeTransformation::transform( TPositionVector& pv ) const
 {// Transformation of a position vector using N (height above geoid)
 
 
-	TLength hg(pv.getH());
+	TScalar hg(pv.getH());
 
 	TReal x, y, h;
-	x = pv.getX().getMetresValue();
-	y = pv.getY().getMetresValue();
-	h = hg.getMetresValue();
+	x = pv.getX().getValue();
+	y = pv.getY().getValue();
+	h = hg.getValue();
 
 	// extraction of N using a tspatialposition of coordinates = pv, and reference frame = CCS
 	TSpatialPosition trick(fTo->getMLARefFrame(), x, y, h, pv.getCoordSys()); 
-	TLength N = fGeoid->getN(trick);
+	TScalar N = fGeoid->getN(trick).getMetresValue();
 
 	pv.setH(hg+N);
 

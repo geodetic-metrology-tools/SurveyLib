@@ -40,7 +40,7 @@ class  TAReferenceFrame;
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup spatialobjects
+/*!\ingroup ShortestPath
 	@{*/
 
 //! A Wrapper around a reference frame

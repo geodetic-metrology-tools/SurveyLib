@@ -16,6 +16,7 @@
 
 
 #include "TLength.h"
+#include "TScalar.h"
 
 /*! \name Distance Fonction*/
 //@{
@@ -30,6 +31,8 @@
 	@{*/
 	TReal	dist(TLength x1, TLength y1, TLength x2, TLength y2);
 	/*@}*/
+
+	TReal	dist(TScalar x1, TScalar y1, TScalar x2, TScalar y2);
 
 /*! computation of the distance from 2D coordinates
 	\param TReal x1, coordinate  x of the first point
@@ -58,6 +61,8 @@
 	@{*/
 	TReal	dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2);
 	/*@}*/
+
+	TReal	dist3D(TScalar x1, TScalar y1, TScalar z1, TScalar x2, TScalar y2, TScalar z2);
 
 /*! computation of the distance from 3D coordinates
 	\param TReal x1, coordinate  x of the first point

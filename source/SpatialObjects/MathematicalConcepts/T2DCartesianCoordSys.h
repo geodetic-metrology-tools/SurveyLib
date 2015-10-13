@@ -28,7 +28,7 @@
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Class for explain vector in a 2D cartesian coordinate system
@@ -39,16 +39,16 @@ public:
 	/*!\name Functions for Vector*/
 	//@{
 	//!get the X coordinate of a position vector or a free vector	
-	virtual TLength getX(const TACoordSysVector*) const;
+	virtual TScalar getX(const TACoordSysVector*) const;
 
 	//!get the Y coordinate of a position vector or a free vector
-	virtual TLength getY(const TACoordSysVector*) const;
+	virtual TScalar getY(const TACoordSysVector*) const;
 
 	//!set the X Coordinate in meters of a position vector or a free vector
-	virtual bool setX(TACoordSysVector*, const TLength&);
+	virtual bool setX(TACoordSysVector*, const TScalar&);
 
 	//!set the Y Coordinate in meters of a position vector or a free vector
-	virtual bool setY(TACoordSysVector*, const TLength&);
+	virtual bool setY(TACoordSysVector*, const TScalar&);
 	//@}
 
 

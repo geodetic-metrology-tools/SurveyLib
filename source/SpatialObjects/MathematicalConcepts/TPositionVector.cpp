@@ -218,7 +218,7 @@ TPositionVector&  TPositionVector::operator=( const TPositionVector& right)
 ///Member Function
 /////////////////////////////////////////////////////////////////////////////////////
 
-TLength TPositionVector::dist(const TPositionVector& pv) const
+TScalar TPositionVector::dist(const TPositionVector& pv) const
 {//!Give the distance between this and a second point defined by theirs position vector
 	TFreeVector fv (getCoordSys());
 	TPositionVector vect(*this);
@@ -227,7 +227,7 @@ TLength TPositionVector::dist(const TPositionVector& pv) const
 }
 
 
-TLength TPositionVector::getH() const
+TScalar TPositionVector::getH() const
 {//!get the H value of a TPositionVector if is defined
 	return getCoordSysPtr()->getH(this);
 }
@@ -245,7 +245,7 @@ TAngle TPositionVector::getPhiEllipsoid() const
 }
 
 
-bool TPositionVector::setH(const TLength& h)
+bool TPositionVector::setH(const TScalar& h)
 {//!set the H coordinate of a vector in a specific Coordinate System return true if X is defined
 return getCoordSysPtr()->setH(this, h);
 }

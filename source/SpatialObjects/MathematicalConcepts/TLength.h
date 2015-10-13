@@ -38,6 +38,7 @@ typedef	TReal	LengthValue;	// the value for the coordinate
 
 
 //!Class Definition
+/// \ingroup MathematicalConcepts
 class	TLength  : public  TANumericValue //: public TObject
 {
 
@@ -216,9 +217,5 @@ inline LengthValue	TLength::getMMetresValue() const
 	// return the converted length value
 	return fValue * 1000;
 }
-
-
-
-
 
 #endif // SU_LENGTH

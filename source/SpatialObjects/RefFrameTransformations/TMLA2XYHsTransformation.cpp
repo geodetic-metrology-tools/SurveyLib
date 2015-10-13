@@ -107,10 +107,12 @@ bool  TMLA2XYHsTransformation::transform(TPositionVector& pv) const
 	TReal H;
 
 	//distance from P0 in XY-plane
-	dx = pv.getX().getMetresValue() - fFrom->getFalseOrigin().getX().getMetresValue();
-	dy = pv.getY().getMetresValue() - fFrom->getFalseOrigin().getY().getMetresValue();
-	dz = pv.getZ().getMetresValue() - fFrom->getFalseOrigin().getZ().getMetresValue()
-		+ fTo->getMLARefFrame()->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getH(/*TGraph::getGraph()->getEllipsoid(TGraph::kGRS80)*/).getMetresValue();
+	dx = pv.getX().getValue() - fFrom->getFalseOrigin().getX().getValue();
+	dy = pv.getY().getValue() - fFrom->getFalseOrigin().getY().getValue();
+	//Following line does not work properly, "fTo->getMLARefFrame()->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getH(/*TGraph::getGraph()->getEllipsoid(TGraph::kGRS80)*/).getValue()" 
+	//does not return what is expected
+	dz = pv.getZ().getValue() - fFrom->getFalseOrigin().getZ().getValue()
+		+ fTo->getMLARefFrame()->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getH(/*TGraph::getGraph()->getEllipsoid(TGraph::kGRS80)*/).getValue();
 	d=sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 
 	//H = sqrtq( (powq((R+dz),2) + (powq(d,2))) )-  R;
@@ -118,7 +120,7 @@ bool  TMLA2XYHsTransformation::transform(TPositionVector& pv) const
 	d0 = d * R * cosq(omega) / (R + dz);
 	H = ( dz + (d0 * tanq(omega/LITERAL(2.0))) ) / cosq(omega);
 
-	TLength newH (H);
+	TScalar newH (H);
 	
 	// Change the coordinate system of the position vector
 	pv.setCoordSys(TCoordSysFactory::k2DPlusH);   

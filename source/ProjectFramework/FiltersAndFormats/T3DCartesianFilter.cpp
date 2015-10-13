@@ -127,9 +127,9 @@ void	T3DCartesianFilter::input(TAStreamFormatter& iStream, TSpatialPosition& pos
 				}
 				else
 				{
-					pv.setX(x);
-					pv.setY(y);
-					pv.setZ(z);
+					pv.setX(x.getMetresValue());
+					pv.setY(y.getMetresValue());
+					pv.setZ(z.getMetresValue());
 					pv.setStatus(TVNumericValue::kKnown);
 
 				}
@@ -220,9 +220,9 @@ void	T3DCartesianFilter::input(TAStreamFormatter& iStream, TPositionVector& pv) 
 				}
 				else
 				{
-					pv.setX(x);
-					pv.setY(y);
-					pv.setZ(z);
+					pv.setX(x.getMetresValue());
+					pv.setY(y.getMetresValue());
+					pv.setZ(z.getMetresValue());
 					pv.setStatus(TVNumericValue::kKnown);
 				}
 			}

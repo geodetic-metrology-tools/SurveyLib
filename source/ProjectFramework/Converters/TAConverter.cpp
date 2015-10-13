@@ -34,14 +34,14 @@ inline bool isDelim(const char c, const char* delims, int ndelims) {
 }
 
 
-const vector<const string> TAConverter::tokenizeString(const string& str, const char* delims) {
+const vector<string> TAConverter::tokenizeString(const string& str, const char* delims) {
 	enum {
 		STATE_TOKEN,
 		STATE_DELIM
 	};
 
 	size_t delimlen(strlen(delims));
-	vector<const string> result(0);
+	vector<string> result(0);
 	
 	size_t start(0);
 	size_t end(0);

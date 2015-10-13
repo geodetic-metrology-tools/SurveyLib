@@ -130,9 +130,9 @@ TGeodeticRefFrame* TGeodeticRefFrame::instance() {
 TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv, const TReferenceEllipsoid* ellipsoid )  const
 {
 	// get the Cartesian coordinates of the position
-	TReal  x = pv.getX().getMetresValue();
-	TReal  y = pv.getY().getMetresValue();
-	TReal  z = pv.getZ().getMetresValue();
+	TReal  x = pv.getX().getValue();
+	TReal  y = pv.getY().getValue();
+	TReal  z = pv.getZ().getValue();
 	//TReal  x = getX1( posn );
 	//TReal  y = getX2( posn );
 	//TReal  z = getX3( posn );
@@ -152,10 +152,10 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 	if( x==0 && y==0)
 	{
 		TAngle phirad, lrad;
-		TLength hm;
+		TScalar hm;
 		phirad = TAngle::piBy2();;
 		lrad.setRadiansValue(LITERAL(0.0));
-		hm.setMetresValue(z-a);
+		hm.setValue(z-a);
 		geodpv.setPhiEllipsoid(phirad);
 		geodpv.setLambdaEllipsoid(lrad);
 		geodpv.setH(hm);
@@ -186,10 +186,10 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 		}
 		
 		TAngle phirad, lrad;
-		TLength hm;
+		TScalar hm;
 		phirad.setRadiansValue(phi);
 		lrad.setRadiansValue(lambda);
-		hm.setMetresValue(h);
+		hm.setValue(h);
 		geodpv.setPhiEllipsoid(phirad);
 		geodpv.setLambdaEllipsoid(lrad);
 		geodpv.setH(hm);
@@ -205,7 +205,7 @@ TPositionVector  TGeodeticRefFrame::getCartesianCoords( TPositionVector posvec, 
 	// get coordinates of posvec as TReal
 	TReal phi = posvec.getPhiEllipsoid().getRadiansValue();
 	TReal lambda = posvec.getLambdaEllipsoid().getRadiansValue();
-	TReal he = posvec.getH().getMetresValue();
+	TReal he = posvec.getH().getValue();
 
 	//get a copy of the parameters of the ellipsoid
 	TReal a = ellipsoid->getA();

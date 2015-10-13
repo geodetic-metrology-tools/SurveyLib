@@ -181,6 +181,10 @@ bool TAReferenceFrame::transform(TSpatialPosition *sp, TAReferenceFrame* rf)
 		if (transfo[0] == 0)
 		{return false;}
 
+		// reverse the order of the vector to have transformations as applicated to the point
+		reverse(transfo.begin(), transfo.end());
+			
+
 		// application of the successive transformations
 		for (vector<TARefFrameTransformation*>::iterator iter = transfo.begin(); 
 			 iter != transfo.end(); 
@@ -236,6 +240,10 @@ bool TAReferenceFrame::transform( TSpatialVector* sv, TAReferenceFrame* rf )
 		
 		if (transfo[0] == 0)
 		{return false;}
+
+		// reverse the order of the vector to have transformations as applicated to the point
+		reverse(transfo.begin(), transfo.end());
+			
 
 		// application of the successive transformations
 		for (vector<TARefFrameTransformation*>::iterator iter = transfo.begin(); 

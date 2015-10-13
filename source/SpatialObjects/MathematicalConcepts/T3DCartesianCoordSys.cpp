@@ -20,42 +20,42 @@
 //////////////////////////////////////////////////////////////////
 
 
-TLength T3DCartesianCoordSys::getX(const TACoordSysVector* vec) const
+TScalar T3DCartesianCoordSys::getX(const TACoordSysVector* vec) const
 {//get the X coordinate of a position vector or a free vector
-	TLength retVal;
-	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 0));
+	TScalar retVal;
+	retVal.setValue(this->TACoordinateSystem::getX(vec, 0));
 	return retVal;
 }
 
-TLength T3DCartesianCoordSys::getY(const TACoordSysVector* vec) const
+TScalar T3DCartesianCoordSys::getY(const TACoordSysVector* vec) const
 {//get the Y coordinate of a position vector or a free vector
-	TLength retVal;
-	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 1));
+	TScalar retVal;
+	retVal.setValue(this->TACoordinateSystem::getX(vec, 1));
 	return retVal;
 }
 
-TLength T3DCartesianCoordSys::getZ(const TACoordSysVector* vec) const
+TScalar T3DCartesianCoordSys::getZ(const TACoordSysVector* vec) const
 {//get the Z coordinate of a position vector or a free vector
-	TLength retVal;
-	retVal.setMetresValue(this->TACoordinateSystem::getX(vec, 2));
+	TScalar retVal;
+	retVal.setValue(this->TACoordinateSystem::getX(vec, 2));
 	return retVal;
 }
 
-bool T3DCartesianCoordSys::setX(TACoordSysVector* vec, const TLength& len)
+bool T3DCartesianCoordSys::setX(TACoordSysVector* vec, const TScalar& len)
 {//set the X in meters Coordinate of a position vector or a free vector 
-this->TACoordinateSystem::setX(vec,0,len.getMetresValue());
+this->TACoordinateSystem::setX(vec,0,len.getValue());
 return true; 
 }
 
-bool  T3DCartesianCoordSys::setY(TACoordSysVector* vec, const TLength& len)
+bool  T3DCartesianCoordSys::setY(TACoordSysVector* vec, const TScalar& len)
 {//set the Y Coordinate of a position vector or a free vector, default def: return false
-this->TACoordinateSystem::setX(vec,1,len.getMetresValue());
+this->TACoordinateSystem::setX(vec,1,len.getValue());
 return true;
 }
 
-bool  T3DCartesianCoordSys::setZ(TACoordSysVector* vec, const TLength& len)
+bool  T3DCartesianCoordSys::setZ(TACoordSysVector* vec, const TScalar& len)
 {//set the Z Coordinate of a position vector or a free vector, default def: return false
-this->TACoordinateSystem::setX(vec,2,len.getMetresValue());
+this->TACoordinateSystem::setX(vec,2,len.getValue());
 return true;
 }
 
