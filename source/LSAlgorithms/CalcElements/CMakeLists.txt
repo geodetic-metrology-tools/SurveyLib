@@ -34,6 +34,10 @@ SET(CalcElements_HEADERS
 	TLSParametricMtdComputer.h
 	TLSResultsMatrices.h
 	UEOIndices.h
+	QuantileFunctions.h
+	TLSCnstMtdComputer.h
+	TLSCombinedMtdComputer.h
+	TLSWeightedUnkMtdComputer.h
 )
 
 #Create a static library from the object files
