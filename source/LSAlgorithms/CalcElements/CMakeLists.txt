@@ -19,6 +19,10 @@ SET(CalcElements_SOURCES
 	#TUnknownAngle.cpp
 	#TUnknownLength.cpp
 	#TUnknownParameter.cpp
+	QuantileFunctions.cpp
+	TLSCnstMtdComputer.cpp
+	TLSCombinedMtdComputer.cpp
+	TLSWeightedUnkMtdComputer.cpp
 )
 
 # Create a variable containing all .h files:

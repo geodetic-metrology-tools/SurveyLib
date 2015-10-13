@@ -10,6 +10,7 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformation
 # Create a variable containing all .cpp files:
 set(AffineTransformations_SOURCES 
 	TAAffineTransformation.cpp
+	TAffineTransformFactory.cpp
 	TAffineTransformWrapper.cpp
 	TCompositeAffTransform.cpp
 	THelmertTransformation.cpp
