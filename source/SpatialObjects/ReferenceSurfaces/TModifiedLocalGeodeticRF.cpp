@@ -96,6 +96,7 @@ TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 	//unitVector.setElements(vector);
 
 	TAngle azcern(LITERAL(37.77864) * TAngle::gonsToRadsFactor());
+	//TAngle azcern(LITERAL(37.77923) * TAngle::gonsToRadsFactor());
 	TAngle phiP0, lambdaP0;
 	TVReferenceFrame* rf = TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS);
 	phiP0 = rf->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();
