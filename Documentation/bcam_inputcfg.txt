@@ -1,0 +1,3 @@
+
+*BCAM PC PS PP % Cone Slot and Plane points
+<serial>[:fc|:rc] [<PointID>|<serial>[:fs|:rs]]
