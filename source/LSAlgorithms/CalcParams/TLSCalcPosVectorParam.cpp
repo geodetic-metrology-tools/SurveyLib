@@ -265,9 +265,9 @@ UEOIndices		TLSCalcPosVectorParam::setUIndex(UEOIndices ui)
 
 
 
-TLength		TLSCalcPosVectorParam::getHEstValue(const TRefSystemFactory::ERefFrame	refFrame) const
+TScalar		TLSCalcPosVectorParam::getHEstValue(const TRefSystemFactory::ERefFrame	refFrame) const
 {
-	TLength h;
+	TScalar h;
 	TAReferenceFrame* refH = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(refFrame));
 	TAReferenceFrame* ccs = TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS);
 	if(refH != ccs)
@@ -281,9 +281,9 @@ TLength		TLSCalcPosVectorParam::getHEstValue(const TRefSystemFactory::ERefFrame	
 	return h;
 }
 
-TLength		TLSCalcPosVectorParam::getHProvValue(const TRefSystemFactory::ERefFrame	refFrame) const
+TScalar		TLSCalcPosVectorParam::getHProvValue(const TRefSystemFactory::ERefFrame	refFrame) const
 {
-	TLength h;
+	TScalar h;
 	TAReferenceFrame* refH = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(refFrame));
 	TAReferenceFrame* ccs = TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS);
 	if(refH != ccs)
@@ -301,7 +301,7 @@ TLength		TLSCalcPosVectorParam::getHProvValue(const TRefSystemFactory::ERefFrame
 
 
 
-TLength		TLSCalcPosVectorParam::getNEstValue(const TRefSystemFactory::EGeoid	geo) const
+TScalar		TLSCalcPosVectorParam::getNEstValue(const TRefSystemFactory::EGeoid	geo) const
 {
 
 
@@ -311,43 +311,43 @@ TLength		TLSCalcPosVectorParam::getNEstValue(const TRefSystemFactory::EGeoid	geo
 
 	TSpatialPosition pos (ccs);
 	pos.setCoordinates(getEstimatedValue());
-	TLength N = geoid->getN(pos);
+	TScalar N = geoid->getN(pos).getMetresValue();
 
 	return N;
 }
 
 
-TLength		TLSCalcPosVectorParam::getErrorEllMajorAxis() const
+TReal		TLSCalcPosVectorParam::getErrorEllMajorAxis() const
 {
-	TReal vxy = getXYCovar().getMMetresValue();
-	TReal sx2 = powq(getXSigma().getMMetresValue(), 2) ;
-	TReal sy2 = powq(getYSigma().getMMetresValue(), 2) ;
+	TReal vxy = getXYCovar()*M2MM;
+	TReal sx2 = powq(getXSigma()*M2MM, 2) ;
+	TReal sy2 = powq(getYSigma()*M2MM, 2) ;
 	TReal gdAxe = (LITERAL(1.0)/sqrtq(LITERAL(2.0))) * sqrtq( sx2 + sy2 + sqrtq( powq((sy2 - sx2), 2) + (LITERAL(4.0) * vxy * vxy) ) );
 	
-	TLength res;
-	res.setMMetresValue(gdAxe);
+	TReal res;
+	res = gdAxe * MM2M;
 	return res;
 }
 
 	
-TLength		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
+TReal		TLSCalcPosVectorParam::getErrorEllMinorAxis() const
 {
-	TReal vxy = getXYCovar().getMMetresValue();
-	TReal sx2 = powq(getXSigma().getMMetresValue(), 2) ;
-	TReal sy2 = powq(getYSigma().getMMetresValue(), 2) ;
+	TReal vxy = getXYCovar()*M2MM;
+	TReal sx2 = powq(getXSigma()*M2MM, 2) ;
+	TReal sy2 = powq(getYSigma()*M2MM, 2) ;
 	TReal ptAxe = (LITERAL(1.0)/sqrtq(LITERAL(2.0))) * sqrtq( sx2 + sy2 - sqrtq( powq((sy2 - sx2), 2) + (LITERAL(4.0) * vxy *vxy) ) );
 	
-	TLength res;
-	res.setMMetresValue(ptAxe);
+	TReal res;
+	res = ptAxe * MM2M;
 	return res;
 }
 
 	
 TAngle TLSCalcPosVectorParam::getErrorEllGis() const
 {
-	TReal vxy = getXYCovar().getMMetresValue();
-	TReal sx2 = powq(getXSigma().getMMetresValue(), 2) ;
-	TReal sy2 = powq(getYSigma().getMMetresValue(), 2) ;
+	TReal vxy = getXYCovar()*M2MM;
+	TReal sx2 = powq(getXSigma()*M2MM, 2) ;
+	TReal sy2 = powq(getYSigma()*M2MM, 2) ;
 	TAngle gis (( LITERAL(0.5)) * TAngle::aTan2(2*vxy , (sy2 - sx2) ) );
 	
 	TReal testAffichage = gis.getGonsValue();
@@ -365,9 +365,9 @@ TAngle TLSCalcPosVectorParam::getErrorEllGis() const
 TLSCalcPosVectorParam::ErrorEllipsoid TLSCalcPosVectorParam::getErrorEllipsoid() const {
 	Eigen::Matrix3d m;
 
-	m << pow2(getXSigma().getMMetresValue()),     getXYCovar().getMMetresValue(),     getXZCovar().getMMetresValue(),
-             getXYCovar().getMMetresValue(),  pow2(getYSigma().getMMetresValue()),    getYZCovar().getMMetresValue(),
-		     getXZCovar().getMMetresValue(),      getYZCovar().getMMetresValue(), pow2(getZSigma().getMMetresValue());
+	m << pow2(getXSigma()*M2MM),     getXYCovar()*M2MM,     getXZCovar()*M2MM,
+             getXYCovar()*M2MM,  pow2(getYSigma()*M2MM),    getYZCovar()*M2MM,
+		     getXZCovar()*M2MM,      getYZCovar()*M2MM, pow2(getZSigma()*M2MM);
 
 	Eigen::EigenSolver<Eigen::Matrix3d> ev(m);
 	

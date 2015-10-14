@@ -3,8 +3,7 @@
 
 #include "TAConverter.h"
 #include "TRefSystemFactory.h"
-#include "TLGCRefFrame.h"
-#include "TAdjustablePoint.h"
+//#include "TLGCRefFrame.h"
 
 /*!\ingroup Converters
  \brief Enables to write points in many different ways.
@@ -18,11 +17,11 @@ public:
 	/*!@name Constructors and Destructors*/
 		//@{
 			//!constructor
-/*			TPointConverter(TAStreamFormatter* stream,
-							const TRefSystemFactory::ERefFrame	fRefFrame);*/
-
 			TPointConverter(TAStreamFormatter* stream,
-							const TLGCRefFrame::ERefs	fRefFrame);
+							const TRefSystemFactory::ERefFrame	fRefFrame);
+
+			//TPointConverter(TAStreamFormatter* stream,
+			//				const TLGCRefFrame::ERefs	fRefFrame);
 
 
 			//!Destructor
@@ -37,21 +36,13 @@ public:
 	/*!@name Public member functions*/
 		//@{
 
-//			void	writeName(LSPosVecConstIter pt, int width);
+			//void	writeName(const TPositionVector& pt, int width);
 
 			void	writeName(string ptName, int width);
-
-			void	writeXYZandH(const TAdjustablePoint& pt);
 
 			void	writeXYZandH(const TPositionVector& pt);
 			void	writeXYZandH(const TPositionVector& pt, TReal heightH);
 
-
-			void	writeXYZandH(	const int width,
-									const int precision,
-									const TLength::EUnits unit,
-									const string separator,
-									TAdjustablePoint pt);
 
 
 /*			void	writeXYZorH(	const int width,
@@ -64,7 +55,9 @@ public:
 								const int precision,
 								const TLength::EUnits unit,
 								const string separator,
-								TAdjustablePoint pt);
+								const TScalar Xparam,
+								const TScalar Yparam,
+								const TScalar Hparam);
 
 /*			void	writeXYZ(	const int width,
 								const int precision,
@@ -82,12 +75,6 @@ public:
 										const int precision,
 										const string separator,
 										const TPositionVector pt);
-
-
-			void	writeN( const int width,
-							const int precision,
-							const TLength::EUnits unit,
-							TAdjustablePoint pt);
 
 
 			void	writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
@@ -138,7 +125,8 @@ private:
 
 		bool							fLocalSys;
 
-		TLGCRefFrame::ERefs	fRefFrame;
+		//TLGCRefFrame::ERefs	fRefFrame;
+		TRefSystemFactory::ERefFrame	fRefFrame;
 };
 
 /*@}*/

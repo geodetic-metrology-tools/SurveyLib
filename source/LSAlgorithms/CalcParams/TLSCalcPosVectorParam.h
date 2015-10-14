@@ -19,6 +19,7 @@
 #include "TFreeVector.h"
 #include "UEOIndices.h"
 #include "TALSCalcParameter.h"
+#include "TConstants.h"
 
 class TLSCalcPosVectorParam : public TALSCalcParameter
 {
@@ -91,35 +92,35 @@ public:
 		MatrixIndex			getZIndex() const {	return fPosVectorIndices[2];}
 
 		/*!Return the estimated X sigma*/
-		TLength				getXSigma() const {return fEstimatedPrecision.getX();}
+		TReal				getXSigma() const {return fEstimatedPrecision.getX().getValue();}
 
 		/*!Return the estimated Y sigma*/
-		TLength				getYSigma() const {return fEstimatedPrecision.getY();}
+		TReal				getYSigma() const {return fEstimatedPrecision.getY().getValue();}
 
 		/*!Return the estimated Z sigma*/
-		TLength				getZSigma() const {return fEstimatedPrecision.getZ();}
+		TReal				getZSigma() const {return fEstimatedPrecision.getZ().getValue();}
 
 		/*!Return the estimated XY covariance*/
-		TLength				getXYCovar() const {return fCovariance.getX();}
+		TReal				getXYCovar() const {return fCovariance.getX().getValue();}
 
 		/*!Return the estimated YZ covariance*/
-		TLength				getYZCovar() const {return fCovariance.getY();}
+		TReal				getYZCovar() const {return fCovariance.getY().getValue();}
 
 		/*!Return the estimated XZ covariance*/
-		TLength				getXZCovar() const {return fCovariance.getZ();}
+		TReal				getXZCovar() const {return fCovariance.getZ().getValue();}
 
 		/*!Return the estimated X variance (mm2)*/
-		TDouble				getXVar() const {return TDouble (powq(getXSigma().getMMetresValue(), 2) );}
+		TReal				getXVar() const {return  (powq(getXSigma()*M2MM, 2) );}
 
 		/*!Return the estimated Y variance (mm2)*/
-		TDouble				getYVar() const {return TDouble (powq(getYSigma().getMMetresValue(), 2) );}
+		TDouble				getYVar() const {return  (powq(getYSigma()*M2MM, 2) );}
 
 		/*!Return the estimated Z variance (mm2)*/
-		TDouble				getZVar() const {return TDouble (powq(getZSigma().getMMetresValue(), 2) );}
+		TDouble				getZVar() const {return  (powq(getZSigma()*M2MM, 2) );}
 
-		TLength				getErrorEllMajorAxis() const;
+		TReal				getErrorEllMajorAxis() const;
 
-		TLength				getErrorEllMinorAxis() const;
+		TReal				getErrorEllMinorAxis() const;
 
 		TAngle				getErrorEllGis() const;
 
@@ -135,44 +136,44 @@ public:
 		ErrorEllipsoid getErrorEllipsoid() const;
 
 		/*!Return the estimated X coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getXEstValue() const {return getEstimatedValue().getX();}
+		TScalar				getXEstValue() const {return getEstimatedValue().getX();}
 
 		/*!Return the estimated Y coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getYEstValue() const {return getEstimatedValue().getY();}
+		TScalar				getYEstValue() const {return getEstimatedValue().getY();}
 
 		/*!Return the estimated Z coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getZEstValue() const {return getEstimatedValue().getZ();}
+		TScalar				getZEstValue() const {return getEstimatedValue().getZ();}
 
 		/*!Return the estimated X coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getDXValue() const {return (getEstimatedValue().getX()-getProvisionalValue().getX());}
+		TScalar				getDXValue() const {return (getEstimatedValue().getX()-getProvisionalValue().getX());}
 
 		/*!Return the estimated Y coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getDYValue() const {return (getEstimatedValue().getY()-getProvisionalValue().getY());}
+		TScalar				getDYValue() const {return (getEstimatedValue().getY()-getProvisionalValue().getY());}
 
 		/*!Return the estimated Z coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getDZValue() const {return (getEstimatedValue().getZ()-getProvisionalValue().getZ());}
+		TScalar				getDZValue() const {return (getEstimatedValue().getZ()-getProvisionalValue().getZ());}
 
 		/*!Compute and return the estimated H coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getHEstValue(const TRefSystemFactory::ERefFrame	refFrame) const;
+		TScalar				getHEstValue(const TRefSystemFactory::ERefFrame	refFrame) const;
 
 		/*!Compute and return the estimated H coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getHProvValue(const TRefSystemFactory::ERefFrame	refFrame) const;
+		TScalar				getHProvValue(const TRefSystemFactory::ERefFrame	refFrame) const;
 
 		/*!Compute and return the estimated H coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getDHValue(const TRefSystemFactory::ERefFrame	refFrame) const {return getHEstValue(refFrame) - getHProvValue(refFrame);}
+		TScalar				getDHValue(const TRefSystemFactory::ERefFrame	refFrame) const {return getHEstValue(refFrame) - getHProvValue(refFrame);}
 
 
 		/*!Compute and return the estimated N */
-		TLength				getNEstValue(const TRefSystemFactory::EGeoid	geo) const;
+		TScalar				getNEstValue(const TRefSystemFactory::EGeoid	geo) const;
 
 		/*!Return the provisional X coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getXProvValue() const {return getProvisionalValue().getX();}
+		TScalar				getXProvValue() const {return getProvisionalValue().getX();}
 
 		/*!Return the provisional Y coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getYProvValue() const {return getProvisionalValue().getY();}
+		TScalar				getYProvValue() const {return getProvisionalValue().getY();}
 
 		/*!Return the provisional Z coordinate of TLSCalcPosVectorParam (this object is always in CCS)*/
-		TLength				getZProvValue() const {return getProvisionalValue().getZ();}
+		TScalar				getZProvValue() const {return getProvisionalValue().getZ();}
 
 //		int					getId() const {return getName().getId();}
 

@@ -42,6 +42,7 @@ set(MathematicalConcepts_HEADERS
 	TAngle.h
 	TANumericValue.h
 	TColumnVector.h
+	TConstants.h
 	TCoordSysFactory.h
 	TDist.h
 	TDouble.h

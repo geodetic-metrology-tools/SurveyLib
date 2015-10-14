@@ -138,8 +138,8 @@ int SpatialObjFns::transformToMLA(double x0, double y0, double z0,
 
 	//DIF *1
 	TAngle gis, slope(0);
-	gis = gis.aTan2( (x0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue()),
-		(y0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue()) );
+	gis = gis.aTan2( (x0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getValue()),
+		(y0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getValue()) );
 
 	
 	// MLA system construction
@@ -154,9 +154,9 @@ int SpatialObjFns::transformToMLA(double x0, double y0, double z0,
 	cout << point.getZCoord().getMetresValue() << endl;
 */
 
-	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-	*z = point.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue();
+	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getValue();
+	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getValue();
+	*z = point.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getValue();
 
 	delete pMLA;
 
@@ -200,8 +200,8 @@ int SpatialObjFns::transformFromMLA(double x0, double y0, double z0,
 
 	// DIF *2
 	TAngle gis, slope(0);
-	gis = gis.aTan2( (x0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue()),
-		(y0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue()) );
+	gis = gis.aTan2( (x0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getValue()),
+		(y0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getValue()) );
 
 	
 	// MLA system construction
@@ -221,9 +221,9 @@ int SpatialObjFns::transformFromMLA(double x0, double y0, double z0,
 	cout << point.getZCoord().getMetresValue() << endl;
 */
 
-	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-	*z = point.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue();
+	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getValue();
+	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getValue();
+	*z = point.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getValue();
 
 	delete pMLA;
 
@@ -278,14 +278,14 @@ int SpatialObjFns::transformToMLA2(double x0, double y0, double z0,
 
 	point.transform(pMLA);
 
-/*	cout << point.getXCoord().getMetresValue() << endl;
-	cout << point.getYCoord().getMetresValue() << endl;
-	cout << point.getZCoord().getMetresValue() << endl;
+/*	cout << point.getXCoord().getValue() << endl;
+	cout << point.getYCoord().getValue() << endl;
+	cout << point.getZCoord().getValue() << endl;
 */
 
-	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-	*z = point.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue();
+	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getValue();
+	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getValue();
+	*z = point.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getValue();
 
 	delete pMLA;
 
@@ -342,14 +342,14 @@ int SpatialObjFns::transformFromMLA2(double x0, double y0, double z0,
 	point.transform(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
 
 
-/*	cout << point.getXCoord().getMetresValue() << endl;
-	cout << point.getYCoord().getMetresValue() << endl;
-	cout << point.getZCoord().getMetresValue() << endl;
+/*	cout << point.getXCoord().getValue() << endl;
+	cout << point.getYCoord().getValue() << endl;
+	cout << point.getZCoord().getValue() << endl;
 */
 
-	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-	*z = point.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue();
+	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getValue();
+	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getValue();
+	*z = point.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getValue();
 
 	delete pMLA;
 
@@ -401,8 +401,8 @@ int SpatialObjFns::descenteVert(double x, double y, double h, double deltaH, dou
 
 	//if((h + deltaH>= hres - 0.000005) && (h + deltaH<= hres + 0.000005))
 	//{
-		*xt = res.getX().getMetresValue();
-		*yt = res.getY().getMetresValue();
+		*xt = res.getX().getValue();
+		*yt = res.getY().getValue();
 		*ht = h + deltaH;
 		return 1;
 	//}
