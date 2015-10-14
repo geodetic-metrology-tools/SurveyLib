@@ -592,7 +592,7 @@ void	TRefSystemFactory::init()
 	fTransformList.push_back(pCCS2XYHe);
 
 	//Transformation between CCS and CGRF
-	pCCS2CGRFTransformation = *(new TCCS2CGRFTransformation);
+//	pCCS2CGRFTransformation = *(new TCCS2CGRFTransformation);
 
 	// TRefSystemFactory instantiated
 	delete NMatrix0;

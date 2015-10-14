@@ -44,7 +44,7 @@ class TARefFrameTransformation;
 class TSpatialPosition;
 
 #include <TLocalSystemOrigin.h>
-#include <TCCS2CGRFTransformation.h>
+//#include <TCCS2CGRFTransformation.h>
 //
 //
 ////////////////////////////////////////////////////////////////
@@ -187,7 +187,7 @@ public:
 		TAReferenceFrame* getNewLocalRefFrame(const TLocalSystemOrigin & LSO, EGeoid geoid, ERefFrame frame);
 
 		//return a CCS2CGRF transformation
-		TCCS2CGRFTransformation* getCCS2CGRFTransformation() {return &pCCS2CGRFTransformation;}
+		//TCCS2CGRFTransformation* getCCS2CGRFTransformation() {return &pCCS2CGRFTransformation;}
 
 	//@}
 
@@ -226,7 +226,7 @@ private:
 	vector<TARefFrameTransformation*> fTransformList; /*!< list of pointers to the to-be-defined Ref.Frame transformations */
 	//il est important que ce soit une classe TA plutot que TV pour avoir acces au destructeur
 
-	TCCS2CGRFTransformation pCCS2CGRFTransformation;
+	//TCCS2CGRFTransformation pCCS2CGRFTransformation;
 
 
 	TGeodeticRefFrame *fCGRF, *fCGRFSphere;

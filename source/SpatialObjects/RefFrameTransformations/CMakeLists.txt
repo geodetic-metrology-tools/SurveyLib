@@ -28,10 +28,10 @@ set(RefFrameTransformations_SOURCES
 	TXYHg2XYHeTransformation.cpp
 	TXYHs2MLATransformation.cpp
 	Cartesian2Ellipsoidal.cpp
-	TCCS2CGRFTransformation.cpp
-	TCGRF2LGTransformation.cpp
+	#TCCS2CGRFTransformation.cpp
+	#TCGRF2LGTransformation.cpp
 	TGridGeoidModels.cpp
-	TILG2ILATransformation.cpp
+	#TILG2ILATransformation.cpp
 	TLG2MLATransformation.cpp
 	TXYH2CCS.cpp
 )
@@ -60,10 +60,10 @@ set(RefFrameTransformations_HEADERS
 	TXYHs2MLATransformation.h
 	Cartesian2Ellipsoidal.h
 	GeodeticConstants.h
-	TCCS2CGRFTransformation.h
-	TCGRF2LGTransformation.h
+	#TCCS2CGRFTransformation.h
+	#TCGRF2LGTransformation.h
 	TGridGeoidModels.h
-	TILG2ILATransformation.h
+	#TILG2ILATransformation.h
 	TLG2MLATransformation.h
 	TXYH2CCS.h
 )
