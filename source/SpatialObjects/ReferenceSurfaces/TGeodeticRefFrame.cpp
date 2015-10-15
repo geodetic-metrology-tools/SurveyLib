@@ -16,15 +16,12 @@
 //////////////////////////////////////////////////////////////////////
 //forward declarations
 #include	"TReferenceEllipsoid.h"
-
 #include	"TSpatialPosition.h"
 #include	"TPositionStatus.h"
 #include	"TSpatialPositionError.h"
-
 #include	"TSpatialVector.h"
 #include	"TSpatialVectorStatus.h"
 #include	"TSpatialVectorError.h"
-
 #include  "TGeodeticRefFrame.h"
 ////////////////////////////////////////////////////////////////
 

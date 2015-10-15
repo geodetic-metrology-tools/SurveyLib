@@ -30,7 +30,7 @@ TACoordSysVector::TACoordSysVector(): TANumericValue()
 		fVector[i] = LITERAL(0.0);
 		i++;
 	}
-	fCoordSys = 0;
+	fCoordSys = nullptr;
 }
 
 

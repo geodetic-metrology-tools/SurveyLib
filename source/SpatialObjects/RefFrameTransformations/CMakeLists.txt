@@ -27,10 +27,7 @@ set(RefFrameTransformations_SOURCES
 	TXYHe2XYHgTransformation.cpp
 	TXYHg2XYHeTransformation.cpp
 	TXYHs2MLATransformation.cpp
-	#TCCS2CGRFTransformation.cpp
-	#TCGRF2LGTransformation.cpp
 	TGridGeoidModels.cpp
-	#TILG2ILATransformation.cpp
 	TXYH2CCS.cpp
 )
 
@@ -57,10 +54,7 @@ set(RefFrameTransformations_HEADERS
 	TXYHg2XYHeTransformation.h
 	TXYHs2MLATransformation.h
 	GeodeticConstants.h
-	#TCCS2CGRFTransformation.h
-	#TCGRF2LGTransformation.h
 	TGridGeoidModels.h
-	#TILG2ILATransformation.h
 	TXYH2CCS.h
 )
 
