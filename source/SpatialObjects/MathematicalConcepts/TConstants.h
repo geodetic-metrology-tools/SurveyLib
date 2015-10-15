@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include "Quad.h"
 
+namespace {
 
 #define assert3D(x) assert((x) >= 0 && (x) < 3)
 #define assert4D(x) assert((x) >= 0 && (x) < 4)
@@ -35,4 +36,5 @@ static const TReal PI_4 = M_PI*0.25;
 static const TReal MM2M = 0.001;
 static const TReal M2MM = 1000;
 
+} 
 #endif
