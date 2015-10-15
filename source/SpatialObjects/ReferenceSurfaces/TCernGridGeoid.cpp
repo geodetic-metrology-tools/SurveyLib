@@ -1,16 +1,13 @@
 #include "TSpatialPosition.h"
 #include "TGraph.h"
 #include "TAReferenceFrame.h"
-
-
 #include "TCernGridGeoid.h"
 
 #include <TNotInLepGridException.h>
-
 #include <math.h>
 #include <valarray>
 #include <vector>
-
+#include <sstream>
 
 
 
