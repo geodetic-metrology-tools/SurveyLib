@@ -10,7 +10,6 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformation
 # Create a variable containing all .cpp files:
 set(ReferenceSurfaces_SOURCES 
 	T3DLocalRefFrame.cpp
-	TA2DEuclideanRefFrame.cpp
 	TA2DPlus1MapProjection.cpp
 	#TA2DXYRefFrame.cpp
 	TA3DEuclideanRefFrame.cpp
