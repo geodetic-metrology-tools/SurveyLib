@@ -27,9 +27,9 @@ namespace tut
         TRGF93ZoneTransformation trans(true);
         ensure("Transform returns true", trans.transform(position));
 
-        ensure_distance("RGF93 CC46 X", position.getX().getMetresValue(), static_cast<TReal>(1918471.0676), static_cast<TReal>(0.0001));
-		ensure_distance("RGF93 CC46 Y", position.getY().getMetresValue(), static_cast<TReal>(5215917.6067), static_cast<TReal>(0.0001));
-		ensure_distance("RGF93 CC46 H", position.getH().getMetresValue(), static_cast<TReal>(400.157 /*- 1.2233*/), static_cast<TReal>(0.001));
+        ensure_distance("RGF93 CC46 X", position.getX().getValue(), static_cast<TReal>(1918471.0676), static_cast<TReal>(0.0001));
+		ensure_distance("RGF93 CC46 Y", position.getY().getValue(), static_cast<TReal>(5215917.6067), static_cast<TReal>(0.0001));
+		ensure_distance("RGF93 CC46 H", position.getH().getValue(), static_cast<TReal>(400.157 /*- 1.2233*/), static_cast<TReal>(0.001));
 	}
 
     template<>
@@ -56,8 +56,8 @@ namespace tut
         TRGF93ZoneTransformation trans(false);
         ensure("Transform returns true", trans.transform(position));
 
-        ensure_distance("RGF93 CC46 X", position.getX().getMetresValue(), static_cast<TReal>(4407040.76287), static_cast<TReal>(1e-4));
-        ensure_distance("RGF93 CC46 Y", position.getY().getMetresValue(), static_cast<TReal>(449723.28541), static_cast<TReal>(1e-4)); 
-        ensure_distance("RGF93 CC46 Z", position.getZ().getMetresValue(), static_cast<TReal>(4573892.46194), static_cast<TReal>(1e-3));
+        ensure_distance("RGF93 CC46 X", position.getX().getValue(), static_cast<TReal>(4407040.76287), static_cast<TReal>(1e-4));
+        ensure_distance("RGF93 CC46 Y", position.getY().getValue(), static_cast<TReal>(449723.28541), static_cast<TReal>(1e-4)); 
+        ensure_distance("RGF93 CC46 Z", position.getZ().getValue(), static_cast<TReal>(4573892.46194), static_cast<TReal>(1e-3));
 	}
 }

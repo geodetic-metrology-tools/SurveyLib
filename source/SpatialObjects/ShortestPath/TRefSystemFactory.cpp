@@ -579,7 +579,231 @@ void	TRefSystemFactory::init()
 	pCCS2XYHs->setTransformId( kCCS2XYHsSphereSPS);
 	fTransformList.push_back(pCCS2XYHs);
 
+	// Transformation between CCS and CGRF
+	/*Il est equivalent de mettre CG2000 ou CG1985 car les parametres du geoide au niveau de P0,
+	servant a definir la transformation sont equivalent*/
+	TMLA2GCTransformation* pCCS2CGRF = new TMLA2GCTransformation(pCCS, pCG1985Machine);
+	pCCS2CGRF->setTransformId(kCCS2CGRF);
+	fTransformList.push_back(pCCS2CGRF);
+		//Inverse
+	TARefFrameTransformation* pCGRF2CCS = pCCS2CGRF->inverse(); //utilise new
+	pCGRF2CCS->setTransformId(kCGRF2CCS);
+	fTransformList.push_back(pCGRF2CCS);
 
+
+	// Transformation between CCS and CGRFSphere
+	//rotation pour diriger les axes du CGRFs parallele a ceux du CGRF
+	TAngle rx, ry, rz;
+	rx.setGonsValue(-LITERAL(42.726243230216));
+	ry.setGonsValue(-LITERAL(25.285434244947));
+	rz.setGonsValue(-LITERAL(77.864346765085));
+	TRotation rs(TRotationMatrix::kRzyx, rx.getRadiansValue(), ry.getRadiansValue(), rz.getRadiansValue());
+	//translation pour situer le centre de la sphere
+	TReal txs (LITERAL(4381882.331989)), tys (LITERAL(461505.530464)), tzs (LITERAL(4598944.364158));
+	TTranslation transls(txs, tys, tzs);
+	//facteur d echelle
+	TScaleFactor ks (LITERAL(1.0));
+	THelmertRefFrameTransform* pCCS2CGRFs = new THelmertRefFrameTransform(pCCS, pCGRFs, new THelmertTransformation(ks, rs, transls));
+	pCCS2CGRFs->setTransformId(kCCS2CGRFSphere);
+	fTransformList.push_back(pCCS2CGRFs);
+		//Inverse
+	TARefFrameTransformation* pCGRFs2CCS = pCCS2CGRFs->inverse();//utilise new
+	pCGRFs2CCS->setTransformId(kCGRFSphere2CCS);
+	fTransformList.push_back(pCGRFs2CCS);
+
+
+	// Transformation between LAp0 and LGp0
+	TLA2LGTransformation* pLAp02LGp0 = new TLA2LGTransformation(pLAp0);
+	pLAp02LGp0->setTransformId(kLAp02LGp0);
+	fTransformList.push_back(pLAp02LGp0);
+	//Inverse
+	TARefFrameTransformation* pLGp02LAp0 = pLAp02LGp0->inverse(); //utilise new
+	pLGp02LAp0->setTransformId(kLGp02LAp0);
+	fTransformList.push_back(pLGp02LAp0);
+
+
+	//Transformation between LGp0 and CGRF
+	TLG2GCTransformation* pLGp02CGRF = new TLG2GCTransformation(pLGp0);
+	pLGp02CGRF->setTransformId(kLGp02CGRF);
+	fTransformList.push_back(pLGp02CGRF);
+	//Inverse
+	TARefFrameTransformation* pCGRF2LGp0 = pLGp02CGRF->inverse(); //utilise new
+	pCGRF2LGp0->setTransformId(kCGRF2LGp0);
+	fTransformList.push_back(pCGRF2LGp0);
+
+
+	// Helmert Transformation between LAp0 and CCS
+	TRotation r(TRotationMatrix::kRzyx, 0, 0, -(kappa.getRadiansValue()));
+	TTranslation transl(falseOrigin.getX(), falseOrigin.getY(),	(falseOrigin.getZ()) );
+	TScaleFactor enl(LITERAL(1.0));
+	THelmertRefFrameTransform* pLAp02CCS = new THelmertRefFrameTransform(pLAp0, pCCS, new THelmertTransformation(enl, r, transl));
+	pLAp02CCS->setTransformId(kLAp02CCS);
+	fTransformList.push_back(pLAp02CCS);
+	//Inverse
+	TARefFrameTransformation* pCCS2LAp0 = pLAp02CCS->inverse(); //utilise new
+	pCCS2LAp0->setTransformId(kCCS2LAp0);
+	fTransformList.push_back(pCCS2LAp0);
+
+	
+	// Helmert Transformation between ROMA40 and WGS84
+	TAngle om1, p1, k1;
+	om1.setDMSValue(0, 0, -LITERAL(1.822));
+	p1.setDMSValue(0, 0, LITERAL(3.235));
+	k1.setDMSValue(0, 0, -LITERAL(0.762));
+	TRotation r1(TRotationMatrix::kRzyx, om1.getRadiansValue(), p1.getRadiansValue(), k1.getRadiansValue());
+	TReal tx(-LITERAL(54.62)), ty(-LITERAL(24.26)), tz(LITERAL(17.75));
+	TTranslation transl1(tx, ty, tz);
+	TScaleFactor enl1(LITERAL(1.0) - LITERAL(0.00002801));
+	THelmertRefFrameTransform* pROMA2WGS = new THelmertRefFrameTransform(pROMA, pWGS, new THelmertTransformation(enl1, r1, transl1));
+	pROMA2WGS->setTransformId(kROMA2WGS);
+	fTransformList.push_back(pROMA2WGS);
+		//Inverse
+	TARefFrameTransformation* pWGS2ROMA = pROMA2WGS->inverse(); //utilise new
+	pWGS2ROMA->setTransformId(kWGS2ROMA);
+	fTransformList.push_back(pWGS2ROMA);
+
+	
+	// Helmert Transformation between WGS84 and CGRF
+	TAngle om2, p2, k2;
+	om2.setGonsValue(-LITERAL(0.0003314103458));
+	p2.setGonsValue(LITERAL(0.0022563667184));
+	k2.setGonsValue(LITERAL(0.0008629680740));
+	TRotation r2(TRotationMatrix::kRzyx, om2.getRadiansValue(), p2.getRadiansValue(), k2.getRadiansValue());
+	TReal Tx(LITERAL(114.1736041)), Ty(LITERAL(114.1154332)), Tz(-LITERAL(178.5526666));
+	TTranslation transl2(Tx, Ty, Tz);
+	TScaleFactor enl2(LITERAL(0.999998644222261));
+	THelmertRefFrameTransform* pWGS2CGRF = new THelmertRefFrameTransform(pWGS, pCGRF, new THelmertTransformation(enl2, r2, transl2));
+	pWGS2CGRF->setTransformId(kWGS2CGRF);
+	fTransformList.push_back(pWGS2CGRF);
+		//Inverse
+	TARefFrameTransformation* pCGRF2WGS = pWGS2CGRF->inverse(); //utilise new
+	pCGRF2WGS->setTransformId(kCGRF2WGS);
+	fTransformList.push_back(pCGRF2WGS);
+
+
+	// Helmert Transformation between ITRF97 (ep1998.5) and CGRF
+	TAngle om3, p3, k3;
+	om3.setGonsValue(LITERAL(399.999533213524));
+	p3.setGonsValue(LITERAL(0.001825157943));
+	k3.setGonsValue(LITERAL(0.000991054274));
+	TRotation r3(TRotationMatrix::kRzyx, om3.getRadiansValue(), p3.getRadiansValue(), k3.getRadiansValue());
+	TReal Tx3(LITERAL(76.3768280)), Ty3(LITERAL(131.9389844)), Tz3(-LITERAL(156.1229775));
+	TTranslation transl3(Tx3, Ty3, Tz3);
+	TScaleFactor enl3(LITERAL(1.000000000000000));
+	THelmertRefFrameTransform* pITRF972CGRF = new THelmertRefFrameTransform(pITRF97, pCGRF, new THelmertTransformation(enl3, r3, transl3));
+	pITRF972CGRF->setTransformId(kITRF972CGRF);
+	fTransformList.push_back(pITRF972CGRF);
+	//Inverse
+	TARefFrameTransformation* pCGRF2ITRF97 = pITRF972CGRF->inverse(); //utilise new
+	pCGRF2ITRF97->setTransformId(kCGRF2ITRF97);
+	fTransformList.push_back(pCGRF2ITRF97);
+
+	{
+		// Helmert Transformation between ITRF97 (ep1998.5) and ETRF93
+		// There is no rotation:
+		TRotation r3(TRotationMatrix::kRzyx, 0, 0, 0);
+		// Total translation resulting from epoch changes and Reference Frame changes:
+		// TODO:
+		TReal Tx3(LITERAL(0.163550)), Ty3(LITERAL(-0.131900)), Tz3(LITERAL(-0.142100));
+		TTranslation transl3(Tx3, Ty3, Tz3);
+		// There is no scaling:
+		TScaleFactor enl3(LITERAL(1.000000000000000));
+		THelmertRefFrameTransform* pITRF972ETRF93 = new THelmertRefFrameTransform(pITRF97, pETRF93, new THelmertTransformation(enl3, r3, transl3));
+		pITRF972ETRF93->setTransformId(kITRF972ETRF93);
+		fTransformList.push_back(pITRF972ETRF93);
+		//Inverse
+		TARefFrameTransformation* pETRF932ITRF97 = pITRF972ETRF93->inverse(); //utilise new
+		pETRF932ITRF97->setTransformId(kETRF932ITRF97);
+		fTransformList.push_back(pETRF932ITRF97);
+	}
+
+	{
+		// kETRF93 == kRGF93 == kCHTRF95
+		THelmertRefFrameTransform * t1a = new THelmertRefFrameTransform(pETRF93, pRGF93, new THelmertTransformation(TScaleFactor(1.0), TRotation(TRotationMatrix::kRzyx, 0, 0, 0), TTranslation(0,0,0)));
+		t1a->setTransformId(kETRF932kRGF93);
+		THelmertRefFrameTransform * t1b = t1a->inverse();
+		t1b->setTransformId(kRGF932kETRF93);
+		fTransformList.push_back(t1a);
+		fTransformList.push_back(t1b);
+
+		THelmertRefFrameTransform * t2a = new THelmertRefFrameTransform(pETRF93, pCHTRF95, new THelmertTransformation(TScaleFactor(1.0), TRotation(TRotationMatrix::kRzyx, 0, 0, 0), TTranslation(0,0,0)));
+		t2a->setTransformId(kETRF932kCHTRF95);
+		THelmertRefFrameTransform * t2b = t1a->inverse();
+		t2b->setTransformId(kCHTRF952kETRF93);
+		fTransformList.push_back(t2a);
+		fTransformList.push_back(t2b);
+	}
+
+    {
+        ////////////////////////////////////////////////////////////////
+		// Helmert Transformation between ETRF93 (ep1993) and CH1903plus
+        ////////////////////////////////////////////////////////////////
+		// There is no rotation:
+		TRotation r3(TRotationMatrix::kRzyx, 0, 0, 0);
+		// Total translation resulting from epoch changes and Reference Frame changes:
+		TReal Tx3(LITERAL(-674.374)), Ty3(LITERAL(-15.056)), Tz3(LITERAL(-405.346));
+		TTranslation transl3(Tx3, Ty3, Tz3);
+		// There is no scaling:
+		TScaleFactor enl3(LITERAL(1.000000000000000));
+		THelmertRefFrameTransform* pETRF932CH1903plus = new THelmertRefFrameTransform(pETRF93, pCH1903plus, new THelmertTransformation(enl3, r3, transl3));
+		pETRF932CH1903plus->setTransformId(kETRF932CH1903plus);
+		fTransformList.push_back(pETRF932CH1903plus);
+		//Inverse
+		TARefFrameTransformation* pCH1903plus2ETRF93 = pETRF932CH1903plus->inverse(); //utilise new
+		pCH1903plus2ETRF93->setTransformId(kCH1903plus2ETRF93);
+		fTransformList.push_back(pCH1903plus2ETRF93);
+	}
+#ifdef USE_SWISSTOPO
+    {
+        ////////////////////////////////////////////////////////////////
+		// Transformation between CH1903plus and LV95
+        ////////////////////////////////////////////////////////////////
+        TLV95Transformation * pTrans = new TLV95Transformation(true);
+        pTrans->setTransformId(kCH1903plus2SwissLV95);
+		fTransformList.push_back(pTrans);
+		//Inverse
+		TARefFrameTransformation* pInverse = pTrans->inverse();
+        pInverse->setTransformId(kSwissLV952CH1903plus);
+        fTransformList.push_back(pInverse);
+	}
+    {
+        ////////////////////////////////////////////////////////////////
+		// Transformation between LV95 and LV03
+        ////////////////////////////////////////////////////////////////
+        TLV03Transformation * pTrans = new TLV03Transformation(true);
+        pTrans->setTransformId(kSwissLV952SwissLV03);
+		fTransformList.push_back(pTrans);
+		//Inverse
+		TARefFrameTransformation* pInverse = pTrans->inverse();
+        pInverse->setTransformId(kSwissLV032SwissLV95);
+        fTransformList.push_back(pInverse);
+	}
+#endif
+    {
+        ////////////////////////////////////////////////////////////////
+		// Transformation between ETRF93 and RGF93
+        ////////////////////////////////////////////////////////////////
+        TRGF93ZoneTransformation * pTrans = new TRGF93ZoneTransformation(true);
+        pTrans->setTransformId(kETRF932FrenchRGF93);
+		fTransformList.push_back(pTrans);
+		//Inverse
+		TARefFrameTransformation* pInverse = pTrans->inverse();
+        pInverse->setTransformId(kFrenchRGF932ETRF93);
+        fTransformList.push_back(pInverse);
+	}
+
+	{
+        ////////////////////////////////////////////////////////////////
+		// Transformation between ETRF93 and Lambert93
+        ////////////////////////////////////////////////////////////////
+        TLambert93Transformation * pTrans = new TLambert93Transformation(true);
+        pTrans->setTransformId(kETRF932kLambert93);
+		fTransformList.push_back(pTrans);
+		//Inverse
+		TARefFrameTransformation* pInverse = pTrans->inverse();
+        pInverse->setTransformId(kLambert932ETRF93);
+        fTransformList.push_back(pInverse);
+	}
 
 
 	// Transformation between CERN projection XYHe and CCS
@@ -590,6 +814,68 @@ void	TRefSystemFactory::init()
 	TARefFrameTransformation* pCCS2XYHe = pXYHe2CCS->inverse(); //utilise new
 	pCCS2XYHe->setTransformId(kCCS2XYHe);
 	fTransformList.push_back(pCCS2XYHe);
+
+
+	
+	// Transformation between CERN projection X0Y0He and CERN projection XYHe
+	TX0Y0He2XYHeTransformation* pX0Y0He2XYHe =  new TX0Y0He2XYHeTransformation(pCernX0Y0He) ;
+	pX0Y0He2XYHe->setTransformId(kX0Y0He2XYHe);
+	fTransformList.push_back(pX0Y0He2XYHe);
+	//Inverse
+	TARefFrameTransformation* pXYHe2X0Y0He =  pX0Y0He2XYHe->inverse(); //utilise new
+	pXYHe2X0Y0He->setTransformId(kXYHe2X0Y0He);
+	fTransformList.push_back(pXYHe2X0Y0He);
+
+
+	// Transformation between CERN projection XYHg (Geoid 2000) and XYHe
+	TXYHg2XYHeTransformation* pXYHg2XYHe = new TXYHg2XYHeTransformation(pCernXYHg00) ;
+	pXYHg2XYHe->setTransformId(kXYHg2XYHe);
+	fTransformList.push_back(pXYHg2XYHe);
+	//Inverse
+	TARefFrameTransformation* pXYHe2XYHg = pXYHg2XYHe->inverse(); //utilise new
+	pXYHe2XYHg->setTransformId(kXYHe2XYHg);
+	fTransformList.push_back(pXYHe2XYHg);
+
+
+	// Transformation between CERN projection XYHg (Geoid 2000Topo) and XYHe
+	TXYHg2XYHeTransformation* pXYHg2XYHe00Topo = new TXYHg2XYHeTransformation(pCernXYHg00Topo) ;
+	pXYHg2XYHe00Topo->setTransformId(kXYHg2XYHe00Topo);
+	fTransformList.push_back(pXYHg2XYHe00Topo);
+	//Inverse
+	TARefFrameTransformation* pXYHe00Topo2XYHg = pXYHg2XYHe00Topo->inverse(); //utilise new
+	pXYHe00Topo2XYHg->setTransformId(kXYHe00Topo2XYHg);
+	fTransformList.push_back(pXYHe00Topo2XYHg);
+
+
+	// Transformation between CERN projection XYHg (Geoid 2000Machine) and XYHe 
+	TXYHg2XYHeTransformation* pXYHg2XYHe00Machine = new TXYHg2XYHeTransformation(pCernXYHg00Machine) ;
+	pXYHg2XYHe00Machine->setTransformId(kXYHg2XYHe00Machine);
+	fTransformList.push_back(pXYHg2XYHe00Machine);
+	//Inverse
+	TARefFrameTransformation* pXYHe00Machine2XYHg = pXYHg2XYHe00Machine->inverse(); //utilise new
+	pXYHe00Machine2XYHg->setTransformId(kXYHe00Machine2XYHg);
+	fTransformList.push_back(pXYHe00Machine2XYHg);
+
+
+	// Transformation between CERN projection XYHg (Geoid 1985) and XYHe
+	TXYHg2XYHeTransformation* pXYHg2XYHe85 = new TXYHg2XYHeTransformation(pCernXYHg85) ;
+	pXYHg2XYHe85->setTransformId(kXYHg2XYHe85);
+	fTransformList.push_back(pXYHg2XYHe85);
+		//Inverse
+	TARefFrameTransformation* pXYHe852XYHg = pXYHg2XYHe85->inverse(); //utilise new
+	pXYHe852XYHg->setTransformId(kXYHe852XYHg);
+	fTransformList.push_back(pXYHe852XYHg);
+
+
+	// Transformation between CERN projection XYHg (Geoid 1985Machine) and XYHe
+	TXYHg2XYHeTransformation* pXYHg2XYHe85Machine = new TXYHg2XYHeTransformation(pCernXYHg85Machine) ;
+	pXYHg2XYHe85Machine->setTransformId(kXYHg2XYHe85Machine);
+	fTransformList.push_back(pXYHg2XYHe85Machine);
+	//Inverse
+	TARefFrameTransformation* pXYHe85Machine2XYHg = pXYHg2XYHe85Machine->inverse(); //utilise new
+	pXYHe85Machine2XYHg->setTransformId(kXYHe85Machine2XYHg);
+	fTransformList.push_back(pXYHe85Machine2XYHg);
+
 
 	//Transformation between CCS and CGRF
 //	pCCS2CGRFTransformation = *(new TCCS2CGRFTransformation);

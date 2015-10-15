@@ -56,10 +56,10 @@ void comparePointsXYH(const TPointsMap & actual, const TPointsMap & expected, co
 		{
 			log.clear();
 			log << comment << " Point:" << iter->first;
-			TReal actualX = iter->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
-			TReal actualY = iter->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
-			TReal expectedX = validationPoint->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
-			TReal expectedY = validationPoint->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
+			TReal actualX = iter->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getValue();
+			TReal actualY = iter->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getValue();
+			TReal expectedX = validationPoint->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getValue();
+			TReal expectedY = validationPoint->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getValue();
 			tut::ensure_distance(log.str(), actualX, expectedX, static_cast<TReal>(0.001));
 			tut::ensure_distance(log.str(), actualY, expectedY, static_cast<TReal>(0.001));
 		}
@@ -126,8 +126,8 @@ namespace tut
 			std::map<std::string, TSpatialPosition>::const_iterator it = afterTransformation95.find(pointName);
 			if(it != afterTransformation95.end())
 			{
-				ensure_distance("Swiss LV95 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(xCoordLV95), static_cast<TReal>(0.001));
-				ensure_distance("Swiss LV95 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(yCoordLV95), static_cast<TReal>(0.001));
+				ensure_distance("Swiss LV95 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getValue(), static_cast<TReal>(xCoordLV95), static_cast<TReal>(0.001));
+				ensure_distance("Swiss LV95 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getValue(), static_cast<TReal>(yCoordLV95), static_cast<TReal>(0.001));
 			}
 			else
 			{
@@ -192,11 +192,11 @@ namespace tut
 #ifdef _DEBUG
 				// test fails, distance to reference is 3.1278 ( > 1 mm)
 				// Uses reframe DLL, needs investigation
-				std::cout << "\nDistance CSS_X: " << fabs(it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() - xCoordCCS) << std::endl;
-				std::cout << "\nDistance CSS_Y: " << fabs(it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() - yCoordCCS) << std::endl;
+				std::cout << "\nDistance CSS_X: " << fabs(it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getValue() - xCoordCCS) << std::endl;
+				std::cout << "\nDistance CSS_Y: " << fabs(it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getValue() - yCoordCCS) << std::endl;
 #endif
-				ensure_distance("CCS X", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(xCoordCCS), static_cast<TReal>(0.001));
-				ensure_distance("CCS Y", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(yCoordCCS), static_cast<TReal>(0.001));
+				ensure_distance("CCS X", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getValue(), static_cast<TReal>(xCoordCCS), static_cast<TReal>(0.001));
+				ensure_distance("CCS Y", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getValue(), static_cast<TReal>(yCoordCCS), static_cast<TReal>(0.001));
 			}
 			else
 			{
@@ -255,8 +255,8 @@ namespace tut
 			std::map<std::string, TSpatialPosition>::const_iterator it = afterTransformation03.find(pointName);
 			if(it != afterTransformation03.end())
 			{
-				ensure_distance("Swiss LV03 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(xCoordLV03), static_cast<TReal>(0.001));
-				ensure_distance("Swiss LV03 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(yCoordLV03), static_cast<TReal>(0.001));
+				ensure_distance("Swiss LV03 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getValue(), static_cast<TReal>(xCoordLV03), static_cast<TReal>(0.001));
+				ensure_distance("Swiss LV03 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getValue(), static_cast<TReal>(yCoordLV03), static_cast<TReal>(0.001));
 			}
 			else
 			{
@@ -326,8 +326,8 @@ namespace tut
 			std::map<std::string, TSpatialPosition>::const_iterator it = afterTransformationRGF93CC46.find(pointName);
 			if(it != afterTransformationRGF93CC46.end())
 			{
-				ensure_distance("RGF93CC46 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(xCoordRGF93CC46), static_cast<TReal>(0.001));
-				ensure_distance("RGF93CC46 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(yCoordRGF93CC46), static_cast<TReal>(0.001));
+				ensure_distance("RGF93CC46 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getValue(), static_cast<TReal>(xCoordRGF93CC46), static_cast<TReal>(0.001));
+				ensure_distance("RGF93CC46 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getValue(), static_cast<TReal>(yCoordRGF93CC46), static_cast<TReal>(0.001));
 			}
 			else
 			{
@@ -392,8 +392,8 @@ namespace tut
 			std::map<std::string, TSpatialPosition>::const_iterator it = afterTransformationLambert93.find(pointName);
 			if(it != afterTransformationLambert93.end())
 			{
-				ensure_distance("Swiss LV95 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(xCoordLambert93), static_cast<TReal>(0.001));
-				ensure_distance("Swiss LV95 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(yCoordLambert93), static_cast<TReal>(0.001));
+				ensure_distance("Swiss LV95 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getValue(), static_cast<TReal>(xCoordLambert93), static_cast<TReal>(0.001));
+				ensure_distance("Swiss LV95 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getValue(), static_cast<TReal>(yCoordLambert93), static_cast<TReal>(0.001));
 			}
 			else
 			{

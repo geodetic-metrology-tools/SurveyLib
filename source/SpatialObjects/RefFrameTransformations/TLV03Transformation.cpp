@@ -67,9 +67,9 @@ bool TLV03Transformation::transform(TPositionVector & pv) const
 	if(!position.setCoordinates(pv))
         return false;
 
-    double x = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
-    double y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
-    double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+    double x = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getValue();
+    double y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getValue();
+    double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getValue();
 
     bool result = true;
     if(fFromLV95)
@@ -80,9 +80,9 @@ bool TLV03Transformation::transform(TPositionVector & pv) const
     if(!result)
         return false;
 
-    pv.setX(TLength(x));
-    pv.setY(TLength(y));
-    pv.setH(TLength(h));
+    pv.setX(x);
+    pv.setY(y);
+    pv.setH(h);
 
     return true;
 }

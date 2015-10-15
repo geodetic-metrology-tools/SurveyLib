@@ -76,7 +76,7 @@ bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
 
     const double phi = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue();
     const double lam = position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue();
-    const double h   = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
+    const double h   = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getValue();
     
     // Auxiliary value:
     const double S = - alpha * log(tan(PI/4 - phi/2)) - (alpha*sqrt(E2))/2 * log((1+sqrt(E2)*sin(phi))/(1-sqrt(E2)*sin(phi)))+K;
@@ -113,9 +113,9 @@ bool TLV95Transformation::transformToCH1903plus(TPositionVector & pv) const
 	if(!position.setCoordinates(pv))
         return false;
 
-    const double x = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
-    const double y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
-    const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+    const double x = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getValue();
+    const double y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getValue();
+    const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getValue();
 
     // projection plane (x, y) to sphere (l_, b_)
     const double Y = y - LV95_Y_OFFSET;

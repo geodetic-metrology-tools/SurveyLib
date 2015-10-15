@@ -78,7 +78,7 @@ namespace tut
 
 
 		z100 = basev;
-		z100.setH(basev.getH()+TLength(100));
+		z100.setH(basev.getH()+TReal(100));
 		TFreeVector ez = (z100-basev).normalize();
 
 		TPositionVector pN(0, 0, 6137000, k3D); // Approx. north pole
@@ -130,7 +130,7 @@ namespace tut
 			p_trafo[i].transform(LG);
 
 		for (int i = 0; i < 4; i++) {
-			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo[i].getCoordinates(k3D)).getMetresValue() ;
+			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo[i].getCoordinates(k3D)).getValue() ;
 			// std::cout << "Difference between points (LG): " << d << std::endl;
 			ensure_distance("Testing distance between expected and calculated points", TReal(0), d, TReal(1e-5));
 		}
@@ -142,8 +142,8 @@ namespace tut
 		TSpatialPosition pnorth(p_trafo[2]);
 		pnorth.setCoordinates(pnorthv);
 
-		TReal d = pnorth.getCoordinates(k3D).getX().getMetresValue()-
-			      p_theo.data[2]->getCoordinates(k3D).getX().getMetresValue();
+		TReal d = pnorth.getCoordinates(k3D).getX().getValue()-
+			      p_theo.data[2]->getCoordinates(k3D).getX().getValue();
 		//std::cout << "Difference between X-coordinates after north transformation (LG): " << d << std::endl;
 		ensure_distance("Difference in X must be 0 after moving north", TReal(0), d, TReal(1e-5));
 
@@ -163,7 +163,7 @@ namespace tut
 		for (int i = 0; i < 4; i++) { 
 			if (i > 0) p_trafo3[i].setCoordinates(p_trafo2[i-1]);
 			p_trafo3[i].transform(LG);
-			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo3[i].getCoordinates(k3D)).getMetresValue() ;
+			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo3[i].getCoordinates(k3D)).getValue() ;
 			//std::cout << "Difference between points (LG NOT p0): " << d << std::endl;
 			ensure_distance("Testing distance between expected and calculated points", TReal(0), d, TReal(1e-5));
 		}
@@ -225,11 +225,11 @@ namespace tut
 			p_trafo[i].transform(MLG);
 
 		for (int i = 0; i < 4; i++) {
-			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo[i].getCoordinates(k3D)).getMetresValue() ;
+			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo[i].getCoordinates(k3D)).getValue() ;
 			//std::cout << "Analyzing point " << i << "(MLG)\n"
-			//		  << p_trafo[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
-			//		  << p_trafo[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
-			//		  << p_trafo[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
+			//		  << p_trafo[i].getCoordinates(k3D).getX().getValue() << " (X)\n"
+			//		  << p_trafo[i].getCoordinates(k3D).getY().getValue() << " (Y)\n"
+			//		  << p_trafo[i].getCoordinates(k3D).getZ().getValue() << " (Z)\n";
 			//std::cout << "Difference between points (MLG): " << d << std::endl;
 			ensure_distance("Testing distance between expected and calculated points (at p0)", TReal(0), d, TReal(1e-5));
 		}
@@ -254,11 +254,11 @@ namespace tut
 			
 			for (int i = 0; i < 4; i++) {
 				unrotated[i].transform(MLG2);
-				TReal d = p_theo.data[i]->getCoordinates(k3D).dist(unrotated[i].getCoordinates(k3D)).getMetresValue() ;
+				TReal d = p_theo.data[i]->getCoordinates(k3D).dist(unrotated[i].getCoordinates(k3D)).getValue() ;
 				//std::cout << "Analyzing point " << i << "(MLG2)\n"
-				//		  << unrotated[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
-				//		  << unrotated[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
-				//		  << unrotated[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
+				//		  << unrotated[i].getCoordinates(k3D).getX().getValue() << " (X)\n"
+				//		  << unrotated[i].getCoordinates(k3D).getY().getValue() << " (Y)\n"
+				//		  << unrotated[i].getCoordinates(k3D).getZ().getValue() << " (Z)\n";
 				//std::cout << "Difference between points (MLG2): " << d << std::endl;
 				ensure_distance("Testing distance between expected and calculated points (manual system)", TReal(0), d, TReal(1e-1));
 			}
@@ -294,7 +294,7 @@ namespace tut
 			p_trafo[i].transform(LGs);
 
 		for (int i = 0; i < 4; i++) {
-			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo[i].getCoordinates(k3D)).getMetresValue() ;
+			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo[i].getCoordinates(k3D)).getValue() ;
 			//std::cout << "Difference between points (LGsphere): " << d << std::endl;
 			ensure_distance("Testing distance between expected and calculated points", TReal(0), d, TReal(1e-5));
 		}
@@ -306,8 +306,8 @@ namespace tut
 		TSpatialPosition pnorth(p_trafo[2]);
 		pnorth.setCoordinates(pnorthv);
 
-		TReal d = pnorth.getCoordinates(k3D).getX().getMetresValue()-
-			      p_theo.data[2]->getCoordinates(k3D).getX().getMetresValue();
+		TReal d = pnorth.getCoordinates(k3D).getX().getValue()-
+			      p_theo.data[2]->getCoordinates(k3D).getX().getValue();
 		//std::cout << "Difference between X-coordinates after north transformation (LGs): " << d << std::endl;
 		ensure_distance("Difference in X must be 0 after moving north", TReal(0), d, TReal(1e-5));
 	}
@@ -340,11 +340,11 @@ namespace tut
 			p_trafo[i].transform(MLGs);
 
 		for (int i = 0; i < 4; i++) {
-			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo[i].getCoordinates(k3D)).getMetresValue() ;
+			TReal d = p_theo.data[i]->getCoordinates(k3D).dist(p_trafo[i].getCoordinates(k3D)).getValue() ;
 			//std::cout << "Analyzing point " << i << "(MLG)\n"
-			//		  << p_trafo[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
-			//		  << p_trafo[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
-			//		  << p_trafo[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
+			//		  << p_trafo[i].getCoordinates(k3D).getX().getValue() << " (X)\n"
+			//		  << p_trafo[i].getCoordinates(k3D).getY().getValue() << " (Y)\n"
+			//		  << p_trafo[i].getCoordinates(k3D).getZ().getValue() << " (Z)\n";
 			//std::cout << "Difference between points (MLG): " << d << std::endl;
 			ensure_distance("Testing distance between expected and calculated points (at p0)", TReal(0), d, TReal(1e-5));
 		}
@@ -369,11 +369,11 @@ namespace tut
 			
 			for (int i = 0; i < 4; i++) {
 				unrotated[i].transform(MLG2);
-				TReal d = p_theo.data[i]->getCoordinates(k3D).dist(unrotated[i].getCoordinates(k3D)).getMetresValue() ;
+				TReal d = p_theo.data[i]->getCoordinates(k3D).dist(unrotated[i].getCoordinates(k3D)).getValue() ;
 				//std::cout << "Analyzing point " << i << "(MLG2)\n"
-				//		  << unrotated[i].getCoordinates(k3D).getX().getMetresValue() << " (X)\n"
-				//		  << unrotated[i].getCoordinates(k3D).getY().getMetresValue() << " (Y)\n"
-				//		  << unrotated[i].getCoordinates(k3D).getZ().getMetresValue() << " (Z)\n";
+				//		  << unrotated[i].getCoordinates(k3D).getX().getValue() << " (X)\n"
+				//		  << unrotated[i].getCoordinates(k3D).getY().getValue() << " (Y)\n"
+				//		  << unrotated[i].getCoordinates(k3D).getZ().getValue() << " (Z)\n";
 				//std::cout << "Difference between points (MLG2): " << d << std::endl;
 				ensure_distance("Testing distance between expected and calculated points (manual system)", TReal(0), d, TReal(1e-1));
 			}

@@ -34,7 +34,7 @@ TLength::TLength(): fValue(LITERAL(0.0))
 
 
 
-TLength::TLength(LengthValue	value): fValue(value)
+TLength::TLength(TReal	value): fValue(value)
 {	// constructor taking a given length value in metres
 	setStatus( TANumericValue::kKnown );
 }

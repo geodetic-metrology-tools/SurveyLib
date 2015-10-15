@@ -37,13 +37,13 @@ namespace tut
         //TLambert93Transformation trans(true);
         //ensure("Transform returns true", trans.transform(position));
 
-		//std::cout << "X: " << position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue() << std::endl;
-		//std::cout << "Y: " << position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue() << std::endl;
+		//std::cout << "X: " << position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getValue() << std::endl;
+		//std::cout << "Y: " << position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getValue() << std::endl;
 			
 
-        ensure_distance("Lambert 93 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1082722.205), static_cast<TReal>(0.001));
-		ensure_distance("Lambert 93 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(7001994.409), static_cast<TReal>(0.001));
-		//ensure_distance("RGF93 CC46 H", position.getH().getMetresValue(), static_cast<TReal>(400.157 /*- 1.2233*/), static_cast<TReal>(0.001));
+        ensure_distance("Lambert 93 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getValue(), static_cast<TReal>(1082722.205), static_cast<TReal>(0.001));
+		ensure_distance("Lambert 93 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getValue(), static_cast<TReal>(7001994.409), static_cast<TReal>(0.001));
+		//ensure_distance("RGF93 CC46 H", position.getH().getValue(), static_cast<TReal>(400.157 /*- 1.2233*/), static_cast<TReal>(0.001));
 	}
 
     template<>
@@ -81,6 +81,6 @@ namespace tut
 																																		
         ensure_distance("ETRF93 PHI", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue(), static_cast<TReal>(0.872664626), static_cast<TReal>(1e-4));
         ensure_distance("ETRF93 LAM", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue(), static_cast<TReal>(0.145512099), static_cast<TReal>(1e-4)); 
-        //ensure_distance("ETRF93 H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<TReal>(4573892.46194), static_cast<TReal>(1e-3));
+        //ensure_distance("ETRF93 H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getValue(), static_cast<TReal>(4573892.46194), static_cast<TReal>(1e-3));
 	}
 }

@@ -143,7 +143,7 @@ TCernParabolicGeoid::~TCernParabolicGeoid()
 
 TLength	TCernParabolicGeoid::getN( const TSpatialPosition& position ) const
 {//
-	LengthValue x, y;
+	TReal x, y;
 	TReal dx, dy, xp, yp;
 	//TSpatialPosition position( point.getPosition( modelSystem ) );
 	//GeoidValue fNValue;
@@ -183,7 +183,7 @@ TAngle	TCernParabolicGeoid::getXi( const TSpatialPosition& sp ) const
 
 
 
-	LengthValue x, y;
+	TReal x, y;
 	TReal dx, dy, xp, yp;
 	TReal falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
 	//TSpatialPosition position( modelSystem );
@@ -219,7 +219,7 @@ TAngle	TCernParabolicGeoid::getEta( const TSpatialPosition& sp ) const
 
 
 
-	LengthValue x, y;
+	TReal x, y;
 	TReal dx, dy, xp, yp;
 	TReal falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
 	TAngle fEtaValue;
