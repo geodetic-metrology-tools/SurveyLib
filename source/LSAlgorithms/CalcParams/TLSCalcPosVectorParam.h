@@ -113,10 +113,10 @@ public:
 		TReal				getXVar() const {return  (powq(getXSigma()*M2MM, 2) );}
 
 		/*!Return the estimated Y variance (mm2)*/
-		TDouble				getYVar() const {return  (powq(getYSigma()*M2MM, 2) );}
+		TReal				getYVar() const {return  (powq(getYSigma()*M2MM, 2) );}
 
 		/*!Return the estimated Z variance (mm2)*/
-		TDouble				getZVar() const {return  (powq(getZSigma()*M2MM, 2) );}
+		TReal				getZVar() const {return  (powq(getZSigma()*M2MM, 2) );}
 
 		TReal				getErrorEllMajorAxis() const;
 
