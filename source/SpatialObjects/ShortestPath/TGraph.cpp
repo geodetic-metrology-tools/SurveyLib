@@ -11,7 +11,7 @@
 
 #include "TReferenceEllipsoid.h"
 #include "TGeodeticRefFrame.h"
-#include "TAModifiedLocalastronomicalRF.h"
+#include "TAModifiedLocalAstronomicalRF.h"
 #include "TGraphMLARF.h"
 #include "TXYHeProjection.h"
 #include "TX0Y0HeProjection.h"

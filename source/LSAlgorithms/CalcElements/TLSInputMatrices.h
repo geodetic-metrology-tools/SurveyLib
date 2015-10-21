@@ -1,37 +1,15 @@
-/*SURVEYLIB VERSION!!!!!
-// TLSInputMatrices.h
-
-//////////////////////////////////////////////////////////////////////
-
-/*! Class for input matrices of a least squares calculation
-
-  Pattern:
-
-  Copyright 2000 CERN EST/SU. All rights reserved.
-*/
-
-
-//////////////////////////////////////////////////////////////////////
-
-
 #ifndef SU_TLSINPUTMATRICES
 #define SU_TLSINPUTMATRICES
 
-
-#if _MSC_VER >= 1000
-#pragma once
-#pragma warning(disable:4786)
-
-#endif // _MSC_VER >= 1000
-
-/////////////////////////////////////////////////////
-// Forward declarations
-/////////////////////////////////////////////////////
 #include "TSparseMatrix.h"
 #include "UEOIndices.h"
 
 
-//! class for input matrices used in the ls-calculation
+/*!
+	\ingroup CalcElements
+
+	\brief Class for the input matrices used in the LS-calculation.
+*/
 class TLSInputMatrices{
 
 public:
@@ -47,18 +25,25 @@ public:
 
 	/*!@name Set methods*/
 	//@{
-		//!Sets the dimensions of the matrices
-		/*!@param nbUnknowns the survey network's number of unknowns
-		@param nbEquations the survey network's number of equations
-		@param nbObservations the survey network's number of observations*/
+		/*!
+			\brief Sets the dimensions of the matrices
+
+			\param[in] nbUnknowns the survey network's number of unknowns
+			\param[in] nbEquations the survey network's number of equations
+			\param[in] nbObservations the survey network's number of observations
+			\param[in] nbObservations the survey network's number of observation constraints
+		*/
 		virtual void setDimensions(int nbUnknowns, int nbEquations, int nbObservations, int nbCnstrObs);
 	
-		//!Sets the dimensions of the matrices
-		/*! \param nbUnknowns the survey network's number of unknowns
-			\param nbEquations the survey network's number of equations
-			\param nbObservations the survey network's number of observations
-			\param nbConstraints the free survey network's number of constraint*/
-		virtual void setDimensions(int nbUnknowns, int nbEquations, int nbCnstrObs, int nbObservations, int nbConstraints);
+		/*! \brief Sets the dimensions of the matrices
+			
+			\param[in] nbUnknowns the survey network's number of unknowns
+			\param[in] nbEquations the survey network's number of equations
+			\param[in] nbObservations the survey network's number of observations
+			\param[in] nbConstraints the free survey network's number of observation constraints
+			\param[in] constraints the free survey network's number of constraints
+		*/
+		virtual void setDimensions(int unknowns, int equations, int observations, int nbCnstrObs, int constraints);
 	
 		//!Sets a coefficient of the first design matrix
 		virtual bool setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
@@ -68,32 +53,45 @@ public:
 		virtual bool setMisclosureVectorElement(MatrixIndex row, TReal coeff);
 		//!Sets a coefficient of the weight matrix
 		virtual bool setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
-		//!Sets a coefficient of the constraint first design matrix
+		//!Sets a coefficient of the inverted weight matrix
+		virtual bool setWeightInvMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+		//!Sets a coefficient of the weight matrix for the unknowns
+		virtual bool setWeightUnkMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+		//!Sets a coefficient of the constraint first design matrix 
 		virtual bool setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 		//!Sets a coefficient of the constraint misclosure vector
 		virtual bool setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff);
 	//@}
 
+	 /// Returns the number of unknowns
 	 virtual int		getNbrUnknowns() const;
+	 /// Returns the number of observations
 	 virtual int		getNbrObservations() const;
+	 /// Returns the number of equations
 	 virtual int		getNbrEquations()const;
+	 /// Returns the number of observations constraints
 	 virtual int		getNbrConstraintObs()const;
+	 /// Returns the number of constraints
 	 virtual int		getNbrConstraints()const;
 
 
-	/*!@return a const reference to the first design matrix*/
+	/// Returns a const reference to the first design matrix
 	const TSparseMatrix* getFirstDgnMtrx() const;
-	/*!@return a const reference to the second design matrix*/
+	/// Returns a const reference to the second design matrix
 	const TSparseMatrix* getSecondDgnMtrx() const;
-	/*!@return a const reference to the weight design matrix*/
+	/// Returns a const reference to the weight matrix
 	const TSparseMatrix* getWeightMtrx() const;
-	/*!@return a const reference to the misclosure vector*/
+	/// Returns a const reference to the inverted weight matrix
+	const TSparseMatrix* getWeightInvMtrx() const;
+	/// Returns a const reference to the weight matrix for the unknowns
+	const TSparseMatrix* getWeightUnkMtrx() const;
+	/// Returns a const reference to the misclosure vector
 	const TVector&	getMisclosureVctr() const;
-	/*!@return a const reference to the constraint first design matrix*/
+	/// Returns a const reference to the constraint first design matrix
 	const TSparseMatrix*	getCnstrFirstDgnMtrx() const;
-	/*!@return a const reference to the constraint misclosure vector*/
+	/// Returns a const reference to the constraint misclosure vector
 	const TVector&	getCnstrMisclosureVctr() const;
-	//!Debug method
+	/// Debug method
 	void saveMatricesToFile(int nbIter) const;
 
 private:
@@ -113,6 +111,8 @@ private:
 	TSparseMatrix*	firstDesignMatrix; /*!< matrix (u x e) for the parametric part of the model */
 	TSparseMatrix*	secondDesignMatrix; /*!< matrix (o x e) for the conditional part of the model  */
 	TSparseMatrix*	weightMatrix; /*!< matrix (o x o) for observations weights */
+	TSparseMatrix*	weightInvMatrix; /*!< matrix (o x o) for observations weights */
+	TSparseMatrix*	weightUnkMatrix; /*!< matrix (o x o) for unknowns weights */
 
 	void clearMatrices();
 };
