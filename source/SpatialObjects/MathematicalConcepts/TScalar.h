@@ -22,11 +22,6 @@ Copyright 1999-2007, Mark Jones, CERN TS/SU. All rights reserved.
 // Forward declarations
 ////////////////////////////////////////////////////////////////
 
-//!Includes Files
-
-class T3DMatrix;
-class TFreeVector;
-class TDouble;
 
 #include "TANumericValue.h"
 #include "TAngle.h"
@@ -34,12 +29,11 @@ class TDouble;
 #include "TMatrix.h"
 #include "TColumnVector.h"
 
-//!Type Definition
-typedef	TReal	ScalarValue;	// the value for Scalar
-//
-////////////////////////////////////////////////////////////////
+class T3DMatrix;
+class TFreeVector;
 
-/*! \ingroup spatialobjects
+
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Class for a Scalar
@@ -67,12 +61,12 @@ public:
 	//@{
 	
 	/*!set a value to a TScalar Object
-	\param ScalarValue, value of TScalar in metres 
+	\param TReal, value of TScalar in metres 
 	*/
-	void setValue(const ScalarValue);
+	void setValue(const TReal);
 	
 	//!give the value of a TScalar Object
-	ScalarValue	getValue() const;
+	TReal	getValue() const;
 	
 	/*! Equality operator, comparaison between two TScalar objects
 	\param TScalar&, TScalar object
@@ -141,6 +135,10 @@ public:
 
 	//!multiply a TScalar object by a TFreeVector object
 	TFreeVector operator*(const TFreeVector);
+
+	//!multiply a TScalar object by a factor
+	TScalar operator*(const TReal );
+
 	//@}
 
 private:
@@ -148,7 +146,7 @@ private:
 	/*!\name Protected Attributes*/
 	//@{
 	
-	ScalarValue			fValue; /*!< default = LITERAL(0.0) */
+	TReal			fValue; /*!< default = LITERAL(0.0) */
 	//@}
 
 

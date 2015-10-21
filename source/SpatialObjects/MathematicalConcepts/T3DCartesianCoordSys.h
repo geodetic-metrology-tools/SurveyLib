@@ -28,7 +28,7 @@
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Class for explain matrix and vector in a 3D cartesian coordinate system 

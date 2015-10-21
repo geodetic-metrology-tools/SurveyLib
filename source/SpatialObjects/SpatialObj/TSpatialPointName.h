@@ -20,7 +20,7 @@ Copyright 1999,2000, CERN, EST/SU. All rights reserved.
 #include <string>
 //using namespace std;
 
-/*!\ingroup spatialobjects
+/*!\ingroup SpatialObjectsAndSystems
 	@{*/
 //! Class for a spatial point name tag.
 class	TSpatialPointName// : public TObject

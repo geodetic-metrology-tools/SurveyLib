@@ -50,7 +50,7 @@ typedef  bool  CoordKnown;
 //
 //////////////////////////////
 
-/*!\ingroup spatialobjects
+/*!\ingroup SpatialObjectsAndSystems
 	@{*/
 
 //! The Spatial Position of a point in a given reference frame 

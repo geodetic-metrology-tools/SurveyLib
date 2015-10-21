@@ -34,7 +34,7 @@ TLength::TLength(): fValue(LITERAL(0.0))
 
 
 
-TLength::TLength(LengthValue	value): fValue(value)
+TLength::TLength(TReal value): fValue(value)
 {	// constructor taking a given length value in metres
 	setStatus( TANumericValue::kKnown );
 }
@@ -101,25 +101,10 @@ TLength TLength::operator-(const TLength &length1)
 }	
 
 
-TDouble TLength::operator/(const TLength& div)
+TReal TLength::operator/(const TLength& div)
 {// Multiplies a TAngle by a TDouble scale factor
-	TDouble resultat;
-	TANumericValue::EStatus status;
-	status=this->testStatus(div);
-	if (status!= kNull)
-	{	
-		if(div.getMetresValue() != 0)
-		{
-			resultat.setValue(this->getMetresValue()/div.getMetresValue());
-		}
-		else
-		{
-			resultat.setValue(0);
-			status = kNull;
-		}
-	}
-	resultat.setStatus(status);
-	return resultat;
+
+   return (div.getMetresValue() != 0) ? (this->getMetresValue() / div.getMetresValue()) : 0;
 }
 
 	
@@ -133,15 +118,10 @@ TLength TLength::operator*(const TReal factor)
 }
 
 
-TLength	TLength::operator*(const TDouble &factor)
+TLength	TLength::operator*(const TReal factor)
 {//multiply a TLength object by a factor
-	TLength resultat;
-	TANumericValue::EStatus status;
-	status=this->testStatus(factor);
-	if (status!= kNull)
-	{resultat.setMetresValue(factor.getValue()*this->getMetresValue());}
-	resultat.setStatus(status);
-	return resultat;
+
+   return TLength (factor*this->getMetresValue());
 }	
 
 TLength	operator*(const TReal factor, const TLength &length )
@@ -179,13 +159,7 @@ return *this=*this-length;
 
 TLength& TLength::operator*=(const TReal factor)
 {//multiply a TLength object by a factor and rewrite this
-return *this=(*this)*factor;
-}
-
-
-TLength& TLength::operator*=(const TDouble &factor)
-{//multiply a TLength object by a factor and rewrite it
-return *this=(*this)*factor;
+   return *this=(*this)*factor;
 }
 
 /*TLength operator*=(const TReal factor, TLength &length )

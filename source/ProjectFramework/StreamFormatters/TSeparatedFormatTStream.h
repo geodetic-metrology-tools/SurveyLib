@@ -67,6 +67,7 @@ class TWireToWireDistMeas;*/
 
 
 //Class definition
+///\ingroup StreamFormatters
 class  TSeparatedFormatTStream : public TAStreamFormatter  
 {
 public:

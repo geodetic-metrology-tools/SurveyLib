@@ -15,7 +15,7 @@
 
 #include "TVSpatialPtListener.h"
 
-/*!\ingroup spatialobjects
+/*!\ingroup SpatialObjectsAndSystems
 	@{*/
 //! Abstract base class defining the default implementation of the method of the TVSpatialPtListener interface
 class TASpatialPtListener : public TVSpatialPtListener{

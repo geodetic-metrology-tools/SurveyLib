@@ -41,7 +41,7 @@ class TPositionVector;
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Class for the matrices of rotation used for points transformations 

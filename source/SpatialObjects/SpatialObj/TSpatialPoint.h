@@ -32,7 +32,7 @@ class  TAReferenceFrame;
 //#include  "TASpatialPtListener.h"
 
 
-/*!\ingroup spatialobjects
+/*!\ingroup SpatialObjectsAndSystems
 	@{*/
 
 //! Class for a spatial point. The current pointed-to spatial position will be deleted

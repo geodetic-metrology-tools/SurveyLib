@@ -34,7 +34,7 @@ class		TLength;
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup projectframework
+/*!\ingroup FiltersAndFormats
 @{*/
 
 //Class definition

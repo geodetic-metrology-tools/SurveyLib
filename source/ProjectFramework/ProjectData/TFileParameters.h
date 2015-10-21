@@ -1,4 +1,4 @@
-//! TFileParameters.h
+/// TFileParameters.h
 //
 /*! A class defining the parameters of a data file:
         filename, 
@@ -42,12 +42,12 @@ class  TFileParameters //: public TObject
 {
 public:
 	
-	//!@name Constants
+	///@name Constants
 	//@{
-		//! copied from TAQtTestStreamFormatter ****Should NOT be here****
+		/// copied from TAQtTestStreamFormatter ****Should NOT be here****
 		enum  ETextFormat { kNullFormat, kFreeFormat };
 
-		//! enumeration of the file types
+		/// enumeration of the file types
 		enum  EFileType{ kNull=1, kPassivePtFile, kCSGEOFile, kLGCFile };
 		
 		
@@ -56,13 +56,13 @@ public:
 
 	/*!@name Constructors and Destructors */
 	//@{
-		//! default constructor
+		/// default constructor
 		TFileParameters();
 
-		//! copy constructor
+		/// copy constructor
 		TFileParameters(const  TFileParameters&);
 
-		//! destructor
+		/// destructor
 		virtual  ~TFileParameters();
 
 	//@}
@@ -71,28 +71,28 @@ public:
 	/*!@name member functions */
 	//@{
 		
-		//! copy assignment operator
+		/// copy assignment operator
 		TFileParameters& operator=( const TFileParameters& );
 		
-		//! set the full filename, both path and name
+		/// set the full filename, both path and name
         bool  setFileName( const std::string& name );
 		bool  setFilePath( const std::string& path );
-		//! set the file type
+		/// set the file type
 		bool  setTypeFormat( const std::string& );
-		//! clear the file parameters and set the default values 
+		/// clear the file parameters and set the default values 
 		void  defaultValues();
 
-		//! get the full filename, both path and name
+		/// get the full filename, both path and name
 		std::string  getFileName()  const;  
-		//! get the name of the file
+		/// get the name of the file
 		std::string  getName()  const  { return fName; }
-		//! get the path for the file
+		/// get the path for the file
 		std::string  getPath()  const  { return fPath; }
-		//! get the file type
+		/// get the file type
 		EFileType  getType()  const  { return fType; }
-		//! get the text stream's format
+		/// get the text stream's format
 		ETextFormat  getFormat() const  { return fFormat; }
-		//! indicates if the file name, type and format have been set
+		/// indicates if the file name, type and format have been set
 		bool  defined()  const;
 
 	//@}
@@ -100,10 +100,10 @@ public:
 private:
 	/*!@name private member functions */
 	//@{	
-		//! convert a file type from string form to enumerator form 
+		/// convert a file type from string form to enumerator form 
 		EFileType  toType( const std::string& format );
 
-		//! convert a format from string form to enumerator form 
+		/// convert a format from string form to enumerator form 
 		ETextFormat  toFormat( const std::string& format );
 
 	//@}

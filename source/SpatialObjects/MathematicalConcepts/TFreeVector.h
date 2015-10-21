@@ -35,7 +35,7 @@ class TScalar;
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! 3D Vector used as a free vector
@@ -48,16 +48,19 @@ public:
 	/*!\name Constructors and Destructors */
 	//@{
 		//!Default Constructor 
-		TFreeVector(TCoordSysFactory::ECoordSys);
+		TFreeVector(TCoordSysFactory::ECoordSys en);
+
+		//!Default Constructor 
+		TFreeVector();
 	
-		//!Constructor taking 3 TReal (value in meter)
+		//!Constructor taking 3 TReal
 		TFreeVector(const TReal&, const TReal&, const TReal&, TCoordSysFactory::ECoordSys);
 
 		//!Copy Constructor 
 		TFreeVector( const TFreeVector&);
 
 		//!Destructor
-		virtual  ~TFreeVector();
+		virtual ~TFreeVector();
 	//@}
 
 	
@@ -110,13 +113,12 @@ public:
 		TFreeVector& normalize();
 
 		TFreeVector cross(const TFreeVector& b);
+
+		TReal dot(const TFreeVector& b) const;
 	//@}
 
 
 private:
-
-		//!Default Constructor 
-		TFreeVector();
 
 	
 	//ClassDef(TFreeVector, 1)

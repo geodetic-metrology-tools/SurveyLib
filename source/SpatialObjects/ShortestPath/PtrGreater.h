@@ -8,7 +8,7 @@
 
 
 template<class T>
-/*!\ingroup spatialobjects
+/*!\ingroup ShortestPath
 	@{*/
 struct PtrGreater
 {

@@ -3,7 +3,7 @@
 
 #include <TSparseMatrix.h>
 #include <Eigen/Core>
-
+/// \ingroup MathematicalConcepts
 class TMatrixImpl
 {
 public:

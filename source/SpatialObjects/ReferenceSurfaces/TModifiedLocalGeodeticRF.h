@@ -35,7 +35,7 @@ class  TReferenceEllipsoid;
 class TGeodeticRefFrame;
 class TLG2GCTransformation;
 #include  "TA3DEuclideanRefFrame.h"
-#include  "TSpatialOrientation.H"
+#include  "TSpatialOrientation.h"
 
 // typedefs
 //

@@ -49,8 +49,7 @@ TAConverter(stream)
 }
 #endif
 
-TPointConverter::TPointConverter(TAStreamFormatter* stream,
-							const TLGCRefFrame::ERefs	refFrame):
+TPointConverter::TPointConverter(TAStreamFormatter* stream, const TLGCRefFrame::ERefs	refFrame):
 TAConverter(stream)
 {//constructor
 	fRefFrame = refFrame;

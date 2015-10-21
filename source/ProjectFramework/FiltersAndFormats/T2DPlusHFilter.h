@@ -33,7 +33,7 @@ class		TSpatialPosition;
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup projectframework
+/*!\ingroup FiltersAndFormats
 @{*/
 
 //Class definition

@@ -39,7 +39,7 @@ class  TARefFrameTransformation;
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup spatialobjects
+/*!\ingroup ShortestPath
 	@{*/
 
 //! A Wrapper around a spatial transformation

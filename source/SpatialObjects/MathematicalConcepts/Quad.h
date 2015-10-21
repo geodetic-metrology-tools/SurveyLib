@@ -107,6 +107,7 @@ inline _Quad tanhq(_Quad _X) {return (__tanhq(_X)); }
 
 #define powq pow
 #define sqrtq sqrt
+#define pow2q pow2
 
 #define cosq cos
 #define sinq sin

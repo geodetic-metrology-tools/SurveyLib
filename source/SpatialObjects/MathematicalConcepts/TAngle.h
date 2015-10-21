@@ -53,7 +53,7 @@ typedef	int		Degrees;		// the degrees of an angle
 typedef	int		Minutes;		// the minutes of an angle
 typedef	TReal	Seconds;		// the seconds of an angle
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //!  The TAngle class represents a mathematical angle value.

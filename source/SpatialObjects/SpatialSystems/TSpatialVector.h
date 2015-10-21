@@ -32,6 +32,7 @@ class  TModifiedLocalAstronomicalRF;
 #include  "TLength.h"
 #include  "TSpatialStatus.h"
 #include  "TFreeVector.h"
+
 #include  "TVAffineTransformation.h"
 
 using namespace std;
@@ -40,7 +41,7 @@ using namespace std;
 typedef TReal Component;
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup spatialobjects 
+/*!\ingroup SpatialObjectsAndSystems 
 	@{*/
 
 //! 3D Vector used as a Spatial Position for stations or as translation vector in Helmert transformation

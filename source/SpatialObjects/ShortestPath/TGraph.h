@@ -39,7 +39,7 @@ class TVRefFrameTransformation;
 
 #include "DynamicPriorityQueue.h"
 
-/*!\ingroup spatialobjects
+/*!\ingroup ShortestPath
 	@{*/
 
 //!A singleton class used to find the transformations  between two reference frame

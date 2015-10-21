@@ -112,13 +112,6 @@ public:
 		//! Invert the transformation, replaces the current transformation parameters
 		//virtual void invert() = 0;
 	//@}
-
-
-protected:
-
-private:
-
-	//ClassDef(TAAffineTransformation, 1)
 };
 
 /*@}*/

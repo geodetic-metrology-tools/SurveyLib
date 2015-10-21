@@ -87,7 +87,6 @@ bool TACoordSysVector::setX(const TLength& xc)
 return fCoordSys->setX(this, xc);
 }
 
-
 bool TACoordSysVector::setY(const TLength& yc)
 {//!set the Y coordinate of a vector in a specific Coordinate System return true if Y is defined
 return fCoordSys->setY(this, yc); 

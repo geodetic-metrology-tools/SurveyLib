@@ -35,7 +35,7 @@ class  TVReferenceFrame;
 //
 /////////////////////////////////////////////////////////////////
 
-/*!\ingroup spatialobjects
+/*!\ingroup SpatialObjectsAndSystems
 	@{*/
 
 //! Class storing the statuses of objects related to a 3D position
