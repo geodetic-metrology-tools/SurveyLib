@@ -3,7 +3,6 @@
 
 #include "TAConverter.h"
 #include "TRefSystemFactory.h"
-//#include "TLGCRefFrame.h"
 
 /*!\ingroup Converters
  \brief Enables to write points in many different ways.
@@ -19,8 +18,6 @@ public:
 			//!constructor
 			TPointConverter(TAStreamFormatter* stream, const TRefSystemFactory::ERefFrame	fRefFrame);
 
-			//TPointConverter(TAStreamFormatter* stream,
-			//				const TLGCRefFrame::ERefs	fRefFrame);
 
 
 			//!Destructor
@@ -124,7 +121,6 @@ private:
 
 		bool							fLocalSys;
 
-		//TLGCRefFrame::ERefs	fRefFrame;
 		TRefSystemFactory::ERefFrame	fRefFrame;
 };
 

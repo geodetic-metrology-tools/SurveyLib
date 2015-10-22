@@ -47,18 +47,6 @@ TAConverter(stream)
 		fLocalSys = true;
 }
 
-/*TPointConverter::TPointConverter(TAStreamFormatter* stream,
-							const TLGCRefFrame::ERefs	refFrame):
-TAConverter(stream)
-{//constructor
-	fRefFrame = refFrame;
-
-	//This was changed, the previous version is quite weird
-	if(refFrame == TLGCRefFrame::kOLOC)
-		fLocalSys = true;
-	else
-		fLocalSys = false;
-}*/
 
 TPointConverter::~TPointConverter()
 {//destructor
