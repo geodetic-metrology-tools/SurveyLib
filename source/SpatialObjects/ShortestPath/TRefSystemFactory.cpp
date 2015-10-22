@@ -207,23 +207,24 @@ void	TRefSystemFactory::init()
 	TSpatialPosition origin(pCGRF);
 	TAngle phi, lambda;
 	TLength H;
-	//phi.setGonsValue(LITERAL(51.3692));
-	//lambda.setGonsValue(LITERAL(6.72124));
-	//H.setMetresValue(LITERAL(433.65921));
-
-	//phi.setGonsValue(LITERAL(51.3673));
-	//lambda.setGonsValue(LITERAL(6.72251));
-	//H.setMetresValue(LITERAL(433.65921));
 	
-	//final
+	//P0
+	phi.setGonsValue(LITERAL(51.3692));
+	lambda.setGonsValue(LITERAL(6.72124));
+	H.setMetresValue(LITERAL(433.65921));
+	
+	/*
+	//P02final
 	phi.setGonsValue(LITERAL(51.3673));
 	lambda.setGonsValue(LITERAL(6.72278));
 	H.setMetresValue(LITERAL(433.65921));
-
-	//phi.setGonsValue(LITERAL(51.3671));
-	//lambda.setGonsValue(LITERAL(6.72205));
-	//H.setMetresValue(LITERAL(433.65921));
-
+	*/
+	/*
+	//P03
+	phi.setGonsValue(LITERAL(51.3671));
+	lambda.setGonsValue(LITERAL(6.72205));
+	H.setMetresValue(LITERAL(433.65921));
+	*/
 	TPositionVector pos(TCoordSysFactory::kGeodetic);
 	pos.setPhiEllipsoid(phi);
 	pos.setLambdaEllipsoid(lambda);
@@ -237,7 +238,9 @@ void	TRefSystemFactory::init()
 	pLGp0->setRefFrameId(kLGp0);
 	fRefFrameList.push_back(pLGp0);
 
-		// Local Astronomic at CERN: origin = principal point of the system = P0
+
+
+	// Local Astronomic at CERN: origin = principal point of the system = P0
 	//TAngle etaP0(0), xsiP0(0), dAlphaP0(0);
 
 	//TAngle etaP0, xsiP0, dAlphaP0;
@@ -264,7 +267,7 @@ void	TRefSystemFactory::init()
 	pCCS->setRefFrameId(kCCS);
 	fRefFrameList.push_back(pCCS);
 
-	
+
 
 	///////////////////////////////////////////////////////////////////////////////	
 	// Definition of the geoid list
@@ -710,30 +713,55 @@ void	TRefSystemFactory::init()
 
 
 	// Helmert Transformation between ITRF97 (ep1998.5) and CGRF
+	//CG2000
+	
 	TAngle om3, p3, k3;
-	//om3.setGonsValue(LITERAL(399.999533213524));
-	//p3.setGonsValue(LITERAL(0.001825157943));
-	//k3.setGonsValue(LITERAL(0.000991054274));
-
-	//om3.setGonsValue(LITERAL(399.999937134899));
-	//p3.setGonsValue(LITERAL(0.000169364819));
-	//k3.setGonsValue(LITERAL(399.999226356268));
-
-	//om3.setGonsValue(LITERAL(399.999995544721));
-	//p3.setGonsValue(LITERAL(0.000044048663));
-	//k3.setGonsValue(LITERAL(399.999994595977));
-
+	
+	om3.setGonsValue(LITERAL(399.999533213524));
+	p3.setGonsValue(LITERAL(0.001825157943));
+	k3.setGonsValue(LITERAL(0.000991054274));
+	TRotation r3(TRotationMatrix::kRzyx, om3.getRadiansValue(), p3.getRadiansValue(), k3.getRadiansValue());
+	TLength Tx3(LITERAL(76.3768280)), Ty3(LITERAL(131.9389844)), Tz3(-LITERAL(156.1229775));
+	
+	/*
+	TAngle om3, p3, k3;
+	om3.setGonsValue(LITERAL(399.999937134899));
+	p3.setGonsValue(LITERAL(0.000169364819));
+	k3.setGonsValue(LITERAL(399.999226356268));
+	TRotation r3(TRotationMatrix::kRzyx, om3.getRadiansValue(), p3.getRadiansValue(), k3.getRadiansValue());
+	*/
+	/*
+	TAngle om3, p3, k3;
+	om3.setGonsValue(LITERAL(399.999995544721));
+	p3.setGonsValue(LITERAL(0.000044048663));
+	k3.setGonsValue(LITERAL(399.999994595977));
+	TRotation r3(TRotationMatrix::kRzyx, om3.getRadiansValue(), p3.getRadiansValue(), k3.getRadiansValue());
+	*/
+	/*
+	//final
+	TAngle om3, p3, k3;
 	om3.setGonsValue(LITERAL(399.999958213515));
 	p3.setGonsValue(LITERAL(399.999970478738));
 	k3.setGonsValue(LITERAL(399.999956356222));
-
 	TRotation r3(TRotationMatrix::kRzyx, om3.getRadiansValue(), p3.getRadiansValue(), k3.getRadiansValue());
-	//TLength Tx3(LITERAL(76.3768280)), Ty3(LITERAL(131.9389844)), Tz3(-LITERAL(156.1229775));
+	TLength Tx3(LITERAL(75.7324772397687)), Ty3(LITERAL(150.004761694971)), Tz3(-LITERAL(156.448899190019));
+	*/
+	
 	//TLength Tx3(LITERAL(95.3182145)), Ty3(LITERAL(101.8144855)), Tz3(-LITERAL(170.333951));
 	//TLength Tx3(LITERAL(50.9845325)), Ty3(-LITERAL(29.9607824)), Tz3(LITERAL(23.6128363));
 	//TLength Tx3(LITERAL(95.3691377)), Ty3(LITERAL(101.8185265)), Tz3(-LITERAL(170.2896474));
-	TLength Tx3(LITERAL(75.7324772397687)), Ty3(LITERAL(150.004761694971)), Tz3(-LITERAL(156.448899190019));
+	//final
+	//
 	
+	/*
+	// CG1985
+	TAngle om3, p3, k3;
+	om3.setGonsValue(LITERAL(399.999736948));
+	p3.setGonsValue(LITERAL(0.002058791000));
+	k3.setGonsValue(LITERAL(0.00076631970));
+	TRotation r3(TRotationMatrix::kRzyx, om3.getRadiansValue(), p3.getRadiansValue(), k3.getRadiansValue());
+	TLength Tx3(LITERAL(94.8430513)), Ty3(LITERAL(101.7579632)), Tz3(-LITERAL(170.7584007));
+	*/
 
 	TTranslation transl3(Tx3, Ty3, Tz3);
 	TScaleFactor enl3(LITERAL(1.000000000000000));
@@ -1193,7 +1221,9 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 
 	else if (frame ==  kLA1985Machine  || frame ==  kLA2000Machine  || 
 			 frame ==  kMLA1985Machine || frame ==  kMLA2000Machine || 
-			 frame ==  kLGGRS80        || frame ==  kMLGGRS80 )
+			 frame ==  kLGGRS80        || frame ==  kMLGGRS80       || 
+			 frame ==  kLA2000Topo     || frame ==  kMLA2000Topo    ||
+			 frame ==  kLA2000H0       || frame ==  kMLA2000H0)
 		lsoCG.transform(getRefFrame(kCGRF));
 		
 	lsoCG.setStatus(TVNumericValue::kKnown);
@@ -1202,11 +1232,15 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 		case kLASphere:
 		case kLA1985Machine:
 		case kLA2000Machine:
+		case kLA2000Topo:
+		case kLA2000H0:
 			pRF = new TModifiedLocalAstronomicalRF("la", geoid, lsoCG);
 			break;
 		case kMLASphere:
 		case kMLA1985Machine:
 		case kMLA2000Machine:
+		case kMLA2000Topo:
+		case kMLA2000H0:
 			pRF = new TModifiedLocalAstronomicalRF("mla", geoid, lsoCG, falseOrigin, gis, slope);
 			break;
 		case kLGSphere:

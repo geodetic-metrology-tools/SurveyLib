@@ -73,7 +73,7 @@ public:
 		/*! Enumerator for Reference Frames implemented in the factory */
 		enum  ERefFrame {
 			kCCS                 =  0, 
-			kLAp0                =  1,
+			kLAp0 				 =  1,
 			kLGp0                =  2, 
 			kCGRF                =  3, 
 			kITRF97              =  4, 
@@ -106,9 +106,14 @@ public:
             kMLA1985Machine      = 1000,
             kMLA2000Machine      = 1001,
             kMLASphere           = 1002,
+			kMLA2000Topo         = 1003,
+			kMLA2000H0           = 1004,
             kLA1985Machine       = 1010,
             kLA2000Machine       = 1011,
             kLASphere            = 1012,
+			kLA2000Topo          = 1013,
+			kLA2000H0            = 1014,
+			
 
             kMLGGRS80            = 2000,
             kMLGSphere           = 2001,

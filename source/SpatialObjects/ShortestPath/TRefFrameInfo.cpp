@@ -84,13 +84,21 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
         tmp->insert(std::make_pair(TRefSystemFactory::kMLA1985Machine, 
             TDetails("kMLA1985Machine","MLA (1985)", TCoordSysFactory::k3DCartesian, 0, true)));
         tmp->insert(std::make_pair(TRefSystemFactory::kMLA2000Machine, 
-            TDetails("kMLA2000Machine","MLA (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
+            TDetails("kMLA2000Machine","MLAMachine (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kMLA2000Topo, 
+            TDetails("kMLA2000Topo","MLATopo (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kMLA2000H0, 
+            TDetails("kMLA2000H0","MLAH0 (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
         tmp->insert(std::make_pair(TRefSystemFactory::kMLASphere, 
             TDetails("kMLASphere","MLA (Sphere)", TCoordSysFactory::k3DCartesian, 0, true)));
         tmp->insert(std::make_pair(TRefSystemFactory::kLA1985Machine, 
             TDetails("kLA1985Machine","LA (1985)", TCoordSysFactory::k3DCartesian, 0, true)));
         tmp->insert(std::make_pair(TRefSystemFactory::kLA2000Machine, 
-            TDetails("kLA2000Machine","LA (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
+            TDetails("kLA2000Machine","LAMachine (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kLA2000Topo, 
+            TDetails("kLA2000Topo","LATopo (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kLA2000H0, 
+            TDetails("kLA2000H0","LAH0 (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
         tmp->insert(std::make_pair(TRefSystemFactory::kLASphere, 
             TDetails("kLASphere","LA (Sphere)", TCoordSysFactory::k3DCartesian, 0, true)));
 
@@ -265,6 +273,14 @@ TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSyste
 		case TRefSystemFactory::kMLA2000Machine:
 		case TRefSystemFactory::kLA2000Machine:
 			localgeoid = TRefSystemFactory::kCG2000Machine;
+			break;
+		case TRefSystemFactory::kMLA2000Topo:
+		case TRefSystemFactory::kLA2000Topo:
+			localgeoid = TRefSystemFactory::kCG2000topo;
+			break;
+		case TRefSystemFactory::kMLA2000H0:
+		case TRefSystemFactory::kLA2000H0:
+			localgeoid = TRefSystemFactory::kCG2000;
 			break;
 		case TRefSystemFactory::kMLASphere:
 		case TRefSystemFactory::kMLGSphere:
