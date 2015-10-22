@@ -290,9 +290,9 @@ void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus
 												const int width,
 												const int precision,
 												const string separator,
-												const TScalar Xparam,
-												const TScalar Yparam,
-												const TScalar Zparam,
+												TReal Xparam,
+                                    TReal Yparam,
+												TReal Zparam,
 												const string Dparam,
 												bool isCovar)
 {
@@ -374,49 +374,6 @@ void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus
 	//write Z
 	if((isCovar &&  (status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVyz))  || 
 		!isCovar && (status == TSpatialStatus::kVz || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxz  || status == TSpatialStatus::kVyz))
-		(*stream)<<(Zparam);
-	else
-		writeString(width, Dparam);
-
-	(*stream)<<(separator);
-
-	return;
-}
-
-void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
-												const int width,
-												const int precision,
-												const string separator,
-												const TDouble Xparam,
-												const TDouble Yparam,
-												const TDouble Zparam,
-												const string Dparam)
-{
-	TAStreamFormatter*	stream = getStream();
-
-	stream->setWidthFormat(width);
-	stream->setPrecisionFormat(precision);
-
-	//write X
-	if(status == TSpatialStatus::kVx || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVxz)
-		(*stream)<<(Xparam);	
-	else
-		writeString(width, Dparam);
-
-	(*stream)<<(separator);
-
-
-	//write Y
-	if(status == TSpatialStatus::kVy || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVyz)
-		(*stream)<<(Yparam);
-	else
-		writeString(width, Dparam);
-
-	(*stream)<<(separator);
-
-
-	//write Z
-	if(status == TSpatialStatus::kVz || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxz  || status == TSpatialStatus::kVyz)
 		(*stream)<<(Zparam);
 	else
 		writeString(width, Dparam);

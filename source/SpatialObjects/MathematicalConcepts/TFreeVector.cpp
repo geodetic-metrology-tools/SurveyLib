@@ -33,6 +33,12 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+TFreeVector::TFreeVector()
+{	// default constructor	
+   setCoordSys(TCoordSysFactory::ECoordSys::k3DCartesian);
+   setStatus(kNull);
+}
+
 TFreeVector::TFreeVector(TCoordSysFactory::ECoordSys en)
 {	// default constructor
 	
@@ -49,16 +55,7 @@ TFreeVector::TFreeVector(const TReal& x, const TReal& y, const TReal&z, TCoordSy
 	setStatus(kKnown);
 }
 
-/*TFreeVector::TFreeVector(const TReal& x, const TReal& y, const TReal&z)
-{
-	setX(0, x);
-	setX(1, y);
-	setX(2, z);
-	setStatus(kKnown);
-}
-*/
-
-TFreeVector::TFreeVector(  const TFreeVector& original )
+TFreeVector::TFreeVector(const TFreeVector& original)
 {	// copy constructor
 	setX(0, original.getX(0));
 	setX(1, original.getX(1));
@@ -253,6 +250,18 @@ TFreeVector TFreeVector::cross(const TFreeVector& b) {
 	return resultat;
 }
 
+TReal TFreeVector::dot(const TFreeVector& b) const
+{
+
+   TReal  result;
+   TANumericValue::EStatus status = this->testStatus(b);
+   if(status != kNull && testCoordSysCart(b.getCoordSys()) == true)
+      result = getX(0) * b.getX(0) + getX(1) * b.getX(1) + getX(2) * b.getX(2);
+   else
+      throw std::runtime_error("One of the FreeVector elements is NULL or coordinate system does not match!");
+
+   return result;
+}
 
 TLength TFreeVector::getHorDist() const
 {///give the length of a TFreeVector (meters)

@@ -97,6 +97,20 @@ bool TACoordSysVector::setZ(const TLength& zc)
 return fCoordSys->setZ(this, zc);
 }
 
+TReal TACoordSysVector::operator[](int i) const
+{//! Allows to retrieve one of the coordinates of the vector
+   if(i >= 0 && i <= 3)
+      return fVector[i];
+   throw std::out_of_range("Try to access a TACoordSysVector with a wrong indice : " + i);
+}
+
+TReal& TACoordSysVector::operator[](int i)
+{//! Allows to retrieve one of the coordinates of the vector and to modify it
+   if(i >= 0 && i <= 3)
+      return fVector[i];
+   throw std::out_of_range("Try to access a TACoordSysVector with a wrong indice : " + i);
+}
+
 TVCoordinateSystem* TACoordSysVector::getCoordSysPtr() const
 {//!get fCoordSys
 	return fCoordSys;

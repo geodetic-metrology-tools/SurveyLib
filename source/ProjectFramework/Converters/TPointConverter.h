@@ -18,8 +18,6 @@ public:
 			//!constructor
 			TPointConverter(TAStreamFormatter* stream, const TRefSystemFactory::ERefFrame	fRefFrame);
 
-
-
 			//!Destructor
 			virtual  ~TPointConverter();
 		//@}
@@ -89,21 +87,11 @@ public:
 											const int width,
 											const int precision,
 											const string separator,
-											const TScalar Xparam,
-											const TScalar Yparam,
-											const TScalar Zparam,
+                                 const TReal Xparam,
+                                 const TReal Yparam,
+                                 const TReal Zparam,
 											const string Dparam,
 											bool isCovar = false);
-
-	
-			void	writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
-											const int width,
-											const int precision,
-											const string separator,
-											const TDouble Xparam,
-											const TDouble Yparam,
-											const TDouble Zparam,
-											const string Dparam);
 
 			bool	isInLocalSystem() const {return	fLocalSys;}
 

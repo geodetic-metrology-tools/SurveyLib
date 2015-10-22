@@ -16,20 +16,20 @@ bool  TXYH2CCS::XYHs2CCS(TPositionVector& pv)
 
 	// transform TPositionVector
 	// distance from P0 (CCS false origin) and XY-plane
-	TReal dx = pv.getX().getValue() - XP0;
-	TReal dy = pv.getY().getValue() - YP0;
-	TReal hs = pv.getH().getValue();
+	TReal dx = pv.getX().getMetresValue() - XP0;
+   TReal dy = pv.getY().getMetresValue() - YP0;
+   TReal hs = pv.getH().getMetresValue();
 	TReal d=sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 
 	TReal d0 = d * R / (R + hs);
 	TReal omega = asinq(d0 / R);
-	TScalar Z = LITERAL(2000.00079) + (hs * cosq(omega)) - (d0 * tanq(omega/LITERAL(2.0)));
+	TReal Z = LITERAL(2000.00079) + (hs * cosq(omega)) - (d0 * tanq(omega/LITERAL(2.0)));
 
 	// change the coordinate system of the position vector
 	pv.setCoordSys(TCoordSysFactory::k3DCartesian);
 
 	// change the H coordinate of the position vector into the third coordinate Z
-	pv.setZ( Z ); 
+	pv.setZ( TLength(Z) ); 
 	return true;
 }
 
@@ -43,20 +43,19 @@ bool  TXYH2CCS::CCS2XYHs(TPositionVector& pv)
 	TReal H;
 
 	//distance from P0 in XY-plane
-	dx = pv.getX().getValue() - XP0;
-	dy = pv.getY().getValue() - YP0;
-	dz = pv.getZ().getValue() - ZP0 + HP0;
+   dx = pv.getX().getMetresValue() - XP0;
+   dy = pv.getY().getMetresValue() - YP0;
+   dz = pv.getZ().getMetresValue() - ZP0 + HP0;
 	d=sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 
 	omega = atanq(d / (R+dz));
 	d0 = d * R * cosq(omega) / (R + dz);
 	H = ( dz + (d0 * tanq(omega/LITERAL(2.0))) ) / cosq(omega);
 
-	TScalar newH (H);
 	// Change the coordinate system of the position vector
 	pv.setCoordSys(TCoordSysFactory::k2DPlusH);   
 	// Change the third dimension Z of the position vector into H
-	pv.setH(newH);
+	pv.setH(TLength(H));
 
 	return true;
 }
@@ -90,9 +89,9 @@ bool  TXYH2CCS::XYHe2CCS(TPositionVector& pv) {
 	TReal dx, dy, he, d, d0, Dzh;
 
 	// distance from P0 in XY-plane
-	dx = pv.getX().getValue() - XP0;
-	dy = pv.getY().getValue() - YP0;
-	he = pv.getH().getValue();
+   dx = pv.getX().getMetresValue() - XP0;
+   dy = pv.getY().getMetresValue() - YP0;
+   he = pv.getH().getMetresValue();
 	d  = sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 
 	// bearing from P0 in the XY-plane
@@ -118,12 +117,11 @@ bool  TXYH2CCS::XYHe2CCS(TPositionVector& pv) {
 	// transform TPositionVector
 	Dzh = ZP0 - HP0;
 	TReal omegaBy2 = omega * LITERAL(0.5);
-	TScalar newZ(Dzh + he * cosq(omega)
-		- d0 * (tanq(omegaBy2)));
+	TReal newZ(Dzh + he * cosq(omega) - d0 * (tanq(omegaBy2)));
 
 	// change the coordinate system of the position vector
 	pv.setCoordSys(TCoordSysFactory::k3DCartesian);
-	pv.setZ( newZ ); 
+	pv.setZ(TLength(newZ)); 
 	return true;
 }
 
@@ -132,9 +130,9 @@ bool TXYH2CCS::CCS2XYHe(TPositionVector& pv){
 	TReal dx, dy, dz, d, d0;
 
 	// distance from P0 in XY-plane
-	dx = pv.getX().getValue() - XP0;
-	dy = pv.getY().getValue() - YP0;
-	dz = pv.getZ().getValue() - ZP0 + HP0;
+   dx = pv.getX().getMetresValue() - XP0;
+   dy = pv.getY().getMetresValue() - YP0;
+   dz = pv.getZ().getMetresValue() - ZP0 + HP0;
 	d = sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 
 	// bearing from P0 in the XY-plane
@@ -159,45 +157,43 @@ bool TXYH2CCS::CCS2XYHe(TPositionVector& pv){
 
 	// transform TPositionVector
 	TReal omegaBy2 = omega * LITERAL(0.5);
-	TScalar newH( (dz + d0 * tanq(omegaBy2)) / cosq(omega) );
+	TReal newH( (dz + d0 * tanq(omegaBy2)) / cosq(omega) );
 	
 	// Change the coordinate system of the position vector
 	pv.setCoordSys(TCoordSysFactory::k2DPlusH);             
-	pv.setH(newH);
+	pv.setH(TLength(newH));
 	return true;
 }
 
 
 bool  TXYH2CCS::XYHg2XYHe(TPositionVector& pv, TRefSystemFactory::EGeoid geoid)
 {// Transformation of a position vector using N (height above geoid)
-	TScalar hg(pv.getH());
+
 	TReal x, y, h;
-	x = pv.getX().getValue();
-	y = pv.getY().getValue();
-	h = hg.getValue();
+   x = pv.getX().getMetresValue();
+   y = pv.getY().getMetresValue();
+   h = pv.getH().getMetresValue();
 
 	// extraction of N using a tspatialposition of coordinates = pv, and reference frame = CCS
 	TSpatialPosition spaPos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS), x, y, h, pv.getCoordSys()); 
 	TAGeoidModel* geoidModel = TRefSystemFactory::getRefSystemFactory()->getGeoid(geoid);
 
-	TLength N = geoidModel->getN(spaPos);
-	pv.setH(hg + TScalar(N.getMetresValue()));
+   pv.setH(TLength(h + geoidModel->getN(spaPos).getMetresValue()));
 	return true;
 }
 
 
 bool TXYH2CCS::XYHe2XYHg(TPositionVector& pv, TRefSystemFactory::EGeoid geoid){
-	TScalar he(pv.getH());
+
 	TReal x, y, h;
-	x = pv.getX().getValue();
-	y = pv.getY().getValue();
-	h = he.getValue();
+   x = pv.getX().getMetresValue();
+   y = pv.getY().getMetresValue();
+   h = pv.getH().getMetresValue();
 
 	// extraction of N using a tspatialposition of coordinates = pv, and reference frame = CCS
 	TSpatialPosition spaPos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS), x, y, h, pv.getCoordSys()); 
 	TAGeoidModel* geoidModel = TRefSystemFactory::getRefSystemFactory()->getGeoid(geoid);
 
-	TLength N = geoidModel->getN(spaPos);
-	pv.setH(he - TScalar(N.getMetresValue()));
+   pv.setH(TLength(h - geoidModel->getN(spaPos).getMetresValue()));
 	return true;
 }

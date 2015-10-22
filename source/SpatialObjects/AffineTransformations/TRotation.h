@@ -75,7 +75,7 @@ public:
 		//! Return element ri, cj of the rotation matrix
 		TReal operator()(int row, int col) const;
 
-		//! set the 3 rotations taking angles values in the order specified by the enumerator
+      //! set the 3 rotations taking angles values in the order specified by the enumerator
 		void setAllRotations(TRotationMatrix::ERotationType kR, TReal omega, TReal phi, TReal kappa);
 
 		//! return the rotation matrix as TRotationMatrix
@@ -97,7 +97,7 @@ public:
 		virtual  bool transform( TFreeVector & ) const;
 
 		//! Transform a rotation matrix
-		virtual  bool  transform( TRotationMatrix & ) const;
+		virtual  bool transform( TRotationMatrix & ) const;
 
 		//! apply this transformation to a position vector
 		virtual  TPositionVector &  operator() ( TPositionVector & ) const;

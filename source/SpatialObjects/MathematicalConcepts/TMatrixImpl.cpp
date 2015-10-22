@@ -115,7 +115,7 @@ const double * TMatrixImpl::data() const
 
 TSparseMatrix TMatrixImpl::toSparse() const
 {
-	TSparseMatrix result(fMatrix.rows(), fMatrix.cols());
+   TSparseMatrix result(int(fMatrix.rows()), int(fMatrix.cols()));
 	result.reserve(Eigen::VectorXi::Constant(fMatrix.cols(),10));
 	for(auto r=0; r!=fMatrix.rows(); ++r)
 		for(auto c=0; c!=fMatrix.cols(); ++c)

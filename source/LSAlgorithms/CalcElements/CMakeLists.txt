@@ -9,6 +9,9 @@ SET(CalcElements_SOURCES
 	TALSComputer.cpp
 	TLSInputMatrices.cpp
 	TLSParametricMtdComputer.cpp
+	TLSWeightedUnkMtdComputer.cpp
+	TLSCombinedMtdComputer.cpp
+	TLSCnstMtdComputer.cpp
 	TLSResultsMatrices.cpp
 )
 
@@ -19,6 +22,9 @@ SET(CalcElements_HEADERS
 	TLSCalcWorkingUnknown.h
 	TLSInputMatrices.h
 	TLSParametricMtdComputer.h
+	TLSWeightedUnkMtdComputer.h
+	TLSCombinedMtdComputer.h
+	TLSCnstMtdComputer.h
 	TLSResultsMatrices.h
 	UEOIndices.h
 )

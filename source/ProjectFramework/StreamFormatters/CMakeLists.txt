@@ -18,7 +18,6 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/ReferenceSurfaces
 set(StreamFormatters_SOURCES
 	TAStreamFormatter.cpp
 	TFixedColFormatTStream.cpp
-	TFreeFormatTStream.cpp
 	TSeparatedFormatTStream.cpp
 	TStreamFormatterFactory.cpp
 )
@@ -27,7 +26,6 @@ set(StreamFormatters_SOURCES
 set(StreamFormatters_HEADERS 
 	TAStreamFormatter.h
 	TFixedColFormatTStream.h
-	TFreeFormatTStream.h
 	TSeparatedFormatTStream.h
 	TStreamFormatterFactory.h
 )

@@ -27,6 +27,7 @@ set(RefFrameTransformations_SOURCES
 	TXYHe2XYHgTransformation.cpp
 	TXYHg2XYHeTransformation.cpp
 	TXYHs2MLATransformation.cpp
+	TXYH2CCS.cpp
 )
 
 # Create a variable containing all .h files:
@@ -51,6 +52,7 @@ set(RefFrameTransformations_HEADERS
 	TXYHe2XYHgTransformation.h
 	TXYHg2XYHeTransformation.h
 	TXYHs2MLATransformation.h
+	TXYH2CCS.h
 )
 
 #Add transformations if Swisstopo is used
