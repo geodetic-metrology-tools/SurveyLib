@@ -16,16 +16,9 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/ReferenceSurfaces
 
 # Create a variable containing all .cpp files:
 set(StreamFormatters_SOURCES
-	#TAFixedColFormatTStream.cpp
-	#TAQtStreamFormatter.cpp
 	TAStreamFormatter.cpp
-	#TBDFixedColFormatTStream.cpp
 	TFixedColFormatTStream.cpp
 	TFreeFormatTStream.cpp
-	#TIStreamFormatterCatalogue.cpp
-	#TLGCTStream.cpp
-	#TQtFreeFormatTStream.cpp
-	#TQtStreamFormatterFactory.cpp
 	TSeparatedFormatTStream.cpp
 	TStreamFormatterFactory.cpp
 )

@@ -41,7 +41,7 @@ set(ReferenceSurfaces_SOURCES
 set(ReferenceSurfaces_HEADERS 
 	T3DLocalRefFrame.h
 	TA2DPlus1MapProjection.h
-	TA2DXYRefFrame.h
+	#TA2DXYRefFrame.h
 	TA3DEuclideanRefFrame.h
 	TAGeoidModel.h
 	TAModifiedLocalAstronomicalRF.h
