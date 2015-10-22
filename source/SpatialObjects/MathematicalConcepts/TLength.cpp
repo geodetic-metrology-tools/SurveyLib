@@ -107,17 +107,6 @@ TReal TLength::operator/(const TLength& div)
    return (div.getMetresValue() != 0) ? (this->getMetresValue() / div.getMetresValue()) : 0;
 }
 
-	
-TLength TLength::operator*(const TReal factor)
-{//multiply a TLength object by a factor
-	TLength resultat;
-	if(isNull()!=true)
-	{resultat.setMetresValue(factor*(this->getMetresValue()));}
-	resultat.setStatus(getStatus());
-	return resultat;
-}
-
-
 TLength	TLength::operator*(const TReal factor)
 {//multiply a TLength object by a factor
    return TLength (factor*this->getMetresValue());

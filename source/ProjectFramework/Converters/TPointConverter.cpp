@@ -166,9 +166,9 @@ void	TPointConverter::writeXYH(	const int width,
 									const int precision,
 									const TLength::EUnits unit,
 									const string separator,
-									const TScalar Xparam,
-									const TScalar Yparam,
-									const TScalar Hparam)
+                           const TReal Xparam,
+                           const TReal Yparam,
+                           const TReal Hparam)
 {
 	TAStreamFormatter*	stream = getStream();
 

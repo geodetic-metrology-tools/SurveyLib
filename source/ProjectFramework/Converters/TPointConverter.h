@@ -17,8 +17,7 @@ public:
 	/*!@name Constructors and Destructors*/
 		//@{
 			//!constructor
-			TPointConverter(TAStreamFormatter* stream,
-							const TRefSystemFactory::ERefFrame	fRefFrame);
+			TPointConverter(TAStreamFormatter* stream, const TRefSystemFactory::ERefFrame	fRefFrame);
 
 			//TPointConverter(TAStreamFormatter* stream,
 			//				const TLGCRefFrame::ERefs	fRefFrame);
@@ -55,9 +54,9 @@ public:
 								const int precision,
 								const TLength::EUnits unit,
 								const string separator,
-								const TScalar Xparam,
-								const TScalar Yparam,
-								const TScalar Hparam);
+								const TReal Xparam,
+                        		const TReal Yparam,
+                        		const TReal Hparam);
 
 /*			void	writeXYZ(	const int width,
 								const int precision,

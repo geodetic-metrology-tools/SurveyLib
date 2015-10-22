@@ -124,6 +124,9 @@ public:
 	//!multiply a TLength object by a factor and rewrite this
    TLength& operator*=(const TReal);
 
+   //!cast operator return the value as a TReal and expressed in Meters
+   operator TReal() { return this->getMetresValue(); }
+
 
 private:
 
