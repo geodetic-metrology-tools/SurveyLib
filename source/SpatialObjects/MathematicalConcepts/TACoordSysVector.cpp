@@ -58,7 +58,7 @@ bool TACoordSysVector::operator==( const TACoordSysVector& right) const
 //////////////////////////////////////////////////////////////////////
 
 	
-bool TACoordSysVector::testCoordSysCart(TCoordSysFactory::ECoordSys en)
+bool TACoordSysVector::testCoordSysCart(TCoordSysFactory::ECoordSys en) const
 {//test if two object have the same coordinate system
 	if (getCoordSys()== en  && (en==TCoordSysFactory::k3DCartesian || en==TCoordSysFactory::k2DCartesian))
 	{return true;}

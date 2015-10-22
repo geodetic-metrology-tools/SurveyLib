@@ -36,14 +36,8 @@ TScalar::TScalar(): fValue(LITERAL(0.0))
 
 
 
-TScalar::TScalar(ScalarValue	value): fValue(value)
+TScalar::TScalar(TReal	value): fValue(value)
 {	// constructor taking a given scalar value
-	setStatus( TANumericValue::kKnown );
-}
-
-TScalar::TScalar(TDouble&	value)
-{	// constructor taking a given scalar value as a TDouble
-	fValue = value.getValue();
 	setStatus( TANumericValue::kKnown );
 }
 
@@ -65,14 +59,14 @@ TScalar::~TScalar()
 //////////////
 // set and get
 //////////////
-void TScalar::setValue(const ScalarValue value)
+void TScalar::setValue(const TReal value)
 {	// set a value to a TScalar Object
 	fValue = value;
 	valueSet();
 	return;
 }
 
-ScalarValue TScalar::getValue() const
+TReal TScalar::getValue() const
 {	// give the value of a TScalar Object
 	 return fValue;
 }

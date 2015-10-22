@@ -1,8 +1,9 @@
-
+// TALSComputer.h 
+// abstract base class for a least squares computer 
+//
 
 #ifndef SU_VLS_COMPUTER
 #define SU_VLS_COMPUTER
-
 
 #if _MSC_VER >= 1000
 #pragma once
@@ -14,39 +15,53 @@
 // Forward declarations
 /////////////////////////////////////////////////////
 #include <math.h>
+#include <string>
+#include <vector>
+#include <Eigen/LU>
+
+#include "TSparseMatrix.h"
+#include "UEOIndices.h"
+#include "TLSResultsMatrices.h"
+#include "TLSInputMatrices.h"
 
 
-class TLSInputMatrices;
-class TLSResultsMatrices;
+struct limits{double s0PostUpLimit; double s0PostLoLimit;};
 
-//! Abstract Base Class. Defines the methods common to all least squares computers
+/*!
+	\ingroup CalcElements
+
+	\brief Abstract Base Class. Defines the methods common to all least squares computers.
+*/
 class TALSComputer{
 
 public:
 	//!Destructor
 	virtual ~TALSComputer();
 
+	//!Verify the number of unknowns and run the calculation
+	virtual bool computeResults(TLSInputMatrices*, TLSResultsMatrices*) = 0;
+
 	//!Computes the results matrices
-	/*!@param im a pointer to the LS input matrices
-	!@param rm a pointer to the LS results matrices*/
-	virtual bool computeResultsByParametricMethod(TLSInputMatrices* im, TLSResultsMatrices* rm) = 0;
-	//!Sets the scale factor for the sigma zero a priori
-//	virtual void				setS0APrioriScaleFactor(TReal scalefac);
+	virtual bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*) = 0;
 
-	//!makes the variances to be calculated with respect to the sigma zero a priori
-//	virtual void				s0APrioriVariances();
-	//!makes the variances to be calculated with respect to the sigma zero a posteriori
-//	virtual void				s0APosterioriVariances();
+	//!Computes the results matrices for a free calculation
+	//bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
 
+	//!Computes the residual vector and the varaiance covariance matrices
+	virtual void calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm) = 0;
+
+	//!Calculate the hypothesis testing limits for the sigma zero a posteriori
+	struct limits	calcSigmaZeroLimits(const int nbObs, const int nbUnk, const double sigmaZero2);
+	
+	/*! Access to eventual error */
+	std::string		getError() const { return fError; }
 
 protected:
 	///Constructor
 	TALSComputer();
 
-//	bool		fS0APosterioriVariances;
-//	TReal		fS0APrioriScaleFactor;
-
-
+	std::string			fError;		/*!< errors during calculation */
+	
 };
 
 #endif

@@ -120,7 +120,6 @@ TLength TLength::operator*(const TReal factor)
 
 TLength	TLength::operator*(const TReal factor)
 {//multiply a TLength object by a factor
-
    return TLength (factor*this->getMetresValue());
 }	
 

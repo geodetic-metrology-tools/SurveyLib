@@ -12,29 +12,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-//TLSResultsMatrices::TLSResultsMatrices()
-//{// no argument constructor
-//
-//	fSolutionVctr = 0;
-//	fResidualsVctr = 0;
-//	fSigmaZero2 = LITERAL(0.0);
-//	fUnknownsCovarianceMtrx = NULL;
-//	fS0APosterioriVariances = false;
-//	L = NULL;
-//	bigMatrix = NULL;
-//}
-
 
 TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 {// constructor dimensioning the matrices
 	fSolutionVctr = new TVector(ueoi.UIndex);
 	fResidualsVctr = new TVector(ueoi.OIndex);
 	fSigmaZero2 = LITERAL(0.0);
-	fUnknownsCovarianceMtrx = new TSparseMatrix(ueoi.UIndex, ueoi.UIndex);
-	//fUnknownsCovarianceMtrx = NULL;
-	fS0APosterioriVariances = false;
-	//L = NULL;
-	//bigMatrix = NULL;
+	fResCovarianceMtrx = new TSparseMatrix(ueoi.OIndex, ueoi.OIndex);
+	fUnkCovarianceMtrx =new TSparseMatrix(ueoi.UIndex, ueoi.UIndex);
+
 }
 
 
@@ -43,57 +29,22 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi, int numConstraints)
 	fSolutionVctr = new TVector(ueoi.UIndex);
 	fResidualsVctr = new TVector(ueoi.OIndex);
 	fSigmaZero2 = LITERAL(0.0);
-	fUnknownsCovarianceMtrx = new TSparseMatrix(ueoi.UIndex + numConstraints, ueoi.UIndex + numConstraints);
-	//fUnknownsCovarianceMtrx = NULL;
-	fS0APosterioriVariances = false;
-	//L = NULL;
-	//bigMatrix = NULL;
+	fResCovarianceMtrx = new TSparseMatrix(ueoi.OIndex + numConstraints, ueoi.OIndex + numConstraints);
+	fUnkCovarianceMtrx = new TSparseMatrix(ueoi.UIndex, ueoi.UIndex);
 }
 
 
-//TLSResultsMatrices::TLSResultsMatrices(TVector* solut, TVector* resid, 
-//									   TReal sigm2, TMatrix* unkcov)
-//{// constructor setting the results
-//
-//	cout<<(double) sigm2<<std::endl<<std::endl;
-//	fSolutionVctr = new TVector (*solut);
-//	fResidualsVctr = new TVector (*resid);
-//	fSigmaZero2 = sigm2;
-//	//fUnknownsCovarianceMtrx = new TMatrix(*unkcov);
-//	fUnknownsCovarianceMtrx = NULL;
-//	fS0APosterioriVariances = false;
-//	L = NULL;
-//	bigMatrix = NULL;
-//}
-//
-//
-TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations)
+TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations,int numObs)
 {// constructor creating the results matrices with the input dimensions
 
 	fSolutionVctr = new TVector (numUnknowns);
-	fResidualsVctr = new TVector (numEquations);
+	fResidualsVctr = new TVector (numObs);
 	fSigmaZero2 = LITERAL(0.0);
-	fUnknownsCovarianceMtrx = new TSparseMatrix(numUnknowns,numUnknowns);
-	//fUnknownsCovarianceMtrx = NULL;
-	fS0APosterioriVariances = false;
-	//L = NULL;
-	//bigMatrix = NULL;
+	fResCovarianceMtrx = new TSparseMatrix(numObs,numObs);
+	fUnkCovarianceMtrx = new TSparseMatrix(numUnknowns,numUnknowns);
+
 }
-//
-//
-//TLSResultsMatrices::TLSResultsMatrices(int solut, int resid, 
-//									   int unkcov)
-//{// constructor setting the results
-//
-//	fSolutionVctr = new TVector (solut);
-//	fResidualsVctr = new TVector (resid);
-//	fSigmaZero2 = LITERAL(0.0);
-//	//fUnknownsCovarianceMtrx = new TMatrix(unkcov,unkcov);
-//	fUnknownsCovarianceMtrx = NULL;
-//	fS0APosterioriVariances = false;
-//	L = NULL;
-//	bigMatrix = NULL;
-//}
+
 
 TLSResultsMatrices::~TLSResultsMatrices()
 {// destructor
@@ -107,11 +58,15 @@ TLSResultsMatrices::~TLSResultsMatrices()
 		delete fResidualsVctr;
 	}
 
-	if(fUnknownsCovarianceMtrx != 0)
+	if(fResCovarianceMtrx != 0)
 	{
-		delete fUnknownsCovarianceMtrx;
+		delete fResCovarianceMtrx;
 	}
 
+	if(fUnkCovarianceMtrx != 0)
+	{
+		delete fUnkCovarianceMtrx;
+	}
 }
 
 
@@ -119,11 +74,10 @@ TLSResultsMatrices::~TLSResultsMatrices()
 //MEMBER FUNCTION
 //////////////////////////////////////////////////////////////////////////////////////////
 
-TVector	TLSResultsMatrices::computeVarObs(const TSparseMatrix* A) 
-{
-	TVector res;
-	return TSparseUtils::multABATasDiag(res, *A, *fUnknownsCovarianceMtrx);
-}
+//TSparseMatrix TLSResultsMatrices::computeCovarObs(const TSparseMatrix& A)
+//{
+//	return  (A - *fResCovarianceMtrx);
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //DEBUG METHOD 
@@ -145,7 +99,7 @@ void TLSResultsMatrices::saveMatricesToFile(int nbIter) const
 
 	of << std::setprecision(9);
 
-	of << "Number of Unknowns : " << fUnknownsCovarianceMtrx->rows() << std::endl;
+	of << "Number of Unknowns : " << fUnkCovarianceMtrx->rows() << std::endl;
 	of << "Number of Observations : " << fResidualsVctr->size() << std::endl << std::endl;
 //	of << "Number of Equations : " << fNbEqn << std::endl << std::endl;
 
@@ -163,6 +117,13 @@ void TLSResultsMatrices::saveMatricesToFile(int nbIter) const
 	of << *fSolutionVctr << std::endl;
 	of << std::endl << std::endl;
 
+	of << "******************************" << std::endl;
+	of << "* UNKNOWNS COVARIANCE MATRIX *" << std::endl;
+	of << "******************************" << std::endl << std::endl;
+
+	of<< *fUnkCovarianceMtrx << std::endl;
+	of << std::endl << std::endl;
+
 	of << "********************" << std::endl;
 	of << "* RESIDUALS VECTOR *" << std::endl;
 	of << "********************" << std::endl << std::endl;
@@ -172,17 +133,10 @@ void TLSResultsMatrices::saveMatricesToFile(int nbIter) const
 
 
 	of << "******************************" << std::endl;
-	of << "* UNKNOWNS COVARIANCE MATRIX *" << std::endl;
+	of << "* RESIDUALS COVARIANCE MATRIX *" << std::endl;
 	of << "******************************" << std::endl << std::endl;
 
-	of << *fUnknownsCovarianceMtrx << std::endl;
-	of << std::endl << std::endl;
-
-	of << "******************************" << std::endl;
-	of << "* INTERMEDIATE MATRIX *" << std::endl;
-	of << "******************************" << std::endl << std::endl;
-
-	of << fIntermediateMatrix << std::endl;
+	of<< *fResCovarianceMtrx << std::endl;
 	of << std::endl << std::endl;
 
 	of.close();

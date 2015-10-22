@@ -32,7 +32,6 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 //constructor / destructor
 /////////////////////////////////////////////////////////////////////////////
 
-#if 0
 TPointConverter::TPointConverter(TAStreamFormatter* stream,
 								 const TRefSystemFactory::ERefFrame	refFrame):
 TAConverter(stream)
@@ -47,9 +46,9 @@ TAConverter(stream)
 	else
 		fLocalSys = true;
 }
-#endif
 
-TPointConverter::TPointConverter(TAStreamFormatter* stream, const TLGCRefFrame::ERefs	refFrame):
+/*TPointConverter::TPointConverter(TAStreamFormatter* stream,
+							const TLGCRefFrame::ERefs	refFrame):
 TAConverter(stream)
 {//constructor
 	fRefFrame = refFrame;
@@ -59,7 +58,7 @@ TAConverter(stream)
 		fLocalSys = true;
 	else
 		fLocalSys = false;
-}
+}*/
 
 TPointConverter::~TPointConverter()
 {//destructor
@@ -143,52 +142,6 @@ void	TPointConverter::writeXYZandH(const TPositionVector& pt, TReal heightH)
 	return;
 }
 
-
-void	TPointConverter::writeXYZandH(const TAdjustablePoint& pt)
-{
-	TAStreamFormatter*	stream = getStream();
-	int					coordWidth = getCoordWidth();
-	string				separator = getSeparator();
-
-	//get Coordinate as a TPositionVector
-	(*stream)<<(pt.getEstimatedValue());
-
-	//write H if point's refrence frame is CCS
-	if(!isInLocalSystem())
-	{
-		stream->width(coordWidth);
-		(*stream)<<(pt.getHEstValue()) << separator;
-	}
-
-	return;
-}
-
-void	TPointConverter::writeXYZandH(	const int width,
-										const int precision,
-										const TLength::EUnits unit,
-										const string separator,
-										TAdjustablePoint pt)
-{
-	TAStreamFormatter*	stream = getStream();
-
-	stream->setLengthUnits(unit);
-	stream->setWidthFormat(width);
-	stream->setPrecisionFormat(precision);
-
-	//write X
-	(*stream) << pt.getEstimatedValue()[0] << separator;
-
-	//write Y
-	(*stream) << pt.getEstimatedValue()[1] << separator;
-
-	//write Z
-	(*stream) << pt.getEstimatedValue()[2] << separator;
-
-	//write H if point's refrence frame is CCS
-	if(!isInLocalSystem())
-		(*stream) << (pt.getHEstValue()) << separator;
-}
-
 #if 0
 
 void	TPointConverter::writeXYZorH(	const int width,
@@ -213,7 +166,9 @@ void	TPointConverter::writeXYH(	const int width,
 									const int precision,
 									const TLength::EUnits unit,
 									const string separator,
-									TAdjustablePoint pt)
+									const TScalar Xparam,
+									const TScalar Yparam,
+									const TScalar Hparam)
 {
 	TAStreamFormatter*	stream = getStream();
 
@@ -222,14 +177,14 @@ void	TPointConverter::writeXYH(	const int width,
 	stream->setPrecisionFormat(precision);
 
 	//write X
-	(*stream)<< pt.getEstimatedValue().getX().getValue() << separator;
+	(*stream)<< Xparam << separator;
 
 	//write Y
-	(*stream)<< pt.getEstimatedValue().getY().getValue() << separator;
+	(*stream)<< Yparam << separator;
 
 	//write H if point's refrence frame is CCS
 	if(!isInLocalSystem())
-		(*stream)<< pt.getHEstValue(); 
+		(*stream)<< Hparam; 
 	else
 		writeString(width, " ");
 	
@@ -237,7 +192,6 @@ void	TPointConverter::writeXYH(	const int width,
 	
 	return;
 }
-
 #if 0
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -326,7 +280,7 @@ void	TPointConverter::write3Coordinates(	const int width,
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void	TPointConverter::writeN( const int width,
+/*void	TPointConverter::writeN( const int width,
 								 const int precision,
 								 const TLength::EUnits unit,
 								 TAdjustablePoint pt)
@@ -342,8 +296,7 @@ void	TPointConverter::writeN( const int width,
 		geoid = TRefSystemFactory::kCG2000Machine;
 	
 	//writeLength(width, precision ,unit , pt.getNEstValue(geoid) );
-}
-
+}*/
 
 void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
 												const int width,
