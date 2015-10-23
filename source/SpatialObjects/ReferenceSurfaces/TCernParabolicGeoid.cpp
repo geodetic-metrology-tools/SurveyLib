@@ -255,7 +255,7 @@ TAngle	TCernParabolicGeoid::getDAlpha( const TSpatialPosition& sp ) const
 
 
 	TAngle latitude;
-	AngleValue phi;
+	TReal phi;
 	TAngle eta, fDAlphaValue;
 	
 	latitude = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();
@@ -271,7 +271,7 @@ TAngle	TCernParabolicGeoid::getDAlpha( const TSpatialPosition& sp ) const
 
 TAngle	TCernParabolicGeoid::getDAlpha( const TSpatialPosition& sp, const TAngle& latitude ) const
 {
-	AngleValue phi;
+	TReal phi;
 	TAngle eta, fDAlphaValue;
 	
 	phi = latitude.getRadiansValue();

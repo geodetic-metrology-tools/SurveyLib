@@ -130,7 +130,7 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 
 	TReal p;
 	TReal nu;
-	AngleValue phi, tempphi, lambda;
+	TReal phi, tempphi, lambda;
 	TReal h, temph;
 	TPositionVector  geodpv(TCoordSysFactory::kGeodetic);
 //	TPositionVector*  pgeodpv;
