@@ -113,7 +113,9 @@ void	TCCsFilter::output(TAStreamFormatter& oStream,const TAngle& angle)const
 
 	// provisoire
 	TAngle a(angle);
-	if (a.getRadiansValue()<LITERAL(0.0)) { a += (2*TAngle::pi()); }
+	if (a.getRadiansValue()<LITERAL(0.0)) 
+      a += (2.0*TAngle::pi());
+
 	oStream<< a.getGonsValue();
 	
 

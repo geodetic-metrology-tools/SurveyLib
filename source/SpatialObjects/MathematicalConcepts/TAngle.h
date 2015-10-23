@@ -162,6 +162,8 @@ public:
 	TAngle& operator*=(const TReal );
 	/*! Multiplies the TAngle by a TDouble scale factor */
 	TAngle& operator*=(const TDouble &);
+   /*! Cast current TRadian value to TReal */
+   operator TReal() const { return fValue; }
 
 	/*!@name trigonometric functions */
 	//@{

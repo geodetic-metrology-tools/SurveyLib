@@ -21,9 +21,9 @@
 ////////////////////////////////////////////////////////////////
 
 //!Includes Files
-#include    <iostream>
+#include <iostream>
 #include	<float.h>
-#include    <math.h>
+#include <math.h>
 #include	<assert.h>
 //
 
@@ -126,8 +126,7 @@ public:
    TLength& operator*=(const TReal);
 
    //!cast operator return the value as a TReal and expressed in Meters
-   operator TReal() { return this->getMetresValue(); }
-
+   operator TReal() const { return fValue; }
 
 private:
 

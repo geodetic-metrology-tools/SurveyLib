@@ -120,9 +120,6 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 	TReal  x = pv.getX().getMetresValue();
 	TReal  y = pv.getY().getMetresValue();
 	TReal  z = pv.getZ().getMetresValue();
-	//TReal  x = getX1( posn );
-	//TReal  y = getX2( posn );
-	//TReal  z = getX3( posn );
 
 	//get a copy of the parameters of the ellipsoid
 	TReal  a = ellipsoid->getA();
@@ -133,10 +130,8 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 	TReal phi, tempphi, lambda;
 	TReal h, temph;
 	TPositionVector  geodpv(TCoordSysFactory::kGeodetic);
-//	TPositionVector*  pgeodpv;
-//	pgeodpv=&geodpv;
 
-	if( x==0 && y==0)
+   if( x==0 && y==0)
 	{
 		TAngle phirad, lrad;
 		TLength hm;
