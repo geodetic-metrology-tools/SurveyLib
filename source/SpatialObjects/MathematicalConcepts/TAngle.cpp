@@ -55,10 +55,17 @@ TAngle::TAngle() : fValue(LITERAL(0.0))
 }
 
 
-TAngle::TAngle(const AngleValue value)
+TAngle::TAngle(const TReal value, EUnits unit)
 {	// constructor taking a given angle value in radians
-	this->setRadiansValue(value);
-	setStatus( TANumericValue::kKnown );
+
+   switch(unit)
+   {
+      case EUnits::kRadians:     setRadiansValue(value); break;
+      case EUnits::kGons:        setGonsValue(value); break;
+      case EUnits::kCCs:         setGonsValue(value/10000); break;
+      case EUnits::k100MicroGons:setGonsValue(value/10000); break;
+   }
+   setStatus((value == std::numeric_limits<TReal>::quiet_NaN()) ? EStatus::kNull : EStatus::kKnown);
 }
 
 
@@ -89,7 +96,7 @@ void TAngle::normaliseAngle()
 }
 
 
-bool	TAngle::setRadiansValue(const AngleValue value)
+bool	TAngle::setRadiansValue(const TReal value)
 {	// set the angle value to the given radians value
 		
 	fValue = value;
@@ -104,7 +111,7 @@ bool	TAngle::setRadiansValue(const AngleValue value)
 
 
 
-bool	TAngle::setGonsValue(const AngleValue value)
+bool	TAngle::setGonsValue(const TReal value)
 {	// set the angle value to the given gons value
 	
 	// convert the given value to radians
@@ -346,7 +353,7 @@ TDouble TAngle::operator/(const TAngle& div) const
 }
 
 
-TAngle	operator*(const TReal factor, const TAngle &angle )
+TAngle operator*(const TReal factor, const TAngle &angle )
 {// Multiplies a TAngle by a scale factor
 	TAngle resultat;
 	if (angle.isNull()!=true)
@@ -470,7 +477,7 @@ TAngle TAngle::aTan2(const TReal x, const TReal y)
 
 
 	
-TAngle::ENumberSign		TAngle::sign(TReal	number) const
+TAngle::ENumberSign TAngle::sign(TReal	number) const
 {	// return the sign of the number entered
 
 	ENumberSign	sign;
@@ -494,3 +501,39 @@ TAngle::ENumberSign		TAngle::sign(TReal	number) const
 	return sign;
 }
 
+TReal	TAngle::getRadiansValue() const
+{	// get the radians angular value for the angle
+   return fValue;
+}
+
+TReal	TAngle::getGonsValue() const
+{	// get the gons angular value for the angle
+   // return the converted angular value
+   /*modification du 08/05/2003,
+   getRadiansValue() donne les angles entre -pi et pi
+   getGonsValue() donne les angles entre 0 et 2pi*/
+   TReal gValue = fValue;
+   while(gValue < 0)
+   {
+      gValue += 2 * M_PI;
+   }
+   while(gValue >= 2 * M_PI - seuil())
+   {
+      gValue -= 2 * M_PI;
+   }
+   if(gValue < 0)
+   {
+      gValue = 0;
+   }
+   return (gValue * radsToGonsFactor());
+}
+
+TReal	TAngle::getSignedCCValue() const
+{	// get the CC (100 microgons) angular value for the angle
+   return fValue * radsToGonsFactor() * 10000;
+}
+
+Degrees	TAngle::getDegreesValue() const
+{	// get the integer degrees of the angular value 
+   return Degrees(fValue * radsToDecDegsFactor());
+}

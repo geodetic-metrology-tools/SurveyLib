@@ -8,18 +8,8 @@
 // Copyright 1999,2000, Mark Jones, EST/SU. All rights reserved.
 ////////////////////////////////////////////////////////////////
 
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
 #include	"TLength.h"
 #include	"TDouble.h"
-////////////////////////////////////////////////////////////////
-
-
-
-//ClassImp(TLength)
 
 
 //////////////////////////////////////////////////////////////////////
@@ -32,11 +22,16 @@ TLength::TLength(): fValue(LITERAL(0.0))
 	setStatus( TANumericValue::kNull );
 }
 
-
-
-TLength::TLength(TReal value): fValue(value)
+TLength::TLength(TReal value, EUnits unit)
 {	// constructor taking a given length value in metres
-	setStatus( TANumericValue::kKnown );
+   
+   switch(unit)
+   {
+      case EUnits::kMetres:      setMetresValue(value); break;
+      case EUnits::kMillimetres: setMMetresValue(value); break;
+      case EUnits::kKilometres:  setKMetresValue(value); break;
+   }
+   setStatus((value == std::numeric_limits<TReal>::quiet_NaN()) ? EStatus::kNull : EStatus::kKnown);
 }
 
 TLength::TLength(const TLength& tl)

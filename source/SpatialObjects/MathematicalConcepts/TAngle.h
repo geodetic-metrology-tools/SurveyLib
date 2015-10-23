@@ -48,9 +48,8 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 class TDouble;
 using namespace std;
 // typedefs
-typedef	TReal	AngleValue;		// the value for the angle
-typedef	int		Degrees;		// the degrees of an angle
-typedef	int		Minutes;		// the minutes of an angle
+typedef	int	Degrees;		// the degrees of an angle
+typedef	int	Minutes;		// the minutes of an angle
 typedef	TReal	Seconds;		// the seconds of an angle
 
 /*! \ingroup MathematicalConcepts
@@ -79,8 +78,8 @@ public:
 	/*! Default constructor */
 	TAngle();
 	/*! Explicit constructor taking an angle value in radians */
-	explicit  TAngle(AngleValue);
-	//TAngle(AngleValue);
+   explicit  TAngle(TReal, EUnits = kRadians);
+	//TAngle(TReal);
 	/*! Destructor */
 	virtual	~TAngle();
 	/*! Copy contructor */
@@ -112,9 +111,9 @@ public:
 	/*!@name Setting methods */
 	//@{
 	/*! Sets the angle value in radians */
-	bool setRadiansValue( AngleValue );
+    bool setRadiansValue(TReal);
 	/*! Sets the angle value in gons */
-	bool setGonsValue( AngleValue );
+    bool setGonsValue(TReal);
 	/*! Sets the angle value in degre, minutes, seconds */
 	bool setDMSValue( Degrees, Minutes, Seconds );
 	//@}
@@ -122,17 +121,17 @@ public:
 	/*!@name Access methods  */
 	//@{
 	/*! Gets the angle value in rads */
-	AngleValue getRadiansValue() const;
+   TReal getRadiansValue() const;
 	/*! Gets the angle value in gons */
-	AngleValue getGonsValue() const;
+   TReal getGonsValue() const;
 	/*! Gets the angle value in CC (100 microgons) */
-	AngleValue getSignedCCValue() const;
+   TReal getSignedCCValue() const;
 	/*! Gets part of the angle value in degs */
-	Degrees	getDegreesValue() const;
+   Degrees getDegreesValue() const;
 	/*! Gets part of the angle value in min */
-	Minutes	getMinutesValue() const;
+   Minutes getMinutesValue() const;
 	/*! Gets part of the angle value in sec */
-	Seconds	getSecondsValue() const;
+   Seconds getSecondsValue() const;
 	//@}
 
 	/*!@name Algebraic operators */
@@ -202,57 +201,11 @@ private:
 	ENumberSign		sign(TReal	number) const;	
 
 private:	
-	AngleValue		fValue;		/*!< Angle value, default = LITERAL(0.0) */
+	TReal		fValue;		/*!< Angle value, default = LITERAL(0.0) */
 	
 	//ClassDef(TAngle, 1)
 };
 /*@}*/
-
-//////////////////////////////////////////////////////////////////////
-// Inline Definitions
-//////////////////////////////////////////////////////////////////////
-
-
-inline AngleValue	TAngle::getRadiansValue() const
-{	// get the radians angular value for the angle
-	return fValue;
-}
-
-
-inline AngleValue	TAngle::getGonsValue() const
-{	// get the gons angular value for the angle
-	// return the converted angular value
-	/*modification du 08/05/2003,
-	getRadiansValue() donne les angles entre -pi et pi
-	getGonsValue() donne les angles entre 0 et 2pi*/
-	AngleValue gValue = fValue;
-	while (gValue < 0)
-	{
-        gValue += 2*M_PI;
-	}
-    while (gValue >= 2*M_PI - seuil())
-	{
-        gValue -= 2*M_PI;
-	}
-	if (gValue < 0)
-	{
-		gValue = 0;
-	}
-    return (gValue * radsToGonsFactor());
-}
-
-
-inline AngleValue	TAngle::getSignedCCValue() const
-{	// get the CC (100 microgons) angular value for the angle
-    return fValue * radsToGonsFactor() * 10000;
-}
-
-
-inline Degrees	TAngle::getDegreesValue() const
-{	// get the integer degrees of the angular value 
-    return Degrees(fValue * radsToDecDegsFactor());
-}
-
 
 #endif // !defined(SU_ANGLE)
 

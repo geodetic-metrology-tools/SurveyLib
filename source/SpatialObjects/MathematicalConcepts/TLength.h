@@ -48,8 +48,9 @@ public:
 	//@{
 	//! Default Constructor
 	TLength();
-	//! constructor taking a given length value in metres
-	explicit  TLength(TReal);
+
+   //! constructor taking a given length value in metres
+   explicit  TLength(TReal, EUnits = kMetres);
 
 	//! copy constructor
 	TLength(const TLength&);
