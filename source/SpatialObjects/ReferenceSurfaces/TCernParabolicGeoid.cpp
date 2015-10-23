@@ -93,8 +93,8 @@ TCernParabolicGeoid::TCernParabolicGeoid( const string& name, const TReal a,
 {		
 		// set the derived parameters of the paraboloid
 		TReal thc, azp;
-		TReal azxs = -LITERAL(1.12878) * TAngle::gonsToRadsFactor();
-		TReal gsc = LITERAL(38.90742) * TAngle::gonsToRadsFactor();
+		TReal azxs = -LITERAL(1.12878) * GON2RAD;
+		TReal gsc = LITERAL(38.90742) * GON2RAD;
 
 	/*	//modif du 25/07/03 pour representer le niv5 utiliser dans LGC
 		if(fThs* TAngle::radsToGonsFactor() == LITERAL(48.219))

@@ -38,14 +38,15 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-#include    <iostream>
-#include	<float.h>
-#include	<assert.h>
-#define     _USE_MATH_DEFINES
-#include    <math.h>
-//
-#include  "TANumericValue.h"
+#include <iostream>
+#include <float.h>
+#include <assert.h>
+#define   _USE_MATH_DEFINES
+#include <math.h>
+#include "TANumericValue.h"
+#include "TConstants.h"
 class TDouble;
+
 using namespace std;
 // typedefs
 typedef	int	Degrees;		// the degrees of an angle
@@ -90,21 +91,14 @@ public:
 	/*!@name static member functions */
 	//@{
 	/*! Defines the angle Pi */ 
-    static const TAngle pi() { return TAngle(M_PI); }
+    static const TAngle pi() { return TAngle(PI); }
 	/*! Defines the angle 2xPi */
-    static const TAngle twoPi() { return TAngle(2*M_PI); }
+    static const TAngle twoPi() { return TAngle(TWOPI); }
 	/*! Defines the angle Pi/2 */
-    static const TAngle piBy2() { return TAngle(M_PI*0.5); }
+    static const TAngle piBy2() { return TAngle(PI_2); }
 	/*! Defines the angle Pi/4 */
-    static const TAngle piBy4() { return TAngle(M_PI*0.25); }
-	/*! Provides a scale factor to convert from angles in radians to angles in gons */
-    static TReal  radsToGonsFactor() { return 200.0 / M_PI; }	
-	/*! Provides a scale factor to convert from angles in gons to angles in radians */
-    static TReal  gonsToRadsFactor() { return M_PI / 200.0; }
-	/*! Provides a scale factor to convert from angles in radians to angles in degres */
-    static TReal  radsToDecDegsFactor() { return 180.0 / M_PI; }
-	/*! Provides a scale factor to convert from angles in degres to angles in radians */
-    static TReal  decDegsToRadsFactor() { return M_PI / 180.0; }
+    static const TAngle piBy4() { return TAngle(PI_4); }
+
 	//@}
 	
 	
