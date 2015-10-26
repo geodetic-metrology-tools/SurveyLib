@@ -116,7 +116,7 @@ TLength	operator*(const TReal factor, const TLength &length )
 	return resultat;
 }
 
-TLength&	TLength::operator=(const TLength &length)
+TLength& TLength::operator=(const TLength &length)
 {//assign a TLength object to an other
 	if (this != &length) 
 	{
