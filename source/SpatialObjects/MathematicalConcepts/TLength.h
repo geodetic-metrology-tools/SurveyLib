@@ -177,7 +177,7 @@ inline void TLength::setKMetresValue(const TReal value)
 inline void TLength::setMMetresValue(const TReal value)
 {	// set as a length measure of the given millimetres value
 	// scale the value input
-	fValue = value / 1000;
+	fValue = value * 0.001;
 	valueSet();
 	return;
 }
@@ -192,7 +192,7 @@ inline TReal TLength::getMetresValue() const
 inline TReal	TLength::getKMetresValue() const
 {	// get the km length value
 	// return the converted length value
-	return fValue / 1000;
+	return fValue * 0.001;
 }
 
 
