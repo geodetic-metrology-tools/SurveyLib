@@ -13,6 +13,7 @@ SET(CalcElements_SOURCES
 	TLSCombinedMtdComputer.cpp
 	TLSCnstMtdComputer.cpp
 	TLSResultsMatrices.cpp
+	QuantileFunctions.cpp
 )
 
 # Create a variable containing all .h files:
@@ -27,6 +28,7 @@ SET(CalcElements_HEADERS
 	TLSCnstMtdComputer.h
 	TLSResultsMatrices.h
 	UEOIndices.h
+	QuantileFunctions.h
 )
 
 #Create a static library from the object files
