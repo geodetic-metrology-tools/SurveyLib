@@ -1,7 +1,4 @@
 # set include directories needed by this library
-
-message ("BOOST : ${BOOST_ROOT}")
-
 include_directories(${BOOST_ROOT}
 					${SURVEYLIB_ROOT}/source/SpatialObjects/MathematicalConcepts
 					${SURVEYLIB_ROOT}/source/SpatialObjects/CalcParams)
