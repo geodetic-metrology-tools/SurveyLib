@@ -15,7 +15,6 @@
 #include "TSpatialPoint.h"
 #include "TSpatialPosition.h"
 #include "TFreeVector.h"
-#include "TScalar.h"
 #include "UEOIndices.h"
 #include "TALSCalcParameter.h"
 
@@ -28,7 +27,7 @@ public:
 		TLSCalcScalarParam();
 		/*! Constructor
 		/param stores provisional value for the scale */
-		TLSCalcScalarParam(TScalar pos, ELSStatus status, string name);
+      TLSCalcScalarParam(TReal pos, ELSStatus status, string name);
 		/*! Copy constructor */
 		TLSCalcScalarParam(const TLSCalcScalarParam& source);
 		/*! Destructor */
@@ -39,41 +38,41 @@ public:
 	/*!@name Access methods */
 	//@{
 		/*! Returns the provisional value of the scale */
-		TScalar	getProvisionalValue() const;
+		TReal getProvisionalValue() const;
 		/*! Returns the correction value */
-		TScalar		getCorrection() const;
+      TReal getCorrection() const;
 		/*! Returns the estimated value for the scale */
-		TScalar	getEstimatedValue() const;
+      TReal getEstimatedValue() const;
 		/*! Returns the estimated precision for the scale */
-		TScalar		getEstimatedPrecision() const;
+      TReal getEstimatedPrecision() const;
 		/*! Returns the covariance element for the scale */
-		TScalar		getEstimatedCovariance() const;
+      TReal getEstimatedCovariance() const;
 		/*! Returns the status of the scale for calculation */
-		TALSCalcParameter::ELSStatus	getStatus() const;
+		TALSCalcParameter::ELSStatus getStatus() const;
 		/*!Returns the status (Cala, Vxy....)*/
-		TSpatialStatus::ESpatialStatus	getGlobalStatus() const;
+		TSpatialStatus::ESpatialStatus getGlobalStatus() const;
 		void resetValues();
 	//@}
 
 	/*!@name Settings */
 	//@{
 		/*! Sets the provisional value of the scale */
-		void	setProvisionalValue(TScalar pv);
+      void setProvisionalValue(TReal pv);
 		/*! Sets the estimated value of the scale */
-		void	setEstimatedValue(TScalar ev);
+      void setEstimatedValue(TReal ev);
 		/*! Sets the correction value */
-		void	setCorrection(TScalar corr);
+      void setCorrection(TReal corr);
 		/*! Sets the estimated precision after calculation */
-		void	setEstimatedPrecision(TScalar ep);
+      void setEstimatedPrecision(TReal ep);
 		/*! Sets the covariance after calculation */
-		void	setEstimatedCovariance(TScalar cov);
+      void setEstimatedCovariance(TReal cov);
 		/*! Sets the status of the scale */
-		void	setStatus(ELSStatus stat);
+		void setStatus(ELSStatus stat);
 		
 		/*! Sets the position vector parameter's unknown index */
 		
-		UEOIndices		setUIndex(UEOIndices ui);
-		MatrixIndex		getScalarIndex();
+		UEOIndices setUIndex(UEOIndices ui);
+		MatrixIndex getScalarIndex();
 
 		/*! re-initialises the parameters alterred during or after
 			a least squares calculation */
@@ -92,13 +91,12 @@ private:
 	/*! Copy assignment operator */
 	TLSCalcScalarParam&	operator=(const TLSCalcScalarParam& right);
 
-	TScalar				fProvisionalValue; /*!< scale's provisional value */
-	TScalar				fCorrection; /*!< scale's correction after calculation  */
-	TScalar				fEstimatedValue; /*!< scale's estimated value after calculation */
-	TScalar				fEstimatedPrecision; /*!< scale's estimated precision after calculation */
-	TScalar				fCovariance; 
+	TReal	fProvisionalValue; /*!< scale's provisional value */
+   TReal	fCorrection; /*!< scale's correction after calculation  */
+   TReal	fEstimatedValue; /*!< scale's estimated value after calculation */
+   TReal	fEstimatedPrecision; /*!< scale's estimated precision after calculation */
+   TReal	fCovariance;
 	
-
 	TALSCalcParameter::ELSStatus		fStatus; /*!< scale parameter's status for calculation */
 	MatrixIndex			fScalarIndices[1]; /*!< scalar parameter's unknown indices for calculation */
 };
@@ -106,9 +104,9 @@ private:
 /*!@name Constants definition */
 //@{
 /*! List of ls calc position vector observations  */
-typedef list< TLSCalcScalarParam >		LSScalarContainer;
+typedef list< TLSCalcScalarParam > LSScalarContainer;
 /*! Iterator of the list of ls calc position vector observations */
-typedef LSScalarContainer::iterator			LSScalarIter;
+typedef LSScalarContainer::iterator LSScalarIter;
 /*! Constant iterator of the list of ls calc position vector observations */
 typedef LSScalarContainer::const_iterator	LSScalarConstIter;
 //@}
