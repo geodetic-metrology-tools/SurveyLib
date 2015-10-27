@@ -51,7 +51,7 @@ public:
 	virtual void calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm) = 0;
 
 	//!Calculate the hypothesis testing limits for the sigma zero a posteriori
-	struct limits	calcSigmaZeroLimits(const int nbObs, const int nbUnk, const double sigmaZero2);
+	struct limits	calcSigmaZeroLimits(const int nbObs, const int nbUnk);
 	
 	/*! Access to eventual error */
 	std::string		getError() const { return fError; }

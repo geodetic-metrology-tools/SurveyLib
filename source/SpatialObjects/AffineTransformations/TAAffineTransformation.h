@@ -110,7 +110,7 @@ public:
 		virtual TAAffineTransformation * inverse() const = 0;
 
 		//! Invert the transformation, replaces the current transformation parameters
-		//virtual void invert() = 0;
+		virtual void invert() = 0;
 	//@}
 };
 

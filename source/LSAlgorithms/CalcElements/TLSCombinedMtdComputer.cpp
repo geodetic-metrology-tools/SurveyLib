@@ -193,7 +193,7 @@ void	TLSCombinedMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* 
 		else
 			fError += "Number of equations equals number of unknowns, causes zero division!";
 		rm->setSigmaZero2(sigmaZero2Aposteriori);
-		struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk, sigmaZero2Aposteriori);
+		struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk);
 		rm->setSigmaZero2Limits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
 
 

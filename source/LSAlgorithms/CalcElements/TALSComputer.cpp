@@ -16,7 +16,7 @@ TALSComputer::TALSComputer():fError("")
 /////////////
 TALSComputer::~TALSComputer(){}
 
-limits TALSComputer::calcSigmaZeroLimits(const int nbObs, const int nbUnk, const double sigmaZero2)
+limits TALSComputer::calcSigmaZeroLimits(const int nbObs, const int nbUnk)
 {
 	// computes and saves limits of interval for test chi of S0 validity
 	struct limits resultat;
