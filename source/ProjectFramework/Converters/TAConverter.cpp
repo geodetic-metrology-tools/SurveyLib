@@ -50,13 +50,13 @@ const vector<string> TAConverter::tokenizeString(const string& str, const char* 
 	do {
 		switch (state) {
 			case STATE_DELIM:
-				if (! isDelim(str[end], delims, delimlen+1)) {
+            if(!isDelim(str[end], delims, (int)delimlen + 1)) {
 					start = end;
 					state = STATE_TOKEN;
 				}
 			break;
 			case STATE_TOKEN:
-				if (isDelim(str[end], delims, delimlen+1)) {
+            if(isDelim(str[end], delims, (int)delimlen + 1)) {
 					result.push_back(std::move(str.substr(start, end-start)));
 					state = STATE_DELIM;
 				}

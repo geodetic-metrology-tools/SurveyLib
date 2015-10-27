@@ -22,7 +22,7 @@
 // explicitly ignore unused parameters
 template <typename T>
 void ignoring(T &&)
-{ }
+{}
 
 #define USE_QUAD __INTEL_COMPILER && ENABLE_QUAD
 

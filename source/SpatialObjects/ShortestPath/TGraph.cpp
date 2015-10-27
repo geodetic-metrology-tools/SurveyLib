@@ -293,18 +293,16 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 int TGraph::insert(const TRefFrameWrapper& RF)
 {// insert a RF throught a reference frame wrapper
 	for (unsigned int i = 0; i < size(); i++)
-	{
 		if (RF == C[i].first)
 			return i;
-	}
 
 	RefFrame rf(RF, Successor());
 
 	C.push_back(rf);
-	C[size()-1].first.setIdentifier(size()-1);
+	C[size()-1].first.setIdentifier(int(size()-1));
 
 	//returns the indice of the introduced reference frame
-	return size()-1;
+	return int(size()-1);
 }
 
 
@@ -347,7 +345,7 @@ void TGraph::path(vector<int>& trans, vector<int>& pred,vector<TTransformWrapper
 
 	while (!Q.empty())
 	{
-		i=Q.topIndex();
+		i= (int)Q.topIndex();
 		Q.pop();
 
 		Successor::iterator startN = C[i].second.begin(), 
