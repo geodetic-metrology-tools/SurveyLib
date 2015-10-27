@@ -7,6 +7,10 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformation
 					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialObj
 					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialSystems)
 
+IF(USE_SWISSTOPO)
+	include_directories(C:/Windows/System32)
+ENDIF()
+					
 # Create a variable containing all .cpp files:
 set(RefFrameTransformations_SOURCES 
 	TARefFrameTransformation.cpp
