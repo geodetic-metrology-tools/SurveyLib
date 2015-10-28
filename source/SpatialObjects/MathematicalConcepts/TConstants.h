@@ -1,14 +1,11 @@
 #ifndef _SL_CONSTANTS_H_
 #define _SL_CONSTANTS_H_
 
+#include "Quad.h"
+
 /*!
    Global definitions and includes shared among the classes.
 */
-typedef double TReal;
-
-#ifndef M_PI
-#define M_PI 3.141592653589793238462
-#endif
 
 namespace  {
 
