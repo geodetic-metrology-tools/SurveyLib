@@ -75,18 +75,6 @@ TPointConverter& 	TPointConverter::operator=(const TPointConverter& source)
 //////////////////////////////////////////////////////////////////////////////////
 //Name
 //////////////////////////////////////////////////////////////////////////////////
-#if 0
-void	TPointConverter::writeName(LSPosVecConstIter pt, int width)
-{
-	TAStreamFormatter*	stream = getStream();
-
-	//Write point name
-	stream->width(width);
-	(*stream)<<left<<(pt->getName())<<right << this->getSeparator();
-	return;
-}
-#endif
-
 void	TPointConverter::writeName(string ptName, int width)
 {
 	TAStreamFormatter*	stream = getStream();
@@ -130,26 +118,10 @@ void	TPointConverter::writeXYZandH(const TPositionVector& pt, TReal heightH)
 	return;
 }
 
-#if 0
-
-void	TPointConverter::writeXYZorH(	const int width,
-										const int precision,
-										const TLength::EUnits unit,
-										const string separator,
-										LSPosVecConstIter pt)
-{
-	if(!isInLocalSystem())
-	{writeXYH(width, precision, unit, separator, pt);}
-	else
-	{writeXYZ(width, precision, unit, separator, pt);}
-	return;
-}
-
-#endif
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //X Y H
 ////////////////////////////////////////////////////////////////////////////////////////////////
+
 void	TPointConverter::writeXYH(	const int width,
 									const int precision,
 									const TLength::EUnits unit,
@@ -180,34 +152,10 @@ void	TPointConverter::writeXYH(	const int width,
 	
 	return;
 }
-#if 0
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //X Y Z 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void	TPointConverter::writeXYZ(	const int width,
-									const int precision,
-									const TLength::EUnits unit,
-									const string separator,
-									LSPosVecConstIter pt)
-{
-	TAStreamFormatter*	stream = getStream();
-
-	stream->setLengthUnits(unit);
-	stream->setWidthFormat(width);
-	stream->setPrecisionFormat(precision);
-
-	//write X
-	(*stream)<<pt->getXEstValue()<<separator;
-
-	//write Y
-	(*stream)<<pt->getYEstValue()<<separator;
-
-	//write Z
-	(*stream)<<pt->getZEstValue() << separator;
-	return;
-}
-#endif
 
 void	TPointConverter::writeXYZ(	const int width,
 									const int precision,
@@ -261,37 +209,12 @@ void	TPointConverter::write3Coordinates(	const int width,
 
 
 
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-//N
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/*void	TPointConverter::writeN( const int width,
-								 const int precision,
-								 const TLength::EUnits unit,
-								 TAdjustablePoint pt)
-{
-	TRefSystemFactory::EGeoid geoid(TRefSystemFactory::kNoGeoid);
-	
-	// Set geoeid depending on the ref frame
-	if(fRefFrame ==	TRefSystemFactory::kCERNXYHsSphereSPS)
-		geoid = TRefSystemFactory::kCGSphere;
-	if(fRefFrame ==	TRefSystemFactory::kCernXYHg85Machine)
-		geoid = TRefSystemFactory::kCG1985Machine;
-	if(fRefFrame ==	TRefSystemFactory::kCernXYHg00Machine)
-		geoid = TRefSystemFactory::kCG2000Machine;
-	
-	//writeLength(width, precision ,unit , pt.getNEstValue(geoid) );
-}*/
-
 void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
 												const int width,
 												const int precision,
 												const string separator,
 												TReal Xparam,
-                                    TReal Yparam,
+												TReal Yparam,
 												TReal Zparam,
 												const string Dparam,
 												bool isCovar)
@@ -380,5 +303,37 @@ void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus
 
 	(*stream)<<(separator);
 
+	return;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//N
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/*void	TPointConverter::writeN( const int width,
+								 const int precision,
+								 const TLength::EUnits unit,
+								 TAdjustablePoint pt)
+{
+	TRefSystemFactory::EGeoid geoid(TRefSystemFactory::kNoGeoid);
+	
+	// Set geoeid depending on the ref frame
+	if(fRefFrame ==	TRefSystemFactory::kCERNXYHsSphereSPS)
+		geoid = TRefSystemFactory::kCGSphere;
+	if(fRefFrame ==	TRefSystemFactory::kCernXYHg85Machine)
+		geoid = TRefSystemFactory::kCG1985Machine;
+	if(fRefFrame ==	TRefSystemFactory::kCernXYHg00Machine)
+		geoid = TRefSystemFactory::kCG2000Machine;
+	
+	//writeLength(width, precision ,unit , pt.getNEstValue(geoid) );
+}*/
+
+
+void	TPointConverter::writeN( const int width,
+								 const int precision,
+								 TReal N)
+{
+	writeDouble(width, precision ,N );
 	return;
 }

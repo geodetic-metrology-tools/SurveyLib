@@ -5,8 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
-
+#include "TConstants.h"
 #include "TLSResultsMatrices.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +16,7 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 {// constructor dimensioning the matrices
 	fSolutionVctr = new TVector(ueoi.UIndex);
 	fResidualsVctr = new TVector(ueoi.OIndex);
-	fSigmaZero2 = LITERAL(0.0);
+	fSigmaZero2 = NO_VALf;
 	fResCovarianceMtrx = new TSparseMatrix(ueoi.OIndex, ueoi.OIndex);
 	fUnkCovarianceMtrx =new TSparseMatrix(ueoi.UIndex, ueoi.UIndex);
 
@@ -28,7 +27,7 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi, int numConstraints)
 {// constructor dimensioning the matrices
 	fSolutionVctr = new TVector(ueoi.UIndex);
 	fResidualsVctr = new TVector(ueoi.OIndex);
-	fSigmaZero2 = LITERAL(0.0);
+	fSigmaZero2 = NO_VALf;
 	fResCovarianceMtrx = new TSparseMatrix(ueoi.OIndex + numConstraints, ueoi.OIndex + numConstraints);
 	fUnkCovarianceMtrx = new TSparseMatrix(ueoi.UIndex, ueoi.UIndex);
 }
@@ -39,7 +38,7 @@ TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations,int num
 
 	fSolutionVctr = new TVector (numUnknowns);
 	fResidualsVctr = new TVector (numObs);
-	fSigmaZero2 = LITERAL(0.0);
+	fSigmaZero2 = NO_VALf;
 	fResCovarianceMtrx = new TSparseMatrix(numObs,numObs);
 	fUnkCovarianceMtrx = new TSparseMatrix(numUnknowns,numUnknowns);
 

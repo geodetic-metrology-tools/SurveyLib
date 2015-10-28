@@ -4,6 +4,7 @@
 /*!
    Global definitions and includes shared among the classes.
 */
+typedef double TReal;
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462
@@ -29,6 +30,9 @@ namespace  {
 	static const TReal MM2M = 0.001;
 	static const TReal M2MM = 1000;
 
+
+	static const TReal NO_VALf = std::numeric_limits<TReal>::quiet_NaN(); //!< marks uninitialized or unused float/real values
+	static const int NO_VALi = std::numeric_limits<int>::quiet_NaN(); //!< marks uninitialized or unused integer values
 }
 
 #endif

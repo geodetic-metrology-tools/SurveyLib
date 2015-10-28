@@ -29,22 +29,13 @@ public:
 
 	/*!@name Public member functions*/
 		//@{
-
-			//void	writeName(const TPositionVector& pt, int width);
-
 			void	writeName(string ptName, int width);
 
 			void	writeXYZandH(const TPositionVector& pt);
+
 			void	writeXYZandH(const TPositionVector& pt, TReal heightH);
 
 
-
-/*			void	writeXYZorH(	const int width,
-									const int precision,
-									const TLength::EUnits unit,
-									const string separator,
-									LSPosVecConstIter pt);
-*/
 			void	writeXYH(	const int width,
 								const int precision,
 								const TLength::EUnits unit,
@@ -53,12 +44,6 @@ public:
                         		const TReal Yparam,
                         		const TReal Hparam);
 
-/*			void	writeXYZ(	const int width,
-								const int precision,
-								const TLength::EUnits unit,
-								const string separator,
-								LSPosVecConstIter pt);
-*/
 			void	writeXYZ(	const int width,
 								const int precision,
 								const TLength::EUnits unit,
@@ -93,6 +78,10 @@ public:
 											const string Dparam,
 											bool isCovar = false);
 
+			void	TPointConverter::writeN( const int width,
+								 const int precision,
+								 TReal N);
+
 			bool	isInLocalSystem() const {return	fLocalSys;}
 
 		//@}
@@ -105,7 +94,6 @@ private:
 
 
 private:
-
 
 		bool							fLocalSys;
 
