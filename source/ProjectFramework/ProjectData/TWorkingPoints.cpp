@@ -144,7 +144,7 @@ bool TWorkingPoints::deletePoint(PointIterator iter)
 
 int TWorkingPoints::numberOfPoints() const{
 
-	return fWorkingPoints.size();
+	return (int)fWorkingPoints.size();
 }
 
 
