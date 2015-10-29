@@ -138,7 +138,7 @@ namespace tut
 		// Test the north orientation by moving p_trafo[2] north by 1 deg of latitude
 		// the X coordinate in the cartesian view must be the same afterwards
 		TPositionVector pnorthv = p_trafo[2].getCoordinates(TCoordSysFactory::kGeodetic);
-		pnorthv.setPhiEllipsoid(pnorthv.getPhiEllipsoid()+TAngle(TAngle::gonsToRadsFactor()));
+		pnorthv.setPhiEllipsoid(pnorthv.getPhiEllipsoid()+TAngle(GON2RAD));
 		TSpatialPosition pnorth(p_trafo[2]);
 		pnorth.setCoordinates(pnorthv);
 
@@ -217,7 +217,7 @@ namespace tut
 		};
 
 		// Construct an LG whith its origin at p0 and a rotation of 18 gons around Z
-		TLocalSystemOrigin lso(p_trafo[0], TAngle((18.0-37.77864)*TAngle::gonsToRadsFactor()),TAngle(0), "LSO GISEMENT 18");
+		TLocalSystemOrigin lso(p_trafo[0], TAngle((18.0-37.77864)*GON2RAD),TAngle(0), "LSO GISEMENT 18");
 		TAReferenceFrame *MLG(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kMLGGRS80));
 		PTheo p_theo(MLG);
 		
@@ -241,7 +241,7 @@ namespace tut
 			TAReferenceFrame *LG = TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso2, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kLGGRS80);
 
 			// build a rotated system at the same point
-			TLocalSystemOrigin lso3(p_trafo2base, TAngle((18-37.77864)*TAngle::gonsToRadsFactor()),TAngle(0), "LSO GISEMENT 18 P1000");
+			TLocalSystemOrigin lso3(p_trafo2base, TAngle((18-37.77864)*GON2RAD),TAngle(0), "LSO GISEMENT 18 P1000");
 			TAReferenceFrame *MLG2(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso3, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kMLGGRS80));
 
 			TSpatialPosition unrotated[4] = {
@@ -302,7 +302,7 @@ namespace tut
 		// Test the north orientation by moving p_trafo[2] north by 1 deg of latitude
 		// the X coordinate in the cartesian view must be the same afterwards
 		TPositionVector pnorthv = p_trafo[2].getCoordinates(TCoordSysFactory::kGeodetic);
-		pnorthv.setPhiEllipsoid(pnorthv.getPhiEllipsoid()+TAngle(TAngle::gonsToRadsFactor()));
+		pnorthv.setPhiEllipsoid(pnorthv.getPhiEllipsoid()+TAngle(GON2RAD));
 		TSpatialPosition pnorth(p_trafo[2]);
 		pnorth.setCoordinates(pnorthv);
 
@@ -332,7 +332,7 @@ namespace tut
 		};
 
 		// Construct an LGs whith its origin at p0 and a rotation of 18 gons around Z
-		TLocalSystemOrigin lso(p_trafo[0], TAngle((18.0-37.77864)*TAngle::gonsToRadsFactor()),TAngle(0), "LSO GISEMENT 18");
+		TLocalSystemOrigin lso(p_trafo[0], TAngle((18.0-37.77864)*GON2RAD),TAngle(0), "LSO GISEMENT 18");
 		TAReferenceFrame *MLGs(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kMLGSphere));
 		PTheo p_theo(MLGs);
 		
@@ -356,7 +356,7 @@ namespace tut
 			TAReferenceFrame *LG = TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso2, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kLGGRS80);
 
 			// build a rotated system at the same point
-			TLocalSystemOrigin lso3(p_trafo2base, TAngle((18-37.77864)*TAngle::gonsToRadsFactor()),TAngle(0), "LSO GISEMENT 18 P1000");
+			TLocalSystemOrigin lso3(p_trafo2base, TAngle((18-37.77864)*GON2RAD),TAngle(0), "LSO GISEMENT 18 P1000");
 			TAReferenceFrame *MLG2(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso3, TRefSystemFactory::kNoGeoid, TRefSystemFactory::kMLGGRS80));
 
 			TSpatialPosition unrotated[4] = {

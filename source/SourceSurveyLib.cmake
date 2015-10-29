@@ -1,6 +1,12 @@
 # We need some CMake macros
 INCLUDE(CheckIncludeFileCXX)
 
+IF(CMAKE_PROJECT_NAME STREQUAL "SurveyLib")
+	SET(SURVEYLIB_ROOT "${CMAKE_SOURCE_DIR}/..")
+	message("Building Surveylib in tree.")
+ENDIF()
+
+
 # Inlcude sublibraries
 INCLUDE(${SURVEYLIB_ROOT}/source/SubLibraries.cmake)
 
@@ -14,12 +20,6 @@ if(DOXYGEN_FOUND)
 	COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
 endif(DOXYGEN_FOUND)
-
-
-IF(CMAKE_PROJECT_NAME STREQUAL "SurveyLib")
-	SET(SURVEYLIB_ROOT "${CMAKE_SOURCE_DIR}/..")
-	message("Building Surveylib in tree.")
-ENDIF()
 
 # Compiler options
 IF(WIN32)
@@ -83,8 +83,6 @@ ENDIF()
 
 INCLUDE_DIRECTORIES(${EIGEN_INCLUDE_PATH} ${SURVEYLIB_INCLUDE_PATH})
 	
-INCLUDE("${SURVEYLIB_ROOT}/source/SubLibraries.cmake")
-
 IF(CMAKE_PROJECT_NAME STREQUAL "SurveyLib")
 	# Includes for all subprojects
 	# In-tree build
