@@ -124,12 +124,6 @@ void TRefFrameWrapper::setFrame( TAReferenceFrame* frame )
 }
 
 
-void TRefFrameWrapper::setIdentifier(int i)
-{
-//	fFrame->setIdentifier(i);
-	return;
-}
-
 
 //////////////////////////////////////////////////////////////////////
 // Utility Member Functions

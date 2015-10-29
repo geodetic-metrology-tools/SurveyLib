@@ -33,7 +33,7 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi, int numConstraints)
 }
 
 
-TLSResultsMatrices::TLSResultsMatrices(int numUnknowns, int numEquations,int numObs)
+TLSResultsMatrices::TLSResultsMatrices(int numUnknowns,int numObs)
 {// constructor creating the results matrices with the input dimensions
 
 	fSolutionVctr = new TVector (numUnknowns);

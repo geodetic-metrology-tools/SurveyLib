@@ -299,7 +299,7 @@ int TGraph::insert(const TRefFrameWrapper& RF)
 	RefFrame rf(RF, Successor());
 
 	C.push_back(rf);
-	C[size()-1].first.setIdentifier(int(size()-1));
+	//C[size()-1].first.setIdentifier(int(size()-1));
 
 	//returns the indice of the introduced reference frame
 	return int(size()-1);

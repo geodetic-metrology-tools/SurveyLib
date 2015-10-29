@@ -84,8 +84,6 @@ public:
 		/// Set the pointer to a Reference Frame
 		void setFrame( TAReferenceFrame* frame );
 
-		/// Set the Ref Frame idetifier
-		void setIdentifier( int i );
 
 	//@}
 

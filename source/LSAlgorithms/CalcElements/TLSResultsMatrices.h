@@ -15,7 +15,7 @@ public:
 
 	/*!@name Constructors / Destructor*/
 	//@{
-	TLSResultsMatrices(int numUnknowns, int numEquations, int numObs);
+	TLSResultsMatrices(int numUnknowns, int numObs);
 
 
 	/*! 
