@@ -104,6 +104,7 @@ namespace tut
 			} catch (const std::logic_error & e)
 			{
 				ensure("There shouldn't be any exceptions",false);
+				std::cout << e.what() << std::endl;
 			}
 			afterTransformation95.insert(std::pair<std::string, TSpatialPosition>(iter->first, iter->second));
 		}
@@ -167,6 +168,7 @@ namespace tut
 			} catch (const std::logic_error & e)
 			{
 				ensure("There shouldn't be any exceptions",false);
+				std::cout << e.what() << std::endl;
 			}
 			afterTransformationCCS.insert(std::pair<std::string, TSpatialPosition>(iter->first, iter->second));
 		}
@@ -235,6 +237,7 @@ namespace tut
 			} catch (const std::logic_error & e)
 			{
 				ensure("There shouldn't be any exceptions",false);
+				std::cout << e.what() << std::endl;
 			}
 			afterTransformation03.insert(std::pair<std::string, TSpatialPosition>(iter->first, iter->second));
 		}
@@ -302,6 +305,7 @@ namespace tut
 			} catch (const std::logic_error & e)
 			{
 				ensure("There shouldn't be any exceptions",false);
+				std::cout << e.what() << std::endl;
 			}
 			afterTransformationRGF93CC46.insert(std::pair<std::string, TSpatialPosition>(iter->first, iter->second));
 		}
@@ -369,6 +373,7 @@ namespace tut
 			} catch (const std::logic_error & e)
 			{
 				ensure("There shouldn't be any exceptions",false);
+				std::cout << e.what() << std::endl;
 			}
 			afterTransformationLambert93.insert(std::pair<std::string, TSpatialPosition>(iter->first, iter->second));
 		}

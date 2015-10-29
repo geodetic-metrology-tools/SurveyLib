@@ -27,8 +27,8 @@ namespace tut
         set_test_name("Iterating over the all registered ERefFrame values");
 
 		TRefFrameInfo::RefFrameSet set = TRefFrameInfo::getRefFrameSet();
-		ensure(set.count(TRefSystemFactory::kITRF97));
-		ensure(set.count(TRefSystemFactory::kCCS));
+		ensure_equals(set.count(TRefSystemFactory::kITRF97),4);
+		ensure_equals(set.count(TRefSystemFactory::kCCS),0);
 		// Example
         std::stringstream out;
 		for(TRefFrameInfo::RefFrameSet::const_iterator it = set.begin(); it!=set.end(); ++it)
@@ -118,6 +118,7 @@ namespace tut
 		}
 		catch (const std::invalid_argument & e)
 		{
+			std::cout << e.what() << std::endl;
 		}
 	}
 
@@ -133,7 +134,7 @@ namespace tut
 		}
 		catch (const std::invalid_argument & e)
 		{
-			// std::cout << e.what() << std::endl;
+			 std::cout << e.what() << std::endl;
 		}
 	}
 

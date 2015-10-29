@@ -34,7 +34,7 @@ namespace tut
 		}
 		catch(std::runtime_error const & e)
 		{
-			//std::cerr << "(EE) Exception while transforming point: "<< e.what()<<std::endl;
+			std::cerr << "(EE) Exception while transforming point: "<< e.what()<<std::endl;
 		}
 	}
 }
