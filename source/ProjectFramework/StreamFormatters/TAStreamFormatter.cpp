@@ -1047,9 +1047,9 @@ void TAStreamFormatter::skipBOM() {
 
 	// all widespread byte order marks
 	static const char boms[NUM_BOMs][BOM_LEN] = {
-		{char(239), char(187), char(191)},
-		{char(254), char(255), char(0)},
-		{char(255), char(254), char(0)}
+      {uint8_t(239), uint8_t(187), uint8_t(191)},
+      {uint8_t(254), uint8_t(255), uint8_t(0)},
+      {uint8_t(255), uint8_t(254), uint8_t(0)}
 	};
 	
 	char y;

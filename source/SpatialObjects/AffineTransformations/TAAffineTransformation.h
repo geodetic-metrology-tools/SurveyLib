@@ -9,7 +9,7 @@
 */
 //////////////////////////////////////////////////////////////////////
 
-
+#pragma warning(disable:4505)
 
 #ifndef SU_A_AFFINE_TRANSFORMATION
 #define SU_A_AFFINE_TRANSFORMATION
