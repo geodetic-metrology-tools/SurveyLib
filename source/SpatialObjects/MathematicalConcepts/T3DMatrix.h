@@ -36,7 +36,7 @@
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Class for a general 3x3 TReal matrix

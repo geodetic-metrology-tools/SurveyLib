@@ -1,41 +1,37 @@
-
-
 #ifndef SU_TLSResultsMatrices
 #define SU_TLSResultsMatrices
-
-
-#if _MSC_VER >= 1000
-#pragma once
-#pragma warning(disable:4786)
-
-#endif // _MSC_VER >= 1000
-
-/////////////////////////////////////////////////////
-// Forward declarations
-/////////////////////////////////////////////////////
 
 #include "TSparseMatrix.h"
 #include "UEOIndices.h"
 
 
-//!Class for result matrices of a least squares calculation
+/*!
+	\ingroup CalcElements
+	\brief Class for result matrices of a least squares calculation.
+*/
 class TLSResultsMatrices{
 
 public:
 
 	/*!@name Constructors / Destructor*/
 	//@{
-	TLSResultsMatrices(int numUnknowns, int numEquations);
+	TLSResultsMatrices(int numUnknowns, int numObs);
 
-	//!Constructor
-	/*!@param ueoi an object holding the number of unknowns, equations and observations,
-	thus enabling the dimensioning of the matrices (set to zero)*/
+
+	/*! 
+		\brief Constructor
+
+		\param[in] ueoi an object holding the number of unknowns, equations and observations,
+	thus enabling the dimensioning of the matrices (set to zero)
+	*/
 	TLSResultsMatrices(UEOIndices ueoi);
 
-	//!Constructor
-	/*	!@param ueoi an object holding the number of unknowns, equations and observations,
+	/*!
+		\brief Constructor
+
+		\param[in] ueoi an object holding the number of unknowns, equations and observations,
 		thus enabling the dimensioning of the matrices (set to zero)
-		!@param numConstraints indicates the number of constraints added for a free network
+		\param[in] numConstraints indicates the number of constraints added for a free network
 		calculation
 	*/
 	TLSResultsMatrices(UEOIndices ueoi, int numConstraints);
@@ -44,91 +40,89 @@ public:
 	virtual ~TLSResultsMatrices();
 	//@}
 
-	/*!@name Access nethods*/
+	/*!@name Access methods*/
 	//@{
-	/*!@return an element of the solution vector
-	@param row the desired element's index*/
-	virtual MatrixElmt	getSolutionVctrElmt(MatrixIndex row) const {return (*fSolutionVctr)(row);}
+	/*! 
+		\brief Returns an element of the solution vector
 
-	/*!@return an element of the residuals vector
-	@param row the desired element's index*/
-	virtual MatrixElmt	getResidualsVctrElmt(MatrixIndex row) const {return (*fResidualsVctr)(row);}
+		\param[in] row the desired element's index
+	*/
+	virtual TReal getSolutionVctrElmt(MatrixIndex row) const {return (*fSolutionVctr)(row);}
 
-	/*!@return an element of the unknowns covariance matrix
-	@param row the desired element's row index
-	@param column the desired element's column index*/
-	virtual MatrixElmt	getUnknownsCovarMtrxElmt(MatrixIndex row, MatrixIndex column) const {return (*fUnknownsCovarianceMtrx).coeff(row, column);}
+	/*!
+		\brief Returns an element of the residuals vector
 
-	/*!@return a pointer to the Solution Vector*/
-	virtual TVector*		getSolutionVctr() const {return fSolutionVctr;}
+		\param[in] row the desired element's index*/
+   virtual TReal getResidualsVctrElmt(MatrixIndex row) const { return (*fResidualsVctr)(row); }
 
-	/*!@return a pointer to the Residuals Vector*/
-	virtual TVector*		getResidualsVctr() const {return fResidualsVctr;}
+	/*!\brief Returns an element of the residuals covariance matrix
 
-	/*!@return a pointer to the unknowns covariance matrix*/
-	virtual TSparseMatrix*		getUnkCovarMtrx() const {return fUnknownsCovarianceMtrx;}
-	virtual void				setUnkCovarMtrx(TSparseMatrix* m) { fUnknownsCovarianceMtrx = m; }
+	\param[in] row the desired element's row index
+	\param[in] column the desired element's column index*/
+   virtual TReal getResCovarMtrxElmt(MatrixIndex row, MatrixIndex column) const { return (*fResCovarianceMtrx).coeff(row, column); }
+	
+	/*!\brief Returns an element of the observations covariance matrix
 
-	/*!@return the boolean indicating if sigma zero should be applied or not */
-	virtual bool				S0APosterioriVariances() const {return fS0APosterioriVariances;}
-	/*!@return  the squared sigma zero */
-	virtual TReal				getSigmaZero2() const { return fSigmaZero2; }
+	\param[in] row the desired element's row index
+	\param[in] column the desired element's column index*/
+   virtual TReal getUnkCovarMtrxElmt(MatrixIndex row, MatrixIndex column) const { return (*fUnkCovarianceMtrx).coeff(row, column); }
+
+	/// Returns a pointer to the Solution Vector
+	virtual TVector* getSolutionVctr() const {return fSolutionVctr;}
+
+	/// Returns a pointer to the Residuals Vector
+	virtual TVector* getResidualsVctr() const {return fResidualsVctr;}
+
+	/// Returns a pointer to the residuals covariance matrix
+	virtual TSparseMatrix* getResCovarMtrx() const {return fResCovarianceMtrx;}
+
+	/// Returns a pointer to the unknowns covariance matrix
+	virtual TSparseMatrix* getUnkCovarMtrx() const {return fUnkCovarianceMtrx;}
+
+	/// Returns  the squared sigma zero 
+	virtual TReal getSigmaZero2() const { return fSigmaZero2; }
 	//@}
 
-	/*! sets the sigma zero */
-	virtual void			setSigmaZero2(TReal s);
+	/// Sets the sigma zero 
+	virtual void setSigmaZero2(TReal s){ fSigmaZero2 = s;}
 
-	/*! sets the boolean */
-	virtual void			setS0APosterioriVariances(bool s0) {fS0APosterioriVariances = s0; return;}
+	/// Sets the residuals covariance matrix 
+	virtual void setResCovarMtrx(TSparseMatrix* m) { fResCovarianceMtrx = m; }
 
-	/*! Save the results matrices in a file */
-	void			saveMatricesToFile(int nbIter) const;
+	/// Sets the unknowns covariance matrix 
+	virtual void setUnkCovarMtrx(TSparseMatrix* m) { fUnkCovarianceMtrx = m; }
 
-	/*! compute and return a vector of observations variances */
-	TVector	computeVarObs(const TSparseMatrix* A);
-
-
+	/// Save the results matrices in a file 
+	void saveMatricesToFile(int nbIter) const;
+	
+	/// Returns the normal matrix
 	const TSparseMatrix & getIntermediateMatrix() const {return fIntermediateMatrix;}
-	void setIntermediateMatrix(const TSparseMatrix & matrix) { fIntermediateMatrix = matrix; }
-	/*
-	TSparseMatrix* getL() const { return L; }
-	void setL(TSparseMatrix* l) { L = l; }
-	TSparseMatrix* getBigMatrix() const { return bigMatrix; }
-	void setBigMatrix(TSparseMatrix* l) { bigMatrix = l; }
+	/*! 
+		\brief  Set an intermediate matirx
+
+		This intermediate matrix is the normal matrix, which is used to calculated the covariance matrices. 
 	*/
+	void setIntermediateMatrix(const TSparseMatrix & matrix) { fIntermediateMatrix = matrix; }
+
+	void setSigmaZero2Limits(TReal loLimit, TReal upLimit) {
+		fSigmaZero2LowLimit =  loLimit; 
+		fSigmaZero2UpLimit = upLimit;
+	}
+
+	TReal getSigmaZeroLowLimit() const {return fSigmaZero2LowLimit;}
+	TReal getSigmaZeroUpLimit() const {return fSigmaZero2UpLimit;}
 
 private:
-	////mj2008
-	////!Default constructor
-	//TLSResultsMatrices();
-	////!Constructor
-	///*!The passed pointers are stored. The pointed to matrices musn't be deleted
-	//@param solut a pointer to the solution vector
-	//@param solut a pointer to the residuals vector
-	//@param sigm2 the estimated square of the sigma zero
-	//@param unkcov a pointer to the unknowns covariance matrix */
-	//TLSResultsMatrices(TVector* solut, TVector* resid, TReal sigm2, TMatrix* unkcov);
-	//TLSResultsMatrices(int solut, int resid, int unkcov);
-	////mj
-	
-
 
 	TVector*	fSolutionVctr; /*!< vector (u x 1) containing the calculated parameters */
 	TVector*	fResidualsVctr; /*!< vector (o x 1) containing the calculated residues on observations */
-	TSparseMatrix*	fUnknownsCovarianceMtrx; /*!< matrix (u x u) containing the variances and covariances for parameters */
-	TReal			fSigmaZero2; /*!< calculated "average variance" on residues */
-	bool			fS0APosterioriVariances; /*!< indicates if the s0 a posteriori should be applied */
+	TSparseMatrix*	fResCovarianceMtrx; /*!< matrix (o x o) containing the variances and covariances for residuals */
+	TSparseMatrix*	fUnkCovarianceMtrx; /*!< matrix (u x u) containing the variances and covariances for unknowns */
+	TReal fSigmaZero2; /*!< calculated "average variance" on residues */
+	TReal fSigmaZero2LowLimit;
+	TReal fSigmaZero2UpLimit;
 
 	TSparseMatrix fIntermediateMatrix;
-	//TSparseMatrix* L;
-	//TSparseMatrix* bigMatrix;
 };
-
-/////////////////////
-// Inline Definitions
-/////////////////////
-inline void TLSResultsMatrices::setSigmaZero2(TReal s){ fSigmaZero2 = s;}
-
-//inline void TLSResultsMatrices::setResVariance(TReal rv) {fResidualVariance = new TDouble(rv);}
 
 #endif

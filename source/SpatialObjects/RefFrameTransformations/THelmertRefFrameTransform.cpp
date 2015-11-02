@@ -165,9 +165,8 @@ bool  THelmertRefFrameTransform::transform( TRotationMatrix& rmx ) const
 void THelmertRefFrameTransform::setTransform(THelmertTransformation* helmert)
 {// set the transformation
 	if (fTransform != 0)
-	{
 		delete fTransform;
-	}
+
 	fTransform = helmert;
 }
 
@@ -175,9 +174,8 @@ void THelmertRefFrameTransform::setTransform(THelmertTransformation* helmert)
 void THelmertRefFrameTransform::setTransform( const TScaleFactor& scale, const TRotation& rot, const TTranslation& transl )
 { 
 	if (fTransform != 0)
-	{
 		delete fTransform;
-	}
+
 	fTransform = new THelmertTransformation(scale, rot, transl);
 	return;
 }

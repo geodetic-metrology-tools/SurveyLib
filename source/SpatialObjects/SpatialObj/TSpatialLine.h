@@ -25,7 +25,7 @@
 #include "TSpatialPointName.h"
 /////////////////////////////////////////////////////////////
 
-/*!\ingroup spatialobjects
+/*!\ingroup SpatialObjectsAndSystems
 	@{*/
 
 

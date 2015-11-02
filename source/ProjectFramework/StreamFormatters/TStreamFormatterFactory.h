@@ -32,6 +32,7 @@ class  TAStreamFormatter;
 
 
 //Class definition
+///\ingroup StreamFormatters
 class TStreamFormatterFactory //: public TObject  
 {
 public:

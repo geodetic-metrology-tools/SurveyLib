@@ -38,22 +38,22 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-#include    <iostream>
-#include	<float.h>
-#include	<assert.h>
-#define     _USE_MATH_DEFINES
-#include    <math.h>
-//
-#include  "TANumericValue.h"
+#include <iostream>
+#include <float.h>
+#include <assert.h>
+#define   _USE_MATH_DEFINES
+#include <math.h>
+#include "TANumericValue.h"
+#include "TConstants.h"
 class TDouble;
+
 using namespace std;
 // typedefs
-typedef	TReal	AngleValue;		// the value for the angle
-typedef	int		Degrees;		// the degrees of an angle
-typedef	int		Minutes;		// the minutes of an angle
+typedef	int	Degrees;		// the degrees of an angle
+typedef	int	Minutes;		// the minutes of an angle
 typedef	TReal	Seconds;		// the seconds of an angle
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //!  The TAngle class represents a mathematical angle value.
@@ -79,8 +79,8 @@ public:
 	/*! Default constructor */
 	TAngle();
 	/*! Explicit constructor taking an angle value in radians */
-	explicit  TAngle(AngleValue);
-	//TAngle(AngleValue);
+   explicit  TAngle(TReal, EUnits = kRadians);
+	//TAngle(TReal);
 	/*! Destructor */
 	virtual	~TAngle();
 	/*! Copy contructor */
@@ -91,30 +91,23 @@ public:
 	/*!@name static member functions */
 	//@{
 	/*! Defines the angle Pi */ 
-    static const TAngle pi() { return TAngle(M_PI); }
+    static const TAngle pi() { return TAngle(PI); }
 	/*! Defines the angle 2xPi */
-    static const TAngle twoPi() { return TAngle(2*M_PI); }
+    static const TAngle twoPi() { return TAngle(TWOPI); }
 	/*! Defines the angle Pi/2 */
-    static const TAngle piBy2() { return TAngle(M_PI*0.5); }
+    static const TAngle piBy2() { return TAngle(PI_2); }
 	/*! Defines the angle Pi/4 */
-    static const TAngle piBy4() { return TAngle(M_PI*0.25); }
-	/*! Provides a scale factor to convert from angles in radians to angles in gons */
-    static TReal  radsToGonsFactor() { return 200.0 / M_PI; }	
-	/*! Provides a scale factor to convert from angles in gons to angles in radians */
-    static TReal  gonsToRadsFactor() { return M_PI / 200.0; }
-	/*! Provides a scale factor to convert from angles in radians to angles in degres */
-    static TReal  radsToDecDegsFactor() { return 180.0 / M_PI; }
-	/*! Provides a scale factor to convert from angles in degres to angles in radians */
-    static TReal  decDegsToRadsFactor() { return M_PI / 180.0; }
+    static const TAngle piBy4() { return TAngle(PI_4); }
+
 	//@}
 	
 	
 	/*!@name Setting methods */
 	//@{
 	/*! Sets the angle value in radians */
-	bool setRadiansValue( AngleValue );
+    bool setRadiansValue(TReal);
 	/*! Sets the angle value in gons */
-	bool setGonsValue( AngleValue );
+    bool setGonsValue(TReal);
 	/*! Sets the angle value in degre, minutes, seconds */
 	bool setDMSValue( Degrees, Minutes, Seconds );
 	//@}
@@ -122,17 +115,17 @@ public:
 	/*!@name Access methods  */
 	//@{
 	/*! Gets the angle value in rads */
-	AngleValue getRadiansValue() const;
+   TReal getRadiansValue() const;
 	/*! Gets the angle value in gons */
-	AngleValue getGonsValue() const;
+   TReal getGonsValue() const;
 	/*! Gets the angle value in CC (100 microgons) */
-	AngleValue getSignedCCValue() const;
+   TReal getSignedCCValue() const;
 	/*! Gets part of the angle value in degs */
-	Degrees	getDegreesValue() const;
+   Degrees getDegreesValue() const;
 	/*! Gets part of the angle value in min */
-	Minutes	getMinutesValue() const;
+   Minutes getMinutesValue() const;
 	/*! Gets part of the angle value in sec */
-	Seconds	getSecondsValue() const;
+   Seconds getSecondsValue() const;
 	//@}
 
 	/*!@name Algebraic operators */
@@ -163,6 +156,8 @@ public:
 	TAngle& operator*=(const TReal );
 	/*! Multiplies the TAngle by a TDouble scale factor */
 	TAngle& operator*=(const TDouble &);
+   /*! Cast current TRadian value to TReal */
+   operator TReal() const { return fValue; }
 
 	/*!@name trigonometric functions */
 	//@{
@@ -202,57 +197,11 @@ private:
 	ENumberSign		sign(TReal	number) const;	
 
 private:	
-	AngleValue		fValue;		/*!< Angle value, default = LITERAL(0.0) */
+	TReal		fValue;		/*!< Angle value, default = LITERAL(0.0) */
 	
 	//ClassDef(TAngle, 1)
 };
 /*@}*/
-
-//////////////////////////////////////////////////////////////////////
-// Inline Definitions
-//////////////////////////////////////////////////////////////////////
-
-
-inline AngleValue	TAngle::getRadiansValue() const
-{	// get the radians angular value for the angle
-	return fValue;
-}
-
-
-inline AngleValue	TAngle::getGonsValue() const
-{	// get the gons angular value for the angle
-	// return the converted angular value
-	/*modification du 08/05/2003,
-	getRadiansValue() donne les angles entre -pi et pi
-	getGonsValue() donne les angles entre 0 et 2pi*/
-	AngleValue gValue = fValue;
-	while (gValue < 0)
-	{
-        gValue += 2*M_PI;
-	}
-    while (gValue >= 2*M_PI - seuil())
-	{
-        gValue -= 2*M_PI;
-	}
-	if (gValue < 0)
-	{
-		gValue = 0;
-	}
-    return (gValue * radsToGonsFactor());
-}
-
-
-inline AngleValue	TAngle::getSignedCCValue() const
-{	// get the CC (100 microgons) angular value for the angle
-    return fValue * radsToGonsFactor() * 10000;
-}
-
-
-inline Degrees	TAngle::getDegreesValue() const
-{	// get the integer degrees of the angular value 
-    return Degrees(fValue * radsToDecDegsFactor());
-}
-
 
 #endif // !defined(SU_ANGLE)
 

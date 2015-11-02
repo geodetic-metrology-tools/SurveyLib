@@ -13,7 +13,7 @@ INCLUDE(${SURVEYLIB_ROOT}/source/SubLibraries.cmake)
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
 	configure_file(${SURVEYLIB_ROOT}/source/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-	add_custom_target(doc
+	add_custom_target(doc_surveylib
 	${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	COMMENT "Generating API documentation with Doxygen" VERBATIM
@@ -82,8 +82,6 @@ ENDIF()
 
 INCLUDE_DIRECTORIES(${EIGEN_INCLUDE_PATH} ${SURVEYLIB_INCLUDE_PATH})
 	
-INCLUDE("${SURVEYLIB_ROOT}/source/SubLibraries.cmake")
-
 IF(CMAKE_PROJECT_NAME STREQUAL "SurveyLib")
 	# Includes for all subprojects
 	# In-tree build

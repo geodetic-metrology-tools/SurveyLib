@@ -35,7 +35,7 @@ class		TAReferenceFrame;
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup spatialobjects
+/*!\ingroup SpatialObjectsAndSystems
 	@{*/
 
 //! An abstract class

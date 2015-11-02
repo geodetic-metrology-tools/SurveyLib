@@ -477,18 +477,7 @@ bool	TModifiedLocalAstronomicalRF::transform(TSpatialPosition* sp, TAReferenceFr
 		sp->changeRefFrameTo(rf);
 		sp->setCoordinates(position);
 	}
-		
-	return true;
-
-
-
-
-
-
-
-
-
-
+	
 	return true;
 }
 

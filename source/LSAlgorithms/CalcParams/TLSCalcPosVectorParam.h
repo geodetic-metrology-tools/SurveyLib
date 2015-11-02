@@ -109,13 +109,13 @@ public:
 		TLength				getXZCovar() const {return fCovariance.getZ();}
 
 		/*!Return the estimated X variance (mm2)*/
-		TDouble				getXVar() const {return TDouble (powq(getXSigma().getMMetresValue(), 2) );}
+		TReal				getXVar() const {return TReal (powq(getXSigma().getMMetresValue(), 2) );}
 
 		/*!Return the estimated Y variance (mm2)*/
-		TDouble				getYVar() const {return TDouble (powq(getYSigma().getMMetresValue(), 2) );}
+		TReal				getYVar() const {return TReal (powq(getYSigma().getMMetresValue(), 2) );}
 
 		/*!Return the estimated Z variance (mm2)*/
-		TDouble				getZVar() const {return TDouble (powq(getZSigma().getMMetresValue(), 2) );}
+		TReal				getZVar() const {return TReal (powq(getZSigma().getMMetresValue(), 2) );}
 
 		TLength				getErrorEllMajorAxis() const;
 

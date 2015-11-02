@@ -37,7 +37,7 @@ class  TAAffineTransformation;
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup spatialobjects
+/*!\ingroup SpatialObjectsAndSystems
 	@{*/
 
 //! Class for the matrices of rotation used for points transformations

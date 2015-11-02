@@ -1,5 +1,3 @@
-// TStreamFormatterFactory.h: 
-//
 /** A Factory producing the different TQtStreamFormatter objects.
 
     Patterns:
@@ -8,22 +6,12 @@
  
     Copyright 2000 CERN EST/SU. All rights reserved.
 */
-//////////////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////////////////////////
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// Other forward declarations
-#include  "TFreeFormatTStream.h"
 #include  "TSeparatedFormatTStream.h"
 #include  "TFixedColFormatTStream.h"
 #include  "TAStreamFormatter.h"
 #include  "TStreamFormatterFactory.h"
-//
-//////////////////////////////////////////////////////////////////////
-
 
 //ClassImp(TStreamFormatterFactory)
 

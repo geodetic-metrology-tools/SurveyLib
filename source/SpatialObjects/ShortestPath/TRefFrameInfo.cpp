@@ -200,12 +200,12 @@ TCoordSysFactory::ECoordSys TRefFrameInfo::getDefaultCoordSys(int frame)
 
 bool TRefFrameInfo::isCoordSysAllowed(int frame, TCoordSysFactory::ECoordSys sys)
 {
-    MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
-	if(iter!=getMapping().end())
-	{
-		return (iter->second.fAllowedCoordSys&sys);
-	}
-	throw std::invalid_argument("Unknown ERefFrame value");
+   MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
+	
+   if(iter!=getMapping().end())
+		return ( (iter->second.fAllowedCoordSys&sys) > 0);
+
+   throw std::invalid_argument("Unknown ERefFrame value");
 }
 
 int TRefFrameInfo::getAllowedCoordSysCount(int frame)

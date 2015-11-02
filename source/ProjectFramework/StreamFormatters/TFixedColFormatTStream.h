@@ -56,6 +56,7 @@ class TAngleConstants;
 
 
 //Class definition
+///\ingroup StreamFormatters
 class  TFixedColFormatTStream : public TAStreamFormatter  
 {
 public:

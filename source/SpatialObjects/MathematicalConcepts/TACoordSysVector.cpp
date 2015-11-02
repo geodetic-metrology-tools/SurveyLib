@@ -58,7 +58,7 @@ bool TACoordSysVector::operator==( const TACoordSysVector& right) const
 //////////////////////////////////////////////////////////////////////
 
 	
-bool TACoordSysVector::testCoordSysCart(TCoordSysFactory::ECoordSys en)
+bool TACoordSysVector::testCoordSysCart(TCoordSysFactory::ECoordSys en) const
 {//test if two object have the same coordinate system
 	if (getCoordSys()== en  && (en==TCoordSysFactory::k3DCartesian || en==TCoordSysFactory::k2DCartesian))
 	{return true;}
@@ -87,7 +87,6 @@ bool TACoordSysVector::setX(const TLength& xc)
 return fCoordSys->setX(this, xc);
 }
 
-
 bool TACoordSysVector::setY(const TLength& yc)
 {//!set the Y coordinate of a vector in a specific Coordinate System return true if Y is defined
 return fCoordSys->setY(this, yc); 
@@ -96,6 +95,20 @@ return fCoordSys->setY(this, yc);
 bool TACoordSysVector::setZ(const TLength& zc)
 {//!set the Z coordinate of a vector in a specific Coordinate System return true if Z is defined
 return fCoordSys->setZ(this, zc);
+}
+
+TReal TACoordSysVector::operator[](int i) const
+{//! Allows to retrieve one of the coordinates of the vector
+   if(i >= 0 && i <= 3)
+      return fVector[i];
+   throw std::out_of_range("Try to access a TACoordSysVector with a wrong indice : " + i);
+}
+
+TReal& TACoordSysVector::operator[](int i)
+{//! Allows to retrieve one of the coordinates of the vector and to modify it
+   if(i >= 0 && i <= 3)
+      return fVector[i];
+   throw std::out_of_range("Try to access a TACoordSysVector with a wrong indice : " + i);
 }
 
 TVCoordinateSystem* TACoordSysVector::getCoordSysPtr() const

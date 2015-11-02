@@ -39,7 +39,7 @@ TDataParameters::TDataParameters()
 	resultsFileFormat = TAStreamFormatter::kColumnFormat;
 	punchFileFormat = TAStreamFormatter::kColumnFormat;
 	*/
-	fRefFrame =0;
+	fRefFrame = nullptr;
 	//fLSO.origin = 0;
     fRefFrameEnum = TRefSystemFactory::kNotInGraph;
 	fCoordUnit = TDataParameters::kNotDefined;
@@ -289,37 +289,46 @@ void TDataParameters::setPrecision(int precision)
 	
 		case 0:
 			observationPrecision = TObservationFormat::kMetre;
+			setAnglePrecision(TObservationFormat::kGons);
 			pointPrecision = TPointFormat::kMetre; break;
 		case 1:
 			observationPrecision = TObservationFormat::k100Millimetres; 
+			setAnglePrecision(TObservationFormat::k100Milligons);
 			pointPrecision = TPointFormat::k100Millimetres; break;
 		case 2:
 			observationPrecision = TObservationFormat::k10Millimetres; 
+			setAnglePrecision(TObservationFormat::k10Milligons);
 			pointPrecision = TPointFormat::k10Millimetres; break;
 		case 3:
 			observationPrecision = TObservationFormat::kMillimetre; 
+			setAnglePrecision(TObservationFormat::kMilligons);
 			pointPrecision = TPointFormat::kMillimetre; break;
 		case 4:
-			observationPrecision = TObservationFormat::k100Micrometres; 
+			observationPrecision = TObservationFormat::k100Micrometres;
+			setAnglePrecision(TObservationFormat::k100Microgons);
 			pointPrecision = TPointFormat::k100Micrometres; break;
 		case 5:
 			observationPrecision = TObservationFormat::k10Micrometres;
+			setAnglePrecision(TObservationFormat::k10Microgons);
 			pointPrecision = TPointFormat::k10Micrometres; break;
 		case 6:
 			observationPrecision = TObservationFormat::kMicrometre;
+			setAnglePrecision(TObservationFormat::kMicrogon);
 			pointPrecision = TPointFormat::kMicrometre; break;
 		case 7:
 			observationPrecision = TObservationFormat::k100Nanometres;
+			setAnglePrecision(TObservationFormat::k100Nanogons);
 			pointPrecision = TPointFormat::k100Nanometres; break;
 		default:
-			observationPrecision = TObservationFormat::k10Micrometres; 
+			observationPrecision = TObservationFormat::k10Micrometres;
+			setAnglePrecision(TObservationFormat::k10Microgons);
 			pointPrecision = TPointFormat::k10Micrometres; break;
 
 		}
 
 		setCoordPrecision(pointPrecision); 
 		setLengthPrecision(observationPrecision);
-		setAnglePrecision(TObservationFormat::k10Microgons);
+		//setAnglePrecision(TObservationFormat::k10Microgons);
 }
 
 //! set point name's width precision 

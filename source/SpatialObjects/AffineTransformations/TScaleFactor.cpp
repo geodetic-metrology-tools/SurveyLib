@@ -35,30 +35,21 @@
 
 TScaleFactor::TScaleFactor()
 {	// default constructor
-	fScaleFactor.setValue(LITERAL(1.0));
+	fScaleFactor = LITERAL(1.0);
 	this->setStatus( TVNumericValue::kNull );
 }
 
-
 TScaleFactor::TScaleFactor( TReal f )
-{	// constructor taking factor
-	fScaleFactor.setValue(f);
-	this->setStatus( TVNumericValue::kKnown );
-}
-
-TScaleFactor::TScaleFactor( TScalar f )
 {	// constructor taking factor
 	fScaleFactor = f;
 	this->setStatus( TVNumericValue::kKnown );
 }
-
 
 TScaleFactor::TScaleFactor( const  TScaleFactor & original )
 {	// copy constructor
 	*this = original;
 
 }
-
 
 TScaleFactor::~TScaleFactor()
 {
@@ -69,27 +60,25 @@ TScaleFactor::~TScaleFactor()
 //////////////////////////////////////////////////////////////////////
 
 
-TScaleFactor&  TScaleFactor::operator=(const TScaleFactor & right)
+TScaleFactor& TScaleFactor::operator=(const TScaleFactor & right)
 {	// Copy Assignment operator
 
 	if (this != &right)
 	{
-		fScaleFactor = right.getScaleFactor();
+		fScaleFactor = right.fScaleFactor;
 		setStatus( right.getStatus() );
 	}
+
 	return *this;
 }
 
 //! Multiplication by another scaling transformation
 TScaleFactor TScaleFactor::operator*( const TScaleFactor & right )
 {
-	TScaleFactor result( this->getScaleFactor() * right.getScaleFactor() );
-	result.setStatus( this->testStatus(right) );
-	return result;
+	return TScaleFactor ( fScaleFactor * right.fScaleFactor );
 }
 
-
-TScaleFactor*  TScaleFactor::clone() const
+TScaleFactor* TScaleFactor::clone() const
 {// Return a pointer to a clone of this transformation
 	return new TScaleFactor( *this );
 }
@@ -98,92 +87,76 @@ TScaleFactor*  TScaleFactor::clone() const
 // Transforme
 //////////////////////////////////////////////////////////////////////
 
-bool  TScaleFactor::transform(TPositionVector& pv) const
+bool TScaleFactor::transform(TPositionVector& pv) const
 {/// Return a transformed position vector
-	bool trans = false;
-
-	if (isNull()==false)
+	if(!isNull())
 	{
-		pv *= this->getScaleFactor();
-		trans = true;
+		pv *= fScaleFactor;
+		return true;
 	}
-	return trans;
+	return false;
 }
 
-	
-bool  TScaleFactor::transform(TFreeVector& fv) const
+bool TScaleFactor::transform(TFreeVector& fv) const
 {/// Return a transformed free vector
-	bool trans = false;
-	if (isNull()==false)
+	if (!isNull())
 	{
-		fv *= this->getScaleFactor();
-		trans = true;
+		fv *= fScaleFactor;
+		return true;
 	}
-	return trans;
+	return false;
 }
-
 	
 bool TScaleFactor::transform(TRotationMatrix& rm) const
 {/// Return a transformed rotation matrix
 	ignoring(rm);
-	bool trans = false;
-	if (isNull()==false)
-	{
-		trans = true;
-	}
-	return trans;
-}
 
+	if (!isNull())
+		return  true;
+
+	return false;
+}
 
 TPositionVector &  TScaleFactor::operator() ( TPositionVector & right ) const
 {// apply this transformation to a position vector
 	if ( this->isNull() || right.isNull() )
-	{
 		right.setStatus( TVNumericValue::kNull );
-	}
-	else
-	{
-		right = right * this->getScaleFactor();
-	}
+   else
+	   right = right * fScaleFactor;
+
 	return right;
 }
-
 
 TFreeVector &  TScaleFactor::operator() ( TFreeVector & right ) const
 {// apply this transformation to a free vector
 	if ( this->isNull() || right.isNull() )
-	{
-		right.setStatus( TVNumericValue::kNull );
-	}
+		right.setStatus(TVNumericValue::kNull);
 	else
-	{
-		right = right * this->getScaleFactor();
-	}
+      right = right * fScaleFactor;
+
 	return right;
 }
-
 
 TRotationMatrix &  TScaleFactor::operator() ( TRotationMatrix & right ) const
 {// apply this transformation to a Rotation Matrix
 	if ( this->isNull() )
-	{
 		right.setStatus( TVNumericValue::kNull );
-	}
+	
 	return right;
 }
 
-
-TScaleFactor *  TScaleFactor::inverse() const
+TScaleFactor* TScaleFactor::inverse() const
 {// Return the inverse transformation
-	TScaleFactor * inverse = new TScaleFactor( LITERAL(1.0) / this->getScaleFactor().getValue() );
-	return inverse;
+   return new TScaleFactor(LITERAL(1.0) / fScaleFactor);
 }
-
 
 void TScaleFactor::invert()
 {/// Change this transformation in the inverse
-	fScaleFactor.setValue( LITERAL(1.0) / fScaleFactor.getValue() );
-	return;
+	fScaleFactor = ( LITERAL(1.0) / fScaleFactor );
 }
 
+TReal TScaleFactor::getScaleFactor() const 
+{//! get the scale factor
+   return fScaleFactor;
+}
 

@@ -22,7 +22,7 @@
 
 #include <TReferenceEllipsoid.h>
 #include <TGeodeticRefFrame.h>
-#include <TAModifiedLocalastronomicalRF.h>
+#include <TAModifiedLocalAstronomicalRF.h>
 #include <TModifiedLocalAstronomicalRF.h>
 #include <TGraphMLARF.h>
 #include <TXYHeProjection.h>

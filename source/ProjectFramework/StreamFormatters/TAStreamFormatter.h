@@ -54,10 +54,16 @@ class		TFileParameters;
 typedef TAStreamFormatter & (*TSFFUNC)(TAStreamFormatter &);// manipulator function
 //typedef size_t streamsize;
 ////////////////////////////////////////////////////////////////
-
+///////////////////////////////////////////////////////////////
+//Implementation of multiplication operator for STRING, can be used for "multiplying" TAB spaces if we want a structurized output file
+///////////////////////////////////////////////////////////////
+string operator*(const string& s, unsigned int n);
+string operator*(unsigned int n, const string& s);
+static const string TAB = "\t";
 
 /*@{*/
 //Class definition
+///\ingroup StreamFormatters
 class TAStreamFormatter//, public TObject  
 {
 	friend class TGeodeticFilter;
@@ -113,6 +119,10 @@ public:
 	virtual ~TAStreamFormatter();
 	//@}
 
+	/*Function which reset the stream with a new file name, all the options are kept, just a file is changed, so that we write or read from a different file*/
+	void resetStreamName(std::string name);
+
+
 	/*!@member functions: set*/
 	//@{
 	/*!set angle's units
@@ -147,7 +157,10 @@ public:
 	virtual	int	setPrecisionFormat(const int precision);
 
 	virtual void	setPointFormat(const TPointFormat ptFormat);
+	
 	virtual void	setObsFormat(const TObservationFormat ptFormat);
+	
+	virtual void	setFileName(string const& Name);
 	//@}
 
 
@@ -370,6 +383,17 @@ public:
 	std::streampos tellg();
 	TAStreamFormatter& seekg(streamoff off, ios_base::seekdir dir);
 
+	//! Returns the current depth in a tree, reflecting e.g. the hierarchical structure.
+	inline void setTreeDepth(unsigned int dpth){fNofSpaces = dpth;};
+
+	//! Returns the current depth in a tree, reflecting e.g. the hierarchical structure.
+	inline int getTreeDepth() const{return fNofSpaces;};
+
+	//! Returns the current space, one TAB for each depth.
+	inline std::string getCurrSpace() const{return fNofSpaces*TAB;};
+
+	//! Returns the current space extended for any number of extra TABs without affecting the current depth level.
+	inline std::string getCurrSpaceExtended(int ext) const{return (fNofSpaces + ext)*TAB;};
 
 protected:
 	static TAngleFilter *getAngleFilter( TAngle::EUnits );
@@ -403,6 +427,8 @@ protected:
 private:
 
 	bool									fLineGap;
+	//Used for formating, number of 'TAB' before start of the line.
+	unsigned int							fNofSpaces;
 
 	//ClassDef(TAStreamFormatter, 1)
 };
@@ -420,10 +446,6 @@ extern TAStreamFormatter &ws( TAStreamFormatter &s );	// eat whitespace on input
 extern TAStreamFormatter &reset( TAStreamFormatter &s );	// set default flags
 extern TAStreamFormatter &left( TAStreamFormatter &s );
 extern TAStreamFormatter &right( TAStreamFormatter &s );
-
-
-
-
 
 
 #endif // !defined(SU_A_TEXT_STREAM_FORMATTER)

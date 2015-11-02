@@ -1,19 +1,13 @@
 #include "TSpatialPosition.h"
 #include "TGraph.h"
 #include "TAReferenceFrame.h"
-
-
 #include "TCernGridGeoid.h"
 
 #include <TNotInLepGridException.h>
-
 #include <math.h>
 #include <valarray>
 #include <vector>
-
-
-
-
+#include <sstream>
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,10 +100,10 @@ TLength TCernGridGeoid::getN ( const TSpatialPosition& sp) const
 
 	else
 	{
-		char posstr[512];
-		_snprintf(posstr, 512, " (%.3g,%.3g,%.3g) ",x, y, spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue());
-		throw TNotInLepGridException("TNotInLepGridException: getEta function problem with coordinate " + string(posstr) + ".");
-		//exit(EXIT_FAILURE);
+		stringstream ss;
+		ss << "TNotInLepGridException: getEta function problem with coordinate ";
+		ss << "(" << x << "," << y << "," << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ").";
+		throw TNotInLepGridException(ss.str());
 	}
 
 	
@@ -160,16 +154,10 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 	{
 		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid (2)" << endl;
 		
-		char posstr[512];
-		_snprintf(posstr, 512, " (%.3g,%.3g,%.3g) ",x, y, spos.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue());
-		throw TNotInLepGridException("TNotInLepGridException: getEta function problem with coordinate " + string(posstr) + ".");
-		
-		//cerr << endl << "Error : spatial position not in the LEP grid" << endl;
-
-		///
-		//TODO@*@
-		///
-		//exit(EXIT_FAILURE);
+		stringstream ss;
+		ss << "TNotInLepGridException: getEta function problem with coordinate ";
+		ss << "(" << x << "," << y << "," << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
+		throw TNotInLepGridException(ss.str());
 	}
 
 	
@@ -218,15 +206,10 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 
 	else
 	{
-		char posstr[512];
-		_snprintf(posstr, 512, " (%.3g,%.3g,%.3g) ",x, y, spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue());
-		throw TNotInLepGridException("TNotInLepGridException: getEta function problem with coordinate " + string(posstr) + ".");
-		
-		//cerr << endl << "Error : spatial position not in the LEP grid" << endl;
-		///
-		//TODO@*@
-		///
-		//exit(EXIT_FAILURE);
+		stringstream ss;
+		ss << "TNotInLepGridException: getEta function problem with coordinate ";
+		ss << "(" << x << "," << y << "," << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ").";
+		throw TNotInLepGridException(ss.str());
 	}
 	
 }
@@ -277,15 +260,10 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 
 	else
 	{
-		char posstr[512];
-		_snprintf(posstr, 512, " (%.3g,%.3g,%.3g) ",position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue());
-		throw TNotInLepGridException("TNotInLepGridException: getEta function problem with coordinate " + string(posstr) + ".");
-		
-		//cerr << "Error : spatial position not in the LEP grid" << endl;
-		///
-		//TODO@*@
-		///
-		//exit(EXIT_FAILURE);
+		stringstream ss;
+		ss << "TNotInLepGridException: getEta function problem with coordinate ";
+		ss << "(" << x << "," << y << "," << position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
+		throw TNotInLepGridException(ss.str());
 	}
 	
 	
@@ -320,18 +298,12 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& lat
 
 	else
 	{
-		char posstr[512];
-		_snprintf(posstr, 512, " (%.3g,%.3g,%.3g) ", 
-			position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), 
-			position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), 
-			position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue());
-		throw TNotInLepGridException("TNotInLepGridException: getEta function problem with coordinate " + string(posstr) + ".");
-		
-		//cerr << "Error : spatial position not in the LEP grid" << endl;
-		///
-		//TODO@*@
-		///
-		//exit(EXIT_FAILURE);
+		stringstream ss;
+		ss << "TNotInLepGridException: getEta function problem with coordinate ";
+		ss << "(" << position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() 
+		   << "," << position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() 
+		   << "," << position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
+		throw TNotInLepGridException(ss.str());
 	}
 	
 	

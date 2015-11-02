@@ -5,6 +5,7 @@
 
 #if _MSC_VER >= 1000
 #pragma once
+#pragma warning(disable:4221)
 #endif // _MSC_VER >= 1000
 
 #ifndef M_PI
@@ -22,7 +23,7 @@
 // explicitly ignore unused parameters
 template <typename T>
 void ignoring(T &&)
-{ }
+{}
 
 #define USE_QUAD __INTEL_COMPILER && ENABLE_QUAD
 
@@ -107,6 +108,7 @@ inline _Quad tanhq(_Quad _X) {return (__tanhq(_X)); }
 
 #define powq pow
 #define sqrtq sqrt
+#define pow2q pow2
 
 #define cosq cos
 #define sinq sin

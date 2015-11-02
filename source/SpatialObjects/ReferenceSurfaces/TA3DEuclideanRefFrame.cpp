@@ -23,12 +23,12 @@
 #include	"TA3DEuclideanRefFrame.h"
 //ClassImp(TAReferenceFrame)
 #include "TSpatialPosition.h"
-#include "TPositionStatus.h"
-#include "TSpatialPositionError.h"
-
-
-#include "TSpatialVectorStatus.h"
-#include "TSpatialVectorError.h"
+//#include "TPositionStatus.h"
+//#include "TSpatialPositionError.h"
+//
+//
+//#include "TSpatialVectorStatus.h"
+//#include "TSpatialVectorError.h"
 
 #include "TGeodeticRefFrame.h"
 #include "TModifiedLocalGeodeticRF.h"

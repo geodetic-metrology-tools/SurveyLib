@@ -27,10 +27,8 @@
 //
 #include <string>
 #include <vector>
-
 #include <iostream>
 #include <iomanip>
-
 #include <stddef.h>
 //using namespace std;
 
@@ -51,12 +49,7 @@ class TSpatialPosition;
 /*!\ingroup spatialobjects
 	@{*/
 
-
-#define XP0 LITERAL(2000.00000);
-#define YP0 LITERAL(2097.79265);
-#define ZP0 LITERAL(2433.66000);
-#define HP0 LITERAL(433.65921);
-#define PHIP0 LITERAL(51.3692);
+//#define PHIP0 LITERAL(51.3692);
 
 //! Singleton class: produce one unique instance listing ref. surfaces, ref.frames and transformations
 class TRefSystemFactory
@@ -79,9 +72,9 @@ public:
 			kITRF97              =  4, 
 			kWGS84               =  5, 
 			kROMA40              =  6,
-            kETRF93              =  7,
-            kCH1903plus          =  8, /*!< Swiss coordinate system */
-            // Projections:
+         kETRF93              =  7,
+         kCH1903plus          =  8, /*!< Swiss coordinate system */
+         // Projections:
 			kCernXYHe            = 100, 
 			kCernX0Y0He          = 101, 
 			kCernXYHg00          = 102, 
@@ -95,30 +88,26 @@ public:
             kSwissLV95           = 109,
             kSwissLV03           = 110,
 #endif
-            kFrenchRGF93Zone5    = 205,
-			kLambert93			 = 206,
-			//
+         kFrenchRGF93Zone5    = 205,
+			kLambert93			   = 206,
 			//The same as ETRF93
 			kRGF93               = 207,
 			kCHTRF95             = 208,
-			//
-            // Local Reference Frames:
-            kMLA1985Machine      = 1000,
-            kMLA2000Machine      = 1001,
-            kMLASphere           = 1002,
-            kLA1985Machine       = 1010,
-            kLA2000Machine       = 1011,
-            kLASphere            = 1012,
-
-            kMLGGRS80            = 2000,
-            kMLGSphere           = 2001,
-            kLGGRS80             = 2010,
-            kLGSphere            = 2011,
-
-            // Reserved value:
-			kNotInGraph			 = -1,
-            kLocalRefFrame       = -2 /*!< This was present in the TDataParameters variant. Referenced in LGC in few places */
-        };
+         // Local Reference Frames:
+         kMLA1985Machine      = 1000,
+         kMLA2000Machine      = 1001,
+         kMLASphere           = 1002,
+         kLA1985Machine       = 1010,
+         kLA2000Machine       = 1011,
+         kLASphere            = 1012,
+         kMLGGRS80            = 2000,
+         kMLGSphere           = 2001,
+         kLGGRS80             = 2010,
+         kLGSphere            = 2011,
+         // Reserved value:
+			kNotInGraph			   = -1,
+         kLocalRefFrame       = -2 /*!< This was present in the TDataParameters variant. Referenced in LGC in few places */
+      };
 
 		/*! Enumerator for transformations between Ref.Frames implemented in the factory */
 		enum  ERefFrameTransform {	kCCS2CGRF, kLAp02LGp0, kLGp02CGRF, kLAp02CCS,

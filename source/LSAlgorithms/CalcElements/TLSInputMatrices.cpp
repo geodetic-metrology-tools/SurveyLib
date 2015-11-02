@@ -3,7 +3,7 @@
 //TLSInputMatrices.h : implementation file
 // class for input matrices as defined for survey purposes
 // and for the least squares solving algorithm
-
+/***DEBUG*///
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -21,6 +21,8 @@ TLSInputMatrices::TLSInputMatrices()
 	firstDesignMatrix = nullptr;
 	secondDesignMatrix = nullptr;
 	weightMatrix = nullptr;
+	weightInvMatrix = nullptr;
+	weightUnkMatrix = nullptr;
 	fCnstrFirstDesignMtrx = nullptr;
 	
 	fMisclosureVector = nullptr;
@@ -53,11 +55,13 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	fNbCnstrObs = cnstrObs;
 
 	clearMatrices();
-	fMisclosureVector = new TVector(fNbObs);
+	fMisclosureVector = new TVector(fNbEqn);
 
 	firstDesignMatrix = new TSparseMatrix(equations, unknowns);
 	secondDesignMatrix = new TSparseMatrix(equations, observations /*+ cnstrObs*/);
 	weightMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
+	weightInvMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
+	weightUnkMatrix = new TSparseMatrix(unknowns, unknowns);
 }
 
 
@@ -71,19 +75,21 @@ void TLSInputMatrices::setDimensions(int unknowns, int equations, int observatio
 	fNbCnstrObs = nbCnstrObs;
 
 	clearMatrices();
-	fMisclosureVector = new TVector(fNbObs);
+	fMisclosureVector = new TVector(fNbEqn);
 	fCnstrMisclosureVector = new TVector(constraints);
 
 	firstDesignMatrix = new TSparseMatrix(equations, unknowns);
 	secondDesignMatrix = new TSparseMatrix(equations, observations /*+ cnstrObs*/);
 	weightMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
+	weightInvMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
+	weightUnkMatrix = new TSparseMatrix(unknowns, unknowns);
 	fCnstrFirstDesignMtrx = new	TSparseMatrix(constraints, unknowns);
 }
 
 void TLSInputMatrices::clearMatrices()
 {
 	// TODO: gets deleted externally, change to internal deletion
-	/*
+	
 	if (firstDesignMatrix != nullptr) {
 		delete firstDesignMatrix;
 		firstDesignMatrix = nullptr;
@@ -95,6 +101,14 @@ void TLSInputMatrices::clearMatrices()
 	if (weightMatrix != nullptr) {
 		delete weightMatrix;
 		weightMatrix = nullptr;
+	}
+	if (weightInvMatrix != nullptr) {
+		delete weightInvMatrix;
+		weightInvMatrix = nullptr;
+	}
+	if (weightUnkMatrix != nullptr) {
+		delete weightUnkMatrix;
+		weightUnkMatrix = nullptr;
 	}
 	if (fMisclosureVector != nullptr) {
 		delete fMisclosureVector;
@@ -108,14 +122,14 @@ void TLSInputMatrices::clearMatrices()
 		delete fCnstrMisclosureVector;
 		fCnstrMisclosureVector = nullptr;
 	}
-	*/
+	
 }
 
 
 bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try {
-	if (notZero(coeff))
+	if (0 <= row && row < fNbEqn && 0 <= column && column < fNbUnk)
 		firstDesignMatrix->coeffRef(row,column) = coeff;
 	} catch(...) {
 		return false;
@@ -127,7 +141,7 @@ bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try {
-	if (notZero(coeff))
+	if (0 <= row && row < fNbEqn && 0 <= column && column < fNbObs)
 		secondDesignMatrix->insert(row,column) = coeff;
 	} catch(...) {
 		return false;
@@ -150,7 +164,7 @@ bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try {
-	if (notZero(coeff))
+	if (0 <= row && row < fNbObs && 0 <= column && column < fNbObs)
 		weightMatrix->insert(row,column) = coeff;
 	} catch(...) {
 		return false;
@@ -158,11 +172,32 @@ bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column,
 	return true;
 }
 
+bool TLSInputMatrices::setWeightInvMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
+{
+	try {
+	if (0 <= row && row < fNbObs && 0 <= column && column < fNbObs)
+		weightInvMatrix->insert(row,column) = coeff;
+	} catch(...) {
+		return false;
+	}
+	return true;
+}
+
+bool TLSInputMatrices::setWeightUnkMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
+{
+	try {
+	if (0 <= row && row < fNbUnk && 0 <= column && column < fNbUnk)
+		weightUnkMatrix->insert(row,column) = coeff;
+	} catch(...) {
+		return false;
+	}
+	return true;
+}
 
 bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try {
-	if (notZero(coeff))
+	if (0 <= row && row < fNbCnstr && 0 <= column && column < fNbUnk)
 		fCnstrFirstDesignMtrx->insert(row,column) = coeff;
 	} catch(...) {
 		return false;
@@ -198,6 +233,16 @@ const TSparseMatrix* TLSInputMatrices::getSecondDgnMtrx() const
 const TSparseMatrix* TLSInputMatrices::getWeightMtrx() const
 {
 	return weightMatrix;
+}
+
+const TSparseMatrix* TLSInputMatrices::getWeightInvMtrx() const
+{
+	return weightInvMatrix;
+}
+
+const TSparseMatrix* TLSInputMatrices::getWeightUnkMtrx() const
+{
+	return weightUnkMatrix;
 }
 
 const TVector& TLSInputMatrices::getMisclosureVctr() const

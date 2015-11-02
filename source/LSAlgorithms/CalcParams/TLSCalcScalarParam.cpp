@@ -8,25 +8,24 @@
 
 // Default constructor
 TLSCalcScalarParam::TLSCalcScalarParam():
-fProvisionalValue(LITERAL(0.0) /*, TCoordSysFactory::k3DCartesian*/),
-fCorrection(LITERAL(0.0) /*, TCoordSysFactory::k3DCartesian*/),
-fEstimatedValue(fProvisionalValue),
-fEstimatedPrecision(LITERAL(0.0) /*, TCoordSysFactory::k3DCartesian*/),
-fCovariance(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/),
-TALSCalcParameter("") {
-	
-	fStatus = TALSCalcParameter::kVariable;
-	
+   fProvisionalValue(LITERAL(0.0) /*, TCoordSysFactory::k3DCartesian*/),
+   fCorrection(LITERAL(0.0) /*, TCoordSysFactory::k3DCartesian*/),
+   fEstimatedValue(fProvisionalValue),
+   fEstimatedPrecision(LITERAL(0.0) /*, TCoordSysFactory::k3DCartesian*/),
+   fCovariance(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/),
+   TALSCalcParameter("") 
+{
+   fStatus = TALSCalcParameter::kVariable;
 }
 
 // Constructor taking provisional value and parameter status as argument
-TLSCalcScalarParam::TLSCalcScalarParam(TScalar pv, ELSStatus status, string name )://does the scalar need a name?
-fProvisionalValue(pv),
-fStatus(status),TALSCalcParameter(name), 
-fCorrection(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/),
-fEstimatedValue(fProvisionalValue),
-fEstimatedPrecision(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/),
-fCovariance(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/)
+TLSCalcScalarParam::TLSCalcScalarParam(TReal pv, ELSStatus status, string name) ://does the scalar need a name?
+   fProvisionalValue(pv),
+   fStatus(status),TALSCalcParameter(name), 
+   fCorrection(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/),
+   fEstimatedValue(fProvisionalValue),
+   fEstimatedPrecision(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/),
+   fCovariance(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/)
 {
 	
 }
@@ -34,13 +33,13 @@ fCovariance(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/)
 
 // Copy constructor 
 TLSCalcScalarParam::TLSCalcScalarParam(const TLSCalcScalarParam& source):
-fProvisionalValue(source.fProvisionalValue),
-fCorrection(source.fCorrection),
-fEstimatedValue(source.fEstimatedValue),
-fEstimatedPrecision(source.fEstimatedPrecision),
-fCovariance(source.fCovariance),
-TALSCalcParameter(source.getName()){
-	
+   fProvisionalValue(source.fProvisionalValue),
+   fCorrection(source.fCorrection),
+   fEstimatedValue(source.fEstimatedValue),
+   fEstimatedPrecision(source.fEstimatedPrecision),
+   fCovariance(source.fCovariance),
+   TALSCalcParameter(source.getName())
+{
 	fStatus = source.fStatus; 
 }
 
@@ -48,14 +47,6 @@ TALSCalcParameter(source.getName()){
 // Destructor
 TLSCalcScalarParam::~TLSCalcScalarParam() {
 }
-
-/*
-// Copy assignement operator
-TLSCalcScalarParam& TLSCalcScalarParam::operator =(const TLSCalcScalarParam& right) {
-
-	//not implemented
-}
-*/
 
 // re-initialises the parameters alterred during or after a least squares calculation
 void	TLSCalcScalarParam::reInitialise()
@@ -74,40 +65,39 @@ void	TLSCalcScalarParam::reInitialise()
 
 void TLSCalcScalarParam::resetValues()
 {
-fProvisionalValue = TReal(LITERAL(1.0));
-fCorrection = TReal(LITERAL(0.0));
-fEstimatedValue = TReal(LITERAL(0.0));
-fEstimatedPrecision = TReal(LITERAL(0.0));
-fCovariance = TReal(LITERAL(0.0));
-
+   fProvisionalValue = TReal(LITERAL(1.0));
+   fCorrection = TReal(LITERAL(0.0));
+   fEstimatedValue = TReal(LITERAL(0.0));
+   fEstimatedPrecision = TReal(LITERAL(0.0));
+   fCovariance = TReal(LITERAL(0.0));
 }
 
 // Returns the provisional value of the position vector 
-TScalar	TLSCalcScalarParam::getProvisionalValue() const {
+TReal	TLSCalcScalarParam::getProvisionalValue() const {
 
 	return fProvisionalValue;
 }
 	
 // Returns the correction value 
-TScalar	TLSCalcScalarParam::getCorrection() const {
+TReal	TLSCalcScalarParam::getCorrection() const {
 
 	return fCorrection;
 }
 	
 //! Returns the estimated value for the position 
-TScalar	TLSCalcScalarParam::getEstimatedValue() const {
+TReal	TLSCalcScalarParam::getEstimatedValue() const {
 
 	return fEstimatedValue;
 }
 
 // Returns the estimated precision for the position 
-TScalar	TLSCalcScalarParam::getEstimatedPrecision() const {
+TReal	TLSCalcScalarParam::getEstimatedPrecision() const {
 
 	return fEstimatedPrecision;
 }
 
 // Returns the covariance element for the position 
-TScalar	TLSCalcScalarParam::getEstimatedCovariance() const {
+TReal	TLSCalcScalarParam::getEstimatedCovariance() const {
 
 	return fCovariance;
 }
@@ -129,7 +119,7 @@ TSpatialStatus::ESpatialStatus	TLSCalcScalarParam::getGlobalStatus() const
 
 MatrixIndex	TLSCalcScalarParam::getScalarIndex()
 {
-	return 	fScalarIndices[0];
+	return  fScalarIndices[0];
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -137,32 +127,32 @@ MatrixIndex	TLSCalcScalarParam::getScalarIndex()
 ///////////////////////////////////////////////////////////////////////////
 
 // Sets the provisional value of the scalar parameter 
-void	TLSCalcScalarParam::setProvisionalValue(TScalar pv) {
+void	TLSCalcScalarParam::setProvisionalValue(TReal pv) {
 
 	fProvisionalValue = pv;
 	setEstimatedValue(pv);
 }
 // Sets the estimated value of the scalar parameter 
-void	TLSCalcScalarParam::setEstimatedValue(TScalar evv) {
+void	TLSCalcScalarParam::setEstimatedValue(TReal evv) {
 
 	fEstimatedValue = evv;
 	}
 
 // Sets the correction value 
-void	TLSCalcScalarParam::setCorrection(TScalar corr) {
+void	TLSCalcScalarParam::setCorrection(TReal corr) {
 
 	fCorrection = corr;
 	setEstimatedValue();
 }
 
 // Sets the estimated precision after calculation 
-void	TLSCalcScalarParam::setEstimatedPrecision(TScalar ep) {
+void	TLSCalcScalarParam::setEstimatedPrecision(TReal ep) {
 
 	fEstimatedPrecision = ep;
 }
 
 // Sets the estimated precision after calculation 
-void	TLSCalcScalarParam::setEstimatedCovariance(TScalar cov) {
+void	TLSCalcScalarParam::setEstimatedCovariance(TReal cov) {
 
 	fCovariance = cov;
 }
@@ -177,11 +167,10 @@ void	TLSCalcScalarParam::setStatus(ELSStatus stat) {
 void	TLSCalcScalarParam::setEstimatedValue() 
 {//plus signs removed as a test - 21/10/03 10:11
 	fEstimatedValue += fCorrection;
-	
 }
 
 // Sets the scalar parameter's unknown index 
-UEOIndices		TLSCalcScalarParam::setUIndex(UEOIndices ui) {
+UEOIndices TLSCalcScalarParam::setUIndex(UEOIndices ui) {
  
 	if (fStatus == TALSCalcParameter::kVariable)
 		fScalarIndices[0] = ui.UIndex ++;

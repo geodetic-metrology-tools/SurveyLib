@@ -31,10 +31,12 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 /////////////////////////////////////////////////////////////////////////////
 //constructor / destructor
 /////////////////////////////////////////////////////////////////////////////
+
 TPointConverter::TPointConverter(TAStreamFormatter* stream,
 								 const TRefSystemFactory::ERefFrame	refFrame):
 TAConverter(stream)
 {//constructor
+
 	fRefFrame = refFrame;
 
 	TAReferenceFrame* pointRefFrame = stream->getReferenceFrame();
@@ -44,6 +46,7 @@ TAConverter(stream)
 	else
 		fLocalSys = true;
 }
+
 
 TPointConverter::~TPointConverter()
 {//destructor
@@ -72,17 +75,6 @@ TPointConverter& 	TPointConverter::operator=(const TPointConverter& source)
 //////////////////////////////////////////////////////////////////////////////////
 //Name
 //////////////////////////////////////////////////////////////////////////////////
-void	TPointConverter::writeName(LSPosVecConstIter pt, int width)
-{
-	TAStreamFormatter*	stream = getStream();
-
-	//Write point name
-	stream->width(width);
-	(*stream)<<left<<(pt->getName())<<right << this->getSeparator();
-	return;
-}
-
-
 void	TPointConverter::writeName(string ptName, int width)
 {
 	TAStreamFormatter*	stream = getStream();
@@ -98,81 +90,45 @@ void	TPointConverter::writeName(string ptName, int width)
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //X Y Z and H
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void	TPointConverter::writeXYZandH(LSPosVecConstIter pt)
+
+//Write position vector in any 
+void	TPointConverter::writeXYZandH(const TPositionVector& pt)
+{
+	TAStreamFormatter*	stream = getStream();
+	string				separator = getSeparator();
+
+	//get Coordinate as a TPositionVector
+	(*stream)<<(pt);
+	return;
+}
+
+
+void	TPointConverter::writeXYZandH(const TPositionVector& pt, TReal heightH)
 {
 	TAStreamFormatter*	stream = getStream();
 	int					coordWidth = getCoordWidth();
 	string				separator = getSeparator();
 
 	//get Coordinate as a TPositionVector
-	(*stream)<<(pt->getEstimatedValue());
+	(*stream)<<(pt);
 
-	//write H if point's refrence frame is CCS
-	if(!isInLocalSystem())
-	{
-		stream->width(coordWidth);
-		(*stream)<<(pt->getHEstValue(fRefFrame)) << separator;
-	}
+	stream->width(coordWidth);
+	(*stream)<<heightH << separator;
 
 	return;
 }
-
-
-void	TPointConverter::writeXYZandH(	const int width,
-										const int precision,
-										const TLength::EUnits unit,
-										const string separator,
-										LSPosVecConstIter pt)
-{
-	TAStreamFormatter*	stream = getStream();
-
-	stream->setLengthUnits(unit);
-	stream->setWidthFormat(width);
-	stream->setPrecisionFormat(precision);
-
-	//write X
-	(*stream)<<pt->getXEstValue()<<separator;
-
-	//write Y
-	(*stream)<<pt->getYEstValue()<<separator;
-
-	//write Z
-	(*stream)<<pt->getZEstValue()<<separator;
-
-	//write H if point's refrence frame is CCS
-	if(!isInLocalSystem())
-	{
-		(*stream)<<(pt->getHEstValue(fRefFrame)) << separator;
-	}
-
-	return;
-}
-
-
-
-void	TPointConverter::writeXYZorH(	const int width,
-										const int precision,
-										const TLength::EUnits unit,
-										const string separator,
-										LSPosVecConstIter pt)
-{
-	if(!isInLocalSystem())
-	{writeXYH(width, precision, unit, separator, pt);}
-	else
-	{writeXYZ(width, precision, unit, separator, pt);}
-	return;
-}
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //X Y H
 ////////////////////////////////////////////////////////////////////////////////////////////////
+
 void	TPointConverter::writeXYH(	const int width,
 									const int precision,
 									const TLength::EUnits unit,
 									const string separator,
-									LSPosVecConstIter pt)
+                           const TReal Xparam,
+                           const TReal Yparam,
+                           const TReal Hparam)
 {
 	TAStreamFormatter*	stream = getStream();
 
@@ -181,51 +137,25 @@ void	TPointConverter::writeXYH(	const int width,
 	stream->setPrecisionFormat(precision);
 
 	//write X
-	(*stream)<<pt->getXEstValue()<<separator;
+	(*stream)<< Xparam << separator;
 
 	//write Y
-	(*stream)<<pt->getYEstValue()<<separator;
+	(*stream)<< Yparam << separator;
 
 	//write H if point's refrence frame is CCS
-	if(!isInLocalSystem()) 
-	{ 
-		(*stream)<<(pt->getHEstValue(fRefFrame))<<separator; 
-	}
+	if(!isInLocalSystem())
+		(*stream)<< Hparam; 
 	else
-	{
 		writeString(width, " ");
-		(*stream) << separator; 
-	}
+	
+	(*stream) << separator; 
+	
 	return;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //X Y Z 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void	TPointConverter::writeXYZ(	const int width,
-									const int precision,
-									const TLength::EUnits unit,
-									const string separator,
-									LSPosVecConstIter pt)
-{
-	TAStreamFormatter*	stream = getStream();
-
-	stream->setLengthUnits(unit);
-	stream->setWidthFormat(width);
-	stream->setPrecisionFormat(precision);
-
-	//write X
-	(*stream)<<pt->getXEstValue()<<separator;
-
-	//write Y
-	(*stream)<<pt->getYEstValue()<<separator;
-
-	//write Z
-	(*stream)<<pt->getZEstValue() << separator;
-	return;
-}
-
 
 void	TPointConverter::writeXYZ(	const int width,
 									const int precision,
@@ -253,13 +183,11 @@ void	TPointConverter::writeXYZ(	const int width,
 
 void	TPointConverter::write3Coordinates(	const int width,
 											const int precision,
-											const TLength::EUnits unit,
 											const string separator,
 											const TPositionVector pt)
 {
 	TAStreamFormatter*	stream = getStream();
 
-	stream->setLengthUnits(unit);
 	stream->setWidthFormat(width);
 	stream->setPrecisionFormat(precision);
 
@@ -274,35 +202,59 @@ void	TPointConverter::write3Coordinates(	const int width,
 		(*stream)<<pt.getZ() << separator;
 	
 	if(pt.getCoordSys() == TCoordSysFactory::k2DPlusH)
-		(*stream)<<pt.getH() << separator;
+		(*stream)<<pt.getH()<< separator;
 
 	return;
 }
 
 
 
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-//N
-////////////////////////////////////////////////////////////////////////////////////////////////
-void	TPointConverter::writeN( const int width,
-								 const int precision,
-								 const TLength::EUnits unit,
-								 LSPosVecConstIter pt)
+void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
+												const int width,
+												const int precision,
+												const string separator,
+												TReal Xparam,
+												TReal Yparam,
+												TReal Zparam,
+												const string Dparam,
+												bool isCovar)
 {
-	TRefSystemFactory::EGeoid geoid(TRefSystemFactory::kNoGeoid);
-	if(fRefFrame ==	TRefSystemFactory::kCERNXYHsSphereSPS)
-	{geoid = TRefSystemFactory::kCGSphere;}
-	if(fRefFrame ==	TRefSystemFactory::kCernXYHg85Machine)
-	{geoid = TRefSystemFactory::kCG1985Machine;}
-	if(fRefFrame ==	TRefSystemFactory::kCernXYHg00Machine)
-	{geoid = TRefSystemFactory::kCG2000Machine;}
-	writeLength(width, precision ,unit ,pt->getNEstValue(geoid) );
+	TAStreamFormatter*	stream = getStream();
+
+	stream->setWidthFormat(width);
+	stream->setPrecisionFormat(precision);
+	
+	//write X
+	if((isCovar &&  (status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy))  || 
+		!isCovar && (status == TSpatialStatus::kVx || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVxz))
+		(*stream)<<(Xparam);	
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
+
+
+	//write Y
+	if((isCovar &&  (status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxz))  || 
+		!isCovar && (status == TSpatialStatus::kVy || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVyz))
+		(*stream)<<(Yparam);
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
+
+
+	//write Z
+	if((isCovar &&  (status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVyz))  || 
+		!isCovar && (status == TSpatialStatus::kVz || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxz  || status == TSpatialStatus::kVyz))
+		(*stream)<<(Zparam);
+	else
+		writeString(width, Dparam);
+
+	(*stream)<<(separator);
+
 	return;
 }
-
-
 
 
 void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
@@ -354,57 +306,34 @@ void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus
 	return;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+//N
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
-												const int width,
-												const int precision,
-												const string separator,
-												const TDouble Xparam,
-												const TDouble Yparam,
-												const TDouble Zparam,
-												const string Dparam)
+/*void	TPointConverter::writeN( const int width,
+								 const int precision,
+								 const TLength::EUnits unit,
+								 TAdjustablePoint pt)
 {
-	TAStreamFormatter*	stream = getStream();
-
-	stream->setWidthFormat(width);
-	stream->setPrecisionFormat(precision);
-
-	//write X
-	if(status == TSpatialStatus::kVx || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVxz)
-		(*stream)<<(Xparam);	
-	else
-		writeString(width, Dparam);
-
-	(*stream)<<(separator);
-
-
-	//write Y
-	if(status == TSpatialStatus::kVy || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxy  || status == TSpatialStatus::kVyz)
-		(*stream)<<(Yparam);
-	else
-		writeString(width, Dparam);
-
-	(*stream)<<(separator);
+	TRefSystemFactory::EGeoid geoid(TRefSystemFactory::kNoGeoid);
+	
+	// Set geoeid depending on the ref frame
+	if(fRefFrame ==	TRefSystemFactory::kCERNXYHsSphereSPS)
+		geoid = TRefSystemFactory::kCGSphere;
+	if(fRefFrame ==	TRefSystemFactory::kCernXYHg85Machine)
+		geoid = TRefSystemFactory::kCG1985Machine;
+	if(fRefFrame ==	TRefSystemFactory::kCernXYHg00Machine)
+		geoid = TRefSystemFactory::kCG2000Machine;
+	
+	//writeLength(width, precision ,unit , pt.getNEstValue(geoid) );
+}*/
 
 
-	//write Z
-	if(status == TSpatialStatus::kVz || status == TSpatialStatus::kVxyz || status == TSpatialStatus::kVxz  || status == TSpatialStatus::kVyz)
-		(*stream)<<(Zparam);
-	else
-		writeString(width, Dparam);
-
-	(*stream)<<(separator);
-
+void	TPointConverter::writeN( const int width,
+								 const int precision,
+								 TReal N)
+{
+	writeDouble(width, precision ,N );
 	return;
 }
-
-
-
-
-
-
-
-
-
-

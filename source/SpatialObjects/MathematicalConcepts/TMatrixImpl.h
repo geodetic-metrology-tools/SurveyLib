@@ -3,7 +3,7 @@
 
 #include <TSparseMatrix.h>
 #include <Eigen/Core>
-
+/// \ingroup MathematicalConcepts
 class TMatrixImpl
 {
 public:
@@ -18,8 +18,8 @@ public:
     void initDiag(double value); 
     void resize(int rows, int cols);
 
-    int rows() const { return fMatrix.rows(); }
-    int cols() const { return fMatrix.cols(); }
+    int rows() const { return int(fMatrix.rows()); }
+    int cols() const { return int(fMatrix.cols()); }
 
     double & operator()(int row, int col);
     double operator()(int row, int col) const;

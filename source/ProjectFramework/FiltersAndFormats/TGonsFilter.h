@@ -34,7 +34,7 @@ class  TAngle;
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup projectframework
+/*!\ingroup FiltersAndFormats
 @{*/
 
 //Class definition

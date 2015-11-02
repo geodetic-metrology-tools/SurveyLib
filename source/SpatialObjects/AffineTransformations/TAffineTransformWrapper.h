@@ -18,15 +18,11 @@
 #ifndef SU_AFFINE_TRANSFORMATION_WRAPPER
 #define SU_AFFINE_TRANSFORMATION_WRAPPER
 
-
 #if _MSC_VER >= 1000
 #pragma once
-#pragma warning(disable:4786)
-
-#endif // _MSC_VER >= 1000
+#endif
 
 #include  "TPtrWrapper.h"
-//#include  "TConstPtrWrapper.h"
 #include  "TAAffineTransformation.h"
 
 
@@ -55,57 +51,4 @@ private:
 
 };
 
-/*#include <list>
-using namespace std;
-	typedef list<TAffineTransformWrapper> CompositeTransformationSet;
-	typedef CompositeTransformationSet::iterator CompositeIterator;
-	typedef CompositeTransformationSet::const_iterator ConstCompositeIter;
-	typedef list<TAffineTransformWrapper> MySet;
-	typedef MySet::iterator MyIterator;
-	typedef MySet::const_iterator ConstMyIter;*/
-
-//////////////////////////////////////////////////////////////////////
-// Inline Definitions
-//////////////////////////////////////////////////////////////////////
-
-/*
-//////////////////////////////////////////////////////////////////////
-// Definitions and Initialisations
-//////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
-//Default constructor
-//template <class T>
-TAffineTransformWrapper::TAffineTransformWrapper() 
-:TPtrWrapper<TVAffineTransformation>()
-{}
-
-//Constructor taking a pointer to the template object
-//template <class T>
-TAffineTransformWrapper::TAffineTransformWrapper( TVAffineTransformation * transformer )
-:TPtrWrapper<TVAffineTransformation>(transformer)
-{ 
-}
-
-
-//Copy constructor
-//template <class T>
-TAffineTransformWrapper::TAffineTransformWrapper( TAffineTransformWrapper & original )
-:TPtrWrapper<TVAffineTransformation>( original )
-{
-	this->setPtr( original.getPtr() );
-	this->setCountPtr( original.getCountPtr() );
-	this->incrementCount();
-}
-
-
-//Destructor
-//template <class T>
-TAffineTransformWrapper::~TAffineTransformWrapper()
-{  
-}
-*/
 #endif // SU_TRANSFORMATION_WRAPPER

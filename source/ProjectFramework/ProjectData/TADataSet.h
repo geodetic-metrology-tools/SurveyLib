@@ -41,54 +41,62 @@ public:
 
 	/*!@name Constructors and Destructors */
 	//@{
-		//!Default Constructor 
+		/// Default Constructor 
 		TADataSet();
 
-		/*!Constructor
+		/*!
+		\brief Constructor
+
 		\param fp : TFileParameters
 		\param dp : TDataParameters*/
 		TADataSet(const  TFileParameters& fp, const TDataParameters& dp);
 
-		/*!Constructor
+		/*!
+		\brief Constructor
+
 		\param dp : TDataParameters*/
 		TADataSet(const TDataParameters& dp);
 
-		//!Copy Constructor 
+		/// Copy Constructor 
 		TADataSet( const TADataSet& );
 
-		//!Destructor
+		/// Destructor
 		virtual  ~TADataSet();
 	//@}
 
 
 	/*!@name Member Functions */
 	//@{
-		//! Copy Assignment Operator 
+		/// Copy Assignment Operator 
 		TADataSet& operator=( const TADataSet& );
 
-		//! indicates if file parameters have been set
+		/// indicates if file parameters have been set
 		bool  fileKnown() const;
 
-		//! clear the file parameters
+		/// clear the file parameters
 		//void  fileDeleted();
 
-		//! returns a copy of the file parameters
+		/// returns a copy of the file parameters
 		TFileParameters  getFileParams() const;
 
-		//! set the file parameters
+		/// set the file parameters
 		void  setFileParams(const TFileParameters&);
 
-		//! returns a copy of the data parameters
+		/// returns a copy of the data parameters
 		TDataParameters  getDataParams() const;
 
-		//! set copy ofthe data parameters
+		/// set copy ofthe data parameters
 		void  setDataParams(const TDataParameters&);
 
-		/*!check if the Data Set is Saved
+		/*!
+		\brief check if the Data Set is Saved
+
 		\return true if it's saved*/
 		bool isSaved();
 
-		/*!put the saved status to the value of b
+		/*!
+		\brief put the saved status to the value of b
+
 		\return b*/
 		void saved();
 	//@}
@@ -100,129 +108,132 @@ public:
 
 		bool	isOriginExpected() const;
 
-		//! set the reference system identifier
+		/// set the reference system identifier
 		bool	setRefFrame(TRefSystemFactory::ERefFrame);
 
-		//!set the coordinate system
+		///set the coordinate system
 		bool	setCoordSys(const TCoordSysFactory::ECoordSys&);
 
-		//!set angle umits
+		///set angle umits
 		bool	setAngUnits(const TAngle::EUnits&);
 
-		//!setlength units
+		///setlength units
 		bool	setLenUnits(const TLength::EUnits&);
 	
-		//! set the coordinate units
+		/// set the coordinate units
 		bool	setUnits( const TDataParameters::ECoordUnit& );
 
-		//! set the angle precision
+		/// set the angle precision
 		void	setAnglePrecision(const TObservationFormat::EAnglePrecision precision );
 		
-		//! set the length precision 
+		/// set the length precision 
 		void	setLengthPrecision(const TObservationFormat::ELengthPrecision precision );
 		
-		//!set coordinate precision
+		/// set coordinate precision
 		void	setCoordPrecision(const TPointFormat::ECoordPrecision precision);
 
-		//!set the point name's width
+		/// set the point name's width
 		void	setPointNameWidth(const int);
 
+		/// set the origin of the local system used
 		bool	setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin>);
 	
 
-		//! get the reference system identifier
+		/// get the reference system identifier
 		TAReferenceFrame*	getRefFrame();
 
-		//! get the reference system identifier
+		/// get the reference system identifier
         TRefSystemFactory::ERefFrame	getRefFrameEnumerator() const;
 
-		//! get the coordinate system for the RefSystem data
+		/// get the coordinate system for the RefSystem data
 		TCoordSysFactory::ECoordSys		getCoordinateSystem()  const;
 		
-		//! get the angle units
+		/// get the angle units
 		TAngle::EUnits		getAngleUnits() const;
 	
-		//! get the length units
+		/// get the length units
 		TLength::EUnits		getLengthUnits() const;
 	
-		//! get the angle precision
+		/// get the angle precision
 		TObservationFormat::EAnglePrecision		getAnglePrecision() const;
 
-		//! get the length precision 
+		/// get the length precision 
 		TObservationFormat::ELengthPrecision	getLengthPrecision() const;
 
-		//! get the coord precision 
+		/// get the coord precision 
 		TPointFormat::ECoordPrecision			getCoordPrecision() const;
 
-		//! get the point name's width 
+		/// get the point name's width 
 		int										getPointNameWidth() const;
 
-
+		/// get a pointer to the origin of the local system used
         std::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
 	//@}
 	
 		
 	/*!@name Wrapper TFileParameters Functions */
 	//@{
-		//! set the full filename, both path and name
+		/// set the full filename, both path and name
 		bool  setFileName( const string& );
-		//! set the file type
+		/// set the file type
 		bool  setTypeFormat( const string& );
-		//! clear the file parameters and set the default values 
+		/// clear the file parameters and set the default values 
 		void  defaultValues();
 
-		//! get the full filename, both path and name
+		/// get the full filename, both path and name
 		string  getFileName()  const;  
-		//! get the name of the file
+		/// get the name of the file
 		string  getName()  const;
-		//! get the path for the file
+		/// get the path for the file
 		string  getPath()  const;
-		//! get the file type
+		/// get the file type
 		TFileParameters::EFileType  getType()  const;
-		//! get the text stream's format
+		/// get the text stream's format
 		TFileParameters::ETextFormat  getFormat() const;
-		//! indicates if the file name, type and format have been set
+		/// indicates if the file name, type and format have been set
 		bool  isFileParamsDefined()  const;
 	//@}
 
 	/*!@output stream format access methods*/
 	//@{
 	
-		/*!@ set results file format*/
+		/// set results file format
 		virtual void setResultsFileFormat(TAStreamFormatter::ETextFormat resFileFrmt);
 
-		/*!@ get results file format*/
+		/// get results file format
 		virtual TAStreamFormatter::ETextFormat getResultsFileFormat();
 
-		/*!@ set punch file format*/
+		/// set punch file format
 		virtual void setPunchFileFormat(TAStreamFormatter::ETextFormat puncFileFrmt);
 
-		/*!@ get punch file format*/
+		/// get punch file format
 		virtual TAStreamFormatter::ETextFormat getPunchFileFormat();
 
-		/*!@ set punch seperator*/
+		/// set punch seperator
 		virtual void setPunchSeparator(string);
 
-		/*!@ set results seperator*/
+		/// set results seperator
 		virtual void setResultsSeparator(string);
 
-		/*!@ get results seperator*/
+		/// get results seperator
 		virtual string getResultsSeparator();
 
-		/*!@ get punch seperator*/
+		/// get punch seperator
 		virtual string getPunchSeparator();
 
-		/*!@ get the format for the spacing between the data*/
+		/// get the format for the spacing between the data
 		bool isSpaceBetweenData();
 		
-		/*!@ set no space between the data*/
+		/// set no space between the data
 		void setNoSpaceBetweenData();
 
-		/*!@ set a space between the data*/
+		/// set a space between the data
 		void setSpaceBetweenData();
 
+		/// set the format of the file
 		void setFormatType(string fmtType);
 
+		/// get the format of the file
 		string getFormatType();
 	//@}
 
@@ -234,13 +245,13 @@ private:
 	//@{
 		bool						fLineSpacing;
 
-		//!TFileParameters
+		///TFileParameters
 		TFileParameters				fFileParams;
 
-		//!TDataParameters
+		///TDataParameters
 		TDataParameters				fDataParams;
 
-		//!saved status : bool
+		///saved status : bool
 		bool						fSaved;
 
 		string						fFormatType;

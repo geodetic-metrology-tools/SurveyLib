@@ -20,23 +20,14 @@
 //////////////////////////////////////////////////////////////////////
 
 
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
 #include  "TModifiedLocalGeodeticRF.h"
 #include  "TGraph.h"
 #include  "TReferenceEllipsoid.h"
 #include  "TGeodeticRefFrame.h"
 #include  "TRotation.h"
-#include  "TSpatialPositionError.h"
 #include  "TGC2LGTransformation.h"
 #include  "TLG2GCTransformation.h"
-////////////////////////////////////////////////////////////////
 
-
-//ClassImp(TModifiedLocalGeodeticRF)
 
 
 //////////////////////////////////////////////////////////////////////
@@ -95,7 +86,7 @@ TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 		alpha.sine(), TCoordSysFactory::k3DCartesian);
 	//unitVector.setElements(vector);
 
-	TAngle azcern(LITERAL(37.77864) * TAngle::gonsToRadsFactor());
+	TAngle azcern(LITERAL(37.77864) * GON2RAD);
 	TAngle phiP0, lambdaP0;
 	TVReferenceFrame* rf = TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS);
 	phiP0 = rf->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();

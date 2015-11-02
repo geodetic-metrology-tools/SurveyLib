@@ -25,7 +25,6 @@ class  TCompositeAffTransform;
 //
 // typedefs
 #include  "TAAffineTransformation.h"
-#include  "TScalar.h"
 //
 //
 ////////////////////////////////////////////////////////////////
@@ -45,9 +44,6 @@ public:
 
 		//! Constructor taking a scale factor as a TReal
 		explicit TScaleFactor(TReal);
-
-		//! Constructor taking a scale factor as a TDouble
-		explicit TScaleFactor(TScalar);
 
 		//! Copy Constructor 
 		TScaleFactor( const TScaleFactor & );
@@ -71,17 +67,14 @@ public:
 		//! Set the factor of ScaleFactor
 		void setScaleFactor( TReal );
 
-		//! Set the factor of ScaleFactor
-		void setScaleFactor( TScalar );
-
 		//! Return the factor
-		TScalar getScaleFactor() const;
+		TReal getScaleFactor() const;
 		
 		//! Create a composite transformation by applying this transformation to an affine transformation
 		//virtual  TCompositeAffTransform operator() ( const TAAffineTransformation & ) const;
 
 		//! Return a pointer to a clone of this transformation
-		virtual  TScaleFactor *  clone() const;
+		virtual  TScaleFactor*  clone() const;
 
 		//! Transform a position vector
 		virtual  bool transform( TPositionVector & )const;
@@ -102,7 +95,7 @@ public:
 		virtual  TRotationMatrix &  operator() ( TRotationMatrix & ) const;
 
 		//! Return a pointer to the inverse of this transformation
-		virtual  TScaleFactor * inverse() const;
+		virtual  TScaleFactor* inverse() const;
 
 		//! Invert the transformation, replaces the current transformation parameters
 		virtual  void invert();
@@ -111,22 +104,11 @@ public:
 
 private:
 	
-		TScalar  fScaleFactor; /*!< scale factor */
+		TReal  fScaleFactor; /*!< scale factor */
 
 	//ClassDef(TScaleFactor, 1)
 };
 /*@}*/
-
-//////////////////////////////////////////////////////////////////////
-// Inline Definitions
-//////////////////////////////////////////////////////////////////////
-
-inline void TScaleFactor::setScaleFactor( TReal fact) {fScaleFactor.setValue( fact ); return;}
-
-inline void TScaleFactor::setScaleFactor( TScalar fact) {fScaleFactor = fact; return;}
-
-inline TScalar TScaleFactor::getScaleFactor() const { return fScaleFactor;}
-
 
 
 

@@ -23,12 +23,6 @@ set(FiltersAndFormats_SOURCES
 	TMetresFilter.cpp
 	TMillimetresFilter.cpp
 	TRadiansFilter.cpp
-	# TWPS2DFilter.cpp
-	# TWPSTFilter.cpp
-	# TWPSVFilter.cpp
-	# TWTW2DFilter.cpp
-	# TWTWHFilter.cpp
-	# TWTWVFilter.cpp
 )
 
 # Create a variable containing all .h files:
@@ -48,12 +42,6 @@ set(FiltersAndFormats_HEADERS
 	TMillimetresFilter.h
 	TRadiansFilter.h
 	TSpatialPositionFilter.h
-	# TWPS2DFilter.h
-	# TWPSTFilter.h
-	# TWPSVFilter.h
-	# TWTW2DFilter.h
-	# TWTWHFilter.h
-	# TWTWVFilter.h
 )
 
 # Create a static library from sources:

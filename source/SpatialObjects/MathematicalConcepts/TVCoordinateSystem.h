@@ -41,7 +41,7 @@ class TPositionVector;
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Virtual class for Coordonate System

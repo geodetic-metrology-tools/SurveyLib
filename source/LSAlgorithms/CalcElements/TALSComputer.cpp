@@ -1,46 +1,43 @@
-//
-// VLSComputer.h : header file
-// abstract base class for a least squares computer 
-//
-
 #include "TALSComputer.h"
+#include "TVNumericValue.h"
+#include "QuantileFunctions.h"
+#include <memory>
+#include <iostream>
 
 //////////////////////////
 // no argument constructor
 //////////////////////////
-TALSComputer::TALSComputer()
-{
-//	fS0APosterioriVariances = true;
-//	fS0APrioriScaleFactor = 1;
-}
+TALSComputer::TALSComputer():fError("")
+{}
+
 
 /////////////
 // destructor
 /////////////
-TALSComputer::~TALSComputer(){
+TALSComputer::~TALSComputer(){}
 
+limits TALSComputer::calcSigmaZeroLimits(const int nbObs, const int nbUnk)
+{
+	// computes and saves limits of interval for test chi of S0 validity
+	struct limits resultat;
+	resultat.s0PostUpLimit = LITERAL(0.0);
+	resultat.s0PostLoLimit = LITERAL(0.0);
+	double d = LITERAL(0.0);
+	
+	d = nbObs - nbUnk;
+	
+	if(d>0)
+	{
+        double chiUp = deviates_chi_sq(0.975, d);
+        double chiLow = deviates_chi_sq(1-0.975, d);
+
+		if (fError == "")
+		{
+			//Limits
+			resultat.s0PostUpLimit = sqrtq(chiUp/d);
+			resultat.s0PostLoLimit = sqrtq(chiLow/d);
+
+		}
+	}
+	return resultat;
 }
-/*
-////////////////////////////////////////
-// sets the sigma0 a priori scale factor
-////////////////////////////////////////
-void TALSComputer::setS0APrioriScaleFactor(TReal scalefac){
-
-	fS0APrioriScaleFactor = scalefac;
-}*/
-/*
-//////////////////////////////////////////////////////////////////////
-// sets the variances to be calculated with respect to the s0 a priori
-//////////////////////////////////////////////////////////////////////
-void TALSComputer::s0APrioriVariances(){
-
-	fS0APosterioriVariances = false;
-}
-
-//////////////////////////////////////////////////////////////////////////
-// sets the variances to be calculated with respect to the s0 a posteriori
-//////////////////////////////////////////////////////////////////////////
-void TALSComputer::s0APosterioriVariances(){
-
-	fS0APosterioriVariances = true;
-}*/

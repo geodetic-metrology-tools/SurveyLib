@@ -1,16 +1,3 @@
-// TPointFormat.h
-/*!
-Class used by a text stream to store and get all necessary formatting information
-for the points and positions
-
-Patterns:
-
-Copyright 2000 CERN EST/SU. All rights reserved.
-*/
-//////////////////////////////////////////////////////////////////////
-
-
-
 #ifndef SU_TPointFormat
 #define SU_TPointFormat
 
@@ -18,25 +5,11 @@ Copyright 2000 CERN EST/SU. All rights reserved.
 #if _MSC_VER >= 1000
 #pragma once
 #endif // _MSC_VER >= 1000
-
-
-////////////////////////////////////////////////////////////////
-// Forward declarations
-//
-//#include  <**classname**>
-//using namespace std;
-//
-//class  **classname**;
-// typedefs
 #include  "TSpatialStatus.h"
-//
-//
-////////////////////////////////////////////////////////////////
 
-/*!\ingroup projectframework
+/*!\ingroup Converters
+ \brief Class used by a text stream to store and get all necessary formatting information for the points and positions.
 @{*/
-
-//Class definition
 class  TPointFormat 
 {
 public:
@@ -54,12 +27,12 @@ public:
 	TPointFormat();
 
 	/*!Constructor
-	\param name Width
-	\param coord Width
-	\param coord Precision
-	\param coord error Width
-	\param coord error Precision
-	\param show Sign (bool)
+		\param name Width
+		\param coord Width
+		\param coord Precision
+		\param coord error Width
+		\param coord error Precision
+		\param show Sign (bool)
 	*/
 	TPointFormat(int nameWidth, int coordWidth, ECoordPrecision coordPrecision, int coordErrorWidth, ECoordPrecision coordErrorPrecision, bool showSign, TSpatialStatus::ESpatialStatus status);
 

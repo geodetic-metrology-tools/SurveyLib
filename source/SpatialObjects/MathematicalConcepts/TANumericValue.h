@@ -41,7 +41,7 @@ Copyright 2002 CERN EST/SU. All rights reserved.
 
 
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //!  The TANumericValue class implements the interface for a numerical value.

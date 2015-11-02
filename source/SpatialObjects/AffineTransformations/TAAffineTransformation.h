@@ -9,7 +9,7 @@
 */
 //////////////////////////////////////////////////////////////////////
 
-
+#pragma warning(disable:4505)
 
 #ifndef SU_A_AFFINE_TRANSFORMATION
 #define SU_A_AFFINE_TRANSFORMATION
@@ -110,15 +110,8 @@ public:
 		virtual TAAffineTransformation * inverse() const = 0;
 
 		//! Invert the transformation, replaces the current transformation parameters
-		//virtual void invert() = 0;
+		virtual void invert() = 0;
 	//@}
-
-
-protected:
-
-private:
-
-	//ClassDef(TAAffineTransformation, 1)
 };
 
 /*@}*/

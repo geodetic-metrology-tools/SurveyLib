@@ -21,23 +21,16 @@
 ////////////////////////////////////////////////////////////////
 
 //!Includes Files
-#include    <iostream>
+#include <iostream>
 #include	<float.h>
-#include    <math.h>
+#include <math.h>
 #include	<assert.h>
 //
 
 #include  "TANumericValue.h"
-class TDouble;
-//using namespace std;
-
-//!Type Definition
-typedef	TReal	LengthValue;	// the value for the coordinate
-//
-////////////////////////////////////////////////////////////////
-
 
 //!Class Definition
+/// \ingroup MathematicalConcepts
 class	TLength  : public  TANumericValue //: public TObject
 {
 
@@ -55,9 +48,10 @@ public:
 	//@{
 	//! Default Constructor
 	TLength();
-	//! constructor taking a given length value in metres
-	explicit  TLength(LengthValue);
-	//TLength(LengthValue);
+
+   //! constructor taking a given length value in metres
+   explicit  TLength(TReal, EUnits = kMetres);
+
 	//! copy constructor
 	TLength(const TLength&);
 	//! Destructor
@@ -68,28 +62,28 @@ public:
 	//@{
 	
 	/*!set a value in metres
-	\param LengthValue, value of Tlength in metres 
+	\param TReal, value of Tlength in metres 
 	*/
-	void setMetresValue(LengthValue);
+	void setMetresValue(TReal);
 
 	/*!set a value in kilometres
-	\param LengthValue, value of Tlength in kilometres 
+	\param TReal, value of Tlength in kilometres 
 	*/
-	void setKMetresValue(LengthValue);
+	void setKMetresValue(TReal);
 
 	/*!set a value in millimetres
-	\param LengthValue, value of Tlength in millimetres 
+	\param TReal, value of Tlength in millimetres 
 	*/
-	void setMMetresValue(LengthValue);
+	void setMMetresValue(TReal);
 	
 	//!give the value in metres
-	LengthValue	getMetresValue() const;
+	TReal	getMetresValue() const;
 
 	//!give the value in kilometres
-	LengthValue	getKMetresValue() const;
+	TReal	getKMetresValue() const;
 
 	//!give the value in millimetres
-	LengthValue	getMMetresValue() const;
+	TReal	getMMetresValue() const;
 	
 	/*!Equality operator, comparaison between two TLength objects
 	\param Tlength&, TLength object
@@ -111,14 +105,11 @@ public:
 	TLength operator-(const TLength &);
 
 	/*! div. a TLength by a TLength*/
-	TDouble operator/(const TLength& );
+	TReal operator/(const TLength& );
 	
 	//!multiply a TLength object by a factor
 	TLength operator*(const TReal );
 	
-	//!idem *
-	TLength operator*(const TDouble &);
-
 	//!idem *
 	friend  TLength operator*(const TReal, const TLength & );
 
@@ -132,23 +123,17 @@ public:
 	TLength& operator-=(const TLength &);
 	
 	//!multiply a TLength object by a factor and rewrite this
-	TLength& operator*=(const TReal );
-	
-	//!idem *=
-	TLength& operator*=(const TDouble&);
+   TLength& operator*=(const TReal);
 
-
-	//!idem *=
-	//friend  TLength& operator*=(const TReal, const TLength & );
-	//@}
-
+   //!cast operator return the value as a TReal and expressed in Meters
+   operator TReal() const { return fValue; }
 
 private:
 
 	/*!\name Protected Methods*/
 	//@{
 	//!return the sign of a TReal number
-	ENumberSign		sign(TReal	number) const;
+	ENumberSign	sign(TReal	number) const;
 	//@}
 
 
@@ -157,7 +142,7 @@ private:
 	/*!\name Protected Attributes*/
 	//@{
 	//! default = LITERAL(0.0)
-	LengthValue			fValue;
+	TReal			fValue;
 	//@}
 
 
@@ -172,7 +157,7 @@ private:
 
 
 
-inline void TLength::setMetresValue(const LengthValue value)
+inline void TLength::setMetresValue(const TReal value)
 {	// set as a length measure of the given metres value
 	fValue = value;
 	valueSet();
@@ -180,7 +165,7 @@ inline void TLength::setMetresValue(const LengthValue value)
 }
 
 
-inline void TLength::setKMetresValue(const LengthValue value)
+inline void TLength::setKMetresValue(const TReal value)
 {	// set as a length measure of the given kilometres value
 	// scale the value input
 	fValue = value * 1000;
@@ -189,36 +174,32 @@ inline void TLength::setKMetresValue(const LengthValue value)
 }
 
 
-inline void TLength::setMMetresValue(const LengthValue value)
+inline void TLength::setMMetresValue(const TReal value)
 {	// set as a length measure of the given millimetres value
 	// scale the value input
-	fValue = value / 1000;
+	fValue = value * 0.001;
 	valueSet();
 	return;
 }
 
 
-inline LengthValue TLength::getMetresValue() const
+inline TReal TLength::getMetresValue() const
 {	// get the metres length value
 	return fValue;
 }
 
 
-inline LengthValue	TLength::getKMetresValue() const
+inline TReal	TLength::getKMetresValue() const
 {	// get the km length value
 	// return the converted length value
-	return fValue / 1000;
+	return fValue * 0.001;
 }
 
 
-inline LengthValue	TLength::getMMetresValue() const
+inline TReal	TLength::getMMetresValue() const
 {	// get the mm length value
 	// return the converted length value
 	return fValue * 1000;
 }
-
-
-
-
 
 #endif // SU_LENGTH

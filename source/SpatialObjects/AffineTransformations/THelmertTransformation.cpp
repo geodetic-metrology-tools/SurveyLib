@@ -176,7 +176,8 @@ TPositionVector &  THelmertTransformation::operator() ( TPositionVector & right 
 	}
 	else
 	{
-		fTranslation( fScaleFactor( fRotation( right ) ) ); 
+      //See that later if we want to replace the class by a TAdjustableHelmertTransformation
+		//fTranslation( fScaleFactor( fRotation( right ) ) ); 
 	}
 	return right;
 }
@@ -190,7 +191,8 @@ TFreeVector &  THelmertTransformation::operator() ( TFreeVector & right ) const
 	}
 	else
 	{
-		fTranslation( fScaleFactor( fRotation( right ) ) ); 
+      //See that later if we want to replace the class by a TAdjustableHelmertTransformation
+		//fTranslation( fScaleFactor( fRotation( right ) ) ); 
 	}
 	return right;
 }
@@ -204,7 +206,8 @@ TRotationMatrix &  THelmertTransformation::operator() ( TRotationMatrix & right 
 	}
 	else
 	{
-		fTranslation( fScaleFactor( fRotation( right ) ) ); 
+      //See that later if we want to replace the class by a TAdjustableHelmertTransformation
+		//fTranslation( fScaleFactor( fRotation( right ) ) ); 
 	}
 	return right;
 }

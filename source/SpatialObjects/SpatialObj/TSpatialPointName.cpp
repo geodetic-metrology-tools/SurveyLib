@@ -103,13 +103,13 @@ void	TSpatialPointName::setName( const std::string &name )
 
 		//cut 6 first caracteres to give the classe
 		fClassification = (name.substr(0, 6));
-		i = (fClassification.find_last_of('_', (fClassification.length())));
+      i = (int)(fClassification.find_last_of('_', ((int)fClassification.length())));
 		fClassification = (fClassification.substr(0, i));
 	
 		//cut 6 next caracteres to give the name
 		fElement  = (name.substr(6, 6));
-		i = (fElement.find_first_not_of('_',0)); 
-		fElement = (fElement.substr(i, (fElement.length())-i));
+		i = (int)(fElement.find_first_not_of('_',0)); 
+      fElement = (fElement.substr(i, ((int)fElement.length()) - i));
 	
 		//the last caractere gives the type
 		if (name[12]=='_') fName="";

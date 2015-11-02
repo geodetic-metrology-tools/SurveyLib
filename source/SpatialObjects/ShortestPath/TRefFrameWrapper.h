@@ -40,7 +40,7 @@ class  TAReferenceFrame;
 //
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup spatialobjects
+/*!\ingroup ShortestPath
 	@{*/
 
 //! A Wrapper around a reference frame
@@ -84,8 +84,6 @@ public:
 		/// Set the pointer to a Reference Frame
 		void setFrame( TAReferenceFrame* frame );
 
-		/// Set the Ref Frame idetifier
-		void setIdentifier( int i );
 
 	//@}
 

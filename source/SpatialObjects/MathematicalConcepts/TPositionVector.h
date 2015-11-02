@@ -1,6 +1,6 @@
 // TPositionVector.h
 //
-/** 3D Vector used as a free vector only affected by rotations and scaling
+/** 3D Vector used to define position in a space
 //
 // Patterns:
 //
@@ -38,7 +38,7 @@
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects
+/*! \ingroup MathematicalConcepts
 	@{*/
 
 //! 3D Vector used as a position vector
@@ -100,6 +100,7 @@ public:
 
 		//!Copy Assignment Operator 
 		TPositionVector& operator=(const TPositionVector& );
+
 	//@}
 
 	/*!\name member Functions */

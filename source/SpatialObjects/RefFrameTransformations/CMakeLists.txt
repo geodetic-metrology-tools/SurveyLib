@@ -7,6 +7,10 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformation
 					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialObj
 					${SURVEYLIB_ROOT}/source/SpatialObjects/SpatialSystems)
 
+IF(USE_SWISSTOPO)
+	include_directories(C:/Windows/System32)
+ENDIF()
+					
 # Create a variable containing all .cpp files:
 set(RefFrameTransformations_SOURCES 
 	TARefFrameTransformation.cpp
@@ -27,6 +31,7 @@ set(RefFrameTransformations_SOURCES
 	TXYHe2XYHgTransformation.cpp
 	TXYHg2XYHeTransformation.cpp
 	TXYHs2MLATransformation.cpp
+	TXYH2CCS.cpp
 )
 
 # Create a variable containing all .h files:
@@ -51,6 +56,7 @@ set(RefFrameTransformations_HEADERS
 	TXYHe2XYHgTransformation.h
 	TXYHg2XYHeTransformation.h
 	TXYHs2MLATransformation.h
+	TXYH2CCS.h
 )
 
 #Add transformations if Swisstopo is used

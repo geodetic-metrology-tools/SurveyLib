@@ -32,7 +32,7 @@
 //
 ////////////////////////////////////////////////////////////////
 
-/*! \ingroup spatialobjects 
+/*! \ingroup MathematicalConcepts 
 	@{*/
 
 //! Abstract class for Coordonate System

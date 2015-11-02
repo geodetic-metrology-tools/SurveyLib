@@ -28,7 +28,7 @@
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	TReal	dist(TLength x1, TLength y1, TLength x2, TLength y2);
+	TReal dist(TLength x1, TLength y1, TLength x2, TLength y2);
 	/*@}*/
 
 /*! computation of the distance from 2D coordinates
@@ -40,10 +40,8 @@
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	TReal	dist(TReal x1, TReal y1, TReal x2, TReal y2);
+	TReal dist(TReal x1, TReal y1, TReal x2, TReal y2);
 	/*@}*/
-
-
 
 /*! computation of the distance from 3D coordinates
 	\param TLength x1, coordinate  x of the first point
@@ -56,7 +54,7 @@
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	TReal	dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2);
+	TReal dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2);
 	/*@}*/
 
 /*! computation of the distance from 3D coordinates
@@ -70,12 +68,9 @@
 	*/
 	/*!\addtogroup spatialobjects
 	@{*/
-	TReal	dist3D(TReal x1, TReal y1, TReal z1, TReal x2, TReal y2, TReal z2);
+	TReal dist3D(TReal x1, TReal y1, TReal z1, TReal x2, TReal y2, TReal z2);
 	/*@}*/
 
-
 //@}
-
-
 
 #endif

@@ -25,22 +25,14 @@
 #endif // _MSC_VER >= 1000
 
 
-////////////////////////////////////////////////////////////////
-// Forward declarations
-//
-//#include  <##classname##>
-//using namespace std;
-//
+#include  "TARefFrameTransformation.h"
+#include  "TSpatialPosition.h"
+
 class  THelmertTransformation;
 class  TScaleFactor;
 class  TRotation;
 class  TTranslation;
-#include  "TARefFrameTransformation.h"
-#include  "TSpatialPosition.h"
-// typedefs
-//
-//
-////////////////////////////////////////////////////////////////
+
 
 /*!\ingroup spatialobjects
 	@{*/
@@ -64,7 +56,7 @@ public:
 		THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, THelmertTransformation* );
 
 		/// Constructor taking parameters of a THelmertTransformation
-		THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, const TScaleFactor&, const TRotation&, const TTranslation&);
+	   THelmertRefFrameTransform( TAReferenceFrame* from, TAReferenceFrame* to, const TScaleFactor&, const TRotation&, const TTranslation&);
 
 		/// Copy Constructor 
 		THelmertRefFrameTransform(const  THelmertRefFrameTransform&);

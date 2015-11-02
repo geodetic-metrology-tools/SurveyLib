@@ -112,10 +112,11 @@ void	TGonsFilter::output(TAStreamFormatter& oStream,const TAngle& angle)const
 
 	// provisoire
 	TAngle a(angle);
-	if (a.getRadiansValue()<LITERAL(0.0)) { a += (2*TAngle::pi()); }
-	oStream<< a.getGonsValue();
+	if (a.getRadiansValue()<LITERAL(0.0))
+      a += (2.0*TAngle::pi());
 	
-
+   oStream << a.getGonsValue();
+	
 	return;
 }
 

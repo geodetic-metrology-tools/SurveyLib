@@ -1,24 +1,19 @@
 # set include directories needed by this library
-include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/MathematicalConcepts
+include_directories(${BOOST_ROOT}
+					${SURVEYLIB_ROOT}/source/SpatialObjects/MathematicalConcepts
 					${SURVEYLIB_ROOT}/source/SpatialObjects/CalcParams)
 
 # Create a variable containing all .cpp files:
 SET(CalcElements_SOURCES 
 	TALSCalcParameter.cpp
 	TALSComputer.cpp
-	#TLSCalcDataSet.cpp
-	#TLSCalculation.cpp
-	#TLSComputer.cpp
-	#TLSConstraintIdentifier.cpp
 	TLSInputMatrices.cpp
-	#TLSInputSparseMatrices.cpp
 	TLSParametricMtdComputer.cpp
+	TLSWeightedUnkMtdComputer.cpp
+	TLSCombinedMtdComputer.cpp
+	TLSCnstMtdComputer.cpp
 	TLSResultsMatrices.cpp
-	#TLSResultsSparseMatrices.cpp
-	#TLSSparseMatrixComputer.cpp
-	#TUnknownAngle.cpp
-	#TUnknownLength.cpp
-	#TUnknownParameter.cpp
+	QuantileFunctions.cpp
 )
 
 # Create a variable containing all .h files:
@@ -28,8 +23,12 @@ SET(CalcElements_HEADERS
 	TLSCalcWorkingUnknown.h
 	TLSInputMatrices.h
 	TLSParametricMtdComputer.h
+	TLSWeightedUnkMtdComputer.h
+	TLSCombinedMtdComputer.h
+	TLSCnstMtdComputer.h
 	TLSResultsMatrices.h
 	UEOIndices.h
+	QuantileFunctions.h
 )
 
 #Create a static library from the object files

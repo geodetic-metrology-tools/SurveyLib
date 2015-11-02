@@ -34,14 +34,14 @@ inline bool isDelim(const char c, const char* delims, int ndelims) {
 }
 
 
-const vector<const string> TAConverter::tokenizeString(const string& str, const char* delims) {
+const vector<string> TAConverter::tokenizeString(const string& str, const char* delims) {
 	enum {
 		STATE_TOKEN,
 		STATE_DELIM
 	};
 
 	size_t delimlen(strlen(delims));
-	vector<const string> result(0);
+	vector<string> result(0);
 	
 	size_t start(0);
 	size_t end(0);
@@ -50,13 +50,13 @@ const vector<const string> TAConverter::tokenizeString(const string& str, const 
 	do {
 		switch (state) {
 			case STATE_DELIM:
-				if (! isDelim(str[end], delims, delimlen+1)) {
+            if(!isDelim(str[end], delims, (int)delimlen + 1)) {
 					start = end;
 					state = STATE_TOKEN;
 				}
 			break;
 			case STATE_TOKEN:
-				if (isDelim(str[end], delims, delimlen+1)) {
+            if(isDelim(str[end], delims, (int)delimlen + 1)) {
 					result.push_back(std::move(str.substr(start, end-start)));
 					state = STATE_DELIM;
 				}

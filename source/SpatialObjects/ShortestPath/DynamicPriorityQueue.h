@@ -1,8 +1,6 @@
 #ifndef dyn_pq
 #define dyn_pq
 
-//#pragma warning (disable:4786)
-
 #if _MSC_VER >= 1000
 #pragma once
 #endif
@@ -13,22 +11,14 @@
 #include <algorithm>
 #include <stddef.h>
 #include <string>
-//using namespace std;
 
 #include "PtrGreater.h"
-
 #include "assert.h"
-
-
-//#include "TTransformWrapper.h"
-
-
-
 
 
 template <class T> 
 
-/*!\ingroup spatialobjects
+/*!\ingroup ShortestPath
 	@{*/
 class DynamicPriorityQueue
 {

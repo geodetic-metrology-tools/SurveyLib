@@ -29,11 +29,11 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 class	TAStreamFormatter;
 
 // typedefs
-typedef const std::vector<const std::string>&& TStrTokens;
+typedef const std::vector<std::string>&& TStrTokens;
 ////////////////////////////////////////////////////////////////
 
-/*!\ingroup ProjectFramework
-
+/*!\ingroup Converters
+	\brief Base class for converting and writing functionalities, specific classes to output points, observations or other application-specific objects should inherit from this class.
 @{*/
 
 //Class definition
@@ -57,7 +57,7 @@ public:
 	// Tokenizes a std::string into a std::vector of strings based on the delimiters given to delim
 	// e.g. " \t_" will split on every occurence of a blank, a tab or an underscore.
 	//  Use the TStrTokens type to catch the return value avoiding copies
-	static const std::vector<const std::string> tokenizeString(const std::string& str, const char* delims);
+	static const std::vector<std::string> tokenizeString(const std::string& str, const char* delims);
 
 
 protected:

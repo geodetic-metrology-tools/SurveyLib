@@ -34,12 +34,13 @@
 
 
 
-//Class definition
+/// \ingroup MathematicalConcepts
 class  TVNumericValue  //: public TObject
 
 {
 public:
-	/**@name Constants */
+	/**@name Constant
+	s */
 	//@{
 		enum  EStatus { kNull, kKnown };
 	//@}
@@ -51,11 +52,6 @@ public:
 	virtual bool isNull() const = 0;
 
 	virtual ~TVNumericValue() { }
-
-
-
-
-
 
 	//ClassDef(TVNumericValue, 1)
 };
