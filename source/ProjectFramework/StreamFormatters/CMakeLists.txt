@@ -13,7 +13,6 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/ReferenceSurfaces
 					${SURVEYLIB_ROOT}/source/ProjectFramework/FiltersAndFormats
 					${SURVEYLIB_ROOT}/source/ProjectFramework/ProjectData)
 					
-
 # Create a variable containing all .cpp files:
 set(StreamFormatters_SOURCES
 	TAStreamFormatter.cpp
@@ -34,4 +33,4 @@ set(StreamFormatters_HEADERS
 add_library(StreamFormatters STATIC ${StreamFormatters_SOURCES} ${StreamFormatters_HEADERS})
 
 #link used libraries
-target_link_libraries(StreamFormatters ${PROJECTFRAMEWORK_LIBRARIES} ${SPATIAL_LIBRARIES})
+#target_link_libraries(StreamFormatters ${PROJECTFRAMEWORK_LIBRARIES} ${SPATIAL_LIBRARIES})
