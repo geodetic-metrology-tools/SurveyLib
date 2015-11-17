@@ -35,7 +35,7 @@ public:
 	//!Verify the number of unknowns and run the calculation
 	virtual bool computeResults(TLSInputMatrices*, TLSResultsMatrices*);
 
-	//!Computes the results matrices with the weihted unknowns
+	//!Computes the results matrices with cnstr
 	virtual bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
 
 	//!Computes the results matrices for a free calculation
