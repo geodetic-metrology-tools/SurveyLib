@@ -176,7 +176,7 @@ TPositionVector &  THelmertTransformation::operator() ( TPositionVector & right 
 	}
 	else
 	{
-		fTranslation( fScaleFactor( fRotation( right ) ) ); 
+		//fTranslation( fScaleFactor( fRotation( right ) ) ); 
 	}
 	return right;
 }
@@ -190,7 +190,7 @@ TFreeVector &  THelmertTransformation::operator() ( TFreeVector & right ) const
 	}
 	else
 	{
-		fTranslation( fScaleFactor( fRotation( right ) ) ); 
+		//fTranslation( fScaleFactor( fRotation( right ) ) ); 
 	}
 	return right;
 }
@@ -204,7 +204,7 @@ TRotationMatrix &  THelmertTransformation::operator() ( TRotationMatrix & right 
 	}
 	else
 	{
-		fTranslation( fScaleFactor( fRotation( right ) ) ); 
+		//fTranslation( fScaleFactor( fRotation( right ) ) ); 
 	}
 	return right;
 }
