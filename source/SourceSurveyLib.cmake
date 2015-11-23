@@ -3,7 +3,7 @@ INCLUDE(CheckIncludeFileCXX)
 
 IF(CMAKE_PROJECT_NAME STREQUAL "SurveyLib")
 	SET(SURVEYLIB_ROOT "${CMAKE_SOURCE_DIR}/..")
-	message("Building Surveylib in tree.")
+	message("-- Building Surveylib in tree.")
 ENDIF()
 
 # Inlcude sublibraries
