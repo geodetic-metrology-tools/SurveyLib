@@ -97,7 +97,7 @@ TLength TLength::operator-(const TLength &length1)
 
 
 TReal TLength::operator/(const TLength& div)
-{// Multiplies a TAngle by a TDouble scale factor
+{// Multiplies a TLength by a TDouble scale factor
 
    return (div.getMetresValue() != 0) ? (this->getMetresValue() / div.getMetresValue()) : 0;
 }
