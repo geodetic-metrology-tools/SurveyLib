@@ -36,3 +36,5 @@ set(ShortestPath_HEADERS
 
 # Create a static library from sources:
 add_library(ShortestPath STATIC ${ShortestPath_SOURCES} ${ShortestPath_HEADERS})
+
+target_link_libraries(ShortestPath AffineTransformations)

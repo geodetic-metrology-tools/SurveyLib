@@ -60,8 +60,8 @@
 
 
 #include "TRefSystemFactory.h"
-
 #include "TNotInGraphException.h"
+
 ////////////////////////////////////////////////////////////////
 
 

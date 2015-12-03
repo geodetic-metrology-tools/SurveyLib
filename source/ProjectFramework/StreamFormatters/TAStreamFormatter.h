@@ -29,8 +29,7 @@
 #include	<string>
 #include	<fstream>
 #include	<sstream>
-//using namespace std;
-//
+
 class		TAngleFilter;
 class		TLengthFilter;
 class		TSpatialPointName;
@@ -42,16 +41,17 @@ class		TADataSet;
 class		TDataParameters;
 class		TFileParameters;
 
+#include "TAngle.h"
+#include "TLength.h"
+#include "TScalar.h"
+#include "TSpatialPosition.h"
+#include "TAReferenceFrame.h"
+#include "TPointFormat.h"
+#include "TObservationFormat.h"
 
-#include	"TAngle.h"
-#include	"TLength.h"
-#include	"TScalar.h"
-#include	"TSpatialPosition.h"
-#include	"TAReferenceFrame.h"
-#include	"TPointFormat.h"
-#include	"TObservationFormat.h"
 // typedefs
 typedef TAStreamFormatter & (*TSFFUNC)(TAStreamFormatter &);// manipulator function
+
 //typedef size_t streamsize;
 ////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////

@@ -6,6 +6,7 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/MathematicalConcepts
 					${SURVEYLIB_ROOT}/source/SpatialObjects/ReferenceSurfaces
 					${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformations
 					${SURVEYLIB_ROOT}/source/SpatialObjects/RefFrameTransformations
+					${SURVEYLIB_ROOT}/source/ProjectFramework/Converters
 					${SURVEYLIB_ROOT}/source/ProjectFramework/StreamFormatters
 					${SURVEYLIB_ROOT}/source/LSAlgorithms/CalcParams
 					${SURVEYLIB_ROOT}/source/LSAlgorithms/CalcElements)

@@ -14,8 +14,10 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 
 /////////////////////////////////////////////////////////////////////
 // other forward declarations
-#include	"TAConverter.h"
-#include	"TAStreamFormatter.h"
+#include "TAConverter.h"
+#include "TAStreamFormatter.h"
+#include <stdio.h>
+#include <string.h>
 
 /////////////////////////////////////////////////////////////////////
 

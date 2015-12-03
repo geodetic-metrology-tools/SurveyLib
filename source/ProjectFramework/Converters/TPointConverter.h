@@ -78,7 +78,7 @@ public:
 											const string Dparam,
 											bool isCovar = false);
 
-			void	TPointConverter::writeN( const int width,
+			void	writeN( const int width,
 								 const int precision,
 								 TReal N);
 

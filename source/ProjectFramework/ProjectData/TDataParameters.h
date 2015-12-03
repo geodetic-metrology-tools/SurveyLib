@@ -28,29 +28,18 @@
 #endif // _MSC_VER >= 1000
 
 
-////////////////////////////////////////////////////////////////
-// Forward declarations
-//
-#include  <string>
-//using namespace std;
-//
-class		TAReferenceFrame;
-#include	"TAReferenceFrame.h"
-#include	"TAngle.h"
-#include	"TLength.h"
-#include	"TPointFormat.h"
-#include	"TObservationFormat.h"
-#include	"TAStreamFormatter.h"
-
-#include <TRefSystemFactory.h> 
+#include <string>
 #include <memory>
 
-// typedefs
-//
-//
-////////////////////////////////////////////////////////////////
+#include "TAReferenceFrame.h"
+#include "TAngle.h"
+#include "TLength.h"
+#include "TPointFormat.h"
+#include "TObservationFormat.h"
+#include "TAStreamFormatter.h"
+#include <TRefSystemFactory.h> 
 
-
+class		TAReferenceFrame;
 	
 //Class definition
 class  TDataParameters //: public TObject 

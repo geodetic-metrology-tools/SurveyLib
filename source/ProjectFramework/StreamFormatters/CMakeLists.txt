@@ -10,6 +10,7 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/ReferenceSurfaces
 					${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformations
 					${SURVEYLIB_ROOT}/source/SpatialObjects/RefFrameTransformations
 					${SURVEYLIB_ROOT}/source/ProjectFramework/Converters
+					${SURVEYLIB_ROOT}/source/ProjectFramework/StreamFormatters
 					${SURVEYLIB_ROOT}/source/ProjectFramework/FiltersAndFormats
 					${SURVEYLIB_ROOT}/source/ProjectFramework/ProjectData)
 					
@@ -33,4 +34,4 @@ set(StreamFormatters_HEADERS
 add_library(StreamFormatters STATIC ${StreamFormatters_SOURCES} ${StreamFormatters_HEADERS})
 
 #link used libraries
-#target_link_libraries(StreamFormatters ${PROJECTFRAMEWORK_LIBRARIES} ${SPATIAL_LIBRARIES})
+target_link_libraries(StreamFormatters FiltersAndFormats)
