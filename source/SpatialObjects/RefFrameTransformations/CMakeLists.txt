@@ -57,6 +57,7 @@ set(RefFrameTransformations_HEADERS
 	TXYHg2XYHeTransformation.h
 	TXYHs2MLATransformation.h
 	TXYH2CCS.h
+	GeodeticConstants.h
 )
 
 #Add transformations if Swisstopo is used
