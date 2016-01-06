@@ -44,9 +44,6 @@ public:
 	//!Computes the results matrices
 	virtual bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*) = 0;
 
-	//!Computes the results matrices for a free calculation
-	//bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
-
 	//!Computes the residual vector and the varaiance covariance matrices
 	virtual void calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm) = 0;
 
