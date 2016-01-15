@@ -171,3 +171,9 @@ bool TLambert93Transformation::transformFromETRF93(TPositionVector & pv) const
     return true;
 
 }
+
+TLambert93Transformation& TLambert93Transformation::operator=(const TLambert93Transformation& fLambert)
+{
+	*this = fLambert;
+	return *this;
+}

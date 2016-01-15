@@ -13,7 +13,7 @@ fEstimatedPrecision(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3D
 fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian)
  {
 	for (int i=0;i<3;i++)
-		fFreeVectorIndices[i] = 0;
+		fFreeVectorIndices[i] = -1;
 	fStatus.first = TALSCalcParameter::kVariable;
 	fStatus.second = TALSCalcParameter::kVariable;
 	fStatus.third = TALSCalcParameter::kVariable;
@@ -30,7 +30,7 @@ fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesia
 fStatus(status)
 {
 	for (int i=0;i<3;i++)
-		fFreeVectorIndices[i] = 0;
+		fFreeVectorIndices[i] = -1;
 }
 
 
@@ -69,6 +69,8 @@ void	TLSCalcFreeVectorParam::reInitialise()
 	fEstimatedValue = fProvisionalValue;
 	fEstimatedPrecision = zeroVec;
 	fCovariance = zeroVec;
+	for (int i = 0; i<3; i++)
+		fFreeVectorIndices[i] = -1;
 
 	return;
 }
@@ -219,6 +221,8 @@ fCorrection = zero;
 fEstimatedValue = fProvisionalValue;
 fEstimatedPrecision = zero;
 fCovariance = zero;
+for (int i = 0; i<3; i++)
+	fFreeVectorIndices[i] = -1;
 
 }
 

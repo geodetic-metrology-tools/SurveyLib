@@ -12,7 +12,7 @@
 TLSCalcOrientationParam::TLSCalcOrientationParam():TALSCalcParameter("") {
 	
 	for (int i=0;i<3;i++)
-		fOrientIndex[i]=0;
+		fOrientIndex[i]=-1;
 
 	fProvisionalValue.omega = TAngle(LITERAL(0.0));
 	fProvisionalValue.phi = TAngle(LITERAL(0.0));
@@ -39,9 +39,9 @@ fProvisionalValue(provAng), fStatus(ems), TALSCalcParameter(name) {
 	fEstimatedPrecision.omega = TAngle(LITERAL(0.0));
 	fEstimatedPrecision.phi = TAngle(LITERAL(0.0));
 	fEstimatedPrecision.kappa = TAngle(LITERAL(0.0));
-	// Sets the index to 0
+	// Sets the index to -1
 	for (int i=0;i<3;i++)
-		fOrientIndex[i]=0;
+		fOrientIndex[i]=-1;
 }
 
 // Copy constructor
@@ -91,6 +91,9 @@ void	TLSCalcOrientationParam::reInitialise()
 	fEstimatedPrecision.omega = TAngle(LITERAL(0.0));
 	fEstimatedPrecision.phi = TAngle(LITERAL(0.0));
 	fEstimatedPrecision.kappa = TAngle(LITERAL(0.0));
+	// Sets the index to -1
+	for (int i = 0; i<3; i++)
+		fOrientIndex[i] = -1;
 
 	return;
 }
@@ -111,6 +114,9 @@ void TLSCalcOrientationParam::resetValues()
 	fEstimatedPrecision.omega = TAngle(LITERAL(0.0));
 	fEstimatedPrecision.phi = TAngle(LITERAL(0.0));
 	fEstimatedPrecision.kappa = TAngle(LITERAL(0.0));
+	// Sets the index to -1
+	for (int i = 0; i<3; i++)
+		fOrientIndex[i] = -1;
 
 }
 

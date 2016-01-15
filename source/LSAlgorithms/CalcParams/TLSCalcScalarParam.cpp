@@ -16,6 +16,7 @@ TLSCalcScalarParam::TLSCalcScalarParam():
    TALSCalcParameter("") 
 {
    fStatus = TALSCalcParameter::kVariable;
+   fScalarIndices[0] = -1;
 }
 
 // Constructor taking provisional value and parameter status as argument
@@ -27,7 +28,7 @@ TLSCalcScalarParam::TLSCalcScalarParam(TReal pv, ELSStatus status, string name) 
    fEstimatedPrecision(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/),
    fCovariance(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/)
 {
-	
+	fScalarIndices[0] = -1;
 }
 
 
@@ -40,7 +41,8 @@ TLSCalcScalarParam::TLSCalcScalarParam(const TLSCalcScalarParam& source):
    fCovariance(source.fCovariance),
    TALSCalcParameter(source.getName())
 {
-	fStatus = source.fStatus; 
+	fStatus = source.fStatus;
+	fScalarIndices[0] = source.fScalarIndices[0];
 }
 
 
@@ -55,6 +57,7 @@ void	TLSCalcScalarParam::reInitialise()
 	fEstimatedValue = fProvisionalValue;
 	fEstimatedPrecision = TReal(LITERAL(0.0)); /*,TCoordSysFactory::k3DCartesian*/
 	fCovariance = TReal(LITERAL(0.0)); /*,TCoordSysFactory::k3DCartesian*/
+	fScalarIndices[0] = -1;
 
 	return;
 }
@@ -70,6 +73,7 @@ void TLSCalcScalarParam::resetValues()
    fEstimatedValue = TReal(LITERAL(0.0));
    fEstimatedPrecision = TReal(LITERAL(0.0));
    fCovariance = TReal(LITERAL(0.0));
+   fScalarIndices[0] = -1;
 }
 
 // Returns the provisional value of the position vector 
