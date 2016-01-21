@@ -116,8 +116,6 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 				
 			insert_ok = true;
 		}
-
-
 	}
 
 	insert_ok = (fWorkingPoints.size() == (origNumPoints + 1));
@@ -129,13 +127,20 @@ bool TWorkingPoints::deletePoint(PointIterator iter)
 {
 	std::string pName = iter->getName().getName();
 	std::unordered_map<string, PointIterator>::iterator i = pointsMap.find(pName);
+
 	if (i == pointsMap.end())
-	{
 		return false;
-	}
+
 	fWorkingPoints.erase(iter);
 	pointsMap.erase(i);
+
 	return true;
+}
+
+void TWorkingPoints::clear()
+{
+	fWorkingPoints.clear();
+	pointsMap.clear();
 }
 
 /////////////////////////////////////////////////////////////////

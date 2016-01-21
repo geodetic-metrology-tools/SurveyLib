@@ -54,6 +54,9 @@ public:
 	/*!@deletes a point from the working point list, returning a true bool if the deletion was sucessful*/
 	bool deletePoint(PointIterator iter);
 
+	/*!@clear all points*/
+	void clear();
+
 	/*!@return the number of stored points*/
 	int					numberOfPoints() const;
 
