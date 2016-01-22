@@ -32,16 +32,12 @@ by an other rotation or vector. Sub classes for rotations around each axis*/
 
 TRotation::TRotation()
 {	// default constructor
-
-	this->setStatus( TVNumericValue::kNull );
 	fRotationMatrix.identity();
-
 }
 
 TRotation::TRotation( const TRotationMatrix matrix)
 {//Constructor taking the rotation matrix
 	fRotationMatrix = matrix;
-	this->setStatus( TVNumericValue::kKnown );
 }
 
 
@@ -51,7 +47,6 @@ TRotation::TRotation( const TRotationMatrix matrix)
 TRotation::TRotation(TRotationMatrix::ERotationType kR, TReal omega, TReal phi, TReal kappa)
 : fRotationMatrix(kR, omega, phi, kappa)
 {//Constructor taking the radians values of the angles in the specified order
-	this->setStatus( TVNumericValue::kKnown );
 }
 
 
@@ -75,11 +70,8 @@ TRotation::~TRotation()
 TRotation&  TRotation::operator=(const TRotation& right)
 {	// Copy Assignment operator
 
-	if (this != &right)
-	{		
+	if (this != &right)	
 		fRotationMatrix = right.getRotationMatrix();
-		setStatus(right.getStatus());
-	}
 	return *this;
 }
 
@@ -88,7 +80,6 @@ TRotation&  TRotation::operator=(const TRotation& right)
 TRotation TRotation::operator*( const TRotation & right )
 {
 	TRotation result( this->getRotationMatrix() * right.getRotationMatrix() );
-	result.setStatus( this->testStatus(right) );
 	return result;
 }
 
@@ -128,7 +119,7 @@ bool TRotation::transform(TPositionVector& pv) const
 
 	bool trans = false;
 
-	if (isNull()==false)
+	if (isInitialise())
 	{
 		pv = this->getRotationMatrix() * pv;
 		trans = true;
@@ -141,7 +132,7 @@ bool TRotation::transform(TFreeVector& fv) const
 {/// Transform a free vector
 	bool trans = false;
 
-	if (isNull()==false)
+	if (isInitialise())
 	{
 		fv = this->getRotationMatrix() * fv;
 		trans = true;
@@ -155,7 +146,7 @@ bool  TRotation::transform(TRotationMatrix& rm) const
 
 	bool trans = false;
 
-	if (isNull()==false)
+	if (isInitialise())
 	{
 		rm = this->getRotationMatrix() * rm;
 		trans = true;
@@ -166,7 +157,7 @@ bool  TRotation::transform(TRotationMatrix& rm) const
 	
 TPositionVector &  TRotation::operator() ( TPositionVector & right ) const
 {// apply this transformation to a position vector
-	if (this->isNull() || !right.isInitialise())
+	if (!isInitialise() || !right.isInitialise())
 	{
 		//right.setStatus( TVNumericValue::kNull );
 	}
@@ -180,7 +171,7 @@ TPositionVector &  TRotation::operator() ( TPositionVector & right ) const
 
 TFreeVector &  TRotation::operator() ( TFreeVector & right ) const
 {// apply this transformation to a free vector
-	if (this->isNull() || !right.isInitialise())
+	if (!isInitialise() || !right.isInitialise())
 	{
 		//right.setStatus( TVNumericValue::kNull );
 	}
@@ -194,7 +185,7 @@ TFreeVector &  TRotation::operator() ( TFreeVector & right ) const
 
 TRotationMatrix &  TRotation::operator() ( TRotationMatrix & right ) const
 {// apply this transformation to a Rotation Matrix
-	if ( this->isNull() || !right.isInitialise() )
+	if ( !isInitialise() || !right.isInitialise() )
 	{
 		//right.setStatus( TVNumericValue::kNull );
 	}

@@ -114,6 +114,8 @@ public:
 		//! Invert the transformation, replaces the current transformation parameters
 		virtual  void invert();
 
+		//! Return true if the transformation parameter are not set to NO_VALf
+		virtual bool isInitialise() const { return fRotationMatrix.isInitialise(); };
 	//@}
 		
 

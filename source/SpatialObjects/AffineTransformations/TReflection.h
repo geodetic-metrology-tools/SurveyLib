@@ -108,6 +108,9 @@ public:
 
 		//! Invert the transformation, replaces the current transformation parameters
 		void invert();
+
+		//! Return true if the transformation parameter are not set to NO_VALf
+		virtual bool isInitialise() const { return fReflectionMatrix.isInitialise(); };
 	//@}
 
 

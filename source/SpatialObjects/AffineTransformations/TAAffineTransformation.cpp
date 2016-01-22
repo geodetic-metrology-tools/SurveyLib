@@ -1,30 +1,9 @@
-// TAAffineTransformation.cpp
-//
-/** Abstract Base Class for affine transformation. Deals with the status */
-//
-// Patterns:
-//
-// 
-// Copyright 2000-10 CERN SU, M.Jones. All rights reserved.
-//////////////////////////////////////////////////////////////////////
 
-
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
 #include  "TSpatialPosition.h"
 #include  "TSpatialVector.h"
 #include  "TSpatialOrientation.h"
 #include  "TCompositeAffTransform.h"
-
 #include  "TAAffineTransformation.h"
-////////////////////////////////////////////////////////////////
-
-
-//ClassImp(TAAffineTransformation)
-
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -101,28 +80,10 @@ bool  TAAffineTransformation::transform( TSpatialOrientation& sori) const
 }
 
 
-/*bool  TAAffineTransformation::transform( TPositionVector& pos) const
-{// transform a position vector : default function
-	return false;
-}
-
-
-bool  TAAffineTransformation::transform( TFreeVector& free) const
-{// transform a free vector : default function
-	return false;
-}
-
-
-bool  TAAffineTransformation::transform( TRotationMatrix& rotation) const
-{// transform a rotation matrix : default function
-	return false;
-}*/
-
-
 TSpatialPosition &  TAAffineTransformation::operator() ( TSpatialPosition & spos ) const
 {// apply this transformation to a spatial position
 
-	if( !spos.isNull() && !this->isNull() )
+	if (!spos.isNull() && this->isInitialise())
 	{
 		TPositionVector vect = spos.getCoordinates(TCoordSysFactory::k3DCartesian);
 		this->operator ()(vect);
@@ -138,7 +99,7 @@ TSpatialPosition &  TAAffineTransformation::operator() ( TSpatialPosition & spos
 
 TSpatialVector &  TAAffineTransformation::operator() ( TSpatialVector & svec) const
 {// apply this transformation to a spatial vector
-	if( !svec.isNull() && !this->isNull() )
+	if (!svec.isNull() && this->isInitialise())
 	{
 		TFreeVector vect = svec.getElements(TCoordSysFactory::k3DCartesian);
 		this->operator ()(vect);
@@ -155,7 +116,7 @@ TSpatialVector &  TAAffineTransformation::operator() ( TSpatialVector & svec) co
 TSpatialOrientation &  TAAffineTransformation::operator() ( TSpatialOrientation & sori) const
 {// apply this transformation to a spatial orientation
 
-	if( !sori.isNull() && !this->isNull() )
+	if( !sori.isNull() && this->isInitialise() )
 	{
 		TRotationMatrix matrix = sori.getElements(TCoordSysFactory::k3DCartesian);
 		this->operator ()(matrix);

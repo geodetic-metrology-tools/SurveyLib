@@ -1,36 +1,7 @@
-// TCompositeAffTransform.cpp
-//
-/** Class for transformations composed of multiple single transformations
-Wrappers around those transformations are kept in a list
-
-The last transformation added is applied first in the transformation of an object*/
-//
-// Patterns:
-// this class is close to the pattern Composite
-// 
-// Copyright 2000-10 CERN SU, M.Jones. All rights reserved.
-//////////////////////////////////////////////////////////////////////
-
-
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
 #include  "TCompositeAffTransform.h"
 #include  "TPositionVector.h"
 #include  "TFreeVector.h"
 #include  "TRotationMatrix.h"
-
-////////////////////////////////////////////////////////////////
-
-
-//ClassImp(TCompositeAffTransform)
-
-
-//////////////////////////////////////////////////////////////////////
-// Definitions and Initialisations
-//////////////////////////////////////////////////////////////////////
 
 
 //////////////////////////////////////////////////////////////////////
@@ -39,7 +10,6 @@ The last transformation added is applied first in the transformation of an objec
 
 TCompositeAffTransform::TCompositeAffTransform()
 {	// default constructor
-	setStatus( TVNumericValue::kNull );
 }
 
 
@@ -55,7 +25,6 @@ TCompositeAffTransform::TCompositeAffTransform( const TAAffineTransformation & t
 {
 	TAffineTransformWrapper wrapper( transfn.clone() );
 	fComposite.push_back(wrapper);
-	setStatus(transfn.getStatus());
 }
 
 
@@ -71,7 +40,16 @@ TCompositeAffTransform::~TCompositeAffTransform()
 // Member Functions
 //////////////////////////////////////////////////////////////////////
 
+bool TCompositeAffTransform::isInitialise() const
+{
+	for (auto transfoIter(fComposite.begin()); transfoIter != fComposite.begin(); ++transfoIter)
+		if (!transfoIter->getTransformation()->isInitialise())
+			return false;
 
+	return true;
+
+
+}
 
 TCompositeAffTransform&  TCompositeAffTransform::operator=( const TCompositeAffTransform& right )
 {	// Copy Assignment operator
@@ -93,7 +71,6 @@ TCompositeAffTransform&  TCompositeAffTransform::operator=( const TCompositeAffT
 			beg++;
 		}
 
-		setStatus(right.getStatus());
 	}
 	return *this;
 }
@@ -109,7 +86,6 @@ TCompositeAffTransform & TCompositeAffTransform::operator() ( const TAAffineTran
 	// right will be applied before any other transformations already in this composite
 	TAffineTransformWrapper wrapper( right.clone() );
 	this->fComposite.push_front( wrapper );
-	this->setStatus( this->testStatus(right) );
 	return *this;	
 	
 }
@@ -131,7 +107,6 @@ TCompositeAffTransform *  TCompositeAffTransform::clone() const
 		beg++;
 	}
 
-	clonedTransform->setStatus( this->getStatus() );
 	
 	return clonedTransform;
 	
@@ -143,7 +118,7 @@ bool  TCompositeAffTransform::transform(TPositionVector& pv) const
 	bool trans = true;
 
 
-	if (isNull() == false)
+	if (isInitialise())
 	{
 		ConstCompositeIter iter = fComposite.begin();
 		ConstCompositeIter iterEnd = fComposite.end();
@@ -165,7 +140,7 @@ bool  TCompositeAffTransform::transform(TFreeVector& fv) const
 {/// Return a transformed free vector
 	bool trans = true;
 
-	if (isNull() == false)
+	if (isInitialise())
 	{
 		ConstCompositeIter iter = fComposite.begin();
 		ConstCompositeIter iterEnd = fComposite.end();
@@ -186,7 +161,7 @@ bool  TCompositeAffTransform::transform(TRotationMatrix& rm) const
 {/// Return a transformed Rotation Matrix
 	bool trans = true;
 	
-	if (isNull() == false)
+	if (isInitialise())
 	{
 		ConstCompositeIter iter = fComposite.begin();
 		ConstCompositeIter iterEnd = fComposite.end();
@@ -206,7 +181,7 @@ bool  TCompositeAffTransform::transform(TRotationMatrix& rm) const
 
 TPositionVector &  TCompositeAffTransform::operator() ( TPositionVector & right ) const
 {// apply this transformation to a position vector 
-	if (this->isNull() || !right.isInitialise())
+	if (!isInitialise() || !right.isInitialise())
 	{
 		//right.setStatus( TVNumericValue::kNull );
 	}
@@ -227,7 +202,7 @@ TPositionVector &  TCompositeAffTransform::operator() ( TPositionVector & right 
 
 TFreeVector &  TCompositeAffTransform::operator() ( TFreeVector & right ) const
 {// apply this transformation to a free vector 
-	if ( this->isNull() || !right.isInitialise() )
+	if ( !isInitialise() || !right.isInitialise() )
 	{
 		//right.setStatus( TVNumericValue::kNull );
 	}
@@ -248,7 +223,7 @@ TFreeVector &  TCompositeAffTransform::operator() ( TFreeVector & right ) const
 
 TRotationMatrix &  TCompositeAffTransform::operator() ( TRotationMatrix & right ) const
 {// apply this transformation to a Rotation Matrix 
-	if ( this->isNull() || !right.isInitialise() )
+	if ( !isInitialise() || !right.isInitialise() )
 	{
 		//right.setStatus( TVNumericValue::kNull );
 	}
@@ -291,53 +266,18 @@ void TCompositeAffTransform::invert()
 }
 
 
-/*// Append a TAAffineTransformation
-void TCompositeAffTransform::append( const TAAffineTransformation &transf )
-{
-	TAffineTransformWrapper wrapper( &transf );
-	this->fComposite.push_front( wrapper );
-	if (transf.getStatus() == kNull && this->getStatus() != kNull)
-	{
-		setStatus(kNull);
-	}
-	return;
-}
-
-
-// Append a TAAffineTransformation
-void TCompositeAffTransform::append( const TAAffineTransformation &transf )
-{
-	TAffineTransformWrapper wrapper( &transf );
-	this->fComposite.push_front( wrapper );
-	if (transf.getStatus() == kNull && this->getStatus() != kNull)
-	{
-		setStatus(kNull);
-	}
-	return;
-}
-*/
-
 // Prepend a TAAffineTransformation
 void TCompositeAffTransform::prepend( const TAAffineTransformation & transf )
 {
 	TAffineTransformWrapper wrapper( transf.clone() );
 	this->fComposite.push_back( wrapper );
-	if (transf.getStatus() == kNull && this->getStatus() != kNull)
+	if (!transf.isInitialise() && isInitialise())
 	{
-		setStatus(kNull);
+		//setStatus(kNull);
 	}
 	return;
 }
 	
-
-/*void TCompositeAffTransform::add(const TAAffineTransformation& right)
-{ 
-	TAffineTransformWrapper wrapper (&right);
-	fComposite.push_front(wrapper);
-	setStatus(right.getStatus());
-	return;
-}*/
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////

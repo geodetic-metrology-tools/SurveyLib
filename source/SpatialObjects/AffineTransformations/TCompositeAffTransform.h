@@ -71,6 +71,9 @@ public:
 		/// Copy Assignment Operator 
 		TCompositeAffTransform& operator=( const TCompositeAffTransform& );
 
+		//! Return true if the transformation chain parameter are not set to NO_VALf
+		virtual bool isInitialise() const;
+
 		//! add to the composite transformation by applying this transformation to an affine transformation
 		// the added transformation will be applied before any other transformations already in this composite
 		virtual  TCompositeAffTransform & operator()( const TAAffineTransformation & );
@@ -130,21 +133,7 @@ private:
 };
 /*@}*/
 
-//////////////////////////////////////////////////////////////////////
-// Inline Definitions
-//////////////////////////////////////////////////////////////////////
 
-//inline TCompositeAffTransform::CompositeTransformationSet TCompositeAffTransform::getComposite() const {return fComposite;}
-
-/*
-// prepend a TAAffineTransformation
-TCompositeAffTransform &operator+( TAAffineTransformation& left, TCompositeAffTransform &right )
-{// prepend another affine transformation to the composition  right = left + right
-	
-	right.prepend(left);
-	return right;	
-
-}*/
 
 
 #endif // SU_COMPOSITE_AFFINE_TRANSFO
