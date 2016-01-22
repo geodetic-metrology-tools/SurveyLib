@@ -1,36 +1,13 @@
-// TPositionVector.cpp
-//
-/** 3D Vector used as a Spatial Position for stations or as translation vector in Helmert transformation */
-//
-// Patterns:
-//
-// 
-// Copyright 2000 CERN EST/SU. All rights reserved.
-//////////////////////////////////////////////////////////////////////
-
-
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
-//#include  "TLength.h"
 #include  "TPositionVector.h"
 #include  "TVCoordinateSystem.h"
-////////////////////////////////////////////////////////////////
-
-
-//ClassImp(TPositionVector)
-
 
 //////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 //////////////////////////////////////////////////////////////////////
 
-TPositionVector::TPositionVector(TCoordSysFactory::ECoordSys en)
+TPositionVector::TPositionVector(TCoordSysFactory::ECoordSys en) :TACoordSysVector()
 {	// default constructor
-	setCoordSys(en);
-	setStatus(kNull); 
+	setCoordSys(en); 
 }
 
 TPositionVector::TPositionVector(const TReal& x, const TReal& y, const TReal& z,TCoordSysFactory::ECoordSys en)
@@ -39,18 +16,9 @@ TPositionVector::TPositionVector(const TReal& x, const TReal& y, const TReal& z,
 	setX(1, y);
 	setX(2, z);
 	setCoordSys(en);
-	setStatus(kKnown); 
 }
 
-/*TPositionVector::TPositionVector(const TReal& x, const TReal& y, const TReal&z)
-{
-	TLength X(x), Y(y),Z(z);
-	fPositionVector[0] = X;
-	fPositionVector[1] = Y;
-	fPositionVector[2] = Z;
-	setStatus(kKnown); 
-}
-*/
+
 
 TPositionVector::TPositionVector(  const TPositionVector& original )
 {	// copy constructor
@@ -60,7 +28,6 @@ TPositionVector::TPositionVector(  const TPositionVector& original )
 		setX(i, original.getX(i));
 	}
 	setCoordSys(original.getCoordSys());
-	setStatus(original.getStatus());
 }
 
 
@@ -84,30 +51,28 @@ bool TPositionVector::operator==( const TPositionVector& right) const
 TPositionVector TPositionVector::operator+(const TFreeVector& second)
 {//!add a PositionVector  and FreeVector, return a PositionVector
 	TPositionVector resultat (getCoordSys());
-	TANumericValue::EStatus status = this->testStatus(second);
-	if ( status!= kNull && testCoordSysCart(second.getCoordSys())==true)
+	bool fContinue = second.isInitialise() && this->isInitialise();
+	if (fContinue && testCoordSysCart(second.getCoordSys()) == true)
 	{
 		resultat.setX(getX() + second.getX());
 		resultat.setY(getY() + second.getY());
 		resultat.setZ(getZ() + second.getZ());
 	}
-	else{status=TVNumericValue::kNull;}
-	resultat.setStatus(status);
+
 	return resultat;		
 }
 
 TPositionVector TPositionVector::operator-(const TFreeVector& second)
 {//!add a PositionVector  and FreeVector, return a PositionVector
 	TPositionVector resultat (getCoordSys());
-	TANumericValue::EStatus status = this->testStatus(second);
-	if ( status!= kNull && testCoordSysCart(second.getCoordSys())==true)
+	bool fContinue = second.isInitialise() && this->isInitialise();
+	if (fContinue && testCoordSysCart(second.getCoordSys()) == true)
 	{
 		resultat.setX(getX() - second.getX());
 		resultat.setY(getY() - second.getY());
 		resultat.setZ(getZ() - second.getZ());
 	}
-	else{status=TVNumericValue::kNull;}
-	resultat.setStatus(status);
+
 	return resultat;		
 }
 
@@ -127,15 +92,14 @@ TPositionVector& TPositionVector::operator-=(const TFreeVector& second) {
 TFreeVector TPositionVector::operator-( const TPositionVector& second)
 {//!substract two TPositionVector objects and return a FreeVector
 	TFreeVector resultat (getCoordSys());
-	TANumericValue::EStatus status = this->testStatus(second);
-	if ( status!= kNull && testCoordSysCart(second.getCoordSys())==true)
-		{
+	bool fContinue = second.isInitialise() && this->isInitialise();
+	if (fContinue && testCoordSysCart(second.getCoordSys()) == true)
+	{
 		resultat.setX(getX() - second.getX());
 		resultat.setY(getY() - second.getY());
 		resultat.setZ(getZ() - second.getZ());
-		}
-	else{status=TVNumericValue::kNull;}
-	resultat.setStatus(status);
+	}
+
 	return resultat;
 }
 
@@ -143,15 +107,15 @@ TFreeVector TPositionVector::operator-( const TPositionVector& second)
 TPositionVector TPositionVector::operator*( const TDouble& factor)
 {//!Multiplication by a TDouble object
 	TPositionVector resultat (getCoordSys());
-	TANumericValue::EStatus status = this->testStatus(factor);
-	if ( status!= kNull)
+
+	if ( factor.getValue() != NO_VALf && this->isInitialise())
 	{
 		TReal scalar = factor.getValue();
 		resultat.setX( 0, scalar * getX(0) ); 
 		resultat.setX( 1, scalar * getX(1) );
 		resultat.setX( 2, scalar * getX(2) );
 	}
-	resultat.setStatus(status);
+
 	return resultat;
 }
 
@@ -159,15 +123,15 @@ TPositionVector TPositionVector::operator*( const TDouble& factor)
 TPositionVector TPositionVector::operator *( const TScalar& factor)
 {//!Multiplication by a TScalar
 	TPositionVector resultat (getCoordSys());
-	TANumericValue::EStatus status = this->testStatus(factor);
-	if ( status!= kNull)
+
+	if ( factor.getValue() != NO_VALf && this->isInitialise())
 	{
 		TReal scalar = factor.getValue();
 		resultat.setX( 0, scalar * getX(0) ); 
 		resultat.setX( 1, scalar * getX(1) );
 		resultat.setX( 2, scalar * getX(2) );
 	}
-	resultat.setStatus(status);
+
 	return resultat;
 }
 
@@ -175,13 +139,13 @@ TPositionVector TPositionVector::operator *( const TScalar& factor)
 TPositionVector TPositionVector::operator*(const TReal& factor)
 {//!Multiplication by a TReal object
 	TPositionVector resultat (getCoordSys());
-	if ( this->isNull()== false)
-		{
+	if ( factor != NO_VALf && this->isInitialise())
+	{
 		resultat.setX(0, getX(0)*factor); 
 		resultat.setX(1, getX(1)*factor);
 		resultat.setX(2, getX(2)*factor);
-		}
-	resultat.setStatus(getStatus());
+	}
+
 	return resultat;
 }
 
@@ -208,7 +172,7 @@ TPositionVector&  TPositionVector::operator=( const TPositionVector& right)
 		setX(1, right.getX(1));
 		setX(2, right.getX(2));
 	}
-	setStatus(right.getStatus());
+
 	setCoordSys(right.getCoordSys());
 	return *this;
 }

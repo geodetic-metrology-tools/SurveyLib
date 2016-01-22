@@ -215,7 +215,7 @@ void	TRefSystemFactory::init()
 	pos.setPhiEllipsoid(phi);
 	pos.setLambdaEllipsoid(lambda);
 	pos.setH(H);
-	pos.setStatus(TVNumericValue::kKnown);
+	//pos.setStatus(TVNumericValue::kKnown);
 	
 	origin.setCoordinates( pos );
 	origin.setObjectStatus( TSpatialStatus::kCala );

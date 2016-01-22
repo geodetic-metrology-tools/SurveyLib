@@ -68,7 +68,7 @@ void	TRadiansFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')
 	{//check if there's coordinate to read
-		angle.setStatus(TVNumericValue::kNull);
+		angle.setRadiansValue(NO_VALf);
 		iStream.setError("No angle value to read");
 	}
 
@@ -76,13 +76,10 @@ void	TRadiansFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 	{
 		iStream >> rads;
 		if(!(iStream.fail()))
-		{
-			angle.setStatus(TVNumericValue::kKnown);
 			angle.setRadiansValue(rads);
-		}
 		else
 		{
-			angle.setStatus(TVNumericValue::kNull);
+			angle.setRadiansValue(NO_VALf);
 			//make iStream's flags to "goodbit"
 			iStream.clear();
 			//read the "wrong" gons

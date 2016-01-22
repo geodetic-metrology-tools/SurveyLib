@@ -42,7 +42,6 @@ TTranslation::TTranslation(const TLength Tx, const TLength Ty, const TLength Tz)
 	fTranslationVector.setX(Tx);
 	fTranslationVector.setY(Ty);
 	fTranslationVector.setZ(Tz);
-	fTranslationVector.setStatus(kKnown);
 	setStatus( TVNumericValue::kKnown );
 }
 
@@ -147,9 +146,9 @@ bool TTranslation::transform(TRotationMatrix& rm)const
 /* apply this transformation to a position vector */
 TPositionVector &  TTranslation::operator() ( TPositionVector & right ) const
 {
-	if ( this->isNull() || right.isNull() )
+	if (this->isNull() || !right.isInitialise())
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{
@@ -164,7 +163,7 @@ TFreeVector &  TTranslation::operator() ( TFreeVector & right ) const
 {
 	if ( this->isNull() )
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	return right;
 }
@@ -175,7 +174,7 @@ TRotationMatrix &  TTranslation::operator() ( TRotationMatrix & right ) const
 {
 	if ( this->isNull() )
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	return right;
 }
@@ -192,7 +191,6 @@ TTranslation * TTranslation::inverse() const
 void TTranslation::invert()
 {// Invert the transformation, replaces the current transformation parameters
 	TFreeVector defaut(0,0,0, TCoordSysFactory::k3DCartesian);
-	fTranslationVector.setStatus(kKnown);
 	fTranslationVector= defaut-fTranslationVector;
 	
 	return;

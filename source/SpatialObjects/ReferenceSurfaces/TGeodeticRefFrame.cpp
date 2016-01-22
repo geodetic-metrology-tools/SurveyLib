@@ -141,7 +141,7 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 		geodpv.setPhiEllipsoid(phirad);
 		geodpv.setLambdaEllipsoid(lrad);
 		geodpv.setH(hm);
-		geodpv.setStatus(pv.getStatus());
+		//geodpv.setStatus(pv.getStatus());
 	}
 	else
 	{	
@@ -175,7 +175,7 @@ TPositionVector   TGeodeticRefFrame::getGeodeticCoords( const TPositionVector pv
 		geodpv.setPhiEllipsoid(phirad);
 		geodpv.setLambdaEllipsoid(lrad);
 		geodpv.setH(hm);
-		geodpv.setStatus(pv.getStatus());
+		//geodpv.setStatus(pv.getStatus());
 	}
 //	pv.setCoordSys(TGraph::kGeodetic); //to be implemented in TGraph and in TACoordSysVector
 	return geodpv;

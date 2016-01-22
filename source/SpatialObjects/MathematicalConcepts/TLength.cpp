@@ -17,9 +17,8 @@
 //////////////////////////////////////////////////////////////////////
 
 
-TLength::TLength(): fValue(LITERAL(0.0))
+TLength::TLength(): fValue(NO_VALf)
 {	// default constructor 
-	setStatus( TANumericValue::kNull );
 }
 
 TLength::TLength(TReal value, EUnits unit)
@@ -31,13 +30,11 @@ TLength::TLength(TReal value, EUnits unit)
       case EUnits::kMillimetres: setMMetresValue(value); break;
       case EUnits::kKilometres:  setKMetresValue(value); break;
    }
-   setStatus((value == std::numeric_limits<TReal>::quiet_NaN()) ? EStatus::kNull : EStatus::kKnown);
 }
 
 TLength::TLength(const TLength& tl)
 {	// copy constructor
 	fValue = tl.fValue;
-	setStatus( tl.getStatus() );
 }
 
 TLength::~TLength()
@@ -74,11 +71,10 @@ bool TLength::operator<(const TLength& right) const
 TLength TLength::operator+(const TLength &length1)
 {//add two TLength objects
 	TLength resultat;
-	TANumericValue::EStatus status;
-	status=this->testStatus(length1);
-	if (status!= kNull)
-	{resultat.setMetresValue(this->getMetresValue()+length1.getMetresValue());}
-	resultat.setStatus(status);
+
+	if (length1 != NO_VALf && *this!= NO_VALf)
+		resultat.setMetresValue(this->getMetresValue()+length1.getMetresValue());
+
 	return resultat;
 }
 
@@ -87,11 +83,10 @@ TLength TLength::operator+(const TLength &length1)
 TLength TLength::operator-(const TLength &length1)
 {//substract two TLength objects
 	TLength resultat;
-	TANumericValue::EStatus status;
-	status=this->testStatus(length1);
-	if (status!= kNull)
-	{resultat.setMetresValue(getMetresValue()-length1.getMetresValue());}
-	resultat.setStatus(status);
+	
+	if (length1 != NO_VALf && *this != NO_VALf)
+		resultat.setMetresValue(getMetresValue()-length1.getMetresValue());
+
 	return resultat;
 }	
 
@@ -99,7 +94,7 @@ TLength TLength::operator-(const TLength &length1)
 TReal TLength::operator/(const TLength& div)
 {// Multiplies a TLength by a TDouble scale factor
 
-   return (div.getMetresValue() != 0) ? (this->getMetresValue() / div.getMetresValue()) : 0;
+   return (div.getMetresValue() != 0) ? (this->getMetresValue() / div.getMetresValue()) : NO_VALf;
 }
 
 TLength	TLength::operator*(const TReal factor)
@@ -110,19 +105,17 @@ TLength	TLength::operator*(const TReal factor)
 TLength	operator*(const TReal factor, const TLength &length )
 {//multiply a TLength object by a factor
 	TLength resultat;
-	if(length.isNull()!=true)
-	{resultat.setMetresValue(factor*(length.getMetresValue()));}
-	resultat.setStatus(length.getStatus());
+
+	if (length != NO_VALf && factor != NO_VALf)
+		resultat.setMetresValue(factor*(length.getMetresValue()));
+	
 	return resultat;
 }
 
 TLength& TLength::operator=(const TLength &length)
 {//assign a TLength object to an other
 	if (this != &length) 
-	{
 		fValue=(length.getMetresValue());
-		setStatus( length.getStatus() );
-	}
 
 	return *this;
 }

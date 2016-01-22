@@ -124,9 +124,9 @@ bool TReflection::transform(TRotationMatrix& rm) const
 
 TPositionVector &  TReflection::operator() ( TPositionVector & right ) const
 {// apply this transformation to a position vector
-	if ( this->isNull() || right.isNull() )
+	if (this->isNull() || !right.isInitialise())
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{
@@ -138,9 +138,9 @@ TPositionVector &  TReflection::operator() ( TPositionVector & right ) const
 
 TFreeVector &  TReflection::operator() ( TFreeVector & right ) const
 {// apply this transformation to a free vector
-	if ( this->isNull() || right.isNull() )
+	if (this->isNull() || !right.isInitialise())
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{
@@ -153,9 +153,9 @@ TFreeVector &  TReflection::operator() ( TFreeVector & right ) const
 
 TRotationMatrix &  TReflection::operator() ( TRotationMatrix & right ) const
 {// apply this transformation to a Rotation Matrix
-	if ( this->isNull() )
+	if (this->isNull() || !right.isInitialise())
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	return right;
 }

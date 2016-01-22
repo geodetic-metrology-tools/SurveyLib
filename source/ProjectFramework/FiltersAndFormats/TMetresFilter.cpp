@@ -68,7 +68,7 @@ void	TMetresFilter::input(TAStreamFormatter&	iStream, TLength& length)const
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')
 	{//check if there's length to read
-		length.setStatus(TVNumericValue::kNull);
+		length.setMetresValue(NO_VALf);
 		iStream.setError("No length value to read");
 	}
 
@@ -81,7 +81,7 @@ void	TMetresFilter::input(TAStreamFormatter&	iStream, TLength& length)const
 		}
 		else
 		{
-			length.setStatus(TVNumericValue::kNull);
+			length.setMetresValue(NO_VALf);
 			iStream.clear();
 			//read the wrong meters value
 			while(iStream.peek()!=' ' && iStream.peek()!='\n')

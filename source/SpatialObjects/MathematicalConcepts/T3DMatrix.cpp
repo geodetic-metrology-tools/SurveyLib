@@ -1,25 +1,6 @@
-// T3DMatrix.cpp
-//
-/** Class for a general 3x3 doubles matrix*/
-//
-// Patterns:
-//
-// 
-// Copyright 2002 CERN EST/SU. All rights reserved.
-//////////////////////////////////////////////////////////////////////
-
-
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
 #include  "T3DMatrix.h"
 #include "TVCoordinateSystem.h"
-////////////////////////////////////////////////////////////////
 
-
-//ClassImp(T3DMatrix)
 
 
 //////////////////////////////////////////////////////////////////////
@@ -27,13 +8,9 @@
 //////////////////////////////////////////////////////////////////////
 
 
-T3DMatrix::T3DMatrix(TCoordSysFactory::ECoordSys en )
+T3DMatrix::T3DMatrix(TCoordSysFactory::ECoordSys en) :TACoordSysMatrix()
 {//default constructor
-	for (int i=0; i<3; i++)
-		{	for (int j=0; j<3; j++)
-			{setC(i,j,LITERAL(0.0));}
-		}
-	setStatus(kNull);
+
 	setCoordSys(en);
 }
 
@@ -44,7 +21,6 @@ T3DMatrix::T3DMatrix( const  T3DMatrix& original )
 		{	for (int j=0; j<3; j++)
 			{setC(i,j, original.getC(i,j));}
 		}
-	setStatus(original.getStatus());
 	setCoordSys(original.getCoordSys());
 }
 
@@ -68,7 +44,6 @@ T3DMatrix&  T3DMatrix::operator=(const T3DMatrix& right)
 			}
 	}
 	setCoordSys(right.getCoordSys());
-	setStatus(right.getStatus());
 	return *this;
 }
 
@@ -85,17 +60,13 @@ void T3DMatrix::operator=(const TReal& value)
 T3DMatrix T3DMatrix::operator +(const T3DMatrix& right) const
 {//returns the sum of this matrix and a second one
 	T3DMatrix resultat (getCoordSys());
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(right);
-	if (status!= kNull && testCoordSysGen(right.getCoordSys())==true)	
-	{
+
+	if (right.isInitialise() && this->isInitialise() && testCoordSysGen(right.getCoordSys()))	
 		for (int i=0; i<3; i++)
-		{	for (int j=0; j<3; j++)
-			{resultat.setC(i,j, getC(i,j) + right.getC(i,j));}
-		}
-	resultat.setStatus(status);
-	}
+			for (int j=0; j<3; j++)
+				resultat.setC(i,j, getC(i,j) + right.getC(i,j));
+
+
 	return resultat;
 }
 
@@ -110,17 +81,13 @@ return *this;
 T3DMatrix T3DMatrix::operator -(const T3DMatrix& right) const
 {//returns the difference of this matrix and a second one
 	T3DMatrix resultat (getCoordSys());
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(right);
-	if (status!= kNull && testCoordSysGen(right.getCoordSys())==true)	
-	{
+
+	if (right.isInitialise() && this->isInitialise() && testCoordSysGen(right.getCoordSys()))
 		for (int i=0; i<3; i++)
-		{	for (int j=0; j<3; j++)
-			{resultat.setC(i,j, getC(i,j) - right.getC(i,j));}
-		}
-	resultat.setStatus(status);
-	}
+			for (int j=0; j<3; j++)
+				resultat.setC(i,j, getC(i,j) - right.getC(i,j));
+
+
 	return resultat;
 }
 
@@ -135,24 +102,19 @@ return *this;
 T3DMatrix T3DMatrix::operator *(const T3DMatrix& right) const
 {//returns the product of this matrix and a second one
 	T3DMatrix resultat (getCoordSys());
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(right);
-	if (status!= kNull && testCoordSysGen(right.getCoordSys())==true)	
-	{for (int i=0; i<3; i++)
-		{
-		for (int k=0; k<3 ;k++)
+
+	if (right.isInitialise() && this->isInitialise() && testCoordSysGen(right.getCoordSys()))
+		for (int i=0; i<3; i++)
+			for (int k=0; k<3 ;k++)
 			{
-			TReal a=0;
-			for (int j=0; j<3; j++)
+				TReal a=0;
+				for (int j=0; j<3; j++)
 				{
-				a=a+getC(i,j)*right.getC(j,k);
-				resultat.setC(i,k,a);
+					a=a+getC(i,j)*right.getC(j,k);
+					resultat.setC(i,k,a);
 				}
 			}
-		}
-	resultat.setStatus(status);
-	}
+
 	return resultat;
 }
 
@@ -166,16 +128,14 @@ return *this;
 
 TPositionVector T3DMatrix::operator*(const TPositionVector& pv) const
 {//returns the product of this matrix by a position vector
-	TPositionVector resultat (0,0,0, pv.getCoordSys());
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(pv);
-	if (status!= kNull && testCoordSysGen(pv.getCoordSys())==true)
+	TPositionVector resultat (pv.getCoordSys());
+
+	if (pv.isInitialise() && testCoordSysGen(pv.getCoordSys())==true)
 	{
 		resultat.setX(pv.getX()*getC(0,0)+pv.getY()*getC(0,1)+pv.getZ()*getC(0,2));
 		resultat.setY(pv.getX()*getC(1,0)+pv.getY()*getC(1,1)+pv.getZ()*getC(1,2));
 		resultat.setZ(pv.getX()*getC(2,0)+pv.getY()*getC(2,1)+pv.getZ()*getC(2,2));
-		resultat.setStatus(status);
+
 	}
 	return resultat;
 }
@@ -183,16 +143,13 @@ TPositionVector T3DMatrix::operator*(const TPositionVector& pv) const
 
 TFreeVector T3DMatrix::operator*(const TFreeVector& fv) const
 {//returns the product of this matrix by a position vector
-	TFreeVector resultat (0,0,0, fv.getCoordSys());
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(fv);
-	if (status!= kNull && testCoordSysCart(fv.getCoordSys()))
+	TFreeVector resultat (fv.getCoordSys());
+
+	if (fv.isInitialise() && testCoordSysCart(fv.getCoordSys()))
 	{
 		resultat.setX(fv.getX()*getC(0,0)+fv.getY()*getC(0,1)+fv.getZ()*getC(0,2));
 		resultat.setY(fv.getX()*getC(1,0)+fv.getY()*getC(1,1)+fv.getZ()*getC(1,2));
 		resultat.setZ(fv.getX()*getC(2,0)+fv.getY()*getC(2,1)+fv.getZ()*getC(2,2));
-		resultat.setStatus(status);
 	}
 	return resultat;
 }
@@ -214,13 +171,12 @@ T3DMatrix T3DMatrix::operator*( const TReal& k)
 T3DMatrix T3DMatrix::operator*( const TDouble& k)
 {//multiplies the Matrix by a TDouble
 	T3DMatrix resultat (this->getCoordSys());
-	TANumericValue::EStatus status;
-	status=this->testStatus(k);
-	if (status!= kNull)	
+
+	if (k.getValue() != NO_VALf && this->isInitialise())	
 	{
 		resultat = (*this) * k.getValue();
 	}
-	resultat.setStatus(status);
+
 	return resultat;
 }
 
@@ -258,16 +214,12 @@ return copy;
 
 
 void T3DMatrix::clear()
-{//return a matrice (i,j)=0, status kNull
+{//return a matrice (i,j)=NO_VALf
 	for (int i=0; i< 3; i++)
 	{
 		for (int j=0; j< 3; j++)
-		{setElt(i,j,0);}
+		{setElt(i,j,NO_VALf);}
 	}
-	if (isNull()==true)
-	{setStatus(TVNumericValue::kNull);}
-	else
-	{setStatus(TVNumericValue::kKnown);}
 }
 
 
@@ -283,7 +235,6 @@ bool T3DMatrix::initDiag( const TReal& comVal)
 				{setElt(i,j,LITERAL(0.0));}
 			}
 		}
-	setStatus(kKnown);
 	return true;
 }
 
@@ -291,8 +242,8 @@ bool T3DMatrix::initDiag( const TReal& comVal)
 bool T3DMatrix::invert()
 {//Overwrites this Matrix by its inverse
 	T3DMatrix resultat (this->getCoordSys());
-	resultat.setStatus(TVNumericValue::kNull);
-	if (this->getStatus()!= kNull)	
+
+	if (this->isInitialise())	
 	{
 		//calcul du determinant
 		TReal det=0;
@@ -311,7 +262,6 @@ bool T3DMatrix::invert()
 			resultat.setC(0,2,d*(getC(0,1)*getC(1,2)-getC(1,1)*getC(0,2)));
 			resultat.setC(1,2,-d*(getC(0,0)*getC(1,2)-getC(1,0)*getC(0,2)));
 			resultat.setC(2,2,d*(getC(0,0)*getC(1,1)-getC(1,0)*getC(0,1)));
-			resultat.setStatus(getStatus());
 		
 		*this=resultat;
 		return true;

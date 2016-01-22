@@ -20,27 +20,12 @@ Designed to be easiliy usable with matrix functions of the NagC math library
 #pragma once
 #endif // _MSC_VER >= 1000
 
-
-////////////////////////////////////////////////////////////////
-// Forward declarations
-//
-//#include  <iostream.h>
-//using namespace std;
-//
+#include	<list>
 class  TColumnVector;
 class  TDouble;
-#include	<list>
-
-//using namespace std;
-//
-#include "TANumericValue.h"
-
 class TMatrixImpl;
 
-// typedefs
-//
-//
-////////////////////////////////////////////////////////////////
+
 
 /*! \ingroup MathematicalConcepts
 	@{*/
@@ -48,7 +33,7 @@ class TMatrixImpl;
 
 
 //! Class for a matrix of doubles
-class  TMatrix : public  TANumericValue //: public TObject  
+class  TMatrix
 {
 public:
 	//constants
@@ -165,11 +150,14 @@ public:
 		virtual TMatrix		inverse();
 			
 		/*!clear a matrice
-		\return a matrice (i,j)=0, status kNull*/
+		\return a matrice (i,j)=NO_VALf*/
 		void clear();
 			
 		/*! Returns the error message */
 		std::string	getError() const { return fError; }
+
+		/*! return true if the matrix is initialise*/
+		bool isInitialise() const;
 	//@}
 
 private:

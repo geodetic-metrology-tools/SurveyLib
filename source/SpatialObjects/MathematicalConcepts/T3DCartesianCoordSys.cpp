@@ -147,31 +147,16 @@ struct Angles T3DCartesianCoordSys::getAngles(const TRotationMatrix* mx, const T
 			k.setRadiansValue(kappa);
 
 			if ( getC(mx,2,2) == 0 || getC(mx,2,1) == 0) 
-			{
-				om.setStatus(TANumericValue::kNull);
-			}
-			else
-			{
-				om.setStatus(TANumericValue::kKnown);
-			}
+				om.setRadiansValue(NO_VALf);
+
 
 			if ( (getC(mx,0,0) == 0)  || ((getC(mx,2,0) == 0) & (getC(mx,1,0) == 0))) 
-			{
-				p.setStatus(TANumericValue::kNull);
-			}
-			else
-			{
-				p.setStatus(TANumericValue::kKnown);
-			}
+				p.setRadiansValue(NO_VALf);
+
 
 			if ( getC(mx,0,0) == 0  || getC(mx,1,0) == 0) 
-			{
-				k.setStatus(TANumericValue::kNull);
-			}
-			else
-			{
-				k.setStatus(TANumericValue::kKnown);
-			}
+				k.setRadiansValue(NO_VALf);
+
 		
 
 			xyz.omega = om;
@@ -195,31 +180,16 @@ struct Angles T3DCartesianCoordSys::getAngles(const TRotationMatrix* mx, const T
 			
 
 			if ( getC(mx,2,2) == 0  || getC(mx,2,0) == 0) 
-			{
-				om.setStatus(TANumericValue::kNull);
-			}
-			else
-			{
-				om.setStatus(TANumericValue::kKnown);
-			}
+				om.setRadiansValue(NO_VALf);
+
 
 			if ( (getC(mx,1,1) == 0)  || ((getC(mx,2,1) == 0) & (getC(mx,0,1) == 0))) 
-			{
-				p.setStatus(TANumericValue::kNull);
-			}
-			else
-			{
-				p.setStatus(TANumericValue::kKnown);
-			}
+				p.setRadiansValue(NO_VALf);
+
 
 			if ( getC(mx,1,1) == 0  || getC(mx,0,1) == 0) 
-			{
-				k.setStatus(TANumericValue::kNull);
-			}
-			else
-			{
-				k.setStatus(TANumericValue::kKnown);
-			}
+				k.setRadiansValue(NO_VALf);
+
 			
 			
 			xyz.omega=om;
@@ -244,7 +214,7 @@ bool T3DCartesianCoordSys::identity(TRotationMatrix* mx)
 				{setC(mx,i,j,LITERAL(0.0));}
 			}
 		}
-	mx->setStatus(TANumericValue::kKnown);
+
 return true;
 }
 

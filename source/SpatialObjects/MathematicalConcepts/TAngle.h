@@ -43,7 +43,6 @@ Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
 #include <assert.h>
 #define   _USE_MATH_DEFINES
 #include <math.h>
-#include "TANumericValue.h"
 #include "TConstants.h"
 class TDouble;
 
@@ -57,7 +56,7 @@ typedef	TReal	Seconds;		// the seconds of an angle
 	@{*/
 
 //!  The TAngle class represents a mathematical angle value.
-class	TAngle  : public  TANumericValue //: public TObject
+class	TAngle
 {
 
 public:

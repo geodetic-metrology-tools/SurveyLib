@@ -58,7 +58,7 @@ public:
 	/*!@name Member methods */
 	//@{
 		/*! Returns a boolean indicating if the numeric value is NULL */ 
-		virtual  bool  isNull() const { return ( kNull == fStatus ); }
+	virtual  bool  isNull() const { return (kNull == fStatus); }
 
 		/*! Returns the computational status of the numeric value */
 		virtual  TVNumericValue::EStatus  getStatus() const  { return fStatus; }

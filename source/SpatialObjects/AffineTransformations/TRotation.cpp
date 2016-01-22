@@ -166,9 +166,9 @@ bool  TRotation::transform(TRotationMatrix& rm) const
 	
 TPositionVector &  TRotation::operator() ( TPositionVector & right ) const
 {// apply this transformation to a position vector
-	if ( this->isNull() || right.isNull() )
+	if (this->isNull() || !right.isInitialise())
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{
@@ -180,9 +180,9 @@ TPositionVector &  TRotation::operator() ( TPositionVector & right ) const
 
 TFreeVector &  TRotation::operator() ( TFreeVector & right ) const
 {// apply this transformation to a free vector
-	if ( this->isNull() || right.isNull() )
+	if (this->isNull() || !right.isInitialise())
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{
@@ -194,9 +194,9 @@ TFreeVector &  TRotation::operator() ( TFreeVector & right ) const
 
 TRotationMatrix &  TRotation::operator() ( TRotationMatrix & right ) const
 {// apply this transformation to a Rotation Matrix
-	if ( this->isNull() || right.isNull() )
+	if ( this->isNull() || !right.isInitialise() )
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{

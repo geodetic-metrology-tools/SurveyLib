@@ -79,21 +79,19 @@ void	TGeodeticFilter::input(TAStreamFormatter& iStream, TSpatialPosition& positi
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')
 	{//check if there's coordinate to read
-		pv.setStatus(TVNumericValue::kNull);
 		iStream.setError("No coordinates to read");
 	}
 	else
 	{
 		(TAStreamFormatter::getAngleFilter(iStream.getAngleUnits()))->input(iStream , phi);
-		if(iStream.peek()=='\n' || phi.getStatus()==TVNumericValue::kNull)
+		if(iStream.peek()=='\n' || phi == NO_VALf)
 		{/*check if coordinate which has been read is valid and
 			if there's always coordinate to read*/
-			pv.setStatus(TVNumericValue::kNull);
 			if(iStream.peek()=='\n')
 			{
 				iStream.setError("There's only one coordinate to read");
 			}
-			if(phi.getStatus()==TVNumericValue::kNull)
+			if (phi == NO_VALf)
 			{
 				iStream.setError("The <Phi> coordinate is not valid");
 			}
@@ -102,15 +100,14 @@ void	TGeodeticFilter::input(TAStreamFormatter& iStream, TSpatialPosition& positi
 		{
 			(TAStreamFormatter::getAngleFilter(iStream.getAngleUnits()))->input(iStream , lambda);
 			iStream.skipWhiteSpace();
-			if(iStream.peek()=='\n' || lambda.getStatus()==TVNumericValue::kNull)
+			if (iStream.peek() == '\n' || lambda == NO_VALf)
 			{/*check if coordinate which has been read is valid and
 			if there's always coordinate to read*/
-				pv.setStatus(TVNumericValue::kNull);
 				if(iStream.peek()=='\n')
 				{
 					iStream.setError("There's only two coordinates to read");
 				}
-				if(phi.getStatus()==TVNumericValue::kNull)
+				if (lambda == NO_VALf)
 				{
 					iStream.setError("The <Lambda> coordinate is not valid");
 				}
@@ -119,12 +116,11 @@ void	TGeodeticFilter::input(TAStreamFormatter& iStream, TSpatialPosition& positi
 			{
 				(TAStreamFormatter::getLengthFilter(iStream.getLengthUnits()))->input(iStream , H);
 				iStream.skipWhiteSpace();
-				//if(H.getStatus()==TVNumericValue::kNull || (iStream.peek()!='\n' && iStream.peek()!='&' && iStream.peek()!=EOF))
-				if(H.getStatus()==TVNumericValue::kNull)
+				if (H == NO_VALf)
 				{/*check if coordinate which has been read is valid and
 					check if there's not too much information, except comments*/
-					pv.setStatus(TVNumericValue::kNull);
-					if(H.getStatus()==TVNumericValue::kNull)
+
+					if (H == NO_VALf)
 					{
 						iStream.setError("The <H> coordinate is not valid");
 					}
@@ -139,8 +135,6 @@ void	TGeodeticFilter::input(TAStreamFormatter& iStream, TSpatialPosition& positi
 					pv.setPhiEllipsoid(phi);
 					pv.setLambdaEllipsoid(lambda);
 					pv.setH(H);
-					pv.setStatus(TVNumericValue::kKnown);
-
 				}
 			}
 		}
@@ -181,21 +175,20 @@ void	TGeodeticFilter::input(TAStreamFormatter& iStream, TPositionVector& pv) con
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')
 	{//check if there's coordinate to read
-		pv.setStatus(TVNumericValue::kNull);
 		iStream.setError("No coordinates to read");
 	}
 	else
 	{
 		(TAStreamFormatter::getAngleFilter(iStream.getAngleUnits()))->input(iStream , phi);
-		if(iStream.peek()=='\n' || phi.getStatus()==TVNumericValue::kNull)
+		if (iStream.peek() == '\n' || phi == NO_VALf)
 		{/*check if coordinate which has been read is valid and
 			if there's always coordinate to read*/
-			pv.setStatus(TVNumericValue::kNull);
+			//pv.setStatus(TVNumericValue::kNull);
 			if(iStream.peek()=='\n')
 			{
 				iStream.setError("There's only one coordinate to read");
 			}
-			if(phi.getStatus()==TVNumericValue::kNull)
+			if (phi == NO_VALf)
 			{
 				iStream.setError("The <Phi> coordinate is not valid");
 			}
@@ -204,15 +197,14 @@ void	TGeodeticFilter::input(TAStreamFormatter& iStream, TPositionVector& pv) con
 		{
 			(TAStreamFormatter::getAngleFilter(iStream.getAngleUnits()))->input(iStream , lambda);
 			iStream.skipWhiteSpace();
-			if(iStream.peek()=='\n' || lambda.getStatus()==TVNumericValue::kNull)
+			if (iStream.peek() == '\n' || lambda == NO_VALf)
 			{/*check if coordinate which has been read is valid and
 			if there's always coordinate to read*/
-				pv.setStatus(TVNumericValue::kNull);
 				if(iStream.peek()=='\n')
 				{
 					iStream.setError("There's only two coordinates to read");
 				}
-				if(phi.getStatus()==TVNumericValue::kNull)
+				if (lambda == NO_VALf)
 				{
 					iStream.setError("The <Lambda> coordinate is not valid");
 				}
@@ -222,11 +214,10 @@ void	TGeodeticFilter::input(TAStreamFormatter& iStream, TPositionVector& pv) con
 				(TAStreamFormatter::getLengthFilter(iStream.getLengthUnits()))->input(iStream , H);
 				iStream.skipWhiteSpace();
 				//if(H.getStatus()==TVNumericValue::kNull || (iStream.peek()!='\n' && iStream.peek()!='&' && iStream.peek()!=EOF))
-				if(H.getStatus()==TVNumericValue::kNull)
+				if (H == NO_VALf)
 				{/*check if coordinate which has been read is valid and
 					check if there's not too much information, except comments*/
-					pv.setStatus(TVNumericValue::kNull);
-					if(H.getStatus()==TVNumericValue::kNull)
+					if (H == NO_VALf)
 					{
 						iStream.setError("The <H> coordinate is not valid");
 					}
@@ -241,7 +232,6 @@ void	TGeodeticFilter::input(TAStreamFormatter& iStream, TPositionVector& pv) con
 					pv.setPhiEllipsoid(phi);
 					pv.setLambdaEllipsoid(lambda);
 					pv.setH(H);
-					pv.setStatus(TVNumericValue::kKnown);
 
 				}
 			}
@@ -258,7 +248,7 @@ void	TGeodeticFilter::output(TAStreamFormatter& oStream, const TPositionVector& 
 	string sep =oStream.getSeparator();
 
 	// sets the stream's width and precision and outputs the coordinates
-	if (pv.getStatus()!= TANumericValue::kNull)
+	if (pv.isInitialise())
 	{
 		int width = oStream.getWidthFormat();
 		int precision = oStream.getPrecisionFormat();

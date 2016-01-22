@@ -20,31 +20,25 @@
 #endif // _MSC_VER >= 1000
 
 
-////////////////////////////////////////////////////////////////
-// Forward declarations
-//
-class TVCoordinateSystem;
-#include "TANumericValue.h"
 #include  "TCoordSysFactory.h"
+#include  "Quad.h"
+class TVCoordinateSystem;
 class TRotationMatrix;
-//using namespace std;
-//
-//
-//typedefs
-//
-//
-////////////////////////////////////////////////////////////////
+
 
 /*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Abstract class use for explain T3DMatrix and TRotationMatrix
-class  TACoordSysMatrix : public  TANumericValue //: public TObject
+class  TACoordSysMatrix
 {
 
 public:
 
 	friend class TACoordinateSystem;
+
+	TACoordSysMatrix();
+	virtual ~TACoordSysMatrix() { }
 
 	/*!\name member public functions*/
 	//@{
@@ -55,6 +49,9 @@ public:
 	/*!test if two object have the same general coordinate system
 	\return false if it s wrong*/
 	bool testCoordSysGen(TCoordSysFactory::ECoordSys) const;
+
+	//! return true if elements of the matrix are not set to NO_VALf
+	bool isInitialise() const;
 	
 	//!get the *TVCoordinateSystem
 	TVCoordinateSystem* getCoordSysPtr() const;

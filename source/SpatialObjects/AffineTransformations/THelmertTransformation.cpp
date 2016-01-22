@@ -170,9 +170,9 @@ bool  THelmertTransformation::transform(TRotationMatrix& rm) const
 
 TPositionVector &  THelmertTransformation::operator() ( TPositionVector & right ) const
 {// apply this transformation to a position vector
-	if ( this->isNull() || right.isNull() )
+	if ( this->isNull() || !right.isInitialise() )
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{
@@ -185,9 +185,9 @@ TPositionVector &  THelmertTransformation::operator() ( TPositionVector & right 
 
 TFreeVector &  THelmertTransformation::operator() ( TFreeVector & right ) const
 {// apply this transformation to a free vector
-	if ( this->isNull() || right.isNull() )
+	if (this->isNull() || !right.isInitialise())
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{
@@ -200,9 +200,9 @@ TFreeVector &  THelmertTransformation::operator() ( TFreeVector & right ) const
 
 TRotationMatrix &  THelmertTransformation::operator() ( TRotationMatrix & right ) const
 {// apply this transformation to a Rotation Matrix
-	if ( this->isNull() || right.isNull() )
+	if ( this->isNull() || !right.isInitialise() )
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{

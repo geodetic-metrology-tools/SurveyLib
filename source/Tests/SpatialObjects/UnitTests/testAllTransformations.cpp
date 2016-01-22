@@ -197,8 +197,8 @@ namespace tut
 				std::cout << "\nDistance CSS_X: " << fabs(it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() - xCoordCCS) << std::endl;
 				std::cout << "\nDistance CSS_Y: " << fabs(it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() - yCoordCCS) << std::endl;
 #endif
-				ensure_distance("CCS X", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(xCoordCCS), static_cast<TReal>(0.001));
-				ensure_distance("CCS Y", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(yCoordCCS), static_cast<TReal>(0.001));
+				ensure_equals("CCS X", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(xCoordCCS), static_cast<TReal>(0.001));
+				ensure_equals("CCS Y", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(yCoordCCS), static_cast<TReal>(0.001));
 			}
 			else
 			{
@@ -258,8 +258,8 @@ namespace tut
 			std::map<std::string, TSpatialPosition>::const_iterator it = afterTransformation03.find(pointName);
 			if(it != afterTransformation03.end())
 			{
-				ensure_distance("Swiss LV03 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(xCoordLV03), static_cast<TReal>(0.001));
-				ensure_distance("Swiss LV03 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(yCoordLV03), static_cast<TReal>(0.001));
+				ensure_equals("Swiss LV03 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(xCoordLV03), static_cast<TReal>(0.001));
+				ensure_equals("Swiss LV03 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(yCoordLV03), static_cast<TReal>(0.001));
 			}
 			else
 			{

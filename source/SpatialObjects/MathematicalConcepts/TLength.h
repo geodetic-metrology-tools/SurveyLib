@@ -15,23 +15,17 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
-
-////////////////////////////////////////////////////////////////
-// Forward declarations
-////////////////////////////////////////////////////////////////
-
 //!Includes Files
 #include <iostream>
 #include	<float.h>
 #include <math.h>
 #include	<assert.h>
-//
+#include "Quad.h"
 
-#include  "TANumericValue.h"
 
 //!Class Definition
 /// \ingroup MathematicalConcepts
-class	TLength  : public  TANumericValue //: public TObject
+class	TLength
 {
 
 public:
@@ -160,7 +154,7 @@ private:
 inline void TLength::setMetresValue(const TReal value)
 {	// set as a length measure of the given metres value
 	fValue = value;
-	valueSet();
+
 	return;
 }
 
@@ -169,7 +163,7 @@ inline void TLength::setKMetresValue(const TReal value)
 {	// set as a length measure of the given kilometres value
 	// scale the value input
 	fValue = value * 1000;
-	valueSet();
+
 	return;
 }
 
@@ -178,7 +172,7 @@ inline void TLength::setMMetresValue(const TReal value)
 {	// set as a length measure of the given millimetres value
 	// scale the value input
 	fValue = value * 0.001;
-	valueSet();
+
 	return;
 }
 

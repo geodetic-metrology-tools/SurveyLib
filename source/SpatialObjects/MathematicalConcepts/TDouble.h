@@ -18,31 +18,20 @@ Copyright 1999-2007, Mark Jones, CERN TS/SU. All rights reserved.
 #endif //! _MSC_VER >= 1000
 
 
-////////////////////////////////////////////////////////////////
-// Forward declarations
-////////////////////////////////////////////////////////////////
 
-//!Includes Files
-
-class T3DMatrix;
-class TFreeVector;
-
-#include "TANumericValue.h"
 #include "TAngle.h"
 #include "TLength.h"
 #include "TMatrix.h"
 #include "TColumnVector.h"
+class T3DMatrix;
+class TFreeVector;
 
-//!Type Definition
-typedef	TReal	DoubleValue;	// the value for TReal
-//
-////////////////////////////////////////////////////////////////
 
 /*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Class for a TReal
-class	TDouble : public  TANumericValue //: public TObject
+class	TDouble
 {
 
 public:
@@ -53,7 +42,7 @@ public:
 	//! Default Constructor
 	TDouble();
 	//! constructor taking a given TReal value
-	TDouble(TReal DoubleValue);
+	TDouble(TReal TReal);
 	//! copy constructor
 	TDouble(const TDouble&);
 	//! Destructor
@@ -64,12 +53,12 @@ public:
 	//@{
 	
 	/*!set a value to a TDouble Object
-	\param DoubleValue, value of TDouble in metres 
+	\param TReal, value of TDouble in metres 
 	*/
-	void setValue(DoubleValue);
+	void setValue(TReal);
 	
 	//!give the value of a TDouble Object
-	DoubleValue	getValue() const;
+	TReal	getValue() const;
 	
 	/*! Equality operator, comparaison between two TDouble objects
 	\param TDouble&, TDouble object
@@ -138,7 +127,7 @@ private:
 	/*!\name Protected Attributes*/
 	//@{
 	
-	DoubleValue			fValue; /*!< default = LITERAL(0.0) */
+	TReal			fValue; /*!< default = LITERAL(0.0) */
 	//@}
 
 
