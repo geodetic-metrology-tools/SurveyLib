@@ -4,7 +4,6 @@
 
 #include <assert.h>
 #include <math.h>
-#include <TVNumericValue.h>
 
 // Anonymous namespace for local constants
 namespace

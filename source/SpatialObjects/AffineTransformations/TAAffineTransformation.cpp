@@ -83,7 +83,7 @@ bool  TAAffineTransformation::transform( TSpatialOrientation& sori) const
 TSpatialPosition &  TAAffineTransformation::operator() ( TSpatialPosition & spos ) const
 {// apply this transformation to a spatial position
 
-	if (!spos.isNull() && this->isInitialise())
+	if (spos.isInitialise() && this->isInitialise())
 	{
 		TPositionVector vect = spos.getCoordinates(TCoordSysFactory::k3DCartesian);
 		this->operator ()(vect);
@@ -91,7 +91,7 @@ TSpatialPosition &  TAAffineTransformation::operator() ( TSpatialPosition & spos
 	}
 	else
 	{
-		spos.setStatus( TVNumericValue::kNull );
+		//spos.setStatus( TVNumericValue::kNull );
 	}
 	return spos;
 }
@@ -99,7 +99,7 @@ TSpatialPosition &  TAAffineTransformation::operator() ( TSpatialPosition & spos
 
 TSpatialVector &  TAAffineTransformation::operator() ( TSpatialVector & svec) const
 {// apply this transformation to a spatial vector
-	if (!svec.isNull() && this->isInitialise())
+	if (svec.isInitialise() && this->isInitialise())
 	{
 		TFreeVector vect = svec.getElements(TCoordSysFactory::k3DCartesian);
 		this->operator ()(vect);
@@ -107,7 +107,7 @@ TSpatialVector &  TAAffineTransformation::operator() ( TSpatialVector & svec) co
 	}
 	else
 	{
-		svec.setStatus( TVNumericValue::kNull );
+		//svec.setStatus( TVNumericValue::kNull );
 	}
 	return svec;
 }
@@ -116,7 +116,7 @@ TSpatialVector &  TAAffineTransformation::operator() ( TSpatialVector & svec) co
 TSpatialOrientation &  TAAffineTransformation::operator() ( TSpatialOrientation & sori) const
 {// apply this transformation to a spatial orientation
 
-	if( !sori.isNull() && this->isInitialise() )
+	if( sori.isInitialise() && this->isInitialise() )
 	{
 		TRotationMatrix matrix = sori.getElements(TCoordSysFactory::k3DCartesian);
 		this->operator ()(matrix);
@@ -124,7 +124,7 @@ TSpatialOrientation &  TAAffineTransformation::operator() ( TSpatialOrientation 
 	}
 	else
 	{
-		sori.setStatus( TVNumericValue::kNull );
+		//sori.setStatus( TVNumericValue::kNull );
 	}
 	return sori;
 }

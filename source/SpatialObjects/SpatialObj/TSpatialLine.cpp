@@ -1,6 +1,3 @@
-//
-// TSpatialLine.cpp : implementation file
-// class modelising a straight spatial line
 
 #include "TSpatialLine.h"
 

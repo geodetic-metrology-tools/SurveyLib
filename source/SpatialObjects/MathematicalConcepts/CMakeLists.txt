@@ -13,7 +13,6 @@ set(MathematicalConcepts_SOURCES
 	TACoordSysMatrix.cpp
 	TACoordSysVector.cpp
 	TAngle.cpp
-	TANumericValue.cpp
 	TColumnVector.cpp
 	TCoordSysFactory.cpp
 	TDist.cpp
@@ -40,7 +39,6 @@ set(MathematicalConcepts_HEADERS
 	TACoordSysMatrix.h
 	TACoordSysVector.h
 	TAngle.h
-	TANumericValue.h
 	TColumnVector.h
 	TConstants.h
 	TCoordSysFactory.h
@@ -56,7 +54,6 @@ set(MathematicalConcepts_HEADERS
 	TScalar.h
 	TSparseMatrix.h
 	TVCoordinateSystem.h
-	TVNumericValue.h
 )
 
 # Create a static library from sources:

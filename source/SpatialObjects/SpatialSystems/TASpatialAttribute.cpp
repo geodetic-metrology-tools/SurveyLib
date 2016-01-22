@@ -1,32 +1,4 @@
-//  TASpatialAttribute.cpp
-//
-/**  
-   
-    Copyright 2000 CERN EST/SU. All rights reserved.
-*/
-//////////////////////////////////////////////////////////////////////
-
-
-
-//////////////////////////////////////////////////////////////////////
-
-
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
 #include  "TASpatialAttribute.h"
-////////////////////////////////////////////////////////////////
-
-
-//ClassImp(##Template##)
-
-
-//////////////////////////////////////////////////////////////////////
-// Definitions and Initialisations
-//////////////////////////////////////////////////////////////////////
-
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -91,36 +63,6 @@ TASpatialAttribute&  TASpatialAttribute::operator=(const TASpatialAttribute& rig
 	return *this;
 }
 
-
-bool TASpatialAttribute::knownXCoord() const
-{// checks if the X coordinate is known
-
-	if ( this->getAttribute()->getXAxisStatus() != TANumericValue::kNull )
-		return true;
-	else
-		return false;
-}
-
-
-bool TASpatialAttribute::knownYCoord() const
-{// checks if the Y coordinate is known
-	if ( this->getAttribute()->getYAxisStatus() != TANumericValue::kNull )
-		return true;
-	else
-		return false;
-}
-
-
-bool TASpatialAttribute::knownZCoord() const
-{// checks if the Z coordinate is known
-	if ( this->getAttribute()->getZAxisStatus() != TANumericValue::kNull )
-		return true;
-	else
-		return false;
-}
-
-
-	
 
 //////////////////////////////////////////////////////////////////////
 //END

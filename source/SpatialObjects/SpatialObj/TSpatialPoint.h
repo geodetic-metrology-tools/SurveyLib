@@ -15,21 +15,11 @@
 
 #include <list>
 #include <string>
-//using namespace std;
-
-//class TRoundOfMeasNetworkListnr;
-
-
-
 class  TSpatialPosition;
 class  TAReferenceFrame;
-
-#include  "TVNumericValue.h"
-
-//#include  "TWorkingPoints.h"
 #include  "TSpatialPointName.h"
 #include  "TVSpatialPtListener.h"
-//#include  "TASpatialPtListener.h"
+#include "Quad.h"
 
 
 /*!\ingroup SpatialObjectsAndSystems

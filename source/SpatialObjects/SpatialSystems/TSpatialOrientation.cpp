@@ -201,3 +201,7 @@ TRotationMatrix TSpatialOrientation::getOrientation() const
 }
 
 
+bool TSpatialOrientation::isInitialise() const
+{
+	return fRotationMatrix->isInitialise();
+}

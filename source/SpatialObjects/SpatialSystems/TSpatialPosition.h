@@ -30,12 +30,10 @@ class  TAngle;
 class  TVReferenceFrame;
 class  TModifiedLocalAstronomicalRF;
 class  TReferenceEllipsoid;
-
 class TVRefFrameTransformation;
 
 #include  "TASpatialAttribute.h"
 #include  "counted_ptr.h"
-#include  "TANumericValue.h"
 #include  "TPositionVector.h"
 #include  "TGraph.h"
 #include  "TVCoordinateSystem.h"
@@ -91,6 +89,9 @@ public:
 		//! transformation between the definition reference frame of the spatial position and another reference frame
 		bool transform(TAReferenceFrame* to);
 
+		//! Return true if the position vector is initialised
+		bool isInitialise() const { return fX->isInitialise(); }
+
 	//@}
 
 	
@@ -122,14 +123,12 @@ private:
 	//! get the coordinate system id of the position vector
 	TCoordSysFactory::ECoordSys getCoordSys() const { return fX->getCoordSysPtr()->getCoordSysId(); }
 
-
+	
 	
 private:
 	// member attributes
 	TPositionVector*  fX;
 
-	
-	//ClassDef(TSpatialPosition, 1)
 };
 /*@}*/
 #endif // SU_SPATIAL_POSITION

@@ -1153,7 +1153,7 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 			 frame ==  kLGGRS80        || frame ==  kMLGGRS80 )
 		lsoCG.transform(getRefFrame(kCGRF));
 		
-	lsoCG.setStatus(TVNumericValue::kKnown);
+	//lsoCG.setStatus(TVNumericValue::kKnown);
 
 	switch (frame) {
 		case kLASphere:

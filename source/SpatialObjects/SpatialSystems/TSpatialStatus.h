@@ -21,18 +21,9 @@
 
 
 /////////////////////////////////////////////////////////////////
-// Forward declarations
-//
-//
-//
+
 class  TVReferenceFrame;
-#include  "TANumericValue.h"
 
-//using namespace std;
-
-// typedefs
-//
-//
 /////////////////////////////////////////////////////////////////
 
 /*!\ingroup SpatialObjectsAndSystems
@@ -46,7 +37,6 @@ public:
 
 	//!@name Constants
 	//@{
-	typedef TANumericValue::EStatus  EAxisStatus;
 	enum  ESpatialStatus {kPosNull, kUnknown,  kCala, kVx, kVy, kVz, kVxy, kVxz, kVyz, kVxyz};
 	//@}
 
@@ -73,14 +63,9 @@ public:
 		//! returns the 3D status if defined for the position's reference frame
 		virtual ESpatialStatus	getObjectStatus() const {return fSpatialStatus;}
 
-		//! returns the X coordinate status if defined for the position's reference frame
-		virtual EAxisStatus		getXAxisStatus() const {return fStatus[0];}
+		/*!@return the position's number of variable coordinates*/
+		virtual int				getVariableDimension() const;
 
-		//! returns the Y coordinate status if defined for the position's reference frame
-		virtual EAxisStatus		getYAxisStatus() const {return fStatus[1];}
-
-		//! returns the Z coordinate status if defined for the position's reference frame
-		virtual EAxisStatus		getZAxisStatus() const {return fStatus[2];}
 	//@}
 
 
@@ -89,26 +74,13 @@ public:
 		//! sets the 3D status if defined in the position's Reference Frame
 		virtual void			setObjectStatus(ESpatialStatus s) {fSpatialStatus = s; return;}
 
-		//! sets the X-Axis status if defined in the position's Reference Frame
-		virtual void			setXAxisStatus(EAxisStatus s) {fStatus[0] = s; return;}
-
-		//! sets the Y-Axis status if defined in the position's Reference Frame
-		virtual void			setYAxisStatus(EAxisStatus s) {fStatus[1] = s; return;}
-
-		//! sets the Z-Axis status if defined in the position's Reference Frame
-		virtual void			setZAxisStatus(EAxisStatus s) {fStatus[2] = s; return;}
 	//@}
 
-
-		/*!@return the position's number of variable coordinates*/
-		virtual int				getVariableDimension() const;
-
-
+	
 
 private:
 
 	ESpatialStatus				fSpatialStatus;
-	TANumericValue::EStatus		fStatus[3];
 
 	//ClassDef(TPositionStatus, 1)
 };
