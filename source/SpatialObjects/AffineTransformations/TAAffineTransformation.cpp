@@ -89,10 +89,7 @@ TSpatialPosition &  TAAffineTransformation::operator() ( TSpatialPosition & spos
 		this->operator ()(vect);
 		spos.setCoordinates(vect);
 	}
-	else
-	{
-		//spos.setStatus( TVNumericValue::kNull );
-	}
+
 	return spos;
 }
 
@@ -105,10 +102,7 @@ TSpatialVector &  TAAffineTransformation::operator() ( TSpatialVector & svec) co
 		this->operator ()(vect);
 		svec.setElements(vect);
 	}
-	else
-	{
-		//svec.setStatus( TVNumericValue::kNull );
-	}
+
 	return svec;
 }
 
@@ -122,9 +116,6 @@ TSpatialOrientation &  TAAffineTransformation::operator() ( TSpatialOrientation 
 		this->operator ()(matrix);
 		sori.setElements(matrix);
 	}
-	else
-	{
-		//sori.setStatus( TVNumericValue::kNull );
-	}
+
 	return sori;
 }

@@ -73,10 +73,8 @@ TColumnVector::~TColumnVector()
 
 bool TColumnVector::isInitialise() const
 {
-	if (fNbRows == 0)
-		return false;
-	else
-		return true;
+	return (fNbRows != 0);
+
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -85,17 +83,12 @@ bool TColumnVector::isInitialise() const
 TColumnVector&  TColumnVector::operator=(const TColumnVector& right)
 {//!Copy assignement operator
 	if (this != &right)
-	{
 		if (dimension() <= right.dimension() && dimension()!=0)
-		{
 			for (int i=0; i<fNbRows; i++)
 				(const_cast<TColumnVector*>(this))->operator()(i) = right(i);
-		}
 		else
-		{
 			this->setDimension(0);
-		}
-	}
+
 
 	return *this;
 }
@@ -135,9 +128,8 @@ TColumnVector TColumnVector::operator -(const TColumnVector& right) const
 	{
 		TColumnVector resul (dimension());
 		for (int i=0; i<fNbRows; i++)
-		{
 			(resul)(i) = (*this)(i) - right(i);
-		}
+
 		resultat.setDimension(dimension());
 		resultat = resul;
 	}
@@ -222,9 +214,8 @@ void TColumnVector::setDimension(const int nRows)
 
 	//!destroy the previous values
 	if (fVector != 0)
-	{
 		delete[] fVector;
-	}
+
 
 	//!creates the new vector
 	fNbRows = nRows;

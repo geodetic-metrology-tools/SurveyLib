@@ -82,13 +82,11 @@ TAngle::TAngle(const TAngle& angle)
 void TAngle::normaliseAngle()
 {
     while (fValue > PI - seuil())
-    {
         fValue -= TWOPI;
-    }
+   
     while (fValue < -PI + seuil())
-    {
         fValue += TWOPI;
-    }
+    
 }
 
 
@@ -292,17 +290,12 @@ TDouble TAngle::operator/(const TAngle& div) const
 {// Multiplies a TAngle by a TDouble scale factor
 	TDouble resultat;
 
-	if (div!= NO_VALf && *this!= NO_VALf)
-	{	
+	if (div!= NO_VALf && *this!= NO_VALf)	
 		if(div.getRadiansValue() != LITERAL(0.0))
-		{
 			resultat.setValue(this->getRadiansValue()/div.getRadiansValue());
-		}
 		else
-		{
 			resultat.setValue(NO_VALf);
-		}
-	}
+
 	return resultat;
 }
 

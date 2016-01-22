@@ -85,7 +85,8 @@ TFreeVector TFreeVector::operator-( const TFreeVector& second)
 	TFreeVector resultat (getCoordSys());
 	bool fContinue = second.isInitialise() && this->isInitialise();
 	if (fContinue && testCoordSysCart(second.getCoordSys()) == true)
-	{	resultat.setX(0, getX(0) - second.getX(0));
+	{	
+		resultat.setX(0, getX(0) - second.getX(0));
 		resultat.setX(1, getX(1) - second.getX(1));
 		resultat.setX(2, getX(2) - second.getX(2));
 	}

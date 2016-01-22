@@ -157,42 +157,27 @@ bool  TRotation::transform(TRotationMatrix& rm) const
 	
 TPositionVector &  TRotation::operator() ( TPositionVector & right ) const
 {// apply this transformation to a position vector
-	if (!isInitialise() || !right.isInitialise())
-	{
-		//right.setStatus( TVNumericValue::kNull );
-	}
-	else
-	{
+	if (isInitialise() && !right.isInitialise())
 		right = fRotationMatrix * right;
-	}
+
 	return right;
 }
 
 
 TFreeVector &  TRotation::operator() ( TFreeVector & right ) const
 {// apply this transformation to a free vector
-	if (!isInitialise() || !right.isInitialise())
-	{
-		//right.setStatus( TVNumericValue::kNull );
-	}
-	else
-	{
+	if (isInitialise() && right.isInitialise())
 		right = fRotationMatrix * right;
-	}
+
 	return right;
 }
 
 
 TRotationMatrix &  TRotation::operator() ( TRotationMatrix & right ) const
 {// apply this transformation to a Rotation Matrix
-	if ( !isInitialise() || !right.isInitialise() )
-	{
-		//right.setStatus( TVNumericValue::kNull );
-	}
-	else
-	{
+	if (isInitialise() && right.isInitialise())
 		right = fRotationMatrix * right;
-	}
+	
 	return right;
 }
 

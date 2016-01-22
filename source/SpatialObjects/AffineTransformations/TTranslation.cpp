@@ -110,32 +110,25 @@ bool TTranslation::transform(TPositionVector& pv)const
 bool TTranslation::transform(TFreeVector& fv)const
 {// Transform a free vector
 	ignoring(fv);
-	if (fTranslationVector.isInitialise())
-		return true;
-	else
-		return false;
+
+	return fTranslationVector.isInitialise();
+
 }
 
 
 bool TTranslation::transform(TRotationMatrix& rm)const
 {// Transform a rotation matrix
 	ignoring(rm);
-	if (fTranslationVector.isInitialise())
-		return true;
-	else
-		return false;
+	return fTranslationVector.isInitialise();
 }
 
 
 /* apply this transformation to a position vector */
 TPositionVector &  TTranslation::operator() ( TPositionVector & right ) const
 {
-	if (!fTranslationVector.isInitialise() || !right.isInitialise())
-	{
-		//right.setStatus( TVNumericValue::kNull );
-	}
-	else
+	if (fTranslationVector.isInitialise() && right.isInitialise())
 		right += this->getVector();
+
 	return right;
 }
 
@@ -143,10 +136,6 @@ TPositionVector &  TTranslation::operator() ( TPositionVector & right ) const
 /* apply this transformation to a free vector */
 TFreeVector &  TTranslation::operator() ( TFreeVector & right ) const
 {
-	if (!fTranslationVector.isInitialise())
-	{
-		//right.setStatus( TVNumericValue::kNull );
-	}
 	return right;
 }
 
@@ -154,10 +143,6 @@ TFreeVector &  TTranslation::operator() ( TFreeVector & right ) const
 /* apply this transformation to a Rotation Matrix */
 TRotationMatrix &  TTranslation::operator() ( TRotationMatrix & right ) const
 {
-	if (!fTranslationVector.isInitialise())
-	{
-		//right.setStatus( TVNumericValue::kNull );
-	}
 	return right;
 }
 

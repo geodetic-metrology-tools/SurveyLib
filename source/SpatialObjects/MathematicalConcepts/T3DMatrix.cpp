@@ -173,9 +173,8 @@ T3DMatrix T3DMatrix::operator*( const TDouble& k)
 	T3DMatrix resultat (this->getCoordSys());
 
 	if (k.getValue() != NO_VALf && this->isInitialise())	
-	{
 		resultat = (*this) * k.getValue();
-	}
+
 
 	return resultat;
 }
@@ -191,12 +190,9 @@ T3DMatrix T3DMatrix::transposed() const
 
 	T3DMatrix resultat (*this);
 	for (int i=0; i<3; i++)
-	{
 		for (int j=0; j<3; j++)
-		{
 			resultat.setC(i,j, getC(j,i));
-		}
-	}
+	
 	return resultat;
 }
 
@@ -216,25 +212,20 @@ return copy;
 void T3DMatrix::clear()
 {//return a matrice (i,j)=NO_VALf
 	for (int i=0; i< 3; i++)
-	{
 		for (int j=0; j< 3; j++)
-		{setElt(i,j,NO_VALf);}
-	}
+			setElt(i,j,NO_VALf);
 }
 
 
 bool T3DMatrix::initDiag( const TReal& comVal)
 {//inits all the matrix diagonal coefficients to a common value
 	for (int i = 0; i<3 ; i++)
-		{
 			for (int j=0; j<3; j++)
-			{
 				if (i == j)
-				{setElt(i,j,comVal);}
+					setElt(i,j,comVal);
 				else
-				{setElt(i,j,LITERAL(0.0));}
-			}
-		}
+					setElt(i,j,LITERAL(0.0));
+
 	return true;
 }
 

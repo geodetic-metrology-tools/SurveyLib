@@ -81,18 +81,12 @@ bool TScaleFactor::transform(TRotationMatrix& rm) const
 {/// Return a transformed rotation matrix
 	ignoring(rm);
 
-	if (isInitialise())
-		return  true;
-
-	return false;
+	return isInitialise();
 }
 
 TPositionVector &  TScaleFactor::operator() ( TPositionVector & right ) const
 {// apply this transformation to a position vector
-	if (!this->isInitialise() || !right.isInitialise())
-	{
-		//right.setStatus( TVNumericValue::kNull );
-	}
+	if (this->isInitialise() && right.isInitialise())
 	   right = right * fScaleFactor;
 
 	return right;
@@ -100,10 +94,7 @@ TPositionVector &  TScaleFactor::operator() ( TPositionVector & right ) const
 
 TFreeVector &  TScaleFactor::operator() ( TFreeVector & right ) const
 {// apply this transformation to a free vector
-	if (!this->isInitialise() || !right.isInitialise())
-	{
-		//right.setStatus( TVNumericValue::kNull );
-	}
+	if (this->isInitialise() && right.isInitialise())
       right = right * fScaleFactor;
 
 	return right;
@@ -111,8 +102,6 @@ TFreeVector &  TScaleFactor::operator() ( TFreeVector & right ) const
 
 TRotationMatrix &  TScaleFactor::operator() ( TRotationMatrix & right ) const
 {// apply this transformation to a Rotation Matrix
-	if (!this->isInitialise())
-		//right.setStatus( TVNumericValue::kNull );
 	
 	return right;
 }

@@ -111,38 +111,25 @@ bool TReflection::transform(TRotationMatrix& rm) const
 {/// Transform a TRotationMatrix
 	// TODO: why is the other object unused here?
 	ignoring(rm);
-	bool trans = false;
-	if (isInitialise())
-		trans = true;
 
-	return trans;
+	return isInitialise();
 }
 
 
 TPositionVector &  TReflection::operator() ( TPositionVector & right ) const
 {// apply this transformation to a position vector
-	if (!isInitialise() || !right.isInitialise())
-	{
-		//right.setStatus( TVNumericValue::kNull );
-	}
-	else
-	{
+	if (isInitialise() && right.isInitialise())
 		right = fReflectionMatrix * right;
-	}
+	
 	return right;
 }
 
 
 TFreeVector &  TReflection::operator() ( TFreeVector & right ) const
 {// apply this transformation to a free vector
-	if (!isInitialise() || !right.isInitialise())
-	{
-		//right.setStatus( TVNumericValue::kNull );
-	}
-	else
-	{
+	if (isInitialise() && right.isInitialise())
 		right = fReflectionMatrix * right;
-	}
+	
 	return right;
 }
 
@@ -150,10 +137,7 @@ TFreeVector &  TReflection::operator() ( TFreeVector & right ) const
 
 TRotationMatrix &  TReflection::operator() ( TRotationMatrix & right ) const
 {// apply this transformation to a Rotation Matrix
-	if (!isInitialise() || !right.isInitialise())
-	{
-		//right.setStatus( TVNumericValue::kNull );
-	}
+	
 	return right;
 }
 

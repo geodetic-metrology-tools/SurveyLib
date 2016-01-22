@@ -271,10 +271,7 @@ void TCompositeAffTransform::prepend( const TAAffineTransformation & transf )
 {
 	TAffineTransformWrapper wrapper( transf.clone() );
 	this->fComposite.push_back( wrapper );
-	if (!transf.isInitialise() && isInitialise())
-	{
-		//setStatus(kNull);
-	}
+
 	return;
 }
 	

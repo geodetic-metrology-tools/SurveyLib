@@ -110,7 +110,6 @@ TDouble TDouble::operator/(const TDouble& div)
 {//divide a TDouble object by an other
 	TDouble resultat;
 	if (div.getValue() != NO_VALf && this->getValue() != NO_VALf)
-	{
 		if (div.getValue() != 0)
 		{
 			TDouble resul(this->getValue() / div.getValue());
@@ -118,7 +117,7 @@ TDouble TDouble::operator/(const TDouble& div)
 		}
 		else
 			throw std::runtime_error("Division by 0. ");
-	}
+
 
 
 	return resultat;
