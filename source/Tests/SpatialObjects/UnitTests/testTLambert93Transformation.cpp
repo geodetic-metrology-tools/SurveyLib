@@ -41,9 +41,9 @@ namespace tut
 		//std::cout << "Y: " << position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue() << std::endl;
 			
 
-        ensure_distance("Lambert 93 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1082722.205), static_cast<TReal>(0.001));
-		ensure_distance("Lambert 93 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(7001994.409), static_cast<TReal>(0.001));
-		//ensure_distance("RGF93 CC46 H", position.getH().getMetresValue(), static_cast<TReal>(400.157 /*- 1.2233*/), static_cast<TReal>(0.001));
+        ensure_equals("Lambert 93 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1082722.205), static_cast<TReal>(0.001));
+		ensure_equals("Lambert 93 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(7001994.409), static_cast<TReal>(0.001));
+		//ensure_equals("RGF93 CC46 H", position.getH().getMetresValue(), static_cast<TReal>(400.157 /*- 1.2233*/), static_cast<TReal>(0.001));
 	}
 
     template<>
@@ -79,8 +79,8 @@ namespace tut
 
 		//std::cout << "LAM: " << position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue() << std::endl;
 																																		
-        ensure_distance("ETRF93 PHI", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue(), static_cast<TReal>(0.872664626), static_cast<TReal>(1e-4));
-        ensure_distance("ETRF93 LAM", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue(), static_cast<TReal>(0.145512099), static_cast<TReal>(1e-4)); 
-        //ensure_distance("ETRF93 H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<TReal>(4573892.46194), static_cast<TReal>(1e-3));
+        ensure_equals("ETRF93 PHI", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue(), static_cast<TReal>(0.872664626), static_cast<TReal>(1e-4));
+        ensure_equals("ETRF93 LAM", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue(), static_cast<TReal>(0.145512099), static_cast<TReal>(1e-4)); 
+        //ensure_equals("ETRF93 H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<TReal>(4573892.46194), static_cast<TReal>(1e-3));
 	}
 }

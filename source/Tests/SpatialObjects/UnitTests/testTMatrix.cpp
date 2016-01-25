@@ -45,7 +45,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), prod(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), prod(i,j), expected(i,j), 1e-7);
             }
 
     }
@@ -87,7 +87,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), prod(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), prod(i,j), expected(i,j), 1e-7);
             }
 
 
@@ -123,7 +123,7 @@ namespace tut
         {
             std::stringstream msg;
             msg << "Value mismatch at (" << i << ","<< ")";
-            ensure_distance(msg.str(), res(i), expected(i), static_cast<TReal>(1e-7));
+            ensure_equals(msg.str(), res(i), expected(i), static_cast<TReal>(1e-7));
         }
     }
 
@@ -154,7 +154,7 @@ namespace tut
         {
             std::stringstream msg;
             msg << "Value mismatch at (" << i << ","<< ")";
-            ensure_distance(msg.str(), res(i), expected(i), static_cast<TReal>(1e-7));
+            ensure_equals(msg.str(), res(i), expected(i), static_cast<TReal>(1e-7));
         }
     }
 
@@ -181,7 +181,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), A(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), A(i,j), expected(i,j), 1e-7);
             }
     }
 
@@ -226,7 +226,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), B(i,j), A(i,j), 1e-7);
+                ensure_equals(msg.str(), B(i,j), A(i,j), 1e-7);
             }
         
         
@@ -258,7 +258,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), C(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), C(i,j), expected(i,j), 1e-7);
             }
         
         
@@ -290,7 +290,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), A(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), A(i,j), expected(i,j), 1e-7);
             }
         
     }
@@ -320,7 +320,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), C(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), C(i,j), expected(i,j), 1e-7);
             }        
     }
     template<>
@@ -348,7 +348,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), A(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), A(i,j), expected(i,j), 1e-7);
             }        
     }
 
@@ -375,7 +375,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), B(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), B(i,j), expected(i,j), 1e-7);
             }
     }
 
@@ -405,7 +405,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), A(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), A(i,j), expected(i,j), 1e-7);
             }
 
     }
@@ -433,7 +433,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), C(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), C(i,j), expected(i,j), 1e-7);
             }
 
     }
@@ -470,7 +470,7 @@ namespace tut
                 {
                     std::stringstream msg;
                     msg << "Value mismatch at (" << i << "," << j << ")";
-                    ensure_distance(msg.str(), A(i,j), expected(i,j), 1e-7);
+                    ensure_equals(msg.str(), A(i,j), expected(i,j), 1e-7);
                 }
         }
         else
@@ -501,7 +501,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), B(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), B(i,j), expected(i,j), 1e-7);
             }
     }
 
@@ -538,7 +538,7 @@ namespace tut
             {
                 std::stringstream msg;
                 msg << "Value mismatch at (" << i << "," << j << ")";
-                ensure_distance(msg.str(), A(i,j), expected(i,j), 1e-7);
+                ensure_equals(msg.str(), A(i,j), expected(i,j), 1e-7);
             }
     }
 
@@ -597,8 +597,8 @@ namespace tut
 		TColumnVector result = A*v;
 
 		TColumnVector expected(2);
-		ensure_distance("result(0)", (double)result(0), 3.0, 1e-7);
-		ensure_distance("result(1)", (double)result(1), -35.0, 1e-7);
+		ensure_equals("result(0)", (double)result(0), 3.0, 1e-7);
+		ensure_equals("result(1)", (double)result(1), -35.0, 1e-7);
 	}
 
 	template<>
@@ -642,7 +642,7 @@ std::cout << newres<<"\n\n";
 
 		// compare result vectors
 		for (int i = 0; i < n; i++)
-			ensure_distance("Difference in result for optimized matrix multiplication: ", ref(i)-newres(i), 0.0, 1e-8);
+			ensure_equals("Difference in result for optimized matrix multiplication: ", ref(i)-newres(i), 0.0, 1e-8);
 		
 
 

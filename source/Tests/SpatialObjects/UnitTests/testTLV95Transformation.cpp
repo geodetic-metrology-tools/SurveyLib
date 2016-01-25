@@ -28,9 +28,9 @@ namespace tut
         TLV95Transformation trans(true);
         ensure("Transform returns true", trans.transform(position));
 
-        ensure_distance("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
-		ensure_distance("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
-		ensure_distance("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
+        ensure_equals("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
+		ensure_equals("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
+		ensure_equals("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
 	}
 
     template<>
@@ -58,9 +58,9 @@ namespace tut
         TLV95Transformation trans(false);
         ensure("Transform returns true", trans.transform(position));
 
-		ensure_distance("CH1903+ X", position.getX().getMetresValue(), static_cast<TReal>(4272473.562), static_cast<TReal>(0.001));
-		ensure_distance("CH1903+ Y", position.getY().getMetresValue(), static_cast<TReal>(575353.239), static_cast<TReal>(0.001));
-		ensure_distance("CH1903+ Z", position.getZ().getMetresValue(), static_cast<TReal>(4684498.293), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ X", position.getX().getMetresValue(), static_cast<TReal>(4272473.562), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ Y", position.getY().getMetresValue(), static_cast<TReal>(575353.239), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ Z", position.getZ().getMetresValue(), static_cast<TReal>(4684498.293), static_cast<TReal>(0.001));
 	}
 
     template<>
@@ -105,18 +105,18 @@ namespace tut
 	//	{
 	//		ensure("Transform returns true", trans.transform(*it);
 
-	//		ensure_distance("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
-	//		ensure_distance("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
-	//		ensure_distance("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
+	//		ensure_equals("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
+	//		ensure_equals("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
+	//		ensure_equals("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
 	//
 
 	//	}
 
  //       //ensure("Transform returns true", trans.transform(position));
 
- //       ensure_distance("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
-	//	ensure_distance("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
-	//	ensure_distance("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
+ //       ensure_equals("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
+	//	ensure_equals("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
+	//	ensure_equals("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
 	//}
 
 	template<>
@@ -129,9 +129,9 @@ namespace tut
         TLV95Transformation trans(true);
         ensure("Transform returns true", trans.transform(position));
 
-        ensure_distance("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1265372.250), static_cast<TReal>(0.001));
-		ensure_distance("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2776668.590), static_cast<TReal>(0.001));
-		ensure_distance("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(1043.615 /*- 1.2233*/), static_cast<TReal>(0.001));
+        ensure_equals("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1265372.250), static_cast<TReal>(0.001));
+		ensure_equals("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2776668.590), static_cast<TReal>(0.001));
+		ensure_equals("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(1043.615 /*- 1.2233*/), static_cast<TReal>(0.001));
 	}
 	template<>
     template<>
@@ -144,9 +144,9 @@ namespace tut
         TLV95Transformation trans(false);
         ensure("Transform returns true", trans.transform(position));
 
-		ensure_distance("CH1903+ X", position.getX().getMetresValue(), static_cast<TReal>(4252889.174), static_cast<TReal>(0.001));
-		ensure_distance("CH1903+ Y", position.getY().getMetresValue(), static_cast<TReal>(733507.303), static_cast<TReal>(0.001));
-		ensure_distance("CH1903+ Z", position.getZ().getMetresValue(), static_cast<TReal>(4681046.757), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ X", position.getX().getMetresValue(), static_cast<TReal>(4252889.174), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ Y", position.getY().getMetresValue(), static_cast<TReal>(733507.303), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ Z", position.getZ().getMetresValue(), static_cast<TReal>(4681046.757), static_cast<TReal>(0.001));
 	}
 
 	template<>
@@ -159,9 +159,9 @@ namespace tut
         TLV95Transformation trans(true);
         ensure("Transform returns true", trans.transform(position));
 
-        ensure_distance("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1191775.030), static_cast<TReal>(0.001));
-		ensure_distance("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2602030.740), static_cast<TReal>(0.001));
-		ensure_distance("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(897.361 /*- 1.2233*/), static_cast<TReal>(0.001));
+        ensure_equals("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1191775.030), static_cast<TReal>(0.001));
+		ensure_equals("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2602030.740), static_cast<TReal>(0.001));
+		ensure_equals("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(897.361 /*- 1.2233*/), static_cast<TReal>(0.001));
 	}
 	template<>
     template<>
@@ -174,9 +174,9 @@ namespace tut
         TLV95Transformation trans(false);
         ensure("Transform returns true", trans.transform(position));
 
-		ensure_distance("CH1903+ X", position.getX().getMetresValue(), static_cast<TReal>(4330616.737), static_cast<TReal>(0.001));
-		ensure_distance("CH1903+ Y", position.getY().getMetresValue(), static_cast<TReal>(567539.766), static_cast<TReal>(0.001));
-		ensure_distance("CH1903+ Z", position.getZ().getMetresValue(), static_cast<TReal>(4632721.664), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ X", position.getX().getMetresValue(), static_cast<TReal>(4330616.737), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ Y", position.getY().getMetresValue(), static_cast<TReal>(567539.766), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ Z", position.getZ().getMetresValue(), static_cast<TReal>(4632721.664), static_cast<TReal>(0.001));
 	}
 
 	template<>
@@ -190,9 +190,9 @@ namespace tut
         TLV95Transformation trans(true);
         ensure("Transform returns true", trans.transform(position));
 
-        ensure_distance("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1145626.140), static_cast<TReal>(0.001));
-		ensure_distance("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2497312.650), static_cast<TReal>(0.001));
-		ensure_distance("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(1206.367 /*- 1.2233*/), static_cast<TReal>(0.001));
+        ensure_equals("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1145626.140), static_cast<TReal>(0.001));
+		ensure_equals("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2497312.650), static_cast<TReal>(0.001));
+		ensure_equals("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(1206.367 /*- 1.2233*/), static_cast<TReal>(0.001));
 	}
 	template<>
     template<>
@@ -205,9 +205,9 @@ namespace tut
         TLV95Transformation trans(false);
         ensure("Transform returns true", trans.transform(position));
 
-		ensure_distance("CH1903+ X", position.getX().getMetresValue(), static_cast<TReal>(4377121.142), static_cast<TReal>(0.001));
-		ensure_distance("CH1903+ Y", position.getY().getMetresValue(), static_cast<TReal>(467993.592), static_cast<TReal>(0.001));
-		ensure_distance("CH1903+ Z", position.getZ().getMetresValue(), static_cast<TReal>(4600671.934), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ X", position.getX().getMetresValue(), static_cast<TReal>(4377121.142), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ Y", position.getY().getMetresValue(), static_cast<TReal>(467993.592), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ Z", position.getZ().getMetresValue(), static_cast<TReal>(4600671.934), static_cast<TReal>(0.001));
 	}
 
 	template<>
@@ -221,9 +221,9 @@ namespace tut
         TLV95Transformation trans(true);
         ensure("Transform returns true", trans.transform(position));
 
-        ensure_distance("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1087648.190), static_cast<TReal>(0.001));
-		ensure_distance("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2722759.059), static_cast<TReal>(0.001));
-		ensure_distance("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(1634.472 /*- 1.2233*/), static_cast<TReal>(0.001));
+        ensure_equals("LV95 X", position.getX().getMetresValue(), static_cast<TReal>(1087648.190), static_cast<TReal>(0.001));
+		ensure_equals("LV95 Y", position.getY().getMetresValue(), static_cast<TReal>(2722759.059), static_cast<TReal>(0.001));
+		ensure_equals("LV95 H", position.getH().getMetresValue(), static_cast<TReal>(1634.472 /*- 1.2233*/), static_cast<TReal>(0.001));
 	}
 	template<>
     template<>
@@ -236,9 +236,9 @@ namespace tut
         TLV95Transformation trans(false);
         ensure("Transform returns true", trans.transform(position));
 
-		ensure_distance("CH1903+ X", position.getX().getMetresValue(), static_cast<TReal>(4389483.221), static_cast<TReal>(0.001));
-		ensure_distance("CH1903+ Y", position.getY().getMetresValue(), static_cast<TReal>(696984.352), static_cast<TReal>(0.001));
-		ensure_distance("CH1903+ Z", position.getZ().getMetresValue(), static_cast<TReal>(4560589.600), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ X", position.getX().getMetresValue(), static_cast<TReal>(4389483.221), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ Y", position.getY().getMetresValue(), static_cast<TReal>(696984.352), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ Z", position.getZ().getMetresValue(), static_cast<TReal>(4560589.600), static_cast<TReal>(0.001));
 	}
 
 }
