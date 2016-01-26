@@ -34,4 +34,4 @@ set(StreamFormatters_HEADERS
 add_library(StreamFormatters STATIC ${StreamFormatters_SOURCES} ${StreamFormatters_HEADERS})
 
 #link used libraries
-target_link_libraries(StreamFormatters FiltersAndFormats)
+target_link_libraries(StreamFormatters Converters FiltersAndFormats)
