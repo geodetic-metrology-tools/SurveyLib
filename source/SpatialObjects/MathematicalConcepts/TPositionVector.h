@@ -21,21 +21,12 @@
 
 
 ////////////////////////////////////////////////////////////////
-// Forward declarations
-//
 #include  <iostream>
-//using namespace std;
-//
 #include "TACoordSysVector.h"
 #include "TFreeVector.h"
 #include "TDouble.h"
 #include "TScalar.h"
 #include "TLength.h"
-//
-//#include  "**classname**.h"
-// typedefs
-//
-//
 ////////////////////////////////////////////////////////////////
 
 /*! \ingroup MathematicalConcepts

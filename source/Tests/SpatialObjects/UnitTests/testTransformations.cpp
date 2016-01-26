@@ -42,7 +42,7 @@ namespace tut
 
         // Inverse transformation - take the ETRF result and convert back
         position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRF97));
-        ensure_equals("ITRF97 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.1801), static_cast<TReal>(0.00001));
+		ensure_equals("ITRF97 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.1801), static_cast<TReal>(0.00001));
 		ensure_equals("ITRF97 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.7634), static_cast<TReal>(0.00001));
 		ensure_equals("ITRF97 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.8516), static_cast<TReal>(0.00001));
 	}
@@ -62,13 +62,13 @@ namespace tut
 
         ensure_equals("ETRF93 Phi (Deg)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getDegreesValue(), 47);
         ensure_equals("ETRF93 Phi (Min)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getMinutesValue(), 34);
-        ensure_equals("ETRF93 Phi (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getSecondsValue(), static_cast<TReal>(1.385301), static_cast<TReal>(1e-4));
+		ensure_equals("ETRF93 Phi (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getSecondsValue(), static_cast<TReal>(1.385301), static_cast<TReal>(1e-4));
 
         ensure_equals("ETRF93 Lam (Deg)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getDegreesValue(), 7);
         ensure_equals("ETRF93 Lam (Min)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getMinutesValue(), 40);
-        ensure_equals("ETRF93 Lam (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getSecondsValue(), static_cast<TReal>(6.983077), static_cast<TReal>(1e-4));
+		ensure_equals("ETRF93 Lam (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getSecondsValue(), static_cast<TReal>(6.983077), static_cast<TReal>(1e-4));
 
-        ensure_equals("ETRF93 H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<TReal>(504.935), static_cast<TReal>(1e-3));
+		ensure_equals("ETRF93 H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<TReal>(504.935), static_cast<TReal>(1e-3));
 	}
 
     template<>
@@ -89,13 +89,12 @@ namespace tut
             ensure("pv.setPhiEllipsoid",pv.setPhiEllipsoid(phi));
 	        ensure("pv.setLambdaEllipsoid",pv.setLambdaEllipsoid(lam));
 	        ensure("pv.setH",pv.setH(h));
-	        pv.setStatus(TVNumericValue::kKnown);
         }
 		
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
 
-        ensure_equals("ETRF93 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4273147.936), static_cast<TReal>(0.001));
+		ensure_equals("ETRF93 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4273147.936), static_cast<TReal>(0.001));
 		ensure_equals("ETRF93 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(575368.294), static_cast<TReal>(0.001));
 		ensure_equals("ETRF93 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4684903.639), static_cast<TReal>(0.001));
 	}
@@ -114,13 +113,13 @@ namespace tut
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
         position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
 
-        ensure_equals("CH1903+ X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4272473.562), static_cast<TReal>(0.001));
+		ensure_equals("CH1903+ X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4272473.562), static_cast<TReal>(0.001));
 		ensure_equals("CH1903+ Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(575353.239), static_cast<TReal>(0.001));
 		ensure_equals("CH1903+ Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4684498.293), static_cast<TReal>(0.001));
 
         // Inverse transformation - take the CH1903+ result and convert back
         position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
-        ensure_equals("ETRF93 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4273147.936), static_cast<TReal>(0.001));
+		ensure_equals("ETRF93 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4273147.936), static_cast<TReal>(0.001));
 		ensure_equals("ETRF93 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(575368.294), static_cast<TReal>(0.001));
 		ensure_equals("ETRF93 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4684903.639), static_cast<TReal>(0.001));
 
@@ -144,7 +143,6 @@ namespace tut
             ensure("pv.setPhiEllipsoid",pv.setPhiEllipsoid(phi));
 	        ensure("pv.setLambdaEllipsoid",pv.setLambdaEllipsoid(lam));
 	        ensure("pv.setH",pv.setH(h));
-	        pv.setStatus(TVNumericValue::kKnown);
         }
 		
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
@@ -158,6 +156,7 @@ namespace tut
 
         // Inverse transformation - take the CH1903+ result and convert back
         position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
+		auto x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 		ensure_equals("ETRF93 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4273147.936), static_cast<TReal>(0.001));
 		ensure_equals("ETRF93 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(575368.294), static_cast<TReal>(0.001));
 		ensure_equals("ETRF93 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4684903.639), static_cast<TReal>(0.001));
@@ -191,15 +190,14 @@ namespace tut
             ensure("pv.setPhiEllipsoid",pv.setPhiEllipsoid(phi));
 	        ensure("pv.setLambdaEllipsoid",pv.setLambdaEllipsoid(lam));
 	        ensure("pv.setH",pv.setH(h));
-	        pv.setStatus(TVNumericValue::kKnown);
         }
 		
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
 
-        ensure_equals("CH1903+ X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4272473.562), static_cast<TReal>(0.001));
-		ensure_equals("CH1903+ Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(575353.239), static_cast<TReal>(0.001));
-		ensure_equals("CH1903+ Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4684498.293), static_cast<TReal>(0.001));
+        ensure_distance("CH1903+ X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4272473.562), static_cast<TReal>(0.001));
+		ensure_distance("CH1903+ Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(575353.239), static_cast<TReal>(0.001));
+		ensure_distance("CH1903+ Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4684498.293), static_cast<TReal>(0.001));
 	}
 
     template<>
@@ -217,13 +215,13 @@ namespace tut
 
         ensure_equals("CH1903+ Phi (Deg)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getDegreesValue(), 47);
         ensure_equals("CH1903+ Phi (Min)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getMinutesValue(), 34);
-        ensure_equals("CH1903+ Phi (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getSecondsValue(), static_cast<TReal>(6.404965), static_cast<TReal>(1e-4));
+        ensure_distance("CH1903+ Phi (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getSecondsValue(), static_cast<TReal>(6.404965), static_cast<TReal>(1e-4));
 
         ensure_equals("CH1903+ Lam (Deg)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getDegreesValue(), 7);
         ensure_equals("CH1903+ Lam (Min)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getMinutesValue(), 40);
-        ensure_equals("CH1903+ Lam (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getSecondsValue(), static_cast<TReal>(10.574820), static_cast<TReal>(1e-4)); 
+        ensure_distance("CH1903+ Lam (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getSecondsValue(), static_cast<TReal>(10.574820), static_cast<TReal>(1e-4)); 
 
-        ensure_equals("CH1903+ H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<TReal>(457.138), static_cast<TReal>(1e-3));
+        ensure_distance("CH1903+ H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<TReal>(457.138), static_cast<TReal>(1e-3));
 	}
 
     template<>
@@ -239,9 +237,9 @@ namespace tut
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
         ensure("Transformation OK", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95)));
-        ensure_equals("LV95 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
-		ensure_equals("LV95 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
-		ensure_equals("LV95 H", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
+        ensure_distance("LV95 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
+		ensure_distance("LV95 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
+		ensure_distance("LV95 H", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
 	}
 
     template<>
@@ -261,13 +259,13 @@ namespace tut
 
         ensure_equals("CH1903+ Phi (Deg)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getDegreesValue(), 47);
         ensure_equals("CH1903+ Phi (Min)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getMinutesValue(), 34);
-        ensure_equals("CH1903+ Phi (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getSecondsValue(), static_cast<TReal>(6.404965), static_cast<TReal>(1e-4));
+        ensure_distance("CH1903+ Phi (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getSecondsValue(), static_cast<TReal>(6.404965), static_cast<TReal>(1e-4));
 
         ensure_equals("CH1903+ Lam (Deg)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getDegreesValue(), 7);
         ensure_equals("CH1903+ Lam (Min)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getMinutesValue(), 40);
-        ensure_equals("CH1903+ Lam (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getSecondsValue(), static_cast<TReal>(10.574820), static_cast<TReal>(1e-4)); 
+        ensure_distance("CH1903+ Lam (Sec)", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getSecondsValue(), static_cast<TReal>(10.574820), static_cast<TReal>(1e-4)); 
 
-        ensure_equals("CH1903+ H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<TReal>(457.138), static_cast<TReal>(1e-3));
+        ensure_distance("CH1903+ H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<TReal>(457.138), static_cast<TReal>(1e-3));
 
 	}
 
@@ -283,9 +281,9 @@ namespace tut
 
         position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93Zone5));     
 
-        ensure_equals("RGF93 CC46 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1918471.0676), static_cast<TReal>(0.0001));
-		ensure_equals("RGF93 CC46 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(5215917.6067), static_cast<TReal>(0.0001));
-		ensure_equals("RGF93 CC46 H", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<TReal>(400.157 /*- 1.2233*/), static_cast<TReal>(0.001));   
+        ensure_distance("RGF93 CC46 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1918471.0676), static_cast<TReal>(0.0001));
+		ensure_distance("RGF93 CC46 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(5215917.6067), static_cast<TReal>(0.0001));
+		ensure_distance("RGF93 CC46 H", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<TReal>(400.157 /*- 1.2233*/), static_cast<TReal>(0.001));   
     }
 
 	template<>
@@ -300,8 +298,8 @@ namespace tut
 
 		position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCCS));     
 
-		ensure_equals("CCS X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(1200.67), static_cast<TReal>(0.01)); 
-		ensure_equals("CCS Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(2077.57), static_cast<TReal>(0.01));
-		ensure_equals("CCS Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(2481.52), static_cast<TReal>(0.01));   
+		ensure_distance("CCS X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(1200.67), static_cast<TReal>(0.01)); 
+		ensure_distance("CCS Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(2077.57), static_cast<TReal>(0.01));
+		ensure_distance("CCS Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(2481.52), static_cast<TReal>(0.01));   
 	}
 }

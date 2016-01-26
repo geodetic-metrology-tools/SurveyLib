@@ -37,13 +37,11 @@ Reflection by a plane x=0, y=0, z=0 or Reflection by the plane x=y, x=z or y=z*/
 TReflection::TReflection() : fReflectionMatrix(TCoordSysFactory::k3DCartesian)
 {	// default constructor
 	fReflectionType = kNull;
-	setStatus(TVNumericValue::kNull);
 }
 
 TReflection::TReflection(const TReflection::EType type) : fReflectionMatrix(TCoordSysFactory::k3DCartesian)
 {
 	fReflectionType = type;
-	setStatus(TVNumericValue::kKnown);
 	fillMatrix(type);
 }
 
@@ -69,7 +67,6 @@ TReflection&  TReflection::operator=( const TReflection& right)
 		fReflectionType = right.getType();
 		fillMatrix(fReflectionType);
 		
-		setStatus(right.getStatus());
 	}
 	return *this;
 }
@@ -87,7 +84,7 @@ bool TReflection::transform(TPositionVector& rightV) const
 
 	bool trans = false;
 
-	if (isNull()==false)
+	if (isInitialise())
 	{
 		rightV = fReflectionMatrix * rightV;
 		trans = true;
@@ -101,7 +98,7 @@ bool TReflection::transform(TFreeVector & rightV) const
 	// V2=P*V1
 	bool trans = false;
 	
-	if (isNull()==false)
+	if (isInitialise())
 	{
 		rightV = fReflectionMatrix * rightV;
 		trans = true;
@@ -114,38 +111,25 @@ bool TReflection::transform(TRotationMatrix& rm) const
 {/// Transform a TRotationMatrix
 	// TODO: why is the other object unused here?
 	ignoring(rm);
-	bool trans = false;
-	if (isNull() == false)
-		trans = true;
 
-	return trans;
+	return isInitialise();
 }
 
 
 TPositionVector &  TReflection::operator() ( TPositionVector & right ) const
 {// apply this transformation to a position vector
-	if ( this->isNull() || right.isNull() )
-	{
-		right.setStatus( TVNumericValue::kNull );
-	}
-	else
-	{
+	if (isInitialise() && right.isInitialise())
 		right = fReflectionMatrix * right;
-	}
+	
 	return right;
 }
 
 
 TFreeVector &  TReflection::operator() ( TFreeVector & right ) const
 {// apply this transformation to a free vector
-	if ( this->isNull() || right.isNull() )
-	{
-		right.setStatus( TVNumericValue::kNull );
-	}
-	else
-	{
+	if (isInitialise() && right.isInitialise())
 		right = fReflectionMatrix * right;
-	}
+	
 	return right;
 }
 
@@ -153,10 +137,7 @@ TFreeVector &  TReflection::operator() ( TFreeVector & right ) const
 
 TRotationMatrix &  TReflection::operator() ( TRotationMatrix & right ) const
 {// apply this transformation to a Rotation Matrix
-	if ( this->isNull() )
-	{
-		right.setStatus( TVNumericValue::kNull );
-	}
+	
 	return right;
 }
 

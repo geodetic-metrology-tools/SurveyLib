@@ -24,15 +24,6 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
-////////////////////////////////////////////////////////////////
-// Forward declarations
-//
-//include files
-//using namespace std;
-//typedefs
-//
-//
-////////////////////////////////////////////////////////////////
 
 
 template <class T>
@@ -80,14 +71,6 @@ bool operator<( const TPtrWrapper<T>& wrapper1, const TPtrWrapper<T>& wrapper2 )
 {
     return *(wrapper1.getPtr())  <  *(wrapper2.getPtr());
 }
-
-
-
-//Default constructor
-/*template <class T>
-TPtrWrapper<T>::TPtrWrapper() : fPointer(0), fCount(0) 
-{ 
-}*/
 
 
 //Constructor taking a pointer to the template object

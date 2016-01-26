@@ -1,26 +1,6 @@
-// 
-// TSpatialPoint
-//
-// Class for a spatial point as defined for survey purposes
-//
-// Copyright 1999,2000, CERN, EST/SU. All rights reserved.
-//
-////////////////////////////////////////////////////////////////
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-// other forward declarations
-//#include	"TGeodeticData.h"
-#include  "TANumericValue.h"
 #include  "TSpatialPosition.h"
 #include  "TSpatialPoint.h"
-//#include "TWorkingPoints.h"
-//#include "TRoundOfMeasNetworkListnr.h"
-////////////////////////////////////////////////////////////////
 
-
-
-
-//ClassImp(TSpatialPoint)
 
 
 //////////////////////////////////////////////////////////////////////
@@ -98,24 +78,6 @@ TSpatialPoint::TSpatialPoint(const TSpatialPoint& tsp)
 	fYSet = tsp.fYSet;
 	fZSet = tsp.fZSet;
 }
-
-
-/*TSpatialPoint::TSpatialPoint(const string& name, const char point, const string& classifier)
-	: fName( name, point, classifier )
-{
-	fPosition = 0;
-	fUsedInCalc = true;
-
-}*/
-
-
-/*TSpatialPoint::TSpatialPoint(const string& name, const char point, const string& classifier, TSpatialPosition* sp) 
-	: fName( name, point, classifier )
-{
-	fPosition = sp;
-	fUsedInCalc = true;
-
-}*/
 
 
 TSpatialPoint::~TSpatialPoint()
@@ -199,15 +161,6 @@ void  TSpatialPoint::setPosition( TSpatialPosition *position )
 	}
 
 	fPosition = position;  
-/*
-	PtListnrIterator iter = fPtListeners.begin();
-	PtListnrIterator iterEnd = fPtListeners.end();
-
-	while (iter != iterEnd){
-		(*iter)->pointUpdated(TVSpatialPtListener::EUpdateMessage::kPositionChange);
-		iter++;
-	}
-*/
 //	updateNeededEquations();
 
 	if (flistener != 0)
@@ -228,15 +181,7 @@ void  TSpatialPoint::setPosition( TSpatialPosition *position, int column, bool i
 	}
 
 	fPosition = position;  
-/*
-	PtListnrIterator iter = fPtListeners.begin();
-	PtListnrIterator iterEnd = fPtListeners.end();
 
-	while (iter != iterEnd){
-		(*iter)->pointUpdated(TVSpatialPtListener::EUpdateMessage::kPositionChange);
-		iter++;
-	}
-*/
 //	updateNeededEquations();
 
 	if (fPointStatus == kNew && isNull == false)
@@ -308,19 +253,8 @@ int TSpatialPoint::getVariableDimension() const{
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 void TSpatialPoint::setName( const TSpatialPointName& name ){
-///////////////////////////////////////////////////////
-// sets the point's name 
-///////////////////////////////////////////////////////
 
 	*fName = name;
-/*
-	PtListnrIterator iter = fPtListeners.begin();
-	PtListnrIterator iterEnd = fPtListeners.end();
-
-	while (iter != iterEnd){
-		(*iter)->pointUpdated(TVSpatialPtListener::EUpdateMessage::kNameChange);
-		iter++;
-	}*/
 	//put in new imp here
 	if (flistener != 0)
 	{

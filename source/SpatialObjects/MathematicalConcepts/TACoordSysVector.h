@@ -20,30 +20,19 @@
 #endif // _MSC_VER >= 1000
 
 
-////////////////////////////////////////////////////////////////
-// Forward declarations
-//
-//
-class TVCoordinateSystem;
-//
-
-#include "TANumericValue.h"
 #include "TLength.h"
 #include "TDouble.h"
 #include  "TCoordSysFactory.h"
-//using namespace std;
-//
-//
-//typedefs
-//
-//
-////////////////////////////////////////////////////////////////
+
+class TVCoordinateSystem;
+
+
 
 /*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Abstract class use for explain TPositionVector and TFreeVector
-class  TACoordSysVector : public  TANumericValue //: public TObject
+class  TACoordSysVector
 {
 public:
 
@@ -61,6 +50,9 @@ public:
 		/*!test if two object have the same coordinate system
 		\return false if it s wrong*/
 		bool testCoordSysCart(TCoordSysFactory::ECoordSys) const;
+
+		//! return true if coordinates are not set to NO_VALf
+		bool isInitialise() const;
 		
 		//!get the X coordinate of a vector in a specific Coordinate System
 		TLength getX() const;

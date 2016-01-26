@@ -34,6 +34,7 @@ namespace tut
         B(1,0) = 2;  B(1,1) = 0;  B(1, 2) = -4;
         B(2,0) = 3;  B(2,1) = 9;  B(2, 2) = 2;
 
+
         TMatrix expected(3,3);
         expected(0,0)=34;expected(0,1)=75;expected(0,2)=13;
         expected(1,0)=10;expected(1,1)=15;expected(1,2)=-21;
@@ -557,8 +558,7 @@ namespace tut
         B(1,0) = 2;  B(1,1) = 0;
 
         TMatrix result = A + B;
-        ensure_equals("Status should be kNull", result.getStatus(), TVNumericValue::kNull);
-        ensure_not("There should be and error message", result.getError().empty());
+        ensure_equals("Status should be kNull", result.isInitialise(), false);
     }
 
     template<>
@@ -576,8 +576,7 @@ namespace tut
         B(1,0) = 2;  B(1,1) = 0;
 
         TMatrix result = A - B;
-        ensure_equals("Status should be kNull", result.getStatus(), TVNumericValue::kNull);
-        ensure_not("There should be and error message", result.getError().empty());
+		ensure_equals("Status should be kNull", result.isInitialise(), false);
     }
 	
 	template<>

@@ -1,28 +1,10 @@
-// TMatrix.cpp
-//
-/** Class for a matrix of doubles.
-Designed to be easiliy usable with matrix functions of the NagC math library */
-//
-// Patterns:
-//
-// 
-// Copyright 2002 CERN EST/SU. All rights reserved.
-//////////////////////////////////////////////////////////////////////
-
-
 #include "TDouble.h"
 #include "TMatrix.h"
 #include "TColumnVector.h"
 #include "TSparseMatrix.h"
-
 #include <TMatrixImpl.h>
-
 #include <iostream>
 using namespace std;
-////////////////////////////////////////////////////////////////
-
-
-//ClassImp(TMatrix)
 
 
 //////////////////////////////////////////////////////////////////////
@@ -32,35 +14,23 @@ using namespace std;
 TMatrix::TMatrix()
 : fImpl(new TMatrixImpl)
 {//default constructor
-	setStatus( TANumericValue::kNull );
 }
 
 // TODO: Check who is using that
 TMatrix::TMatrix(const TDouble & value)
 : fImpl(new TMatrixImpl(1,1,value.getValue()))
 {//Constructor return the matrice (1,1) with (1,1)=value ..... 
-	setStatus( TANumericValue::kKnown );
 }
 
 
 TMatrix::TMatrix(int nRows, int nCols)
 : fImpl(new TMatrixImpl(nRows, nCols, 0.0))
 {//Constructor setting the dimensions of the matrix
-    setStatus( TANumericValue::kKnown );	
-	//{
-	//	fNbRows = 1;
-	//	fNbCols = 1;
-	//	fMatrix = new double [fNbRows * fNbCols];
-	//	(*this) = LITERAL(0.0);
-	//	fError = "Invalid dimension" + '\n';
-	//	setStatus( TANumericValue::kNull );
-	//}
 }	
 		
 
 TMatrix::TMatrix(const TMatrix & source)
-: TANumericValue(source)
-,  fImpl(new TMatrixImpl(*(source.fImpl)))
+: fImpl(new TMatrixImpl(*(source.fImpl)))
 ,  fError(source.fError)
 {//!Copy constructor
 	//copy the status
@@ -69,7 +39,6 @@ TMatrix::TMatrix(const TMatrix & source)
 
 void TMatrix::swap(TMatrix & other) throw()
 {
-	TANumericValue::swap(other);
     using std::swap;
     swap(fImpl, other.fImpl);
     swap(fError, other.fError);
@@ -78,6 +47,32 @@ void TMatrix::swap(TMatrix & other) throw()
 TMatrix::~TMatrix()
 {//!Destructor
     delete fImpl;
+}
+
+bool TMatrix::isInitialise() const
+{
+	TMatrix mat = *this;
+	int nbCol = this->numCols();
+	int nbRow = this->numRows();
+
+	if (nbCol == 0 && nbRow == 0)
+		return false;
+	
+	int i = 0;
+	
+	while (i < nbRow)
+	{
+		int j = 0;
+		while (j < nbCol)
+		{
+			if (mat(i, j) == NO_VALf)
+				return false;
+			j++;
+		}
+		i++;
+	}
+
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -101,15 +96,24 @@ void TMatrix::operator=(const double& value)
 // TODO: Dimension checks?
 TMatrix & TMatrix::operator+=(const TMatrix & right)
 {//replaces this matrix by its sum with a second one
-    setStatus(this->testStatus(right));
-    if(numRows()!=right.numRows() || numCols()!=right.numCols()) {
-        setStatus(kNull);
-        fError += "Cannot add matrices of a different sizes";
-    }
-    if(getStatus()!=kNull)
-    {
-        fImpl->operator+=(*right.fImpl);
-    }
+
+	if (right.isInitialise() && this->isInitialise())
+	{
+		if (numRows() != right.numRows() || numCols() != right.numCols())
+		{
+			fError += "Cannot add matrices of a different sizes";
+			TMatrix uninitMtr;
+			*this = uninitMtr;
+		}
+		else
+			fImpl->operator+=(*right.fImpl);
+	}
+	else
+	{
+		TMatrix uninitMtr;
+		*this = uninitMtr;
+	}
+
     return *this;
 }
 
@@ -123,15 +127,23 @@ TMatrix TMatrix::operator+(const TMatrix & right) const
 // TODO: Dimension checks?
 TMatrix & TMatrix::operator-=(const TMatrix& right)
 {//replaces this matrix by its difference with a second one
-    setStatus(this->testStatus(right));
-    if(numRows()!=right.numRows() || numCols()!=right.numCols()) {
-        setStatus(kNull);
-        fError += "Cannot calculate a difference between the matrices of a different sizes";
-    }
-    if(getStatus()!=kNull)
-    {
-        fImpl->operator-=(*right.fImpl);
-    }
+	if (right.isInitialise() && this->isInitialise())
+	{
+		if (numRows() != right.numRows() || numCols() != right.numCols())
+		{
+			fError += "Cannot substract matrices of a different sizes";
+			TMatrix uninitMtr;
+			*this = uninitMtr;
+		}
+		else
+			fImpl->operator-=(*right.fImpl);
+	}
+	else
+	{
+		TMatrix uninitMtr;
+		*this = uninitMtr;
+	}
+
     return *this;
 }
 
@@ -145,11 +157,13 @@ TMatrix TMatrix::operator-(const TMatrix& right) const
 
 TMatrix & TMatrix::operator*=(const TMatrix & right)
 {//replaces this matrix by its product with a second one
-    setStatus(this->testStatus(right));
-    if(getStatus()!=kNull && numCols() == right.numRows())
-    {
-        fImpl->operator*=(*right.fImpl);
-    }
+	if (right.isInitialise() && this->isInitialise() && numCols() == right.numRows())
+		fImpl->operator*=(*right.fImpl);
+	else
+	{
+		TMatrix uninitMtr;
+		*this = uninitMtr;
+	}
     return *this;
 }
 
@@ -162,8 +176,8 @@ TMatrix TMatrix::operator*(const TMatrix & right) const
 TColumnVector TMatrix::operator*(const TColumnVector& right) const
 {//returns the product of this matrix by a column vector
     TColumnVector result(numRows());
-	result.setStatus(this->testStatus(right));
-    if (result.getStatus()!=kNull && numCols() == right.dimension())
+
+    if (right.isInitialise() && this->isInitialise() && numCols() == right.dimension())
 	{
         TMatrixImpl tmp(numCols(),1,0.0);
         for(int i=0; i!=numCols(); ++i)
@@ -178,10 +192,9 @@ TColumnVector TMatrix::operator*(const TColumnVector& right) const
 
 TMatrix & TMatrix::operator*=(double value)
 {
-    if(getStatus()!=kNull)
-    {
+    if(value != NO_VALf && this->isInitialise())
         fImpl->operator*=(value);
-    }
+
     return *this;
 }
 
@@ -194,8 +207,7 @@ TMatrix TMatrix::operator*(double value)
 
 TMatrix & TMatrix::operator*=(const TDouble & right)
 {
-    setStatus(this->testStatus(right));
-    if(getStatus()!=kNull)
+	if (right.getValue() != NO_VALf && this->isInitialise())
     {
         fImpl->operator*=(right.getValue());
     }
@@ -224,8 +236,8 @@ TMatrix TMatrix::transposed() const
 TColumnVector TMatrix::eqnSolve(const TColumnVector& B)
 {//returns the solution of the system this*X = B
     TColumnVector result(numRows());
-	result.setStatus(this->testStatus(B));
-    if (result.getStatus()!=kNull && numCols() == B.dimension())
+
+    if (B.isInitialise() && this->isInitialise() && numCols() == B.dimension())
 	{
         TMatrixImpl tmp(numCols(),1,0.0);
         for(int i=0; i!=numCols(); ++i)
@@ -241,8 +253,7 @@ TColumnVector TMatrix::eqnSolve(const TColumnVector& B)
 TColumnVector TMatrix::ldltSolve(const TColumnVector& B)
 {//returns the solution of the system this*X = B, requires P(S)D matrix
     TColumnVector result(numRows());
-	result.setStatus(this->testStatus(B));
-    if (result.getStatus()!=kNull && numCols() == B.dimension())
+	if (B.isInitialise() && this->isInitialise() && numCols() == B.dimension())
 	{
         TMatrixImpl tmp(numCols(),1,0.0);
         for(int i=0; i!=numCols(); ++i)
@@ -251,7 +262,8 @@ TColumnVector TMatrix::ldltSolve(const TColumnVector& B)
         TMatrixImpl res = this->fImpl->solveLdlt(tmp);
 		if (res.rows() == 0)
 		{
-			result.setStatus(TVNumericValue::kNull);
+			throw std::runtime_error("LDLT decomposition failed");
+			result.setDimension(0);
 			return result;
 		}
         for(int i=0; i!=numCols(); ++i)
@@ -281,14 +293,6 @@ bool TMatrix::initDiag(double value)
 void TMatrix::setDimensions(int nRows, int nCols)
 {//Sets the dimensions of the matrix
     fImpl->resize(nRows, nCols);
-	//{
-	//	fNbRows = 1;
-	//	fNbCols = 1;
-	//	fMatrix = new double [fNbRows * fNbCols];
-	//	(*this) = LITERAL(0.0);
-	//	fError = "Invalid dimension" + '\n';
-	//	setStatus( TANumericValue::kNull );
-	//}
 }
 
 
@@ -307,14 +311,10 @@ int TMatrix::numCols() const
 bool TMatrix::invert()
 {//Overwrites this Matrix by its inverse
 //checks if the Matrix can be inverted
-	if(getStatus() != TVNumericValue::kNull && numRows() == numCols())
-	{
+	if(this->isInitialise() && numRows() == numCols())
 	    return fImpl->invert();
-	}
 	else
-	{
 		return false;
-	}
 }
 
 
@@ -326,7 +326,7 @@ TMatrix TMatrix::inverse()
 	TMatrix result(*this);
 	bool inverted = result.invert();
     if(!inverted)
-        result.setStatus(TANumericValue::kNull);
+		throw std::runtime_error("Cannot invert the TMatrix.");
     return result;
 }
 

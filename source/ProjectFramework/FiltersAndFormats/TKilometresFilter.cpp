@@ -72,7 +72,7 @@ void	TKilometresFilter::input(TAStreamFormatter&	iStream, TLength& length)const
 	}
 	else
 	{
-		length.setStatus(TVNumericValue::kNull);
+		length.setKMetresValue(NO_VALf);
 		iStream.clear();
 			
 		while(iStream.peek()!=' ' && iStream.peek()!='\n')

@@ -48,9 +48,8 @@ inline TReal wrapAngle( TReal angle )
 //////////////////////////////////////////////////////////////////////
 
 
-TAngle::TAngle() : fValue(LITERAL(0.0))
+TAngle::TAngle() : fValue(NO_VALf)
 {	// default constructor
-	setStatus( TANumericValue::kNull );
 }
 
 
@@ -64,7 +63,6 @@ TAngle::TAngle(const TReal value, EUnits unit)
       case EUnits::kCCs:         setGonsValue(value*CC2GON); break;
       case EUnits::k100MicroGons:setGonsValue(value*CC2GON); break;
    }
-   setStatus((value == std::numeric_limits<TReal>::quiet_NaN()) ? EStatus::kNull : EStatus::kKnown);
 }
 
 
@@ -75,7 +73,6 @@ TAngle::~TAngle()
 TAngle::TAngle(const TAngle& angle)
 {
 	fValue=angle.fValue;
-	setStatus( angle.getStatus() );
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -85,13 +82,11 @@ TAngle::TAngle(const TAngle& angle)
 void TAngle::normaliseAngle()
 {
     while (fValue > PI - seuil())
-    {
         fValue -= TWOPI;
-    }
+   
     while (fValue < -PI + seuil())
-    {
         fValue += TWOPI;
-    }
+    
 }
 
 
@@ -102,8 +97,6 @@ bool	TAngle::setRadiansValue(const TReal value)
 	
 	//normalise the radians value
 	normaliseAngle();			
-
-	valueSet();
 
 	return true;
 }
@@ -118,8 +111,6 @@ bool	TAngle::setGonsValue(const TReal value)
 
 	//normalise the radians value
 	normaliseAngle();
-	
-	valueSet();
 
 	return true;
 }
@@ -168,7 +159,6 @@ bool	TAngle::setDMSValue(const	Degrees	degs,
 	//normalise the radians value
 	normaliseAngle();
 
-	valueSet();
 
 	return true;
 }
@@ -259,14 +249,9 @@ bool TAngle::operator<(const TAngle& right) const{
 TAngle TAngle::operator+(const TAngle &angle) const
 {// Adds another angle to the angle and returns the result	
 	TAngle resultat;
-	TANumericValue::EStatus status;
-	status=this->testStatus(angle);
-	if (status!= kNull)
-	{
+	if (angle != NO_VALf && *this != NO_VALf)
 		resultat.setRadiansValue(this->getRadiansValue() + angle.getRadiansValue());
-		//resultat.setGonsValue(this->getGonsValue() + angle.getGonsValue());
-	}
-	resultat.setStatus(status);
+
 	return resultat;
 }
 
@@ -274,32 +259,9 @@ TAngle TAngle::operator+(const TAngle &angle) const
 TAngle TAngle::operator-(const TAngle &angle) const
 {// Subtracts another angle from the angle and returns the result
 	TAngle resultat;
-	TANumericValue::EStatus status;
-	status=this->testStatus(angle);
-	if (status!= kNull)
-	{
-/*		TAngle a(angle);
-		if (a.getRadiansValue() < LITERAL(0.0)) { a += (2 * pi()); }
-		if (this->getRadiansValue() < LITERAL(0.0)) { (*this) += (2 * pi()); }
-		if (((a.getRadiansValue()) < pi().getRadiansValue()) && ((this->getRadiansValue()) >= pi().getRadiansValue()))
-		{
-			resultat.setRadiansValue((this->getRadiansValue() - a.getRadiansValue()) - 2 * pi().getRadiansValue());
-		}
-
-		else if (a.getRadiansValue() >= pi().getRadiansValue() && this->getRadiansValue() < pi().getRadiansValue())
-		{
-			resultat.setRadiansValue((this->getRadiansValue() - a.getRadiansValue()) + 2 * pi().getRadiansValue());
-		}
-		
-		else
-		{
-			resultat.setRadiansValue(this->getRadiansValue() - a.getRadiansValue());
-		}*/
-
+	if (angle != NO_VALf && *this != NO_VALf)
 		resultat.setRadiansValue(this->getRadiansValue() - angle.getRadiansValue());
-		//resultat.setGonsValue(this->getGonsValue()-angle.getGonsValue());
-	}
-	resultat.setStatus(status);
+
 	return resultat;
 }
 
@@ -307,11 +269,9 @@ TAngle TAngle::operator-(const TAngle &angle) const
 TAngle TAngle::operator*(const TReal factor) const
 {// Multiplies the angle by a scale factor
 	TAngle resultat;
-	if (isNull()!=true)
-	{
+	if (factor != NO_VALf && *this != NO_VALf)
 		resultat.setRadiansValue(factor*(this->getRadiansValue()));
-	}
-	resultat.setStatus(getStatus());
+	
 	return resultat;
 }
 
@@ -319,13 +279,9 @@ TAngle TAngle::operator*(const TReal factor) const
 TAngle TAngle::operator*(const TDouble &factor) const
 {// Multiplies a TAngle by a TDouble scale factor
 	TAngle resultat;
-	TANumericValue::EStatus status;
-	status=this->testStatus(factor);
-	if (status!= kNull)
-	{	
+	if (factor.getValue() != NO_VALf && *this != NO_VALf)
 		resultat.setRadiansValue(this->getRadiansValue()*factor.getValue());
-	}
-	resultat.setStatus(status);
+
 	return resultat;
 }
 
@@ -333,21 +289,13 @@ TAngle TAngle::operator*(const TDouble &factor) const
 TDouble TAngle::operator/(const TAngle& div) const
 {// Multiplies a TAngle by a TDouble scale factor
 	TDouble resultat;
-	TANumericValue::EStatus status;
-	status=this->testStatus(div);
-	if (status!= kNull)
-	{	
+
+	if (div!= NO_VALf && *this!= NO_VALf)	
 		if(div.getRadiansValue() != LITERAL(0.0))
-		{
 			resultat.setValue(this->getRadiansValue()/div.getRadiansValue());
-		}
 		else
-		{
-			resultat.setValue(LITERAL(0.0));
-			status = kNull;
-		}
-	}
-	resultat.setStatus(status);
+			resultat.setValue(NO_VALf);
+
 	return resultat;
 }
 
@@ -355,11 +303,9 @@ TDouble TAngle::operator/(const TAngle& div) const
 TAngle operator*(const TReal factor, const TAngle &angle )
 {// Multiplies a TAngle by a scale factor
 	TAngle resultat;
-	if (angle.isNull()!=true)
-	{
+	if (angle != NO_VALf && factor!= NO_VALf)
 		resultat.setRadiansValue(angle.getRadiansValue() * factor);
-	}
-	resultat.setStatus(angle.getStatus());
+
 	return resultat;
 }
 
@@ -368,10 +314,8 @@ TAngle operator*(const TReal factor, const TAngle &angle )
 TAngle&	TAngle::operator=(const TAngle &angle)
 {// assigns a TAngle to the angle
 	if (this != &angle) 
-	{
 		fValue=(angle.getRadiansValue());
-		setStatus( angle.getStatus() );
-	}
+
 	return *this;
 }
 

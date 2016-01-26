@@ -83,6 +83,8 @@ public:
 
 		//! Set the rotation matrix
 		bool setElements( const TRotationMatrix& );
+
+		bool isInitialise() const;
 	//@}
 
 

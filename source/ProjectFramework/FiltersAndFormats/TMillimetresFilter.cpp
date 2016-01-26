@@ -76,7 +76,7 @@ void	TMillimetresFilter::input(TAStreamFormatter& iStream, TLength& length)const
 	}
 	else
 	{
-		length.setStatus(TVNumericValue::kNull);
+		length.setMMetresValue(NO_VALf);
 		iStream.clear();
 			
 		while(iStream.peek()!=' ' && iStream.peek()!='\n')

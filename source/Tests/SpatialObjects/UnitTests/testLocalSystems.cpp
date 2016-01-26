@@ -1,5 +1,4 @@
 #include <TAngle.h>
-#include <TVNumericValue.h>
 #include <TLocalSystemOrigin.h>
 #include <TRefSystemFactory.h>
 
@@ -79,7 +78,8 @@ namespace tut
 
 		z100 = basev;
 		z100.setH(basev.getH()+TLength(100));
-		TFreeVector ez = (z100-basev).normalize();
+		TFreeVector ez = (z100 - basev);
+		ez.normalize();
 
 		TPositionVector pN(0, 0, 6137000, k3D); // Approx. north pole
 		TFreeVector pBN = pN - basev; // Free vector from base point to north

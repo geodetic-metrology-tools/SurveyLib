@@ -1,28 +1,7 @@
-// TFreeVector.cpp
-//
-/** 3D Vector used as a Spatial Position for stations or as translation vector in Helmert transformation */
-//
-// Patterns:
-//
-// 
-// Copyright 2000 CERN EST/SU. All rights reserved.
-//////////////////////////////////////////////////////////////////////
-
-
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
 #include  "TFreeVector.h"
 #include  "TVCoordinateSystem.h"
 #include  "TDouble.h"
 #include  "TScalar.h"
-////////////////////////////////////////////////////////////////
-
-
-//ClassImp(TFreeVector)
-
 
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
@@ -33,17 +12,15 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-TFreeVector::TFreeVector()
+TFreeVector::TFreeVector() :TACoordSysVector()
 {	// default constructor	
    setCoordSys(TCoordSysFactory::ECoordSys::k3DCartesian);
-   setStatus(kNull);
+
 }
 
-TFreeVector::TFreeVector(TCoordSysFactory::ECoordSys en)
-{	// default constructor
-	
+TFreeVector::TFreeVector(TCoordSysFactory::ECoordSys en) :TACoordSysVector()
+{	// default constructor	
 	setCoordSys(en);
-	setStatus(kNull);
 }
 
 TFreeVector::TFreeVector(const TReal& x, const TReal& y, const TReal&z, TCoordSysFactory::ECoordSys en)
@@ -52,7 +29,7 @@ TFreeVector::TFreeVector(const TReal& x, const TReal& y, const TReal&z, TCoordSy
 	setX(1, y);
 	setX(2, z);
 	setCoordSys(en);
-	setStatus(kKnown);
+
 }
 
 TFreeVector::TFreeVector(const TFreeVector& original)
@@ -61,7 +38,6 @@ TFreeVector::TFreeVector(const TFreeVector& original)
 	setX(1, original.getX(1));
 	setX(2, original.getX(2));
 	setCoordSys(original.getCoordSys());
-	setStatus(original.getStatus());
 }
 
 
@@ -84,15 +60,14 @@ bool TFreeVector::operator==( const TFreeVector& right) const
 TFreeVector TFreeVector::operator+( const TFreeVector& second)
 {//!Add two FreeVector
 	TFreeVector resultat (getCoordSys());
-	TANumericValue::EStatus status = this->testStatus(second);
-	if (status != kNull && testCoordSysCart(second.getCoordSys())==true)
-	{	resultat.setX(0, getX(0) + second.getX(0));
+	bool fContinue = second.isInitialise() && this->isInitialise();
+	if (fContinue && testCoordSysCart(second.getCoordSys())==true)
+	{	
+		resultat.setX(0, getX(0) + second.getX(0));
 		resultat.setX(1, getX(1) + second.getX(1));
-		resultat.setX(2, getX(2) + second.getX(2));
-	
+		resultat.setX(2, getX(2) + second.getX(2));	
 	}
-	else{status=TVNumericValue::kNull;}
-	resultat.setStatus(status);
+
 	return resultat;
 }
 
@@ -108,14 +83,14 @@ TFreeVector& TFreeVector::operator+=( const TFreeVector& second)
 TFreeVector TFreeVector::operator-( const TFreeVector& second)
 {//!Substract two FreeVector
 	TFreeVector resultat (getCoordSys());
-	TANumericValue::EStatus status = this->testStatus(second);
-	if (status != kNull && testCoordSysCart(second.getCoordSys())==true)
-	{	resultat.setX(0, getX(0) - second.getX(0));
+	bool fContinue = second.isInitialise() && this->isInitialise();
+	if (fContinue && testCoordSysCart(second.getCoordSys()) == true)
+	{	
+		resultat.setX(0, getX(0) - second.getX(0));
 		resultat.setX(1, getX(1) - second.getX(1));
 		resultat.setX(2, getX(2) - second.getX(2));
 	}
-	else{status=TVNumericValue::kNull;}
-	resultat.setStatus(status);
+
 	return resultat;
 }
 
@@ -130,42 +105,43 @@ TFreeVector& TFreeVector::operator-=( const TFreeVector& second)
 TFreeVector TFreeVector::operator*( const TDouble& factor)
 {//!Multiplication by a TDouble object
 	TFreeVector resultat (getCoordSys());
-	TANumericValue::EStatus status = this->testStatus(factor);
-	if (status != kNull)
+
+	if (factor.getValue() != NO_VALf && this->isInitialise())
     {	
         TReal scalar = factor.getValue();
 		resultat.setX( 0, scalar * getX(0) ); 
 		resultat.setX( 1, scalar * getX(1) );
 		resultat.setX( 2, scalar * getX(2) );
     }
-	resultat.setStatus(status);
+
 	return resultat;
 }
 
 TFreeVector TFreeVector::operator*( const TScalar& factor)
 {//!Multiplication by a TScalar object
 	TFreeVector resultat (getCoordSys());
-	TANumericValue::EStatus status = this->testStatus(factor);
-	if (status != kNull)
+	
+	if (factor.getValue() != NO_VALf && this->isInitialise())
 	{	
 		TReal scalar = factor.getValue();
 		resultat.setX( 0, scalar * getX(0) ); 
 		resultat.setX( 1, scalar * getX(1) );
 		resultat.setX( 2, scalar * getX(2) );
 	}
-	resultat.setStatus(status);
+
 	return resultat;
 }
 
 TFreeVector TFreeVector::operator*( const TReal& factor)
 {//!Multiplication by a TDouble object
 	TFreeVector resultat (getCoordSys());
-	if (this->isNull() == false)
+
+	if (factor != NO_VALf && this->isInitialise())
 	{	resultat.setX(0, factor*getX(0)); 
 		resultat.setX(1, factor*getX(1));
 		resultat.setX(2, factor*getX(2));
 	}
-	resultat.setStatus(getStatus());
+
 	return resultat;
 }
 
@@ -187,13 +163,10 @@ TFreeVector& TFreeVector::operator *=( const TReal& right)
 TFreeVector&  TFreeVector::operator=( const TFreeVector& right)
 {//!Copy Assignment operator
 	if (this != &right)
-	{	setX(0, right.getX(0));
+	{	
+		setX(0, right.getX(0));
 		setX(1, right.getX(1));
 		setX(2, right.getX(2));
-		if (right.isNull() == true)
-			{setStatus(kNull);}
-		else
-			{setStatus(right.getStatus());}
 	}
 	setCoordSys(right.getCoordSys());
 	return *this;
@@ -208,16 +181,9 @@ TFreeVector&  TFreeVector::operator=( const TFreeVector& right)
 TLength TFreeVector::length() const
 {///give the length of a TFreeVector (meters)
 	TLength length;
-	if(this->getStatus() != kNull)
-	{
+	if(this->isInitialise())
 		length.setMetresValue(sqrtq(powq((getX()).getMetresValue(),2)+powq((getY()).getMetresValue(),2)+powq((getZ()).getMetresValue(),2)));
-		length.setStatus(this->getStatus());
-	}
-	else
-	{
-		length.setMetresValue(0);
-		length.setStatus(kNull);
-	}
+
 	return length;
 }
 
@@ -225,7 +191,7 @@ TLength TFreeVector::length() const
 TFreeVector& TFreeVector::normalize() 
 {
 	TLength norml = length();
-	if (norml.getStatus() != TANumericValue::kNull) {
+	if (norml != NO_VALf) {
 		TReal norm = norml.getMetresValue();
 		setX(0, getX(0)/norm);
 		setX(1, getX(1)/norm);
@@ -237,16 +203,16 @@ TFreeVector& TFreeVector::normalize()
 
 TFreeVector TFreeVector::cross(const TFreeVector& b) {
 	TFreeVector resultat (getCoordSys());
-	TANumericValue::EStatus status = this->testStatus(b);
-	if (status != kNull && testCoordSysCart(b.getCoordSys())==true)
+	bool fContinue = b.isInitialise() && this->isInitialise();
+	if (fContinue && testCoordSysCart(b.getCoordSys()) == true)
 	{	
 		resultat.setX(0, getX(1)*b.getX(2) - getX(2)*b.getX(1));
 		resultat.setX(1, getX(2)*b.getX(0) - getX(0)*b.getX(2));
 		resultat.setX(2, getX(0)*b.getX(1) - getX(1)*b.getX(0));
-	
 	}
-	else{status=TVNumericValue::kNull;}
-	resultat.setStatus(status);
+	else
+		throw std::runtime_error("One of the FreeVector elements is NULL or coordinate system does not match!");
+	
 	return resultat;
 }
 
@@ -254,8 +220,8 @@ TReal TFreeVector::dot(const TFreeVector& b) const
 {
 
    TReal  result;
-   TANumericValue::EStatus status = this->testStatus(b);
-   if(status != kNull && testCoordSysCart(b.getCoordSys()) == true)
+   bool fContinue = b.isInitialise() && this->isInitialise();
+   if (fContinue && testCoordSysCart(b.getCoordSys()) == true)
       result = getX(0) * b.getX(0) + getX(1) * b.getX(1) + getX(2) * b.getX(2);
    else
       throw std::runtime_error("One of the FreeVector elements is NULL or coordinate system does not match!");
@@ -266,15 +232,10 @@ TReal TFreeVector::dot(const TFreeVector& b) const
 TLength TFreeVector::getHorDist() const
 {///give the length of a TFreeVector (meters)
 	TLength length;
-	if(this->getStatus() != kNull)
-	{
+
+	if(this->isInitialise())
 		length.setMetresValue( sqrtq( powq((getX()).getMetresValue(),2) + powq((getY()).getMetresValue(),2) ) );
-		length.setStatus(this->getStatus());
-	}
-	else
-	{
-		length.setMetresValue(0);
-		length.setStatus(kNull);
-	}
+
+
 	return length;
 }

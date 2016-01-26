@@ -1,33 +1,14 @@
-// TACoordSysVector.cpp
-//
-/** Abstract class use for explain TPositionVector and TFreeVector in a Coordonate System */
-//
-// Patterns:
-//
-// 
-// Copyright 2002 CERN EST/SU. All rights reserved.
-//////////////////////////////////////////////////////////////////////
-
-
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
 #include  "TVCoordinateSystem.h"
 #include  "TACoordSysVector.h"
-////////////////////////////////////////////////////////////////
 
 
-//ClassImp(TACoordSysVector)
 
-
-TACoordSysVector::TACoordSysVector(): TANumericValue()
+TACoordSysVector::TACoordSysVector()
 {
 	int i = 0;
 	while(i<3)
 	{
-		fVector[i] = LITERAL(0.0);
+		fVector[i] = NO_VALf;
 		i++;
 	}
 	fCoordSys = 0;
@@ -43,11 +24,8 @@ bool TACoordSysVector::operator==( const TACoordSysVector& right) const
 		&& fVector[1] == right.fVector[1] 
 		&& fVector[2] == right.fVector[2]
 		&& fCoordSys == right.fCoordSys
-			&& getStatus() == right.getStatus()
 		) 
-	{
 		equal = true;
-	}
 
 	return equal;
 }
@@ -154,6 +132,14 @@ void TACoordSysVector::setX(const int& i, const TReal& value)
 }
 
 
-
+bool TACoordSysVector::isInitialise() const
+{
+	if (this->getX() != NO_VALf
+		&& this->getY() != NO_VALf
+		&& this->getZ() != NO_VALf)
+		return true;
+	else
+		return false;
+}
 
 

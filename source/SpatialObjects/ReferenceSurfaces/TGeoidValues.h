@@ -16,8 +16,7 @@
 
 ////////////////////////////////////////////////////////////////
 // Forward declarations
-//
-#include	<TVNumericValue.h>
+#include "Quad.h"
 #include	<assert.h>
 class	TAngle;
 

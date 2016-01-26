@@ -157,7 +157,7 @@ TPositionVector TSpatialPosition::getCoordinates(TCoordSysFactory::ECoordSys coo
 
 bool TSpatialPosition::setCoordinates(const TPositionVector& pv)
 {//! Set a position vector of a spatial position through TVReferenceFrame
-	if (pv.getStatus() != TANumericValue::kNull)
+	if (pv.isInitialise())
 	{
 		return getRefFrame()->setCoordinates(this, pv);
 	}
@@ -214,7 +214,7 @@ bool TSpatialPosition::setPositionVector(const TPositionVector& pv)
 	}
 	else
 	{
-		if (pv.getStatus() == TVNumericValue::kNull)
+		if (pv.isInitialise())
 			setObjectStatus(TSpatialStatus::kPosNull);
 		else if (this->getObjectStatus() != TSpatialStatus::kPosNull)
 			setObjectStatus(this->getObjectStatus());

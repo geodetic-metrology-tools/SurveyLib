@@ -1,6 +1,4 @@
 #include <TAngle.h>
-#include <TVNumericValue.h>
-
 #include <tut/tut.hpp>
 
 namespace tut

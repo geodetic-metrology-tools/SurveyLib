@@ -19,8 +19,6 @@
 
 #include <list>
 #include <sstream>
-//using namespace std;
-
 #include "TAngle.h"
 #include "TSpatialPointName.h"
 /////////////////////////////////////////////////////////////

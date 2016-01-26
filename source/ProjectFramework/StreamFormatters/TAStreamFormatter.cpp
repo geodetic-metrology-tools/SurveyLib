@@ -642,7 +642,7 @@ TAStreamFormatter  &TAStreamFormatter::operator<<( const TDouble& db )
 	this->width(fWidth);
 	this->precision(fPrecision);
 	(*this)<<right;
-	if(db.getStatus() != TVNumericValue::kNull)
+	if(db.getValue() != NO_VALf)
 	{
 		TReal d = db.getValue();
 		(*this)<<d;
@@ -672,7 +672,7 @@ TAStreamFormatter  &TAStreamFormatter::operator<<( const TScalar& db )
 	this->width(fWidth);
 	this->precision(fPrecision);
 	(*this)<<right;
-	if(db.getStatus() != TVNumericValue::kNull)
+	if(db.getValue() != NO_VALf)
 	{
 		TReal d = db.getValue();
 		(*this)<<d;

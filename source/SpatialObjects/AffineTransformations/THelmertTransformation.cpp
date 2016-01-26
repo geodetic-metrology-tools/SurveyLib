@@ -28,37 +28,18 @@
 THelmertTransformation::THelmertTransformation()
 :fScaleFactor(LITERAL(1.0)), fRotation(), fTranslation()
 {// default constructor
-	this->setStatus( TVNumericValue::kNull );
 }
 
 THelmertTransformation::THelmertTransformation( const TScaleFactor& scale, const TRotation& rotate, const TTranslation& trans)
 :fScaleFactor(scale), fRotation(rotate), fTranslation(trans)
 {//Constructor
-	if (scale.getStatus() != TVNumericValue::kNull 
-		&& rotate.getStatus() != TVNumericValue::kNull 
-		&& trans.getStatus() != TVNumericValue::kNull)
-	{
-		setStatus(TVNumericValue::kKnown);
-	}
-	else
-	{
-		setStatus(TVNumericValue::kNull);
-	}
 }
 
 
 THelmertTransformation::THelmertTransformation( const TRotation& rotate, const TTranslation& trans)
 :fScaleFactor(LITERAL(1.0)), fRotation(rotate), fTranslation(trans)
 {// Constructor
-	if (rotate.getStatus() != TVNumericValue::kNull 
-		&& trans.getStatus() != TVNumericValue::kNull)
-	{
-		setStatus(TVNumericValue::kKnown);
-	}
-	else
-	{
-		setStatus(TVNumericValue::kNull);
-	}
+
 }
 
 THelmertTransformation::THelmertTransformation( const  THelmertTransformation& original )
@@ -85,7 +66,6 @@ THelmertTransformation &  THelmertTransformation::operator=(const THelmertTransf
 		fScaleFactor = right.getScaleFactor();
 		fRotation = right.getRotation();
 		fTranslation = right.getTranslation();
-		setStatus(right.getStatus());
 	}
 	return *this;
 }
@@ -96,17 +76,7 @@ void THelmertTransformation::setTransformations(const TScaleFactor& scale, const
 	fScaleFactor = scale;
 	fRotation = rotate;
 	fTranslation = trans;
-
-	if (scale.getStatus() != TVNumericValue::kNull 
-		&& rotate.getStatus() != TVNumericValue::kNull 
-		&& trans.getStatus() != TVNumericValue::kNull)
-	{
-		setStatus(TVNumericValue::kKnown);
-	}
-	else
-	{
-		setStatus(TVNumericValue::kNull);
-	}	
+	
 	return;
 }
 
@@ -123,7 +93,7 @@ THelmertTransformation*  THelmertTransformation::clone() const
 bool  THelmertTransformation::transform(TPositionVector& pv) const
 {/// Transform a position vector
 	bool trans = false;
-	if (isNull()==false)
+	if (isInitialise())
 	{	
 		trans = rotation()->transform(pv);
 		if (trans == true)
@@ -139,7 +109,7 @@ bool  THelmertTransformation::transform(TFreeVector& fv ) const
 {/// Transform a free vector
 	bool trans = false;
 
-	if (isNull()==false)
+	if (isInitialise())
 	{	
 		trans = rotation()->transform(fv);
 		if (trans == true)
@@ -156,7 +126,7 @@ bool  THelmertTransformation::transform(TRotationMatrix& rm) const
 {/// Transform a Rotation Matrix
 	bool trans = false;
 
-	if (isNull()==false)
+	if (isInitialise())
 	{	
 		trans = rotation()->transform(rm);
 		if (trans == true)
@@ -170,9 +140,9 @@ bool  THelmertTransformation::transform(TRotationMatrix& rm) const
 
 TPositionVector &  THelmertTransformation::operator() ( TPositionVector & right ) const
 {// apply this transformation to a position vector
-	if ( this->isNull() || right.isNull() )
+	if (!isInitialise() || !right.isInitialise())
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{
@@ -185,9 +155,9 @@ TPositionVector &  THelmertTransformation::operator() ( TPositionVector & right 
 
 TFreeVector &  THelmertTransformation::operator() ( TFreeVector & right ) const
 {// apply this transformation to a free vector
-	if ( this->isNull() || right.isNull() )
+	if (!isInitialise() || !right.isInitialise())
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{
@@ -200,9 +170,9 @@ TFreeVector &  THelmertTransformation::operator() ( TFreeVector & right ) const
 
 TRotationMatrix &  THelmertTransformation::operator() ( TRotationMatrix & right ) const
 {// apply this transformation to a Rotation Matrix
-	if ( this->isNull() || right.isNull() )
+	if (!isInitialise() || !right.isInitialise())
 	{
-		right.setStatus( TVNumericValue::kNull );
+		//right.setStatus( TVNumericValue::kNull );
 	}
 	else
 	{
@@ -230,5 +200,13 @@ void THelmertTransformation::invert()
 	return;
 }
 
+
+bool THelmertTransformation::isInitialise() const
+{
+	if (fScaleFactor.isInitialise() && fRotation.isInitialise() && fTranslation.isInitialise())
+		return true;
+	else
+		return false;
+}
 
 

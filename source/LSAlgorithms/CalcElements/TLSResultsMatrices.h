@@ -3,6 +3,7 @@
 
 #include "TSparseMatrix.h"
 #include "UEOIndices.h"
+#include "Quad.h"
 
 
 /*!

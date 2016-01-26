@@ -29,9 +29,7 @@ class  TSpatialPosition;
 class  TSpatialVector;
 class  TSpatialOrientation;
 class  TCompositeAffTransform;
-//
-// typedefs
-#include  "TANumericValue.h"
+
 #include  "TVAffineTransformation.h"
 //
 //
@@ -41,7 +39,7 @@ class  TCompositeAffTransform;
 	@{*/
 
 //! Classe de base abstraite pour une transformation affine
-class  TAAffineTransformation : public TANumericValue, public TVAffineTransformation
+class  TAAffineTransformation :  public TVAffineTransformation
 {
 public:
 
@@ -111,6 +109,9 @@ public:
 
 		//! Invert the transformation, replaces the current transformation parameters
 		virtual void invert() = 0;
+
+		//! Return true if the transformation parameter are not set to NO_VALf
+		virtual bool isInitialise() const { return false; };
 	//@}
 };
 

@@ -37,7 +37,6 @@ TColumnVector::TColumnVector()
 {//!Default constructor	
 	fVector = 0;
 	fNbRows = 0;
-	setStatus( TANumericValue::kNull );
 }
 
 
@@ -46,7 +45,7 @@ fNbRows(nRows)
 {//!Constructor setting the dimensions of the vector
 	fVector = new TReal [fNbRows];
 	(*this) = TReal(LITERAL(0.0));
-	setStatus( TANumericValue::kKnown );
+
 }
 		
 
@@ -62,9 +61,6 @@ fNbRows(source.fNbRows)
 	for (int i = 0; i<fNbRows; i++)
 		fVector[i] = source.fVector[i];
 
-	//!copy the status
-	setStatus( source.getStatus() );
-
 }
 
 
@@ -75,6 +71,11 @@ TColumnVector::~TColumnVector()
 }
 
 
+bool TColumnVector::isInitialise() const
+{
+	return (fNbRows != 0);
+
+}
 
 //////////////////////////////////////////////////////////////////////
 ///operator
@@ -82,19 +83,12 @@ TColumnVector::~TColumnVector()
 TColumnVector&  TColumnVector::operator=(const TColumnVector& right)
 {//!Copy assignement operator
 	if (this != &right)
-	{
 		if (dimension() <= right.dimension() && dimension()!=0)
-		{
 			for (int i=0; i<fNbRows; i++)
 				(const_cast<TColumnVector*>(this))->operator()(i) = right(i);
-			setStatus (right.getStatus());
-		}
 		else
-		{
-			this->setStatus(kNull);
 			this->setDimension(0);
-		}
-	}
+
 
 	return *this;
 }
@@ -103,9 +97,8 @@ TColumnVector&  TColumnVector::operator=(const TColumnVector& right)
 TColumnVector TColumnVector::operator +(const TColumnVector& right) const
 {//!returns the sum of this vector and a second one
 	TColumnVector resultat;
-	resultat.setStatus(kNull);
-	EStatus status=this->testStatus(right);
-	if (status!=kNull && dimension() == right.dimension())
+
+	if (right.isInitialise() && this->isInitialise() && dimension() == right.dimension())
 	{
 		TColumnVector resul (dimension());
 		for (int i=0; i<fNbRows; i++)
@@ -114,7 +107,6 @@ TColumnVector TColumnVector::operator +(const TColumnVector& right) const
 		}
 		resultat.setDimension(dimension());
 		resultat = resul;
-		resultat.setStatus(status);
 	}
 	return resultat;
 }
@@ -132,18 +124,14 @@ TColumnVector TColumnVector::operator -(const TColumnVector& right) const
 {//!returns the difference of this vector and a second one
 
 	TColumnVector resultat;
-	resultat.setStatus(kNull);
-	EStatus status=this->testStatus(right);
-	if (status!=kNull && dimension() == right.dimension())
+	if (right.isInitialise() && this->isInitialise() && dimension() == right.dimension())
 	{
 		TColumnVector resul (dimension());
 		for (int i=0; i<fNbRows; i++)
-		{
 			(resul)(i) = (*this)(i) - right(i);
-		}
+
 		resultat.setDimension(dimension());
 		resultat = resul;
-		resultat.setStatus(status);
 	}
 	return resultat;	
 }
@@ -167,15 +155,13 @@ TColumnVector TColumnVector::operator*(const TReal k)
 TColumnVector TColumnVector::operator*(const TDouble k)
 {//!multiplies the vector by a TDouble
 	TColumnVector resultat;
-	EStatus status=this->testStatus(k);
-	if (status!=kNull )
+	if (k.getValue() != NO_VALf && this->isInitialise())
 	{
 		resultat.setDimension(dimension());
 		TReal d=k.getValue();
 		for (int i=0; i<fNbRows; i++)
 			(resultat)(i) = (*this)(i)*d;
 	}
-	resultat.setStatus(status);
 	return resultat;
 }
 
@@ -183,15 +169,12 @@ TColumnVector TColumnVector::operator*(const TDouble k)
 TDouble TColumnVector::operator *(const TColumnVector& right) const
 {//!returns the scalar product of this vector and a second one
 	TDouble resultat;
-	resultat.setStatus(kNull);
-	EStatus status=this->testStatus(right);
-	if (status!=kNull && dimension() == right.dimension())
+	if (right.isInitialise() && this->isInitialise() && dimension() == right.dimension())
 	{
 		TReal result = LITERAL(0.0);
 		for (int i=0; i<dimension(); i++)
 			result =result + (*this)(i) * right(i);
-		resultat.setValue(result);
-		resultat.setStatus(status);	
+		resultat.setValue(result);	
 	}
 	return resultat;
 }
@@ -231,9 +214,8 @@ void TColumnVector::setDimension(const int nRows)
 
 	//!destroy the previous values
 	if (fVector != 0)
-	{
 		delete[] fVector;
-	}
+
 
 	//!creates the new vector
 	fNbRows = nRows;
@@ -244,13 +226,10 @@ void TColumnVector::setDimension(const int nRows)
 TMatrix TColumnVector::transposed()const
 {//!return the tranposed row vector as a matrix
 	TMatrix resultat (1,dimension());
-	if((this->isNull())==false)
-	{	for (int i=0; i<dimension(); i++)
-		{
+	if(this->isInitialise())
+		for (int i=0; i<dimension(); i++)
 			(resultat)(0,i) = (*this)(i);
-		}
-	}
-	resultat.setStatus(getStatus());
+
 	return resultat;
 }
 

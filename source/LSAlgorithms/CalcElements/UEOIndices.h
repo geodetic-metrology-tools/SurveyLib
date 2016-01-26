@@ -6,8 +6,6 @@
 #ifndef SU_UEOINDICES
 #define SU_UEOINDICES
 
-#include  "TVNumericValue.h"
-
 //matrix index type
 typedef int MatrixIndex;
 

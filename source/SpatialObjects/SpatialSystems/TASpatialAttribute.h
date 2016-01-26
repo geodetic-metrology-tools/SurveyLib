@@ -20,26 +20,17 @@
 
 ////////////////////////////////////////////////////////////////
 // Forward declarations
-//
-//#include  <##classname##>
-//
-//class  ##classname##;
 class		TAReferenceFrame;
 #include	"TSpatialStatus.h"
 #include	"counted_ptr.h"
-#include	"TVNumericValue.h"
 
-//using namespace std;
-// typedefs
-//
-//
 ////////////////////////////////////////////////////////////////
 
 /*!\ingroup SpatialObjectsAndSystems
 	@{*/
 
 //! An abstract class
-class TASpatialAttribute : public TANumericValue
+class TASpatialAttribute /*: public TANumericValue*/
 {
 public:
 	
@@ -87,15 +78,6 @@ public:
 		//! return the number of Axis that have a variable status
 		virtual int				getVariableDimension() const {return fSpatialStatus->getVariableDimension();}
 
-		//! returns a boolean indicating the if X axis dimension is known
-		virtual bool			knownXCoord() const;
-
-		//! returns a boolean indicating the if Y axis dimension is known
-		virtual bool			knownYCoord() const;
-
-		//! returns a boolean indicating the if Z axis dimension is known
-		virtual bool			knownZCoord() const;
-
 
 		/// Returns the pointeur to the reference frame
 		TAReferenceFrame*		getRefFrame() const { return fRefFrame; } 
@@ -111,19 +93,13 @@ protected:
 		//! Set Reference Frame
 		virtual void	setRefFrame( TAReferenceFrame* rf) { fRefFrame = rf; }
 
-		//! Set Spatial Status
-		//virtual void setStatus( TSpatialStatus* status) { fSpatialStatus = status; }
-
 
 private:
-
 
 	counted_ptr<TSpatialStatus>		fSpatialStatus;
 
 	TAReferenceFrame*				fRefFrame;
 
-
-	//ClassDef(##Template##, 1)
 };
 /*@}*/
 

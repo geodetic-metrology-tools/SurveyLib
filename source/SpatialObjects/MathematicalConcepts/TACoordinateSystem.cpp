@@ -29,42 +29,36 @@
 TLength TACoordinateSystem::getH(const TPositionVector*) const
 {//get the H coordinate of a position vector, default def: \return TLength Null
 TLength null;
-null.setStatus(TVNumericValue::kNull);
 return null;
 }
 
 TAngle TACoordinateSystem::getLambdaEllipsoid(const TPositionVector*) const
 {//get the Lambda coordinate of a position vector, default def: \return TAngle Null
 TAngle null;
-null.setStatus(TVNumericValue::kNull);
 return null;
 }
 
 TAngle TACoordinateSystem::getPhiEllipsoid(const TPositionVector*) const
 {//get the Phi coordinate of a position vector, default def: \return TAngle Null
 TAngle null;
-null.setStatus(TVNumericValue::kNull);
 return null;
 }
 
 TLength TACoordinateSystem::getX(const TACoordSysVector*) const
 {//get the X coordinate of a position vector or a free vector, default def: \return TLength Null
 TLength null;
-null.setStatus(TVNumericValue::kNull);
 return null;
 }
 
 TLength TACoordinateSystem::getY(const TACoordSysVector*) const
 {//get the Y coordinate of a position vector or a free vector, default def: \return TLength Null
 TLength null;
-null.setStatus(TVNumericValue::kNull);
 return null;
 }
 
 TLength TACoordinateSystem::getZ(const TACoordSysVector*) const
 {//get the Z coordinate of a position vector or a free vector, default def: \return TLength Null
 TLength null;
-null.setStatus(TVNumericValue::kNull);
 return null;
 }
 
@@ -106,7 +100,6 @@ return false;
 
 bool TACoordinateSystem::setAllRotations( TRotationMatrix* mat, TRotationMatrix::ERotationType , TReal &, TReal &, TReal &)
 {//create a TRotationMatrix default def: return false
-	mat->setStatus(TVNumericValue::kNull);
 	return false;
 }
 
@@ -117,12 +110,10 @@ struct Angles TACoordinateSystem::getAngles(const TRotationMatrix*, const TRotat
 	TAngle p;
 	TAngle k;
 	
-	om.setRadiansValue(0);
-	p.setRadiansValue(0);
-	k.setRadiansValue(0);
-	om.setStatus(TVNumericValue::kNull);
-	p.setStatus(TVNumericValue::kNull);
-	k.setStatus(TVNumericValue::kNull);
+	om.setRadiansValue(NO_VALf);
+	p.setRadiansValue(NO_VALf);
+	k.setRadiansValue(NO_VALf);
+
 
 	Angles null;
 	null.omega=om;
@@ -134,7 +125,6 @@ struct Angles TACoordinateSystem::getAngles(const TRotationMatrix*, const TRotat
 	
 bool TACoordinateSystem::identity(TRotationMatrix* mx)
 {//change a rotation matrix into the identity matrix, default def: return false
-mx->setStatus(TVNumericValue::kNull);
 return false;
 }
 
@@ -142,7 +132,6 @@ return false;
 
 bool TACoordinateSystem::setElt(T3DMatrix* mx, const int, const int, const TReal)
 {//set a element into a 3D matrix
-mx->setStatus(TVNumericValue::kNull);
 return false;
 }
 

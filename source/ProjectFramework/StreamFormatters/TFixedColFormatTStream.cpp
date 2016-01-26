@@ -223,7 +223,7 @@ TAStreamFormatter  &TFixedColFormatTStream::operator<<( const TSpatialPoint &poi
 	TPositionVector pv (this->getCoordSys());
 	pv=point.getPosition().getCoordinates(this->getCoordSys());
 
-	if (pv.getStatus()!= TANumericValue::kNull)
+	if (pv.isInitialise())
 	{
 		this->TAStreamFormatter::setWidthFormat(fPointFormat.getCoordWidth());
 		this->TAStreamFormatter::setPrecisionFormat(fPointFormat.getCoordPrecision());

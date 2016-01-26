@@ -21,28 +21,19 @@ Designed to be easiliy usable with matrix/vector functions of the NagC math libr
 #endif // _MSC_VER >= 1000
 
 
-////////////////////////////////////////////////////////////////
-// Forward declarations
-////////////////////////////////////////////////////////////////
-//
 #include  <list>
-//using namespace std;
-//
-//class  **classname**;
+#include "Quad.h"
+#include  "TMatrix.h"
 class TDouble;
 class TFreeVector;
-#include  "TMatrix.h"
-#include  "TANumericValue.h"
-// typedefs
-//
-//
-////////////////////////////////////////////////////////////////
+
+
 
 /*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Class for a vector of doubles
-class  TColumnVector : public  TANumericValue//: public TObject  
+class  TColumnVector 
 {
 public:
 
@@ -108,7 +99,8 @@ public:
 	/*!\param row the row of the desired element*/
 	virtual TReal		operator()(const int row) const;
 
-	
+	/*! return true if the vector is initialise*/
+	bool isInitialise() const;
 	//@}
 
 

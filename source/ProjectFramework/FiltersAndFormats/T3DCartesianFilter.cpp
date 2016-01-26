@@ -74,22 +74,21 @@ void	T3DCartesianFilter::input(TAStreamFormatter& iStream, TSpatialPosition& pos
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n' || iStream.atEndCom() == true)//at endCom added by Eve 20/1/05 9:18
 	{//check if there's coordinate to read
-		pv.setStatus(TVNumericValue::kNull);
+		//pv.setStatus(TVNumericValue::kNull);
 		iStream.setError("No coordinates to read");
 	}
 	else
 	{
 		TAStreamFormatter::getLengthFilter(iStream.getLengthUnits())->input(iStream, x);
 		iStream.skipWhiteSpace();
-		if(iStream.peek()=='\n' || x.getStatus()==TVNumericValue::kNull || iStream.atEndCom() == true)
+		if (iStream.peek() == '\n' || x == NO_VALf || iStream.atEndCom() == true)
 		{/*check if coordinate which has been read is valid and
 			if there's always coordinate to read*/
-			pv.setStatus(TVNumericValue::kNull);
 			if(iStream.peek()=='\n' || iStream.atEndCom() == true)
 			{
 				iStream.setError("There's only one coordinate to read");
 			}
-			if(x.getStatus()==TVNumericValue::kNull)
+			if (x == NO_VALf)
 			{
 				iStream.setError("The <x> coordinate is not valid");
 			}
@@ -98,15 +97,14 @@ void	T3DCartesianFilter::input(TAStreamFormatter& iStream, TSpatialPosition& pos
 		{
 			TAStreamFormatter::getLengthFilter(iStream.getLengthUnits())->input(iStream, y);
 			iStream.skipWhiteSpace();
-			if(iStream.peek()=='\n' || y.getStatus()==TVNumericValue::kNull || iStream.atEndCom() == true)
+			if (iStream.peek() == '\n' || y == NO_VALf || iStream.atEndCom() == true)
 			{/*check if coordinate which has been read is valid and
 			if there's always coordinate to read*/
-				pv.setStatus(TVNumericValue::kNull);
 				if(iStream.peek()=='\n' || iStream.atEndCom() == true)
 				{
 					iStream.setError("There's only two coordinates to read");
 				}
-				if(y.getStatus()==TVNumericValue::kNull)
+				if (y == NO_VALf)
 				{
 					iStream.setError("The <y> coordinate is not valid");
 				}
@@ -115,11 +113,10 @@ void	T3DCartesianFilter::input(TAStreamFormatter& iStream, TSpatialPosition& pos
 			{
 				TAStreamFormatter::getLengthFilter(iStream.getLengthUnits())->input(iStream, z);
 		
-				if(z.getStatus()==TVNumericValue::kNull)
+				if (z == NO_VALf)
 				{/*check if coordinate which has been read is valid and
 					check if there's not too much information, except comments*/
-					pv.setStatus(TVNumericValue::kNull);
-					if(z.getStatus()==TVNumericValue::kNull)
+					if (z == NO_VALf)
 					{
 						iStream.setError("The <z> coordinate is not valid");
 					}
@@ -130,7 +127,6 @@ void	T3DCartesianFilter::input(TAStreamFormatter& iStream, TSpatialPosition& pos
 					pv.setX(x);
 					pv.setY(y);
 					pv.setZ(z);
-					pv.setStatus(TVNumericValue::kKnown);
 
 				}
 			}
@@ -169,22 +165,20 @@ void	T3DCartesianFilter::input(TAStreamFormatter& iStream, TPositionVector& pv) 
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')
 	{//check if there's coordinate to read
-		pv.setStatus(TVNumericValue::kNull);
 		iStream.setError("No coordinates to read");
 	}
 	else
 	{
 		TAStreamFormatter::getLengthFilter(iStream.getLengthUnits())->input(iStream, x);
 		iStream.skipWhiteSpace();
-		if(iStream.peek()=='\n' || x.getStatus()==TVNumericValue::kNull)
+		if (iStream.peek() == '\n' || x == NO_VALf)
 		{/*check if coordinate which has been read is valid and
 			if there's always coordinate to read*/
-			pv.setStatus(TVNumericValue::kNull);
 			if(iStream.peek()=='\n')
 			{
 				iStream.setError("There's only one coordinate to read");
 			}
-			if(x.getStatus()==TVNumericValue::kNull)
+			if (x == NO_VALf)
 			{
 				iStream.setError("The <x> coordinate is not valid");
 			}
@@ -193,15 +187,14 @@ void	T3DCartesianFilter::input(TAStreamFormatter& iStream, TPositionVector& pv) 
 		{
 			TAStreamFormatter::getLengthFilter(iStream.getLengthUnits())->input(iStream, y);
 			iStream.skipWhiteSpace();
-			if(iStream.peek()=='\n' || y.getStatus()==TVNumericValue::kNull)
+			if (iStream.peek() == '\n' || y == NO_VALf)
 			{/*check if coordinate which has been read is valid and
 			if there's always coordinate to read*/
-				pv.setStatus(TVNumericValue::kNull);
 				if(iStream.peek()=='\n')
 				{
 					iStream.setError("There's only two coordinates to read");
 				}
-				if(y.getStatus()==TVNumericValue::kNull)
+				if (y == NO_VALf)
 				{
 					iStream.setError("The <y> coordinate is not valid");
 				}
@@ -209,11 +202,10 @@ void	T3DCartesianFilter::input(TAStreamFormatter& iStream, TPositionVector& pv) 
 			else
 			{
 				TAStreamFormatter::getLengthFilter(iStream.getLengthUnits())->input(iStream, z);
-				if(z.getStatus()==TVNumericValue::kNull)
+				if (z == NO_VALf)
 				{/*check if coordinate which has been read is valid and
 					check if there's not too much information, except comments*/
-					pv.setStatus(TVNumericValue::kNull);
-					if(z.getStatus()==TVNumericValue::kNull)
+					if (z == NO_VALf)
 					{
 						iStream.setError("The <z> coordinate is not valid");
 					}
@@ -223,7 +215,7 @@ void	T3DCartesianFilter::input(TAStreamFormatter& iStream, TPositionVector& pv) 
 					pv.setX(x);
 					pv.setY(y);
 					pv.setZ(z);
-					pv.setStatus(TVNumericValue::kKnown);
+					//pv.setStatus(TVNumericValue::kKnown);
 				}
 			}
 		}
@@ -240,7 +232,7 @@ void	T3DCartesianFilter::output(TAStreamFormatter& oStream, const TPositionVecto
 	string sep =oStream.getSeparator();
 
 	//outputs the coordinates
-	if (pv.getStatus()!= TANumericValue::kNull)
+	if (pv.isInitialise())
 	{
 		oStream<<pv.getX()<<sep<<pv.getY()<<sep<<pv.getZ()<<sep;
 	}

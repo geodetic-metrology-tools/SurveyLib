@@ -1,28 +1,7 @@
-// TRotationMatrix.cpp
-//
-/** Class for the matrices of rotation used for points transformations */
-//
-// Patterns:
-//
-// 
-// Copyright 2000 CERN EST/SU. All rights reserved.
-//////////////////////////////////////////////////////////////////////
-
-
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
 #include  "TVCoordinateSystem.h"
 #include  "TPositionVector.h"
 #include  "TFreeVector.h"
 #include  "TRotationMatrix.h"
-////////////////////////////////////////////////////////////////
-
-
-//ClassImp(TRotationMatrix)
-
 
 //////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
@@ -32,15 +11,13 @@ TRotationMatrix::TRotationMatrix()
 {//default constructor
 	setCoordSys(TCoordSysFactory::k3DCartesian);
 	identity();
-	setStatus(kNull);
 }
 
 
 TRotationMatrix::TRotationMatrix(ERotationType kR, TReal omega, TReal phi, TReal kappa)
 {//Constructor taking the radians value of the angles in the order phi-omega-kappa, and the coordinate system
-setCoordSys(TCoordSysFactory::k3DCartesian);
-setAllRotations(kR, omega, phi, kappa);
-setStatus(kKnown);
+	setCoordSys(TCoordSysFactory::k3DCartesian);
+	setAllRotations(kR, omega, phi, kappa);
 }
 
 
@@ -71,33 +48,27 @@ TRotationMatrix&  TRotationMatrix::operator=(const TRotationMatrix& right)
 			}
 		}
 	setCoordSys(right.getCoordSys());
-	setStatus(right.getStatus());
 	}
-return *this;
+	return *this;
 }
 
 
 TRotationMatrix TRotationMatrix::operator*( const TRotationMatrix& right) const
 {//R2=R*R1
 	TRotationMatrix resultat;
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(right);
-	if (status!= kNull && testCoordSysCart(right.getCoordSys())==true)	
-	{for (int i=0; i<3; i++)
-		{
-		for (int k=0; k<3 ;k++)
+
+	if (right.isInitialise() && this->isInitialise() && testCoordSysCart(right.getCoordSys()))	
+		for (int i=0; i<3; i++)
+			for (int k=0; k<3 ;k++)
 			{
-			TReal a=0;
-			for (int j=0; j<3; j++)
+				TReal a=0;
+				for (int j=0; j<3; j++)
 				{
-				a=a+getC(i,j)*right.getC(j,k);
-				resultat.setC(i,k,a);
+					a=a+getC(i,j)*right.getC(j,k);
+					resultat.setC(i,k,a);
 				}
 			}
-		}
-	resultat.setStatus(status);
-	}
+
 	return resultat;
 }
 
@@ -105,15 +76,12 @@ TRotationMatrix TRotationMatrix::operator*( const TRotationMatrix& right) const
 TFreeVector TRotationMatrix::operator*(const TFreeVector& fv) const
 {// V2=R*V1
 	TFreeVector resultat (fv.getCoordSys());
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(fv);
-	if (status!= kNull && testCoordSysCart(fv.getCoordSys()))
+
+	if (fv.isInitialise() && this->isInitialise() && testCoordSysCart(fv.getCoordSys()))
 	{
 		resultat.setX(fv.getX()*getC(0,0)+fv.getY()*getC(0,1)+fv.getZ()*getC(0,2));
 		resultat.setY(fv.getX()*getC(1,0)+fv.getY()*getC(1,1)+fv.getZ()*getC(1,2));
 		resultat.setZ(fv.getX()*getC(2,0)+fv.getY()*getC(2,1)+fv.getZ()*getC(2,2));
-		resultat.setStatus(status);
 	}
 	return resultat;
 }
@@ -122,15 +90,12 @@ TFreeVector TRotationMatrix::operator*(const TFreeVector& fv) const
 TPositionVector TRotationMatrix::operator*(const TPositionVector& pv) const
 {// V2=R*V1
 	TPositionVector resultat (pv.getCoordSys());
-	resultat.setStatus(TVNumericValue::kNull);
-	TANumericValue::EStatus status;
-	status=this->testStatus(pv);
-	if (status!= kNull && testCoordSysCart(pv.getCoordSys())==true)
+
+	if (pv.isInitialise() && this->isInitialise() && testCoordSysCart(pv.getCoordSys()))
 	{
 		resultat.setX(pv.getX()*getC(0,0)+pv.getY()*getC(0,1)+pv.getZ()*getC(0,2));
 		resultat.setY(pv.getX()*getC(1,0)+pv.getY()*getC(1,1)+pv.getZ()*getC(1,2));
 		resultat.setZ(pv.getX()*getC(2,0)+pv.getY()*getC(2,1)+pv.getZ()*getC(2,2));
-		resultat.setStatus(status);
 	}
 	return resultat;
 }

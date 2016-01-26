@@ -28,11 +28,9 @@ class TA2DEuclideanRefFrame;
 class  TModifiedLocalAstronomicalRF;
 
 #include  "TASpatialAttribute.h"
-#include  "TANumericValue.h"
 #include  "TLength.h"
 #include  "TSpatialStatus.h"
 #include  "TFreeVector.h"
-
 #include  "TVAffineTransformation.h"
 
 using namespace std;
@@ -102,6 +100,8 @@ public:
 		
 		//! transformation between the definition reference frame of the spatial vector and another reference frame
 		bool transform(TAReferenceFrame* to);
+
+		bool isInitialise() const { return fFv->isInitialise(); }
 	//@}
 
 protected:

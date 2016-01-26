@@ -23,7 +23,6 @@ Copyright 1999-2007, Mark Jones, CERN TS/SU. All rights reserved.
 ////////////////////////////////////////////////////////////////
 
 
-#include "TANumericValue.h"
 #include "TAngle.h"
 #include "TLength.h"
 #include "TMatrix.h"
@@ -37,7 +36,7 @@ class TFreeVector;
 	@{*/
 
 //! Class for a Scalar
-class	TScalar : public  TANumericValue //: public TObject
+class	TScalar
 {
 
 public:

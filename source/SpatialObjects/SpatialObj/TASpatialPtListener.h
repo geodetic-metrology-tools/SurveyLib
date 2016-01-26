@@ -9,10 +9,7 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
-//include files
 #include <list>
-//using namespace std;
-
 #include "TVSpatialPtListener.h"
 
 /*!\ingroup SpatialObjectsAndSystems

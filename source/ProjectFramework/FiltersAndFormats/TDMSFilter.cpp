@@ -72,7 +72,7 @@ void	TDMSFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 	iStream.skipWhiteSpace();
 	if(iStream.peek()=='\n')
 	{//check if there's value to read
-		angle.setStatus(TVNumericValue::kNull);
+		angle.setDMSValue(NO_VALi, NO_VALi, NO_VALf);
 		iStream.setError("No angle value to read");
 	}
 
@@ -82,7 +82,7 @@ void	TDMSFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 		if(iStream.fail())
 		{/*check if there's coordinate to read
 			and if degs is valid*/
-			angle.setStatus(TVNumericValue::kNull);
+			angle.setDMSValue(NO_VALi, NO_VALi, NO_VALf);
 			//read the "wrong" degs
 			iStream.clear();
 			while(iStream.peek()!=' ' && iStream.peek()!='\n')
@@ -97,7 +97,7 @@ void	TDMSFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 			iStream.skipWhiteSpace();
 			if(iStream.peek()=='\n')
 			{//check if there's value to read
-				angle.setStatus(TVNumericValue::kNull);
+				angle.setDMSValue(NO_VALi, NO_VALi, NO_VALf);
 				iStream.setError("No minute value to read");
 			}
 			else
@@ -106,7 +106,7 @@ void	TDMSFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 				if(iStream.fail())
 				{/*check if there's coordinate to read
 				and if mins is valid*/
-					angle.setStatus(TVNumericValue::kNull);
+					angle.setDMSValue(NO_VALi, NO_VALi, NO_VALf);
 					//read the "wrong" mins
 					iStream.clear();
 					while(iStream.peek()!=' ' && iStream.peek()!='\n')
@@ -121,7 +121,7 @@ void	TDMSFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 					iStream.skipWhiteSpace();
 					if(iStream.peek()=='\n')
 					{//check if there's value to read
-						angle.setStatus(TVNumericValue::kNull);
+						angle.setDMSValue(NO_VALi, NO_VALi, NO_VALf);
 						iStream.setError("No second value to read");
 					}
 					else
@@ -130,7 +130,7 @@ void	TDMSFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 						if(iStream.fail())
 						{/*check if there's coordinate to read
 						and if secs is valid*/
-							angle.setStatus(TVNumericValue::kNull);
+							angle.setDMSValue(NO_VALi, NO_VALi, NO_VALf);
 							//read the "wrong" mins
 							iStream.clear();
 							while(iStream.peek()!=' ' && iStream.peek()!='\n')
