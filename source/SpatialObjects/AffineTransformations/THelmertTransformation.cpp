@@ -26,20 +26,19 @@
 //////////////////////////////////////////////////////////////////////
 
 THelmertTransformation::THelmertTransformation()
-:fScaleFactor(LITERAL(1.0)), fRotation(), fTranslation()
+	:fScaleFactor(LITERAL(1.0)), fRotation(), fTranslation(), fTranslationStd(), fRotationStd(), fScaleStd()
 {// default constructor
 }
 
 THelmertTransformation::THelmertTransformation( const TScaleFactor& scale, const TRotation& rotate, const TTranslation& trans)
-:fScaleFactor(scale), fRotation(rotate), fTranslation(trans)
+	: fScaleFactor(scale), fRotation(rotate), fTranslation(trans), fTranslationStd(), fRotationStd(), fScaleStd()
 {//Constructor
 }
 
 
 THelmertTransformation::THelmertTransformation( const TRotation& rotate, const TTranslation& trans)
-:fScaleFactor(LITERAL(1.0)), fRotation(rotate), fTranslation(trans)
+	:fScaleFactor(LITERAL(1.0)), fRotation(rotate), fTranslation(trans), fTranslationStd(), fRotationStd(), fScaleStd()
 {// Constructor
-
 }
 
 THelmertTransformation::THelmertTransformation( const  THelmertTransformation& original )
@@ -66,6 +65,9 @@ THelmertTransformation &  THelmertTransformation::operator=(const THelmertTransf
 		fScaleFactor = right.getScaleFactor();
 		fRotation = right.getRotation();
 		fTranslation = right.getTranslation();
+		fScaleStd = right.getScaleFactorStd();
+		fRotationStd = right.getRotationStd();
+		fTranslationStd = right.getTranslationStd();
 	}
 	return *this;
 }
