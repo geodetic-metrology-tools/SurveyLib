@@ -123,12 +123,6 @@ void TLSResultsMatrices::saveMatricesToFile(int nbIter) const
 	of<< *fUnkCovarianceMtrx << std::endl;
 	of << std::endl << std::endl;
 
-	of << "******************************" << std::endl;
-	of << "* SIGMA ZERO ^2  *UNKNOWNS COVARIANCE MATRIX *" << std::endl;
-	of << "******************************" << std::endl << std::endl;
-
-	of << (fSigmaZero2 * *fUnkCovarianceMtrx) << std::endl;
-	of << std::endl << std::endl;
 
 	of << "********************" << std::endl;
 	of << "* RESIDUALS VECTOR *" << std::endl;

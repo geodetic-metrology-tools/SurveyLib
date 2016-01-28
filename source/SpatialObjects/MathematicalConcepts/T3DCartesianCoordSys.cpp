@@ -169,7 +169,7 @@ struct Angles T3DCartesianCoordSys::getAngles(const TRotationMatrix* mx, const T
 				{
 					omega = ang.aTan2(-getC(mx, 2, 1), getC(mx, 2, 2)).getRadiansValue();
 					kappa = ang.aTan2(-getC(mx,1,0),getC(mx,0,0)).getRadiansValue();
-					phi =ang.aSin((-getC(mx,2,0))).getRadiansValue();
+					phi = ang.aSin((getC(mx,2,0))).getRadiansValue();
 				}
 				else  //mx(2,0) = -1
 				{
@@ -198,6 +198,7 @@ struct Angles T3DCartesianCoordSys::getAngles(const TRotationMatrix* mx, const T
 
 	case (TRotationMatrix::kRzxy):
 		{
+			//to redo as kRZYX
 			phi = ang.aTan2(getC(mx,2,0),getC(mx,2,2)).getRadiansValue();
 			omega = ang.aTan2((-getC(mx,2,1)),sqrtq(powq(getC(mx,1,1),2)+powq(getC(mx,0,1),2))).getRadiansValue();
 			kappa = ang.aTan2(getC(mx,0,1),getC(mx,1,1)).getRadiansValue();
