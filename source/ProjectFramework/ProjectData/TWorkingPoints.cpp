@@ -209,9 +209,8 @@ PointConstIter TWorkingPoints::getPoint(string spn) const{
 
 	std::unordered_map<string, PointIterator>::const_iterator i = pointsMap.find(spn);
 	if (i == pointsMap.end())
-	{
 		return fWorkingPoints.end();
-	}
+
 	return i->second;
 }
 
@@ -220,7 +219,11 @@ PointConstIter TWorkingPoints::getPoint(TSpatialPointName spn) const {
 }
 ///////////////////////////////////////////////////////////////////////////
 PointIterator TWorkingPoints::getPoint(int pos)
-{
+{	
+	// If pos exceeds the container's size : return end iterator
+	if(pos >= fWorkingPoints.size())
+		return fWorkingPoints.end();
+
 	PointIterator it = fWorkingPoints.begin();
 	std::advance(it, pos);
 	return it;
@@ -228,6 +231,10 @@ PointIterator TWorkingPoints::getPoint(int pos)
 
 PointConstIter TWorkingPoints::getPoint(int pos) const
 {
+	// If pos exceeds the container's size : return end iterator
+	if(pos >= fWorkingPoints.size())
+		return fWorkingPoints.end();
+
 	PointConstIter it = fWorkingPoints.begin();
 	std::advance(it, pos);
 	return it;
