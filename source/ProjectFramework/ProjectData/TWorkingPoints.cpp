@@ -55,6 +55,7 @@ bool TWorkingPoints::addPoint(TSpatialPoint *sp){
 		}
 		sp->setListener(this);
 		fWorkingPoints.push_back(*sp);
+		
 		pointsMap[sp->getName().getName()] = --(fWorkingPoints.end());
 			
 		insert_ok = true;
@@ -192,9 +193,8 @@ PointIterator TWorkingPoints::getPoint(string spn) {
 
 	std::unordered_map<string, PointIterator>::iterator i = pointsMap.find(spn);
 	if (i == pointsMap.end())
-	{
 		return fWorkingPoints.end();
-	}
+
 	return i->second;
 }
 
