@@ -334,7 +334,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 		of << "* CONSTRAINT FIRST DESIGN MATRIX *" << std::endl;
 		of << "**********************************" << std::endl << std::endl;
 		
-		of << fCnstrFirstDesignMtrx;
+		of << *fCnstrFirstDesignMtrx;
 		of << std::endl << std::endl;
 	}
 
@@ -345,7 +345,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 		of << "* CONSTRAINT MISCLOSURE VECTOR *" << std::endl;
 		of << "********************************" << std::endl << std::endl;
 		
-		of << fCnstrMisclosureVector;
+		of << *fCnstrMisclosureVector;
 		of << std::endl << std::endl;
 	}
 

@@ -18,11 +18,11 @@ class TLSInputMatrices;
 class TLSResultsMatrices;
 
 /*!
-	\ingroup CalcElements
+\ingroup CalcElements
 
-	\brief Class for a least squares computer, used when there are any constraints in the model.
+\brief Class for a least squares computer, used when there are any constraints in the model.
 */
-class TLSCnstMtdComputer:public TALSComputer
+class TLSCnstMtdComputer :public TALSComputer
 {
 
 public:
@@ -39,10 +39,13 @@ public:
 	virtual bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
 
 	//!Computes the results matrices for a free calculation
-	//bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
+	bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
 
 	//!Computes the residual vector and the varaiance covariance matrices
-	virtual void calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr,TLSResultsMatrices* rm);
+	//virtual void calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr,TLSResultsMatrices* rm);
+
+	//!Computes the residual vector and the varaiance covariance matrices for a free calculation
+	void calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm);
 
 private:
 	int		count;
