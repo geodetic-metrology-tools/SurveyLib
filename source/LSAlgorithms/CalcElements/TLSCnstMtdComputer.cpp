@@ -226,7 +226,6 @@ bool TLSCnstMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatr
 bool TLSCnstMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm)
 {
 
-	im->saveMatricesToFile(100);
 	//test if we do not have a 'nullpointer' in a case that the matrices are not initialize
 	if (im->getFirstDgnMtrx() == nullptr || im->getSecondDgnMtrx() == nullptr || im->getWeightInvMtrx() == nullptr)
 		throw std::runtime_error("Any of the design matrices is not initialized!");
