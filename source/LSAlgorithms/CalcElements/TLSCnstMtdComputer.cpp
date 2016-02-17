@@ -36,10 +36,7 @@ bool TLSCnstMtdComputer::computeResults(TLSInputMatrices* im, TLSResultsMatrices
 			result = false;
 		}
 	}
-	else
-	{//pas d'inconnue
-		result = true;
-	}
+
 	return result;
 }
 
