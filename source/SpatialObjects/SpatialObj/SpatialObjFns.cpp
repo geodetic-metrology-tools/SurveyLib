@@ -1,5 +1,3 @@
-
-
 #include  "SpatialObjFns.h"
 #include  "TSpatialPosition.h"
 #include  "TGraph.h"
@@ -43,7 +41,6 @@ int SpatialObjFns::getCG2000N0( double  x, double  y, double* N)
 	
 }
 
-
 // N value for CG2000 at LEP-level
 int SpatialObjFns::getCG2000NMachine( double  x, double  y, double* N)
 {
@@ -66,9 +63,6 @@ int SpatialObjFns::getCG2000NMachine( double  x, double  y, double* N)
 	return 1;
 	
 }
-
-
-
 
 // N value for CG1985 at 0-level
 int SpatialObjFns::getCG1985N0( double  x, double  y, double* N)
@@ -102,139 +96,8 @@ int SpatialObjFns::getCG1985NMachine( double  x, double  y, double* N)
 	
 }
 
-
-// coordinates transformation to MLA system
-int SpatialObjFns::transformToMLA(double x0, double y0, double z0,
-					double* x, double* y, double* z, char* geoid)
-{
-	double lim = 0.000000001;
-	// test to know if the origin is in the Cern grid for geoid definition
-	if ( (x0<(-5000+lim)) || (x0>(6000-lim)) || (y0<lim) || (y0>12000-lim) )
-	{
-		return 0;
-	}
-
-	TPositionVector vectOrigin(x0, y0, z0, TCoordSysFactory::k3DCartesian),
-		vectPoint(*x, *y, *z, TCoordSysFactory::k3DCartesian);
-
-	TSpatialPosition origin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)),
-		point(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-	origin.setCoordinates(vectOrigin);
-	point.setCoordinates(vectPoint);
-
-	TSpatialPosition P0(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getOrigin());
-	P0.transform(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-
-	TRefSystemFactory::EGeoid pGeoid;
-	string cg00("CG2000"), cg85("CG1985");
-	if (geoid == cg00)
-		pGeoid = TRefSystemFactory::kCG2000Machine;
-	else 
-		if (geoid == cg85)
-			pGeoid = TRefSystemFactory::kCG1985Machine;
-		else 
-			return 0;
-
-
-	//DIF *1
-	TAngle gis, slope(0);
-	gis = gis.aTan2( (x0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue()),
-		(y0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue()) );
-
-	
-	// MLA system construction
-	TFreeVector falseOrigin(x0,y0,z0,TCoordSysFactory::k3DCartesian);
-	TModifiedLocalAstronomicalRF* pMLA = new TModifiedLocalAstronomicalRF( "MLA",
-		pGeoid, origin, falseOrigin, gis, slope);
-
-	point.transform(pMLA);
-
-/*	cout << point.getXCoord().getMetresValue() << endl;
-	cout << point.getYCoord().getMetresValue() << endl;
-	cout << point.getZCoord().getMetresValue() << endl;
-*/
-
-	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-	*z = point.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue();
-
-	delete pMLA;
-
-	return 1;
-
-
-}
-
-
-
-// coordinates transformation from MLA system to CCS
-int SpatialObjFns::transformFromMLA(double x0, double y0, double z0,
-					  double* x, double* y, double* z, char* geoid)
-{
-	double lim = 0.000000001;
-	// test to know if the origin is in the Cern grid for geoid definition
-	if ( (x0<(-5000+lim)) || (x0>(6000-lim)) || (y0<lim) || (y0>12000-lim) )
-	{
-		return 0;
-	}
-
-	TPositionVector vectOrigin(x0, y0, z0, TCoordSysFactory::k3DCartesian),
-		vectPoint(*x, *y, *z, TCoordSysFactory::k3DCartesian);
-
-	TSpatialPosition origin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-	origin.setCoordinates(vectOrigin);
-
-
-	TSpatialPosition P0(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getOrigin());
-	P0.transform(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-
-	TRefSystemFactory::EGeoid pGeoid;
-	string cg00("CG2000"), cg85("CG1985");
-	if (geoid == cg00)
-		pGeoid = TRefSystemFactory::kCG2000Machine;
-	else 
-		if (geoid == cg85)
-			pGeoid = TRefSystemFactory::kCG1985Machine;
-		else 
-			return 0;
-
-	// DIF *2
-	TAngle gis, slope(0);
-	gis = gis.aTan2( (x0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue()),
-		(y0-P0.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue()) );
-
-	
-	// MLA system construction
-	TFreeVector falseOrigin(x0,y0,z0,TCoordSysFactory::k3DCartesian);
-	TModifiedLocalAstronomicalRF* pMLA = new TModifiedLocalAstronomicalRF( "MLA",
-		pGeoid, origin, falseOrigin, gis, slope);
-
-	 
-	TSpatialPosition point(pMLA);
-	point.setCoordinates(vectPoint);
-
-
-	point.transform(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-
-/*	cout << point.getXCoord().getMetresValue() << endl;
-	cout << point.getYCoord().getMetresValue() << endl;
-	cout << point.getZCoord().getMetresValue() << endl;
-*/
-
-	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-	*z = point.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue();
-
-	delete pMLA;
-
-	return 1;
-
-
-}
-
-
 // coordinates transformation to MLA system (with bearing, slope and false origin = 0)
-int SpatialObjFns::transformToMLA2(double x0, double y0, double z0,
+int SpatialObjFns::transformToMLA(double x0, double y0, double z0,
 					double* x, double* y, double* z, char* geoid)
 {
 	double lim = 0.000000001;
@@ -267,7 +130,6 @@ int SpatialObjFns::transformToMLA2(double x0, double y0, double z0,
 			return 0;
 		}
 
-	//DIF *1
 	TAngle gis(0), slope(0);
 	
 	
@@ -277,11 +139,6 @@ int SpatialObjFns::transformToMLA2(double x0, double y0, double z0,
 		pGeoid, origin, falseOrigin, gis, slope);
 
 	point.transform(pMLA);
-
-/*	cout << point.getXCoord().getMetresValue() << endl;
-	cout << point.getYCoord().getMetresValue() << endl;
-	cout << point.getZCoord().getMetresValue() << endl;
-*/
 
 	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
@@ -296,7 +153,7 @@ int SpatialObjFns::transformToMLA2(double x0, double y0, double z0,
 
 
 // coordinates transformation from MLA system to CCS (with bearing, slope and false origin = 0)
-int SpatialObjFns::transformFromMLA2(double x0, double y0, double z0,
+int SpatialObjFns::transformFromMLA(double x0, double y0, double z0,
 					  double* x, double* y, double* z, char* geoid)
 {
 	double lim = 0.000000001;
@@ -328,7 +185,6 @@ int SpatialObjFns::transformFromMLA2(double x0, double y0, double z0,
 		else 
 			return 0;
 
-	//DIF *2
 	TAngle gis(0), slope(0);
 	
 
@@ -341,11 +197,6 @@ int SpatialObjFns::transformFromMLA2(double x0, double y0, double z0,
 	point.setCoordinates(vectPoint);
 	point.transform(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
 
-
-/*	cout << point.getXCoord().getMetresValue() << endl;
-	cout << point.getYCoord().getMetresValue() << endl;
-	cout << point.getZCoord().getMetresValue() << endl;
-*/
 
 	*x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	*y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
@@ -398,6 +249,7 @@ int SpatialObjFns::descenteVert(double x, double y, double h, double deltaH, dou
 	delete localRF;
 
 	TPositionVector res = newPoint.getCoordinates(TCoordSysFactory::k2DPlusH);
+	double hres = res.getH().getMetresValue();
 
 	//if((h + deltaH>= hres - 0.000005) && (h + deltaH<= hres + 0.000005))
 	//{
