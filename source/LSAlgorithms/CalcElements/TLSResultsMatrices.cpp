@@ -123,6 +123,7 @@ void TLSResultsMatrices::saveMatricesToFile(int nbIter) const
 	of<< *fUnkCovarianceMtrx << std::endl;
 	of << std::endl << std::endl;
 
+
 	of << "********************" << std::endl;
 	of << "* RESIDUALS VECTOR *" << std::endl;
 	of << "********************" << std::endl << std::endl;

@@ -71,6 +71,15 @@ public:
 
 		//! Set translation
 		void setTranslation(const TTranslation&);
+
+		//! Set the standart deviation of the scaling factor
+		void setScaleStd(const TReal&);
+
+		//! Set  the standart deviation of the rotation
+		void setRotationStd(const struct Angles&);
+
+		//! Set  the standart deviation of the translation
+		void setTranslationStd(const TFreeVector&);
 	//@}
 
 	/**@name Getting Member Functions */
@@ -83,6 +92,15 @@ public:
 		
 		//! Get translation
 		TTranslation getTranslation() const;
+
+		//! Get scaling factor standart deviation
+		TReal getScaleFactorStd() const { return fScaleStd; };
+
+		//! Get rotation standart deviation
+		Angles getRotationStd() const { return fRotationStd; };
+
+		//! Get translation standart deviation
+		TFreeVector getTranslationStd() const { return fTranslationStd; };
 	//@}
 		
 		
@@ -140,6 +158,10 @@ private:
 	TScaleFactor fScaleFactor; /*!< scaling */
 	TRotation fRotation; /*!< rotation */
 	TTranslation fTranslation; /*!< translation */
+
+	TReal fScaleStd;
+	Angles fRotationStd;
+	TFreeVector fTranslationStd;
 		
 	//ClassDef(THelmertTransformation, 1)
 };
@@ -157,5 +179,8 @@ inline  TScaleFactor THelmertTransformation::getScaleFactor() const {return fSca
 inline	TRotation    THelmertTransformation::getRotation() const {return fRotation;}
 inline	TTranslation THelmertTransformation::getTranslation() const {return fTranslation;}
 		
+inline  void THelmertTransformation::setScaleStd(const TReal& scalestd) { fScaleStd = scalestd; return; }
+inline	void THelmertTransformation::setRotationStd(const Angles& rotstd) { fRotationStd = rotstd; return; }
+inline	void THelmertTransformation::setTranslationStd(const TFreeVector& tranlstd) { fTranslationStd = tranlstd; return; }
 
 #endif // SU_HELMERT_TRANSFORMATION
