@@ -8,7 +8,6 @@
 #include  "TVReferenceFrame.h"
 #include  "TModifiedLocalAstronomicalRF.h"
 
-//#include  "TTLength.h"
 
 typedef double double_t;
 
@@ -50,18 +49,18 @@ int DLLAPI transformFromMLA(double_t x0, double_t y0, double_t z0,
 }
 
 // coordinates transformation to MLA system (with bearing, slope and false origin = 0)
-int DLLAPI transformToMLA2(double_t x0, double_t y0, double_t z0,
+/*int DLLAPI transformToMLA2(double_t x0, double_t y0, double_t z0,
 					double_t* x, double_t* y, double_t* z, char* geoid)
 {
 	return SpatialObjFns::transformToMLA2(x0,y0,z0,x,y,z,geoid);
-}
+}*/
 
 // coordinates transformation from MLA system to CCS (with bearing, slope and false origin = 0)
-int DLLAPI transformFromMLA2(double_t x0, double_t y0, double_t z0,
+/*int DLLAPI transformFromMLA2(double_t x0, double_t y0, double_t z0,
 							 double_t* x, double_t* y, double_t* z, char* geoid)
 {
 	return SpatialObjFns::transformFromMLA2(x0,y0,z0,x,y,z,geoid);
-}
+}*/
 
 // coordinates of a point on the vertical of another
 int DLLAPI descenteVert(double_t x, double_t y, double_t h, double_t deltaH, double_t* xt, double_t* yt, double_t* ht)
