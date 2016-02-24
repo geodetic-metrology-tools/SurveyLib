@@ -3,6 +3,7 @@ SET(SURVEYLIB_LIBRARIES
 	LSAlgorithms
 	ProjectFramework
 	SpatialObjects
+	SpatialObjDLL
 )
 
 SET(SPATIAL_LIBRARIES 

@@ -20,8 +20,8 @@
 	#endif
 
 
-	#define DLLAPI __stdcall
-	//#define DLLAPI __cdecl
+	//#define DLLAPI __stdcall
+	#define DLLAPI __cdecl
 
 #else
 
