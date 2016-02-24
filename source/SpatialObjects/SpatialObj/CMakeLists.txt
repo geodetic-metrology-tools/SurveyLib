@@ -9,7 +9,6 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/AffineTransformation
 
 # Create a variable containing all .cpp files:
 set(SpatialObj_SOURCES 
-	#SpatialObjCFns.cpp
 	SpatialObjFns.cpp
 	TASpatialPtListener.cpp
 	TSpatialLine.cpp
@@ -23,10 +22,8 @@ set(SpatialObj_SOURCES
 
 # Create a variable containing all .h files:
 set(SpatialObj_HEADERS 
-	#SpatialObjCFns.h
 	SpatialObjFns.h
 	TASpatialPtListener.h
-	#TGlobalDefs.h
 	TPtrWrapper.h
 	TSpatialLine.h
 	TSpatialLineName.h
