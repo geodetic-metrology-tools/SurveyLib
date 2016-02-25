@@ -33,16 +33,16 @@ public:
 
 			void	writeXYZandH(const TPositionVector& pt);
 
-			void	writeXYZandH(const TPositionVector& pt, TReal heightH);
+			void	writeXYZandH(const TPositionVector& pt, TLength heightH);
 
 
 			void	writeXYH(	const int width,
 								const int precision,
 								const TLength::EUnits unit,
 								const string separator,
-								const TReal Xparam,
-                        		const TReal Yparam,
-                        		const TReal Hparam);
+								const TLength Xparam,
+								const TLength Yparam,
+                        		const TLength Hparam);
 
 			void	writeXYZ(	const int width,
 								const int precision,

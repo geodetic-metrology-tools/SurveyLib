@@ -103,16 +103,19 @@ void	TPointConverter::writeXYZandH(const TPositionVector& pt)
 }
 
 
-void	TPointConverter::writeXYZandH(const TPositionVector& pt, TReal heightH)
+void	TPointConverter::writeXYZandH(const TPositionVector& pt, TLength heightH)
 {
 	TAStreamFormatter*	stream = getStream();
 	int					coordWidth = getCoordWidth();
 	string				separator = getSeparator();
 
-	//get Coordinate as a TPositionVector
-	(*stream)<<(pt);
+	stream->setLengthUnits(TLength::EUnits::kMetres);
+	stream->setWidthFormat(coordWidth);
+	stream->setPrecisionFormat(getLengthPrecision());
 
-	stream->width(coordWidth);
+	//get Coordinate as a TPositionVector
+	//(*stream)<<(pt);
+	this->writeXYZ(coordWidth, getLengthPrecision(), TLength::EUnits::kMetres, separator, pt);
 	(*stream)<<heightH << separator;
 
 	return;
@@ -126,9 +129,9 @@ void	TPointConverter::writeXYH(	const int width,
 									const int precision,
 									const TLength::EUnits unit,
 									const string separator,
-                           const TReal Xparam,
-                           const TReal Yparam,
-                           const TReal Hparam)
+                           const TLength Xparam,
+						   const TLength Yparam,
+						   const TLength Hparam)
 {
 	TAStreamFormatter*	stream = getStream();
 
