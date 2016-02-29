@@ -16,6 +16,8 @@ public:
 	static int getCG1985N0(double x, double y, double* N);
 	static int getCG1985NMachine(double x, double y, double* N);
 
+	static int getCGSphereN(double x, double y, double* N);
+
 	/// return the (XYZ) position in MLA of a point from the origin of the MLA 
 	/// and the point to be transformed both in CCS (with slope and bearing equal to 0
 	/// and false origin (0,0,0) )

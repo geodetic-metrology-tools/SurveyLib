@@ -96,6 +96,21 @@ int SpatialObjFns::getCG1985NMachine( double  x, double  y, double* N)
 	
 }
 
+int SpatialObjFns::getCGSphereN(double  x, double  y, double* N)
+{
+	// get the CCS spatial position corresponding to the double values
+	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+	TPositionVector vector(x, y, 0.0, TCoordSysFactory::k3DCartesian);
+	spos.setCoordinates(vector);
+
+	// return the N value in CG2000
+	*N = TRefSystemFactory::getRefSystemFactory()->getGeoid(TRefSystemFactory::kCGSphere)
+		->getN(spos).getMetresValue();
+
+	return 1;
+
+}
+
 // coordinates transformation to MLA system (with bearing, slope and false origin = 0)
 int SpatialObjFns::transformToMLA(double x0, double y0, double z0,
 					double* x, double* y, double* z, char* geoid)
@@ -119,16 +134,15 @@ int SpatialObjFns::transformToMLA(double x0, double y0, double z0,
 	P0.transform(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
 
 	TRefSystemFactory::EGeoid pGeoid;
-	string cg00("CG2000"), cg85("CG1985");
+	string cg00("CG2000"), cg85("CG1985"), cgs("SPHERE");
 	if (geoid == cg00)
 		pGeoid = TRefSystemFactory::kCG2000Machine;
-	else 
-		if (geoid == cg85)
-			pGeoid = TRefSystemFactory::kCG1985Machine;
-		else 
-		{
-			return 0;
-		}
+	else if (geoid == cg85)
+		pGeoid = TRefSystemFactory::kCG1985Machine;
+	else if (geoid == cgs)
+		pGeoid = TRefSystemFactory::kCGSphere;
+	else
+		return 0;
 
 	TAngle gis(0), slope(0);
 	
@@ -176,13 +190,14 @@ int SpatialObjFns::transformFromMLA(double x0, double y0, double z0,
 
 
 	TRefSystemFactory::EGeoid pGeoid;
-	string cg00("CG2000"), cg85("CG1985");
+	string cg00("CG2000"), cg85("CG1985"), cgs("SPHERE");
 	if (geoid == cg00)
 		pGeoid = TRefSystemFactory::kCG2000Machine;
-	else 
-		if (geoid == cg85)
-			pGeoid = TRefSystemFactory::kCG1985Machine;
-		else 
+	else if (geoid == cg85)
+		pGeoid = TRefSystemFactory::kCG1985Machine;
+	else if (geoid == cgs)
+		pGeoid = TRefSystemFactory::kCGSphere;
+	else
 			return 0;
 
 	TAngle gis(0), slope(0);
