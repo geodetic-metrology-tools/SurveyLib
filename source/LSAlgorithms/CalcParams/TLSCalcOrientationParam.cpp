@@ -91,9 +91,6 @@ void	TLSCalcOrientationParam::reInitialise()
 	fEstimatedPrecision.omega = TAngle(LITERAL(0.0));
 	fEstimatedPrecision.phi = TAngle(LITERAL(0.0));
 	fEstimatedPrecision.kappa = TAngle(LITERAL(0.0));
-	// Sets the index to -1
-	for (int i = 0; i<3; i++)
-		fOrientIndex[i] = -1;
 
 	return;
 }
@@ -114,9 +111,6 @@ void TLSCalcOrientationParam::resetValues()
 	fEstimatedPrecision.omega = TAngle(LITERAL(0.0));
 	fEstimatedPrecision.phi = TAngle(LITERAL(0.0));
 	fEstimatedPrecision.kappa = TAngle(LITERAL(0.0));
-	// Sets the index to -1
-	for (int i = 0; i<3; i++)
-		fOrientIndex[i] = -1;
 
 }
 
