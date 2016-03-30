@@ -34,3 +34,9 @@ set(AffineTransformations_HEADERS
 
 # Create a static library from sources:
 add_library(AffineTransformations STATIC ${AffineTransformations_SOURCES} ${AffineTransformations_HEADERS})
+
+# Link static libraries to the current one
+target_link_libraries(AffineTransformations MathematicalConcepts)
+
+# needed for linux compilation
+set_target_properties(AffineTransformations PROPERTIES POSITION_INDEPENDENT_CODE ON)

@@ -38,3 +38,6 @@ set(ShortestPath_HEADERS
 add_library(ShortestPath STATIC ${ShortestPath_SOURCES} ${ShortestPath_HEADERS})
 
 target_link_libraries(ShortestPath AffineTransformations)
+
+# needed for linux compilation
+set_target_properties(ShortestPath PROPERTIES POSITION_INDEPENDENT_CODE ON)

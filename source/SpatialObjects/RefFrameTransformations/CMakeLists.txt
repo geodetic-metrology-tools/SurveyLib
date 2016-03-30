@@ -77,3 +77,5 @@ ENDIF(USE_SWISSTOPO)
 
 # Create a static library from sources:
 add_library(RefFrameTransformations STATIC ${RefFrameTransformations_SOURCES} ${RefFrameTransformations_HEADERS})
+# needed for linux compilation
+set_target_properties(RefFrameTransformations PROPERTIES POSITION_INDEPENDENT_CODE ON)

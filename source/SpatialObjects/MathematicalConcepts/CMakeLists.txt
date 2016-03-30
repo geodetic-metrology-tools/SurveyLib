@@ -58,3 +58,6 @@ set(MathematicalConcepts_HEADERS
 
 # Create a static library from sources:
 add_library(MathematicalConcepts STATIC ${MathematicalConcepts_SOURCES} ${MathematicalConcepts_HEADERS})
+
+# needed for linux compilation
+set_target_properties(MathematicalConcepts PROPERTIES POSITION_INDEPENDENT_CODE ON)

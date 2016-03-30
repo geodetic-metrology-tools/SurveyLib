@@ -63,3 +63,6 @@ set(ReferenceSurfaces_HEADERS
 
 # Create a static library from sources:
 add_library(ReferenceSurfaces STATIC ${ReferenceSurfaces_SOURCES} ${ReferenceSurfaces_HEADERS})
+
+# needed for linux compilation
+set_target_properties(ReferenceSurfaces PROPERTIES POSITION_INDEPENDENT_CODE ON)

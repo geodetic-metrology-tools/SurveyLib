@@ -36,3 +36,6 @@ set(SpatialObj_HEADERS
 
 # Create a static library from sources:
 add_library(SpatialObj STATIC ${SpatialObj_SOURCES} ${SpatialObj_HEADERS})
+
+# needed for linux compilation
+set_target_properties(SpatialObj PROPERTIES POSITION_INDEPENDENT_CODE ON)

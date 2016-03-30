@@ -27,3 +27,6 @@ target_link_libraries (SpatialObjDLL
 	${PROJECTFRAMEWORK_LIBRARIES}
 	${SPATIAL_LIBRARIES}
 )
+
+# needed for linux compilation
+set_target_properties(SpatialObjDLL PROPERTIES POSITION_INDEPENDENT_CODE ON)
