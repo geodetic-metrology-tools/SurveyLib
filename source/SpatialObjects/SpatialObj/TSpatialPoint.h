@@ -31,7 +31,7 @@ class	TSpatialPoint //: public TObject
 
 public:	
 	
-	enum  EPointStatus {kActive, kInactive,  kBad, kNew};
+	enum  EPointStatus {kActive, kInactive,  kBad};
 	/*!@name Constructors and Destructor*/
 	//@{
 		/*!Default constructor */
@@ -77,7 +77,6 @@ public:
 		virtual  void 	 setPosition( TSpatialPosition* sp);
 
 		void setPosition( TSpatialPosition* sp, int column, bool isNull);
-		void isPointNew();
 		
 		//	virtual  void 	 doNothing();
 		/*!Gets the point's position 

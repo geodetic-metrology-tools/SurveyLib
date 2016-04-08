@@ -184,25 +184,6 @@ void  TSpatialPoint::setPosition( TSpatialPosition *position, int column, bool i
 
 //	updateNeededEquations();
 
-	if (fPointStatus == kNew && isNull == false)
-	{
-		switch (column)
-		{
-		case 2:
-			fXSet = 1;
-			break;
-		case 3: 
-			fYSet = 1;
-			break;
-		case 4: 
-			fZSet = 1;
-			break;	
-		}
-	
-		isPointNew();
-	}
-
-
 	if (flistener != 0)
 	{
 		flistener->positionChanged(*fName);
@@ -210,17 +191,6 @@ void  TSpatialPoint::setPosition( TSpatialPosition *position, int column, bool i
 	
 	return;
 }
-
-
-void TSpatialPoint::isPointNew()
-{
-	if (fPointStatus == kNew && fNameSet == 1 && fXSet == 1 && fYSet == 1 && fZSet == 1)
-	{
-		setStatus(kActive);
-	}
-
-}
-
 
 TSpatialPosition  TSpatialPoint::getPosition( TAReferenceFrame*  frame ) const
 {	// Get the point's position
@@ -274,13 +244,8 @@ void TSpatialPoint::setPtName( const string& ptName )
 {// Set the point's point name
 	fName->setName( ptName);
 
-	if (fPointStatus == kNew && ptName !="")
-		fNameSet = 1;
-	
 	if (flistener != 0)
 		flistener->ptNameChanged(*fName);
-	 
-	isPointNew();
 }
 
 /*METHOD FOR CHABA INTERFACE ONLY - CALLED IF TWO POINTS HAVE IDENTICAL TIMESTAMPS*/
