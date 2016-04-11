@@ -32,7 +32,7 @@ bool TLSCnstMtdComputer::computeResults(TLSInputMatrices* im, TLSResultsMatrices
 		else
 		{
 			result = computeResultsMtrs(im, rm);
-			fError = "We are not in a constraint network!";
+			fError = "We have not necessary constraints!";
 			result = false;
 		}
 	}
