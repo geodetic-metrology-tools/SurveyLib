@@ -135,7 +135,14 @@ void	TRefSystemFactory::init()
 	// Definition of the reference frame list
 	string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf("ITRF97"), wgs("WGS84"), roma("ROMA40");
 	string ccs("CCS"), etrf("ETRF93");
+	string cgrf2("new_CGRF");
 	
+		//new CGRF (coordinate of P0 have been changed)
+	TGeodeticRefFrame* pCGRF2 = new TGeodeticRefFrame(cgrf2, pGRS80);
+	pCGRF2->setRefFrameId(kCGRF_new);
+	fRefFrameList.push_back(pCGRF2);
+	fCGRF2 = pCGRF2;
+
 		// CGRF
 	TGeodeticRefFrame* pCGRF = new TGeodeticRefFrame(cgrf, pGRS80);
 	pCGRF->setRefFrameId(kCGRF);
@@ -210,13 +217,11 @@ void	TRefSystemFactory::init()
 	phi.setGonsValue(LITERAL(51.3692));
 	lambda.setGonsValue(LITERAL(6.72124));
 	H.setMetresValue(LITERAL(433.65921));
-
 	TPositionVector pos(TCoordSysFactory::kGeodetic);
 	pos.setPhiEllipsoid(phi);
 	pos.setLambdaEllipsoid(lambda);
 	pos.setH(H);
-	//pos.setStatus(TVNumericValue::kKnown);
-	
+
 	origin.setCoordinates( pos );
 	origin.setObjectStatus( TSpatialStatus::kCala );
 
@@ -239,6 +244,37 @@ void	TRefSystemFactory::init()
 		pLAp0, omega, phi2, kappa);
 	pCCS->setRefFrameId(kCCS);
 	fRefFrameList.push_back(pCCS);
+
+	//new P0 coordinates
+	TSpatialPosition origin_new(pCGRF2);
+	TAngle phi_new, lambda_new;
+	phi_new.setGonsValue(LITERAL(51.36734));
+	lambda_new.setGonsValue(LITERAL(6.722515));
+
+	TPositionVector pos_new(TCoordSysFactory::kGeodetic);
+	pos_new.setPhiEllipsoid(phi_new);
+	pos_new.setLambdaEllipsoid(lambda_new);
+	pos_new.setH(H);
+
+	origin_new.setCoordinates(pos_new);
+	origin_new.setObjectStatus(TSpatialStatus::kCala);
+
+	// Local Geodetic at P0_new
+	TModifiedLocalGeodeticRF* pLGp0_new = new TModifiedLocalGeodeticRF("LG P0_new", origin_new, pCGRF2);
+	pLGp0_new->setRefFrameId(kLGp0_new);
+	fRefFrameList.push_back(pLGp0_new);
+
+	// Local Astronomic at P0_new
+	TGraphLocalAstronomicalRF* pLAp0_new = new TGraphLocalAstronomicalRF("LA P0_new", etaP0, xsiP0, dAlphaP0, pLGp0_new);
+	pLAp0_new->setRefFrameId(kLAp0_new);
+	fRefFrameList.push_back(pLAp0_new);
+
+	// CCS at P0_new
+	TAngle kappa_new(LITERAL(37.779033), TAngle::EUnits::kGons);
+	TAModifiedLocalAstronomicalRF* pCCS_new = new TGraphMLARF("CCS_new", falseOrigin,
+		pLAp0_new, omega, phi2, kappa_new);
+	pCCS_new->setRefFrameId(kCCS_new);
+	fRefFrameList.push_back(pCCS_new);
 
 	
 
@@ -1074,6 +1110,9 @@ TGeodeticRefFrame* TRefSystemFactory::getGeoRefFrame(const ERefFrame refFrameId)
 	if( refFrameId == kCGRF )
 		return fCGRF;
 
+	if (refFrameId == kCGRF_new)
+		return fCGRF2;
+
 	cerr << "Error : Id. not in RefFrameList" << endl;
 	throw TNotInGraphException("TNotInGraphException");
 
@@ -1148,9 +1187,12 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 		frame == kLGSphere || frame == kMLGSphere)
 		lsoCG.transform(getRefFrame(kCGRFSphere));
 
-	else if (frame ==  kLA1985Machine  || frame ==  kLA2000Machine  || 
-			 frame ==  kMLA1985Machine || frame ==  kMLA2000Machine || 
-			 frame ==  kLGGRS80        || frame ==  kMLGGRS80 )
+	else if (frame == kLA1985Machine || frame == kLA2000Machine ||
+			frame == kMLA1985Machine || frame == kMLA2000Machine ||
+			frame == kLGGRS80 || frame == kMLGGRS80 ||
+			frame == kLA2000Topo || frame == kMLA2000Topo ||
+			frame == kLA2000H0 || frame == kMLA2000H0 ||
+			frame == kLA1985H0 || frame == kMLA1985H0)
 		lsoCG.transform(getRefFrame(kCGRF));
 		
 	//lsoCG.setStatus(TVNumericValue::kKnown);
@@ -1158,12 +1200,18 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 	switch (frame) {
 		case kLASphere:
 		case kLA1985Machine:
+		case kLA1985H0:
 		case kLA2000Machine:
+		case kLA2000Topo:
+		case kLA2000H0:
 			pRF = new TModifiedLocalAstronomicalRF("la", geoid, lsoCG);
 			break;
 		case kMLASphere:
 		case kMLA1985Machine:
+		case kMLA1985H0:
 		case kMLA2000Machine:
+		case kMLA2000Topo:
+		case kMLA2000H0:
 			pRF = new TModifiedLocalAstronomicalRF("mla", geoid, lsoCG, falseOrigin, gis, slope);
 			break;
 		case kLGSphere:
