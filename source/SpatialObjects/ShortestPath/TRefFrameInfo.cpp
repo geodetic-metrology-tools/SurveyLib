@@ -95,12 +95,13 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
 			TDetails("kMLA2000H0", "MLAH0 (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
         tmp->insert(std::make_pair(TRefSystemFactory::kMLASphere, 
             TDetails("kMLASphere","MLA (Sphere)", TCoordSysFactory::k3DCartesian, 0, true)));
-        tmp->insert(std::make_pair(TRefSystemFactory::kLA1985Machine, 
-            
+        
+		tmp->insert(std::make_pair(TRefSystemFactory::kLA1985Machine, 
 			TDetails("kLA1985Machine", "LAMachine (1985)", TCoordSysFactory::k3DCartesian, 0, true)));
-		tmp->insert(std::make_pair(TRefSystemFactory::kLA1985Machine,
-			TDetails("kLA1985H0", "LAH0 (1985)", TCoordSysFactory::k3DCartesian, 0, true)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kLA1985H0,
+			TDetails("kLA1985H0", "LAH0 (1985)", TCoordSysFactory::k3DCartesian, 0, true)));
+		
+		tmp->insert(std::make_pair(TRefSystemFactory::kLA2000Machine,
 			TDetails("kLA2000Machine", "LAMachine (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kLA2000Topo,
 			TDetails("kLA2000Topo", "LATopo (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
