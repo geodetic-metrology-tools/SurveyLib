@@ -78,7 +78,7 @@ public:
 	/*! Default constructor */
 	TAngle();
 	/*! Explicit constructor taking an angle value in radians */
-   explicit  TAngle(TReal, EUnits = kRadians);
+    explicit  TAngle(TReal, EUnits = kRadians);
 	//TAngle(TReal);
 	/*! Destructor */
 	virtual	~TAngle();
