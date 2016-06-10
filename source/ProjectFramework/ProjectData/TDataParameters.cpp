@@ -150,11 +150,38 @@ bool  TDataParameters::setRefFrame(TRefSystemFactory::ERefFrame rf)
     if( rf != TRefSystemFactory::kNotInGraph && fRefFrame == 0)
 	{
 		fRefFrameEnum = rf;
-		fLSO.reset();
 		
+		//LSO is reset only for reference frame don't using it.
+		if (fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLA2000H0 &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLA2000Machine &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLA2000Topo &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLA1985H0 &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLA1985Machine &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLASphere &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLA1985H0 &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLA1985Machine &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLA2000H0 &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLA2000Machine &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLA2000Topo &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLAp0 &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLAp0_new &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLASphere &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLGGRS80 &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLGSphere &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGGRS80 &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGp0 &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGp0_new &&
+			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGSphere)
+			fLSO.reset();
+		
+		//set unit to [m] for non geodetic reference frame
 		if(	fRefFrameEnum != TRefSystemFactory::kCGRF && fRefFrameEnum != TRefSystemFactory::kWGS84 && 
 			fRefFrameEnum != TRefSystemFactory::kROMA40 && fRefFrameEnum != TRefSystemFactory::kITRF97 &&
-			fRefFrameEnum != TRefSystemFactory::kETRF93)
+			fRefFrameEnum != TRefSystemFactory::kETRF93
+			&& fRefFrameEnum != TRefSystemFactory::kCGRFSphere
+			&& fRefFrameEnum != TRefSystemFactory::kCH1903plus
+			&& fRefFrameEnum != TRefSystemFactory::kCHTRF95
+			&& fRefFrameEnum != TRefSystemFactory::kRGF93)
 		{//set automatically metric
 			setUnits(TDataParameters::kMetric );
 		}
