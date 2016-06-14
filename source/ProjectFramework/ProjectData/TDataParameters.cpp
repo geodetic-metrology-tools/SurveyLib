@@ -163,14 +163,10 @@ bool  TDataParameters::setRefFrame(TRefSystemFactory::ERefFrame rf)
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLA2000H0 &&
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLA2000Machine &&
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLA2000Topo &&
-			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLAp0 &&
-			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLAp0_new &&
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLASphere &&
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLGGRS80 &&
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLGSphere &&
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGGRS80 &&
-			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGp0 &&
-			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGp0_new &&
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGSphere)
 			fLSO.reset();
 		
