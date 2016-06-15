@@ -625,6 +625,88 @@ string TDataParameters::getPunchSeparator()
 /////////////////////////////////////////////////////////////////////////////
 
 
+string TDataParameters::getRFName() const
+{
+	switch (getRefFrameEnumerator())
+	{
+	case TRefSystemFactory::ERefFrame::kCCS:
+		return string("CCS");
+	case TRefSystemFactory::ERefFrame::kCGRF:
+		return string("CGRF");
+	case TRefSystemFactory::ERefFrame::kCGRFSphere:
+		return string("CGRFSphere");
+	case TRefSystemFactory::ERefFrame::kCernX0Y0He:
+		return string("CERN X0Y0He");
+	case TRefSystemFactory::ERefFrame::kCernXYHe:
+		return string("CERN XYHe");
+	case TRefSystemFactory::ERefFrame::kCernXYHg00:
+		return string("CERN XYHg_00");
+	case TRefSystemFactory::ERefFrame::kCernXYHg00Machine:
+		return string("CERN XYHg_RS2K");
+	case TRefSystemFactory::ERefFrame::kCernXYHg00Topo:
+		return string("CERN XYHg_00topo");
+	case TRefSystemFactory::ERefFrame::kCernXYHg85:
+		return string("CERN XYHg_85");
+	case TRefSystemFactory::ERefFrame::kCernXYHg85Machine:
+		return string("CERN XYHg_LHC");
+	case TRefSystemFactory::ERefFrame::kCERNXYHsSphereSPS:
+		return string("CERN XYHs_SPS");
+	case TRefSystemFactory::ERefFrame::kCH1903plus:
+		return string("CH1903+");
+	case TRefSystemFactory::ERefFrame::kCHTRF95:
+		return string("CHTRF95");
+	case TRefSystemFactory::ERefFrame::kETRF93:
+		return string("ETRF93");
+	case TRefSystemFactory::ERefFrame::kFrenchRGF93Zone5:
+		return string("RGF93zone5");
+	case TRefSystemFactory::ERefFrame::kITRF97:
+		return string("ITRF97");
+	case TRefSystemFactory::ERefFrame::kLA1985H0:
+	case TRefSystemFactory::ERefFrame::kLA1985Machine:
+		return string("LA_85");
+	case TRefSystemFactory::ERefFrame::kLA2000H0:
+	case TRefSystemFactory::ERefFrame::kLA2000Topo:
+	case TRefSystemFactory::ERefFrame::kLA2000Machine:
+		return string("LA_00");
+	case TRefSystemFactory::ERefFrame::kLambert93:
+		return string("Lambert93");
+		break;
+	case TRefSystemFactory::ERefFrame::kLAp0:
+		return string("LA_P0");
+	case TRefSystemFactory::ERefFrame::kLASphere:
+		return string("LASphere");
+	case TRefSystemFactory::ERefFrame::kLGp0:
+		return string("LG_P0");
+	case TRefSystemFactory::ERefFrame::kLGSphere:
+		return string("LG_Sphere");
+	case TRefSystemFactory::ERefFrame::kLGGRS80:
+		return string("LG_GRS80");
+	case TRefSystemFactory::ERefFrame::kMLA1985H0:
+	case TRefSystemFactory::ERefFrame::kMLA1985Machine:
+		return string("MLA_85");
+	case TRefSystemFactory::ERefFrame::kMLA2000H0:
+	case TRefSystemFactory::ERefFrame::kMLA2000Machine:
+	case TRefSystemFactory::ERefFrame::kMLA2000Topo:
+		return string("MLA_00");
+	case TRefSystemFactory::ERefFrame::kMLASphere:
+		return string("MLA_Sphere");
+	case TRefSystemFactory::ERefFrame::kMLGGRS80:
+		return string("MLG_GRS80");
+	case TRefSystemFactory::ERefFrame::kMLGSphere:
+		return string("MLG_Sphere");
+	case TRefSystemFactory::ERefFrame::kRGF93:
+		return string("RGF93");
+	case TRefSystemFactory::ERefFrame::kROMA40:
+		return string("ROMA40");
+	case TRefSystemFactory::ERefFrame::kSwissLV03:
+		return string("LV03");
+	case TRefSystemFactory::ERefFrame::kSwissLV95:
+		return string("LV95");
+	case TRefSystemFactory::ERefFrame::kWGS84:
+		return string("WGS84");
+	}
+}
+
 
 
 

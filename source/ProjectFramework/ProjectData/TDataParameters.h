@@ -146,6 +146,8 @@ public:
 
         std::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
 			
+
+		string getRFName() const;
 	//@}
 	/*!@output stream format access methods*/
 	//@{
@@ -196,6 +198,7 @@ private:
 	TAStreamFormatter::ETextFormat resultsFileFormat;
 	string punchSeparator;
 	string resultsSeparator;
+
 };
 
 namespace std {
