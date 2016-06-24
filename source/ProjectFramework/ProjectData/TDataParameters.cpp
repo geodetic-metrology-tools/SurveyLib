@@ -704,6 +704,7 @@ string TDataParameters::getRFName() const
 		return string("LV95");
 	case TRefSystemFactory::ERefFrame::kWGS84:
 		return string("WGS84");
+	default: return "";
 	}
 }
 
