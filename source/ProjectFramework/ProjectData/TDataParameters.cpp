@@ -698,10 +698,12 @@ string TDataParameters::getRFName() const
 		return string("RGF93");
 	case TRefSystemFactory::ERefFrame::kROMA40:
 		return string("ROMA40");
+#ifdef USE_SWISSTOPO
 	case TRefSystemFactory::ERefFrame::kSwissLV03:
 		return string("LV03");
 	case TRefSystemFactory::ERefFrame::kSwissLV95:
 		return string("LV95");
+#endif
 	case TRefSystemFactory::ERefFrame::kWGS84:
 		return string("WGS84");
 	default: return "";
