@@ -4,6 +4,7 @@ SET(SURVEYLIB_LIBRARIES
 	ProjectFramework
 	SpatialObjects
 	SpatialObjDLL
+	Tools
 )
 
 SET(SPATIAL_LIBRARIES 
