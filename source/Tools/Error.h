@@ -17,6 +17,7 @@ namespace{
 		ERR_outputFileUnReadable,
 		ERR_savingProjectFile,
 		ERR_savingFile,
+		ERR_savingEmptyDataSet,
 		ERR_readingContent,
 		ERR_transformation,
 		ERR_UnknownExcptInTransformation,
@@ -36,6 +37,7 @@ namespace{
 		"The output file exists bun can't be read",
 		"The program is unable to save the project file",
 		"The program is unable to save the file",
+		"The program doesn't allow to save an empty dataset"
 		"Error happened when reading file content",
 		"An error happened when transforming point with error code : NotInLepGridException",
 		"Unknown Exception thrown during the transformation",
