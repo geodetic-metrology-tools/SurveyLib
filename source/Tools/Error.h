@@ -2,6 +2,8 @@
 #define ERROR_H
 
 #include <string>
+#include <vector>
+#include <utility>
 
 namespace{
 
@@ -25,7 +27,7 @@ namespace{
 		ERR_endOfTheWorld
 	};
 
-	std::string ErrorMessages[ERR_endOfTheWorld] =
+	std::string ErrorMessage[ERR_endOfTheWorld] =
 	{
 		"",
 		"Action canceled",
@@ -50,21 +52,85 @@ class Error
 {
 public:
 
-	Error() { errorCode = ERR_noError; errorMessage = additional = ""; }
-	Error(ErrorCode err, std::string add = "")
-	{
-		errorCode = err;
-		errorMessage = ErrorMessages[err-1];
-		additional = add;
+	Error(){}
+	
+	Error(Error const& err)
+	{ 
+		*this = err; 
 	}
-	operator bool() { return errorCode == ERR_noError;}
-	operator ErrorCode() { return errorCode; }
+	
+	Error(ErrorCode err, std::string add = "")
+	{ 
+		errors.emplace_back(std::make_pair(err, add)); 
+	}
 
-public:
+	Error& operator=(Error const& err)
+	{
+		errors.clear();
+		for(auto& error : err.errors)
+			errors.emplace_back(error);
+		return *this;
+	}
 
-	ErrorCode errorCode = ERR_noError;
-	std::string errorMessage = "";
-	std::string additional = "";
+	operator bool() 
+	{ 
+		bool ret = true;
+		for(size_t i = 0; i < errors.size();)
+			if(errors[i].first == ERR_noError)
+				errors.erase(errors.begin() + i);
+			else 
+			{
+				ret = false;
+				i++;
+			}
+		return ret;
+	}
+	
+	bool operator==(ErrorCode const& code)
+	{
+		for(auto& error : errors)
+			if(error.first == code)
+				return true;
+		return false;
+	}
+
+	bool operator[](ErrorCode const& code)
+	{
+		return *this == code;
+	}
+	
+	Error& operator +=(Error const& err)
+	{
+		for(auto& error : err.errors)
+			// Filter : only adds real errors
+			if(error.first != ERR_noError)
+				errors.emplace_back(std::make_pair(error.first,error.second));
+		return *this;
+	}
+
+	//Error operator+(Error& err1, Error const& err2) const
+	//{
+	//	err1 += err2;
+	//	return err1;
+	//}
+
+	std::vector<std::string> addings(ErrorCode const& code) const
+	{
+		std::vector<std::string> addings;
+		for(auto& error : errors)
+			if(error.first == code)
+				addings.emplace_back(ErrorMessage[code - 1]);
+		return addings;
+	}
+	
+	//Error(Error && t)
+	//{
+	//	errors.push_back(std::make_pair(ERR_noError, ""));
+	//}
+
+private:
+
+	std::vector<std::pair<ErrorCode, std::string>> errors;
 };
 
 #endif // ERROR_H
