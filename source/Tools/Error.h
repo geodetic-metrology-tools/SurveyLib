@@ -19,10 +19,11 @@ namespace{
 		ERR_outputFileUnReadable,
 		ERR_savingProjectFile,
 		ERR_savingFile,
-		ERR_savingEmptyDataSet,
+		ERR_ignoreChanges,
 		ERR_readingContent,
 		ERR_transformation,
 		ERR_UnknownExcptInTransformation,
+		ERR_VirtualProjectRemoved,
 
 		ERR_endOfTheWorld
 	};
@@ -43,6 +44,7 @@ namespace{
 		"Error happened when reading file content",
 		"An error happened when transforming point with error code : NotInLepGridException",
 		"Unknown Exception thrown during the transformation",
+		"Virtual project was removed because it contained no data",
 
 		"The end of the world will be coming soon. You can go home and enjoy a last drink. You're welcome."
 	};
