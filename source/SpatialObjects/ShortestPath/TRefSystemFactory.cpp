@@ -564,42 +564,42 @@ void	TRefSystemFactory::init()
 	// Definition of the CERN projection list (included in ref frame list)
 
 	// CERN XYHs projection: XY system = CCS, Hs = height above SPS sphere (projection of the xy point on the sphere)
-	TXYHeProjection* pCernXYHs = new TXYHeProjection( "CERN XYHs", pSphere, pCCS);
+	TXYHeProjection* pCernXYHs = new TXYHeProjection( "CERN_XYHs", pSphere, pCCS);
 	pCernXYHs->setRefFrameId(kCERNXYHsSphereSPS);
 	fRefFrameList.push_back(pCernXYHs);
 
 	// CERN XYHe projection: XY system = CCS, He = height above ellipsoid (projection of the xy point on the ellipsoid)
-	TXYHeProjection* pCernXYHe = new TXYHeProjection( "CERN XYHe", pGRS80, pCCS);
+	TXYHeProjection* pCernXYHe = new TXYHeProjection( "CERN_XYHe", pGRS80, pCCS);
 	pCernXYHe->setRefFrameId(kCernXYHe);
 	fRefFrameList.push_back(pCernXYHe);
 
 	// CERN X0Y0He projection: X0Y0 = projection of XY on the ellipsoid's level (h=0)
-	TX0Y0HeProjection* pCernX0Y0He = new TX0Y0HeProjection( "CERN X0Y0He", pCernXYHe);
+	TX0Y0HeProjection* pCernX0Y0He = new TX0Y0HeProjection( "CERN_X0Y0He", pCernXYHe);
 	pCernX0Y0He->setRefFrameId(kCernX0Y0He);
 	fRefFrameList.push_back(pCernX0Y0He);
 
 	// CERN XYHg projection CG2000: XY system = CCS, Hg = height above geoid CG2000 (projection of the xy point on the geoid)
-	TXYHgProjection* pCernXYHg00 = new TXYHgProjection( "CERN XYHg2000", pCG2000 , pCernXYHe);
+	TXYHgProjection* pCernXYHg00 = new TXYHgProjection( "CERN_XYHg2000", pCG2000 , pCernXYHe);
 	pCernXYHg00->setRefFrameId(kCernXYHg00);
 	fRefFrameList.push_back(pCernXYHg00);
 
 	// CERN XYHg projection CG2000Topo :XY system = CCS, Hg = height above geoid CG2000Topo (projection of the xy point on the geoid)
-	TXYHgProjection* pCernXYHg00Topo = new TXYHgProjection( "CERN XYHg2000Topo", pCG2000Topo , pCernXYHe);
+	TXYHgProjection* pCernXYHg00Topo = new TXYHgProjection( "CERN_XYHg2000Topo", pCG2000Topo , pCernXYHe);
 	pCernXYHg00Topo->setRefFrameId(kCernXYHg00Topo);
 	fRefFrameList.push_back(pCernXYHg00Topo);
 	
 	// CERN XYHg projection CG2000Machine: XY system = CCS, Hg = height above geoid CG2000Machine (projection of the xy point on the geoid)
-	TXYHgProjection* pCernXYHg00Machine = new TXYHgProjection( "CERN XYHg2000Machine", pCG2000Machine , pCernXYHe);
+	TXYHgProjection* pCernXYHg00Machine = new TXYHgProjection( "CERN_XYHg2000Machine", pCG2000Machine , pCernXYHe);
 	pCernXYHg00Machine->setRefFrameId(kCernXYHg00Machine);
 	fRefFrameList.push_back(pCernXYHg00Machine);
 
 	// CERN XYHg projection CG1985: XY system = CCS, Hg = height above geoid CG1985 (projection of the xy point on the geoid)
-	TXYHgProjection* pCernXYHg85 = new TXYHgProjection( "CERN XYHg1985", pCG1985 , pCernXYHe);
+	TXYHgProjection* pCernXYHg85 = new TXYHgProjection( "CERN_XYHg1985", pCG1985 , pCernXYHe);
 	pCernXYHg85->setRefFrameId(kCernXYHg85);
 	fRefFrameList.push_back(pCernXYHg85);
 
 	// CERN XYHg projection CG1985Machine: XY system = CCS, Hg = height above geoid CG1985Machine (projection of the xy point on the geoid)
-	TXYHgProjection* pCernXYHg85Machine = new TXYHgProjection( "CERN XYHg1985Machine", pCG1985Machine , pCernXYHe);
+	TXYHgProjection* pCernXYHg85Machine = new TXYHgProjection( "CERN_XYHg1985Machine", pCG1985Machine , pCernXYHe);
 	pCernXYHg85Machine->setRefFrameId(kCernXYHg85Machine);
 	fRefFrameList.push_back(pCernXYHg85Machine);
 

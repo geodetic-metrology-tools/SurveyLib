@@ -636,21 +636,21 @@ string TDataParameters::getRFName() const
 	case TRefSystemFactory::ERefFrame::kCGRFSphere:
 		return string("CGRFSphere");
 	case TRefSystemFactory::ERefFrame::kCernX0Y0He:
-		return string("CERN X0Y0He");
+		return string("CERN_X0Y0He");
 	case TRefSystemFactory::ERefFrame::kCernXYHe:
-		return string("CERN XYHe");
+		return string("CERN_XYHe");
 	case TRefSystemFactory::ERefFrame::kCernXYHg00:
-		return string("CERN XYHg_00");
+		return string("CERN_XYHg_00");
 	case TRefSystemFactory::ERefFrame::kCernXYHg00Machine:
-		return string("CERN XYHg_RS2K");
+		return string("CERN_XYHg_RS2K");
 	case TRefSystemFactory::ERefFrame::kCernXYHg00Topo:
-		return string("CERN XYHg_00topo");
+		return string("CERN_XYHg_00topo");
 	case TRefSystemFactory::ERefFrame::kCernXYHg85:
-		return string("CERN XYHg_85");
+		return string("CERN_XYHg_85");
 	case TRefSystemFactory::ERefFrame::kCernXYHg85Machine:
-		return string("CERN XYHg_LHC");
+		return string("CERN_XYHg_LHC");
 	case TRefSystemFactory::ERefFrame::kCERNXYHsSphereSPS:
-		return string("CERN XYHs_SPS");
+		return string("CERN_XYHs_SPS");
 	case TRefSystemFactory::ERefFrame::kCH1903plus:
 		return string("CH1903+");
 	case TRefSystemFactory::ERefFrame::kCHTRF95:
