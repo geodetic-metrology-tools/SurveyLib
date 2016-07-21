@@ -72,9 +72,6 @@ public:
 		//!set the Z coordinate of a vector in a specific Coordinate System return true if Z is defined
 		bool setZ(const TLength&);
 
-		//! Allows to retrieve one of the coordinates of the vector
-		TReal operator[](int i) const;
-
 		//! Allows to retrieve one of the coordinates of the vector and to modify it
 		TReal& operator[](int i);
 		
