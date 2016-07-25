@@ -662,12 +662,15 @@ string TDataParameters::getRFName() const
 	case TRefSystemFactory::ERefFrame::kITRF97:
 		return string("ITRF97");
 	case TRefSystemFactory::ERefFrame::kLA1985H0:
-	case TRefSystemFactory::ERefFrame::kLA1985Machine:
 		return string("LA_85");
+	case TRefSystemFactory::ERefFrame::kLA1985Machine:
+		return string("LA_85Machine");
 	case TRefSystemFactory::ERefFrame::kLA2000H0:
-	case TRefSystemFactory::ERefFrame::kLA2000Topo:
-	case TRefSystemFactory::ERefFrame::kLA2000Machine:
 		return string("LA_00");
+	case TRefSystemFactory::ERefFrame::kLA2000Topo:
+		return string("LA_00Topo");
+	case TRefSystemFactory::ERefFrame::kLA2000Machine:
+		return string("LA_00Machine");
 	case TRefSystemFactory::ERefFrame::kLambert93:
 		return string("Lambert93");
 		break;
@@ -682,12 +685,15 @@ string TDataParameters::getRFName() const
 	case TRefSystemFactory::ERefFrame::kLGGRS80:
 		return string("LG_GRS80");
 	case TRefSystemFactory::ERefFrame::kMLA1985H0:
-	case TRefSystemFactory::ERefFrame::kMLA1985Machine:
 		return string("MLA_85");
+	case TRefSystemFactory::ERefFrame::kMLA1985Machine:
+		return string("MLA_85Machine");
 	case TRefSystemFactory::ERefFrame::kMLA2000H0:
-	case TRefSystemFactory::ERefFrame::kMLA2000Machine:
-	case TRefSystemFactory::ERefFrame::kMLA2000Topo:
 		return string("MLA_00");
+	case TRefSystemFactory::ERefFrame::kMLA2000Machine:
+		return string("MLA_00Machine");
+	case TRefSystemFactory::ERefFrame::kMLA2000Topo:
+		return string("MLA_00Topo");
 	case TRefSystemFactory::ERefFrame::kMLASphere:
 		return string("MLA_Sphere");
 	case TRefSystemFactory::ERefFrame::kMLGGRS80:
