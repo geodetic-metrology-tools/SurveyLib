@@ -3,7 +3,7 @@ include_directories(${SURVEYLIB_ROOT}/source/Tools)
 
 # Create a variable containing all .cpp files:
 set(Tools_SOURCES 
-
+	Error.cpp
 )
 
 # Create a variable containing all .h files:
@@ -15,7 +15,7 @@ set(Tools_HEADERS
 add_library(Tools STATIC ${Tools_SOURCES} ${Tools_HEADERS})
 
 # Link static libraries to the current one
-target_link_libraries(Tools)
+target_link_libraries(Tools Tools)
 
 # needed for linux compilation
 set_target_properties(Tools PROPERTIES POSITION_INDEPENDENT_CODE ON)
