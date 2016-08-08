@@ -242,7 +242,7 @@ public:
 
 	//@}
 
-private:
+protected:
 
 	TPositionVector		fProvisionalValue; /*!< point's provisional value */
 	TLength				fCorrection[3]; /*!< point's correction after calculation  */

@@ -350,7 +350,7 @@ void	TAdjustableHelmertTransformation::setYZTranslationCovariance(TReal value){
 	if (!fixedTranslations[1] && !fixedTranslations[2])
 		fCovarianceTranslation[1] = value;
 	else
-		throw std::logic_error("TAdjustablePlane::setYZTranslationCovariance, translation must be variable in both Y and Z.");
+		throw std::logic_error("LGCAdjustablePlane::setYZTranslationCovariance, translation must be variable in both Y and Z.");
 
 }
 
@@ -358,7 +358,7 @@ void	TAdjustableHelmertTransformation::setXZTranslationCovariance(TReal value){
 	if (!fixedTranslations[0] && !fixedTranslations[2])
 		fCovarianceTranslation[2] = value;
 	else
-		throw std::logic_error("TAdjustablePlane::setXZTranslationCovariance, translation must be variable in both X and Z.");
+		throw std::logic_error("LGCAdjustablePlane::setXZTranslationCovariance, translation must be variable in both X and Z.");
 }
 
 
@@ -374,7 +374,7 @@ void	TAdjustableHelmertTransformation::setYZRotationCovariance(TReal value){
 	if (!fixedRotations[1] && !fixedRotations[2])
 		fCovarianceRotation[1] = value;
 	else
-		throw std::logic_error("TAdjustablePlane::setYZRotationCovariance, rotation must be variable in both Y and Z.");
+		throw std::logic_error("LGCAdjustablePlane::setYZRotationCovariance, rotation must be variable in both Y and Z.");
 
 }
 
@@ -382,7 +382,7 @@ void	TAdjustableHelmertTransformation::setXZRotationCovariance(TReal value){
 	if (!fixedRotations[0] && !fixedRotations[2])
 		fCovarianceRotation[2] = value;
 	else
-		throw std::logic_error("TAdjustablePlane::setXZRotationCovariance, rotation must be variable in both X and Z.");
+		throw std::logic_error("LGCAdjustablePlane::setXZRotationCovariance, rotation must be variable in both X and Z.");
 }
 
 void	TAdjustableHelmertTransformation::setEstimatedPrecision(int idx, TReal value){
