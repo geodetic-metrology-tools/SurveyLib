@@ -35,6 +35,7 @@ public:
 	};
 
 	static std::string ErrorMessage[ERR_endOfTheWorld];
+	static std::string message(unsigned int);
 
 	Error();
 	
@@ -55,6 +56,16 @@ public:
 	Error& operator +=(Error const& err);
 
 	std::vector<std::string> addings(ErrorCode const& code) const;
+
+	std::vector<Error> split() const;
+
+	Error extract(ErrorCode const& code);
+
+	unsigned int size() const;
+
+	ErrorCode code() const;
+
+	std::string additionalInfo(ErrorCode const& code) const;
 
 private:
 
