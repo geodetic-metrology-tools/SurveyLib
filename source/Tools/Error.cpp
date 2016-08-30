@@ -12,7 +12,7 @@ std::string Error::ErrorMessage[ERR_endOfTheWorld] =
 	"Output file exists bun can't be read",
 	"Unable to save the project file",
 	"Unable to save the file",
-	"Unable to save an empty dataset"
+	"Changes ignored",
 	"Error when reading file content",
 	"Transformation exception : NotInLepGrid",
 	"Unknown Exception when transforming",
@@ -21,7 +21,7 @@ std::string Error::ErrorMessage[ERR_endOfTheWorld] =
 	"The end of the world will be coming soon."
 };
 
-std::string Error::message(unsigned int i)
+std::string Error::message(Error::ErrorCode i)
 {
 	return ErrorMessage[i-1];
 }
@@ -101,13 +101,12 @@ Error& Error::operator +=(Error const& err)
 	return *this;
 }
 
-std::vector<std::string> Error::addings(ErrorCode const& code) const
+std::string Error::additionalInfo(ErrorCode const& code) const
 {
-	std::vector<std::string> addings;
-	for(auto& error : errors)
-		if(error.first == code)
-			addings.push_back(ErrorMessage[code - 1]);
-	return addings;
+	for(auto& err : errors)
+		if(err.first == code)
+			return err.second;
+	return "";
 }
 
 // split the vector of codes into a list of single Errors
@@ -131,12 +130,4 @@ unsigned int Error::size() const
 Error::ErrorCode Error::code() const
 {
 	return (size() == 0) ? ERR_noError : errors[0].first;
-}
-
-std::string Error::additionalInfo(ErrorCode const& code) const
-{
-	for(auto& err : errors)
-		if(err.first == code)
-			return err.second;
-	return "";
 }
