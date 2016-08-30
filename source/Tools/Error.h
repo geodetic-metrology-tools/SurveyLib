@@ -30,6 +30,7 @@ public:
 		ERR_transformation,
 		ERR_UnknownExcptInTransformation,
 		ERR_VirtualProjectRemoved,
+		ERR_LSCalculation,
 
 		ERR_endOfTheWorld
 	};

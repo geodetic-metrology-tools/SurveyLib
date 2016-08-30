@@ -17,6 +17,7 @@ std::string Error::ErrorMessage[ERR_endOfTheWorld] =
 	"An error happened when transforming point with error code : NotInLepGridException",
 	"Unknown Exception thrown during the transformation",
 	"Virtual project was removed because it contained no data",
+	"A problem appears during the least square process.",
 
 	"The end of the world will be coming soon. You can go home and enjoy a last drink. You're welcome."
 };
