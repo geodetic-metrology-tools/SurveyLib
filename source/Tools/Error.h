@@ -53,6 +53,15 @@ public:
 		ERR_UnknownExcptInTransformation,
 		//! Usefull within CSGeo
 		ERR_VirtualProjectRemoved,
+
+		//error for LS process:
+		//! error during the input matrices creation
+		ERR_matriceFiller,
+		//! Error during the LS calculation
+		ERR_LSCalculation,
+		//! Error during the matrix extraction
+		ERR_matriceExtractor,
+
 		//! This Error code shall never be used. It's sometimes so as to describe a behavior that should never happen. It it does, there is a problem when manipulating this class.
 		ERR_endOfTheWorld
 	};

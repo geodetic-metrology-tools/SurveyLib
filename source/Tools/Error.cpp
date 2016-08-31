@@ -17,6 +17,9 @@ std::string Error::ErrorMessage[ERR_endOfTheWorld] =
 	"Transformation exception : NotInLepGrid",
 	"Unknown Exception when transforming",
 	"Virtual project removed because empty",
+	"Error filling the input matrices.",
+	"Error during the LS process: A solution cannot be found.",
+	"Error during the matrix extraction.",
 
 	"The end of the world will be coming soon."
 };
