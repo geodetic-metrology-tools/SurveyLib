@@ -41,6 +41,9 @@ public:
 		*/
 		TAdjustablePoint(const TPositionVector& pos, bool isXfixed, bool isYfixed, bool isZHfixed, const std::string& name, TRefSystemFactory::ERefFrame referential);
 
+		/// Copy constructor
+		TAdjustablePoint(const TAdjustablePoint& pos);
+
 		/// Create an unitialized point. 
 		static TAdjustablePoint createUninitialized(const std::string& name);
 		

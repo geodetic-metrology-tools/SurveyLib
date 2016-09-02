@@ -45,6 +45,28 @@ fSpatialStatus(TSpatialStatus::kUnknown)
 	setDefaults(isXfixed, isYfixed, isZHfixed);
 }
 
+/// Copy constructor
+TAdjustablePoint::TAdjustablePoint(const TAdjustablePoint& pos) :
+fName(pos.fName),
+fProvisionalValue(pos.fProvisionalValue),
+fEstimatedValue(pos.fEstimatedValue),
+fReferential(pos.fReferential),
+fHfixed(pos.fHfixed),
+fSpatialStatus(pos.fSpatialStatus),
+fCovariance(pos.fCovariance),
+fXValueSet(pos.fXValueSet),
+fYValueSet(pos.fYValueSet)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		fCorrection[i] = pos.fCorrection[i];
+		fEstimatedPrecision[i] = pos.fEstimatedPrecision[i];
+		fStandardDeviations[i] = pos.fStandardDeviations[i];
+		fixedState[i] = pos.fixedState[i];
+		uidx[i] = pos.uidx[i];
+	}
+}
+
 TAdjustablePoint TAdjustablePoint::createUninitialized(const std::string& name) {
 	TAdjustablePoint ap(name);
 	return ap;
