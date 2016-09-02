@@ -25,6 +25,8 @@ public:
 	{
 		//! Default code. Can be pushed but means that everything is ok
 		ERR_noError = 1,
+		//! Behavioral code meaning that the saving is ok
+		ERR_savingOk,
 		//! Can be pushed when an action is canceled
 		ERR_actionCanceled,
 		//! Can be pushed when a project file is missing

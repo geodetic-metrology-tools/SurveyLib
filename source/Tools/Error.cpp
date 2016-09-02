@@ -3,9 +3,10 @@
 std::string Error::ErrorMessage[ERR_endOfTheWorld] =
 {
 	"",
+	"Files saved",
 	"Action canceled",
 	"Project file is missing",
-	"Input file is missing or filename corrupted",
+	"Input file is missing or corrupted",
 	"Input file exists but can't be read",
 	"An output file is missing",
 	"No output file has been loaded",
@@ -21,7 +22,7 @@ std::string Error::ErrorMessage[ERR_endOfTheWorld] =
 	"Error during the LS process: A solution cannot be found.",
 	"Error during the matrix extraction.",
 
-	"The end of the world will be coming soon."
+	"The end of the world will come soon."
 };
 
 std::string Error::message(Error::ErrorCode i)
