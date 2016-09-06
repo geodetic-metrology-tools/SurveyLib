@@ -3,12 +3,12 @@ include_directories(${SURVEYLIB_ROOT}/source/Tools)
 
 # Create a variable containing all .cpp files:
 set(Tools_SOURCES 
-	Error.cpp
+	Behavior.cpp
 )
 
 # Create a variable containing all .h files:
 set(Tools_HEADERS 
-	Error.h
+	Behavior.h
 	StringManager.h
 )
 
