@@ -9,6 +9,7 @@ set(Tools_SOURCES
 # Create a variable containing all .h files:
 set(Tools_HEADERS 
 	Error.h
+	StringManager.h
 )
 
 # Create a static library from sources:
