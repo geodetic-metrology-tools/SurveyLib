@@ -34,7 +34,7 @@ public:
 		//! Can be pushed when a input file is missing 
 		ERR_inputFileMissing,
 		//! Usefull to alert that a file exists but isn't readable
-		ERR_FileUnReadable,
+		ERR_fileUnReadable,
 		//! Can be pushed when an output file is missing 
 		ERR_outputFileMissing,
 		//! Alert from the absence of output file
@@ -52,9 +52,9 @@ public:
 		//! A problem occured during a transformation (usefull at least in CSGeo)
 		ERR_transformation,
 		//! Means that this exception was thrown during a process. (The exception is from the SurveyLib)
-		ERR_UnknownExcptInTransformation,
+		ERR_unknownExcptInTransformation,
 		//! Usefull within CSGeo
-		ERR_VirtualProjectRemoved,
+		ERR_virtualProjectRemoved,
 
 		//error for LS process:
 		//! error with the input data

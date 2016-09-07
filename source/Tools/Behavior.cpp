@@ -2,25 +2,25 @@
 
 std::string Behavior::ErrorMessage[ERR_endOfTheWorld] =
 {
-	"",
-	"Files saved",
-	"Action canceled",
-	"Project file is missing",
-	"Input file is missing or corrupted",
-	"Input file exists but can't be read",
-	"An output file is missing",
-	"No output file has been loaded",
-	"Output file exists bun can't be read",
-	"Unable to save the project file",
-	"Unable to save the file",
-	"Changes ignored",
-	"Error when reading file content",
-	"Transformation exception : NotInLepGrid",
-	"Unknown Exception when transforming",
-	"Virtual project removed because empty",
-	"Problem with input data",
-	"Problem of calculation ",
-	"Problem with results",
+	"",											// ERR_noError
+	"Files saved",								// ERR_savingOk
+	"Action canceled",							// ERR_actionCanceled
+	"Project file is missing",					// ERR_projectFileMissing
+	"Input file is missing or corrupted",		// ERR_inputFileMissing
+	"Input file exists but can't be read",		// ERR_fileUnReadable
+	"An output file is missing",				// ERR_outputFileMissing
+	"No output file has been loaded",			// ERR_noOutputFile
+	"Output file exists bun can't be read",		// ERR_outputFileUnReadable
+	"Unable to save the project file",			// ERR_savingProjectFile
+	"Unable to save the file",					// ERR_savingFile
+	"Changes ignored",							// ERR_ignoreChanges
+	"Error when reading file content",			// ERR_readingContent
+	"Transformation exception : NotInLepGrid",	// ERR_transformation
+	"Unknown Exception when transforming",		// ERR_unknownExcptInTransformation
+	"Virtual project removed because empty",	// ERR_virtualProjectRemoved
+	"Error in the Input Data (LS process)",		// ERR_inputData
+	"Error in the Least Square Process ",		// ERR_LSCalculation
+	"Problem with results",						// ERR_results
 
 	"The end of the world will come soon."
 };
@@ -153,20 +153,20 @@ Behavior::Type Behavior::getType() const
 		case Behavior::ERR_savingProjectFile:
 		case Behavior::ERR_savingFile:
 		case Behavior::ERR_transformation:
-		case Behavior::ERR_UnknownExcptInTransformation:
+		case Behavior::ERR_unknownExcptInTransformation:
 		case Behavior::ERR_inputData:
 		case Behavior::ERR_LSCalculation:
 		case Behavior::ERR_results:
 			return Type::Error;
 
 		// WARNING
-		case Behavior::ERR_FileUnReadable:
+		case Behavior::ERR_fileUnReadable:
 		case Behavior::ERR_outputFileMissing:
 		case Behavior::ERR_noOutputFile:
 		case Behavior::ERR_outputFileUnReadable:
 		case Behavior::ERR_ignoreChanges:
 		case Behavior::ERR_readingContent:
-		case Behavior::ERR_VirtualProjectRemoved:
+		case Behavior::ERR_virtualProjectRemoved:
 			return Type::Warning;
 
 		default:
