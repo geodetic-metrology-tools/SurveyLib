@@ -1,3 +1,84 @@
-FOREACH(lib ${LSALGO_LIBRARIES})
-	ADD_SUBDIRECTORY(${lib})
-ENDFOREACH(lib)
+include_directories(${CMAKE_SOURCE_DIR}
+					${BOOST_ROOT}
+					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/AdjustableObjects
+					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcElements
+					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcParams
+					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
+					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
+					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
+					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
+					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
+					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
+					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations #to delete too?
+					
+)
+
+set(ALGO_HEADERS
+	headers/AdjustableObjects/TAdjustablePoint.h
+	headers/AdjustableObjects/TVAdjustableObject.h
+	headers/AdjustableObjects/TAdjustableHelmertTransformation.h
+	headers/AdjustableObjects/TAdjustableAngle.h
+	headers/AdjustableObjects/TAdjustableScalar.h
+	headers/AdjustableObjects/TAdjustableLength.h
+	headers/AdjustableObjects/TTransformParameters.h
+	headers/CalcElements/TALSCalcParameter.h
+	headers/CalcElements/TALSComputer.h
+	headers/CalcElements/TLSCalcWorkingUnknown.h
+	headers/CalcElements/TLSInputMatrices.h
+	headers/CalcElements/TLSParametricMtdComputer.h
+	headers/CalcElements/TLSWeightedUnkMtdComputer.h
+	headers/CalcElements/TLSCombinedMtdComputer.h
+	headers/CalcElements/TLSCnstMtdComputer.h
+	headers/CalcElements/TLSResultsMatrices.h
+	headers/CalcElements/UEOIndices.h
+	headers/CalcElements/QuantileFunctions.h
+	#not use since lgc v2
+	headers/CalcParams/TLSCalcFreeVectorParam.h
+	headers/CalcParams/TLSCalcLengthParam.h
+	headers/CalcParams/TLSCalcOrientationParam.h
+	headers/CalcParams/TLSCalcPosVectorParam.h
+	headers/CalcParams/TLSCalcScalarParam.h
+	headers/CalcParams/TLSCalcWorkingPosVec.h
+)
+
+set(ALGO_SOURCES
+	sources/AdjustableObjects/TAdjustablePoint.cpp
+	sources/AdjustableObjects/TAdjustableHelmertTransformation.cpp
+	sources/AdjustableObjects/TAdjustableAngle.cpp
+	sources/AdjustableObjects/TAdjustableScalar.cpp
+	sources/AdjustableObjects/TAdjustableLength.cpp
+	sources/CalcElements/TALSCalcParameter.cpp
+	sources/CalcElements/TALSComputer.cpp
+	sources/CalcElements/TLSInputMatrices.cpp
+	sources/CalcElements/TLSParametricMtdComputer.cpp
+	sources/CalcElements/TLSWeightedUnkMtdComputer.cpp
+	sources/CalcElements/TLSCombinedMtdComputer.cpp
+	sources/CalcElements/TLSCnstMtdComputer.cpp
+	sources/CalcElements/TLSResultsMatrices.cpp
+	sources/CalcElements/QuantileFunctions.cpp
+	
+	sources/CalcParams/TLSCalcFreeVectorParam.cpp
+	sources/CalcParams/TLSCalcLengthParam.cpp
+	sources/CalcParams/TLSCalcOrientationParam.cpp
+	sources/CalcParams/TLSCalcPosVectorParam.cpp
+	sources/CalcParams/TLSCalcScalarParam.cpp
+	sources/CalcParams/TLSCalcWorkingPosVec.cpp
+	
+)
+
+# Define VS folders:
+file(GLOB ADJUSTABLEOBJECT_H 			headers/AdjustableObjects/*.*)
+file(GLOB ADJUSTABLEOBJECT_CPP			sources/AdjustableObjects/*.*)
+file(GLOB CALCELMT_H 					headers/CalcElements/*.*)
+file(GLOB CALCELMT_CPP					sources/CalcElements/*.*)
+file(GLOB CALCPARAMS_H 					headers/CalcParams/*.*)
+file(GLOB CALCPARAMS_CPP				sources/CalcParams/*.*)
+source_group("AdjustableObject\\Headers"   		FILES ${ADJUSTABLEOBJECT_H})
+source_group("AdjustableObject\\Sources"   		FILES ${ADJUSTABLEOBJECT_CPP})
+source_group("CalcElements\\Headers"   		FILES ${CALCELMT_H})
+source_group("CalcElements\\Sources"   		FILES ${CALCELMT_CPP})
+source_group("CalcParams\\Headers"   		FILES ${CALCPARAMS_H})
+source_group("CalcParams\\Sources"   		FILES ${CALCPARAMS_CPP})
+
+#Create a static library from the object files
+ADD_LIBRARY(LSAlgoritms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )

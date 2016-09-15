@@ -7,4 +7,4 @@ set(UnitTestsProjectFramework_SOURCES
 
 add_executable(UnitTestsProjectFramework ${UnitTestsProjectFramework_SOURCES}) 
 # Specify the libraries to link against
-target_link_libraries(UnitTestsProjectFramework Converters)
+target_link_libraries(UnitTestsProjectFramework ProjectFramework)
