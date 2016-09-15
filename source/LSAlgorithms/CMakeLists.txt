@@ -9,8 +9,7 @@ include_directories(${CMAKE_SOURCE_DIR}
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations #to delete too?
-					
+					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
 )
 
 set(ALGO_HEADERS
@@ -32,7 +31,6 @@ set(ALGO_HEADERS
 	headers/CalcElements/TLSResultsMatrices.h
 	headers/CalcElements/UEOIndices.h
 	headers/CalcElements/QuantileFunctions.h
-	#not use since lgc v2
 	headers/CalcParams/TLSCalcFreeVectorParam.h
 	headers/CalcParams/TLSCalcLengthParam.h
 	headers/CalcParams/TLSCalcOrientationParam.h
@@ -56,7 +54,6 @@ set(ALGO_SOURCES
 	sources/CalcElements/TLSCnstMtdComputer.cpp
 	sources/CalcElements/TLSResultsMatrices.cpp
 	sources/CalcElements/QuantileFunctions.cpp
-	
 	sources/CalcParams/TLSCalcFreeVectorParam.cpp
 	sources/CalcParams/TLSCalcLengthParam.cpp
 	sources/CalcParams/TLSCalcOrientationParam.cpp
@@ -81,4 +78,4 @@ source_group("CalcParams\\Headers"   		FILES ${CALCPARAMS_H})
 source_group("CalcParams\\Sources"   		FILES ${CALCPARAMS_CPP})
 
 #Create a static library from the object files
-ADD_LIBRARY(LSAlgoritms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
+ADD_LIBRARY(LSAlgorithms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
