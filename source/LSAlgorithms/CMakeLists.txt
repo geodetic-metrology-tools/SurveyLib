@@ -78,4 +78,4 @@ source_group("CalcParams\\Headers"   		FILES ${CALCPARAMS_H})
 source_group("CalcParams\\Sources"   		FILES ${CALCPARAMS_CPP})
 
 #Create a static library from the object files
-ADD_LIBRARY(LSAlgoritms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
+ADD_LIBRARY(LSAlgorithms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
