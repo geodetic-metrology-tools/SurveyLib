@@ -15,13 +15,13 @@ std::string Behavior::ErrorMessage[ERR_endOfTheWorld] =
 	"Unable to save the file",					// ERR_savingFile
 	"Changes ignored",							// ERR_ignoreChanges
 	"Error when reading file content",			// ERR_readingContent
-	"Transformation exception : NotInLepGrid",	// ERR_transformation
+	"Transformation exception",					// ERR_transformation
 	"Unknown Exception when transforming",		// ERR_unknownExcptInTransformation
 	"Virtual project removed because empty",	// ERR_virtualProjectRemoved
 	"Error in the Input Data (LS process)",		// ERR_inputData
 	"Error in the Least Square Process ",		// ERR_LSCalculation
 	"Problem with results",						// ERR_results
-
+	
 	"The end of the world will come soon."
 };
 
