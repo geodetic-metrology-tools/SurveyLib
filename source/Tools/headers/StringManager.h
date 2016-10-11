@@ -92,6 +92,20 @@ namespace
 
 		return result;
 	}
+
+	//Replace a caracter, "occ", by another, "newChar", in the string "path"
+	std::string replace(string path, char occ, string newChar) 
+	{
+		while (true)
+		{
+			std::size_t found = path.rfind(occ);
+			if (found != std::string::npos)
+				path.replace(path.begin() + found, path.begin() + found + 1, newChar.begin(), newChar.end());
+			else
+				break;
+		}
+		return path;
+	};
 }
 
 
