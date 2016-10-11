@@ -19,7 +19,7 @@ std::string Behavior::ErrorMessage[ERR_endOfTheWorld] =
 	"Unknown Exception when transforming",		// ERR_unknownExcptInTransformation
 	"Virtual project removed because empty",	// ERR_virtualProjectRemoved
 	"Error in the Input Data (LS process)",		// ERR_inputData
-	"Error in the Least Square Process ",		// ERR_LSCalculation
+	"Error in the Least Square Process",		// ERR_LSCalculation
 	"Problem with results",						// ERR_results
 	
 	"The end of the world will come soon."
@@ -82,9 +82,12 @@ Behavior Behavior::extract(BehaviorCode const& code)
 
 	return extractedError;
 }
-	
+
 bool Behavior::operator==(BehaviorCode const& code)
 {
+	if(size() == 0 && code == BehaviorCode::ERR_noError)
+		return true;
+
 	for(auto& error : errors)
 		if(error.first == code)
 			return true;
