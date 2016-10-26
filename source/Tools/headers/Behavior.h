@@ -79,16 +79,16 @@ public:
 	};
 
 	//! Message table declaration
-	static std::string ErrorMessage[ERR_endOfTheWorld];
+	static std::wstring ErrorMessage[ERR_endOfTheWorld];
 	//! Returns message to the associated code
-	static std::string message(Behavior::BehaviorCode);
+	static std::wstring message(Behavior::BehaviorCode);
 
 	//! Default ctor
 	Behavior();
 	//! Copy ctor
 	Behavior(Behavior const& err);
 	//! Param ctor. The most used, taking a code an potential additional information
-	Behavior(BehaviorCode err, std::string add = "");
+	Behavior(BehaviorCode err, std::wstring add = L"");
 	//! dtor
 	~Behavior();
 	//! Copy operator
@@ -102,7 +102,7 @@ public:
 	//! Allows to add two errors
 	Behavior& operator +=(Behavior const& err);
 	//! Retrieves the additional information (software dependant) of the first code pair
-	std::string additionalInfo(BehaviorCode const& code) const;
+	std::wstring additionalInfo(BehaviorCode const& code) const;
 	//! Retrieves a vector of errors with unique codes. Might be empty
 	std::vector<Behavior> split() const;
 	//! Retrieves a unique error from *this, by removing the code from *this. 
@@ -118,7 +118,7 @@ public:
 private:
 
 	//! pairs of codes and additional information
-	std::vector<std::pair<BehaviorCode, std::string>> errors;
+	std::vector<std::pair<BehaviorCode, std::wstring>> errors;
 };
 
 #endif // BEHAVIOR_H

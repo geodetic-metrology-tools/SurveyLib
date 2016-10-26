@@ -1,31 +1,31 @@
 #include <Behavior.h>
 
-std::string Behavior::ErrorMessage[ERR_endOfTheWorld] =
+std::wstring Behavior::ErrorMessage[ERR_endOfTheWorld] =
 {
-	"",											// ERR_noError
-	"Files saved",								// ERR_savingOk
-	"Action canceled",							// ERR_actionCanceled
-	"Project file is missing",					// ERR_projectFileMissing
-	"Input file is missing or corrupted",		// ERR_inputFileMissing
-	"Input file exists but can't be read",		// ERR_fileUnReadable
-	"An output file is missing",				// ERR_outputFileMissing
-	"No output file has been loaded",			// ERR_noOutputFile
-	"Output file exists bun can't be read",		// ERR_outputFileUnReadable
-	"Unable to save the project file",			// ERR_savingProjectFile
-	"Unable to save the file",					// ERR_savingFile
-	"Changes ignored",							// ERR_ignoreChanges
-	"Error when reading file content",			// ERR_readingContent
-	"Transformation exception",					// ERR_transformation
-	"Unknown Exception when transforming",		// ERR_unknownExcptInTransformation
-	"Virtual project removed because empty",	// ERR_virtualProjectRemoved
-	"Error in the Input Data (LS process)",		// ERR_inputData
-	"Error in the Least Square Process",		// ERR_LSCalculation
-	"Problem with results",						// ERR_results
+	L"",										// ERR_noError
+	L"Files saved",								// ERR_savingOk
+	L"Action canceled",							// ERR_actionCanceled
+	L"Project file is missing",					// ERR_projectFileMissing
+	L"Input file is missing or corrupted",		// ERR_inputFileMissing
+	L"Input file exists but can't be read",		// ERR_fileUnReadable
+	L"An output file is missing",				// ERR_outputFileMissing
+	L"No output file has been loaded",			// ERR_noOutputFile
+	L"Output file exists bun can't be read",	// ERR_outputFileUnReadable
+	L"Unable to save the project file",			// ERR_savingProjectFile
+	L"Unable to save the file",					// ERR_savingFile
+	L"Changes ignored",							// ERR_ignoreChanges
+	L"Error when reading file content",			// ERR_readingContent
+	L"Transformation exception",				// ERR_transformation
+	L"Unknown Exception when transforming",		// ERR_unknownExcptInTransformation
+	L"Virtual project removed because empty",	// ERR_virtualProjectRemoved
+	L"Error in the Input Data (LS process)",	// ERR_inputData
+	L"Error in the Least Square Process",		// ERR_LSCalculation
+	L"Problem with results",					// ERR_results
 	
-	"The end of the world will come soon."
+	L"The end of the world will come soon."
 };
 
-std::string Behavior::message(Behavior::BehaviorCode i)
+std::wstring Behavior::message(Behavior::BehaviorCode i)
 {
 	return ErrorMessage[i-1];
 }
@@ -37,7 +37,7 @@ Behavior::Behavior(Behavior const& err)
 	*this = err; 
 }
 	
-Behavior::Behavior(BehaviorCode err, std::string add)
+Behavior::Behavior(BehaviorCode err, std::wstring add)
 { 
 	errors.push_back(std::make_pair(err, add)); 
 }
@@ -108,12 +108,12 @@ Behavior& Behavior::operator +=(Behavior const& err)
 	return *this;
 }
 
-std::string Behavior::additionalInfo(BehaviorCode const& code) const
+std::wstring Behavior::additionalInfo(BehaviorCode const& code) const
 {
 	for(auto& err : errors)
 		if(err.first == code)
 			return err.second;
-	return "";
+	return L"";
 }
 
 // split the vector of codes into a list of single Errors

@@ -94,7 +94,7 @@ namespace
 	}
 
 	//Replace a caracter, "occ", by another, "newChar", in the string "path"
-	std::string replace(std::string path, char occ, std::string newChar) 
+	std::string replace(std::string path, wchar_t occ, std::string newChar) 
 	{
 		while (true)
 		{
@@ -106,6 +106,23 @@ namespace
 		}
 		return path;
 	};
+
+	//Replace a caracter, "occ", by another, "newChar", in the wild string "path"
+	std::wstring replace(std::wstring path, wchar_t occ, std::wstring newChar)
+	{
+		std::string s = replace(std::string(path.begin(), path.end()), occ, std::string(newChar.begin(), newChar.end()));
+		return std::wstring(s.begin(), s.end());
+	};
+
+	std::wstring toWStr(const std::string& str)
+	{
+		return std::wstring(str.begin(), str.end());
+	}
+
+	std::string toStr(const std::wstring str)
+	{
+		return std::string(str.begin(), str.end());
+	}
 }
 
 
