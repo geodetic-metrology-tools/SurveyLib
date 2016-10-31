@@ -17,6 +17,7 @@ std::wstring Behavior::ErrorMessage[ERR_endOfTheWorld] =
 	L"Error when reading file content",			// ERR_readingContent
 	L"Transformation exception",				// ERR_transformation
 	L"Unknown Exception when transforming",		// ERR_unknownExcptInTransformation
+	L"Unknown Reference Frame",					// ERR_unknownReferenceFrame
 	L"Virtual project removed because empty",	// ERR_virtualProjectRemoved
 	L"Error in the Input Data (LS process)",	// ERR_inputData
 	L"Error in the Least Square Process",		// ERR_LSCalculation
@@ -160,6 +161,7 @@ Behavior::Type Behavior::getType() const
 		case Behavior::ERR_inputData:
 		case Behavior::ERR_LSCalculation:
 		case Behavior::ERR_results:
+		case Behavior::ERR_unknownReferenceFrame:
 			return Type::Error;
 
 		// WARNING

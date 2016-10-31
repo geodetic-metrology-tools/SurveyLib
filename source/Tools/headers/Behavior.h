@@ -51,8 +51,10 @@ public:
 		ERR_readingContent,
 		//! A problem occured during a transformation (usefull at least in CSGeo)
 		ERR_transformation,
-		//! Means that this exception was thrown during a process. (The exception is from the SurveyLib)
+		//! Means that this exception was thrown during a transformation process. (The exception is from the SurveyLib)
 		ERR_unknownExcptInTransformation,
+		//! ReferenceFrame not recognized
+		ERR_unknownReferenceFrame,
 		//! Usefull within CSGeo
 		ERR_virtualProjectRemoved,
 

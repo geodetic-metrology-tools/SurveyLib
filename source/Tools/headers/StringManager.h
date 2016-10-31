@@ -95,7 +95,7 @@ namespace
 	}
 
 	//Replace a caracter, "occ", by another, "newChar", in the string "path"
-	inline std::string replace(std::string path, wchar_t occ, std::string newChar)
+	inline std::string replace(std::string path, char occ, std::string newChar)
 	{
 		while (true)
 		{
