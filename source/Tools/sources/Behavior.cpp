@@ -10,7 +10,6 @@ std::wstring Behavior::ErrorMessage[ERR_endOfTheWorld] =
 	L"Input file exists but can't be read",		// ERR_fileUnReadable
 	L"An output file is missing",				// ERR_outputFileMissing
 	L"No output file has been loaded",			// ERR_noOutputFile
-	L"Output file exists bun can't be read",	// ERR_outputFileUnReadable
 	L"Unable to save the project file",			// ERR_savingProjectFile
 	L"Unable to save the file",					// ERR_savingFile
 	L"Changes ignored",							// ERR_ignoreChanges
@@ -168,7 +167,6 @@ Behavior::Type Behavior::getType() const
 		case Behavior::ERR_fileUnReadable:
 		case Behavior::ERR_outputFileMissing:
 		case Behavior::ERR_noOutputFile:
-		case Behavior::ERR_outputFileUnReadable:
 		case Behavior::ERR_ignoreChanges:
 		case Behavior::ERR_readingContent:
 		case Behavior::ERR_virtualProjectRemoved:

@@ -39,8 +39,6 @@ public:
 		ERR_outputFileMissing,
 		//! Alert from the absence of output file
 		ERR_noOutputFile,
-		//! Usefull when an output file is unreadable
-		ERR_outputFileUnReadable,
 		//! Error occurs when saving the project file
 		ERR_savingProjectFile,
 		//! Error occurs when saving a file
