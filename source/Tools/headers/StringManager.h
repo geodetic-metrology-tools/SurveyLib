@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -111,8 +112,15 @@ namespace
 	//Replace a caracter, "occ", by another, "newChar", in the wild string "path"
 	inline std::wstring replace(std::wstring path, wchar_t occ, std::wstring newChar)
 	{
-		std::string s = replace(std::string(path.begin(), path.end()), occ, std::string(newChar.begin(), newChar.end()));
-		return std::wstring(s.begin(), s.end());
+		while(true)
+		{
+			std::size_t found = path.rfind(occ);
+			if(found != std::wstring::npos)
+				path.replace(path.begin() + found, path.begin() + found + 1, newChar.begin(), newChar.end());
+			else
+				break;
+		}
+		return path;
 	};
 
 	inline std::wstring toWStr(const std::string& str)
@@ -144,6 +152,7 @@ namespace
 		}
 		catch(const std::logic_error & e)
 		{
+			std::cout << e.what();
 			return false;
 		}
 		return false;
