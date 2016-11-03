@@ -212,6 +212,11 @@ class TAdjustableHelmertTransformation : public TVAdjustableObject {
 			/// Returns XZ rotation covariance
 			const TReal&			getXZCovarRot() const;
 	
+			/// Returns scale covariance element i
+			const TReal&			getScaleCovar(int i) const;
+			/// Returns covariance element i between translation and rotation
+			const TReal&			getTrRotCovar(int i) const;
+
 		//@}
 
 		/*!@name Settings */
@@ -292,6 +297,10 @@ class TAdjustableHelmertTransformation : public TVAdjustableObject {
 			*/
 			void	setXZRotationCovariance(TReal value);
 
+			/// Sets the estimated scale covaraiance after calculation in order:{ltx, lty, ltz, lrx, lry, lrz}
+			void setScaleCovariance(int idx, TReal value);
+			/// Sets the estimated rotation/translation after calculation in order:{txrx, txry, txrz, tyrx, tyry, tyrz, tzrx, tzry, tzrz}
+			void setTrRotCovariance(int idx, TReal value);
 
 			/// Sets the estimated precision after calculation 
 			void setEstimatedPrecision(int idx, TReal value);
@@ -375,12 +384,14 @@ class TAdjustableHelmertTransformation : public TVAdjustableObject {
 		void setDefaultsParams();
 
 		//Estimated precisons of transformation parametres
-		TAngle	 fEstPrecisionRotation[3];  /*!<Estimated precision of the rotation. */
-		TLength		 fEstPrecisionTranslation[3];  /*!<Estimated precision of the translation. */
-		TReal	       fEstPrecisionScale;  /*!<Estimated precision of the scale factor. */
+		TAngle fEstPrecisionRotation[3];  /*!<Estimated precision of the rotation. */
+		TLength fEstPrecisionTranslation[3];  /*!<Estimated precision of the translation. */
+		TReal fEstPrecisionScale;  /*!<Estimated precision of the scale factor. */
 
-		TReal	 fCovarianceRotation[3];  /*!<Covariance of the rotation  XY, YZ, XZ */
-     	TReal		 fCovarianceTranslation[3];  /*!<Covariance of the translation XY, YZ, XZ  */
+		TReal fCovarianceRotation[3];  /*!<Covariance of the rotation  XY, YZ, XZ */
+     	TReal fCovarianceTranslation[3];  /*!<Covariance of the translation XY, YZ, XZ  */
+		TReal fCovarianceTrRot[9];  /*!<Covariance of the translation and rotation:  order = {txrx, txry, txrz, tyrx, tyry, tyrz, tzrx, tzry, tzrz}  */
+		TReal fCovarianceScl[6];  /*!<Covariance of the translation/ rotation and scale: order = {ltx, lty, ltz, lrx, lry, lrz}   */
 };
 
 #endif //TADJUSTABLE_HELMERT_TRANSFORMATION

@@ -272,6 +272,23 @@ const TReal& TAdjustableHelmertTransformation::getXZCovarRot() const{
 }
 
 
+/// Returns scale covariance  {ltx, lty, ltz, lrx, lry, lrz}
+const TReal& TAdjustableHelmertTransformation::getScaleCovar(int i) const
+{
+	if (fCovarianceScl[i] == NO_VALf)
+		throw std::logic_error("No scale covariance assigned.");
+	return fCovarianceScl[i];
+}
+
+/// Returns covariance between translation and rotation  {txrx, txry, txrz, tyrx, tyry, tyrz, tzrx, tzry, tzrz}
+const TReal& TAdjustableHelmertTransformation::getTrRotCovar(int i) const
+{
+	if (fCovarianceTrRot[i] == NO_VALf)
+		throw std::logic_error("No translation/rotation covariance assigned.");
+	return fCovarianceTrRot[i];
+}
+
+
 void TAdjustableHelmertTransformation::setFirstUidx(int idx) {
 	if (isFixed())
 		throw std::logic_error("Trying to assign unknown index to fixed transformation.");
@@ -382,8 +399,56 @@ void	TAdjustableHelmertTransformation::setXZRotationCovariance(TReal value){
 	if (!fixedRotations[0] && !fixedRotations[2])
 		fCovarianceRotation[2] = value;
 	else
-		throw std::logic_error("LGCAdjustablePlane::setXZRotationCovariance, rotation must be variable in both X and Z.");
+		throw std::logic_error("TAdjustableHelmertTransformation::setXZRotationCovariance, rotation must be variable in both X and Z.");
 }
+
+
+/// Sets the estimated scale covaraiance after calculation {ltx, lty, ltz, lrx, lry, lrz}
+void TAdjustableHelmertTransformation::setScaleCovariance(int idx, TReal value)
+{
+	if (idx < 3)
+	{
+		if (!fixedTranslations[idx] && !fixedScale[0])
+			fCovarianceScl[idx] = value;
+		else
+			throw std::logic_error("TAdjustableHelmertTransformation::setScaleCovariance, translation and scale must be variable.");
+	}
+	else
+	{
+		if (!fixedRotations[idx-3] && !fixedScale[0])
+			fCovarianceScl[idx] = value;
+		else
+			throw std::logic_error("TAdjustableHelmertTransformation::setScaleCovariance, rotation and scale must be variable.");
+	}
+}
+/// Sets the estimated rotation/translation after calculation {txrx, txry, txrz, tyrx, tyry, tyrz, tzrx, tzry, tzrz}
+void TAdjustableHelmertTransformation::setTrRotCovariance(int idx, TReal value)
+{
+	if (idx < 3) //tx
+	{
+		if (!fixedRotations[idx] && !fixedTranslations[0])
+			fCovarianceTrRot[idx] = value;
+		else
+			throw std::logic_error("TAdjustableHelmertTransformation::setTrRotCovariance, translation in X and rotation must be variable.");
+	}
+	else if ((idx > 2) && (idx < 6)) //ty
+	{
+		if (!fixedRotations[idx - 3] && !fixedTranslations[1])
+			fCovarianceTrRot[idx] = value;
+		else
+			throw std::logic_error("TAdjustableHelmertTransformation::setTrRotCovariance, rotation in Y and rotation must be variable.");
+	}
+	else //tz
+	{
+		if (!fixedRotations[idx - 6] && !fixedTranslations[2])
+			fCovarianceTrRot[idx] = value;
+		else
+			throw std::logic_error("TAdjustableHelmertTransformation::setTrRotCovariance, rotation in Z and rotation must be variable.");
+	}
+	
+}
+
+
 
 void	TAdjustableHelmertTransformation::setEstimatedPrecision(int idx, TReal value){
 	if (uidx_scale == idx){
