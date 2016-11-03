@@ -98,7 +98,13 @@ void	TPointConverter::writeXYZandH(const TPositionVector& pt)
 	string				separator = getSeparator();
 
 	//get Coordinate as a TPositionVector
-	(*stream)<<(pt);
+	(*stream) << (pt);
+
+	if (pt.getCoordSys() == TCoordSysFactory::k2DPlusH)
+		(*stream) << separator << pt.getH();
+	else
+		stream->writeString(getCoordWidth(), "");
+
 	return;
 }
 
