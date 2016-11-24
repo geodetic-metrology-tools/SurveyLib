@@ -84,7 +84,7 @@ public:
 		/*! 
 			\see TAdjustableObject::isInitialized
 		*/
-		inline virtual bool isInitialized() const { return !isnan(fProvisionalValue);}
+		inline virtual bool isInitialized() const { return !(fProvisionalValue!=fProvisionalValue); }                              //isnan(fProvisionalValue);}  // FRK 16/11
 
 	//@}
 
