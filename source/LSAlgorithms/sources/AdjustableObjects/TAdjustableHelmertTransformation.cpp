@@ -1,5 +1,5 @@
 #include "TAdjustableHelmertTransformation.h"
-
+#include <stdexcept>
 
 TAdjustableHelmertTransformation::TAdjustableHelmertTransformation() {
 	
@@ -43,20 +43,20 @@ int TAdjustableHelmertTransformation::getTranslationUnknIndex(int d) const{
 	assert3D(d);
 	if (!fixedTranslations[d])
 		return uidx_trans[d];
-//	throw std::logic_error("Trying to get unknown index from fixed translation.);
+	throw std::logic_error("Trying to get unknown index from fixed translation.");
 }
 
 int TAdjustableHelmertTransformation::getRotationUnknIndex(int d) const{ 
 	assert3D(d);
 	if(!fixedRotations[d])
 		return uidx_rot[d];
-//	throw std::logic_error("Trying to get unknown index from fixed rotation.");
+	throw std::logic_error("Trying to get unknown index from fixed rotation.");
 }
 
 int TAdjustableHelmertTransformation::getScaleUnknIndex() const{
 	if(!fixedScale[0])
 		return uidx_scale;
-//	throw std::logic_error("Trying to get unknown index from fixed scale.");
+	throw std::logic_error("Trying to get unknown index from fixed scale.");
 }
 
 
@@ -72,7 +72,7 @@ int TAdjustableHelmertTransformation::getFirstUidx() const {
 	if (!fixedScale[0])
 		return uidx_scale;
 
-//	throw std::logic_error("Trying to get unknown index from fixed transformation.");
+	throw std::logic_error("Trying to get unknown index from fixed transformation.");
 
 }
 
@@ -87,21 +87,21 @@ int TAdjustableHelmertTransformation::getLastUidx() const {
 		if (!fixedTranslations[i])
 			return uidx_trans[i];
 
-//	throw std::logic_error("Trying to get unknown index from fixed transformation.");
+	throw std::logic_error("Trying to get unknown index from fixed transformation.");
 }
 
 const TLength& TAdjustableHelmertTransformation::getTranslationStandDev(int d) const{
 	assert3D(d);
 	if (!isnotanumber(fTransStandDev[d]))
 		return fTransStandDev[d];
-//	throw std::runtime_error("Standard deviations of the translation's component not assigned");
+	throw std::runtime_error("Standard deviations of the translation's component not assigned");
 }
 
 const TAngle& TAdjustableHelmertTransformation::getRotationStandDev(int d) const{
 	assert3D(d);
 	if (!isnotanumber(fRotStandDev[d]))
 		return fRotStandDev[d];
-//	throw std::runtime_error("Standard deviations of the rotation's component not assigned");
+	throw std::runtime_error("Standard deviations of the rotation's component not assigned");
 }
 
 TReal TAdjustableHelmertTransformation::getScaleStandDev()const{
@@ -148,7 +148,7 @@ void TAdjustableHelmertTransformation::setCorrection(int idx, TReal value) {
 		return;
 	}
 
-//	throw std::logic_error("Invalid unknown index in parameter access.");
+	throw std::logic_error("Invalid unknown index in parameter access.");
 }
 
 void TAdjustableHelmertTransformation::setParam(const TAngle& rx, const TAngle& ry, const TAngle& rz){
@@ -477,7 +477,7 @@ void	TAdjustableHelmertTransformation::setEstimatedPrecision(int idx, TReal valu
 		}
 	}
 
-//	throw std::logic_error("Invalid unknown index in parameter access.");
+	throw std::logic_error("Invalid unknown index in parameter access.");
 }
 
 
