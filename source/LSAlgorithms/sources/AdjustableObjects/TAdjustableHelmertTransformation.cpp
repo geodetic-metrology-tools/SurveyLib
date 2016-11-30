@@ -180,7 +180,7 @@ void TAdjustableHelmertTransformation::setTranslationCorrection (int idx, TLengt
 		fEstParameter.tY = fEstParameter.tY + value;
 	else if (idx == 2)
 		fEstParameter.tZ = fEstParameter.tZ + value;
-	else
+	else		
 		throw std::logic_error("Invalid unknown index in parameter access.");
 	return;
 }
