@@ -1,4 +1,5 @@
 #include <Behavior.h>
+#include <stdexcept>
 
 std::wstring Behavior::ErrorMessage[ERR_endOfTheWorld] =
 {
@@ -130,7 +131,7 @@ std::vector<Behavior> Behavior::split() const
 
 unsigned int Behavior::size() const
 {
-	return unsigned int(errors.size());
+	return (unsigned int)(errors.size());
 }
 
 // return no_Error or the first code

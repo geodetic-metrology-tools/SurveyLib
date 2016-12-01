@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
 #include <vector>
 
 #include <stdio.h>  /* defines FILENAME_MAX */
@@ -48,8 +49,8 @@ namespace
 			STATE_DELIM
 		};
 
-		size_t delimlen(strlen(" \t"));
-		size_t commentslen(strlen("%$#"));
+		size_t delimlen(std::strlen(" \t"));
+		size_t commentslen(std::strlen("%$#"));
 		vector<string> result(0);
 
 		bool inString(false);
@@ -139,7 +140,7 @@ namespace
 		try
 		{
 			// check if it's a file
-			std::ifstream file(filename, std::ios::in);
+			std::ifstream file((const char*)filename.c_str(), std::ios::in); // FRK: 17/11/2016
 			if(file.good())
 			{
 				file.close();
