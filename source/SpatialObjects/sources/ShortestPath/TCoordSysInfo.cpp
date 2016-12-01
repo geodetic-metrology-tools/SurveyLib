@@ -41,7 +41,6 @@ TCoordSysFactory::ECoordSys TCoordSysInfo::fromString (const std::string & syste
 	}
 	
 	throw std::invalid_argument("Unknown Coordinate System");
-
 }
 
 std::string TCoordSysInfo::toString (TCoordSysFactory::ECoordSys number)
@@ -51,7 +50,6 @@ std::string TCoordSysInfo::toString (TCoordSysFactory::ECoordSys number)
 		return (it->second.first);
 
 	throw std::invalid_argument("Unknown Coordinate System");
-
 }
 
 std::string TCoordSysInfo::toUserFrendlyString (TCoordSysFactory::ECoordSys number)
@@ -61,6 +59,5 @@ std::string TCoordSysInfo::toUserFrendlyString (TCoordSysFactory::ECoordSys numb
 		return (it->second.second);
 
 	throw std::invalid_argument("Unknown Coordinate System");
-
 }
 

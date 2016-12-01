@@ -1,5 +1,7 @@
-CMAKE_POLICY(SET CMP0022 NEW)
-CMAKE_POLICY(SET CMP0038 NEW)
+if(!UNIX)
+	CMAKE_POLICY(SET CMP0022 NEW)
+	CMAKE_POLICY(SET CMP0038 NEW)
+endif()
 
 # set include directories needed by this library
 include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts

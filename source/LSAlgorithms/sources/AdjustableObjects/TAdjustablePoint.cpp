@@ -55,7 +55,10 @@ fHfixed(pos.fHfixed),
 fSpatialStatus(pos.fSpatialStatus),
 fCovariance(pos.fCovariance),
 fXValueSet(pos.fXValueSet),
-fYValueSet(pos.fYValueSet)
+fYValueSet(pos.fYValueSet),
+eolcomment(pos.eolcomment),
+hdrcomment(pos.hdrcomment),
+line(pos.line)
 {
 	for (int i = 0; i < 3; i++)
 	{

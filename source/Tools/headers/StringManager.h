@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -92,6 +94,70 @@ namespace
 
 		return result;
 	}
+
+	//Replace a caracter, "occ", by another, "newChar", in the string "path"
+	inline std::string replace(std::string path, char occ, std::string newChar)
+	{
+		while (true)
+		{
+			std::size_t found = path.rfind(occ);
+			if (found != std::string::npos)
+				path.replace(path.begin() + found, path.begin() + found + 1, newChar.begin(), newChar.end());
+			else
+				break;
+		}
+		return path;
+	};
+
+	//Replace a caracter, "occ", by another, "newChar", in the wild string "path"
+	inline std::wstring replace(std::wstring path, wchar_t occ, std::wstring newChar)
+	{
+		while(true)
+		{
+			std::size_t found = path.rfind(occ);
+			if(found != std::wstring::npos)
+				path.replace(path.begin() + found, path.begin() + found + 1, newChar.begin(), newChar.end());
+			else
+				break;
+		}
+		return path;
+	};
+
+	inline std::wstring toWStr(const std::string& str)
+	{
+		return std::wstring(str.begin(), str.end());
+	}
+
+	inline std::string toStr(const std::wstring str)
+	{
+		return std::string(str.begin(), str.end());
+	}
+
+	/** Returns true if the file exist & is readable **/
+	bool exist(std::wstring const& filename)
+	{
+		try
+		{
+			// check if it's a file
+			std::ifstream file(filename, std::ios::in);
+			if(file.good())
+			{
+				file.close();
+				return true;
+			}
+			// check if it's a folder
+			//QDir folder(filename);
+			//if(folder.exists())
+			//	return true;
+		}
+		catch(const std::logic_error & e)
+		{
+			std::cout << e.what();
+			return false;
+		}
+		return false;
+	}
+
 }
 
 
