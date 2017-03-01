@@ -41,7 +41,7 @@ class TGeodeticRefFrame;
 class TModifiedLocalGeodeticRF;
 class TModifiedLocalAstronomicalRF;
 
-#include  "TAngle.h"
+#include  <TAngle.h>
 #include  "TLength.h"
 
 #include  "TCoordSysFactory.h"

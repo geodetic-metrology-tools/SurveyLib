@@ -1,4 +1,4 @@
-// TLSCalcLengthParam.h
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
 
 #ifndef SU_LENGTH_PARA
 #define SU_LENGTH_PARA
@@ -12,7 +12,7 @@
 //using namespace std;
 
 #include "TLength.h"
-#include "UEOIndices.h"
+#include <UEOIndices.h>
 #include "TALSCalcParameter.h"
 
 class TLSCalcLengthParam : public TALSCalcParameter

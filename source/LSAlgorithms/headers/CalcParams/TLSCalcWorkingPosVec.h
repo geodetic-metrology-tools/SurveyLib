@@ -1,4 +1,4 @@
-// TLSCalcWorkingPosVec.h
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
 
 #ifndef SU_LS_WORK_POSVEC
 #define SU_LS_WORK_POSVEC

@@ -1,3 +1,5 @@
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
+
 #ifndef STRING_MANAGER
 #define STRING_MANAGER
 
@@ -8,7 +10,6 @@
 #include <string>
 #include <cstring>
 #include <vector>
-
 #include <stdio.h>  /* defines FILENAME_MAX */
 #ifdef __linux__    
 	#include <unistd.h>

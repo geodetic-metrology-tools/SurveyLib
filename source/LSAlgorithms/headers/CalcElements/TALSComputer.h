@@ -1,6 +1,4 @@
-// TALSComputer.h 
-// abstract base class for a least squares computer 
-//
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
 
 #ifndef SU_VLS_COMPUTER
 #define SU_VLS_COMPUTER
@@ -20,7 +18,7 @@
 #include <Eigen/LU>
 
 #include "TSparseMatrix.h"
-#include "UEOIndices.h"
+#include <UEOIndices.h>
 #include "TLSResultsMatrices.h"
 #include "TLSInputMatrices.h"
 

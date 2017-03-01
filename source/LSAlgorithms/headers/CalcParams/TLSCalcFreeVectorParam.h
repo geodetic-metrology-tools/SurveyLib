@@ -1,4 +1,4 @@
-// TLSCalcFreeVectorParam.h
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
 
 
 #ifndef SU_FREE_VECTOR_PARA
@@ -15,7 +15,7 @@
 #include "TSpatialPoint.h"
 #include "TSpatialPosition.h"
 #include "TFreeVector.h"
-#include "UEOIndices.h"
+#include <UEOIndices.h>
 #include "TALSCalcParameter.h"
 
 class TLSCalcFreeVectorParam : public TALSCalcParameter

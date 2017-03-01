@@ -1,5 +1,4 @@
-// TLSCalcPosVectorParam.h
-
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
 
 #ifndef SU_POS_VECTOR_PARA
 #define SU_POS_VECTOR_PARA
@@ -17,7 +16,7 @@
 #include "TSpatialPoint.h"
 #include "TSpatialPosition.h"
 #include "TFreeVector.h"
-#include "UEOIndices.h"
+#include <UEOIndices.h>
 #include "TALSCalcParameter.h"
 
 class TLSCalcPosVectorParam : public TALSCalcParameter

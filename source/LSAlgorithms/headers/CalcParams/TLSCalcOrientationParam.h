@@ -1,5 +1,4 @@
-
-// TLSCalcOrientationParam.h
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
 
 
 #ifndef SU_ORIENT_PARA
@@ -14,7 +13,7 @@
 //using namespace std;
 
 #include "TRotationMatrix.h"
-#include "UEOIndices.h"
+#include <UEOIndices.h>
 #include "TALSCalcParameter.h"
 
 class TLSCalcOrientationParam : public TALSCalcParameter

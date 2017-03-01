@@ -41,7 +41,7 @@ class		TADataSet;
 class		TDataParameters;
 class		TFileParameters;
 
-#include "TAngle.h"
+#include <TAngle.h>
 #include "TLength.h"
 #include "TScalar.h"
 #include "TSpatialPosition.h"

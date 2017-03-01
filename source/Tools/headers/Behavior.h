@@ -7,6 +7,8 @@
 	It groups in a list : error codes, descripting the error/behavioral problem, and an additional information, software dependant. 
 	It provides common errors associated to common messages, available for every software using the SurveyLib. 
 	Moreover, it's used by a component of the GraphicalLibrary : The InfoStack. This component displays common widgets in a common view with the provided messages and displaying the additional one, software dependant.
+
+	Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
 */
 
 #ifndef BEHAVIOR_H

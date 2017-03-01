@@ -1,3 +1,5 @@
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
+
 #ifndef SU_TPTCONVERTER
 #define SU_TPTCONVERTER
 

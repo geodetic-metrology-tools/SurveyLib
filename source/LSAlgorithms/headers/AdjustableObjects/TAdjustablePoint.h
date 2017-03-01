@@ -1,3 +1,5 @@
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
+
 #ifndef TADJUSTABLE_POINT
 #define TADJUSTABLE_POINT
 

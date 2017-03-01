@@ -32,7 +32,7 @@
 #include <memory>
 
 #include "TAReferenceFrame.h"
-#include "TAngle.h"
+#include <TAngle.h>
 #include "TLength.h"
 #include "TPointFormat.h"
 #include "TObservationFormat.h"

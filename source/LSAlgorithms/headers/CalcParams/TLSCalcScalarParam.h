@@ -1,4 +1,6 @@
-// TLSCalcScalarParam.h
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
+
+
 //Class to store the scale parameter of the calculation
 
 #ifndef SU_SCALAR_PARA
@@ -15,7 +17,7 @@
 #include "TSpatialPoint.h"
 #include "TSpatialPosition.h"
 #include "TFreeVector.h"
-#include "UEOIndices.h"
+#include <UEOIndices.h>
 #include "TALSCalcParameter.h"
 
 class TLSCalcScalarParam : public TALSCalcParameter

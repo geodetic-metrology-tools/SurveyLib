@@ -1,8 +1,10 @@
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
+
 #ifndef SU_TLSResultsMatrices
 #define SU_TLSResultsMatrices
 
 #include "TSparseMatrix.h"
-#include "UEOIndices.h"
+#include <UEOIndices.h>
 #include "Quad.h"
 
 
@@ -104,6 +106,7 @@ public:
 		This intermediate matrix is the normal matrix, which is used to calculated the covariance matrices. 
 	*/
 	void setIntermediateMatrix(const TSparseMatrix & matrix) { fIntermediateMatrix = matrix; }
+	void setIntermediateMatrix2(const TSparseMatrix & matrix) { fIntermediateMatrix2 = matrix; }
 
 	void setSigmaZero2Limits(TReal loLimit, TReal upLimit) {
 		fSigmaZero2LowLimit =  loLimit; 
@@ -124,6 +127,7 @@ private:
 	TReal fSigmaZero2UpLimit;
 
 	TSparseMatrix fIntermediateMatrix;
+	TSparseMatrix fIntermediateMatrix2;
 };
 
 #endif

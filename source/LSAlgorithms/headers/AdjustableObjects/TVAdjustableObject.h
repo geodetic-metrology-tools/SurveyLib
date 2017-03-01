@@ -1,3 +1,5 @@
+//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
+
 #ifndef TVADJUSTABLE_OBJECT
 #define TVADJUSTABLE_OBJECT
 
