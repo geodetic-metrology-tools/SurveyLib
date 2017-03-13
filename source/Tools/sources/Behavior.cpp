@@ -95,6 +95,17 @@ bool Behavior::operator==(BehaviorCode const& code)
 	return false;
 }
 
+bool Behavior::operator!=(BehaviorCode const& code)
+{
+	if (size() == 0 && code == BehaviorCode::ERR_noError)
+		return false;
+
+	for (auto& error : errors)
+		if (error.first == code)
+			return false;
+	return true;
+}
+
 bool Behavior::operator[](BehaviorCode const& code)
 {
 	return *this == code;
@@ -139,6 +150,7 @@ Behavior::BehaviorCode Behavior::code() const
 {
 	return (size() == 0) ? ERR_noError : errors[0].first;
 }
+
 
 Behavior::Type Behavior::getType() const
 {

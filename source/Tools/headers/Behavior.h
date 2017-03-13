@@ -101,6 +101,8 @@ public:
 	bool operator==(BehaviorCode const& code);
 	//! Allows to know if the errors owns this error code. Same as ==op
 	bool operator[](BehaviorCode const& code);
+	//! Allows to know if the errors owns this error code.
+	bool operator!=(BehaviorCode const& code);
 	//! Allows to add two errors
 	Behavior& operator +=(Behavior const& err);
 	//! Retrieves the additional information (software dependant) of the first code pair
