@@ -142,7 +142,7 @@ bool TLSWeightedUnkMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResu
 }
 
 void	TLSWeightedUnkMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr,
-													TLSResultsMatrices* rm)
+	TLSResultsMatrices* rm)
 {
 	if (fError == "")
 	{
@@ -160,7 +160,7 @@ void	TLSWeightedUnkMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrice
 		const TVector & misclV = inputMtr->getMisclosureVctr();
 		TVector & solution = *rm->getSolutionVctr();
 		TVector & residuals = *rm->getResidualsVctr();
-		TSparseMatrix & ResCovarMtrx = *rm ->getResCovarMtrx();
+		TSparseMatrix & ResCovarMtrx = *rm->getResCovarMtrx();
 		TSparseMatrix & Qxx = *rm->getUnkCovarMtrx();
 		const TSparseMatrix & N2 = rm->getIntermediateMatrix();
 		TSparseMatrix N1 = B * InvPv * BT;
@@ -169,21 +169,21 @@ void	TLSWeightedUnkMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrice
 		typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
 		Eigen::FullPivLU<TMat> lu(N1);
 
-		if (! lu.isInvertible()) {
+		if (!lu.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSCombinedMtdComputer::computeResultsMtrs:\n\tsolution failed.";
+			foo << "TLSCombinedMtdComputer::calcResiduAndVarCovMatrice:\n\tsolution failed.";
 			fError += foo.str();
 			return;
 		}
 
 		TSparseMatrix S(nbObs, nbEq);
 		S = InvPv * BT * (lu.inverse());
-		residuals = - S * (A * solution + misclV);
+		residuals = -S * (A * solution + misclV);
 
 
 		//Sigma 0 a posteriri
 		sigmaZero2Aposteriori = residuals.transpose() * Pv * residuals;
-		if(nbObs != nbUnk)
+		if (nbObs != nbUnk)
 			sigmaZero2Aposteriori /= (nbObs - nbUnk);
 		else
 			fError += "Number of equations equals number of unknowns, causes zero division!";
@@ -191,15 +191,15 @@ void	TLSWeightedUnkMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrice
 		struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk);
 		rm->setSigmaZero2Limits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
 
-
 		//Residuals and unknowns covariance matrices
-		Eigen::SimplicialLDLT<TSparseMatrix> chol2( N2 );
-		TSparseMatrix AN2AT(nbEq,nbEq);
-
-		#ifdef _DEBUG
-				std::cout << "TLSCombinedCalculation::computeResultsMtrs, det(N2)=\n " << chol2.determinant() << std::endl;
-		#endif
-
+		Eigen::SimplicialLDLT<TSparseMatrix> chol(N1);
+		TSparseMatrix AtInvN1(nbUnk, nbEq); // transpose(A1)*inv(N1)
+		TSparseMatrix MP2(nbObs, nbEq);
+		AtInvN1 = A.transpose() * (lu.inverse());
+		MP2 = InvPv*BT*(lu.inverse());
+		
+		Eigen::SimplicialLDLT<TSparseMatrix> chol2(N2);
+		TSparseMatrix InvN2(nbUnk, nbUnk);
 		if(chol2.info() != Eigen::Success)
 		{
 			// cholesky did not work, try fullPiv
@@ -208,43 +208,36 @@ void	TLSWeightedUnkMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrice
 
 			if (! lu2.isInvertible()) {
 				std::ostringstream foo;
-				foo << "TLSCombinedCalculation::computeResultsMtrs:\n\tsolution failed.";
+				foo << "TLSCombinedCalculation::calcResiduAndVarCovMatrice:\n\tsolution failed.";
 				fError += foo.str();
 				return;
-			}	
-			TSparseMatrix AN2(nbEq,nbUnk);
-			AN2 = A * lu2.inverse();
-			AN2AT = AN2 * AT;
-
+			}
+			TSparseMatrix InvN2(nbUnk, nbUnk);
 			TSparseMatrix Id(nbUnk,nbUnk);
 			for (int i = 0; i<nbUnk; i++)
 				Id.insert(i,i) = 1;
-		
-			Qxx = Id*lu2.inverse();
-			rm->setUnkCovarMtrx(&Qxx);
+			InvN2 = Id*lu2.inverse();
 		}
 		else {
-			TSparseMatrix N2AT(nbUnk,nbEq);
-			N2AT = chol2.solve( AT );
-			AN2AT = A * N2AT;
-
 			TSparseMatrix Id(nbUnk,nbUnk);
 			for (int i = 0; i<nbUnk; i++)
-				Id.insert(i,i) = 1;
-		
-			Qxx = chol2.solve(Id);
-			rm->setUnkCovarMtrx(&Qxx);
+			Id.insert(i,i) = 1;
+			InvN2 = chol2.solve(Id);
 		}
-		TSparseMatrix MP(nbEq, nbEq);
-		MP = AN2AT *lu.inverse();
+
+		TSparseMatrix invN2ATInvN1(nbEq, nbEq);
+		invN2ATInvN1 = InvN2*AtInvN1;
+		Qxx = invN2ATInvN1*A*InvN2.transpose();
+		rm->setUnkCovarMtrx(&Qxx);
+
 		TSparseMatrix Id(nbEq, nbEq);
-		for (int i =0; i<nbEq; i++)
-		{
-			Id.insert(i,i)=1;
-		}
+		for (int i = 0; i<nbEq; i++)
+			Id.insert(i, i) = 1;
+		TSparseMatrix MP(nbEq, nbEq);
+		MP = -1*A*invN2ATInvN1+Id;
 
-		ResCovarMtrx = /*sigmaZero2Aposteriori* */ S * (MP * MP + Id )* B * InvPv;
+
+		ResCovarMtrx =MP2* MP * B * InvPv*BT*MP.transpose()*MP2.transpose();
 		rm->setResCovarMtrx(&ResCovarMtrx);
-		}
-
+	}
 }
