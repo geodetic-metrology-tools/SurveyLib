@@ -59,12 +59,6 @@ bool TLSCnstMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatr
 	int nbEq = im->getNbrEquations();
 	int nbCnstr = im->getNbrConstraints();
 
-#ifdef _DEBUG
-	//std::cout << "TLSCnstMtdComputer::computeResultsMtrs, A=\n " << A << std::endl;
-	//std::cout << "TLSCnstMtdComputer::computeResultsMtrs, B=\n " << B << std::endl;
-	//std::cout << "TLSCnstMtdComputer::computeResultsMtrs, Pv1=\n " <<InvPv << std::endl;
-#endif
-
 	//Intermediate matrces and vector
 	TSparseMatrix N3(nbCnstr, nbCnstr); //N3 = A2*inv(N2)*transpose(A2)
 	TSparseMatrix N2(nbUnk, nbUnk); //N2 = transpose(A1)*inv(N1)*A1
@@ -77,11 +71,6 @@ bool TLSCnstMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatr
 
 	//Inverse N1
 	Eigen::SimplicialLDLT<TSparseMatrix> chol(N1);
-
-#ifdef _DEBUG
-	std::cout << "TLSCnstMtdComputer::computeResultsMtrs, det(N1)=\n " << chol.determinant() << std::endl;
-#endif
-
 	if (chol.info() != Eigen::Success)
 	{
 		// cholesky did not work, try fullPiv
@@ -90,7 +79,7 @@ bool TLSCnstMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatr
 
 		if (!lu.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSCnstMtdComputer::computeResultsMtrs:\n\tsolution failed.";
+			foo << "Matrix not inverted.";
 			fError += foo.str();
 			return false;
 		}
@@ -117,11 +106,6 @@ bool TLSCnstMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatr
 
 	//inverse N2
 	Eigen::SimplicialLDLT<TSparseMatrix> chol2(N2);
-
-#ifdef _DEBUG
-	std::cout << "TLSCnstMtdComputer::computeResultsMtrs, det(N2)=\n " << chol2.determinant() << std::endl;
-#endif
-
 	if (chol2.info() != Eigen::Success)
 	{
 		// cholesky did not work, try fullPiv
@@ -130,7 +114,7 @@ bool TLSCnstMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatr
 
 		if (!lu2.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSCnstMtdComputer::computeResultsMtrs:\n\tsolution failed.";
+			foo << "Matrix not inverted.";
 			fError += foo.str();
 			return false;
 		}
@@ -145,11 +129,6 @@ bool TLSCnstMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatr
 
 		//inverse N3
 		Eigen::SimplicialLDLT<TSparseMatrix> chol3(N3);
-
-#ifdef _DEBUG
-		std::cout << "TLSCnstMtdComputer::computeResultsMtrs, det(N3)=\n " << chol3.determinant() << std::endl;
-#endif
-
 		if (chol3.info() != Eigen::Success)
 		{
 			// cholesky did not work, try fullPiv
@@ -158,7 +137,7 @@ bool TLSCnstMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatr
 
 			if (!lu3.isInvertible()) {
 				std::ostringstream foo;
-				foo << "TLSCnstMtdComputer::computeResultsMtrs:\n\tsolution failed.";
+				foo << "Matrix not inverted ";
 				fError += foo.str();
 				return false;
 			}
@@ -188,11 +167,6 @@ bool TLSCnstMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatr
 
 		//inverse N3
 		Eigen::SimplicialLDLT<TSparseMatrix> chol3(N3);
-
-#ifdef _DEBUG
-		std::cout << "TLSCnstMtdComputer::computeResultsMtrs, det(N3)=\n " << chol3.determinant() << std::endl;
-#endif
-
 		if (chol3.info() != Eigen::Success)
 		{
 			// cholesky did not work, try fullPiv
@@ -201,7 +175,7 @@ bool TLSCnstMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatr
 
 			if (!lu3.isInvertible()) {
 				std::ostringstream foo;
-				foo << "TLSCnstMtdComputer::computeResultsMtrs:\n\tsolution failed.";
+				foo << "Matrix not inverted";
 				fError += foo.str();
 				return false;
 			}
@@ -239,29 +213,13 @@ bool TLSCnstMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResults
 	int nbCnstr = im->getNbrConstraints();
 
 
-#ifdef _DEBUG
-	//std::cout << "TLSCnstrCalculation::computeFreeResultsMtrs, A=\n " << A << std::endl;
-	//std::cout << "TLSCnstrCalculation::computeFreeResultsMtrs, B=\n " << B << std::endl;
-	//std::cout << "TLSCnstrCalculation::computeFreeResultsMtrs, Pv1=\n " <<InvPv << std::endl;
-#endif
-
 	TSparseMatrix N2(nbUnk, nbUnk); //N2 = transpose(A1)*inv(N1)*A1
 	TVector VP(nbUnk); //VP = transpose(A1)*inv(N1)*W
-
 
 	//calculate N1 = B1*inv(Pv1)*transpose(B1)
 	const TSparseMatrix Btransposed = B.transpose();
 	TSparseMatrix N1 = B * InvPv * Btransposed;
-
-#ifdef _DEBUG
-	//std::cout << "TLSCnstrCalculation::computeFreeResultsMtrs, N1=\n " << N1 << std::endl;
-#endif
-
 	Eigen::SimplicialLDLT<TSparseMatrix> chol(N1);
-
-#ifdef _DEBUG
-	//std::cout << "TLSCnstrCalculation::computeFreeResultsMtrs, det(N1)=\n " << chol.determinant() << std::endl;
-#endif
 
 	if (chol.info() != Eigen::Success)
 	{
@@ -271,7 +229,7 @@ bool TLSCnstMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResults
 
 		if (!lu.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSCnstrCalculation::computeFreeResultsMtrs:\n\tsolution failed.";
+			foo << "Matrix not inverted.";
 			fError += foo.str();
 			return false;
 		}
@@ -324,11 +282,6 @@ bool TLSCnstMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResults
 
 	//inverse N2
 	Eigen::SimplicialLDLT<TSparseMatrix> chol2(NBig);
-
-#ifdef _DEBUG
-	//std::cout << "TLSCnstrCalculation::computeFreeResultsMtrs, det(NBig)=\n " << chol2.determinant() << std::endl;
-#endif
-
 	if (chol2.info() != Eigen::Success)
 	{
 		// cholesky did not work, try fullPiv
@@ -337,7 +290,7 @@ bool TLSCnstMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResults
 
 		if (!lu2.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSCnstrCalculation::computeFreeResultsMtrs:\n\tsolution failed.";
+			foo << "Matrix not inverted.";
 			fError += foo.str();
 			return false;
 		}
@@ -571,7 +524,7 @@ void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inpu
 
 		if (!lu.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSCnstrCalculation::calcResiduAndVarCovMatrice:\n\tsolution failed.";
+			foo << "Matrix not inverted.";
 			fError += foo.str();
 			return;
 		}
@@ -594,11 +547,6 @@ void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inpu
 		//--------------- Residual covariance matrix ---------------//
 		//inverse N2
 		Eigen::SimplicialLDLT<TSparseMatrix> chol2(N2);
-
-#ifdef _DEBUG
-		//std::cout << "TLSCombinedCalculation::computeResultsMtrs, det(N2)=\n " << chol2.determinant() << std::endl;
-#endif
-
 		if (chol2.info() != Eigen::Success)
 		{
 			// cholesky did not work, try fullPiv
@@ -607,7 +555,7 @@ void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inpu
 
 			if (!lu2.isInvertible()) {
 				std::ostringstream foo;
-				foo << "TLSCnstrCalculation::calcResiduAndVarCovMatrice:\n\tsolution failed.";
+				foo << "Matrix not inverted.";
 				fError += foo.str();
 				return;
 			}
@@ -632,7 +580,7 @@ void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inpu
 
 		if (!lu2.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSCnstrCalculation::calcResiduAndVarCovMatrice:\n\tsolution failed.";
+			foo << "Matrix not inverted.";
 			fError += foo.str();
 			return;
 		}

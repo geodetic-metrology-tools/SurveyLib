@@ -64,25 +64,13 @@ bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResul
 	if (im->getFirstDgnMtrx() == nullptr || im->getSecondDgnMtrx() == nullptr || im->getWeightInvMtrx() == nullptr)
 		throw std::runtime_error("Any of the design matrices is not initialized!");
 
-
 	const TSparseMatrix & A = *im->getFirstDgnMtrx();
 	const TSparseMatrix & W = *im->getWeightMtrx();
-
-#ifdef _DEBUG
-	//std::cout << "TLSParametricMtdComputer::computeResultsMtrs, A=\n " << *A << std::endl;
-	//std::cout << "TLSParametricMtdComputer::computeResultsMtrs, W=\n " <<*W << std::endl;
-#endif
-
 	const TVector & misclV = im->getMisclosureVctr();
 	TSparseMatrix N = A.transpose() * W * A;
 	rm->setIntermediateMatrix(N);
 
 	Eigen::SimplicialLDLT<TSparseMatrix> chol( N );
-
-#ifdef _DEBUG
-	//std::cout << "TLSParametricMtdComputer::computeResultsMtrs, det(N)=\n " << chol.determinant() << std::endl;
-#endif
-
 if(chol.info() != Eigen::Success)
 	{
 		// cholesky did not work, try fullPiv
@@ -91,7 +79,7 @@ if(chol.info() != Eigen::Success)
 
 		if (! lu.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSParametricMtdComputer::computeResultsMtrs:\n\tsolution failed.";
+			foo << "Matrix not inverted.";
 			fError += foo.str();
 			return false;
 		}
@@ -147,7 +135,7 @@ void	TLSParametricMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices
 		
 		if (! lu2.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSCombinedCalculation::computeResultsMtrs:\n\tsolution failed.";
+			foo << "Matrix not inverted.";
 			fError += foo.str();
 			return;
 		}
@@ -161,11 +149,6 @@ void	TLSParametricMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices
 
 		//--------------- Residual covariance matrix ---------------//
 		Eigen::SimplicialLDLT<TSparseMatrix> chol( N ); 
-
-		#ifdef _DEBUG
-			//std::cout << "TLSCombinedCalculation::computeResultsMtrs, det(N)=\n " << chol.determinant() << std::endl;
-		#endif
-
 		if(chol.info() != Eigen::Success)
 		{
 			// cholesky did not work, try fullPiv
@@ -174,7 +157,7 @@ void	TLSParametricMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices
 
 			if (! lu.isInvertible()) {
 				std::ostringstream foo;
-				foo << "TLSCombinedCalculation::computeResultsMtrs:\n\tsolution failed.";
+				foo << "Matrix not inverted.";
 				fError += foo.str();
 				return;
 			}

@@ -58,14 +58,6 @@ bool TLSWeightedUnkMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResu
 	int nbUnk = im->getNbrUnknowns();
 	int nbEq = im->getNbrEquations();
 
-#ifdef _DEBUG
-	//std::cout << "TLSCombinedCalculation::computeResultsMtrs, A=\n " << A << std::endl;
-	//std::cout << "TLSCombinedCalculation::computeResultsMtrs, B=\n " << B << std::endl;
-	//std::cout << "TLSCombinedCalculation::computeResultsMtrs, Pv1=\n " <<InvPv << std::endl;
-	//std::cout << "TLSCombinedCalculation::computeResultsMtrs, Px=\n " <<Px << std::endl;
-	//std::cout << "TLSCombinedCalculation::computeResultsMtrs, misclosure=\n " <<misclV << std::endl;
-#endif
-
 	//calculate N1 = B1*inv(Pv1)*transpose(B1)
 	TSparseMatrix Btransposed = B.transpose();
 	TSparseMatrix N1 = B * InvPv * Btransposed;
@@ -75,11 +67,6 @@ bool TLSWeightedUnkMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResu
 
 	TSparseMatrix N2(nbUnk, nbUnk); //N2 = transpose(A1)*inv(N1)*A1 + Px
 	TVector VP(nbUnk); //VPassage = transpose(A1)*inv(N1)*W
-
-#ifdef _DEBUG
-	std::cout << "TLSCombinedMtdComputer::computeResultsMtrs, det(N1)=\n " << chol.determinant() << std::endl;
-#endif
-
 	if(chol.info() != Eigen::Success)
 	{
 		// colesky did not work, try fullPiv
@@ -88,7 +75,7 @@ bool TLSWeightedUnkMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResu
 
 		if (! lu.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSCombinedMtdComputer::computeResultsMtrs:\n\tsolution failed.";
+			foo << "Matrix not inverted.";
 			fError += foo.str();
 			return false;
 		}
@@ -114,11 +101,6 @@ bool TLSWeightedUnkMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResu
 
 	//inverse N2
 	Eigen::SimplicialLDLT<TSparseMatrix> chol2( N2 );
-
-	#ifdef _DEBUG
-			std::cout << "TLSCombinedCalculation::computeResultsMtrs, det(N2)=\n " << chol2.determinant() << std::endl;
-	#endif
-
 	if(chol2.info() != Eigen::Success)
 	{
 		// cholesky did not work, try fullPiv
@@ -127,7 +109,7 @@ bool TLSWeightedUnkMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResu
 
 		if (! lu2.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSCombinedCalculation::computeResultsMtrs:\n\tsolution failed.";
+			foo << "Matrix not inverted.";
 			fError += foo.str();
 			return false;
 		}
@@ -171,7 +153,7 @@ void	TLSWeightedUnkMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrice
 
 		if (!lu.isInvertible()) {
 			std::ostringstream foo;
-			foo << "TLSCombinedMtdComputer::calcResiduAndVarCovMatrice:\n\tsolution failed.";
+			foo << "Matrix not inverted.";
 			fError += foo.str();
 			return;
 		}
@@ -208,7 +190,7 @@ void	TLSWeightedUnkMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrice
 
 			if (! lu2.isInvertible()) {
 				std::ostringstream foo;
-				foo << "TLSCombinedCalculation::calcResiduAndVarCovMatrice:\n\tsolution failed.";
+				foo << "Matrix not inverted.";
 				fError += foo.str();
 				return;
 			}
