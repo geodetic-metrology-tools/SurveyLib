@@ -3,6 +3,7 @@
 #ifndef TADJUSTABLE_ANGLE
 #define TADJUSTABLE_ANGLE
 
+#include <stdexcept>
 #include <TAngle.h>
 #include "TVAdjustableObject.h"
 
