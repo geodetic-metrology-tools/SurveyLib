@@ -11,7 +11,7 @@
 #include <cstring>
 #include <vector>
 #include <stdio.h>  /* defines FILENAME_MAX */
-#ifdef __linux__    
+#if defined(__linux__) || defined(__APPLE__)
 	#include <unistd.h>
     #define GetCurrentDir getcwd
 	#define slash "/"

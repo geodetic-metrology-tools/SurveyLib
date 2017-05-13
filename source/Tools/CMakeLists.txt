@@ -16,7 +16,7 @@ set(Tools_HEADERS
 add_library(Tools STATIC ${Tools_SOURCES} ${Tools_HEADERS})
 
 # Link static libraries to the current one
-target_link_libraries(Tools Tools)
+# (No libraries to link)
 
 # needed for linux compilation
 set_target_properties(Tools PROPERTIES POSITION_INDEPENDENT_CODE ON)
