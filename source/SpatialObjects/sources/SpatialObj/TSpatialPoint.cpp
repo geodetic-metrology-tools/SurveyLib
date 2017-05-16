@@ -172,7 +172,7 @@ void  TSpatialPoint::setPosition( TSpatialPosition *position )
 }
 
 
-void  TSpatialPoint::setPosition( TSpatialPosition *position, int column, bool isNull )
+void  TSpatialPoint::setPosition( TSpatialPosition *position, int /*column*/, bool /*isNull*/ )
 {	// Set the point's position
 
 	if( fPosition != 0 ) 

@@ -98,7 +98,7 @@ return false;
 //////////////////////////////////////////////////////////////////////////////////
 
 
-bool TACoordinateSystem::setAllRotations( TRotationMatrix* mat, TRotationMatrix::ERotationType , TReal &, TReal &, TReal &)
+bool TACoordinateSystem::setAllRotations( TRotationMatrix* /*mat*/, TRotationMatrix::ERotationType , TReal &, TReal &, TReal &)
 {//create a TRotationMatrix default def: return false
 	return false;
 }
@@ -123,14 +123,14 @@ struct Angles TACoordinateSystem::getAngles(const TRotationMatrix*, const TRotat
 }
 
 	
-bool TACoordinateSystem::identity(TRotationMatrix* mx)
+bool TACoordinateSystem::identity(TRotationMatrix* /*mx*/)
 {//change a rotation matrix into the identity matrix, default def: return false
 return false;
 }
 
 
 
-bool TACoordinateSystem::setElt(T3DMatrix* mx, const int, const int, const TReal)
+bool TACoordinateSystem::setElt(T3DMatrix* /*mx*/, const int, const int, const TReal)
 {//set a element into a 3D matrix
 return false;
 }

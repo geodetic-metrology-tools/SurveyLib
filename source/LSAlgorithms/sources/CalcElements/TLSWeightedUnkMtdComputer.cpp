@@ -134,7 +134,7 @@ void	TLSWeightedUnkMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrice
 		TReal sigmaZero2Aposteriori = LITERAL(0.0);
 
 		const TSparseMatrix & A = *inputMtr->getFirstDgnMtrx();
-		const TSparseMatrix & AT = A.transpose();
+		// const TSparseMatrix & AT = A.transpose();
 		const TSparseMatrix & B = *inputMtr->getSecondDgnMtrx();
 		const TSparseMatrix BT = B.transpose();
 		const TSparseMatrix & Pv = *inputMtr->getWeightMtrx();

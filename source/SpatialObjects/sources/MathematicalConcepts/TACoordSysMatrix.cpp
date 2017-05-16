@@ -8,7 +8,6 @@
 TACoordSysMatrix::TACoordSysMatrix()
 {
 	int i = 0;
-	int j = 0;
 	while (i<3)
 	{
 		int j = 0;
@@ -91,7 +90,6 @@ void	TACoordSysMatrix::setC(const int& i, const int& j, TReal value)
 bool TACoordSysMatrix::isInitialise() const
 {
 	int i = 0;
-	int j = 0;
 	while (i<3)
 	{
 		int j = 0;

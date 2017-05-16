@@ -264,7 +264,7 @@ int SpatialObjFns::descenteVert(double x, double y, double h, double deltaH, dou
 	delete localRF;
 
 	TPositionVector res = newPoint.getCoordinates(TCoordSysFactory::k2DPlusH);
-	double hres = res.getH().getMetresValue();
+	// double hres = res.getH().getMetresValue();
 
 	//if((h + deltaH>= hres - 0.000005) && (h + deltaH<= hres + 0.000005))
 	//{

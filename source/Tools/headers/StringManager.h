@@ -100,29 +100,23 @@ namespace
 	//Replace a caracter, "occ", by another, "newChar", in the string "path"
 	inline std::string replace(std::string path, char occ, std::string newChar)
 	{
-		while (true)
-		{
-			std::size_t found = path.rfind(occ);
-			if (found != std::string::npos)
-				path.replace(path.begin() + found, path.begin() + found + 1, newChar.begin(), newChar.end());
-			else
-				break;
-		}
+        size_t start_pos = 0;
+        while((start_pos = path.find(occ, start_pos)) != std::string::npos) {
+            path.replace(start_pos, 1, newChar);
+            start_pos += newChar.length(); // Advance starting position
+        }
 		return path;
 	};
 
 	//Replace a caracter, "occ", by another, "newChar", in the wild string "path"
 	inline std::wstring replace(std::wstring path, wchar_t occ, std::wstring newChar)
 	{
-		while(true)
-		{
-			std::size_t found = path.rfind(occ);
-			if(found != std::wstring::npos)
-				path.replace(path.begin() + found, path.begin() + found + 1, newChar.begin(), newChar.end());
-			else
-				break;
-		}
-		return path;
+        size_t start_pos = 0;
+        while((start_pos = path.find(occ, start_pos)) != std::string::npos) {
+            path.replace(start_pos, 1, newChar);
+            start_pos += newChar.length(); // Advance starting position
+        }
+        return path;
 	};
 
 	inline std::wstring toWStr(const std::string& str)

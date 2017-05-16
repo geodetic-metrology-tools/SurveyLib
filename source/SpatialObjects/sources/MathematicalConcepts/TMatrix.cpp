@@ -263,8 +263,8 @@ TColumnVector TMatrix::ldltSolve(const TColumnVector& B)
 		if (res.rows() == 0)
 		{
 			throw std::runtime_error("LDLT decomposition failed");
-			result.setDimension(0);
-			return result;
+			// result.setDimension(0);
+			// return result;
 		}
         for(int i=0; i!=numCols(); ++i)
             result(i) = res(i,0);
