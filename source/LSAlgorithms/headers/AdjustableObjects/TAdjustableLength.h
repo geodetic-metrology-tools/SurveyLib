@@ -111,6 +111,8 @@ public:
 
 	//@}
 
+        bool operator==(const TAdjustableLength &other) const;
+
 private:
 	TLength					fProvisionalValue; /*!< length provisional value. */
 	TLength					fCorrection; /*!< length correction after calculation.  */
