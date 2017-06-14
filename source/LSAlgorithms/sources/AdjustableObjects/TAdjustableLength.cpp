@@ -43,3 +43,14 @@ void TAdjustableLength::reInitialise(){
    fEstimatedPrecision.setMetresValue(0.0);
    fCorrection.setMetresValue(0.0);
 }
+
+bool TAdjustableLength::operator==(const TAdjustableLength &other) const {
+    return
+        fProvisionalValue == other.fProvisionalValue &&
+        fCorrection == other.fCorrection &&
+        fEstimatedValue == other.fEstimatedValue &&
+        fEstimatedPrecision == other.fEstimatedPrecision &&
+        ifFixed == other.ifFixed &&
+        uidx == other.uidx &&
+        fName == other.fName;
+}
