@@ -590,9 +590,9 @@ TAStreamFormatter  &TAStreamFormatter::operator>>(TSpatialPoint&)
 /////////////////////////////////////////////////////////////////////////////////
 //Output  spatial object Operator
 /////////////////////////////////////////////////////////////////////////////////
+
 TAStreamFormatter  &TAStreamFormatter::operator<<( const TAngle &angle )
 {//output an angle to the text stream	
-
 	// pass on the request to the angles filter Strategy
 	fAngFilter->output(*this, angle);
 	return *this;
@@ -1307,10 +1307,11 @@ TAStreamFormatter &hex(TAStreamFormatter &s)
 
 TAStreamFormatter &endl(TAStreamFormatter &s)
 {
+	s.countLineAndHandleComments();
+
 	s.getIOStream().put('\n');
 	s.getIOStream().flush();
 	return s;
-
 }
 
 
@@ -1469,8 +1470,6 @@ void TAStreamFormatter::setGapBetweenData()
 
 void	TAStreamFormatter::writeString(const int width, const string data)
 {
-	//(*fStream)<<" ";
-
 	this->width(width);
 	(*this) << right << data;
 	(*this) << getSeparator();
@@ -1501,3 +1500,28 @@ void	TAStreamFormatter::writeInteger(const int width, const int data)
 }
 
 
+void TAStreamFormatter::countLineAndHandleComments()
+{
+	countLine++;
+
+	while(comments->size() > 0)
+	{
+		// If insertion needed
+		if(comments->begin()->first == countLine)
+		{
+			// write comment
+			*this << "\n" << comments->begin()->second;
+
+			// delete comment from the map
+			comments->erase(comments->begin());
+
+			countLine++;
+		}
+		else break;
+	}
+}
+
+void TAStreamFormatter::setComments(std::map<int, std::string>& comms)
+{
+	comments = &comms;
+}

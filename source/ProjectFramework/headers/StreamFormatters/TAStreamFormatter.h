@@ -395,6 +395,12 @@ public:
 	//! Returns the current space extended for any number of extra TABs without affecting the current depth level.
 	inline std::string getCurrSpaceExtended(int ext) const{return (fNofSpaces + ext)*TAB;};
 
+	/// Increments line counter & add a comment if required
+	void countLineAndHandleComments();
+
+	/// Set comments from project
+	void setComments(std::map<int, std::string>&);
+
 protected:
 	static TAngleFilter *getAngleFilter( TAngle::EUnits );
 	static TLengthFilter *getLengthFilter( TLength::EUnits );
@@ -429,8 +435,12 @@ private:
 	bool									fLineGap;
 	//Used for formating, number of 'TAB' before start of the line.
 	unsigned int							fNofSpaces;
+	
+	// Line counter used when writing for inserting comments
+	int countLine{0};
 
-	//ClassDef(TAStreamFormatter, 1)
+	// pointer to the comments project's map
+	std::map<int, std::string>* comments;
 };
 
 /*@}*/
