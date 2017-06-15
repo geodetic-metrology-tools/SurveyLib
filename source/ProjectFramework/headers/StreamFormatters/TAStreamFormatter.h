@@ -440,7 +440,7 @@ private:
 	int countLine{0};
 
 	// pointer to the comments project's map
-	std::map<int, std::string>* comments;
+	std::map<int, std::string>* comments{nullptr};
 };
 
 /*@}*/

@@ -75,7 +75,7 @@ TAStreamFormatter::TAStreamFormatter(TDataParameters& dp)
 
 	//INSURE
 	init();
-
+	
 	fName = "defaultName";
 	fFStream=0;
 
@@ -89,6 +89,7 @@ TAStreamFormatter::TAStreamFormatter(TDataParameters& dp)
 	fLineGap = true;
 	fNonSpaceSeparator = "";
 	fSeparator = "";
+	comments = nullptr;
 }
 
 
@@ -109,6 +110,7 @@ TAStreamFormatter::TAStreamFormatter(const string& input, TDataParameters& dp)
 	fLineGap = true;
 	fNonSpaceSeparator = "";
 	fSeparator = "";
+	comments = nullptr;
 }
 
 
@@ -153,6 +155,7 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TFileParameters& fp, TDataParam
 	fLineGap = true;
 	fNonSpaceSeparator = "";
 	fSeparator = "";
+	comments = nullptr;
 }
 
 
@@ -194,6 +197,7 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds)
 	fLineGap = true;
 	fNonSpaceSeparator = "";
 	fSeparator = "";
+	comments = nullptr;
 }
 
 
@@ -238,6 +242,7 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds, TPointFormat& pf
 	fLineGap = true;
 	fNonSpaceSeparator = "";
 	fSeparator = "";
+	comments = nullptr;
 }
 
 
@@ -284,6 +289,7 @@ TAStreamFormatter::TAStreamFormatter(const EIOType io, TADataSet& ds, const TPoi
 	fLineGap = true;
 	fNonSpaceSeparator = "";
 	fSeparator = "";
+	comments = nullptr;
 }
 
 
@@ -1502,6 +1508,9 @@ void	TAStreamFormatter::writeInteger(const int width, const int data)
 
 void TAStreamFormatter::countLineAndHandleComments()
 {
+	if(!comments) 
+		return;
+
 	countLine++;
 
 	while(comments->size() > 0)
