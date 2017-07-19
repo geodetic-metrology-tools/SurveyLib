@@ -32,7 +32,7 @@
 #include <memory>
 
 #include "TAReferenceFrame.h"
-#include <TAngle.h>
+#include "TAngle.h"
 #include "TLength.h"
 #include "TPointFormat.h"
 #include "TObservationFormat.h"
@@ -144,37 +144,10 @@ public:
 		/// get the point name's width 
 		int										getPointNameWidth() const;
 
-        std::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
+        TLocalSystemOrigin* getLocalSystemOrigin() const;
 			
 
 		string getRFName() const;
-	//@}
-	/*!@output stream format access methods*/
-	//@{
-/*
-		virtual void setResultsFileFormat(TAStreamFormatter::ETextFormat resFileFrmt);
-
-
-		virtual TAStreamFormatter::ETextFormat getResultsFileFormat();
-
-
-		virtual void setPunchFileFormat(TAStreamFormatter::ETextFormat puncFileFrmt);
-
-
-		virtual TAStreamFormatter::ETextFormat getPunchFileFormat();
-
-
-		virtual void setPunchSeparator(string);
-
-
-		virtual void setResultsSeparator(string);
-
-
-		virtual string getResultsSeparator();
-
-
-		virtual string getPunchSeparator();
-		*/
 	//@}
 
 private:
@@ -182,7 +155,7 @@ private:
 	mutable TAReferenceFrame*					fRefFrame;
     TRefSystemFactory::ERefFrame			    fRefFrameEnum;
 	ECoordUnit									fCoordUnit;
-    std::shared_ptr<TLocalSystemOrigin>			fLSO;
+    TLocalSystemOrigin*             			fLSO;
 	TCoordSysFactory::ECoordSys					fCoordSys;
 
 	TAngle::EUnits								fAngleUnits;

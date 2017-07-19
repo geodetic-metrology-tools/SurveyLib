@@ -33,14 +33,8 @@
 //////////////////////////////////////////////////////////////////////
 TDataParameters::TDataParameters()
 {// default constructor
-	/*
-	punchSeparator = ";";
-	resultsSeparator = ";";
-	resultsFileFormat = TAStreamFormatter::kColumnFormat;
-	punchFileFormat = TAStreamFormatter::kColumnFormat;
-	*/
 	fRefFrame = nullptr;
-	//fLSO.origin = 0;
+	fLSO = nullptr;
     fRefFrameEnum = TRefSystemFactory::kNotInGraph;
 	fCoordUnit = TDataParameters::kNotDefined;
 	fCoordSys = TCoordSysFactory::k3DCartesian;
@@ -56,7 +50,7 @@ TDataParameters::TDataParameters(const TDataParameters& original )
 : fRefFrame(original.fRefFrame)
 , fRefFrameEnum(original.fRefFrameEnum)
 , fCoordUnit(original.fCoordUnit)
-, fLSO(original.fLSO.get() ? new TLocalSystemOrigin( *original.fLSO.get()) : 0)
+, fLSO(original.fLSO? new TLocalSystemOrigin( *original.fLSO) : 0)
 , fCoordSys(original.fCoordSys)
 , fAngleUnits(original.fAngleUnits)
 , fLengthUnits(original.fLengthUnits)
@@ -102,9 +96,6 @@ bool  TDataParameters::operator==(const TDataParameters& rhs )
 {//Equivalence operator
 	return	fRefFrameEnum == rhs.getRefFrameEnumerator() && 
 		fCoordUnit == rhs.fCoordUnit &&
-		//getLocalSystemOrigin().gisement == rhs.getLocalSystemOrigin().gisement &&
-		//getLocalSystemOrigin().slope == rhs.getLocalSystemOrigin().slope &&
-		//getLocalSystemOrigin().origin == rhs.getLocalSystemOrigin().origin &&
         fLSO == rhs.fLSO &&
 		fCoordSys == rhs.getCoordinateSystem() &&
 		fAngleUnits == rhs.getAngleUnits() && 
@@ -168,7 +159,7 @@ bool  TDataParameters::setRefFrame(TRefSystemFactory::ERefFrame rf)
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLGSphere &&
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGGRS80 &&
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGSphere)
-			fLSO.reset();
+			fLSO = nullptr;
 		
 		//set unit to [m] for non geodetic reference frame
 		if(	fRefFrameEnum != TRefSystemFactory::kCGRF && fRefFrameEnum != TRefSystemFactory::kWGS84 && 
@@ -368,7 +359,7 @@ bool TDataParameters::setLocalSystemOrigin(const TLocalSystemOrigin & LSO)
 		&& fRefFrame == 0)
 	{
 		//fLSO = LSO;
-        fLSO.reset(new TLocalSystemOrigin(LSO));
+        fLSO = new TLocalSystemOrigin(LSO);
 		return true;
 	}
 	return false;
@@ -378,7 +369,7 @@ bool TDataParameters::setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> l
     if(TRefFrameInfo::isLocalRefFrame(fRefFrameEnum)
 		&& fRefFrame == 0)
 	{
-        fLSO = lso;
+        fLSO = lso.get();
         return true;
     }
     return false;
@@ -390,137 +381,7 @@ bool TDataParameters::setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> l
 //////////////////////////////////////////////////////////////////////
 TAReferenceFrame*  TDataParameters::getRefFrame() const
 {//! get the reference system identifier
-    return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fLSO.get());;
-//		switch (fRefFrameEnum)
-//		{
-//			case TDataParameters::kCCS:
-//				//CERN XYZ (kCCS)
-//				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-//				break;
-//
-//			case TDataParameters::kCernXYHg00Machine:
-//				//CERN XYHg LHC (kCernXYHg00Machine)
-//				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCernXYHg00Machine));
-//				break;
-//
-//			case TDataParameters::kCernXYHg85Machine:
-//				//CERN XYHg LHC (kCernXYHg85Machine)
-//				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCernXYHg85Machine));
-//				break;
-//
-//			case TDataParameters::kCERNXYHsSphereSPS:
-//				//CERN XYHs SPS (kCERNXYHsSphereSPS)
-//				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCERNXYHsSphereSPS));
-//				break;
-//
-//			case TDataParameters::kCernXYHg85:
-//				//CERN XYHg topo (kCernXYHg85Topo) kCernXYHg85
-//				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCernXYHg85));
-//				break;
-//
-//			case TDataParameters::kCernX0Y0He:
-//				//CERN X0Y0He MapTransfert (kCernX0Y0He)
-//				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCernX0Y0He));
-//				break;
-//
-///*			case TDataParameters::kMLA1985Machine:
-//				//CERN Local Astronomical (kCG1985Machine)
-//				{
-//					if (fRefFrame == 0)
-//					{
-//						if(fLSO.origin != 0)
-//						{
-//							TSpatialPosition* originPointer = fLSO.origin;
-//							TSpatialPosition origin (*originPointer);
-//							TAngle gis = fLSO.gisement;
-//							TAngle slope = fLSO.slope;
-//
-//							TFreeVector falseOrigin (0,0,0, TCoordSysFactory::k3DCartesian);
-//
-//							TModifiedLocalAstronomicalRF* MLA = new TModifiedLocalAstronomicalRF("mla", TRefSystemFactory::kCG1985Machine, origin,falseOrigin, gis, slope);
-//							fRefFrame = MLA;
-//						}
-//						else
-//						{
-//							fRefFrame =  0;
-//						}
-//					}
-//					
-//				}
-//				break;*/
-//
-//			case TDataParameters::kMLA2000Machine:
-//				//CERN Local Astronomical (kCG2000Machine)
-//				{
-//					fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(fLSO, TRefSystemFactory::kCG2000Machine));
-//				}
-//				break;
-//
-//			case TDataParameters::kMLA1985Machine:
-//				//CERN Local Astronomical (kCG1985Machine)
-//				{
-//					fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(fLSO, TRefSystemFactory::kCG1985Machine));
-//				}
-//				break;
-//
-//
-//			case TDataParameters::kROMA40:
-//				//ROMA40
-//				{
-//				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kROMA40));
-//				}
-//				break;
-//
-//			case TDataParameters::kWGS84:
-//				//WGS84
-//				{
-//				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84));
-//				}
-//				break;
-//
-//			case TDataParameters::kITRF97:
-//				//CGRF
-//				{
-//				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kITRF97));
-//				}
-//				break;
-//
-//			case TDataParameters::kCGRF:
-//				//CGRF
-//				{
-//				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
-//				}
-//				break;
-//
-//			case TDataParameters::kCernLGatP0:
-//				//LGp0
-//				{
-//				fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kLGp0));
-//				}
-//				break;
-//
-//			case kLocalRefFrame:
-//				{
-//					fRefFrame = (TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame());
-//				}
-//				break;
-//
-//			case TDataParameters::kUndefined:
-//				{
-//					fRefFrame =   0;
-//				}
-//				break;
-//
-//			default:
-//				//Default Value CERN XYZ (kCCS)
-//				{
-//					fRefFrame =   0;
-//				}
-//				break;
-//		}
-//	
-//	
-//	return fRefFrame;
+    return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fLSO);;
 }
 
 
@@ -573,52 +434,10 @@ int  TDataParameters::getPointNameWidth() const
 }
 
 
-std::shared_ptr<TLocalSystemOrigin> TDataParameters::getLocalSystemOrigin() const
+TLocalSystemOrigin* TDataParameters::getLocalSystemOrigin() const
 {
 	return fLSO;
 }
-/*
-void TDataParameters::setResultsFileFormat(TAStreamFormatter::ETextFormat resFileFrmt)
-{
-	resultsFileFormat = resFileFrmt;
-}
-
-
-TAStreamFormatter::ETextFormat TDataParameters::getResultsFileFormat()
-{
-	return resultsFileFormat;
-}
-
-void TDataParameters::setPunchFileFormat(TAStreamFormatter::ETextFormat puncFileFrmt)
-{
-	punchFileFormat = puncFileFrmt;
-}
-
-TAStreamFormatter::ETextFormat TDataParameters::getPunchFileFormat()
-{
-	return punchFileFormat;
-}
-
-void TDataParameters::setPunchSeparator(string seperator)
-{
-	punchSeparator = seperator;
-}
-
-void TDataParameters::setResultsSeparator(string seperator)
-{
-	resultsSeparator = seperator;
-}
-
-string TDataParameters::getResultsSeparator()
-{
-	return resultsSeparator;
-}
-
-string TDataParameters::getPunchSeparator()
-{
-	return punchSeparator;
-}
-*/
 
 /////////////////////////////////////////////////////////////////////////////
 //end

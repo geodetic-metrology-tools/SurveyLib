@@ -167,7 +167,7 @@ public:
 		int										getPointNameWidth() const;
 
 		/// get a pointer to the origin of the local system used
-        std::shared_ptr<TLocalSystemOrigin> getLocalSystemOrigin() const;
+        TLocalSystemOrigin* getLocalSystemOrigin() const;
 	//@}
 	
 		
