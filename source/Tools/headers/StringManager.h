@@ -51,7 +51,7 @@ namespace
 		};
 
 		size_t delimlen(std::strlen(" \t"));
-		size_t commentslen(std::strlen("%$#"));
+		size_t commentslen(std::strlen("%$"));
 		vector<string> result(0);
 
 		bool inString(false);
@@ -85,7 +85,7 @@ namespace
 			}
 			if (state == STATE_TOKEN || state == STATE_DELIM) {
 				// check for comment
-				if (isDelim(str[end], "%$#", (int)commentslen)) {
+				if (isDelim(str[end], "%$", (int)commentslen)) {
 					start = end;
 					end = length;
 					result.push_back(std::move(str.substr(start, end - start)));
