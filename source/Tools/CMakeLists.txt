@@ -8,6 +8,7 @@ set(Tools_SOURCES
 
 # Create a variable containing all .h files:
 set(Tools_HEADERS 
+    headers/TStatusObject.h
 	headers/Behavior.h
 	headers/StringManager.h
 )
