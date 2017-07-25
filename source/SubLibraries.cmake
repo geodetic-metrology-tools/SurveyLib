@@ -1,10 +1,10 @@
 # This variables are referenced in other projects, too!
 SET(SURVEYLIB_LIBRARIES
+	Tools
 	LSAlgorithms
 	ProjectFramework
 	SpatialObjects
 	SpatialObjDLL
-	Tools
 )
 
 SET(SPATIAL_LIBRARIES 
