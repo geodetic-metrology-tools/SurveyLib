@@ -79,8 +79,8 @@ namespace
 				}
 				// this is the beginning of a keyword, keep it as an extra token
 				if (str[end] == '*') {
-					result.push_back("*");
-					start = end + 1;
+                    result.push_back(std::move(str.substr(start, end - start + 1)));
+                    start = end + 1;
 				}
 			}
 			if (state == STATE_TOKEN || state == STATE_DELIM) {
