@@ -544,7 +544,11 @@ void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inpu
 		rm->setSigmaZero2Limits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
 
 
-		//--------------- Residual covariance matrix ---------------//
+		//--------------- Residual and unknown covariance matrix ---------------//
+		TSparseMatrix Id(nbUnk, nbUnk);
+		for (int i = 0; i<nbUnk; i++)
+			Id.insert(i, i) = 1;
+
 		//inverse N2
 		Eigen::SimplicialLDLT<TSparseMatrix> chol2(N2);
 		if (chol2.info() != Eigen::Success)
@@ -564,31 +568,17 @@ void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inpu
 			SAQ = pS * A * (lu2.inverse());
 			ResCovarMtrx = pS * B * InvPv - SAQ * AT * pS.transpose();
 
+			Qxx = Id*lu2.inverse();
 		}
 		else {
 			TSparseMatrix QAT(nbUnk, nbEq);
 			QAT = chol2.solve(AT);
 			ResCovarMtrx = pS * B * InvPv - pS * A * QAT * pS.transpose();
 
+			Qxx = chol2.solve(Id);
+
 		}
 		rm->setResCovarMtrx(&ResCovarMtrx);
-
-
-		//--------------- Unknowns covariance matrix ---------------//
-		typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-		Eigen::FullPivLU<TMat> lu2(N2);
-
-		if (!lu2.isInvertible()) {
-			std::ostringstream foo;
-			foo << "Matrix not inverted.";
-			fError += foo.str();
-			return;
-		}
-
-		TSparseMatrix Id(nbUnk, nbUnk);
-		for (int i = 0; i<nbUnk; i++)
-			Id.insert(i, i) = 1;
-		Qxx = Id*lu2.inverse();
 		rm->setUnkCovarMtrx(&Qxx);
 	}
 }
