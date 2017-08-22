@@ -494,6 +494,7 @@ void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inpu
 		int nbUnk = inputMtr->getNbrUnknowns();
 		int nbObs = inputMtr->getNbrObservations();
 		int nbEq = inputMtr->getNbrEquations();
+		int nbCnstr = inputMtr->getNbrConstraints();
 		TReal sigmaZero2Aposteriori = LITERAL(0.0);
 
 		if (inputMtr->getFirstDgnMtrx() == nullptr || inputMtr->getSecondDgnMtrx() == nullptr || inputMtr->getWeightMtrx() == nullptr || inputMtr->getWeightInvMtrx() == nullptr ||
@@ -514,6 +515,7 @@ void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inpu
 		TSparseMatrix & Qxx = *rm->getUnkCovarMtrx();
 		const TSparseMatrix & N2 = rm->getIntermediateMatrix();
 		TSparseMatrix N1 = B * InvPv * BT;
+		const TSparseMatrix& A2 = *inputMtr->getCnstrFirstDgnMtrx();//A2
 
 
 
@@ -545,10 +547,6 @@ void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inpu
 
 
 		//--------------- Residual and unknown covariance matrix ---------------//
-		TSparseMatrix Id(nbUnk, nbUnk);
-		for (int i = 0; i<nbUnk; i++)
-			Id.insert(i, i) = 1;
-
 		//inverse N2
 		Eigen::SimplicialLDLT<TSparseMatrix> chol2(N2);
 		if (chol2.info() != Eigen::Success)
@@ -567,18 +565,48 @@ void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inpu
 			TSparseMatrix SAQ(nbObs, nbUnk);
 			SAQ = pS * A * (lu2.inverse());
 			ResCovarMtrx = pS * B * InvPv - SAQ * AT * pS.transpose();
-
-			Qxx = Id*lu2.inverse();
 		}
 		else {
 			TSparseMatrix QAT(nbUnk, nbEq);
 			QAT = chol2.solve(AT);
 			ResCovarMtrx = pS * B * InvPv - pS * A * QAT * pS.transpose();
 
-			Qxx = chol2.solve(Id);
-
 		}
 		rm->setResCovarMtrx(&ResCovarMtrx);
+
+		//--------------- unknown covariance matrix ---------------//
+		TSparseMatrix Id(nbUnk + nbCnstr, nbUnk + nbCnstr);
+		for (int i = 0; i<(nbUnk + nbCnstr); i++)
+			Id.insert(i, i) = 1;
+
+		// construct NBig = (N2, A2t
+		//                   A2, 0  )
+		TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
+		std::vector<TTriplet> coeffs;
+		coeffs.reserve(N2.nonZeros() + 2 * A2.nonZeros());
+		// Fill in the N part
+		for (int k = 0; k<N2.outerSize(); ++k)
+		{
+			for (TSparseMatrix::InnerIterator it(N2, k); it; ++it)
+			{
+				coeffs.push_back(TTriplet(it.row(), it.col(), it.value()));
+			}
+		}
+		// Fill the A2 and A2T
+		for (int k = 0; k<A2.outerSize(); ++k)
+		{
+			for (TSparseMatrix::InnerIterator it(A2, k); it; ++it)
+			{
+				coeffs.push_back(TTriplet(it.row() + N2.rows(), it.col(), it.value())); //A2
+				coeffs.push_back(TTriplet(it.col(), it.row() + N2.cols(), it.value())); // A2T
+			}
+		}
+		NBig.setFromTriplets(coeffs.begin(), coeffs.end());
+
+		//inverse NBig
+		Qxx = TSparseUtils::inverse(NBig, fError);
 		rm->setUnkCovarMtrx(&Qxx);
+
+		
 	}
 }
