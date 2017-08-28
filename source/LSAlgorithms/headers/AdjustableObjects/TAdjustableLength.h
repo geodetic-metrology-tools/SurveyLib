@@ -87,6 +87,9 @@ public:
 	/*!@name Settings */
 	//@{
 
+        /*! Set the fixed state of the length */
+        void setFixed(bool fixed) { ifFixed = fixed; }
+
 		/*! 
 			See \ref TVAdjustableObject::setFirstUidx
 

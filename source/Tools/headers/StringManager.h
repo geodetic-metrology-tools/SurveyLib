@@ -51,7 +51,7 @@ namespace
 		};
 
 		size_t delimlen(std::strlen(" \t"));
-		size_t commentslen(std::strlen("%$#"));
+		size_t commentslen(std::strlen("%$"));
 		vector<string> result(0);
 
 		bool inString(false);
@@ -79,13 +79,13 @@ namespace
 				}
 				// this is the beginning of a keyword, keep it as an extra token
 				if (str[end] == '*') {
-					result.push_back("*");
-					start = end + 1;
+                    result.push_back(std::move(str.substr(start, end - start + 1)));
+                    start = end + 1;
 				}
 			}
 			if (state == STATE_TOKEN || state == STATE_DELIM) {
 				// check for comment
-				if (isDelim(str[end], "%$#", (int)commentslen)) {
+				if (isDelim(str[end], "%$", (int)commentslen)) {
 					start = end;
 					end = length;
 					result.push_back(std::move(str.substr(start, end - start)));

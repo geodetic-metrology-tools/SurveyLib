@@ -88,6 +88,9 @@ public:
 	/*!@name Settings */
 	//@{
 
+        /*! Set the fixed state of the angle */
+        void setFixed(bool fixed) { ifFixed = fixed; }
+
 		/*! 
 			See \ref TVAdjustableObject::setFirstUidx
 

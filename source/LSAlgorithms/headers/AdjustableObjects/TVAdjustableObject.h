@@ -5,6 +5,7 @@
 
 #include <string>
 #include "Quad.h"
+#include "TStatusObject.h"
 
 #ifndef isnotanumber
 #define isnotanumber(x) ((x)!=(x))
@@ -17,7 +18,7 @@
 	\ingroup AdjustableObjects
 	\brief A pure virtual class which is an interface for all the adjustable objects.
 */
-class TVAdjustableObject {
+class TVAdjustableObject : public TStatusObject {
 	public:
 
 		/// This virtual base class destructor does nothing since this is an interface.
