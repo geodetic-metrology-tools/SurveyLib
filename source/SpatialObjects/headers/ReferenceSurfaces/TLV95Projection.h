@@ -1,3 +1,8 @@
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
+
 #ifndef SURVEYLIB_TLV95_PROJECTION_fbf774f0_9fc2_4c4c_ae17_4c2a804516b8
 #define SURVEYLIB_TLV95_PROJECTION_fbf774f0_9fc2_4c4c_ae17_4c2a804516b8
 

@@ -1,13 +1,14 @@
-//Copyright 2017 CERN EN/ACE/SU.  All rights reserved.
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
 
 #ifndef SU_TLS_CNST_MTD_COMPUTER
 #define SU_TLS_CNST_MTD_COMPUTER
 
-
 #if _MSC_VER >= 1000
 #pragma once
 #pragma warning(disable:4786)
-
 #endif // _MSC_VER >= 1000
 
 /////////////////////////////////////////////////////

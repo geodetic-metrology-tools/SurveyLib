@@ -1,11 +1,14 @@
 // TObservationFormat.h
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
+
 /*!
 Class used by a text stream to store and get all necessary formatting information
 for observations
 
 Patterns:
-
-Copyright 2000 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

@@ -1,10 +1,12 @@
 //  TAModifiedLocalAstronomicalRF.h
-//
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
 /** Patterns:
     An abstract base classe for the modified local astronomical reference frame
 	and local astronomical reference frame
    
-    Copyright 2000 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

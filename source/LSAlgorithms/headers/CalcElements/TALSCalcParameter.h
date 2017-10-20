@@ -1,16 +1,16 @@
-// TALSCalcParameter.h
-
-/*!
-	Definition of an abstract class for ls calc parameters:
-	- defines the parameters status with enumerator ELSStatus and structure LSParaStatus
-	- defines the name used as identifier for parameters
-
-	Copyright 2003 CERN EST/SU. All rights reserved
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
 #ifndef SU_ABS_PARA
 #define SU_ABS_PARA
 
+/*!
+Definition of an abstract class for ls calc parameters:
+- defines the parameters status with enumerator ELSStatus and structure LSParaStatus
+- defines the name used as identifier for parameters
+*/
 #if _MSC_VER >= 1000
 #pragma once
 #endif // _MSC_VER >= 1000

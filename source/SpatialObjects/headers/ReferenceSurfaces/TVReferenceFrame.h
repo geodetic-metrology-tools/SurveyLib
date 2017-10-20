@@ -1,18 +1,15 @@
-///////////////////////
 // TVReferenceFrame.h
-///////////////////////
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
 /*!	 
 	definition of the global members for concrete reference frames 
 	
 	Patterns:
 	An Abstract STATE of a Spatial Position
-   
-	Copyright 2000 CERN EST/SU. All rights reserved.
+
 */
-
-  
-////////////////////////////////////////////////////////////////////
-
 
 
 #ifndef SU_V_REFERENCE_FRAME

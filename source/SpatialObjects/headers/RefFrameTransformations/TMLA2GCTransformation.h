@@ -1,13 +1,14 @@
 //  TMLA2GCTransformation.h
-//
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
 /*! The direct transformation from a modified local astronomical reference frame to a
     geodetic reference frame.
 	
     The coordinates of the origin, and the laplace correction at the
 	origin of the reference frames define the transformation.
 
-   
-    Copyright 2000 CERN EST/SU. All rights reserved.
 */
 
 

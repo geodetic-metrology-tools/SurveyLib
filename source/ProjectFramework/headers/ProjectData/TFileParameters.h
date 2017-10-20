@@ -1,15 +1,14 @@
 /// TFileParameters.h
-//
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
 /*! A class defining the parameters of a data file:
         filename, 
 		file type,
   		file format, 
   		data precision
 */
-// Patterns:
-//
-// 
-// Copyright 2000-2002 CERN EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 
