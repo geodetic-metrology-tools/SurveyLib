@@ -1,5 +1,9 @@
 // TMillimetresFilter.h: 
 /*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
+/*
 Concrete Class of the TLengthFilter PABC.
 Handles the IO of an TLength object lengths in a text stream with 
 millimetre units. 
@@ -7,8 +11,6 @@ millimetre units.
 Patterns:
 This class is a Singleton.
 Works as a Strategy of a TTStreamFormatter object. 
-
-Copyright 2002, CERN, EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

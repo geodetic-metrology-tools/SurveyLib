@@ -1,4 +1,8 @@
 // TAngleFilter.h: 
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
 /*!
 Purely Abstract Base Class (Interface) for an TAngleFilter.
 Handles the IO of an TAngle object for all defined
@@ -7,8 +11,6 @@ each angular unit.
  
 Patterns:
 Works as a Strategy of a TQtStreamFormatter object. 
-
-Copyright 2002, CERN, EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

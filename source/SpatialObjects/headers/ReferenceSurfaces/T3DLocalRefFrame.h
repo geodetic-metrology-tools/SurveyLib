@@ -1,12 +1,14 @@
 // T3DLocalRefFrame.h
-///////////////////////////////////
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
 
 /*!
 	class for a local 3D cartesian reference frame
 
 	Pattern:
 
-	Copyright 2002 CERN EST/SU. All rights reserved. 
 */
 
 #ifndef SU_3D_LOCAL_REFFRAME

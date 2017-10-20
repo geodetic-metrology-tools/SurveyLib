@@ -1,12 +1,14 @@
 //	TDouble.h 
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
 /*!
 The TDouble class represents a TReal numerical value in TReal precision.
 
  
 Patterns:
 
- 
-Copyright 1999-2007, Mark Jones, CERN TS/SU. All rights reserved.
 */
 /////////////////////////////////////////////////////////
 

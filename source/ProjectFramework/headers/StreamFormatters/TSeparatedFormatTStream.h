@@ -1,13 +1,13 @@
 // TSeparatedFormatTStream.h
-//
-//
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
 /*! 
  Concrete class defining a separated stream text stream formatter
 
  Patterns:
  A concrete decorator class of a TAStreamFormatter.
- 
- Copyright 1999-2008 M.Jones, CERN, EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

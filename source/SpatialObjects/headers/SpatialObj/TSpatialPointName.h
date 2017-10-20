@@ -1,4 +1,8 @@
 // TSpatialPointName.h
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
 /*! 
 Breaks the name tag down into three components, a name, a point, and a class.
 The name represents the points name.
@@ -6,8 +10,6 @@ the point allows us to distinguish closely related points which otherwise
 have the same name.
 The class represents the type of spatial point, or the element on which it
 is placed.
-
-Copyright 1999,2000, CERN, EST/SU. All rights reserved.
 */
 /////////////////////////////////////////////////////////////////////////
 

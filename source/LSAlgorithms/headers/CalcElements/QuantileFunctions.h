@@ -1,3 +1,8 @@
+/*
+© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
+
 #ifndef QUANTILEFUNCTIONS_D422D74B_C822_4fb7_AB8F_CBAC3EC93DE5
 #define QUANTILEFUNCTIONS_D422D74B_C822_4fb7_AB8F_CBAC3EC93DE5
 
