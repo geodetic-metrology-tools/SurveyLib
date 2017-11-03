@@ -10,6 +10,7 @@ include_directories(${CMAKE_SOURCE_DIR}
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
+					${SURVEYLIB_ROOT}/source/Tools/headers/
 )
 
 set(ALGO_HEADERS
