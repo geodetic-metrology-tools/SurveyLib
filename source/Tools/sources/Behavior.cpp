@@ -31,101 +31,31 @@ std::wstring Behavior::message(Behavior::BehaviorCode i)
 	return ErrorMessage[i-1];
 }
 
-Behavior::Behavior(){}
-	
-Behavior::Behavior(Behavior const& err)
-{ 
-	*this = err; 
-}
-	
-Behavior::Behavior(BehaviorCode err, std::wstring add)
-{ 
-	errors.push_back(std::make_pair(err, add)); 
-}
-
-Behavior::~Behavior() {}
-
-Behavior& Behavior::operator=(Behavior const& err)
-{
-	errors.clear();
-	for(auto& error : err.errors)
-		errors.push_back(error);
-	return *this;
-}
-
-Behavior::operator bool() 
-{ 
-	bool ret = true;
-	for(size_t i = 0; i < errors.size();)
-		if(errors[i].first == Behavior::BehaviorCode::ERR_noError)
-			errors.erase(errors.begin() + i);
-		else 
-		{
-			ret = false;
-			i++;
-		}
-	return ret;
-}
-
 Behavior Behavior::extract(BehaviorCode const& code)
 {
 	Behavior extractedError;
-
-	for(size_t i = 0; i < errors.size();)
-		if(errors[i].first == code)
-		{
-			extractedError = Behavior(errors[i].first, errors[i].second);
-			errors.erase(errors.begin() + i);
-			return extractedError;
-		}
-		else
-			i++;
+	const auto& pos = errors.find(code);
+	if (pos != errors.cend())
+	{
+		extractedError = Behavior(pos->first, pos->second);
+		errors.erase(pos);
+	}
 
 	return extractedError;
 }
 
-bool Behavior::operator==(BehaviorCode const& code)
+bool Behavior::operator==(BehaviorCode const& code) const
 {
 	if(size() == 0 && code == BehaviorCode::ERR_noError)
 		return true;
 
-	for(auto& error : errors)
-		if(error.first == code)
-			return true;
-	return false;
-}
-
-bool Behavior::operator!=(BehaviorCode const& code)
-{
-	if (size() == 0 && code == BehaviorCode::ERR_noError)
-		return false;
-
-	for (auto& error : errors)
-		if (error.first == code)
-			return false;
-	return true;
-}
-
-bool Behavior::operator[](BehaviorCode const& code)
-{
-	return *this == code;
-}
-	
-Behavior& Behavior::operator +=(Behavior const& err)
-{
-	for(auto& error : err.errors)
-		// Filter : only adds real errors
-		if(error.first != Behavior::BehaviorCode::ERR_noError)
-			errors.push_back(std::make_pair(error.first,error.second));
-	return *this;
+	return errors.find(code) != errors.cend();
 }
 
 std::wstring Behavior::additionalInfo(BehaviorCode const& code) const
 {
-	for(auto& err : errors)
-		if(err.first == code)
-			return err.second;
-	return L"";
+	const auto& pos = errors.find(code);
+	return pos == errors.cend() ? L"" : pos->second;
 }
 
 // split the vector of codes into a list of single Errors
@@ -133,24 +63,12 @@ std::vector<Behavior> Behavior::split() const
 {
 	std::vector<Behavior> errorList;
 
-	for(auto& err : errors)
+	for(const auto& err : errors)
 		if(err.first != ERR_noError)
 			errorList.push_back(Behavior(err.first, err.second));
 
 	return errorList;
 }
-
-unsigned int Behavior::size() const
-{
-	return (unsigned int)(errors.size());
-}
-
-// return no_Error or the first code
-Behavior::BehaviorCode Behavior::code() const
-{
-	return (size() == 0) ? ERR_noError : errors[0].first;
-}
-
 
 Behavior::Type Behavior::getType() const
 {

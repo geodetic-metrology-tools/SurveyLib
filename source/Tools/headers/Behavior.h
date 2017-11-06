@@ -17,10 +17,10 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #define BEHAVIOR_H
 
 #include <string>
+#include <unordered_map>
 #include <vector>
-#include <utility>
 
-class Behavior 
+class Behavior
 {
 public:
 
@@ -85,46 +85,52 @@ public:
 	//! Message table declaration
 	static std::wstring ErrorMessage[ERR_endOfTheWorld];
 	//! Returns message to the associated code
-	static std::wstring message(Behavior::BehaviorCode);
+	static std::wstring message(BehaviorCode);
 
 	//! Default ctor
-	Behavior();
-	//! Copy ctor
-	Behavior(Behavior const& err);
+	Behavior() {}
+
 	//! Param ctor. The most used, taking a code an potential additional information
-	Behavior(BehaviorCode err, std::wstring add = L"");
-	//! dtor
-	~Behavior();
-	//! Copy operator
-	Behavior& operator=(Behavior const& err);
+	Behavior(BehaviorCode err, std::wstring add = L"") { errors.emplace(err, add); }
+
 	//! Returns true when no error exists, and delete noError codes at the same time.
-	operator bool();
+	operator bool() { return errors.size() == errors.count(BehaviorCode::ERR_noError); }
+
 	//! Allows to know if the errors owns this error code. Same as []op
-	bool operator==(BehaviorCode const& code);
+	bool operator==(BehaviorCode const& code) const;
+
 	//! Allows to know if the errors owns this error code. Same as ==op
-	bool operator[](BehaviorCode const& code);
+	bool operator[](BehaviorCode const& code) const { return *this == code; }
+
 	//! Allows to know if the errors owns this error code.
-	bool operator!=(BehaviorCode const& code);
+	bool operator!=(BehaviorCode const& code) const { return !(*this == code); }
+
 	//! Allows to add two errors
-	Behavior& operator +=(Behavior const& err);
+	Behavior& operator+=(Behavior const& err) { errors.insert(err.errors.cbegin(), err.errors.cend()); return *this; }
+
 	//! Retrieves the additional information (software dependant) of the first code pair
 	std::wstring additionalInfo(BehaviorCode const& code) const;
+
 	//! Retrieves a vector of errors with unique codes. Might be empty
 	std::vector<Behavior> split() const;
+
 	//! Retrieves a unique error from *this, by removing the code from *this. 
 	//  If the code doesn't belong to this, it returns an empty error.
 	Behavior extract(BehaviorCode const& code);
+
 	//! Returns the numbers of codes include ERR_noError
-	unsigned int size() const;
+	size_t size() const { return errors.size(); }
+
 	//! Retrieves the code of the first error of the table, else ERR_noError
-	BehaviorCode code() const;
+	BehaviorCode code() const { return errors.empty() ? ERR_noError : errors.cbegin()->first; }
+
 	//! Retrieves the type of the error, associated to the BehaviorCode
 	Type getType() const;
 
 private:
 
 	//! pairs of codes and additional information
-	std::vector<std::pair<BehaviorCode, std::wstring>> errors;
+	std::unordered_multimap<BehaviorCode, std::wstring> errors;
 };
 
 #endif // BEHAVIOR_H
