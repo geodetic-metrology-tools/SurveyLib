@@ -1,6 +1,7 @@
 #include <TRefFrameInfo.h>
 
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
 
 #include <sstream>
 #include <stdexcept>
@@ -27,15 +28,15 @@ namespace tut
         set_test_name("Iterating over the all registered ERefFrame values");
 
 		TRefFrameInfo::RefFrameSet set = TRefFrameInfo::getRefFrameSet();
-		ensure_equals(set.count(TRefSystemFactory::kITRF97),4);
-		ensure_equals(set.count(TRefSystemFactory::kCCS),0);
+		ensure_equals(set.count(TRefSystemFactory::kITRF97),1);
+		ensure_equals(set.count(TRefSystemFactory::kCCS),1);
+		ensure_equals(set.size(), 42);
 		// Example
         std::stringstream out;
 		for(TRefFrameInfo::RefFrameSet::const_iterator it = set.begin(); it!=set.end(); ++it)
         {
 			out << *it << std::endl;
         }
-        //std::cout << out.str() << std::endl;
 	}
 
 	template<>
@@ -111,15 +112,7 @@ namespace tut
     void object::test<10>()
     {
         set_test_name("An exception in case of conversion from invalid number");
-		try
-		{
-            TRefFrameInfo::fromNumber(-1);
-			ensure("Should have thrown",false);
-		}
-		catch (const std::invalid_argument & e)
-		{
-			std::cout << e.what() << std::endl;
-		}
+		ensure_THROW(TRefFrameInfo::fromNumber(-1), std::invalid_argument);
 	}
 
 	template<>
@@ -127,15 +120,7 @@ namespace tut
     void object::test<11>()
     {
         set_test_name("An exception when getting a description for invalid number");
-		try
-		{
-			TRefFrameInfo::getName(-1);
-			ensure("Expected exception!",false);
-		}
-		catch (const std::invalid_argument & e)
-		{
-			 std::cout << e.what() << std::endl;
-		}
+		ensure_THROW(TRefFrameInfo::getName(-1), std::invalid_argument);
 	}
 
 	template<>

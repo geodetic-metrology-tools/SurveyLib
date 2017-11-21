@@ -36,9 +36,6 @@ namespace tut
 
         //TLambert93Transformation trans(true);
         //ensure("Transform returns true", trans.transform(position));
-
-		//std::cout << "X: " << position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue() << std::endl;
-		//std::cout << "Y: " << position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue() << std::endl;
 			
 
         ensure_equals("Lambert 93 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1082722.205), static_cast<TReal>(0.001));
@@ -72,12 +69,6 @@ namespace tut
 
 		ensure("Transform returns true", 
 			position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93)));
-
-		//std::cout << "PHI deg: " << position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getDegreesValue() << std::endl;
-		//std::cout << "PHI min: " << position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getMinutesValue() << std::endl;
-		//std::cout << "PHI sec: " << position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getSecondsValue() << std::endl;
-
-		//std::cout << "LAM: " << position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue() << std::endl;
 																																		
         ensure_equals("ETRF93 PHI", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue(), static_cast<TReal>(0.872664626), static_cast<TReal>(1e-4));
         ensure_equals("ETRF93 LAM", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue(), static_cast<TReal>(0.145512099), static_cast<TReal>(1e-4)); 

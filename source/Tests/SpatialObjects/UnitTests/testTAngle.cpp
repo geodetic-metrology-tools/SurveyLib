@@ -26,9 +26,6 @@ namespace tut
         set_test_name("Problematic static initialisation fiasco discovered in TAngle");
         ensure_equals("anonymous namespace", test_value, TReal(0.01745329251994329577), TReal(1e-6));
         ensure_equals("function call", DEG2RAD, TReal(0.01745329251994329577), TReal(1e-6));
-        //std::cout << std::endl;
-        //std::cout << test_value << std::endl;        
-        //std::cout << DEG2RAD  << std::endl;
     }
 
     template<>

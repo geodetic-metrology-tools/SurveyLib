@@ -225,7 +225,6 @@ IF(USE_SWISSTOPO)
 	set(SpatialObject_SOURCES 
 		${SpatialObject_SOURCES}
 		sources/RefFrameTransformations/TLV03Transformation.cpp
-		sources/RefFrameTransformations/TLV03TransformationStub.cpp
 		sources/RefFrameTransformations/TLV95Transformation.cpp
 	)
 	set(SpatialObject_HEADERS 

@@ -73,16 +73,6 @@ namespace tut
 
         TMatrix prod = A*B;
 
-        /*std::cout << std::endl;
-        for(int i=0; i!=prod.numRows(); ++i)
-        {
-            for(int j=0; j!=prod.numCols(); ++j)
-            {
-                std::cout << "C(" << i << "," << j << ")=" << prod(i,j) << ";";
-            }
-            std::cout << std::endl;
-        }*/
-
         for(int i=0; i!=prod.numRows(); ++i)
             for(int j=0; j!=prod.numCols(); ++j)
             {
@@ -115,10 +105,6 @@ namespace tut
         expected(2) = -210;
 
         TColumnVector res = A*v;
-
-        //std::cout << std::endl;
-        //for(int i=0; i!=3 ; ++i)
-            //std::cout << "############" << res(i) << std::endl;
 
         for(int i=0; i!=3 ; ++i)
         {
@@ -198,16 +184,6 @@ namespace tut
         
         ensure_not("Singular matrix inversion returned true", A.invert());
     }
-
-        /*std::cout << std::endl;
-        for(int i=0; i!=prod.numRows(); ++i)
-        {
-            for(int j=0; j!=prod.numCols(); ++j)
-            {
-                std::cout << "C(" << i << "," << j << ")=" << prod(i,j) << ";";
-            }
-            std::cout << std::endl;
-        }*/
 
     template<>
     template<>
@@ -453,29 +429,17 @@ namespace tut
         expected(0,0)=5; expected(0,1)=0; expected(0,2)=0;
         expected(1,0)=0; expected(1,1)=5; expected(1,2)=0;
         expected(2,0)=0; expected(2,1)=0; expected(2,2)=5;
-
-       /* std::cout << std::endl;
+		
+		ensure(bo);
         for(int i=0; i!=A.numRows(); ++i)
-        {
+		{
             for(int j=0; j!=A.numCols(); ++j)
             {
-                std::cout << "C(" << i << "," << j << ")=" << A(i,j) << ";";
+                std::stringstream msg;
+                msg << "Value mismatch at (" << i << "," << j << ")";
+                ensure_equals(msg.str(), A(i,j), expected(i,j), 1e-7);
             }
-            std::cout << std::endl;
-        }*/
-
-        if( bo == true)
-        {
-            for(int i=0; i!=A.numRows(); ++i)
-                for(int j=0; j!=A.numCols(); ++j)
-                {
-                    std::stringstream msg;
-                    msg << "Value mismatch at (" << i << "," << j << ")";
-                    ensure_equals(msg.str(), A(i,j), expected(i,j), 1e-7);
-                }
         }
-        else
-            std::cout<<"Init faild"<<std::endl;
 
     }
 
@@ -525,15 +489,6 @@ namespace tut
         expected(1,0)=0; expected(1,1)=0; expected(1,2)=0;
         expected(2,0)=0; expected(2,1)=0; expected(2,2)=0;
 
-       /* std::cout << std::endl;
-        for(int i=0; i!=A.numRows(); ++i)
-        {
-            for(int j=0; j!=A.numCols(); ++j)
-            {
-                std::cout << "C(" << i << "," << j << ")=" << A(i,j) << ";";
-            }
-            std::cout << std::endl;
-        }*/
         for(int i=0; i!=A.numRows(); ++i)
             for(int j=0; j!=A.numCols(); ++j)
             {
@@ -636,8 +591,6 @@ namespace tut
 		// use new function
 		TVector newres(n);
 		TSparseUtils::multABATasDiag(newres, A, P);
-std::cout << "\n" << ref <<"\n\n";
-std::cout << newres<<"\n\n";
 
 		// compare result vectors
 		for (int i = 0; i < n; i++)

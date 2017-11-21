@@ -58,4 +58,4 @@ SET(USE_SWISSTOPO true)
 
 INCLUDE("${CMAKE_SOURCE_DIR}/SourceSurveyLib.cmake")
 
-ADD_SUBDIRECTORY(Tests/SpatialObjects/UnitTests)
+ADD_SUBDIRECTORY(Tests)
