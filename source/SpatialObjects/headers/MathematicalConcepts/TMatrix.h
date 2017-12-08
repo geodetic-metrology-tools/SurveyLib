@@ -1,6 +1,6 @@
 // TMatrix.h
 /*
-© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*! Class for a matrix of doubles.
@@ -13,12 +13,9 @@ Designed to be easiliy usable with matrix functions of the NagC math library
 #ifndef SU_TMatrix
 #define SU_TMatrix
 
+#include <list>
+#include <string>
 
-#if _MSC_VER >= 1000
-#pragma once
-#endif // _MSC_VER >= 1000
-
-#include	<list>
 class  TColumnVector;
 class  TDouble;
 class TMatrixImpl;
@@ -160,7 +157,7 @@ public:
 
 private:
 	TMatrixImpl * fImpl;
-	std::string			fError; /*!< errors generated from nagc functions */
+	std::string fError; /*!< errors generated from nagc functions */
 };
 
 #endif // SU_TMatrix

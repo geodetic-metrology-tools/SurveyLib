@@ -7,7 +7,7 @@ namespace TrafoTestPoints {
 
 	typedef const std::array<const string, 196> TTestPoints;
 	
-	static TTestPoints LHC_CHpts = {
+	static const TTestPoints LHC_CHpts = {
 		"MQ_11R6_E	2569.94427	10312.41071	2363.13438",
 		"MQ_11R6_S	2572.76261	10311.12025	2363.09339",
 		"MQ_12R6_E	2619.73029	10289.19099	2362.40969",
@@ -206,7 +206,7 @@ namespace TrafoTestPoints {
 		"MQ_11L1_S	2602.52412	2882.48149	2353.61686"
 	};
 	
-	static TTestPoints _swisstopo_transformation_LV95 = {
+	static const TTestPoints _swisstopo_transformation_LV95 = {
 		"MQ_11R6_E	1127431.875	2497955.503	368.466LN95LV",
 		"MQ_11R6_S	1127429.201	2497957.071	368.424LN95LV",
 		"MQ_12R6_E	1127384.291	2497982.955	367.716LN95LV",
@@ -405,7 +405,7 @@ namespace TrafoTestPoints {
 		"MQ_11L1_S	1121328.06	2493718.785	353.705LN95LV"
 	};
 
-	static TTestPoints _swisstopo_transformation_LV03 = {
+	static const TTestPoints _swisstopo_transformation_LV03 = {
 		"MQ_11R6_E	127431.704	497956.084	368.466LN95MI",
 		"MQ_11R6_S	127429.03	497957.652	368.424LN95MI",
 		"MQ_12R6_E	127384.119	497983.538	367.716LN95MI",
@@ -604,7 +604,7 @@ namespace TrafoTestPoints {
 		"MQ_11L1_S	121327.914	493719.483	353.705LN95MI"
 	};
 
-	static TTestPoints _circe_CC46_transformation = {
+	static const TTestPoints _circe_CC46_transformation = {
 		"MQ_11R6_E    1939907.557    5236982.384    368.724",
 		"MQ_11R6_S    1939909.272    5236979.803    368.682",
 		"MQ_12R6_E    1939937.625    5236936.418    367.974",
@@ -803,7 +803,7 @@ namespace TrafoTestPoints {
 		"MQ_11L1_S    1936019.775    5230651.939    353.959"
 	};
 
-	static TTestPoints _circe_Lambert93_transformation = {
+	static const TTestPoints _circe_Lambert93_transformation = {
 		"MQ_11R6_E     939698.159    6581465.553    368.724",
 		"MQ_11R6_S     939699.873    6581462.974    368.682",
 		"MQ_12R6_E     939728.216    6581419.637    367.974",

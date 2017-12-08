@@ -1,3 +1,5 @@
+#ifdef _WIN32
+
 #include <TLV03Transformation.h>
 #include <TRefFrameInfo.h>
 
@@ -198,3 +200,5 @@ namespace tut
 
 
 }
+
+#endif
