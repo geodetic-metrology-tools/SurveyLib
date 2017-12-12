@@ -66,7 +66,7 @@ namespace tut
 	// 
 	void createUnitAxes100(const TSpatialPosition& base, 
 						   TPositionVector& x100, TPositionVector& y100, TPositionVector& z100,
-						   bool isSpherical, TAGeoidModel* geoid = 0)
+						   bool isSpherical)
 	{
 		TPositionVector basev = (isSpherical)?
 								base.getCoordinates(TCoordSysFactory::kGeodeticSphere):

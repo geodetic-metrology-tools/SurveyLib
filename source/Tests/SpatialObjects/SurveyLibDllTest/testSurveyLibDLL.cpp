@@ -48,9 +48,8 @@ namespace tut
 		double x = 0.0;
 		double y = 0.0;
 		double z = 0.0;
-		char * geoid = "CG2000";
 
-		returnData = transformToMLA (2180.15185, 2701.74391, 2359.87975, &x, &y, &z, "CG2000");
+		transformToMLA (2180.15185, 2701.74391, 2359.87975, &x, &y, &z, "CG2000");
 
 		// TODO fix this test
 		tut::skip("Fix this test: returned values are wrong (see comments in code file).");

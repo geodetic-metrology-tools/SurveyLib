@@ -53,8 +53,11 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${STAGING_DIRECTORY})
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${STAGING_DIRECTORY})
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${STAGING_DIRECTORY})
 
-#Enable swisstopo transformations when compiling surveylib on its own.
-SET(USE_SWISSTOPO true)
+# Enable swisstopo transformations when compiling surveylib on its own.
+# Only for Windows as SwissTopo needs a DLL not available on the other platforms
+if(WIN32)
+	SET(USE_SWISSTOPO true)
+endif()
 
 INCLUDE("${CMAKE_SOURCE_DIR}/SourceSurveyLib.cmake")
 

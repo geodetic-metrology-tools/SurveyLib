@@ -24,13 +24,13 @@ namespace
 
 typedef std::map<std::string, TSpatialPosition> TPointsMap;
 //TPointsMap readPoints(const std::string & path, TRefSystemFactory::ERefFrame frame)
-TPointsMap readPoints(TrafoTestPoints::TTestPoints& refpt, TRefSystemFactory::ERefFrame frame)
+TPointsMap readPoints(const TrafoTestPoints::TTestPoints& refpt, TRefSystemFactory::ERefFrame frame)
 {
 	std::stringstream log;
 	TPointsMap result;
 	
-	for (auto& line = refpt.begin(); line != refpt.end(); line++) {
-		std::stringstream indata(*line);
+	for (const auto& line : refpt) {
+		std::stringstream indata(line);
 		std::string pointName;
 		double xCoord, yCoord, zCoord;
 		indata >> pointName >> xCoord >> yCoord >> zCoord;
@@ -78,7 +78,9 @@ namespace tut
 	void object::test<1>()
 	{
 		set_test_name("Test of LV95 [CCS->LV95]");
-
+#ifndef _WIN32
+        skip();
+#else
 		/*
 		*
 		*Read original data in CCS coordinate system
@@ -127,6 +129,7 @@ namespace tut
 				ensure("Missing point",false);
 			}
 		}
+#endif
 	}
 
 	template<>
@@ -134,7 +137,9 @@ namespace tut
 	void object::test<2>()
 	{
 		set_test_name("Test of LV95 [LV95 ->CCS]");
-
+#ifndef _WIN32
+        skip();
+#else
 		/*
 		*
 		*Read original data in LV95 coordinate system
@@ -184,6 +189,7 @@ namespace tut
 				ensure("Missing point",false);
 			}
 		}
+#endif
 	}
 
 	template<>
@@ -191,6 +197,9 @@ namespace tut
 	void object::test<3>()
 	{
 		set_test_name("Test of LV03 [CCS->LV03; LV03 ->CCS]");
+#ifndef _WIN32
+        skip();
+#else
 		// TODO fix LV03 transormation
 		tut::skip("Fix LV03 transormation: it currently dosn't work because the call to the reframe library is not correctly done.");
 
@@ -240,6 +249,7 @@ namespace tut
 				ensure("Missing point",false);
 			}
 		}
+#endif
 	}
 	template<>
 	template<>
@@ -285,9 +295,9 @@ namespace tut
 		*
 		*/
 		
-		TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::_circe_CC46_transformation;
-		for (auto& line = refpt.begin(); line != refpt.end(); line++) {
-			std::stringstream indataRGF93CC46(*line);
+		const TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::_circe_CC46_transformation;
+		for (const auto& line : refpt) {
+			std::stringstream indataRGF93CC46(line);
 			std::string pointName;
 
 			double xCoordRGF93CC46, yCoordRGF93CC46;
@@ -346,9 +356,9 @@ namespace tut
 		*
 		*/
 
-		TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::_circe_Lambert93_transformation;
-		for (auto& line = refpt.begin(); line != refpt.end(); line++) {
-			std::stringstream indataLambert93(*line);
+		const TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::_circe_Lambert93_transformation;
+		for (auto& line : refpt) {
+			std::stringstream indataLambert93(line);
 			std::string pointName;
 			double xCoordLambert93, yCoordLambert93;
 			indataLambert93 >> pointName >> xCoordLambert93 >> yCoordLambert93;

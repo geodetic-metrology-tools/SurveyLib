@@ -13,7 +13,7 @@ namespace tut
 {
     struct test_exceptions{};
     typedef test_group<test_exceptions> factory;
-	factory test_group("Test for proper handling of exceptions");
+	factory testCernGridGeoid("Test for proper handling of exceptions");
     typedef factory::object object;
 
     template<>
