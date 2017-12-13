@@ -35,6 +35,7 @@ TDataParameters::TDataParameters()
 {// default constructor
 	fRefFrame = nullptr;
 	fLSO = nullptr;
+	fOriginFile = "";
     fRefFrameEnum = TRefSystemFactory::kNotInGraph;
 	fCoordUnit = TDataParameters::kNotDefined;
 	fCoordSys = TCoordSysFactory::k3DCartesian;
@@ -51,6 +52,7 @@ TDataParameters::TDataParameters(const TDataParameters& original )
 , fRefFrameEnum(original.fRefFrameEnum)
 , fCoordUnit(original.fCoordUnit)
 , fLSO(original.fLSO? new TLocalSystemOrigin( *original.fLSO) : 0)
+, fOriginFile(original.fOriginFile)
 , fCoordSys(original.fCoordSys)
 , fAngleUnits(original.fAngleUnits)
 , fLengthUnits(original.fLengthUnits)
@@ -82,7 +84,8 @@ void TDataParameters::swap(TDataParameters & other) throw()
     std::swap(fRefFrame,other.fRefFrame);
     std::swap(fRefFrameEnum,other.fRefFrameEnum);
     std::swap(fCoordUnit,other.fCoordUnit);
-    std::swap(fLSO,other.fLSO);
+	std::swap(fLSO, other.fLSO);
+	std::swap(fOriginFile, other.fOriginFile);
     std::swap(fCoordSys,other.fCoordSys);
     std::swap(fAngleUnits,other.fAngleUnits);
     std::swap(fLengthUnits,other.fLengthUnits);
@@ -159,7 +162,10 @@ bool  TDataParameters::setRefFrame(TRefSystemFactory::ERefFrame rf)
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kMLGSphere &&
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGGRS80 &&
 			fRefFrameEnum != TRefSystemFactory::ERefFrame::kLGSphere)
+		{
 			fLSO = nullptr;
+			fOriginFile = "";
+		}
 		
 		//set unit to [m] for non geodetic reference frame
 		if(	fRefFrameEnum != TRefSystemFactory::kCGRF && fRefFrameEnum != TRefSystemFactory::kWGS84 && 
@@ -375,6 +381,11 @@ bool TDataParameters::setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> l
     return false;
 }
 
+void TDataParameters::setOriginFile(const std::string &f)
+{
+	fOriginFile = f;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 //get Functions
@@ -437,6 +448,12 @@ int  TDataParameters::getPointNameWidth() const
 TLocalSystemOrigin* TDataParameters::getLocalSystemOrigin() const
 {
 	return fLSO;
+}
+
+
+const string& TDataParameters::getOriginFile() const
+{
+	return fOriginFile;
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -15,7 +15,8 @@ class TLocalSystemOrigin
 public:
 	//@*@
 	TLocalSystemOrigin(const TSpatialPosition & origin, const TAngle & gisement, const TAngle & slope, const std::string & name="ORIGIN");
-    bool operator==(const TLocalSystemOrigin & rhs) const;
+	bool operator==(const TLocalSystemOrigin & rhs) const;
+	bool operator!=(const TLocalSystemOrigin & rhs) const { return !operator==(rhs); }
     
 	//@*@
 	TSpatialPosition origin() const {return fOrigin;}

@@ -116,7 +116,8 @@ public:
 
         bool	setLocalSystemOrigin(const TLocalSystemOrigin &);
         bool    setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> lso);
-	
+		void	setOriginFile(const std::string &);
+
 
 		/// get the reference system identifier
 		TAReferenceFrame*	getRefFrame() const;
@@ -145,7 +146,8 @@ public:
 		/// get the point name's width 
 		int										getPointNameWidth() const;
 
-        TLocalSystemOrigin* getLocalSystemOrigin() const;
+		TLocalSystemOrigin* getLocalSystemOrigin() const;
+		const string& getOriginFile() const;
 			
 
 		string getRFName() const;
@@ -157,6 +159,7 @@ private:
     TRefSystemFactory::ERefFrame			    fRefFrameEnum;
 	ECoordUnit									fCoordUnit;
     TLocalSystemOrigin*             			fLSO;
+	string										fOriginFile;
 	TCoordSysFactory::ECoordSys					fCoordSys;
 
 	TAngle::EUnits								fAngleUnits;
