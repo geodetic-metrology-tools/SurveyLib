@@ -17,7 +17,25 @@
 ///Member Functions for vector
 ////////////////////////////////////////////////////////////////
 	
-	TAngle TGeodeticCoordSys::getPhiEllipsoid(const TPositionVector* vec) const
+int TGeodeticCoordSys::precisionNeeded(TAngle::EUnits unit)
+{
+	switch (unit)
+	{
+	case TAngle::EUnits::kRadians:
+		return 8;
+	case TAngle::EUnits::kGons:
+		return 5;
+	case TAngle::EUnits::k100MicroGons:
+		return -1;
+	case TAngle::EUnits::kDMS:
+		return 2;
+	case TAngle::EUnits::kCCs:
+		return 1;
+	}
+	return 0;
+}
+
+TAngle TGeodeticCoordSys::getPhiEllipsoid(const TPositionVector* vec) const
 	{//get the Phi coordinate of a position vector
 		TAngle retVal;
 		retVal.setRadiansValue(this->TACoordinateSystem::getX(vec, 0));

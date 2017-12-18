@@ -51,7 +51,8 @@ public:
 	enum ELengthPrecision {kMetre, k100Millimetres, k10Millimetres, kMillimetre, k100Micrometres, k10Micrometres, kMicrometre, k100Nanometres};
 
 	/*!AnglePrecision*/
-	enum EAnglePrecision {kGons, k100Milligons, k10Milligons, kMilligons, k100Microgons, k10Microgons, kMicrogon, k100Nanogons};
+	// here we need more precision for geodetic angles
+	enum EAnglePrecision {kGons, k100Milligons, k10Milligons, kMilligons, k100Microgons, k10Microgons, kMicrogon, k100Nanogons, k10Nanogons, kNanogons, k100Picogons, k10Picogons, kPicogons};
 	//@}
 
 

@@ -81,17 +81,12 @@ public:
 	TAngle();
 	/*! Explicit constructor taking an angle value in radians */
     explicit  TAngle(TReal, EUnits = kRadians);
-	//TAngle(TReal);
-	/*! Destructor */
-	virtual	~TAngle();
-	/*! Copy contructor */
-	TAngle(const TAngle&);
 	//@}
 
 
 	/*!@name static member functions */
 	//@{
-	/*! Defines the angle Pi */ 
+	/*! Defines the angle Pi */
     static const TAngle pi() { return TAngle(PI); }
 	/*! Defines the angle 2xPi */
     static const TAngle twoPi() { return TAngle(TWOPI); }
@@ -189,7 +184,7 @@ private:
 	/*! Enumeration indicating the sign of an angle value */
 	enum			ENumberSign {kNegative=-1, kZero, kPositive}; 
 
-    static TReal seuil() { return LITERAL(0.00000000001); }
+    static constexpr TReal seuil() { return LITERAL(0.00000000001); }
 
 	/*! normalise the angle value to lie between -2Pi and +2Pi */
 	void normaliseAngle();
