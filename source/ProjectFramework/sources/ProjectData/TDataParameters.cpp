@@ -18,6 +18,7 @@
 #include  "TDataParameters.h"
 #include  "TAReferenceFrame.h"
 #include  "TRefFrameInfo.h"
+#include  "TGeodeticCoordSys.h"
 #include  "TGeodeticRefFrame.h"
 #include  "TModifiedLocalAstronomicalRF.h"
 #include  "T3DLocalRefFrame.h"
@@ -302,6 +303,7 @@ void TDataParameters::setPrecision(int precision)
 {
 
 		TObservationFormat::ELengthPrecision observationPrecision;
+		TObservationFormat::EAnglePrecision anglePrecision;
 		TPointFormat::ECoordPrecision pointPrecision;
 
 		//Should be an integer between 0 (m) and 7 (100nm)
@@ -309,46 +311,52 @@ void TDataParameters::setPrecision(int precision)
 	
 		case 0:
 			observationPrecision = TObservationFormat::kMetre;
-			setAnglePrecision(TObservationFormat::kGons);
+			anglePrecision = TObservationFormat::kGons;
 			pointPrecision = TPointFormat::kMetre; break;
 		case 1:
 			observationPrecision = TObservationFormat::k100Millimetres; 
-			setAnglePrecision(TObservationFormat::k100Milligons);
+			anglePrecision = TObservationFormat::k100Milligons;
 			pointPrecision = TPointFormat::k100Millimetres; break;
 		case 2:
 			observationPrecision = TObservationFormat::k10Millimetres; 
-			setAnglePrecision(TObservationFormat::k10Milligons);
+			anglePrecision = TObservationFormat::k10Milligons;
 			pointPrecision = TPointFormat::k10Millimetres; break;
 		case 3:
 			observationPrecision = TObservationFormat::kMillimetre; 
-			setAnglePrecision(TObservationFormat::kMilligons);
+			anglePrecision = TObservationFormat::kMilligons;
 			pointPrecision = TPointFormat::kMillimetre; break;
 		case 4:
 			observationPrecision = TObservationFormat::k100Micrometres;
-			setAnglePrecision(TObservationFormat::k100Microgons);
+			anglePrecision = TObservationFormat::k100Microgons;
 			pointPrecision = TPointFormat::k100Micrometres; break;
 		case 5:
 			observationPrecision = TObservationFormat::k10Micrometres;
-			setAnglePrecision(TObservationFormat::k10Microgons);
+			anglePrecision = TObservationFormat::k10Microgons;
 			pointPrecision = TPointFormat::k10Micrometres; break;
 		case 6:
 			observationPrecision = TObservationFormat::kMicrometre;
-			setAnglePrecision(TObservationFormat::kMicrogon);
+			anglePrecision = TObservationFormat::kMicrogon;
 			pointPrecision = TPointFormat::kMicrometre; break;
 		case 7:
 			observationPrecision = TObservationFormat::k100Nanometres;
-			setAnglePrecision(TObservationFormat::k100Nanogons);
+			anglePrecision = TObservationFormat::k100Nanogons;
 			pointPrecision = TPointFormat::k100Nanometres; break;
 		default:
 			observationPrecision = TObservationFormat::k10Micrometres;
-			setAnglePrecision(TObservationFormat::k10Microgons);
+			anglePrecision = TObservationFormat::k10Microgons;
 			pointPrecision = TPointFormat::k10Micrometres; break;
 
 		}
 
-		setCoordPrecision(pointPrecision); 
+		setCoordPrecision(pointPrecision);
 		setLengthPrecision(observationPrecision);
-		//setAnglePrecision(TObservationFormat::k10Microgons);
+		if (fCoordSys != TCoordSysFactory::ECoordSys::kGeodetic && fCoordSys != TCoordSysFactory::ECoordSys::kGeodeticSphere)
+			setAnglePrecision(anglePrecision);
+		else
+		{
+			const int offset = min(TGeodeticCoordSys::precisionNeeded(fAngleUnits) + anglePrecision, (int) TObservationFormat::EAnglePrecision::kPicogons);
+			setAnglePrecision(TObservationFormat::EAnglePrecision(offset));
+		}
 }
 
 //! set point name's width precision 

@@ -9,10 +9,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef SU_GEO_COORDSYS
 #define SU_GEO_COORDSYS
 
-#if _MSC_VER >= 1000
-#pragma once
-#endif //! _MSC_VER >= 1000
-
 
 ////////////////////////////////////////////////////////////////
 // Forward declarations
@@ -35,6 +31,18 @@ class	TGeodeticCoordSys : public  TACoordinateSystem //: public TObject
 {
 
 public:
+
+	/*!@name static member functions */
+	//@{
+	/*! Return the number of additional decimal needed for 1m precidion.
+	 *!
+	 *! Depending on the unit used for the angle, you need more or less precision to have in the end
+	 *! a precision of 1 meter at the surface of the Earth.
+	 *!
+	 *! @param unit the angle unit
+	 */
+	static int precisionNeeded(TAngle::EUnits unit);
+	//@}
 
 	/*!\name Member Functions for vector*/
 	//@{
