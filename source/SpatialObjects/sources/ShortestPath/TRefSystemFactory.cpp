@@ -214,8 +214,8 @@ void TRefSystemFactory::init()
 	TSpatialPosition origin(pCGRF);
 	TAngle phi, lambda;
 	TLength H;
-	phi.setGonsValue(LITERAL(51.3692));
-	lambda.setGonsValue(LITERAL(6.72124));
+	phi.setGonsValue(LITERAL(51.36734));
+	lambda.setGonsValue(LITERAL(6.722515));
 	H.setMetresValue(LITERAL(433.65921));
 	TPositionVector pos(TCoordSysFactory::kGeodetic);
 	pos.setPhiEllipsoid(phi);
@@ -238,7 +238,7 @@ void TRefSystemFactory::init()
 		// CCS : CERN Modified Local Astronomical system : principal point = P0 defined as false origin
 	TFreeVector falseOrigin(2000, LITERAL(2097.79265), LITERAL(2433.66000), TCoordSysFactory::k3DCartesian);
 	TAngle omega(0), phi2(0), kappa;
-	kappa.setGonsValue(LITERAL(37.77864));
+	kappa.setGonsValue(LITERAL(37.779033));
 
 	TAModifiedLocalAstronomicalRF* pCCS = new TGraphMLARF(ccs, falseOrigin,
 		pLAp0, omega, phi2, kappa);
@@ -723,11 +723,11 @@ void TRefSystemFactory::init()
 
 	// Helmert Transformation between ITRF97 (ep1998.5) and CGRF
 	TAngle om3, p3, k3;
-	om3.setGonsValue(LITERAL(399.999533213524));
-	p3.setGonsValue(LITERAL(0.001825157943));
-	k3.setGonsValue(LITERAL(0.000991054274));
+	om3.setGonsValue(LITERAL(399.999998300576));
+	p3.setGonsValue(LITERAL(0.00000289072));
+	k3.setGonsValue(LITERAL(0.00000038244));
 	TRotation r3(TRotationMatrix::kRzyx, om3.getRadiansValue(), p3.getRadiansValue(), k3.getRadiansValue());
-	TLength Tx3(LITERAL(76.3768280)), Ty3(LITERAL(131.9389844)), Tz3(-LITERAL(156.1229775));
+	TLength Tx3(LITERAL(76.7267314)), Ty3(LITERAL(132.2499171)), Tz3(-LITERAL(155.6321962));
 	TTranslation transl3(Tx3, Ty3, Tz3);
 	TScaleFactor enl3(LITERAL(1.000000000000000));
 	THelmertRefFrameTransform* pITRF972CGRF = new THelmertRefFrameTransform(pITRF97, pCGRF, enl3, r3, transl3);
