@@ -59,6 +59,14 @@ public:
 		virtual  ~TA3DEuclideanRefFrame();
 	//@}
 
+		// Constructors and Destructors
+		// Copy Constructor 
+		TA3DEuclideanRefFrame(const  TA3DEuclideanRefFrame&) = delete;
+
+		// Private Member Functions
+		// Copy Assignment Operator
+		TA3DEuclideanRefFrame& operator=(const TA3DEuclideanRefFrame&) = delete;
+
 		using TAReferenceFrame::getOrientation;
 
 	/*!@name default definition of TVReferenceFrame's Data extraction methods*/
@@ -81,22 +89,6 @@ public:
 		virtual bool setElements(TSpatialOrientation* so, const TRotationMatrix& rm);
 	//@}
 
-
-	
-protected:
-	
-private:
-
-	// Constructors and Destructors
-	// Copy Constructor 
-	TA3DEuclideanRefFrame( const  TA3DEuclideanRefFrame& );
-
-
-	// Private Member Functions
-	// Copy Assignment Operator
-	TA3DEuclideanRefFrame& operator=( const TA3DEuclideanRefFrame& );
-
-
 private:
 
 	//ClassDef(TAReferenceFrame, 1)
@@ -106,10 +98,5 @@ private:
 ////////////////////////////////////////////////////////////////////
 // Inline Definitions
 ////////////////////////////////////////////////////////////////////
-
-
-
-
-
 
 #endif // SU_A_REFERENCE_FRAME

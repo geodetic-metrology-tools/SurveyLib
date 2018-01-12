@@ -66,16 +66,11 @@ TA3DEuclideanRefFrame::~TA3DEuclideanRefFrame()
 //see definition of TSpatialPosition
 TPositionVector TA3DEuclideanRefFrame::getCoordinates(const TSpatialPosition* sp, TCoordSysFactory::ECoordSys coordsys) const
 {
-	if(coordsys == TCoordSysFactory::k3DCartesian) {
+	if(coordsys == TCoordSysFactory::k3DCartesian)
 		return getPositionVector(sp);
-	}
 
-	else 
-	{ 
-		TPositionVector pv(TCoordSysFactory::k3DCartesian);
-		return pv;
-	}
-
+	TPositionVector pv(TCoordSysFactory::k3DCartesian);
+	return pv;
 }
 
 

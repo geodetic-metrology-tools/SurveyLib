@@ -66,9 +66,17 @@ public:
 		virtual  ~TModifiedLocalAstronomicalRF();
 	//@}
 
+		// We don't want these accessible
+		// Copy Constructor 
+		TModifiedLocalAstronomicalRF(const TModifiedLocalAstronomicalRF&) = delete;
+
+		// Copy Assignment Operator 
+		TModifiedLocalAstronomicalRF& operator=(const TModifiedLocalAstronomicalRF&) = delete;
 
 	/**@name Member Functions */
 	//@{
+		virtual TPositionVector getCoordinates(const TSpatialPosition* sp, TCoordSysFactory::ECoordSys coordsys) const override;
+
 		using TAModifiedLocalAstronomicalRF::getOrientation;
 		
 		/// Returns a pointer to the Local Geodetic RF
@@ -121,23 +129,9 @@ public:
 		void initialiseMLA(TSpatialPosition origin);
 
 		void initialiseLA(TSpatialPosition origin);
-
-
-
 	//@}
 
-
-protected:
-
-
 private:
-	// We don't want these accessible
-	// Copy Constructor 
-	TModifiedLocalAstronomicalRF( const TModifiedLocalAstronomicalRF& );
-
-	// Copy Assignment Operator 
-	TModifiedLocalAstronomicalRF& operator=( const TModifiedLocalAstronomicalRF& );
-
 
 	/// set the eta value
 	void setEta(const TAngle eta) { fEta = eta; return; }
@@ -147,9 +141,7 @@ private:
 
 	/// set the dAlpha value
 	void setDAlpha(const TAngle dAlpha) { fDAlpha = dAlpha; return; }
-	
-		
-	
+
 private:
 	
 	TSpatialPosition			fOrigin;
@@ -174,10 +166,5 @@ private:
 //////////////////////////////////////////////////////////////////////
 // Inline Definitions
 //////////////////////////////////////////////////////////////////////
-
-
-
-
-
 
 #endif // SU_GEODETIC_REFERENCE_FRAME
