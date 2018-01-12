@@ -251,6 +251,17 @@ TModifiedLocalAstronomicalRF::~TModifiedLocalAstronomicalRF()
 //////////////////////////////////////////////////////////////////////
 // Member Functions
 //////////////////////////////////////////////////////////////////////
+TPositionVector TModifiedLocalAstronomicalRF::getCoordinates(const TSpatialPosition * sp, TCoordSysFactory::ECoordSys coordsys) const
+{
+	if (coordsys == TCoordSysFactory::k3DCartesian)
+		return getPositionVector(sp);
+	if (coordsys == TCoordSysFactory::kGeodetic || coordsys == TCoordSysFactory::kGeodeticSphere)
+		return fGeodeticSys->getCoordinates(sp, coordsys);
+
+	TPositionVector pv(TCoordSysFactory::k3DCartesian);
+	return pv;
+}
+
 void	TModifiedLocalAstronomicalRF::initialiseMLA(TSpatialPosition origin)
 {
 	//Transformation of the origin (principal point) to a Geodetic Cartesian Reference frame

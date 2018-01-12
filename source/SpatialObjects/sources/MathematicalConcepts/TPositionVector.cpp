@@ -38,10 +38,10 @@ TPositionVector::~TPositionVector()
 
 
 //////////////////////////////////////////////////////////////////////
-// operator Functions 
+// operator Functions
 //////////////////////////////////////////////////////////////////////
 
-//Equivalence Operator 
+//Equivalence Operator
 bool TPositionVector::operator==( const TPositionVector& right) const
 {
 	return TACoordSysVector::operator ==(right);
@@ -59,7 +59,7 @@ TPositionVector TPositionVector::operator+(const TFreeVector& second)
 		resultat.setZ(getZ() + second.getZ());
 	}
 
-	return resultat;		
+	return resultat;
 }
 
 TPositionVector TPositionVector::operator-(const TFreeVector& second)
@@ -73,12 +73,12 @@ TPositionVector TPositionVector::operator-(const TFreeVector& second)
 		resultat.setZ(getZ() - second.getZ());
 	}
 
-	return resultat;		
+	return resultat;
 }
 
 
 TPositionVector& TPositionVector::operator+=(const TFreeVector& second)
-{//!add a PositionVector  and FreeVector, replace this
+{//!add a PositionVector and FreeVector, replace this
 	*this=(*this)+second;
 	return *this;
 }
@@ -111,7 +111,7 @@ TPositionVector TPositionVector::operator*( const TDouble& factor)
 	if ( factor.getValue() != NO_VALf && this->isInitialise())
 	{
 		TReal scalar = factor.getValue();
-		resultat.setX( 0, scalar * getX(0) ); 
+		resultat.setX( 0, scalar * getX(0) );
 		resultat.setX( 1, scalar * getX(1) );
 		resultat.setX( 2, scalar * getX(2) );
 	}
@@ -127,7 +127,7 @@ TPositionVector TPositionVector::operator *( const TScalar& factor)
 	if ( factor.getValue() != NO_VALf && this->isInitialise())
 	{
 		TReal scalar = factor.getValue();
-		resultat.setX( 0, scalar * getX(0) ); 
+		resultat.setX( 0, scalar * getX(0) );
 		resultat.setX( 1, scalar * getX(1) );
 		resultat.setX( 2, scalar * getX(2) );
 	}
@@ -225,9 +225,3 @@ bool TPositionVector::setPhiEllipsoid(const TAngle& phi)
 {//!set the Phi coordinate of a vector in a geodetic Coordinate System return true if X is defined
 return getCoordSysPtr()->setPhiEllipsoid(this, phi);
 }
-
-
-
-
-
-

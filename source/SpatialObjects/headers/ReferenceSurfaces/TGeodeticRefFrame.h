@@ -62,6 +62,16 @@ public:
 		virtual  ~TGeodeticRefFrame();
 	//@}
 
+	/**@name Private Constructors*/
+	//@{
+		// We don't want these accessible
+		/*!Copy Constructor */
+		TGeodeticRefFrame(const TGeodeticRefFrame&) = delete;
+
+		/*!Copy Assignment Operator */
+		TGeodeticRefFrame& operator=(const TGeodeticRefFrame&) = delete;
+	//@}
+
 
 	/**@name Member Functions */
 	//@{
@@ -86,17 +96,6 @@ public:
 		static TGeodeticRefFrame* instance();
 
 private:
-
-	/**@name Private Constructors*/
-	//@{
-		// We don't want these accessible
-		/*!Copy Constructor */
-		TGeodeticRefFrame( const TGeodeticRefFrame& );
-
-		/*!Copy Assignment Operator */
-		TGeodeticRefFrame& operator=( const TGeodeticRefFrame& );
-	//@}
-	
 	// constants
 	static const TReal precisionH;
 	static const TReal precisionPhi;
