@@ -475,3 +475,13 @@ TReal TAdjustablePoint::getHEstValue() const{
 
 	return pvEst.getH().getMetresValue();
 }
+
+/*! Gets the euclidean estimated distance from this adjustable point to another one.
+	\param[in] Second adjustable point
+*/
+TLength TAdjustablePoint::getEstimatedEuclideanDistance(const TAdjustablePoint* ptOther) const {
+	// NB: getEstValue method returns coordinates in Meters 
+	return TLength( sqrt( pow2(getEstValue(0) - ptOther->getEstValue(0)) +
+		                  pow2(getEstValue(1) - ptOther->getEstValue(1)) +
+		                  pow2(getEstValue(2) - ptOther->getEstValue(2))) );
+}

@@ -74,6 +74,9 @@ public:
 
 		/// Tells if at least one coordinate is unfixed (variable).
 		bool hasVariable() const;
+
+		/// Get the estimated euclidean distance with another adjustable point
+		TLength getEstimatedEuclideanDistance(const TAdjustablePoint* ptOther) const;
 		
 
 		/// See \ref TVAdjustableObject::isFixed
