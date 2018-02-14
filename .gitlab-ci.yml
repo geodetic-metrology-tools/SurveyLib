@@ -3,47 +3,134 @@
 variables:
     GIT_SUBMODULE_STRATEGY: recursive
 
-# One job builds all the targets while the other builds the tests and run them.
+# One job builds all the targets and run the tests. (x 3: Linux, Windows 32 bits, Windows 64 bits)
+# One job build the library and saves it as an artifact (only on master changes). (x 3: Linux, Windows 32 bits, Windows 64 bits)
 # The jobs are ran in parallel
 stages:
     - test
 
 before_script:
-    - cp  -r /susoft/SUSoftCMakeCommon ..
+    # for cross plateform compatibility, we execute some commands in bash forced
+    # otherwise, we should use "%VARIABLE%" in Windows and "$VARIABLE" in Linux...
+
+    # CMAKEBIN and SUSCMAKEFOLDER is defined by the runner in environment variables.
+    - bash -c "echo SUSCMAKEFOLDER = $SUSCMAKEFOLDER"
+    - bash -c "cp -r \"$SUSCMAKEFOLDER\" .."
     - mkdir build && cd build
-    - cmake3 -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=RELEASE ../source
+    - bash -c "echo CMAKEBIN = $CMAKEBIN"
+    - bash -c "echo CMAKEGENERATOR = $CMAKEGENERATOR"
+    - bash -c "$CMAKEBIN -G \"$CMAKEGENERATOR\" -DCMAKE_BUILD_TYPE=RELEASE ../source"
 
-# Build all targets
-build_all:
+after_script:
+    - rm -rf "./build"
+    - rm -rf "../SUSoftCMakeCommon"
+
+##################
+# LINUX BUILDS   #
+##################
+
+# Build all targets and run the tests
+linux_build_and_test:
     stage: test
     image: gitlab-registry.cern.ch/dataprocessingandanalysis/sus_ci_worker:latest
+    tags:
+        - docker
     dependencies: []
+    variables:
+        CMAKEGENERATOR: "Unix Makefiles"
     script:
-        - echo "Building all targets"
-        - make all
+        - echo "Building all targets | -j$(nproc)"
+        - make -j$(nproc) all
+        - echo "Running the tests"
+        - ./staging/UnitTests
 
-# Build all targets and uploads the libSpatialObjDLL.so
-build_so_release:
+# Build and upload the libSpatialObjDLL.so
+linux_release:
     stage: test
     image: gitlab-registry.cern.ch/dataprocessingandanalysis/sus_ci_worker:latest
+    tags:
+        - docker
     only:
         - master
     dependencies: []
+    variables:
+        CMAKEGENERATOR: "Unix Makefiles"
     script:
-        - echo "Building shared object library"
-        - make SpatialObjDLL
+        - echo "Building shared object library | -j$(nproc)"
+        - make -j$(nproc) SpatialObjDLL
     artifacts:
         name: sharedlibrary
         paths:
             - build/staging/libSpatialObjDLL.so
 
-# Build the tests and run them
-build_test:
+##################
+# WINDOWS BUILDS #
+##################
+
+# Build all targets and run the tests
+windows32_build_and_test:
     stage: test
-    image: gitlab-registry.cern.ch/dataprocessingandanalysis/sus_ci_worker:latest
+    tags:
+        - windows
+        - x32
     dependencies: []
+    variables:
+        CMAKEGENERATOR: "Visual Studio 15 2017"
     script:
-        - echo "Building tests"
-        - make UnitTests
+        - echo "Building all targets"
+        - msbuild /maxcpucount /p:Configuration=Release ALL_BUILD.vcxproj
         - echo "Running the tests"
-        - ./staging/UnitTests
+        - staging\UnitTests.exe
+
+# Build and upload the SpatialObjDLL.dll
+windows64_release:
+    stage: test
+    tags:
+        - windows
+        - x32
+    only:
+        - master
+    dependencies: []
+    variables:
+        CMAKEGENERATOR: "Visual Studio 15 2017"
+    script:
+        - echo "Building shared object library"
+        - msbuild /maxcpucount /p:Configuration=Release SpatialObjDLL/SpatialObjDLL.vcxproj
+    artifacts:
+        name: win32dll
+        paths:
+            - build/staging/SpatialObjDLL.dll
+
+# Build all targets and run the tests
+windows64_build_and_test:
+    stage: test
+    tags:
+        - windows
+        - x64
+    dependencies: []
+    variables:
+        CMAKEGENERATOR: "Visual Studio 15 2017 Win64"
+    script:
+        - echo "Building all targets"
+        - msbuild /maxcpucount /p:Configuration=Release ALL_BUILD.vcxproj
+        - echo "Running the tests"
+        - staging\UnitTests.exe
+
+# Build and upload the SpatialObjDLL.dll
+windows64_release:
+    stage: test
+    tags:
+        - windows
+        - x64
+    only:
+        - master
+    dependencies: []
+    variables:
+        CMAKEGENERATOR: "Visual Studio 15 2017 Win64"
+    script:
+        - echo "Building shared object library"
+        - msbuild /maxcpucount /p:Configuration=Release SpatialObjDLL/SpatialObjDLL.vcxproj
+    artifacts:
+        name: win64dll
+        paths:
+            - build/staging/SpatialObjDLL.dll
