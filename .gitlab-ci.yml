@@ -58,10 +58,11 @@ linux_release:
     script:
         - echo "Building shared object library | -j$(nproc)"
         - make -j$(nproc) SpatialObjDLL
+        - cp staging/libSpatialObjDLL.so ..
     artifacts:
         name: sharedlibrary
         paths:
-            - build/staging/libSpatialObjDLL.so
+            - libSpatialObjDLL.so
 
 ##################
 # WINDOWS BUILDS #
@@ -83,7 +84,7 @@ windows32_build_and_test:
         - staging\UnitTests.exe
 
 # Build and upload the SpatialObjDLL.dll
-windows64_release:
+windows32_release:
     stage: test
     tags:
         - windows
@@ -96,10 +97,11 @@ windows64_release:
     script:
         - echo "Building shared object library"
         - msbuild /maxcpucount /p:Configuration=Release SpatialObjDLL/SpatialObjDLL.vcxproj
+        - cp staging/SpatialObjDLL.dll ..
     artifacts:
         name: win32dll
         paths:
-            - build/staging/SpatialObjDLL.dll
+            - SpatialObjDLL.dll
 
 # Build all targets and run the tests
 windows64_build_and_test:
@@ -130,7 +132,8 @@ windows64_release:
     script:
         - echo "Building shared object library"
         - msbuild /maxcpucount /p:Configuration=Release SpatialObjDLL/SpatialObjDLL.vcxproj
+        - cp staging/SpatialObjDLL.dll ..
     artifacts:
         name: win64dll
         paths:
-            - build/staging/SpatialObjDLL.dll
+            - SpatialObjDLL.dll
