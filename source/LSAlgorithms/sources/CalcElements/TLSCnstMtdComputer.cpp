@@ -603,10 +603,24 @@ void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inpu
 		}
 		NBig.setFromTriplets(coeffs.begin(), coeffs.end());
 
-		//inverse NBig
-		Qxx = TSparseUtils::inverse(NBig, fError);
-		rm->setUnkCovarMtrx(&Qxx);
 
+		// Inverse NBig: Changed the way the extended matrix is inverted (similar method than during the iterative adjustment steps!!!)
+		Eigen::SimplicialLDLT<TSparseMatrix> cholBig(NBig);
+		if (chol2.info() != Eigen::Success)
+		{
+			// cholesky did not work, try fullPiv
+			typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
+			Eigen::FullPivLU<TMat> luBig(NBig);
+			if (!luBig.isInvertible())
+				return;
+			Qxx = luBig.inverse().sparseView();
+		}
+		else {
+			TSparseMatrix IdMat(NBig.rows(), NBig.cols());
+			IdMat.setIdentity();
+			Qxx = cholBig.solve(Id);
+		}
+		rm->setUnkCovarMtrx(&Qxx);
 		
 	}
 }
