@@ -110,6 +110,9 @@ public:
 
 		/// Return the geoid identifier
 		virtual TRefSystemFactory::EGeoid getGeoidId() const { return fGeoidId; }
+
+		/// Return true if the point is in the grid
+		bool isInGrid(const TSpatialPosition& point) const;
 	//@}
 
 
