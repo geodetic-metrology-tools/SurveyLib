@@ -9,6 +9,7 @@ include_directories (${TUT_INCLUDE_PATH}
 					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/Converters
 					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/StreamFormatters
 					${SURVEYLIB_ROOT}/source/SpatialObjDLL/headers
+					${SURVEYLIB_ROOT}/source/Plugins/Logs
 )
 
 set(SurveyMain_Tests
@@ -39,10 +40,15 @@ set(ProjectFrameworkTests_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/ProjectFramework/UnitTests/testTPointFormat.cpp
 )
 
-add_executable(UnitTests ${SurveyMain_Tests} ${SpatialObjects_SOURCES} ${SurveyLibDLLTests_SOURCES} ${ProjectFrameworkTests_SOURCES}) 
+set(PluginsTests_SOURCES
+	${CMAKE_CURRENT_LIST_DIR}/Plugins/testLogs.cpp
+)
+
+add_executable(UnitTests ${SurveyMain_Tests} ${SpatialObjects_SOURCES} ${SurveyLibDLLTests_SOURCES} ${ProjectFrameworkTests_SOURCES} ${PluginsTests_SOURCES})
 # Specify the libraries to link against
-target_link_libraries (UnitTests SpatialObjects SpatialObjDLL ProjectFramework ProjectFramework)
+target_link_libraries (UnitTests SpatialObjects SpatialObjDLL ProjectFramework ProjectFramework Plugins)
 
 source_group("SpatialObjects" FILES ${SpatialObjects_SOURCES})
 source_group("SurveyLibDLL" FILES ${SurveyLibDLLTests_SOURCES})
 source_group("ProjectFramework" FILES ${ProjectFrameworkTests_SOURCES})
+source_group("Plugins" FILES ${PluginsTests_SOURCES})
