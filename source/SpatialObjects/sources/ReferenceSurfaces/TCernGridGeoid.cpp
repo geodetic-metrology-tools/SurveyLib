@@ -4,7 +4,8 @@
 #include "TCernGridGeoid.h"
 
 #include <TNotInLepGridException.h>
-#include <math.h>
+#include <cmath>
+#include <limits>
 #include <valarray>
 #include <vector>
 #include <sstream>
@@ -35,9 +36,9 @@ TCernGridGeoid::TCernGridGeoid( const string& name,
 {//Constructor
 	
 
-	fNMatrix.setDimensions(15, 14);
-	fEtaMatrix.setDimensions(15, 14);
-	fXiMatrix.setDimensions(15, 14);
+	fNMatrix.setDimensions(N->numRows(), N->numCols());
+	fEtaMatrix.setDimensions(Eta->numRows(), Eta->numCols());
+	fXiMatrix.setDimensions(Xsi->numRows(), Xsi->numCols());
 	
 	
 	fNMatrix = *N;
@@ -83,30 +84,19 @@ TLength TCernGridGeoid::getN ( const TSpatialPosition& sp) const
 
 
 	// the spatial position must be in the LEP grid
-	TReal x,y,xdl,ydl,xur,yur;
-	x = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	y = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-	xdl = fDownLeft.getX().getMetresValue();
-	ydl = fDownLeft.getY().getMetresValue();
-	xur = fUpRight.getX().getMetresValue();
-	yur = fUpRight.getY().getMetresValue();
-	
-
-	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
-	{
+	NValue.setMetresValue(std::numeric_limits<TReal>::quiet_NaN());
+	if (isInGrid(spos))
 		NValue.setMetresValue( splineInterpolation(fNMatrix, spos) );
-		return NValue;
-	}
-
-	else
+	if (isnan(NValue.getMetresValue()))
 	{
 		stringstream ss;
 		ss << "TNotInLepGridException: getEta function problem with coordinate ";
-		ss << "(" << x << "," << y << "," << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ").";
+		ss << "(" << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() << ","
+			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ","
+			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
 		throw TNotInLepGridException(ss.str());
 	}
-
-	
+	return NValue;
 }
 
 
@@ -126,41 +116,30 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 
 
 	// the spatial position must be in the LEP grid
-	TReal x,y,xdl,ydl,xur,yur;
-	x = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	y = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-	xdl = fDownLeft.getX().getMetresValue();
-	ydl = fDownLeft.getY().getMetresValue();
-	xur = fUpRight.getX().getMetresValue();
-	yur = fUpRight.getY().getMetresValue();
-	
-
-	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
+	eta.setGonsValue(std::numeric_limits<TReal>::quiet_NaN());
+	if (isInGrid(spos))
 	{
 		// round to LITERAL(0.01) cc 
 		TReal interpolated = splineInterpolation(fEtaMatrix, spos) * 100;
-		int temp = (int) interpolated;
-		if ( ( interpolated - temp ) >= LITERAL(0.5))
+		int temp = (int)interpolated;
+		if ((interpolated - temp) >= LITERAL(0.5))
 			temp += 1;
 
 		TReal newTemp = temp;
-		newTemp = newTemp/100;
+		newTemp = newTemp / 100;
 
-		eta.setGonsValue( newTemp * LITERAL(0.0001) );
-		return eta;
+		eta.setGonsValue(newTemp * LITERAL(0.0001));
 	}
-
-	else
+	if (isnan(eta.getGonsValue()))
 	{
-		cerr << "SURVEYLIB LOG MESSAGE: Error : spatial position not in the LEP grid (2)" << endl;
-		
 		stringstream ss;
 		ss << "TNotInLepGridException: getEta function problem with coordinate ";
-		ss << "(" << x << "," << y << "," << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
+		ss << "(" << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() << ","
+			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ","
+			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
 		throw TNotInLepGridException(ss.str());
 	}
-
-	
+	return eta;
 }
 
 
@@ -180,38 +159,30 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 
 
 	// the spatial position must be in the LEP grid
-	TReal x,y,xdl,ydl,xur,yur;
-	x = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	y = spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-	xdl = fDownLeft.getX().getMetresValue();
-	ydl = fDownLeft.getY().getMetresValue();
-	xur = fUpRight.getX().getMetresValue();
-	yur = fUpRight.getY().getMetresValue();
-	
-
-	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
+	xsi.setGonsValue(std::numeric_limits<TReal>::quiet_NaN());
+	if (isInGrid(spos))
 	{
 		// round to LITERAL(0.01) cc 
 		TReal interpolated = splineInterpolation(fXiMatrix, spos) * 100;
-		int temp = (int) interpolated;
-		if ( ( interpolated - temp ) >= LITERAL(0.5))
+		int temp = (int)interpolated;
+		if ((interpolated - temp) >= LITERAL(0.5))
 			temp += 1;
 
 		TReal newTemp = temp;
-		newTemp = newTemp/100;
+		newTemp = newTemp / 100;
 
-		xsi.setGonsValue( newTemp * LITERAL(0.0001) );
-		return xsi;
+		xsi.setGonsValue(newTemp * LITERAL(0.0001));
 	}
-
-	else
+	if (isnan(xsi.getGonsValue()))
 	{
 		stringstream ss;
 		ss << "TNotInLepGridException: getEta function problem with coordinate ";
-		ss << "(" << x << "," << y << "," << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ").";
+		ss << "(" << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() << ","
+			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ","
+			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
 		throw TNotInLepGridException(ss.str());
 	}
-	
+	return xsi;
 }
 
 
@@ -241,32 +212,22 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 
 
 	// the spatial position must be in the LEP grid
-	TReal x,y,xdl,ydl,xur,yur;
-	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-	xdl = fDownLeft.getX().getMetresValue();
-	ydl = fDownLeft.getY().getMetresValue();
-	xur = fUpRight.getX().getMetresValue();
-	yur = fUpRight.getY().getMetresValue();
-	
-
-	if ( (x>=xdl) && (x<=xur) && (y>=ydl) && (y<=yur) )
+	fDAlphaValue.setRadiansValue(std::numeric_limits<TReal>::quiet_NaN());
+	if (isInGrid(position))
 	{
-		
 		eta = getEta(position); // / (LITERAL(6.366) * 100000);
-		fDAlphaValue = eta*tanq(phi);
-		return fDAlphaValue;
+		fDAlphaValue = eta * tanq(phi);
 	}
-
-	else
+	if (isnan(fDAlphaValue.getRadiansValue()))
 	{
 		stringstream ss;
 		ss << "TNotInLepGridException: getEta function problem with coordinate ";
-		ss << "(" << x << "," << y << "," << position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
+		ss << "(" << position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() << ","
+			<< position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ","
+			<< position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
 		throw TNotInLepGridException(ss.str());
 	}
-	
-	
+	return fDAlphaValue;
 }
 
 TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& latitude ) const
@@ -287,32 +248,55 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& lat
 	}
 
 	// the spatial position must be in the LEP grid
-	if ( (position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() >= fDownLeft.getX().getMetresValue()) && (position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() <= fUpRight.getX().getMetresValue())
-		&& (position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() >= fDownLeft.getY().getMetresValue()) && (position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() <= fUpRight.getY().getMetresValue()) )
+	fDAlphaValue.setRadiansValue(std::numeric_limits<TReal>::quiet_NaN());
+	if (isInGrid(position))
 	{
-		
 		eta = getEta(position); // / (LITERAL(6.366) * 100000);
-		fDAlphaValue = eta*tanq(phi);
-		return fDAlphaValue;
+		fDAlphaValue = eta * tanq(phi);
 	}
-
-	else
+	if (isnan(fDAlphaValue.getRadiansValue()))
 	{
 		stringstream ss;
 		ss << "TNotInLepGridException: getEta function problem with coordinate ";
-		ss << "(" << position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() 
-		   << "," << position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() 
-		   << "," << position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
+		ss << "(" << position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() << ","
+			<< position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ","
+			<< position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
 		throw TNotInLepGridException(ss.str());
 	}
-	
-	
+	return fDAlphaValue;
 }
 
 
 void TCernGridGeoid::setGeoidId(const TRefSystemFactory::EGeoid geoidId)
 {
 	fGeoidId = geoidId;
+}
+
+bool TCernGridGeoid::isInGrid(const TSpatialPosition& point) const
+{
+	const TReal x = point.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
+	const TReal y = point.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
+	const TReal xdl = fDownLeft.getX().getMetresValue();
+	const TReal ydl = fDownLeft.getY().getMetresValue();
+	const TReal xur = fUpRight.getX().getMetresValue();
+	const TReal yur = fUpRight.getY().getMetresValue();
+
+	// we check that the point is between xdl and xuy, and between ydl and yur
+	// fast way for regular checks
+	if ((x >= xdl) && (x <= xur) && (y >= ydl) && (y <= yur))
+		return true;
+	// if fast comparison isn't enough, we go to real double comparison
+	const TReal epsilon = std::numeric_limits<TReal>::epsilon() * 1000000;
+	const TReal min = std::numeric_limits<TReal>::min();
+	if (x < xdl && std::abs(x - xdl) > epsilon && std::abs(x - xdl) > min)
+		return false;
+	if (x > xur && std::abs(x - xur) > epsilon && std::abs(x - xur) > min)
+		return false;
+	if (y < ydl && std::abs(y - ydl) > epsilon && std::abs(y - ydl) > min)
+		return false;
+	if (y > yur && std::abs(y - yur) > epsilon && std::abs(y - yur) > min)
+		return false;
+	return true;
 }
 
 
@@ -369,6 +353,8 @@ TReal TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialP
 		if (absy[i] == ymin)
 			I = i;
 	}
+	bool yOfIisnull = std::abs(y[I]) <= std::numeric_limits<TReal>::epsilon() * 1000000 || std::abs(y[I]) < std::numeric_limits<TReal>::min();
+	bool xOfJisnull = std::abs(x[J]) <= std::numeric_limits<TReal>::epsilon() * 1000000 || std::abs(x[J]) < std::numeric_limits<TReal>::min();
 
 
 	// Catmull Rom splines
@@ -392,47 +378,25 @@ TReal TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialP
 
 	// elements of the matrix used for the interpolation
 	// if Xo, Yo is not a point of the grid
-	if (x[J] > 0)
+	if (!xOfJisnull)
 	{
-		L[0] = J-2;
-	}
-	else
-	{
-		if(x[J] < 0)
-		{
-			L[0] = J-1;
-
-		}
-	}
-
-
-	if (x[J] != 0)
-	{
+		if (x[J] > 0)
+			L[0] = J - 2;
+		else if (x[J] < 0)
+			L[0] = J - 1;
 		for(i = 1; i < 4; i++)
 			L[i] = L[i-1]+1;
 	}
 
-
 	//cout << L[0] << "  " << L[1] << "  " << L[2] << "  " << L[3] << endl;
 
 
-	if (y[I] > 0)
+	if (!yOfIisnull)
 	{
-		K[0] = I-2;
-
-	}
-	else 
-	{
-		if(y[I] < 0)
-		{
-			K[0] = I-1;
-
-		}
-	}
-
-
-	if (y[I] != 0)
-	{
+		if (y[I] > 0)
+			K[0] = I - 2;
+		else if (y[I] < 0)
+			K[0] = I - 1;
 		for(i = 1; i < 4; i++)
 			K[i] = K[i-1]+1;
 	}
@@ -441,7 +405,7 @@ TReal TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialP
 
 
 
-	if ( (x[J] != 0) && (y[I] != 0) )
+	if (!xOfJisnull && !yOfIisnull)
 	{	
 		// interpolation
 		for(i = 0; i < 4; i++)
@@ -499,10 +463,10 @@ TReal TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialP
 	}
 
 
-	if (x[J] == 0)
+	if (xOfJisnull)
 	{
 
-		if (y[I] == 0)
+		if (yOfIisnull)
 			N = matrix(I,J);
 
 		else
@@ -539,10 +503,9 @@ TReal TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialP
 			N = q(0,2);
 		}
 	}
-		
 
 
-	if ( (y[I] == 0) && (x[J] != 0) )
+	if (yOfIisnull && !xOfJisnull)
 	{
 		for(int j = 0; j < 4; j++)
 		{
