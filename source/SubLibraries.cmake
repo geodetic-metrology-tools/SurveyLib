@@ -2,6 +2,7 @@
 SET(SURVEYLIB_LIBRARIES
 	Tools
 	LSAlgorithms
+	Plugins
 	ProjectFramework
 	SpatialObjects
 	SpatialObjDLL

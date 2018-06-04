@@ -61,4 +61,10 @@ endif()
 
 INCLUDE("${CMAKE_SOURCE_DIR}/SourceSurveyLib.cmake")
 
+############################
+# MSVC:
+if(MSVC)
+	set_vs_default_startup_project(UnitTests)
+endif()
+
 ADD_SUBDIRECTORY(Tests)

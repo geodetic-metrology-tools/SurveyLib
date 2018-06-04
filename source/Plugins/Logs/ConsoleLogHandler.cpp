@@ -1,0 +1,16 @@
+#include "ConsoleLogHandler.hpp"
+
+#include <iostream>
+#include <string>
+
+#include "LogMessage.hpp"
+
+void ConsoleLogHandler::log(const LogMessage & message)
+{
+	std::ostream &out = (message.getType() <= LogMessage::Type::WARNING) ? std::cout : std::cerr;
+	
+	out << message.getDate() << ' ' << message.getType() << ": '" << message.getMessage() << "'";
+	if (message.getType() == LogMessage::Type::DEBUG || message.getType() >= LogMessage::Type::CRITICAL)
+		out << "\n\t'" << message.getContext();
+	out << std::endl;
+}
