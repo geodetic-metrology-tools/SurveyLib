@@ -9,7 +9,7 @@ include_directories (${TUT_INCLUDE_PATH}
 					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/Converters
 					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/StreamFormatters
 					${SURVEYLIB_ROOT}/source/SpatialObjDLL/headers
-					${SURVEYLIB_ROOT}/source/Plugins/Logs
+					${SURVEYLIB_ROOT}/source/Plugins
 )
 
 set(SurveyMain_Tests

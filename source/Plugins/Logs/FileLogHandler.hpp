@@ -15,9 +15,14 @@ class LogMessage;
 /**
  * Log handler that prints the logs in a file.
  *
+ * FileLogHandler is part of the @ref logs module.
+ * @ingroup logs
+ *
  * You must give the path to a file to use this handler.
  *
  * Note that the logs are appended to the given file (the file is not erased).
+ *
+ * @see logs, ILogHandler, ConsoleLogHandler
  */
 class FileLogHandler : public ILogHandler
 {
@@ -30,7 +35,7 @@ public:
 	virtual void log(const LogMessage& message) override;
 
 	void setLogFile(const std::string& file) { _filePath = file; }
-	const std::string& getLogFile() const { return _filePath; }
+	const std::string& getLogFile() const noexcept { return _filePath; }
 
 private:
 	/** the path to the file where to write the logs */

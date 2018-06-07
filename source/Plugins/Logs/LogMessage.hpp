@@ -13,6 +13,9 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 /**
  * Hold a message to be logged.
  *
+ * LogMessage is part of the @ref logs module.
+ * @ingroup logs
+ *
  * A message is composed of:
  * - a type (see the internal enum `Type`) which can be `DEBUG`, `INFO`, `WARNING`, `CRITICAL` or `FATAL`.
  *   Note that these types are close to the Qt ones.
@@ -44,7 +47,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
  * Logger::getLogger().log(LogMessage(LogMessage::Type::DEBUG, "my debug message"));
  * @endcode
  *
- * @see Logger, logDebug(), logInfo(), logWarning(), logCritical(), logFatal()
+ * @see logs, Logger, logDebug(), logInfo(), logWarning(), logCritical(), logFatal()
  */
 class LogMessage
 {
@@ -116,16 +119,16 @@ public:
 	 * @see getFile(), getLine(), getFunction()
 	 */
 	std::string getContext() const;
-	void setType(Type t) { _type = t; }
-	Type getType() const { return _type; }
+	void setType(Type t) noexcept { _type = t; }
+	Type getType() const noexcept { return _type; }
 	void setMessage(const std::string& msg) { _message = msg; }
-	const std::string& getMessage() const { return _message; }
+	const std::string& getMessage() const noexcept { return _message; }
 	void setFile(const std::string& file) { _file = file; }
-	const std::string& getFile() const { return _file; }
-	void setLine(const int line) { _line = line; }
-	int getLine() const { return _line; }
+	const std::string& getFile() const noexcept { return _file; }
+	void setLine(const int line) noexcept { _line = line; }
+	int getLine() const noexcept { return _line; }
 	void setFunction(const std::string& func) { _function = func; }
-	const std::string& getFunction() const { return _function; }
+	const std::string& getFunction() const noexcept { return _function; }
 
 private:
 	/** the type of the message */

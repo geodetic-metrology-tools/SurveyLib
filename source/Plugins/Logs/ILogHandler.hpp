@@ -11,6 +11,9 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 /**
  * Interface for logging handlers.
  *
+ * ILogHandler is part of the @ref logs module.
+ * @ingroup logs
+ *
  * Implement this interface to create a handler able to receive LogMessage coming from the Logger.
  *
  * The goal of a handler is to present the messages received to the user, by the best mean. This can be
@@ -31,7 +34,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
  * It means that if you set the threshold to LogMessage::Type::CRITICAL, only critical and fatal messages
  * will be sent to the handler, all others will be silently ignored. Default min is LogMessage::Type::WARNING.
  *
- * @see Logger, LogMessage, FileLogHandler, ConsoleLogHandler
+ * @see logs, FileLogHandler, ConsoleLogHandler
  */
 class ILogHandler
 {
@@ -64,12 +67,12 @@ public:
 	* @param type the minimum level of importance to set
 	* @see getThreshold()
 	*/
-	void setThreshold(LogMessage::Type type) { _threshold = type; }
+	void setThreshold(LogMessage::Type type) noexcept { _threshold = type; }
 	/**
 	 * @return the threshold
 	 * @see setThreshold()
 	 */
-	LogMessage::Type getThreshold() const { return _threshold; }
+	LogMessage::Type getThreshold() const noexcept { return _threshold; }
 	
 protected:
 	/** The minimum level of importance to send messages to the handlers. */
