@@ -18,7 +18,7 @@ namespace tut
 	};
 
 	typedef test_group<pluginsdata> tg;
-	tg plugins_test_group("Test Plugins package.");
+	tg plugins_logs_test_group("Test Plugins package.");
 	typedef tg::object testobject;
 }
 
