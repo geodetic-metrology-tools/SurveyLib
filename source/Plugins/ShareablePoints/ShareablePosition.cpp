@@ -3,27 +3,16 @@
 #include <iomanip>
 #include <sstream>
 
-constexpr ShareablePosition ShareablePosition::operator+(const ShareablePosition & sp) const noexcept
+const ShareablePosition ShareablePosition::operator+(const ShareablePosition & sp) const noexcept
 {
 	return ShareablePosition{
 		x + sp.x,
 		y + sp.y,
 		z + sp.z,
-		sigmax + sp.sigmax,
-		sigmay + sp.sigmay,
-		sigmaz + sp.sigmaz
+		std::sqrt(std::pow(sigmax, 2) + std::pow(sp.sigmax, 2)),
+		std::sqrt(std::pow(sigmay, 2) + std::pow(sp.sigmay, 2)),
+		std::sqrt(std::pow(sigmaz, 2) + std::pow(sp.sigmaz, 2))
 	};
-}
-
-constexpr ShareablePosition & ShareablePosition::operator+=(const ShareablePosition & sp) noexcept
-{
-	x += sp.x;
-	y += sp.y;
-	z += sp.z;
-	sigmax += sp.sigmax;
-	sigmay += sp.sigmay;
-	sigmaz += sp.sigmaz;
-	return *this;
 }
 
 std::string ShareablePosition::to_string(const int precision) const

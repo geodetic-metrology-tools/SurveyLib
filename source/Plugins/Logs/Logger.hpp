@@ -251,6 +251,11 @@ public:
 	/** @return the instance of the Logger (singleton) */
 	static Logger& getLogger();
 
+	Logger(const Logger&) = delete; // can't copy
+	Logger(const Logger&&) = delete;
+	Logger& operator=(const Logger&) = delete;
+	Logger& operator=(const Logger&&) = delete;
+
 	/**
 	 * Log the given message.
 	 *

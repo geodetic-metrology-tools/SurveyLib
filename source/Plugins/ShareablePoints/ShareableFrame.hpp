@@ -15,9 +15,36 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 struct ShareableParams;
 
+/**
+ * Group of points organized in a tree.
+ *
+ * ShareableFrame is part of the @ref shpoints module.
+ * @ingroup shpoints
+ *
+ * A frame gather together a group of point, which coordinates are relative to the frame. This may be useful, for instance, for points that can only
+ * move together.
+ *
+ * Frames are organized in a tree: you can have frames inside a frame. The leaves of the tree are the points. Thus, a frame, if it is not the root of
+ * the tree, has a parent frame, and a relative position to it. This position is set thanks to a rotation and a translation from the parent frame.
+ *
+ * Finally, a frame is composed of:
+ * - a parent frame
+ * - a name
+ * - a translation (ShareablePosition) from its parent frame
+ * - a rotation (ShareablePosition) from its parent frame
+ * - a list of children frames
+ * - a list of childen points
+ * - the parameters for the list of points (shared by all the frames and the ShareablePointsList).
+ *
+ * Note that it is possible to get all the points from a frame and its children into a single vector thanks to the function getAllPoints().
+ * The points from all the subframes are concatenated into one vector.
+ *
+ * @see shpoints, ShareablePoint, ShareablePointsList, ShareableParams, ShareablePosition
+ */
 class ShareableFrame
 {
 public:
+	/** Constructor. */
 	ShareableFrame(std::shared_ptr<ShareableParams> params, const std::string& name="") : _params(params), _name(name) {}
 	ShareableFrame(const ShareableFrame&) = delete; // can't copy (too heavy structure)
 	ShareableFrame(const ShareableFrame&&) = delete;
@@ -81,8 +108,13 @@ public:
 	ShareableFrame& getFrame(size_t position) { return *_innerFrames[position]; }
 	/** @return the vector of subframes */
 	const std::vector<std::unique_ptr<ShareableFrame>>& getFrames() const noexcept { return _innerFrames; }
-	/** Removes all subframes. */
+	/**
+	 * Removes all subframes.
+	 * @warning All frames are deleted.
+	 */
 	void clearFrames() noexcept { _innerFrames.clear(); }
+	/** @return the number of children frames */
+	size_t sizeFrames() const noexcept { return _innerFrames.size(); }
 
 	/**
 	 * Adds the given point.
@@ -132,8 +164,15 @@ public:
 	ShareablePoint& getPoint(size_t position) { return *_points[position]; }
 	/** @return the vector of points */
 	const std::vector<std::unique_ptr<ShareablePoint>>& getPoints() const noexcept { return _points; }
-	/** Removes all points in this frame. */
+	/** @return a vector with all the points in this frame and its children. */
+	std::vector<ShareablePoint*> getAllPoints();
+	/**
+	 * Removes all points in this frame.
+	 * @warning All points are deleted.
+	 */
 	void clearPoints() noexcept { _points.clear(); }
+	/** @return the number of children points */
+	size_t sizePoints() const noexcept { return _points.size(); }
 
 	void setTranslation(const ShareablePosition& translation) noexcept { _translation = translation; }
 	const ShareablePosition& getTranslation() const noexcept { return _translation; }
@@ -164,12 +203,19 @@ public:
 	ShareableParams& getParams() noexcept { return *_params; }
 
 private:
+	/** The parent frame (null if the frame is the root). */
 	ShareableFrame * _parentFrame = nullptr;
+	/** The name of the frame. */
 	std::string _name;
+	/** The translation from the parent frame. */
 	ShareablePosition _translation = { 0, 0, 0, 0, 0, 0 };
+	/** The rotation from the parent frame. */
 	ShareablePosition _rotation = { 0, 0, 0, 0, 0, 0 };
+	/** Frame children. */
 	std::vector<std::unique_ptr<ShareableFrame>> _innerFrames;
+	/** Point children. */
 	std::vector<std::unique_ptr<ShareablePoint>> _points;
+	/** Parameters of the points. */
 	std::shared_ptr<ShareableParams> _params;
 };
 

@@ -1,5 +1,8 @@
 #include "ShareableFrame.hpp"
 
+#include <algorithm>
+#include <iterator>
+
 #include "ShareablePoint.hpp"
 
 template<class T>
@@ -78,6 +81,21 @@ std::unique_ptr<ShareablePoint> ShareableFrame::removePoint(const ShareablePoint
 	return tmp;
 }
 
+std::vector<ShareablePoint*> ShareableFrame::getAllPoints()
+{
+	std::vector<ShareablePoint*> tmp;
+	tmp.reserve(_points.size());
+	std::transform(std::begin(_points), std::end(_points), std::back_inserter(tmp), [](auto& ptr) -> ShareablePoint* { return ptr.get(); });
+
+	for (const auto& f : _innerFrames)
+	{
+		auto vector = f->getAllPoints();
+		tmp.insert(std::end(tmp), std::make_move_iterator(std::begin(vector)), std::make_move_iterator(std::end(vector)));
+	}
+	
+	return tmp;
+}
+
 void ShareableFrame::setParams(std::shared_ptr<ShareableParams> params)
 {
 	if (_params == params)
@@ -90,6 +108,6 @@ void ShareableFrame::setParams(std::shared_ptr<ShareableParams> params)
 			f->setParams(params);
 	}
 	// parent
-	if (_parentFrame->_params != params)
+	if (_parentFrame && _parentFrame->_params != params)
 		_parentFrame->setParams(params);
 }

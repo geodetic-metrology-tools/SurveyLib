@@ -3,8 +3,8 @@
 #include "ShareableFrame.hpp"
 #include "ShareableParams.hpp"
 
-ShareablePointsList::ShareablePointsList(const std::string & titre) :
-	_titre(titre),
+ShareablePointsList::ShareablePointsList(const std::string & title) :
+	_title(title),
 	_params(new ShareableParams()),
 	_rootFrame(std::make_unique<ShareableFrame>(_params))
 {

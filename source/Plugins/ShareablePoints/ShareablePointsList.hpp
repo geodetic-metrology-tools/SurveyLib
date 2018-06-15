@@ -9,16 +9,50 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <memory>
 #include <string>
 
+/**
+ * @defgroup shpoints ShareablePoints
+ *
+ * Module to share points between SU software.
+ *
+ * The goal of this module is to have a common interface for a list of points, so we can easily share points between all the SU applications.
+ *
+ * A point (ShareablePoint) is an object that has a name and coordinates (ShareablePosition). The coordinates are expressed in a coordinate system
+ * held by the parameters of the list (ShareableParams).
+ *
+ * Points are grouped together in frames (ShareableFrame). A frame is just a list of points, where the points are expressed in relative coordinates
+ * to the position of the frame. A frame can contain points, or other frames, which creates a tree where nodes are frames and leaves are points.
+ * A frame has a relative position from its parent expressed by a translation and a rotation.
+ *
+ * All these objects are usually stored in a main object: the ShareablePointsList. This class has a root frame, the root of the points tree. And it
+ * also defines the parameters (coordinate system and all) that are shared between all frames.
+ */
+
 class ShareableFrame;
 struct ShareableParams;
 
+/**
+ * Main class for describing a list of points.
+ *
+ * ShareablePointsList is part of the @ref shpoints module.
+ * @ingroup shpoints
+ *
+ * This class represent the root of the points tree described by ShareableFrame and ShareablePoint. It is composed of:
+ * - an optional title
+ * - the root frame of the point tree
+ * - the parameters shared with all the frames
+ *
+ * Notice that the parameters are the same for all the frames. Changing the parameters here will also automatically change the values
+ * in all the tree.
+ *
+ * @see shpoints, ShareableFrame, ShareablePoint, ShareableParams
+ */
 class ShareablePointsList
 {
 public:
-	ShareablePointsList(const std::string& titre);
+	ShareablePointsList(const std::string& title = "");
 
-	void setTitre(const std::string& titre) { _titre = titre; }
-	const std::string& getTitre() const noexcept { return _titre; }
+	void setTitle(const std::string& title) { _title = _title; }
+	const std::string& getTitle() const noexcept { return _title; }
 	const ShareableParams& getParams() const noexcept { return *_params; }
 	/**
 	 * Return the parameters.
@@ -49,7 +83,7 @@ public:
 
 private:
 	/** If the project has a title, the title of the project. */
-	std::string _titre;
+	std::string _title;
 	/** The parameters of the points (shared with all the frames). */
 	std::shared_ptr<ShareableParams> _params;
 	/** The root frame. */

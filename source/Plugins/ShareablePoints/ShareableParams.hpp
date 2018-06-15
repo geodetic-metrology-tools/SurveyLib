@@ -9,11 +9,29 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "ShareableExtraInfo.hpp"
 #include "TCoordSysFactory.h"
 
+/**
+ * Parameters for the shareable list of points.
+ *
+ * ShareableParams is part of the @ref shpoints module.
+ * @ingroup shpoints
+ *
+ * This stores the parameters for the ShareablePointsList tree. Basic parameters are the precision and the coordinate system used.
+ *
+ * If any other parameters are available, they can be added in the `extraInfos` ShareableExtraInfos.
+ *
+ * @see shpoints, ShareablePointsList
+ */
 struct ShareableParams
 {
-	int _precision = 6;
-	TCoordSysFactory::ECoordSys _coordsys = TCoordSysFactory::ECoordSys::k3DCartesian;
-	ShareableExtraInfos _extraInfos;
+	/** The precision of the floating values (by default 6 floating digits). */
+	int precision = 6;
+	/**
+	 * The coordinate system used (by default 3D cartesian).
+	 * @see TCoordSysFactory::ECoordSys
+	 */
+	TCoordSysFactory::ECoordSys coordsys = TCoordSysFactory::ECoordSys::k3DCartesian;
+	/** Some optional extra information. */
+	ShareableExtraInfos extraInfos;
 };
 
 #endif // SHAREABLEPARAMS_HPP
