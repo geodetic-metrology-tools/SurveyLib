@@ -51,7 +51,7 @@ class ShareablePointsList
 public:
 	ShareablePointsList(const std::string& title = "");
 
-	void setTitle(const std::string& title) { _title = _title; }
+	void setTitle(const std::string& title) { _title = title; }
 	const std::string& getTitle() const noexcept { return _title; }
 	const ShareableParams& getParams() const noexcept { return *_params; }
 	/**

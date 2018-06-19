@@ -48,7 +48,7 @@ struct ShareablePoint
 	/** The name of the point. */
 	std::string name = "";
 	/** The position (coordinates) of the point. By default (0, 0, 0) */
-	ShareablePosition position = { 0, 0, 0, 0, 0, 0 };
+	ShareablePosition position = { 0 };
 	/** The inline comment associated to the point if it exists. */
 	std::string inlineComment = "";
 	/** The header comment (comment right before in the file) associated to the point if it exists. */

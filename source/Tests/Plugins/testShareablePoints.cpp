@@ -29,9 +29,37 @@ namespace tut
 	template<>
 	void testobject::test<1>()
 	{
+		set_test_name("ShareablePosition: Test of constructors");
+
+		const ShareablePosition p1{}, p2 = { 0, 1, 2, 10, 11, 12, true, false, true };
+		ensure_equals(p1.x, 0);
+		ensure_equals(p1.y, 0);
+		ensure_equals(p1.z, 0);
+		ensure_equals(p1.sigmax, 0);
+		ensure_equals(p1.sigmay, 0);
+		ensure_equals(p1.sigmaz, 0);
+		ensure_not(p1.isfreex);
+		ensure_not(p1.isfreey);
+		ensure_not(p1.isfreez);
+
+		ensure_equals(p2.x, 0);
+		ensure_equals(p2.y, 1);
+		ensure_equals(p2.z, 2);
+		ensure_equals(p2.sigmax, 10);
+		ensure_equals(p2.sigmay, 11);
+		ensure_equals(p2.sigmaz, 12);
+		ensure(p2.isfreex);
+		ensure_not(p2.isfreey);
+		ensure(p2.isfreez);
+	}
+
+	template<>
+	template<>
+	void testobject::test<2>()
+	{
 		set_test_name("ShareablePosition: Test of comparison operators");
 
-		const ShareablePosition p = { 0, 1, 2, 10, 11, 12 };
+		const ShareablePosition p = { 0, 1, 2, 10, 11, 12, true, false, true };
 		ShareablePosition test = p;
 		ensure(p == test);
 		ensure_not(p != test);
@@ -42,13 +70,13 @@ namespace tut
 	
 	template<>
 	template<>
-	void testobject::test<2>()
+	void testobject::test<3>()
 	{
 		set_test_name("ShareablePosition: Test of operators");
 
 		// unary operator-
 		{
-			const ShareablePosition p = { 0, 1, 2, 10, 11, 12 };
+			const ShareablePosition p = { 0, 1, 2, 10, 11, 12, true, false, true };
 			const ShareablePosition p2 = -p;
 			ensure_equals(p2.x, 0);
 			ensure_equals(p2.y, -1);
@@ -56,10 +84,13 @@ namespace tut
 			ensure_equals(p2.sigmax, 10);
 			ensure_equals(p2.sigmay, 11);
 			ensure_equals(p2.sigmaz, 12);
+			ensure(p2.isfreex);
+			ensure_not(p2.isfreey);
+			ensure(p2.isfreez);
 		}
 		// operator+
 		{
-			const ShareablePosition p = { 0, 1, 2, 3, 3, 3 };
+			const ShareablePosition p = { 0, 1, 2, 3, 3, 3, true, false, true };
 			const ShareablePosition p2 = p + ShareablePosition{ 100, 101, 102, 4, 4, 4 };
 			ensure_equals(p2.x, 100);
 			ensure_equals(p2.y, 102);
@@ -67,10 +98,13 @@ namespace tut
 			ensure_equals(p2.sigmax, 5);
 			ensure_equals(p2.sigmay, 5);
 			ensure_equals(p2.sigmaz, 5);
+			ensure(p2.isfreex);
+			ensure_not(p2.isfreey);
+			ensure(p2.isfreez);
 		}
 		// operator-
 		{
-			const ShareablePosition p = { 0, 1, 2, 4, 4, 4 };
+			const ShareablePosition p = { 0, 1, 2, 4, 4, 4, true, false, true };
 			const ShareablePosition p2 = p - ShareablePosition{ 100, 101, 102, 3, 3, 3 };
 			ensure_equals(p2.x, -100);
 			ensure_equals(p2.y, -100);
@@ -78,10 +112,13 @@ namespace tut
 			ensure_equals(p2.sigmax, 5);
 			ensure_equals(p2.sigmay, 5);
 			ensure_equals(p2.sigmaz, 5);
+			ensure(p2.isfreex);
+			ensure_not(p2.isfreey);
+			ensure(p2.isfreez);
 		}
 		// operator*
 		{
-			const ShareablePosition p = { 0, 1, 2, 4, 4, 4 };
+			const ShareablePosition p = { 0, 1, 2, 4, 4, 4, true, false, true };
 			const ShareablePosition p2 = p * 4;
 			ensure(p2 == (4 * p));
 			ensure_equals(p2.x, 0);
@@ -90,10 +127,13 @@ namespace tut
 			ensure_equals(p2.sigmax, 4);
 			ensure_equals(p2.sigmay, 4);
 			ensure_equals(p2.sigmaz, 4);
+			ensure(p2.isfreex);
+			ensure_not(p2.isfreey);
+			ensure(p2.isfreez);
 		}
 		// operator/
 		{
-			const ShareablePosition p = { 0, 1, 2, 4, 4, 4 };
+			const ShareablePosition p = { 0, 1, 2, 4, 4, 4, true, false, true };
 			const ShareablePosition p2 = p / -2;
 			ensure_equals(p2.x, 0);
 			ensure_equals(p2.y, -0.5);
@@ -101,10 +141,13 @@ namespace tut
 			ensure_equals(p2.sigmax, 4);
 			ensure_equals(p2.sigmay, 4);
 			ensure_equals(p2.sigmaz, 4);
+			ensure(p2.isfreex);
+			ensure_not(p2.isfreey);
+			ensure(p2.isfreez);
 		}
 		// operator+=
 		{
-			ShareablePosition p = { 0, 1, 2, 3, 4, 3 };
+			ShareablePosition p = { 0, 1, 2, 3, 4, 3, true, false, true };
 			p += ShareablePosition{ 12, 11, 10, 4, 3, 4 };
 			ensure_equals(p.x, 12);
 			ensure_equals(p.y, 12);
@@ -112,10 +155,13 @@ namespace tut
 			ensure_equals(p.sigmax, 5);
 			ensure_equals(p.sigmay, 5);
 			ensure_equals(p.sigmaz, 5);
+			ensure(p.isfreex);
+			ensure_not(p.isfreey);
+			ensure(p.isfreez);
 		}
 		// operator-=
 		{
-			ShareablePosition p = { 0, 1, 2, 4, 3, 4 };
+			ShareablePosition p = { 0, 1, 2, 4, 3, 4, true, false, true };
 			p -= ShareablePosition{ 12, 11, 10, 3, 4, 3 };
 			ensure_equals(p.x, -12);
 			ensure_equals(p.y, -10);
@@ -123,10 +169,13 @@ namespace tut
 			ensure_equals(p.sigmax, 5);
 			ensure_equals(p.sigmay, 5);
 			ensure_equals(p.sigmaz, 5);
+			ensure(p.isfreex);
+			ensure_not(p.isfreey);
+			ensure(p.isfreez);
 		}
 		// operator*=
 		{
-			ShareablePosition p = { 0, 1, 2, 4, 4, 4 };
+			ShareablePosition p = { 0, 1, 2, 4, 4, 4, true, false, true };
 			p *= 4;
 			ensure_equals(p.x, 0);
 			ensure_equals(p.y, 4);
@@ -134,10 +183,13 @@ namespace tut
 			ensure_equals(p.sigmax, 4);
 			ensure_equals(p.sigmay, 4);
 			ensure_equals(p.sigmaz, 4);
+			ensure(p.isfreex);
+			ensure_not(p.isfreey);
+			ensure(p.isfreez);
 		}
 		// operator/=
 		{
-			ShareablePosition p = { 0, 1, 2, 4, 4, 4 };
+			ShareablePosition p = { 0, 1, 2, 4, 4, 4, true, false, true };
 			p /= -2;
 			ensure_equals(p.x, 0);
 			ensure_equals(p.y, -0.5);
@@ -145,12 +197,15 @@ namespace tut
 			ensure_equals(p.sigmax, 4);
 			ensure_equals(p.sigmay, 4);
 			ensure_equals(p.sigmaz, 4);
+			ensure(p.isfreex);
+			ensure_not(p.isfreey);
+			ensure(p.isfreez);
 		}
 	}
 
 	template<>
 	template<>
-	void testobject::test<3>()
+	void testobject::test<4>()
 	{
 		set_test_name("ShareablePosition: Test of constexpr");
 
@@ -163,7 +218,7 @@ namespace tut
 		// unary operator-
 		{
 			constexpr ShareablePosition p = { 1, -2, 3 };
-			std::array<int, static_cast<size_t>(-p.y)> arr; // if not constexpr, doesn't compile
+			std::array<int, static_cast<size_t>((-p).y)> arr; // if not constexpr, doesn't compile
 			ensure_equals(arr.size(), 2);
 		}
 		// operator*
@@ -184,13 +239,13 @@ namespace tut
 
 	template<>
 	template<>
-	void testobject::test<4>()
+	void testobject::test<5>()
 	{
 		set_test_name("ShareablePosition: Test of to_string()");
 
-		const ShareablePosition p = { 1, -2, 3 , 10, 12, 13 };
+		const ShareablePosition p = { 1, -2, 3 , 10, 12, 13, true, false, true };
 		const std::string out = p.to_string(2);
-		ensure_equals(out, "x: 1.00 (+- 10.00),	y: -2.00 (+- 12.00),	z: 3.00 (+- 13.00)");
+		ensure_equals(out, "x: 1.00 (+- 10.00),	*y: -2.00 (+- 12.00),	z: 3.00 (+- 13.00)");
 	}
 
 	/* ************************************************** *
@@ -199,7 +254,7 @@ namespace tut
 
 	template<>
 	template<>
-	void testobject::test<5>()
+	void testobject::test<10>()
 	{
 		set_test_name("ShareableExtraInfo: Test of methods");
 
@@ -238,7 +293,7 @@ namespace tut
 
 	template<>
 	template<>
-	void testobject::test<6>()
+	void testobject::test<20>()
 	{
 		set_test_name("ShareableParams: Test of constructor");
 
@@ -262,7 +317,7 @@ namespace tut
 
 	template<>
 	template<>
-	void testobject::test<7>()
+	void testobject::test<30>()
 	{
 		set_test_name("ShareablePoint: Test of constructor");
 
@@ -294,7 +349,7 @@ namespace tut
 
 	template<>
 	template<>
-	void testobject::test<8>()
+	void testobject::test<40>()
 	{
 		set_test_name("ShareableFrame: Test of getters & setters");
 
@@ -306,19 +361,25 @@ namespace tut
 		ensure_equals(frame.sizePoints(), 0);
 		ensure(frame.getTranslation() == ShareablePosition{ 0 });
 		ensure(frame.getRotation() == ShareablePosition{ 0 });
+		ensure(frame.getScale() == 1);
+		ensure_not(frame.isFreeScale());
 		ensure(frame.getParentFrame() == nullptr);
 
 		frame.setName("lol");
 		frame.setTranslation({ 1, 2, 3 });
 		frame.setRotation({ 4, 5, 6 });
+		frame.setScale(-12);
+		frame.isFreeScale(true);
 		ensure_equals(frame.getName(), "lol");
 		ensure(frame.getTranslation() == ShareablePosition{ 1, 2, 3 });
 		ensure(frame.getRotation() == ShareablePosition{ 4, 5, 6 });
+		ensure(frame.getScale() == -12);
+		ensure(frame.isFreeScale());
 	}
 
 	template<>
 	template<>
-	void testobject::test<9>()
+	void testobject::test<41>()
 	{
 		set_test_name("ShareableFrame: Test of frames management");
 
@@ -369,7 +430,7 @@ namespace tut
 
 	template<>
 	template<>
-	void testobject::test<10>()
+	void testobject::test<42>()
 	{
 		set_test_name("ShareableFrame: Test of points management");
 
@@ -402,7 +463,7 @@ namespace tut
 
 	template<>
 	template<>
-	void testobject::test<11>()
+	void testobject::test<43>()
 	{
 		set_test_name("ShareableFrame: Test of getAllPoints()");
 
@@ -443,7 +504,7 @@ namespace tut
 
 	template<>
 	template<>
-	void testobject::test<12>()
+	void testobject::test<50>()
 	{
 		set_test_name("ShareablePointsList: Test of all");
 

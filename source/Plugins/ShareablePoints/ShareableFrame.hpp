@@ -10,6 +10,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <string>
 #include <vector>
 
+#include "Quad.h"
 #include "ShareablePoint.hpp"
 #include "ShareablePosition.hpp"
 
@@ -26,12 +27,17 @@ struct ShareableParams;
  *
  * Frames are organized in a tree: you can have frames inside a frame. The leaves of the tree are the points. Thus, a frame, if it is not the root of
  * the tree, has a parent frame, and a relative position to it. This position is set thanks to a rotation and a translation from the parent frame.
+ * A frame is a coordinate system that can either be fixed (i.e. known) with respect to its parent frame, or considered as free, meaning in this
+ * last case that parts (or all) of its position parameters are flexible (the translation or rotation can have some ShareablePosition::isfreex
+ * (or other) true).
  *
  * Finally, a frame is composed of:
  * - a parent frame
  * - a name
  * - a translation (ShareablePosition) from its parent frame
  * - a rotation (ShareablePosition) from its parent frame
+ * - a scale from its parent frame
+ * - a flexibility on the scale attribute
  * - a list of children frames
  * - a list of childen points
  * - the parameters for the list of points (shared by all the frames and the ShareablePointsList).
@@ -180,6 +186,10 @@ public:
 	void setRotation(const ShareablePosition& rotation) noexcept { _rotation = rotation; }
 	const ShareablePosition& getRotation() const noexcept { return _rotation; }
 	ShareablePosition& getRotation() noexcept { return _rotation; }
+	void setScale(TReal scale) noexcept { _scale = scale; }
+	TReal getScale() const noexcept { return _scale; }
+	void isFreeScale(bool free) noexcept { _isfreescale = free; }
+	TReal isFreeScale() const noexcept { return _isfreescale; }
 
 	/**
 	 * Change the parameters for this frame and all its children.
@@ -208,9 +218,13 @@ private:
 	/** The name of the frame. */
 	std::string _name;
 	/** The translation from the parent frame. */
-	ShareablePosition _translation = { 0, 0, 0, 0, 0, 0 };
+	ShareablePosition _translation = { 0 };
 	/** The rotation from the parent frame. */
-	ShareablePosition _rotation = { 0, 0, 0, 0, 0, 0 };
+	ShareablePosition _rotation = { 0 };
+	/** Scale factor from the parent frame. */
+	TReal _scale = 1;
+	/** Tells if the scale is flexible (free, known). */
+	bool _isfreescale = false;
 	/** Frame children. */
 	std::vector<std::unique_ptr<ShareableFrame>> _innerFrames;
 	/** Point children. */
