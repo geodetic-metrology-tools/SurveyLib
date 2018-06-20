@@ -10,7 +10,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <string>
 #include <vector>
 
-#include "Quad.h"
 #include "ShareablePoint.hpp"
 #include "ShareablePosition.hpp"
 
@@ -186,10 +185,10 @@ public:
 	void setRotation(const ShareablePosition& rotation) noexcept { _rotation = rotation; }
 	const ShareablePosition& getRotation() const noexcept { return _rotation; }
 	ShareablePosition& getRotation() noexcept { return _rotation; }
-	void setScale(TReal scale) noexcept { _scale = scale; }
-	TReal getScale() const noexcept { return _scale; }
+	void setScale(double scale) noexcept { _scale = scale; }
+	double getScale() const noexcept { return _scale; }
 	void isFreeScale(bool free) noexcept { _isfreescale = free; }
-	TReal isFreeScale() const noexcept { return _isfreescale; }
+	double isFreeScale() const noexcept { return _isfreescale; }
 
 	/**
 	 * Change the parameters for this frame and all its children.
@@ -222,7 +221,7 @@ private:
 	/** The rotation from the parent frame. */
 	ShareablePosition _rotation = { 0 };
 	/** Scale factor from the parent frame. */
-	TReal _scale = 1;
+	double _scale = 1;
 	/** Tells if the scale is flexible (free, known). */
 	bool _isfreescale = false;
 	/** Frame children. */

@@ -10,6 +10,8 @@
 #include "ShareablePoints/ShareablePointsList.hpp"
 #include "ShareablePoints/ShareablePosition.hpp"
 
+#include "TCoordSysFactory.h"
+
 namespace tut
 {
 	struct shareablepointsdata {};
@@ -304,7 +306,7 @@ namespace tut
 			ensure(p.extraInfos.empty());
 		}
 		{
-			const ShareableParams p = { 2, TCoordSysFactory::ECoordSys::kGeodetic };
+			const ShareableParams p = { 2, ShareableParams::ECoordSys::kGeodetic };
 			ensure_equals(p.precision, 2);
 			ensure_equals(p.coordsys, TCoordSysFactory::ECoordSys::kGeodetic);
 			ensure(p.extraInfos.empty());

@@ -9,8 +9,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <cmath>
 #include <string>
 
-#include "Quad.h"
-
 /**
  * Holds the basic information about the position of a point.
  *
@@ -45,17 +43,17 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 struct ShareablePosition
 {
 	/** X coordinate */
-	TReal x;
+	double x;
 	/** Y coordinate */
-	TReal y;
+	double y;
 	/** Z or H coordinate */
-	TReal z;
+	double z;
 	/** Accuracy on X */
-	TReal sigmax;
+	double sigmax;
 	/** Accuracy on Y */
-	TReal sigmay;
+	double sigmay;
 	/** Accuracy on Z or H */
-	TReal sigmaz;
+	double sigmaz;
 	/** Tells if X coordinate is free or fixed. */
 	bool isfreex;
 	/** Tells if Y coordinate is free or fixed. */
@@ -86,7 +84,7 @@ struct ShareablePosition
 	* @param f the scalar
 	* @return the multiplication between this point and a scalar.
 	*/
-	friend constexpr const ShareablePosition operator*(ShareablePosition sp1, TReal f) noexcept { return sp1 *= f; }
+	friend constexpr const ShareablePosition operator*(ShareablePosition sp1, double f) noexcept { return sp1 *= f; }
 	/**
 	* Return the multiplication between this point and a scalar.
 	*
@@ -94,14 +92,14 @@ struct ShareablePosition
 	* @param sp1 the points that will be multiplied
 	* @return the multiplication between this point and a scalar.
 	*/
-	friend constexpr const ShareablePosition operator*(TReal f, ShareablePosition sp1) noexcept { return sp1 *= f; }
+	friend constexpr const ShareablePosition operator*(double f, ShareablePosition sp1) noexcept { return sp1 *= f; }
 	/**
 	 * Return the division between this point and a scalar.
 	 *
 	 * @param f the scalar
 	 * @return the division between this point and a scalar.
 	 */
-	friend constexpr const ShareablePosition operator/(ShareablePosition sp1, TReal f) noexcept { return sp1 /= f; }
+	friend constexpr const ShareablePosition operator/(ShareablePosition sp1, double f) noexcept { return sp1 /= f; }
 	/**
 	 * Adds sp to the current point.
 	 *
@@ -129,7 +127,7 @@ struct ShareablePosition
 	 * @return the current point (this)
 	 * @see operator*()
 	 */
-	constexpr const ShareablePosition& operator*=(TReal f) noexcept { x *= f; y *= f; z *= f; return *this; }
+	constexpr const ShareablePosition& operator*=(double f) noexcept { x *= f; y *= f; z *= f; return *this; }
 	/**
 	 * Divide this point with a scalar.
 	 *
@@ -137,7 +135,7 @@ struct ShareablePosition
 	 * @return the current point (this)
 	 * @see operator/()
 	 */
-	constexpr const ShareablePosition& operator/=(TReal f) noexcept { return *this *= (1 / f); }
+	constexpr const ShareablePosition& operator/=(double f) noexcept { return *this *= (1 / f); }
 
 	/**
 	 * Compare the points.
