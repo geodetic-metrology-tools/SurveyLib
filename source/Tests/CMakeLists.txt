@@ -9,7 +9,7 @@ include_directories (${TUT_INCLUDE_PATH}
 					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/Converters
 					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/StreamFormatters
 					${SURVEYLIB_ROOT}/source/SpatialObjDLL/headers
-					${SURVEYLIB_ROOT}/source/Plugins/Logs
+					${SURVEYLIB_ROOT}/source/Plugins
 )
 
 set(SurveyMain_Tests
@@ -42,6 +42,7 @@ set(ProjectFrameworkTests_SOURCES
 
 set(PluginsTests_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/Plugins/testLogs.cpp
+	${CMAKE_CURRENT_LIST_DIR}/Plugins/testShareablePoints.cpp
 )
 
 add_executable(UnitTests ${SurveyMain_Tests} ${SpatialObjects_SOURCES} ${SurveyLibDLLTests_SOURCES} ${ProjectFrameworkTests_SOURCES} ${PluginsTests_SOURCES})

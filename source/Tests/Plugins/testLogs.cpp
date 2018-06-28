@@ -5,10 +5,10 @@
 
 #include <tut/tut.hpp>
 
-#include "FileLogHandler.hpp"
-#include "ILogHandler.hpp"
-#include "Logger.hpp"
-#include "LogMessage.hpp"
+#include "Logs/FileLogHandler.hpp"
+#include "Logs/ILogHandler.hpp"
+#include "Logs/Logger.hpp"
+#include "Logs/LogMessage.hpp"
 
 namespace tut
 {
@@ -18,7 +18,7 @@ namespace tut
 	};
 
 	typedef test_group<pluginsdata> tg;
-	tg plugins_test_group("Test Plugins package.");
+	tg plugins_logs_test_group("Test Plugins package.");
 	typedef tg::object testobject;
 }
 

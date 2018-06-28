@@ -12,6 +12,11 @@ class LogMessage;
 
 /**
  * Log handler that print the logs in the console.
+ *
+ * ConsoleLogHandler is part of the @ref logs module.
+ * @ingroup logs
+ *
+ * @see logs, ILogHandler, FileLogHandler
  */
 class ConsoleLogHandler : public ILogHandler
 {

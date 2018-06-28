@@ -3,25 +3,36 @@ include_directories(${CMAKE_SOURCE_DIR}
 )
 
 set(PLUG_HEADERS
-	Logs/ConsoleLogHandler.hpp
-	Logs/FileLogHandler.hpp
-	Logs/ILogHandler.hpp
-	Logs/Logger.hpp
-	Logs/LogMessage.hpp
+	${CMAKE_CURRENT_LIST_DIR}/Logs/ConsoleLogHandler.hpp
+	${CMAKE_CURRENT_LIST_DIR}/Logs/FileLogHandler.hpp
+	${CMAKE_CURRENT_LIST_DIR}/Logs/ILogHandler.hpp
+	${CMAKE_CURRENT_LIST_DIR}/Logs/Logger.hpp
+	${CMAKE_CURRENT_LIST_DIR}/Logs/LogMessage.hpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePosition.hpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareableFrame.hpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareableParams.hpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareableExtraInfo.hpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePoint.hpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePointsList.hpp
 )
 
 set(PLUG_SOURCES
-	Logs/ConsoleLogHandler.cpp
-	Logs/FileLogHandler.cpp
-	Logs/Logger.cpp
-	Logs/LogMessage.cpp
+	${CMAKE_CURRENT_LIST_DIR}/Logs/ConsoleLogHandler.cpp
+	${CMAKE_CURRENT_LIST_DIR}/Logs/FileLogHandler.cpp
+	${CMAKE_CURRENT_LIST_DIR}/Logs/Logger.cpp
+	${CMAKE_CURRENT_LIST_DIR}/Logs/LogMessage.cpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePosition.cpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareableFrame.cpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePointsList.cpp
 )
 
 if (MSVC)
 	# Define VS folders:
-	file(GLOB PLUGINS_MSVC	Logs/*)
-	source_group("Plugins\\Logs"	FILES ${PLUGINS_MSVC})
+	file(GLOB PLUGINS_LOGS	Logs/*)
+	source_group("Plugins\\Logs"	FILES ${PLUGINS_LOGS})
+	file(GLOB PLUGINS_SHAREPOINTS	ShareablePoints/*)
+	source_group("Plugins\\ShareablePoints"	FILES ${PLUGINS_SHAREPOINTS})
 endif()
 
 #Create a static library from the object files
-ADD_LIBRARY(Plugins STATIC ${PLUG_HEADERS} ${PLUG_SOURCES})
+add_library(Plugins STATIC ${PLUG_HEADERS} ${PLUG_SOURCES})
