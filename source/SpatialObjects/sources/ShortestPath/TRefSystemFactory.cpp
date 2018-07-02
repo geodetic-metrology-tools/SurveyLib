@@ -380,7 +380,7 @@ void TRefSystemFactory::init()
 	}
 
 
-	for (i = 0; i < eta.size(); i++)
+	for (i = 0; i <eta.size(); i++)
 	{
 		for (j = 0; j < eta[i].size(); j++)
 			(*EtaMatrix0)(i,j) = eta[i][j];
@@ -566,22 +566,22 @@ void TRefSystemFactory::init()
 	}};
 
 
-	for (i = 0; i < nLEP.size(); i++)
+	for (i = 0; i < (int)nLEP.size(); i++)
 	{
-		for (j = 0; j < nLEP[i].size(); j++)
+		for (j = 0; j < (int)nLEP[i].size(); j++)
 			(*NMatrixLEP)(i,j) = nLEP[i][j];
 	}
 
 
-	for (i = 0; i < etaLEP.size(); i++)
+	for (i = 0; i < (int)etaLEP.size(); i++)
 	{
-		for (j = 0; j < etaLEP[i].size(); j++)
+		for (j = 0; j < (int)etaLEP[i].size(); j++)
 			(*EtaMatrixLEP)(i,j) = etaLEP[i][j];
 	}
 
-	for (i = 0; i < xsiLEP.size(); i++)
+	for (i = 0; i < (int)xsiLEP.size(); i++)
 	{
-		for (j = 0; j < xsiLEP[i].size(); j++)
+		for (j = 0; j < (int)xsiLEP[i].size(); j++)
 			(*XsiMatrixLEP)(i,j) = xsiLEP[i][j];
 	}
 
