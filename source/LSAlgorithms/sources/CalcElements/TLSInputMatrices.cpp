@@ -8,7 +8,7 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
-
+#include "Logger.hpp"
 #include "TLSInputMatrices.h"
 
 
@@ -200,6 +200,8 @@ bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex 
 	if (0 <= row && row < fNbCnstr && 0 <= column && column < fNbUnk)
 		fCnstrFirstDesignMtrx->insert(row,column) = coeff;
 	} catch(...) {
+		logFatal() << "Setting constraints for LIBR calculations in the first design matrix A:\n"
+			<< "Could not insert the element (" << row << "," << column << ") with the value: " << coeff << std::endl;
 		return false;
 	}
 	return true;

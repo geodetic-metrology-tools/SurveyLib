@@ -26,16 +26,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 namespace
 {
-	std::string getCurrentDirectory() { 
-	
-		char cCurrentPath[FILENAME_MAX];
-		if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
-			return "";
-		cCurrentPath[sizeof(cCurrentPath) - 1] = '\0'; /* not really required */
-
-		return std::string(cCurrentPath);
-	}
-
 	inline bool isDelim(const char c, const char* delims, int ndelims) {
 		for (int i = 0; i < ndelims; i++)
 			if (c == delims[i]) return true;

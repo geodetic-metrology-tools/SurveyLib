@@ -1,16 +1,19 @@
 # set include directories needed by this library
-include_directories(${SURVEYLIB_ROOT}/source/Tools/headers)
+include_directories(${SURVEYLIB_ROOT}/source/Tools/headers
+                    ${SURVEYLIB_ROOT}/source/Plugins/Logs)
 
 # Create a variable containing all .cpp files:
 set(Tools_SOURCES 
-	sources/Behavior.cpp
+    sources/Behavior.cpp
+	sources/FileUtils.cpp
 )
 
 # Create a variable containing all .h files:
 set(Tools_HEADERS 
     headers/TStatusObject.h
-	headers/Behavior.h
-	headers/StringManager.h
+    headers/Behavior.h
+    headers/StringManager.h 
+    headers/FileUtils.h
 )
 
 # Create a static library from sources:
