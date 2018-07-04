@@ -13,6 +13,10 @@ Logger & Logger::getLogger()
 
 void Logger::log(const LogMessage & message)
 {
+	if (message.getType() == LogMessage::Type::WARNING)
+		_warningnumber++;
+	else if (message.getType() >= LogMessage::Type::CRITICAL)
+		_errornumber++;
 	for (auto& h : _handlers)
 	{
 		if (message.getType() >= h->getThreshold())

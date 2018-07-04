@@ -14,7 +14,7 @@ namespace tut
 {
 	struct pluginsdata 
 	{
-		~pluginsdata() { Logger::getLogger().clearHandlers(); }
+		~pluginsdata() { Logger::getLogger().clearHandlers(); Logger::getLogger().clearCounters(); }
 	};
 
 	typedef test_group<pluginsdata> tg;
@@ -132,6 +132,10 @@ namespace tut
 		const auto *l2 = &Logger::getLogger();
 		ensure(l1);
 		ensure_equals(l1, l2);
+		ensure_equals(l1->errorNumber(), 0);
+		ensure_equals(l1->warningNumber(), 0);
+		ensure_not(l1->hasErrors());
+		ensure_not(l1->hasWarnings());
 	}
 
 	template<>
@@ -192,6 +196,11 @@ namespace tut
 		auto& logger = Logger::getLogger();
 		logger.addHandlers(&h1, &h2);
 
+		ensure_equals(logger.errorNumber(), 0);
+		ensure_equals(logger.warningNumber(), 0);
+		ensure_not(logger.hasErrors());
+		ensure_not(logger.hasWarnings());
+
 		h1.setThreshold(LogMessage::Type::WARNING);
 		logger.log(LogMessage(LogMessage::Type::DEBUG));
 		logger.log(LogMessage(LogMessage::Type::INFO));
@@ -200,6 +209,10 @@ namespace tut
 		logger.log(LogMessage(LogMessage::Type::FATAL));
 		ensure_equals(h1.i, 3u);
 		ensure_equals(h2.i, 3u);
+		ensure_equals(logger.errorNumber(), 2);
+		ensure_equals(logger.warningNumber(), 1);
+		ensure(logger.hasErrors());
+		ensure(logger.hasWarnings());
 
 		h1.setThreshold(LogMessage::Type::DEBUG);
 		logger.log(LogMessage(LogMessage::Type::DEBUG));
@@ -209,6 +222,10 @@ namespace tut
 		logger.log(LogMessage(LogMessage::Type::FATAL));
 		ensure_equals(h1.i, 8u); // 3 + 5
 		ensure_equals(h2.i, 6u); // 3 + 3
+		ensure_equals(logger.errorNumber(), 4);
+		ensure_equals(logger.warningNumber(), 2);
+		ensure(logger.hasErrors());
+		ensure(logger.hasWarnings());
 
 		h1.setThreshold(LogMessage::Type::INFO);
 		logger.log(LogMessage(LogMessage::Type::DEBUG));
@@ -218,6 +235,10 @@ namespace tut
 		logger.log(LogMessage(LogMessage::Type::FATAL));
 		ensure_equals(h1.i, 12u); // 8 + 4
 		ensure_equals(h2.i, 9u); // 6 + 3
+		ensure_equals(logger.errorNumber(), 6);
+		ensure_equals(logger.warningNumber(), 3);
+		ensure(logger.hasErrors());
+		ensure(logger.hasWarnings());
 
 		h1.setThreshold(LogMessage::Type::FATAL);
 		logger.log(LogMessage(LogMessage::Type::DEBUG));
@@ -227,6 +248,10 @@ namespace tut
 		logger.log(LogMessage(LogMessage::Type::FATAL));
 		ensure_equals(h1.i, 13u); // 12 + 1
 		ensure_equals(h2.i, 12u); // 9 + 3
+		ensure_equals(logger.errorNumber(), 8);
+		ensure_equals(logger.warningNumber(), 4);
+		ensure(logger.hasErrors());
+		ensure(logger.hasWarnings());
 	}
 
 	/* ************************************************** *
@@ -277,26 +302,46 @@ namespace tut
 		ensure(iendswith(h.msg.getFile(), "testLogs.cpp"));
 		ensure_equals(h.msg.getLine(), line);
 		ensure(h.msg.getFunction().find("test") != std::string::npos);
+		ensure_equals(logger.errorNumber(), 0);
+		ensure_equals(logger.warningNumber(), 0);
+		ensure_not(logger.hasErrors());
+		ensure_not(logger.hasWarnings());
 
 		line = __LINE__ + 1;
 		logInfo() << "this is" << "an error message:" << 45 << ' ' << 12.3;
 		ensure_equals(h.msg.getType(), LogMessage::Type::INFO);
 		ensure_equals(h.msg.getLine(), line);
+		ensure_equals(logger.errorNumber(), 0);
+		ensure_equals(logger.warningNumber(), 0);
+		ensure_not(logger.hasErrors());
+		ensure_not(logger.hasWarnings());
 		
 		line = __LINE__ + 1;
 		logWarning() << "this is" << "an error message:" << 45 << ' ' << 12.3;
 		ensure_equals(h.msg.getType(), LogMessage::Type::WARNING);
 		ensure_equals(h.msg.getLine(), line);
+		ensure_equals(logger.errorNumber(), 0);
+		ensure_equals(logger.warningNumber(), 1);
+		ensure_not(logger.hasErrors());
+		ensure(logger.hasWarnings());
 
 		line = __LINE__ + 1;
 		logCritical() << "this is" << "an error message:" << 45 << ' ' << 12.3;
 		ensure_equals(h.msg.getType(), LogMessage::Type::CRITICAL);
 		ensure_equals(h.msg.getLine(), line);
+		ensure_equals(logger.errorNumber(), 1);
+		ensure_equals(logger.warningNumber(), 1);
+		ensure(logger.hasErrors());
+		ensure(logger.hasWarnings());
 
 		line = __LINE__ + 1;
 		logFatal() << "this is" << "an error message:" << 45 << ' ' << 12.3;
 		ensure_equals(h.msg.getType(), LogMessage::Type::FATAL);
 		ensure_equals(h.msg.getLine(), line);
+		ensure_equals(logger.errorNumber(), 2);
+		ensure_equals(logger.warningNumber(), 1);
+		ensure(logger.hasErrors());
+		ensure(logger.hasWarnings());
 	}
 
 	/* ************************************************** *

@@ -3,9 +3,9 @@
 
 
 #ifdef __linux__    
-#define slash '/'
+	#define slash '/'
 #else
-#define slash "\\"
+	#define slash '\\'
 #endif
 
 #include <string>

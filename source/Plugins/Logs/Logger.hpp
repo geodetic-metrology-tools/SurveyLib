@@ -243,6 +243,10 @@ class ILogHandler;
  * logCritical() << "an error occurred with a =" << a;
  * @endcode
  *
+ * Each time an error or a warning is logged, an internal counter is increased. Thus, you can get the number of errors or warnings
+ * with the methods errorNumber() and warningNumber(). To reset these counters, you can call the method clearCounters().
+ * Note that the counters are incremented, even if there is no handlers.
+ *
  * @see logs
  */
 class Logger
@@ -299,6 +303,32 @@ public:
 	/** @see addHandlers(), removeHandler(), ILogHandler */
 	void clearHandlers() noexcept { _handlers.clear(); }
 
+	/**
+	 * @return true if some errors have been logged.
+	 * @see errorNumber(), clearCounters()
+	 */
+	bool hasErrors() const noexcept { return _errornumber > 0; }
+	/**
+	 * @return the number of logged warnings.
+	 * @see hasErrors(), clearCounters()
+	 */
+	size_t errorNumber() const noexcept { return _errornumber; }
+	/**
+	 * @return true if some warnings have been logged.
+	 * @see warningNumber(), clearCounters()
+	 */
+	bool hasWarnings() const noexcept { return _warningnumber > 0; }
+	/**
+	 * @return the number of logged warnings.
+	 * @see hasWarnings(), clearCounters()
+	 */
+	size_t warningNumber() const noexcept { return _warningnumber; }
+	/**
+	 * Clear the error and warning counters.
+	 * @see hasErrors(), errorNumber(), hasWarnings(), warningNumber()
+	 */
+	void clearCounters() noexcept { _errornumber = _warningnumber = 0; }
+
 private:
 	Logger() = default;
 
@@ -308,6 +338,10 @@ private:
 
 	/** List of registered handlers. */
 	std::unordered_set<ILogHandler *> _handlers;
+	/** number of errors */
+	size_t _errornumber = 0;
+	/** number of warnings */
+	size_t _warningnumber = 0;
 };
 
 #endif // LOGGER_HPP
