@@ -1,19 +1,21 @@
-#include <cstdio>  
+#include <algorithm>
+#include <cctype>
+#include <cstdio>
+
 #include "FileUtils.h"
 #include "Logger.hpp"
 
 #ifdef __linux__    
-#include <unistd.h>
-#define GetCurrentDir getcwd
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
+	#include <unistd.h>
+	#define GetCurrentDir getcwd
+	#include <sys/types.h>
+	#include <sys/stat.h>
+	#include <unistd.h>
+	#include <fcntl.h>
 #else
-#include <direct.h>
-#define GetCurrentDir _getcwd
-#include <windows.h>
-#include <regex>
+	#include <direct.h>
+	#define GetCurrentDir _getcwd
+	#include <windows.h>
 #endif
 
 
@@ -48,8 +50,7 @@ namespace svlTools
 #else
 		svlTools::changePathDirSlash(fileName);
 
-		std::regex disk("[[:alpha:]]:");
-		if ((regex_match(fileName.substr(0, 2), disk) && fileName.substr(2, 3).compare("\\")) || fileName.substr(0, 1).compare("\\") == 0)
+		if ((std::isalpha(fileName[0]) && fileName[1] == ':' && fileName[2] == slash) || fileName[0] == slash)
 			filePath = fileName;
 		else
 			filePath = svlTools::getCurrentDirectory() + slash + fileName;
@@ -62,18 +63,7 @@ namespace svlTools
 	void changePathDirSlash(std::string& path)
 	{
 #ifndef __linux__
-		int found = 1;
-		while (found < path.length())
-		{
-			found = (int)path.find_first_of("/");
-			if (found == std::string::npos)
-				break;
-			else
-			{
-				path = path.substr(0, found) + "\\" + path.substr(found + 1, path.length());
-				found += 1;
-			}
-		}
+		std::transform(std::begin(path), std::end(path), std::begin(path), [](char c) -> char { return c == '/' ? slash : c; });
 #endif // !__linux__
 	}
 
