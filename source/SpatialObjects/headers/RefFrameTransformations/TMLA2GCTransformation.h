@@ -31,7 +31,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include  "TAReferenceFrame.h"
 
 
-//using namespace std;
 
 /*!\ingroup spatialobjects
 	@{*/

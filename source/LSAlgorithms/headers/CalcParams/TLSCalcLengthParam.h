@@ -12,7 +12,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 #include <list>
 #include <string>
-//using namespace std;
 
 #include "TLength.h"
 #include <UEOIndices.h>

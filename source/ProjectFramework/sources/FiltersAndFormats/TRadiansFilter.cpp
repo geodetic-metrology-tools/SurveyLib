@@ -105,7 +105,7 @@ void	TRadiansFilter::output(TAStreamFormatter& oStream,const TAngle& angle)const
 	width = oStream.getPointFormat()->getCoordWidth();
 	precision = oStream.getPointFormat()->getCoordPrecision();
 
-	oStream.setf(ios::fixed,ios::floatfield);
+	oStream.setf(std::ios::fixed, std::ios::floatfield);
 	oStream.width(width);
 	oStream.precision(precision);
 	oStream<< angle.getRadiansValue();

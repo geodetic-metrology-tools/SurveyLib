@@ -12,7 +12,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 #include <list>
 #include <string>
-//using namespace std;
 
 #include "TSpatialPoint.h"
 #include "TSpatialPosition.h"
@@ -29,7 +28,7 @@ public:
 		TLSCalcFreeVectorParam();
 		/*! Constructor
 		\param spobs provisional value for the spatial point */
-		TLSCalcFreeVectorParam(TFreeVector pos,struct LSParaStatus status,string name);
+		TLSCalcFreeVectorParam(TFreeVector pos,struct LSParaStatus status, std::string name);
 		/*! Copy constructor */
 		TLSCalcFreeVectorParam(const TLSCalcFreeVectorParam& source);
 		/*! Destructor */
@@ -115,7 +114,7 @@ private:
 /*!@name Constants definition */
 //@{
 /*! List of ls calc position vector observations  */
-typedef list< TLSCalcFreeVectorParam >		LSFreeVecContainer;
+typedef std::list< TLSCalcFreeVectorParam >		LSFreeVecContainer;
 /*! Iterator of the list of ls calc position vector observations */
 typedef LSFreeVecContainer::iterator			LSFreeVecIter;
 /*! Constant iterator of the list of ls calc position vector observations */

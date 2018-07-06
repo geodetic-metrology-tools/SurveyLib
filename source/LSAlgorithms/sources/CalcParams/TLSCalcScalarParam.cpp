@@ -20,7 +20,7 @@ TLSCalcScalarParam::TLSCalcScalarParam():
 }
 
 // Constructor taking provisional value and parameter status as argument
-TLSCalcScalarParam::TLSCalcScalarParam(TReal pv, ELSStatus status, string name) ://does the scalar need a name?
+TLSCalcScalarParam::TLSCalcScalarParam(TReal pv, ELSStatus status, std::string name) ://does the scalar need a name?
    fProvisionalValue(pv),
    fStatus(status),TALSCalcParameter(name), 
    fCorrection(LITERAL(0.0) /*,TCoordSysFactory::k3DCartesian*/),

@@ -102,7 +102,7 @@ void	TMetresFilter::output(TAStreamFormatter& oStream, const TLength& length)con
 {	// function to put a metre length to a QTextStream object.
 	// Gets the value from a TLength object
 
-	oStream.setf(ios::fixed,ios::floatfield);
+	oStream.setf(std::ios::fixed, std::ios::floatfield);
 	oStream.width(oStream.getWidthFormat());
 	oStream.precision(oStream.getPrecisionFormat());
 	oStream<<right;

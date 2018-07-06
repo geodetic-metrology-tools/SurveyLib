@@ -29,7 +29,7 @@ fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesia
 
 
 TLSCalcPosVectorParam::TLSCalcPosVectorParam(TPositionVector pos,struct LSParaStatus status,
-											 string name ):
+	std::string name ):
 TALSCalcParameter(name),
 fProvisionalValue(pos),
 fStatus(status),
@@ -174,9 +174,9 @@ TSpatialStatus::ESpatialStatus	TLSCalcPosVectorParam::getGlobalStatus() const
 }
 
 
-string		TLSCalcPosVectorParam::getPosVecStatus() const
+std::string		TLSCalcPosVectorParam::getPosVecStatus() const
 {
-	string res = "unknown";
+	std::string res = "unknown";
 	TSpatialStatus::ESpatialStatus status = this->getGlobalStatus();
 	
 	switch(status)
@@ -272,7 +272,7 @@ TLength		TLSCalcPosVectorParam::getHEstValue(const TRefSystemFactory::ERefFrame	
 	TAReferenceFrame* ccs = TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS);
 	if(refH != ccs)
 	{
-		string name = refH->getName();
+		std::string name = refH->getName();
 		TSpatialPosition pos (ccs);
 		pos.setCoordinates(getEstimatedValue());
 		pos.transform(refH);
@@ -288,7 +288,7 @@ TLength		TLSCalcPosVectorParam::getHProvValue(const TRefSystemFactory::ERefFrame
 	TAReferenceFrame* ccs = TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS);
 	if(refH != ccs)
 	{
-		string name = refH->getName();
+		std::string name = refH->getName();
 		TSpatialPosition pos (ccs);
 		pos.setCoordinates(getProvisionalValue());
 		pos.transform(refH);

@@ -25,7 +25,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 // Forward declarations
 //
 #include  <string>
-//using namespace std;
 //
 class TWPSFilter;
 
@@ -66,7 +65,7 @@ public:
 	//@{
 		//! Default Constructor
 		TFixedColFormatTStream(TDataParameters&);
-		TFixedColFormatTStream(const string&, TDataParameters&);
+		TFixedColFormatTStream(const std::string&, TDataParameters&);
 		TFixedColFormatTStream(TAStreamFormatter::EIOType, TADataSet&);
 
 		TFixedColFormatTStream(TAStreamFormatter::EIOType, TADataSet&, TPointFormat&);
@@ -109,8 +108,8 @@ public:
     virtual  void  skipCommentLines();
 
 	//!returns the charachter sequence used to spearate fields
-	virtual string		getSeparator() const;
-	virtual void		setSeparator(const string&);
+	virtual std::string		getSeparator() const;
+	virtual void		setSeparator(const std::string&);
 
 	/*! for files which have no observations' values to read */
 	virtual void  setNoObsToRead();
@@ -125,8 +124,8 @@ private:
 /*	TWPSFilter*		fWPSFilter;
 	TWTWFilter*		fWTWFilter;*/
 
-	string			fLineBuf;
-	string			fSeparator;
+	std::string			fLineBuf;
+	std::string			fSeparator;
 
 	bool			fNoObsToRead;
 

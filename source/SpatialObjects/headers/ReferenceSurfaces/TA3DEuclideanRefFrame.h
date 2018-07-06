@@ -36,7 +36,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 //#include  "TA2DXYRefFrame.h"
 
 //#include "TVReferenceFrame.h"
-//using namespace std;
 // typedefs
 //
 //
@@ -53,7 +52,7 @@ public:
 	/*!@name Constructors and Destructors */
 	//@{
 		//! Constructor taking the name of the reference frame
-		explicit TA3DEuclideanRefFrame( const string& name );
+		explicit TA3DEuclideanRefFrame( const std::string& name );
 
 		//! Destructor
 		virtual  ~TA3DEuclideanRefFrame();

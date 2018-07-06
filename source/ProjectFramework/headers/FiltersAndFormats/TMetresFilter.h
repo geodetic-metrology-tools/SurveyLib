@@ -25,7 +25,6 @@ Works as a Strategy of a TTStreamFormatter object.
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-//using namespace std;
 //
 class		TLength;
 #include	"TAStreamFormatter.h"

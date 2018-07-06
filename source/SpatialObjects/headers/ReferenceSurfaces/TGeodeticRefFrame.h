@@ -29,7 +29,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 // Forward declarations
 //
 #include  <string>
-//using namespace std;
 
 class  TSpatialPosition;
 class  TSpatialVector;
@@ -53,10 +52,10 @@ public:
 	//@{
 
 		/// Constructor taking the name of the reference frame
-		explicit TGeodeticRefFrame( const string& name );
+		explicit TGeodeticRefFrame( const std::string& name );
 
 		/// Constructor taking the name of the reference frame
-		TGeodeticRefFrame( const string& name, TReferenceEllipsoid* ell);
+		TGeodeticRefFrame( const std::string& name, TReferenceEllipsoid* ell);
 
 		/// Destructor
 		virtual  ~TGeodeticRefFrame();

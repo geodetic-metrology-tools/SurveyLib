@@ -25,7 +25,6 @@ Works as a Strategy of a TQtStreamFormatter object.
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-//using namespace std;
 class	TAngle;
 class	TPointFormat;
 class	TObservationFormat;

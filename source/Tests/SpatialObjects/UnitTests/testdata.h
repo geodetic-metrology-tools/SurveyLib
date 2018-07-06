@@ -5,7 +5,7 @@
 
 namespace TrafoTestPoints {
 
-	typedef const std::array<const string, 196> TTestPoints;
+	typedef const std::array<const std::string, 196> TTestPoints;
 	
 	static const TTestPoints LHC_CHpts = {
 		"MQ_11R6_E	2569.94427	10312.41071	2363.13438",

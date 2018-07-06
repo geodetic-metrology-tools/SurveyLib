@@ -25,7 +25,6 @@ Works as a Strategy of a TTStreamFormatter object.
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-//using namespace std;
 class		TAngle;
 #include	"TAStreamFormatter.h"
 #include	"TAngleFilter.h"

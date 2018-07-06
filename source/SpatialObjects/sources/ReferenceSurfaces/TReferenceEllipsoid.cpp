@@ -25,7 +25,7 @@
 
 
 // Constructor taking the name of the reference ellipsoid
-TReferenceEllipsoid::TReferenceEllipsoid( const  string& name ) : fName( name )
+TReferenceEllipsoid::TReferenceEllipsoid( const  std::string& name ) : fName( name )
 {	 
 }
 

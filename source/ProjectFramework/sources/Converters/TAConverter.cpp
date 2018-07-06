@@ -36,14 +36,14 @@ inline bool isDelim(const char c, const char* delims, int ndelims) {
 }
 
 
-const vector<string> TAConverter::tokenizeString(const string& str, const char* delims) {
+const std::vector<std::string> TAConverter::tokenizeString(const std::string& str, const char* delims) {
 	enum {
 		STATE_TOKEN,
 		STATE_DELIM
 	};
 
 	size_t delimlen(strlen(delims));
-	vector<string> result(0);
+	std::vector<std::string> result(0);
 	
 	size_t start(0);
 	size_t end(0);
@@ -165,7 +165,7 @@ void	TAConverter::setStream(TAStreamFormatter* stream)
 // PROTECTED MEMBER FUNCTIONS
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void	TAConverter::writeString(const int width, const string data)
+void	TAConverter::writeString(const int width, const std::string data)
 {
 	//(*fStream)<<" ";
 	fStream->width(width);
@@ -174,7 +174,7 @@ void	TAConverter::writeString(const int width, const string data)
 }
 
 
-void	TAConverter::writeStringSep(const int width, const string data)
+void	TAConverter::writeStringSep(const int width, const std::string data)
 {
 	//writeString(1, "");
 	writeString(width, data);
@@ -185,7 +185,7 @@ void	TAConverter::writeStringSep(const int width, const string data)
 //void	TAConverter::writeStringNoSpaceSep(const int width, const string 
 
 
-void	TAConverter::writeStringLeft(const int width, const string data)
+void	TAConverter::writeStringLeft(const int width, const std::string data)
 {
 	fStream->width(width);
 	(*fStream)<<left<<data<<right;
@@ -193,7 +193,7 @@ void	TAConverter::writeStringLeft(const int width, const string data)
 }
 
 
-void	TAConverter::writeStringLeftSep(const int width, const string data)
+void	TAConverter::writeStringLeftSep(const int width, const std::string data)
 {
 	writeStringLeft(width, data);
 	(*fStream)<<fSeparator;
@@ -241,13 +241,13 @@ void	TAConverter::writeAngle(const int width, const int pres, const TAngle::EUni
 	return;
 }
 
-void	TAConverter::readP100Comment(string comments)
+void	TAConverter::readP100Comment(std::string comments)
 {
 
 	//end line comments
 	fStream->readChar(); //read the char %
 
-	string comment = "";
+	std::string comment = "";
 	fStream->skipWhiteSpace();
 	while(fStream->peek() != EOF && fStream->peek() != '\n')
 	{
@@ -260,18 +260,18 @@ void	TAConverter::readP100Comment(string comments)
 }
 
 
-string TAConverter::readOptional(const string& keyword)
+std::string TAConverter::readOptional(const std::string& keyword)
 {
 	fStream->skipWhiteSpace();
 
 	if (fStream->peek() != '\n')
 	{
-		string word;
+		std::string word;
 		*fStream >> word;
 		
 		if (word != keyword)
 		{
-			fStream->seekg(-static_cast<std::streamoff>(word.length()), ios_base::cur);
+			fStream->seekg(-static_cast<std::streamoff>(word.length()), std::ios_base::cur);
 			return "";
 		}
 
@@ -281,13 +281,13 @@ string TAConverter::readOptional(const string& keyword)
 	return "";
 }
 
-bool TAConverter::readOptionalExists(const string& keyword)
+bool TAConverter::readOptionalExists(const std::string& keyword)
 {
 	fStream->skipWhiteSpace();
 
 	if (fStream->peek() != '\n')
 	{
-		string word;
+		std::string word;
 		*fStream >> word;
 		
 		if (word == keyword)
@@ -295,7 +295,7 @@ bool TAConverter::readOptionalExists(const string& keyword)
 			return true;
 		}
 
-		fStream->seekg(-static_cast<std::streamoff>(word.length()), ios_base::cur);
+		fStream->seekg(-static_cast<std::streamoff>(word.length()), std::ios_base::cur);
 	}
 	return false;
 }

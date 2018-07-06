@@ -30,7 +30,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include  "TGraphLocalAstronomicalRF.h"
 
 
-//using namespace std;
 //#include  "TLocalAstronomicalRefFrame.h"
 // typedefs
 //
@@ -49,7 +48,7 @@ public:
 	//@{
 		/// Constructor taking the name of the reference frame, the origin, the geoid parameters,
 		/// the false origin,the geodetic reference frame and the orientation angles
-		TGraphMLARF( const string& name, TFreeVector falseOrigin, TGraphLocalAstronomicalRF* RF,
+		TGraphMLARF( const std::string& name, TFreeVector falseOrigin, TGraphLocalAstronomicalRF* RF,
 		const TAngle omega, const TAngle phi, const TAngle kappa);
 
 		

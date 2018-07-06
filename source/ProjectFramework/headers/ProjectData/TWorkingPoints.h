@@ -16,7 +16,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <algorithm>
 #include <sstream>
 #include <unordered_map>
-using namespace std;
 
 
 #include "TSpatialPoint.h"
@@ -80,10 +79,10 @@ public:
 	PointConstIter		getPoint(TSpatialPointName) const;
 
 	/*!@return an iterator pointing to a point specified through its name*/
-	PointIterator		getPoint(string);
+	PointIterator		getPoint(std::string);
 
 	/*!@return a cons iterator pointing to a point specified through its name*/
-	PointConstIter		getPoint(string) const;
+	PointConstIter		getPoint(std::string) const;
 
 	//////////////////////////////////////////////////////////////////////////////
 	PointIterator getPoint(int pos);
@@ -112,7 +111,7 @@ public:
 private:
 	
 	int						fLastPtNbr;
-	std::unordered_map<string, PointIterator> pointsMap;
+	std::unordered_map<std::string, PointIterator> pointsMap;
 	TPtListBroadcaster*	fBroadcaster;
 	SpatialPointContainer fWorkingPoints;
 

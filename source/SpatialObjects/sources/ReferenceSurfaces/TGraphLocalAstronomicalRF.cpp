@@ -18,7 +18,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-TGraphLocalAstronomicalRF::TGraphLocalAstronomicalRF( const string& name, 
+TGraphLocalAstronomicalRF::TGraphLocalAstronomicalRF( const std::string& name,
 													 const TAngle eta, const TAngle xsi,
 													 const TAngle dAlpha,
 													 TModifiedLocalGeodeticRF* locGeodSys)

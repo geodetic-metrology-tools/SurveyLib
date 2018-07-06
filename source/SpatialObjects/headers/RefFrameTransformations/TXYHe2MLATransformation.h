@@ -28,7 +28,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 //
 //#include  <##classname##>
 //
-//using namespace system;
 // #include  <cmath>
 #include  "TCompositeAffTransform.h"
 #include  "TARefFrameTransformation.h"
@@ -37,7 +36,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include  "TAReferenceFrame.h"
 
 
-using namespace std;
 // typedefs
 //
 //

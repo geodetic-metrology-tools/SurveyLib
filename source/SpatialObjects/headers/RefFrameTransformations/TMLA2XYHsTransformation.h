@@ -33,7 +33,6 @@ Patterns:
 #include  "TXYHeProjection.h"
 #include  "TAReferenceFrame.h"
 
-//using namespace std;
 // typedefs
 //
 //

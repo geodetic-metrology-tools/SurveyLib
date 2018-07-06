@@ -147,10 +147,10 @@ public:
 		int										getPointNameWidth() const;
 
 		TLocalSystemOrigin* getLocalSystemOrigin() const;
-		const string& getOriginFile() const;
+		const std::string& getOriginFile() const;
 			
 
-		string getRFName() const;
+		std::string getRFName() const;
 	//@}
 
 private:
@@ -159,7 +159,7 @@ private:
     TRefSystemFactory::ERefFrame			    fRefFrameEnum;
 	ECoordUnit									fCoordUnit;
     TLocalSystemOrigin*             			fLSO;
-	string										fOriginFile;
+	std::string										fOriginFile;
 	TCoordSysFactory::ECoordSys					fCoordSys;
 
 	TAngle::EUnits								fAngleUnits;
@@ -173,8 +173,8 @@ private:
 
 	TAStreamFormatter::ETextFormat punchFileFormat;
 	TAStreamFormatter::ETextFormat resultsFileFormat;
-	string punchSeparator;
-	string resultsSeparator;
+	std::string punchSeparator;
+	std::string resultsSeparator;
 
 };
 

@@ -31,7 +31,7 @@ public:
 };
 
 /// Type of the container used to store the broadcast list
-typedef list<TVPtListListener*> PtListListnrContainer;
+typedef std::list<TVPtListListener*> PtListListnrContainer;
 /// Type of an iterator pointing to an element of the broadcast list
 typedef PtListListnrContainer::iterator PtListListnrIterator;
 /// Type of a const iterator pointing to an element of the broadcast list

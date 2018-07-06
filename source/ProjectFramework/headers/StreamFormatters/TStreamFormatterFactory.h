@@ -44,16 +44,16 @@ public:
 
 		/// Get a new formatter of a given type
 		//TAStreamFormatter *getFormatter( TAStreamFormatter::ETextFormat, QTextStream* );
-		TAStreamFormatter *getFormatter( TADataSet* ds, TAStreamFormatter::ETextFormat, string seperator);
-		TAStreamFormatter *getFormatter( TAStreamFormatter::ETextFormat, const string&);
+		TAStreamFormatter *getFormatter( TADataSet* ds, TAStreamFormatter::ETextFormat, std::string seperator);
+		TAStreamFormatter *getFormatter( TAStreamFormatter::ETextFormat, const std::string&);
 		TAStreamFormatter *getFormatter( TAStreamFormatter::ETextFormat, TAStreamFormatter::EIOType, const char*);
 
 
 		/// Get a description of a given formatter
-		string  descriptionOf( TAStreamFormatter::ETextFormat )  const;
+		std::string  descriptionOf( TAStreamFormatter::ETextFormat )  const;
 
 		/// Get a formatter enumeration from a given description
-		TAStreamFormatter::ETextFormat  whichDataSet( const string& )  const;
+		TAStreamFormatter::ETextFormat  whichDataSet( const std::string& )  const;
 	//@}
 
 

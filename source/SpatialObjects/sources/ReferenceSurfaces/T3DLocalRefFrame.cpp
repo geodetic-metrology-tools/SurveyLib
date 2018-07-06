@@ -3,7 +3,7 @@
 //////////////////////////////////////
 // constructor
 ///////////////////////////////////////
-T3DLocalRefFrame::T3DLocalRefFrame(const string& name) 
+T3DLocalRefFrame::T3DLocalRefFrame(const std::string& name)
 : TA3DEuclideanRefFrame( name ) 
 {
 }

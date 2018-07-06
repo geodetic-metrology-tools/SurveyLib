@@ -33,7 +33,6 @@ class		TSpatialVector;
 class		TAGeoidModel;
 class		TXYHeProjection;
 #include	"TA2DPlus1MapProjection.h"
-using namespace std;
 // typedefs
 //
 //
@@ -54,7 +53,7 @@ public:
 
 		/*! Constructor taking the name, the geoid and the
 		 ellipsoid projection */
-		TXYHgProjection( const string& name, TAGeoidModel* geoid,
+		TXYHgProjection( const std::string& name, TAGeoidModel* geoid,
 			TXYHeProjection* xyhe); //TAModifiedLocalAstronomicalRF* ccs); modified
 
 		/*! Destructor */

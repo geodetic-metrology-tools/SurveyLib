@@ -175,18 +175,18 @@ public:
 	/*!@name Wrapper TFileParameters Functions */
 	//@{
 		/// set the full filename, both path and name
-		bool  setFileName( const string& );
+		bool  setFileName( const std::string& );
 		/// set the file type
-		bool  setTypeFormat( const string& );
+		bool  setTypeFormat( const std::string& );
 		/// clear the file parameters and set the default values 
 		void  defaultValues();
 
 		/// get the full filename, both path and name
-		string  getFileName()  const;  
+		std::string  getFileName()  const;
 		/// get the name of the file
-		string  getName()  const;
+		std::string  getName()  const;
 		/// get the path for the file
-		string  getPath()  const;
+		std::string  getPath()  const;
 		/// get the file type
 		TFileParameters::EFileType  getType()  const;
 		/// get the text stream's format
@@ -211,16 +211,16 @@ public:
 		virtual TAStreamFormatter::ETextFormat getPunchFileFormat();
 
 		/// set punch seperator
-		virtual void setPunchSeparator(string);
+		virtual void setPunchSeparator(std::string);
 
 		/// set results seperator
-		virtual void setResultsSeparator(string);
+		virtual void setResultsSeparator(std::string);
 
 		/// get results seperator
-		virtual string getResultsSeparator();
+		virtual std::string getResultsSeparator();
 
 		/// get punch seperator
-		virtual string getPunchSeparator();
+		virtual std::string getPunchSeparator();
 
 		/// get the format for the spacing between the data
 		bool isSpaceBetweenData();
@@ -232,10 +232,10 @@ public:
 		void setSpaceBetweenData();
 
 		/// set the format of the file
-		void setFormatType(string fmtType);
+		void setFormatType(std::string fmtType);
 
 		/// get the format of the file
-		string getFormatType();
+		std::string getFormatType();
 	//@}
 
 
@@ -255,15 +255,15 @@ private:
 		///saved status : bool
 		bool						fSaved;
 
-		string						fFormatType;
+		std::string						fFormatType;
 
 		TAStreamFormatter::ETextFormat fPunchFileFormat;
 
 		TAStreamFormatter::ETextFormat fResultsFileFormat;
 
-		string fPunchSeparator;
+		std::string fPunchSeparator;
 
-		string fResultsSeparator;
+		std::string fResultsSeparator;
 	//@}
 
 	//ClassDef(TADataSet, 1)

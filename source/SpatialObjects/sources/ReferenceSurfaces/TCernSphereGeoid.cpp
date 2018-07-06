@@ -23,7 +23,7 @@ TCernSphereGeoid::TCernSphereGeoid() : fName(0)
 }
 
 
-TCernSphereGeoid::TCernSphereGeoid( const string& name, TAReferenceFrame* def,
+TCernSphereGeoid::TCernSphereGeoid( const std::string& name, TAReferenceFrame* def,
 									TReferenceEllipsoid* ell, TAReferenceFrame* calc)
 : fName(name)
 

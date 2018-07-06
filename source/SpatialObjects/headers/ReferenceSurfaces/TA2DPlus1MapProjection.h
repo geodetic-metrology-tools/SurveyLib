@@ -30,7 +30,7 @@ public:
 	/*!@name Constructors and Destructors */
 	//@{
 	//! Constructor taking the name of the reference frame
-	TA2DPlus1MapProjection( const string& name );
+	TA2DPlus1MapProjection( const std::string& name );
 
 	//! Destructor
 	virtual  ~TA2DPlus1MapProjection();

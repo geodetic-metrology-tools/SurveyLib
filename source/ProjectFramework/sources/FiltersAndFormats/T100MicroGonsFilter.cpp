@@ -114,7 +114,7 @@ void	T100MicroGonsFilter::output(TAStreamFormatter& oStream,const TAngle& angle)
 		}
 
 
-	oStream.setf(ios::fixed,ios::floatfield);
+	oStream.setf(std::ios::fixed, std::ios::floatfield);
 	oStream.width(oStream.getWidthFormat());
 	oStream.precision(precision);
 	/*Modification du 08/05/2003 (suite a la modif de TAngle)

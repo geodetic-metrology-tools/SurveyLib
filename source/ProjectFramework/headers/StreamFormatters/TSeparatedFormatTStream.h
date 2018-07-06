@@ -27,7 +27,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 //
 #include  <string>
 #include <iostream>
-//using namespace std;
 //
 class TWPSFilter;
 
@@ -76,7 +75,7 @@ public:
 	//@{
 		//! Default Constructor
 		TSeparatedFormatTStream(TDataParameters&);
-		TSeparatedFormatTStream(const string&, TDataParameters&);
+		TSeparatedFormatTStream(const std::string&, TDataParameters&);
 
 		/*!Constructors
 		\param io: read or write
@@ -126,8 +125,8 @@ public:
     virtual  void  skipCommentLines();
 
 	//!returns the charachter sequence used to spearate fields
-	virtual string		getSeparator() const;
-	virtual void		setSeparator(const string&);
+	virtual std::string		getSeparator() const;
+	virtual void		setSeparator(const std::string&);
 
 	/*! for files which have no observations' values to read */
 	virtual void  setNoObsToRead();
@@ -148,7 +147,7 @@ private:
 /*	TWPSFilter*		fWPSFilter;
 	TWTWFilter*		fWTWFilter;*/
 
-	string			fLineBuf;
+	std::string			fLineBuf;
 	
 
 	bool			fNoObsToRead;

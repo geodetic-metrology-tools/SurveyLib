@@ -18,7 +18,6 @@
 //
 // Other forward declarations
 #include <iostream>
-using namespace std;
 
 #include  "TLength.h"
 #include "TObservationFormat.h"
@@ -108,7 +107,7 @@ void	TMillimetresFilter::output(TAStreamFormatter& oStream, const TLength& lengt
 		}
 	
 
-	oStream.setf(ios::fixed,ios::floatfield);
+	oStream.setf(std::ios::fixed, std::ios::floatfield);
 	oStream.width(oStream.getWidthFormat());
 	oStream.precision(precision);
 	oStream<<right;

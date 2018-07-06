@@ -33,7 +33,6 @@ class  TSpatialVector;
 class  TReferenceEllipsoid;
 class  TXYHeProjection;
 #include  "TA2DPlus1MapProjection.h"
-using namespace std;
 // typedefs
 //
 //
@@ -53,7 +52,7 @@ public:
 		TX0Y0HeProjection();
 
 		/*! Constructor taking the name, and the ellipsoid projection */
-		TX0Y0HeProjection( const string& name, TXYHeProjection* xyhe );
+		TX0Y0HeProjection( const std::string& name, TXYHeProjection* xyhe );
 
 		/*! Destructor */
 		virtual  ~TX0Y0HeProjection();

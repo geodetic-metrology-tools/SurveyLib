@@ -245,7 +245,7 @@ void	TGeodeticFilter::output(TAStreamFormatter& oStream, const TPositionVector& 
 {	// function to put x-, y-, and z-coordinates to a Stream object.
 	// Gets the coordinate values from a TPositionVector object
 
-	string sep =oStream.getSeparator();
+	std::string sep =oStream.getSeparator();
 
 	// sets the stream's width and precision and outputs the coordinates
 	if (pv.isInitialise())

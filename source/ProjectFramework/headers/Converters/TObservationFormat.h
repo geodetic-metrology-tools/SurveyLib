@@ -27,7 +27,6 @@ Patterns:
 // Forward declarations
 //
 //#include  <**classname**>
-//using namespace std;
 //
 //class  **classname**;
 //

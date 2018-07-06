@@ -33,7 +33,6 @@ class  TSpatialVector;
 class  TReferenceEllipsoid;
 class  TAModifiedLocalAstronomicalRF;
 #include  "TA2DPlus1MapProjection.h"
-using namespace std;
 // typedefs
 //
 //
@@ -54,7 +53,7 @@ public:
 
 		/// Constructor taking the name, the reference ellipsoid and the
 		/// modified local astronomical system corresponding to the reference frame
-		TXYHeProjection( const string& name, TReferenceEllipsoid* ellipsoid,
+		TXYHeProjection( const std::string& name, TReferenceEllipsoid* ellipsoid,
 			TAModifiedLocalAstronomicalRF* ccs);
 
 		/// Destructor

@@ -59,9 +59,9 @@ typedef TAStreamFormatter & (*TSFFUNC)(TAStreamFormatter &);// manipulator funct
 ///////////////////////////////////////////////////////////////
 //Implementation of multiplication operator for STRING, can be used for "multiplying" TAB spaces if we want a structurized output file
 ///////////////////////////////////////////////////////////////
-string operator*(const string& s, unsigned int n);
-string operator*(unsigned int n, const string& s);
-static const string TAB = "\t";
+std::string operator*(const std::string& s, unsigned int n);
+std::string operator*(unsigned int n, const std::string& s);
+static const std::string TAB = "\t";
 
 /*@{*/
 //Class definition
@@ -91,7 +91,7 @@ public:
 	/*!Constructors
 	\param str: string to read
 	\param dp: data's parameters (unit, precision, refernce system, coord sys...)*/ 
-	TAStreamFormatter(const string& str, TDataParameters& dp);
+	TAStreamFormatter(const std::string& str, TDataParameters& dp);
 	
 	/*!Constructors
 	\param io: read or write
@@ -162,7 +162,7 @@ public:
 	
 	virtual void	setObsFormat(const TObservationFormat ptFormat);
 	
-	virtual void	setFileName(string const& Name);
+	virtual void	setFileName(std::string const& Name);
 	//@}
 
 
@@ -264,7 +264,7 @@ public:
 		virtual	TAStreamFormatter	&operator>>(float&);
 		virtual	TAStreamFormatter	&operator>>(TReal&);
 		virtual	TAStreamFormatter	&operator>>(char*);
-		virtual	TAStreamFormatter	&operator>>(string&);
+		virtual	TAStreamFormatter	&operator>>(std::string&);
 		virtual	TAStreamFormatter	&operator>>(TSFFUNC);
 	//@}
 
@@ -282,15 +282,15 @@ public:
 		virtual	TAStreamFormatter	&operator<<(float);
 		virtual	TAStreamFormatter	&operator<<(TReal);
 		virtual	TAStreamFormatter	&operator<<(const char*);
-		virtual	TAStreamFormatter	&operator<<(const string&);
+		virtual	TAStreamFormatter	&operator<<(const std::string&);
 		virtual	TAStreamFormatter	&operator<<(void*); 
 		virtual	TAStreamFormatter	&operator<<(TSFFUNC);
 	//@}
  		/*!write a string
 		\param int : width used to write the string
 		\param string : string to write*/
-		void	writeString(const int width, const string data);
-		void	writeStringLeft(const int width, const string data);
+		void	writeString(const int width, const std::string data);
+		void	writeStringLeft(const int width, const std::string data);
 
 		/*!write a TReal and
 		\param int : width used to write the TReal
@@ -303,19 +303,19 @@ public:
 		//void	writeAngle(const int width, const int pres, const TAngle::EUnits, const TAngle data);
 
 	//!member functions
-    fstream*	device() const;
+		std::fstream*	device() const;
 
 
 	virtual	bool		atEnd();
 	virtual	bool		atEndCom();
-    string				readLine();
+	std::string				readLine();
 	char				readChar();
     //non utilisee? string	read();
     void				skipWhiteSpace();
     void				skipBOM(); // removes the byte order marks that is introduced by recent versions of notepad
 	TAStreamFormatter&	get(char&);
 	char				peek();
-	TAStreamFormatter&	readRawBytes(char*, streamsize);
+	TAStreamFormatter&	readRawBytes(char*, std::streamsize);
 	bool				fail() const;
 	void				clear() const;
 	int					flags() const;
@@ -332,14 +332,14 @@ public:
     int					fill(int);
     int					precision()	const;
     int					precision(int);
-    TAStreamFormatter&	writeRawBytes(const char*, streamsize);
+    TAStreamFormatter&	writeRawBytes(const char*, std::streamsize);
 
-	const string&		getError() const;
-	void				setError(const string);
+	const std::string&		getError() const;
+	void				setError(const std::string);
 
-	string				getWarning() const;
+	std::string				getWarning() const;
 	void				initWarning();
-	void				addWarning(const string);
+	void				addWarning(const std::string);
 
 	/*! for files which have no observations' values to read */
 	virtual void  setNoObsToRead();
@@ -350,7 +350,7 @@ public:
 	
 	
 	//!default function
-	virtual string	separator() const;
+	virtual std::string	separator() const;
 	virtual	void	skipCommentLines();
 
 
@@ -361,16 +361,16 @@ public:
 	bool isOpen();
 	void close();
 
-	virtual string		getSeparator() const;
-	virtual void		setSeparator(const string&);
+	virtual std::string		getSeparator() const;
+	virtual void		setSeparator(const std::string&);
 
 
 	//test
-	string getString();
+	std::string getString();
 
 
 
-	iostream&				getIOStream() {return	*fIOStream;}
+	std::iostream&				getIOStream() {return	*fIOStream;}
 
 
 	/*!@ set the format for the spacing between the data*/
@@ -383,7 +383,7 @@ public:
 	void setGapBetweenData();
 
 	std::streampos tellg();
-	TAStreamFormatter& seekg(streamoff off, ios_base::seekdir dir);
+	TAStreamFormatter& seekg(std::streamoff off, std::ios_base::seekdir dir);
 
 	//! Returns the current depth in a tree, reflecting e.g. the hierarchical structure.
 	inline void setTreeDepth(unsigned int dpth){fNofSpaces = dpth;};
@@ -409,13 +409,13 @@ protected:
 	static TSpatialPositionFilter *getPositionFilter( TCoordSysFactory::ECoordSys );
 
 	// member attributes
-	stringstream*							fSStream;
-	fstream*								fFStream;
-	iostream*								fIOStream;
-	string   								fName;
+	std::stringstream*							fSStream;
+	std::fstream*								fFStream;
+	std::iostream*								fIOStream;
+	std::string   								fName;
 	EIOType									fIOType;
-	string									fError;
-	string									fWarning;
+	std::string									fError;
+	std::string									fWarning;
 
 	TAngle::EUnits							fAngles;
 	TAngleFilter*							fAngFilter;
@@ -429,8 +429,8 @@ protected:
 	int										fWidth;
 	int										fPrecision;
 
-	string									fNonSpaceSeparator;
-	string									fSeparator;
+	std::string									fNonSpaceSeparator;
+	std::string									fSeparator;
 
 private:
 

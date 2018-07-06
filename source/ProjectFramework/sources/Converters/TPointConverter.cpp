@@ -75,7 +75,7 @@ TPointConverter& 	TPointConverter::operator=(const TPointConverter& source)
 //////////////////////////////////////////////////////////////////////////////////
 //Name
 //////////////////////////////////////////////////////////////////////////////////
-void	TPointConverter::writeName(string ptName, int width)
+void	TPointConverter::writeName(std::string ptName, int width)
 {
 	TAStreamFormatter*	stream = getStream();
 
@@ -95,7 +95,7 @@ void	TPointConverter::writeName(string ptName, int width)
 void	TPointConverter::writeXYZandH(const TPositionVector& pt)
 {
 	TAStreamFormatter*	stream = getStream();
-	string				separator = getSeparator();
+	std::string				separator = getSeparator();
 
 	//get Coordinate as a TPositionVector
 	(*stream) << (pt);
@@ -113,7 +113,7 @@ void	TPointConverter::writeXYZandH(const TPositionVector& pt, TLength heightH)
 {
 	TAStreamFormatter*	stream = getStream();
 	int					coordWidth = getCoordWidth();
-	string				separator = getSeparator();
+	std::string				separator = getSeparator();
 
 	stream->setLengthUnits(TLength::EUnits::kMetres);
 	stream->setWidthFormat(coordWidth);
@@ -134,7 +134,7 @@ void	TPointConverter::writeXYZandH(const TPositionVector& pt, TLength heightH)
 void	TPointConverter::writeXYH(	const int width,
 									const int precision,
 									const TLength::EUnits unit,
-									const string separator,
+									const std::string separator,
                            const TLength Xparam,
 						   const TLength Yparam,
 						   const TLength Hparam)
@@ -169,7 +169,7 @@ void	TPointConverter::writeXYH(	const int width,
 void	TPointConverter::writeXYZ(	const int width,
 									const int precision,
 									const TLength::EUnits unit,
-									const string separator,
+									const std::string separator,
 									const TPositionVector pt)
 {
 	TAStreamFormatter*	stream = getStream();
@@ -192,7 +192,7 @@ void	TPointConverter::writeXYZ(	const int width,
 
 void	TPointConverter::write3Coordinates(	const int width,
 											const int precision,
-											const string separator,
+											const std::string separator,
 											const TPositionVector pt)
 {
 	TAStreamFormatter*	stream = getStream();
@@ -221,11 +221,11 @@ void	TPointConverter::write3Coordinates(	const int width,
 void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
 												const int width,
 												const int precision,
-												const string separator,
+												const std::string separator,
 												TReal Xparam,
 												TReal Yparam,
 												TReal Zparam,
-												const string Dparam,
+												const std::string Dparam,
 												bool isCovar)
 {
 	TAStreamFormatter*	stream = getStream();
@@ -270,11 +270,11 @@ void	TPointConverter::writeCoordinateParam(	const TSpatialStatus::ESpatialStatus
 												const int width,
 												const int precision,
 												const TLength::EUnits unit,
-												const string separator,
+												const std::string separator,
 												const TLength Xparam,
 												const TLength Yparam,
 												const TLength Zparam,
-												const string Dparam,
+												const std::string Dparam,
 												bool isCovar)
 {
 	TAStreamFormatter*	stream = getStream();

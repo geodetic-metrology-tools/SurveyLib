@@ -30,7 +30,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include  "TModifiedLocalGeodeticRF.h"
 
 
-//using namespace std;
 //#include  "TLocalAstronomicalRefFrame.h"
 // typedefs
 //
@@ -50,7 +49,7 @@ public:
 		
 		/// Constructor for a local astronomical reference frame
 		/// taking the name of the reference frame, the geoid id., and the origin
-		TGraphLocalAstronomicalRF( const string& name, const TAngle eta,
+		TGraphLocalAstronomicalRF( const std::string& name, const TAngle eta,
 			const TAngle xsi, const TAngle dAlpha, TModifiedLocalGeodeticRF* locGeodSys);
 
 		/// Destructor

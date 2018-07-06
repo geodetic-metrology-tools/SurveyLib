@@ -29,7 +29,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 // Forward declarations
 //
 #include  <string>
-//using namespace std;
 //
 class  TSpatialPosition;
 //class  TGraph;
@@ -56,20 +55,20 @@ public:
 	//@{
 
 		/// Default constructor
-		TModifiedLocalGeodeticRF( const string& name );
+		TModifiedLocalGeodeticRF( const std::string& name );
 
 		/// Constructor for a local geodetic reference frame
-		TModifiedLocalGeodeticRF( const string& name, const TSpatialPosition spos,
+		TModifiedLocalGeodeticRF( const std::string& name, const TSpatialPosition spos,
 			TGeodeticRefFrame* GRF );
 
 		/// Constructor taking the name of the reference frame
-		TModifiedLocalGeodeticRF( const string& name, const TSpatialPosition spos,
+		TModifiedLocalGeodeticRF( const std::string& name, const TSpatialPosition spos,
 			const TFreeVector falseOrigin, const TSpatialOrientation orientation,
 			TGeodeticRefFrame* GRF);
 
 		/// Constructor taking the name of the reference frame, the geoid id.,
 		/// the origin and the false origin in CCS and the beam gis. and slope
-		TModifiedLocalGeodeticRF( const string& name, TSpatialPosition origin,
+		TModifiedLocalGeodeticRF( const std::string& name, TSpatialPosition origin,
 			TFreeVector falseOrigin, const TAngle gis, const TAngle slope, TGeodeticRefFrame* GRF);
 
 		/// Destructor

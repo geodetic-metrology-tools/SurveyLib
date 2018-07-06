@@ -33,7 +33,6 @@ class  TRefSystemFactory;
 
 #include  "TAGeoidModel.h"
 
-//using namespace std;
 // typedefs
 //
 //
@@ -71,7 +70,7 @@ public:
 
 		//TCernParabolicGeoid( const string& name, const TReal a, const TReal b, const TReal ths);
 
-		TCernParabolicGeoid( const string& name, const TReal a, const TReal b, const TReal ths,
+		TCernParabolicGeoid( const std::string& name, const TReal a, const TReal b, const TReal ths,
 			TAReferenceFrame* def, TReferenceEllipsoid* ell, TAReferenceFrame* calc);
 
 		/// Destructor
@@ -97,7 +96,7 @@ public:
 		virtual  TAngle  getDAlpha( const TSpatialPosition&, const TAngle& ) const;
 
 		/// Returns the name of the geoid
-		virtual  string	 getName()  const { return fName; }
+		virtual  std::string	 getName()  const { return fName; }
 
 		/// Get the definition reference frame
 		virtual TAReferenceFrame* getDefRefFrame() const { return fDefRFPtr; }
@@ -124,7 +123,7 @@ private:
 	
 	
 	// member attributes
-	string  fName;
+	std::string  fName;
 	TReal  fA;
 	TReal  fB;
 	TReal  fThs;

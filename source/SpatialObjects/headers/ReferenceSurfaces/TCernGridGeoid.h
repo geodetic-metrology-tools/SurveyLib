@@ -35,7 +35,6 @@ class	TRefSystemFactory;
 #include	"TAGeoidModel.h"
 #include	"TMatrix.h"
 
-//using namespace std;
 // typedefs
 //
 //
@@ -57,7 +56,7 @@ public:
 		TCernGridGeoid();
 		
 		/// constructor taking the name, the definition reference frame and ellipsoid, and the calculation reference frame
-		TCernGridGeoid( const string& name,
+		TCernGridGeoid( const std::string& name,
 			const TMatrix* N, const TMatrix* Eta, const TMatrix* Xsi,
 			const TPositionVector downLeft, const TPositionVector upRight,
 			TAReferenceFrame* def, TReferenceEllipsoid* ell, TAReferenceFrame* calc);
@@ -85,7 +84,7 @@ public:
 		virtual  TAngle  getDAlpha( const TSpatialPosition&, const TAngle& ) const;
 
 		/// Returns the name of the geoid
-		virtual  string	 getName()  const { return fName; }
+		virtual  std::string	 getName()  const { return fName; }
 
 		/// Set the definiton reference frame
 		void setDefRefFrame(TAReferenceFrame* def) { fDefRFPtr = def; return; }
@@ -126,7 +125,7 @@ private:
 	
 	/**@name Member Attributes */
 	//@{
-		string						fName; /*!< name  */
+		std::string						fName; /*!< name  */
 			
 		TMatrix						fNMatrix; /*!< N-matrix */
 		TMatrix						fEtaMatrix; /*!< Eta-matrix */

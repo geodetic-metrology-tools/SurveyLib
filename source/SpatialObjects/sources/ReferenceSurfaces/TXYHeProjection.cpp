@@ -39,7 +39,7 @@ TXYHeProjection::TXYHeProjection( )
 }
 
 
-TXYHeProjection::TXYHeProjection( const string& name, TReferenceEllipsoid* ellipsoid,
+TXYHeProjection::TXYHeProjection( const std::string& name, TReferenceEllipsoid* ellipsoid,
 								 TAModifiedLocalAstronomicalRF* ccs) 
 	: TA2DPlus1MapProjection( name )
 {	// constructor taking the name, the reference ellipsoid and the MLA system

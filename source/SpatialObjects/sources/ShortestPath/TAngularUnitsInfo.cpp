@@ -6,7 +6,7 @@
 
 const TAngularUnitsInfo::AngleUnitsMapType & TAngularUnitsInfo::getAngleUnitsMap()
 {
-	typedef std::auto_ptr<AngleUnitsMapType> MapPtr;
+	typedef std::unique_ptr<AngleUnitsMapType> MapPtr;
 	static MapPtr mapping;
 
 	if(mapping.get()==NULL)
@@ -18,7 +18,7 @@ const TAngularUnitsInfo::AngleUnitsMapType & TAngularUnitsInfo::getAngleUnitsMap
 		tmp->insert(std::make_pair(3, std::make_pair("kDMS", "DMS")));
 		tmp->insert(std::make_pair(4, std::make_pair("kCCs", "CCs")));
 
-		mapping = tmp;
+		mapping = std::move(tmp);
 	}
 	return *mapping;
 }

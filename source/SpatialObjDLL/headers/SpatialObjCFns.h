@@ -8,7 +8,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <string>
 //#include <windows.h>
 
-//using namespace std;
 #include "TGlobalDefs.h"
 
 

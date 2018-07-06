@@ -30,7 +30,6 @@ class TPositionVector;
 #include "TCoordSysFactory.h"
 //
 //
-//using namespace std;
 //
 //
 //typedefs

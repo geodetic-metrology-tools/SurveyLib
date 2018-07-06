@@ -38,7 +38,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include  "TVReferenceFrame.h"
 
 
-//using namespace std;
 // typedefs
 //
 //

@@ -34,7 +34,7 @@ TXYHgProjection::TXYHgProjection( )
 }
 
 
-TXYHgProjection::TXYHgProjection( const string& name, TAGeoidModel* geoid,
+TXYHgProjection::TXYHgProjection( const std::string& name, TAGeoidModel* geoid,
 								 TXYHeProjection* xyhe) //TAModifiedLocalAstronomicalRF* ccs)  modified
 	: TA2DPlus1MapProjection( name )
 {	// constructor taking the name, the geoid and the MLA system

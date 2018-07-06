@@ -106,7 +106,7 @@ void TRefSystemFactory::init()
 	
 	///////////////////////////////////////////////////////////////////
 	// Definition of the ellipsoid list
-	string grs("GRS80"), wgsEll("WGS84 Ellipsoid"), internationalEll("Hayford1903 Ellipsoid"), sps("SphereSPS"), Bessel("Bessel Ellipsoid");
+	std::string grs("GRS80"), wgsEll("WGS84 Ellipsoid"), internationalEll("Hayford1903 Ellipsoid"), sps("SphereSPS"), Bessel("Bessel Ellipsoid");
 
 		// Sphere SPS
 	TReferenceEllipsoid* pSphere = new TReferenceEllipsoid(sps);
@@ -141,9 +141,9 @@ void TRefSystemFactory::init()
 
 
 	// Definition of the reference frame list
-	string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf("ITRF97"), wgs("WGS84"), roma("ROMA40");
-	string ccs("CCS"), etrf("ETRF93");
-	string cgrf2("new_CGRF");
+	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf("ITRF97"), wgs("WGS84"), roma("ROMA40");
+	std::string ccs("CCS"), etrf("ETRF93");
+	std::string cgrf2("new_CGRF");
 	
 		//new CGRF (coordinate of P0 have been changed)
 	TGeodeticRefFrame* pCGRF2 = new TGeodeticRefFrame(cgrf2, pGRS80);
@@ -288,7 +288,7 @@ void TRefSystemFactory::init()
 
 	///////////////////////////////////////////////////////////////////////////////	
 	// Definition of the geoid list
-	string cg00, cg00topo, cg00Machine, cg85, cg85Machine, cgSphere;
+	std::string cg00, cg00topo, cg00Machine, cg85, cg85Machine, cgSphere;
 	cg00 = "CG2000 h=0";
 	cg00topo = "CG2000 h=surface";
 	cg00Machine = "CG2000 h=Machine";
@@ -1013,7 +1013,7 @@ void	TRefSystemFactory::deleteRefSystemFactory()
 
 		if(fTransformList.size() != 0)
 		{
-			vector<TARefFrameTransformation*>::iterator iter; 
+			std::vector<TARefFrameTransformation*>::iterator iter;
 			while(fTransformList.begin() != fTransformList.end())
 			{
 				iter = fTransformList.begin();
@@ -1026,7 +1026,7 @@ void	TRefSystemFactory::deleteRefSystemFactory()
 
 		if(fGeoidList.size() != 0)
 		{
-			vector<TAGeoidModel*>::iterator iter;
+			std::vector<TAGeoidModel*>::iterator iter;
 			while(fGeoidList.begin() != fGeoidList.end())
 			{
 				iter = fGeoidList.begin();
@@ -1038,7 +1038,7 @@ void	TRefSystemFactory::deleteRefSystemFactory()
 
 		if(fRefEllList.size() != 0)
 		{
-			vector<TReferenceEllipsoid*>::iterator iter;
+			std::vector<TReferenceEllipsoid*>::iterator iter;
 			while(fRefEllList.begin() != fRefEllList.end())
 			{
 				iter = fRefEllList.begin();
@@ -1050,7 +1050,7 @@ void	TRefSystemFactory::deleteRefSystemFactory()
 
 		if(fRefFrameList.size() != 0)
 		{
-			vector<TAReferenceFrame*>::iterator iter;
+			std::vector<TAReferenceFrame*>::iterator iter;
 			while(fRefFrameList.begin() != fRefFrameList.end())
 			{
 				iter = fRefFrameList.begin();
@@ -1063,7 +1063,7 @@ void	TRefSystemFactory::deleteRefSystemFactory()
 
 		if(fLocalRefFrameList.size() != 0)
 		{
-			vector<TAReferenceFrame*>::iterator iter;
+			std::vector<TAReferenceFrame*>::iterator iter;
 			while(fLocalRefFrameList.begin() != fLocalRefFrameList.end())
 			{
 				iter = fLocalRefFrameList.begin();
@@ -1086,8 +1086,8 @@ void	TRefSystemFactory::deleteRefSystemFactory()
 TAGeoidModel*  TRefSystemFactory::getGeoid(const EGeoid geoidId)
 {//return a pointer to the geoid asked for
 
-	vector<TAGeoidModel*>::iterator iter = fGeoidList.begin();
-	vector<TAGeoidModel*>::iterator iterEnd = fGeoidList.end();
+	std::vector<TAGeoidModel*>::iterator iter = fGeoidList.begin();
+	std::vector<TAGeoidModel*>::iterator iterEnd = fGeoidList.end();
 
 	while (iter != iterEnd)
 	{
@@ -1097,7 +1097,7 @@ TAGeoidModel*  TRefSystemFactory::getGeoid(const EGeoid geoidId)
 		iter++;
 	}
 
-	cerr << "Error : Id. not in GeoidList" << endl;
+	std::cerr << "Error : Id. not in GeoidList" << std::endl;
 	throw TNotInGraphException("TNotInGraphException");
 	///
 	//TODO@*@
@@ -1111,7 +1111,7 @@ TAGeoidModel*  TRefSystemFactory::getGeoid(const EGeoid geoidId)
 
 TReferenceEllipsoid* TRefSystemFactory::getEllipsoid(const ERefEll ellId)
 {//return a pointer to the ellipsoid asked for
-	vector<TReferenceEllipsoid*>::iterator iter, iterEnd;
+	std::vector<TReferenceEllipsoid*>::iterator iter, iterEnd;
 	iter = fRefEllList.begin();
 	iterEnd = fRefEllList.end();
 
@@ -1123,7 +1123,7 @@ TReferenceEllipsoid* TRefSystemFactory::getEllipsoid(const ERefEll ellId)
 		iter++;
 	}
 
-	cerr << "Error : Id. not in RefEllList" << endl;
+	std::cerr << "Error : Id. not in RefEllList" << std::endl;
 	throw TNotInGraphException("TNotInGraphException");
 
 	//cerr << "Error : Id. not in RefEllList";
@@ -1136,8 +1136,8 @@ TReferenceEllipsoid* TRefSystemFactory::getEllipsoid(const ERefEll ellId)
 
 TAReferenceFrame* TRefSystemFactory::getRefFrame(const ERefFrame refFrameId)
 {//return a pointer to the ref frame askes for
-	vector<TAReferenceFrame*>::iterator iter = fRefFrameList.begin();
-	vector<TAReferenceFrame*>::iterator iterEnd = fRefFrameList.end();
+	std::vector<TAReferenceFrame*>::iterator iter = fRefFrameList.begin();
+	std::vector<TAReferenceFrame*>::iterator iterEnd = fRefFrameList.end();
 
 	while (iter != iterEnd)
 	{
@@ -1147,7 +1147,7 @@ TAReferenceFrame* TRefSystemFactory::getRefFrame(const ERefFrame refFrameId)
 		iter++;
 	}
 
-	cerr << "Error : Id. not in RefFrameList" << endl;
+	std::cerr << "Error : Id. not in RefFrameList" << std::endl;
 	throw TNotInGraphException("TNotInGraphException");
 
 	//cerr << "Error : Id. not in RefFrameList";
@@ -1169,7 +1169,7 @@ TGeodeticRefFrame* TRefSystemFactory::getGeoRefFrame(const ERefFrame refFrameId)
 	if (refFrameId == kCGRF_new)
 		return fCGRF2;
 
-	cerr << "Error : Id. not in RefFrameList" << endl;
+	std::cerr << "Error : Id. not in RefFrameList" << std::endl;
 	throw TNotInGraphException("TNotInGraphException");
 
 	//cerr << "Error : Id. not in RefFrameList";
@@ -1182,8 +1182,8 @@ TGeodeticRefFrame* TRefSystemFactory::getGeoRefFrame(const ERefFrame refFrameId)
 
 TARefFrameTransformation* TRefSystemFactory::getTransformation(const ERefFrameTransform id)
 {//return a pointer to the ref frame transformation asked for
-	vector<TARefFrameTransformation*>::iterator iter = fTransformList.begin();
-	vector<TARefFrameTransformation*>::iterator iterEnd = fTransformList.end();
+	std::vector<TARefFrameTransformation*>::iterator iter = fTransformList.begin();
+	std::vector<TARefFrameTransformation*>::iterator iterEnd = fTransformList.end();
 
 	while (iter != iterEnd)
 	{
@@ -1193,7 +1193,7 @@ TARefFrameTransformation* TRefSystemFactory::getTransformation(const ERefFrameTr
 		iter++;
 	}
 
-	cerr << "Error : Id. not in TransformationList" << endl;
+	std::cerr << "Error : Id. not in TransformationList" << std::endl;
 	throw TNotInGraphException("TNotInGraphException");
  
 
@@ -1208,8 +1208,8 @@ TARefFrameTransformation* TRefSystemFactory::getTransformation(const ERefFrameTr
 bool TRefSystemFactory::isInRFFactory( const TAReferenceFrame* rf ) 
 {//test if the reference frame is in the graph or not
 
-	vector<TAReferenceFrame*>::iterator iter = fRefFrameList.begin();
-	vector<TAReferenceFrame*>::iterator iterEnd = fRefFrameList.end();
+	std::vector<TAReferenceFrame*>::iterator iter = fRefFrameList.begin();
+	std::vector<TAReferenceFrame*>::iterator iterEnd = fRefFrameList.end();
 
 	while (iter != iterEnd)
 	{

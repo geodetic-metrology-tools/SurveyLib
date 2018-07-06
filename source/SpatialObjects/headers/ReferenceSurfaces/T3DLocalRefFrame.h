@@ -23,7 +23,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 // Forward declarations
 //
 #include  <string>
-//using namespace std;
 //
 class  TSpatialPosition;
 class  TSpatialVector;
@@ -43,7 +42,7 @@ public:
 	/*!@name Constructors/Destructors*/
 	//@{
 	/*! Constructor taking the name of the ref.frame */
-	T3DLocalRefFrame( const string& name );
+	T3DLocalRefFrame( const std::string& name );
 	/*! Destructors */
 	~T3DLocalRefFrame();
 	//@}

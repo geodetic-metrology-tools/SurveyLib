@@ -37,7 +37,6 @@ namespace
 	// The asterisk is considered to be a separate token and is thus stored in a different field as the keyword itself.
 	// Parsing stops on a comment sign, the comment is then stored as a single token including the comment character.
 	std::vector<std::string> const tokenizefileString(const std::string& str){
-		using namespace std;
 		enum {
 			STATE_TOKEN,
 			STATE_DELIM
@@ -45,7 +44,7 @@ namespace
 
 		size_t delimlen(std::strlen(" \t"));
 		size_t commentslen(std::strlen("%$"));
-		vector<string> result(0);
+		std::vector<std::string> result(0);
 
 		bool inString(false);
 		size_t start(0);

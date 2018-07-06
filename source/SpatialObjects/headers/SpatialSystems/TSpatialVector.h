@@ -30,7 +30,6 @@ class  TModifiedLocalAstronomicalRF;
 #include  "TFreeVector.h"
 #include  "TVAffineTransformation.h"
 
-using namespace std;
 
 
 typedef TReal Component;

@@ -41,7 +41,7 @@ public:
 		
 		/*!Constructor
 		\param ptName the point's name (will be assigned to the Name component of the TSpatialPointName)*/
-		explicit  TSpatialPoint( const string& ptName );
+		explicit  TSpatialPoint( const std::string& ptName );
 
 		/*!Constructor
 		\param ptName the point's name as a TSpatialPointName
@@ -107,28 +107,28 @@ public:
 	
 		/*!Sets the point's header line of comment (for file from geode)
 		\param com the point's comment as a string*/
-		virtual  void  setHeaderComment( const string& com);
+		virtual  void  setHeaderComment( const std::string& com);
 
 		/*!Returns the point's header comment */
-		virtual  string  getHeaderComment()  const {return fHeaderComment;};
+		virtual  std::string  getHeaderComment()  const {return fHeaderComment;};
 
 		/*!Sets the point's End Of Line comments (for file from geode)
 		\param com the point's comment as a string*/
-		virtual  void  setEOLComment( const string& com) {fEOLComment = com; return;};
+		virtual  void  setEOLComment( const std::string& com) {fEOLComment = com; return;};
 
 		/*!Returns the point's header comment */
-		virtual  string  getEOLComment()  const {return fEOLComment;};
+		virtual  std::string  getEOLComment()  const {return fEOLComment;};
 
 		/*!Sets the point's name
 		\param ptName the point's name (will be assigned to the Name component of the TSpatialPointName)*/
-		virtual  void  setPtName( const string& ptName );
+		virtual  void  setPtName( const std::string& ptName );
 
 		/*!METHOD FOR CHABA INTERFACE ONLY - CALLED IF TWO POINTS HAVE IDENTICAL TIMESTAMPS*/
-		virtual void setDuplicatePtName( const string& ptName ) ;
+		virtual void setDuplicatePtName( const std::string& ptName ) ;
 
 
 		/*! Returns the point's concatenated name as a string */
-		virtual  string  getPtName() const;
+		virtual  std::string  getPtName() const;
 
 		/*!Sets the point's status to active, inactive or bad */
 		virtual void setStatus(const TSpatialPoint::EPointStatus status);
@@ -206,8 +206,8 @@ protected:
 
 	TReal						fPointDist; /*!< distance (from geode's DB point) for the point */
 	
-	string						fHeaderComment; /*!<line of comments before the line of coordinate*/
-	string						fEOLComment;/*!<end of line comments*/
+	std::string						fHeaderComment; /*!<line of comments before the line of coordinate*/
+	std::string						fEOLComment;/*!<end of line comments*/
 
 	TSpatialPosition*			fPosition; /*!< pointer to the point's TSpatialPosition */
 
@@ -232,7 +232,7 @@ protected:
 /*!@name Typedefs*/
 //@{
 	/*! Type of the container used to store points */
-	typedef list<TSpatialPoint> SpatialPointContainer;
+	typedef std::list<TSpatialPoint> SpatialPointContainer;
 	/*! Type of an iterator pointing to an element of the container */
 	typedef SpatialPointContainer::iterator PointIterator;
 	/*! Type of a const iterator pointing to an element of the container */

@@ -104,7 +104,7 @@ void	TCCsFilter::output(TAStreamFormatter& oStream,const TAngle& angle)const
 {	// function to put a gons angle to a QTextStream object.
 	// Gets the value from a TAngle object
 
-	oStream.setf(ios::fixed,ios::floatfield);
+	oStream.setf(std::ios::fixed, std::ios::floatfield);
 	oStream.width(oStream.getWidthFormat());
 	oStream.precision(oStream.getPrecisionFormat());
 

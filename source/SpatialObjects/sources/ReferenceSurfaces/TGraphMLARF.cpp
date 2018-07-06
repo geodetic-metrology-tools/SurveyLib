@@ -34,7 +34,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-TGraphMLARF::TGraphMLARF( const string& name,TFreeVector falseOrigin,
+TGraphMLARF::TGraphMLARF( const std::string& name,TFreeVector falseOrigin,
 						 TGraphLocalAstronomicalRF* RF, const TAngle omega,
 						 const TAngle phi, const TAngle kappa) 
 	: TAModifiedLocalAstronomicalRF( name ), fLocAstroSys(RF),

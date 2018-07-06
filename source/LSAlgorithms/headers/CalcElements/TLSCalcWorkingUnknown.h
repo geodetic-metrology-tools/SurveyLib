@@ -24,24 +24,24 @@ public:
 	/*!@name Methods borrowed from the lists properties, named after them */
 	//@{
 	/*! Returns an iterator to the first element in the list */
-	typename list<CalcParam>::iterator			begin() { return paramsList.begin(); }
+	typename std::list<CalcParam>::iterator			begin() { return paramsList.begin(); }
 
 	/*! Returns a const iterator to the first element in the list */
-	typename list<CalcParam>::const_iterator	begin() const { return paramsList.begin(); }
+	typename std::list<CalcParam>::const_iterator	begin() const { return paramsList.begin(); }
 
 	/*! Returns an iterator pointing after the last element in the list */
-	typename list<CalcParam>::iterator			end() { return paramsList.end(); }
+	typename std::list<CalcParam>::iterator			end() { return paramsList.end(); }
 
 	/*! Returns a const iterator pointing after the last element in the list */
-	typename list<CalcParam>::const_iterator	end() const { return paramsList.end(); }
+	typename std::list<CalcParam>::const_iterator	end() const { return paramsList.end(); }
 
 	/*! Adds a new CalcParam at the end of the list, if it is not done yet (tests first if the object is
 	already in the list or not)
 	\returns an iterator to the CalcParam wether it was already inserted or just being inserted */
-	typename list<CalcParam>::iterator			push_back(const CalcParam& param)
+	typename std::list<CalcParam>::iterator			push_back(const CalcParam& param)
 	{
 		auto iter = calcParamsMap.find(param.getName());
-		typename list<CalcParam>::iterator result;
+		typename std::list<CalcParam>::iterator result;
 		if (iter == calcParamsMap.end())
 		{
 			paramsList.push_back(param);
@@ -56,7 +56,7 @@ public:
 		return result;
 	}
 	
-	typename list<CalcParam>::iterator			push_back_unique(const CalcParam& param)
+	typename std::list<CalcParam>::iterator			push_back_unique(const CalcParam& param)
 	{
 		paramsList.push_back(param);
 
@@ -84,9 +84,9 @@ public:
 
 protected:
 
-    std::unordered_map<string, typename list<CalcParam>::iterator> calcParamsMap;
+    std::unordered_map<std::string, typename std::list<CalcParam>::iterator> calcParamsMap;
 
-	list<CalcParam>	paramsList; /*!< list of calc parameters */
+	std::list<CalcParam>	paramsList; /*!< list of calc parameters */
 
 };
 

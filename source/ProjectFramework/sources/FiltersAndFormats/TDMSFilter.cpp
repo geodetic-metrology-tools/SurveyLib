@@ -158,7 +158,7 @@ void	TDMSFilter::output(TAStreamFormatter& oStream, const TAngle& angle)const
 {	// function to put a sexagesimal angle to a QTextStream object.
 	// Gets the value from a TAngle object
 
-	string sep =oStream.getSeparator();
+	std::string sep =oStream.getSeparator();
 
 	
 	int dWidth, mWidth, sWidth, precision;
@@ -167,7 +167,7 @@ void	TDMSFilter::output(TAStreamFormatter& oStream, const TAngle& angle)const
 		precision = 0;
 	sWidth = precision + 5;
 	mWidth = 4;
-	dWidth = max(oStream.getWidthFormat()-(sWidth+mWidth), 5);
+	dWidth = std::max(oStream.getWidthFormat()-(sWidth+mWidth), 5);
 		
 	oStream.width(dWidth);
 	oStream.precision(0);
@@ -183,7 +183,7 @@ void	TDMSFilter::output(TAStreamFormatter& oStream, const TAngle& angle)const
 
 	oStream<<sep;
 
-	oStream.setf(ios::fixed,ios::floatfield);
+	oStream.setf(std::ios::fixed, std::ios::floatfield);
 	oStream.width(sWidth);
 	oStream.precision(precision);
 	oStream<<right;

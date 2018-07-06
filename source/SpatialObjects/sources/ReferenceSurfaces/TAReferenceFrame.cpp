@@ -38,7 +38,7 @@
 //////////////////////////////////////////////////////////////////////
 
 
-TAReferenceFrame::TAReferenceFrame( const string& name )
+TAReferenceFrame::TAReferenceFrame( const std::string& name )
 	: fName( name )/*, fRefFrameId(0)*/
 {	// default constructor 
 	fRefFrameId = TRefSystemFactory::kNotInGraph;
@@ -59,7 +59,7 @@ TAReferenceFrame::~TAReferenceFrame()
 // Member Functions
 //////////////////////////////////////////////////////////////////////
 
-string  TAReferenceFrame::getName() const
+std::string  TAReferenceFrame::getName() const
 {	//return the name of the reference frame
 	
 	return fName;
@@ -176,13 +176,13 @@ bool TAReferenceFrame::transform(TSpatialPosition *sp, TAReferenceFrame* rf)
 	}
 
 	if (! (from == to)) {
-		vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
+		std::vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
 		
 		if (transfo[0] == 0)
 		{return false;}
 
 		// application of the successive transformations
-		for (vector<TARefFrameTransformation*>::iterator iter = transfo.begin(); 
+		for (std::vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
 			 iter != transfo.end(); 
 			 iter++)
 			(*iter)->transform(position);
@@ -232,13 +232,13 @@ bool TAReferenceFrame::transform( TSpatialVector* sv, TAReferenceFrame* rf )
 	}
 
 	if (! (from == to)) {
-		vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
+		std::vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
 		
 		if (transfo[0] == 0)
 		{return false;}
 
 		// application of the successive transformations
-		for (vector<TARefFrameTransformation*>::iterator iter = transfo.begin(); 
+		for (std::vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
 			 iter != transfo.end(); 
 			 iter++)
 			(*iter)->transform(freeVector);

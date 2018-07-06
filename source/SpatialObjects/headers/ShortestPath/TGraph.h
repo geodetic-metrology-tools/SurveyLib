@@ -27,7 +27,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <iomanip>
 
 #include <stddef.h>
-//using namespace std;
 
 class TAGeoidModel;
 class TReferenceEllipsoid;

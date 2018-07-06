@@ -21,7 +21,7 @@ fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesia
 
 // Constructor taking provisional value and parameter status as argument
 TLSCalcFreeVectorParam::TLSCalcFreeVectorParam(TFreeVector pos,struct LSParaStatus status,
-											 string name ): TALSCalcParameter(name),
+	std::string name ): TALSCalcParameter(name),
 fProvisionalValue(pos),
 fCorrection(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
 fEstimatedValue(fProvisionalValue),

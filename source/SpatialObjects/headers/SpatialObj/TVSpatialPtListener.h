@@ -12,7 +12,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 #include <list>
 #include "TSpatialPointName.h"
-using namespace std;
 
 //! Pure abstract base class defininig an interface implemented by every object listening to a spatial point
 class TVSpatialPtListener{
@@ -48,7 +47,7 @@ public:
 /*!@name Typedefs*/
 //@{
 //! Type of the container used to store the broadcast list
-typedef list<TVSpatialPtListener*> PtListnrContainer;
+typedef std::list<TVSpatialPtListener*> PtListnrContainer;
 //! Type of an iterator pointing to an element of the broadcast list
 typedef PtListnrContainer::iterator PtListnrIterator;
 //! Type of a const iterator pointing to an element of the broadcast list

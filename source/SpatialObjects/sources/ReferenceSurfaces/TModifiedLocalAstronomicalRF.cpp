@@ -23,7 +23,7 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, TRefSystemFactory::EGeoid geoid,
+TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::EGeoid geoid,
 								   TSpatialPosition origin, TFreeVector falseOrigin, 
 								   const TAngle gis, const TAngle slope)
 	: TAModifiedLocalAstronomicalRF(name),fOrigin(fGeodeticSys), fOrientationMatrix(fGeodeticSys), 
@@ -126,7 +126,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 }
 
 
-TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, TRefSystemFactory::EGeoid geoid)
+TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::EGeoid geoid)
     : TAModifiedLocalAstronomicalRF(name),
 	fOrigin (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS), 0, 0, 0, TCoordSysFactory::k3DCartesian), fGeodeticSys(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
 	fOrientationMatrix(fGeodeticSys), fGis(0), fSlope(0)
@@ -156,7 +156,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 }
 
 
-TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, TRefSystemFactory::EGeoid geoid,
+TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::EGeoid geoid,
 								   TSpatialPosition origin)
     : TAModifiedLocalAstronomicalRF(name),
 	fGeodeticSys(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
@@ -203,7 +203,7 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, 
 }
 
 
-TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const string& name, TRefSystemFactory::ERefEll ell,
+TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::ERefEll ell,
 								   TSpatialPosition origin)
     : TAModifiedLocalAstronomicalRF(name),
 	fGeodeticSys(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
@@ -467,13 +467,13 @@ bool	TModifiedLocalAstronomicalRF::transform(TSpatialPosition* sp, TAReferenceFr
 	}
 
 	if (! (from == to)) {
-		vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
+		std::vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
 		
 		if (transfo[0] == 0)
 		{return false;}
 
 		// application of the successive transformations
-		for (vector<TARefFrameTransformation*>::iterator iter = transfo.begin(); 
+		for (std::vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
 			 iter != transfo.end(); 
 			 iter++)
 			(*iter)->transform(position);
@@ -519,14 +519,14 @@ bool	TModifiedLocalAstronomicalRF::transform(TSpatialVector* sv, TAReferenceFram
 
 	if (from.getFrame() != to.getFrame() )
 	{
-		vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
+		std::vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
 	
 		if (transfo[0] == 0)
 		{return false;}
 
 		// application of the successive transformations
-		vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
-		vector<TARefFrameTransformation*>::iterator iterEnd = transfo.end();
+		std::vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
+		std::vector<TARefFrameTransformation*>::iterator iterEnd = transfo.end();
 
 		while (iter != iterEnd )
 		{
