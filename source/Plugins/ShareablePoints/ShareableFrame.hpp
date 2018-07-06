@@ -50,7 +50,7 @@ class ShareableFrame
 {
 public:
 	/** Constructor. */
-	ShareableFrame(std::shared_ptr<ShareableParams> params, const std::string& name="") : _params(params), _name(name) {}
+	ShareableFrame(std::shared_ptr<ShareableParams> params, const std::string& name="") : _name(name), _params(params) {}
 	ShareableFrame(const ShareableFrame&) = delete; // can't copy (too heavy structure)
 	ShareableFrame(const ShareableFrame&&) = delete;
 	ShareableFrame& operator=(const ShareableFrame&) = delete;
@@ -217,9 +217,9 @@ private:
 	/** The name of the frame. */
 	std::string _name;
 	/** The translation from the parent frame. */
-	ShareablePosition _translation = { 0 };
+	ShareablePosition _translation = { 0, 0, 0, 0, 0, 0, false, false, false };
 	/** The rotation from the parent frame. */
-	ShareablePosition _rotation = { 0 };
+	ShareablePosition _rotation = { 0, 0, 0, 0, 0, 0, false, false, false };
 	/** Scale factor from the parent frame. */
 	double _scale = 1;
 	/** Tells if the scale is flexible (free, known). */
