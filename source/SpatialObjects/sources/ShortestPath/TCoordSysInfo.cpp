@@ -6,7 +6,7 @@
 
 const TCoordSysInfo::CoordMapType & TCoordSysInfo::getCoordSysMap()
 {
-	typedef std::auto_ptr<CoordMapType> MapPtr;
+	typedef std::unique_ptr<CoordMapType> MapPtr;
 	static MapPtr mapping;
 
 	if(mapping.get()==NULL)
@@ -18,7 +18,7 @@ const TCoordSysInfo::CoordMapType & TCoordSysInfo::getCoordSysMap()
 		tmp->insert(std::make_pair(8, std::make_pair("k2DCartesian", "2DCartesian")));
 		tmp->insert(std::make_pair(16, std::make_pair("kGeodeticSphere", "GeodeticSphere")));
 
-		mapping = tmp;
+		mapping = std::move(tmp);
 	}
 	return *mapping;
 }

@@ -20,7 +20,7 @@ TRefFrameInfo::TDetails::TDetails(
 
 const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
 {
-	typedef std::auto_ptr<MappingType> MapPtr;
+	typedef std::unique_ptr<MappingType> MapPtr;
 	static MapPtr mapping;
 	if(mapping.get()==NULL)
 	{
@@ -124,14 +124,14 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
         tmp->insert(std::make_pair(TRefSystemFactory::kLocalRefFrame, 
             TDetails("kLocalRefFrame","LocalRefFrame (RESERVED)", TCoordSysFactory::k3DCartesian, 0, true)));
 		// ...
-		mapping = tmp;
+		mapping = std::move(tmp);
 	}
 	return *mapping;
 }
 
 const TRefFrameInfo::RefFrameSet & TRefFrameInfo::getRefFrameSet()
 {
-	typedef std::auto_ptr<RefFrameSet> SetPtr;
+	typedef std::unique_ptr<RefFrameSet> SetPtr;
 	static SetPtr refFrameSet;
 	if(refFrameSet.get()==NULL)
 	{
@@ -141,14 +141,14 @@ const TRefFrameInfo::RefFrameSet & TRefFrameInfo::getRefFrameSet()
 		{
 			tmp->insert(it->first);
 		}
-		refFrameSet = tmp;
+		refFrameSet = std::move(tmp);
 	}
 	return *refFrameSet;
 }
 
 const TRefFrameInfo::StringMappingType & TRefFrameInfo::getStringMapping()
 {
-	typedef std::auto_ptr<StringMappingType> StringMapPtr;
+	typedef std::unique_ptr<StringMappingType> StringMapPtr;
 	static StringMapPtr stringMap;
 	if(stringMap.get()==NULL)
 	{
@@ -158,7 +158,7 @@ const TRefFrameInfo::StringMappingType & TRefFrameInfo::getStringMapping()
 		{
 			tmp->insert(std::make_pair(it->second.fRefFrameName, it->first));
 		}
-		stringMap = tmp;
+		stringMap = std::move(tmp);
 	}
 	return *stringMap;
 }
