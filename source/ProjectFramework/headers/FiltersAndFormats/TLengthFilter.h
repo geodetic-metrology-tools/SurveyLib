@@ -27,7 +27,6 @@ Works as a Strategy of a TQtStreamFormatter object.
 //
 //
 //
-//using namespace std;
 class	TAStreamFormatter;
 class	TLength;
 class	TPointFormat;

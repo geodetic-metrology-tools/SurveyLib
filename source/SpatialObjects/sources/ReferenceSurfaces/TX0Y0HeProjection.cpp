@@ -33,7 +33,7 @@ TX0Y0HeProjection::TX0Y0HeProjection( )
 }
 
 
-TX0Y0HeProjection::TX0Y0HeProjection( const string& name, TXYHeProjection* xyhe) 
+TX0Y0HeProjection::TX0Y0HeProjection( const std::string& name, TXYHeProjection* xyhe)
 	: TA2DPlus1MapProjection( name )
 {	// constructor taking the name, the reference ellipsoid and the MLA system
 	fXYHe = xyhe;

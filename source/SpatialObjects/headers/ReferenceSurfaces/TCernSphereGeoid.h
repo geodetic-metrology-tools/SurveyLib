@@ -34,7 +34,6 @@ class	TRefSystemFactory;
 #include	"TPositionVector.h"
 #include	"TAGeoidModel.h"
 
-//using namespace std;
 // typedefs
 //
 //
@@ -56,7 +55,7 @@ public:
 		TCernSphereGeoid();
 		
 		/// constructor taking the name, the definition reference frame and ellipsoid, and the calculation reference frame
-		TCernSphereGeoid(	const string& name, TAReferenceFrame* def, TReferenceEllipsoid* ell,
+		TCernSphereGeoid(	const std::string& name, TAReferenceFrame* def, TReferenceEllipsoid* ell,
 							TAReferenceFrame* calc);
 		
 		/// Destructor
@@ -82,7 +81,7 @@ public:
 		virtual  TAngle  getDAlpha( const TSpatialPosition&, const TAngle& ) const;
 		
 		/// Returns the name of the geoid
-		virtual  string	 getName()  const { return fName; }
+		virtual  std::string	 getName()  const { return fName; }
 
 		/// Set the definiton reference frame
 		void setDefRefFrame(TAReferenceFrame* def) { fDefRFPtr = def; return; }
@@ -113,7 +112,7 @@ public:
 private:
 
 	// member attributes
-	string						fName; /*!< name  */
+	std::string						fName; /*!< name  */
 		
 	TAReferenceFrame*			fDefRFPtr; /*!< pointer to the def. reference frame  */
 	TReferenceEllipsoid*		fDefEllPtr; /*!< pointer to the reference ellispoid  */

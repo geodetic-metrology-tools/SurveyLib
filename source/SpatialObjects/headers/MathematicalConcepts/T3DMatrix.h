@@ -29,7 +29,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TFreeVector.h"
 #include "TPositionVector.h"
 #include "TCoordSysFactory.h"
-//using namespace std;
 // typedefs
 //
 //

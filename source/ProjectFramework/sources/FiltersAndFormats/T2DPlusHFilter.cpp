@@ -232,7 +232,7 @@ void	T2DPlusHFilter::output(TAStreamFormatter& oStream, const TPositionVector& p
 	and put the values in a TAStreamFormatter object
 */
 
-	string sep =oStream.getSeparator();
+	std::string sep =oStream.getSeparator();
 
 	//outputs the coordinates
 	if (pv.isInitialise())

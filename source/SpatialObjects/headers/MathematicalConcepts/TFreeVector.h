@@ -26,7 +26,6 @@ class TDouble;
 class TScalar;
 
 #include "TACoordSysVector.h"
-//using namespace std;
 
 //
 //

@@ -42,7 +42,7 @@
 //////////////////////////////////////////////////////////////////////
 
 
-TA3DEuclideanRefFrame::TA3DEuclideanRefFrame( const string& name )
+TA3DEuclideanRefFrame::TA3DEuclideanRefFrame( const std::string& name )
 	: TAReferenceFrame ( name )
 {	// default constructor 
 }

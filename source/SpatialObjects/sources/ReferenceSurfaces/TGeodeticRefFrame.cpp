@@ -30,14 +30,14 @@ const TReal TGeodeticRefFrame::precisionPhi = LITERAL(0.00000000000001); //preci
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-TGeodeticRefFrame::TGeodeticRefFrame( const string& name ) 
+TGeodeticRefFrame::TGeodeticRefFrame( const std::string& name )
 	: TA3DEuclideanRefFrame( name )
 {	// constructor taking the name of the reference frame
 }
 
 
 
-TGeodeticRefFrame::TGeodeticRefFrame( const string& name, TReferenceEllipsoid* ell ) 
+TGeodeticRefFrame::TGeodeticRefFrame( const std::string& name, TReferenceEllipsoid* ell )
 	: TA3DEuclideanRefFrame( name )
 {	// constructor taking the name of the reference frame
 	fEllipsoid = ell;

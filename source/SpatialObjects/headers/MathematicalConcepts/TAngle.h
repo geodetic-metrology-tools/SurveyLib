@@ -48,7 +48,6 @@ Patterns:
 #include "TConstants.h"
 class TDouble;
 
-using namespace std;
 // typedefs
 typedef	int	Degrees;		// the degrees of an angle
 typedef	int	Minutes;		// the minutes of an angle

@@ -28,7 +28,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 #include  "TAModifiedLocalAstronomicalRF.h"
 
-//using namespace std;
 // typedefs
 //
 //
@@ -46,20 +45,20 @@ public:
 	//@{
 		/// Constructor taking the name of the reference frame, the geoid id.,
 		/// the origin and the false origin in CCS and the beam gis. and slope
-		TModifiedLocalAstronomicalRF( const string& name, TRefSystemFactory::EGeoid geoid, 
+		TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::EGeoid geoid,
 			TSpatialPosition origin, TFreeVector falseOrigin,
 			const TAngle gis, const TAngle slope);
 
 		/// Constructor taking the name of the reference frame, the geoid id.,
-			TModifiedLocalAstronomicalRF( const string& name, TRefSystemFactory::EGeoid geoid);
+			TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::EGeoid geoid);
 
 		/// Constructor for a local astronomical reference frame
 		/// taking the name of the reference frame, the geoid id., and the origin
-		TModifiedLocalAstronomicalRF( const string& name, TRefSystemFactory::EGeoid geoid, TSpatialPosition origin);
+		TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::EGeoid geoid, TSpatialPosition origin);
 
 		/// Constructor for a local astronomical reference frame
 		/// taking the name of the reference frame, the ellipsoid id., and the origin
-		TModifiedLocalAstronomicalRF( const string& name, TRefSystemFactory::ERefEll ell, TSpatialPosition origin);
+		TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::ERefEll ell, TSpatialPosition origin);
 
 
 		/// Destructor

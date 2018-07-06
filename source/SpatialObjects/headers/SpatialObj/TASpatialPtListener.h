@@ -38,7 +38,7 @@ protected:
 /*!@name Typedefs*/
 //@{
 //! Type of the container used to store points
-typedef list<TVSpatialPtListener*> PtListnrContainer;
+typedef std::list<TVSpatialPtListener*> PtListnrContainer;
 //! Type of an iterator pointing to an element of the container
 typedef PtListnrContainer::iterator PtListnrIterator;
 //! Type of a const iterator pointing to an element of the container

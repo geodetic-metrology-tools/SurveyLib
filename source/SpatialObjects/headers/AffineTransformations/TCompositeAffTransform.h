@@ -27,7 +27,6 @@ The last transformation added is applied first in the transformation of an objec
 // Forward declarations
 //
 #include <list>
-//using namespace std;
 
 #include  "TAffineTransformWrapper.h"
 #include  "TAAffineTransformation.h"

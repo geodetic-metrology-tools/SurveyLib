@@ -3,16 +3,16 @@
 
 TAdjustableHelmertTransformation::TAdjustableHelmertTransformation() {
 	
-	fixedTranslations = bitset<3>();
-	fixedRotations = bitset<3>();
-	fixedScale = bitset<1>();
+	fixedTranslations = std::bitset<3>();
+	fixedRotations = std::bitset<3>();
+	fixedScale = std::bitset<1>();
 	name = "";
 
 	setDefaults();
 	setDefaultsParams();
 }
 
-TAdjustableHelmertTransformation::TAdjustableHelmertTransformation(const std::bitset<3>& fixedTranslations, const std::bitset<3>& fixedRotations, const std::bitset<1>& fixedScale, const string& name) :
+TAdjustableHelmertTransformation::TAdjustableHelmertTransformation(const std::bitset<3>& fixedTranslations, const std::bitset<3>& fixedRotations, const std::bitset<1>& fixedScale, const std::string& name) :
 	fixedTranslations(fixedTranslations),
 	fixedRotations(fixedRotations),
 	fixedScale(fixedScale),
@@ -22,7 +22,7 @@ TAdjustableHelmertTransformation::TAdjustableHelmertTransformation(const std::bi
 	setDefaultsParams();
 }
 
-TAdjustableHelmertTransformation::TAdjustableHelmertTransformation(const TransformParameters& transfParam, const std::bitset<3>& fixedTranslations, const std::bitset<3>& fixedRotations, const std::bitset<1>& fixedScale, const string& name) :
+TAdjustableHelmertTransformation::TAdjustableHelmertTransformation(const TransformParameters& transfParam, const std::bitset<3>& fixedTranslations, const std::bitset<3>& fixedRotations, const std::bitset<1>& fixedScale, const std::string& name) :
 	fixedTranslations(fixedTranslations),
 	fixedRotations(fixedRotations),
 	fixedScale(fixedScale),

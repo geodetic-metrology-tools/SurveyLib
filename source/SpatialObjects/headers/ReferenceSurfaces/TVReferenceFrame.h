@@ -50,7 +50,6 @@ class TModifiedLocalAstronomicalRF;
 
 #include  "TVAffineTransformation.h"
 //#include  "TAAffineTransformation.h"
-using namespace std;
 //#include  "TTransformWrapper.h"
 // typedefs
 //
@@ -71,7 +70,7 @@ public:
 	virtual ~TVReferenceFrame() { }
 
 		//! Get the name of the reference frame
-		virtual string  getName() const = 0;
+		virtual std::string  getName() const = 0;
 
 		//! returns identifier of the reference frame in the graph
 	    virtual TRefSystemFactory::ERefFrame  getRefFrameId() const = 0;

@@ -39,7 +39,6 @@ class TVRefFrameTransformation;
 #include  "TVCoordinateSystem.h"
 
 
-using namespace std;
 
 // typedefs
 typedef  TReal  Coordinate;

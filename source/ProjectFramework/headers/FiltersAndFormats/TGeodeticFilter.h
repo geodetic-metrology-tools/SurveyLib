@@ -26,7 +26,6 @@ Works as a Strategy of a TAStreamFormatter object.
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-//using namespace std;
 //
 class  TAStreamFormatter;
 class  TSpatialPosition;

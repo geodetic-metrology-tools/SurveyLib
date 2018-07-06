@@ -30,7 +30,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <iostream>
 #include <iomanip>
 #include <stddef.h>
-//using namespace std;
 
 class TVCoordinateSystem;
 // typedefs

@@ -28,7 +28,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 // Forward declarations
 //
 #include  <string>
-using namespace std;
 //
 class  TVReferenceEllipsoid;
 class  TReferenceEllipsoid;

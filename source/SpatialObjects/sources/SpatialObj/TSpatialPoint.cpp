@@ -23,7 +23,7 @@ TSpatialPoint::TSpatialPoint() : fPtListeners(),fPointDist(),fHeaderComment(), f
 
 }
 
-TSpatialPoint::TSpatialPoint( const string& ptName ) : fPtListeners(),fPointDist(), fHeaderComment(), fEOLComment()
+TSpatialPoint::TSpatialPoint( const std::string& ptName ) : fPtListeners(),fPointDist(), fHeaderComment(), fEOLComment()
 {
 	fName = new TSpatialPointName( ptName );
 	fPosition = 0;
@@ -240,7 +240,7 @@ TSpatialPointName  TSpatialPoint::getName()  const
 }
 
 
-void TSpatialPoint::setPtName( const string& ptName ) 
+void TSpatialPoint::setPtName( const std::string& ptName )
 {// Set the point's point name
 	fName->setName( ptName);
 
@@ -249,18 +249,18 @@ void TSpatialPoint::setPtName( const string& ptName )
 }
 
 /*METHOD FOR CHABA INTERFACE ONLY - CALLED IF TWO POINTS HAVE IDENTICAL TIMESTAMPS*/
-void TSpatialPoint::setDuplicatePtName( const string& ptName ) 
+void TSpatialPoint::setDuplicatePtName( const std::string& ptName )
 {// Set the point's point name
 	fName->setName( ptName);
 }
 
-string TSpatialPoint::getPtName()  const
+std::string TSpatialPoint::getPtName()  const
 {// Get the point's point name
 	return fName->getName();
 }
 
 
-void  TSpatialPoint::setHeaderComment( const string& com) 
+void  TSpatialPoint::setHeaderComment( const std::string& com)
 {
 
 fHeaderComment = com; 

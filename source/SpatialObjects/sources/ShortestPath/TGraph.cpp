@@ -167,19 +167,19 @@ TGraph* TGraph::getGraph()
 
 	
 
-vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
+std::vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 													   TRefFrameWrapper& to)
 {// return the transformation between 2 RF from the graph
 	if (fLastFrom == from.getName() && fLastTo == to.getName())
 		return fLastTransformation;
 	else 
 	{
-		vector<int> tr, pr;
-		vector<TTransformWrapper> transform;
-		vector<TARefFrameTransformation*> transfo;
+		std::vector<int> tr, pr;
+		std::vector<TTransformWrapper> transform;
+		std::vector<TARefFrameTransformation*> transfo;
 		int start = -1, end = -1;
 
-		string cgrfTransformation = "no";
+		std::string cgrfTransformation = "no";
 		TTransformWrapper transfoWithCGRF;
 		
 
@@ -255,7 +255,7 @@ vector<TARefFrameTransformation*> TGraph::getTransform(TRefFrameWrapper& from,
 		transfo[0] = transform[end].getTransformation();
 		if (transfo[0] != 0)
 		{
-			vector<int> precedent(transfo.size(), -1);
+			std::vector<int> precedent(transfo.size(), -1);
 			precedent[0] = pr[end];
 	
 			for (i = 1; i < transfo.size(); i++)
@@ -330,14 +330,14 @@ void TGraph::insert(TARefFrameTransformation* refFrameTrans, TARefFrameTransform
 
 
 
-void TGraph::path(vector<int>& trans, vector<int>& pred,vector<TTransformWrapper>& transform, int start)
+void TGraph::path(std::vector<int>& trans, std::vector<int>& pred, std::vector<TTransformWrapper>& transform, int start)
 {// find the shortest a RF and all the otehers in the graph
 
-	trans = vector<int>(C.size(), 5000);
+	trans = std::vector<int>(C.size(), 5000);
 	trans[start] = 0;
-	pred = vector<int>(C.size(),-1);
+	pred = std::vector<int>(C.size(),-1);
 
-	transform = vector<TTransformWrapper>(C.size(),(TTransformWrapper)0);
+	transform = std::vector<TTransformWrapper>(C.size(),(TTransformWrapper)0);
 
 	
 	DynamicPriorityQueue<int> Q(trans);
@@ -366,7 +366,7 @@ void TGraph::path(vector<int>& trans, vector<int>& pred,vector<TTransformWrapper
 }
 
 
-void TGraph::fillLastTransformation(const string from, const string to, const vector<TARefFrameTransformation*> lastTransform)
+void TGraph::fillLastTransformation(const std::string from, const std::string to, const std::vector<TARefFrameTransformation*> lastTransform)
 {// fill the last transformation objects
 	fLastFrom = from;
 	fLastTo = to;

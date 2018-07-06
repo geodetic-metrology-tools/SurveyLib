@@ -126,7 +126,7 @@ TVCoordinateSystem* TCoordSysFactory::getCoordSys(const ECoordSys coordSysId)
 		iter++;
 	}
 
-	cerr << "Error : Id. not in CoordSysList" << endl;
+	std::cerr << "Error : Id. not in CoordSysList" << std::endl;
 	throw TNotInGraphException("TNotInGraphException");
 }
 

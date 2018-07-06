@@ -26,7 +26,6 @@ class  TSpatialPosition;
 #include "TLength.h"
 #include <TAngle.h>
 #include "TRefSystemFactory.h"
-using namespace std;
 ////////////////////////////////////////////////////////////////
 
 /*! \ingroup spatialobjects
@@ -58,7 +57,7 @@ public:
 		virtual TAngle getDAlpha(const TSpatialPosition&, const TAngle&) const = 0;
 
 		/*! \Returns the name of the geoid*/
-		virtual string	getName() const = 0;
+		virtual std::string	getName() const = 0;
 
 		/*! \Returns the definition reference frame*/
 		virtual TAReferenceFrame* getDefRefFrame() const = 0;

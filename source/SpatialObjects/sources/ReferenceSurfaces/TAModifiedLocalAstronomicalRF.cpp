@@ -17,7 +17,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-TAModifiedLocalAstronomicalRF::TAModifiedLocalAstronomicalRF( const string& name )
+TAModifiedLocalAstronomicalRF::TAModifiedLocalAstronomicalRF( const std::string& name )
 	: TA3DEuclideanRefFrame(name),
 	fFalseOrigin(TCoordSysFactory::k3DCartesian)
 {//constructor

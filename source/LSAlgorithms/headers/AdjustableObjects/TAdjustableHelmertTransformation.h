@@ -36,7 +36,7 @@ class TAdjustableHelmertTransformation : public TVAdjustableObject {
 				\param[in] fixedScale		 Bitset telling if scale factor is fixed or variable.
 				\param[in] name			     Name of the adjustable transformation.
 			*/
-			TAdjustableHelmertTransformation(const TransformParameters& transfParam, const std::bitset<3>& fixedTranslations, const std::bitset<3>& fixedRotations, const std::bitset<1>& fixedScale, const string& name);
+			TAdjustableHelmertTransformation(const TransformParameters& transfParam, const std::bitset<3>& fixedTranslations, const std::bitset<3>& fixedRotations, const std::bitset<1>& fixedScale, const std::string& name);
 
 
 			/*!
@@ -47,7 +47,7 @@ class TAdjustableHelmertTransformation : public TVAdjustableObject {
 				\param[in] fixedScale		 Bitset telling if scale factor is fixed or variable.
 				\param[in] name				 Name of the adjustable object.
 			*/
-			TAdjustableHelmertTransformation(const std::bitset<3>& fixedTranslations, const std::bitset<3>& fixedRotations, const std::bitset<1>& fixedScale, const string& name);
+			TAdjustableHelmertTransformation(const std::bitset<3>& fixedTranslations, const std::bitset<3>& fixedRotations, const std::bitset<1>& fixedScale, const std::string& name);
 
 			///	Creates an uninitialized TAdjustableHelmertTransformation object.
 			static TAdjustableHelmertTransformation createUninitialized(const std::string& name);

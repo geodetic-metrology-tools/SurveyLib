@@ -104,7 +104,7 @@ bool  TRefFrameWrapper::operator<(const TRefFrameWrapper& right) const
 }
 
 
-string  TRefFrameWrapper::getName() const
+std::string  TRefFrameWrapper::getName() const
 {	// get the name of the reference frame node
 	// the node has the same name as the reference frame itself
 	return fFrame->getName();

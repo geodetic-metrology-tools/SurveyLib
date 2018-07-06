@@ -31,7 +31,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 //
 class  TAngle;
 #include "TRefSystemFactory.h"
-//using namespace std;
 //#include  "TVReferenceEllipsoid.h"
 //
 // typedefs
@@ -54,7 +53,7 @@ public:
 	/**@name Constructors and Destructors */
 	//@{
 		/// Constructor taking the name of the reference ellipsoid
-		explicit  TReferenceEllipsoid( const  string& name );
+		explicit  TReferenceEllipsoid( const  std::string& name );
 
 		/// Destructor
 		virtual	~TReferenceEllipsoid();
@@ -82,7 +81,7 @@ public:
 	
 
 		/// return ellipsoid name
-		virtual string  getName()  const;
+		virtual std::string  getName()  const;
 	
 		/// return major semi-axis value
 		virtual EllipseParameter  getA()  const;
@@ -176,7 +175,7 @@ private:
 	EllipseParameter				fF;               /*!< ellispoid parameter: F */
 	EllipseParameter				fB;               /*!< ellispoid parameter: B */
 	EllipseParameter				fEPrimeSquared;   /*!< ellispoid parameter: e'^2 */
-	string							fName;			/*!< name of the ellispoid */	
+	std::string							fName;			/*!< name of the ellispoid */
 
 	TRefSystemFactory::ERefEll		fEllId;		/*!< ellispoid identifier */
 	//ClassDef(TReferenceEllipsoid, 1)
@@ -210,7 +209,7 @@ inline EllipseParameter	TReferenceEllipsoid::getEPrime() const { return sqrtq( f
 inline EllipseParameter	TReferenceEllipsoid::getEPrimeSquared() const {	return fEPrimeSquared;}
 
 
-inline string TReferenceEllipsoid::getName() const { return fName;}
+inline std::string TReferenceEllipsoid::getName() const { return fName;}
 
 
 

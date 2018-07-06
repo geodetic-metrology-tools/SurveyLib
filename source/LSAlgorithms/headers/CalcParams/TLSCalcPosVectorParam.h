@@ -13,7 +13,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <list>
 #include <string>
 #include <array>
-//using namespace std;
 
 #include "TRefSystemFactory.h"
 #include "TSpatialPoint.h"
@@ -32,7 +31,7 @@ public:
 
 		/*! Constructor
 		\param spobs provisional value for the spatial point */
-		TLSCalcPosVectorParam(TPositionVector pos,struct LSParaStatus status,string name);
+		TLSCalcPosVectorParam(TPositionVector pos,struct LSParaStatus status, std::string name);
 
 		/*! Copy constructor */
 		TLSCalcPosVectorParam(const TLSCalcPosVectorParam& source);
@@ -181,7 +180,7 @@ public:
 		/*!Returns the status (Cala, Vxy....)*/
 		TSpatialStatus::ESpatialStatus	getGlobalStatus() const;
 
-		string				getPosVecStatus() const;
+		std::string				getPosVecStatus() const;
 	//@}
 
 	/*!@name Settings */
@@ -236,7 +235,7 @@ private:
 /*!@name Constants definition */
 //@{
 /*! List of ls calc position vector observations  */
-typedef list< TLSCalcPosVectorParam >		LSPosVecContainer;
+typedef std::list< TLSCalcPosVectorParam >		LSPosVecContainer;
 /*! Iterator of the list of ls calc position vector observations */
 typedef LSPosVecContainer::iterator			LSPosVecIter;
 /*! Constant iterator of the list of ls calc position vector observations */

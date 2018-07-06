@@ -20,10 +20,10 @@ public:
 	LSPosVecIter		insert(const LSPosVecIter, const TLSCalcPosVectorParam& posVec);
 
 	/*!\return an iterator pointing to a point specified through its name*/
-	LSPosVecIter		getPoint(const string);
+	LSPosVecIter		getPoint(const std::string);
 
 	/*!\return a cons iterator pointing to a point specified through its name*/
-	LSPosVecConstIter	getPoint(const string) const;
+	LSPosVecConstIter	getPoint(const std::string) const;
 
 	/*!function used for order posVecParam like points in thr input file
 	Move Pos2 to pos1*/

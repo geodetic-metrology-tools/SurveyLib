@@ -35,7 +35,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include  "TVReferenceFrame.h"
 
 
-//using namespace std;
 // typedefs
 //
 //
@@ -53,7 +52,7 @@ public:
 	/*!@name Constructors and Destructors */
 	//@{
 		//! Constructor taking the name of the reference frame
-		explicit TAReferenceFrame( const string& name );
+		explicit TAReferenceFrame( const std::string& name );
 
 		//! Destructor
 		virtual  ~TAReferenceFrame();
@@ -63,7 +62,7 @@ public:
 	//!@name Member Function
 	//@{
 		//! Get the name of the reference frame
-		virtual string  getName() const;
+		virtual std::string  getName() const;
 
 		/// return the reference frame id
 		virtual TRefSystemFactory::ERefFrame  getRefFrameId() const;
@@ -143,7 +142,7 @@ private:
 
 private:
 
-	string  fName; //!< name of the reference frame
+	std::string  fName; //!< name of the reference frame
 
 	TRefSystemFactory::ERefFrame fRefFrameId; //!< Identification of the reference frame in the Graph
 

@@ -79,7 +79,7 @@ TAStreamFormatter::TAStreamFormatter(TDataParameters& dp)
 	fName = "defaultName";
 	fFStream=0;
 
-	fSStream = new stringstream(ios_base::out);
+	fSStream = new std::stringstream(std::ios_base::out);
 	fIOStream = fSStream;
 
 	setAngleUnits(dp.getAngleUnits());
@@ -93,14 +93,14 @@ TAStreamFormatter::TAStreamFormatter(TDataParameters& dp)
 }
 
 
-TAStreamFormatter::TAStreamFormatter(const string& input, TDataParameters& dp)
+TAStreamFormatter::TAStreamFormatter(const std::string& input, TDataParameters& dp)
 {//extraction of a string from a stream, reading of a stream
 	init();
 	
 	fName = "defaultName";
 	fFStream=0;
 
-	fSStream = new stringstream(input, ios_base::in);
+	fSStream = new std::stringstream(input, std::ios_base::in);
 	fIOStream = fSStream;
 
 	setAngleUnits(dp.getAngleUnits());
@@ -126,11 +126,11 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TFileParameters& fp, TDataParam
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(fName.c_str(), ios_base::in);
+		fFStream = new std::fstream(fName.c_str(), std::ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(fName.c_str(), ios_base::out);
+		fFStream = new std::fstream(fName.c_str(), std::ios_base::out);
 	}
 
 	if(fFStream->fail())
@@ -168,11 +168,11 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds)
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(fName.c_str(), ios_base::in);
+		fFStream = new std::fstream(fName.c_str(), std::ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(fName.c_str(), ios_base::out);
+		fFStream = new std::fstream(fName.c_str(), std::ios_base::out);
 	}
 
 	if(fFStream->fail())
@@ -209,11 +209,11 @@ TAStreamFormatter::TAStreamFormatter(EIOType io, TADataSet& ds, TPointFormat& pf
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(fName.c_str(), ios_base::in);
+		fFStream = new std::fstream(fName.c_str(), std::ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(fName.c_str(), ios_base::out);
+		fFStream = new std::fstream(fName.c_str(), std::ios_base::out);
 		fPointFormat =pf;
 		setPrecisionFormat(fPointFormat.getCoordPrecision());
 		setWidthFormat(fPointFormat.getCoordWidth());
@@ -254,11 +254,11 @@ TAStreamFormatter::TAStreamFormatter(const EIOType io, TADataSet& ds, const TPoi
 	fIOType =io;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(fName.c_str(), ios_base::in);
+		fFStream = new std::fstream(fName.c_str(), std::ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(fName.c_str(), ios_base::out);
+		fFStream = new std::fstream(fName.c_str(), std::ios_base::out);
 		fPointFormat =pf;
 		fObservationFormat = obsFor;
 		setPrecisionFormat(fPointFormat.getCoordPrecision());
@@ -328,11 +328,11 @@ void TAStreamFormatter::resetStreamName(std::string name){
 	fName= name;
 	if (fIOType == kRead)
 	{// extraction of a file from a stream, reading of a stream
-		fFStream = new fstream(fName.c_str(), ios_base::in);
+		fFStream = new std::fstream(fName.c_str(), std::ios_base::in);
 	}
 	else if(fIOType == kWrite)
 	{// insertion of a file into a stream, writing a stream
-		fFStream = new fstream(fName.c_str(), ios_base::out);
+		fFStream = new std::fstream(fName.c_str(), std::ios_base::out);
 	}
 
 	if(fFStream->fail())
@@ -465,7 +465,7 @@ int	TAStreamFormatter::setPrecisionFormat(const int precision)
 	return oldPrecision;
 }
 
-void TAStreamFormatter::setFileName(string const& name) 
+void TAStreamFormatter::setFileName(std::string const& name)
 {
 	fName = name;
 }
@@ -561,7 +561,7 @@ TAStreamFormatter  &TAStreamFormatter::operator>>( TSpatialPointName &ptName )
 {//input a spatial point name from the text stream
 	
 	//char  cStr[20];
-	string  stringName = "";
+	std::string  stringName = "";
 
 	this->skipWhiteSpace();
 	if(this->peek()!='\n')
@@ -799,7 +799,7 @@ TAStreamFormatter &TAStreamFormatter::operator>>( char *s )
 {   (*fIOStream)>> s ; return *this; }
 
 
-TAStreamFormatter &TAStreamFormatter::operator>>(string& str)
+TAStreamFormatter &TAStreamFormatter::operator>>(std::string& str)
 {
 (*fIOStream) >> str;
 return *this;
@@ -848,7 +848,7 @@ TAStreamFormatter &TAStreamFormatter::operator<<( float f )
 
 TAStreamFormatter &TAStreamFormatter::operator<<( TReal d )
 {   
-	string s("IND");
+	std::string s("IND");
 	if((size_t)fWidth > s.size())
     	s.insert(0, fWidth - s.size(), ' ');
 
@@ -864,7 +864,7 @@ TAStreamFormatter &TAStreamFormatter::operator<<( const char *s )
 {   (*fIOStream)<<( s ); return *this; }
 
 
-TAStreamFormatter &TAStreamFormatter::operator<<( const string &str )
+TAStreamFormatter &TAStreamFormatter::operator<<( const std::string &str )
 {   
 	(*fIOStream)<<( str ); 
 	return *this; 
@@ -882,19 +882,19 @@ return *this; }
 
 
 
-string operator*(const string& s, unsigned int n) {
-        stringstream out;
+std::string operator*(const std::string& s, unsigned int n) {
+	std::stringstream out;
 		while (n--)
 			out << s;
 		return out.str();
 	}
 
-string operator*(unsigned int n, const string& s) { return s * n; }
+std::string operator*(unsigned int n, const std::string& s) { return s * n; }
 
 //////////////////////////////////////////////////////////////////////
 //Member Function
 /////////////////////////////////////////////////////////////////////
-fstream*	TAStreamFormatter::device() const
+std::fstream*	TAStreamFormatter::device() const
 {
 return fFStream;
 }
@@ -935,7 +935,7 @@ bool TAStreamFormatter::atEndCom()
 return fIOStream->eof();
 }
 
-TAStreamFormatter& TAStreamFormatter::seekg(streamoff off, ios_base::seekdir dir)
+TAStreamFormatter& TAStreamFormatter::seekg(std::streamoff off, std::ios_base::seekdir dir)
 {
 	fIOStream->seekg(off, dir);
 	return *this;
@@ -946,7 +946,7 @@ std::streampos TAStreamFormatter::tellg()
 	return fIOStream->tellg();
 }
 
-string TAStreamFormatter::readLine() 
+std::string TAStreamFormatter::readLine()
 {/*
   Reads a line from the stream and returns a string containing the text.
   The returned string does not contain any trailing newline or carriage
@@ -957,7 +957,7 @@ string TAStreamFormatter::readLine()
 
 	
 	
-	string result ="";
+	std::string result ="";
 	const int buf_size=256;
 	char c[buf_size];
 	int pos=0;
@@ -1082,7 +1082,7 @@ return (char) fIOStream->peek();
 }
 
 
-TAStreamFormatter &TAStreamFormatter::readRawBytes(char *s, streamsize n)
+TAStreamFormatter &TAStreamFormatter::readRawBytes(char *s, std::streamsize n)
 {//extracts up to n elements and stores them in the array beginning at s
 	fIOStream->read(s, n);
 	return *this;
@@ -1108,25 +1108,25 @@ return fIOStream->flags();
 
 int TAStreamFormatter::flags( int f )
 {//sets flags as the new format flags and returns the prvious state of all flags
-return fIOStream->flags( ios_base::fmtflags(f) );
+return fIOStream->flags(std::ios_base::fmtflags(f) );
 }
 
 
 int TAStreamFormatter::setf( int bits )
 {//sets flags "bits" as additional format flags and return the previous state of all flags
-return fIOStream->setf( ios_base::fmtflags(bits) );
+return fIOStream->setf(std::ios_base::fmtflags(bits) );
 }
 
 
 int TAStreamFormatter::setf( int bits, int mask )
 {//sets flags as the new format flags of the group identified by mask and returns the previous state of all flags
-return fIOStream->setf( ios_base::fmtflags(bits), ios_base::fmtflags(mask) );
+return fIOStream->setf(std::ios_base::fmtflags(bits), std::ios_base::fmtflags(mask) );
 }
 
 
 void TAStreamFormatter::unsetf( int bits )
 {//clears flags
-fIOStream->unsetf( ios_base::fmtflags(bits) );
+fIOStream->unsetf(std::ios_base::fmtflags(bits) );
 return;
 }
 
@@ -1179,27 +1179,27 @@ int TAStreamFormatter::precision(int p)
 }
 
 
-TAStreamFormatter &TAStreamFormatter::writeRawBytes(const char* s, streamsize n)
+TAStreamFormatter &TAStreamFormatter::writeRawBytes(const char* s, std::streamsize n)
 {//inserts the sequence of n elements beginning at s
 	fIOStream->write(s, n);
 	return *this;
 }
 
 
-const string&	TAStreamFormatter::getError() const
+const std::string&	TAStreamFormatter::getError() const
 {
 	return fError;
 }
 
 
-void TAStreamFormatter::setError(const string error)
+void TAStreamFormatter::setError(const std::string error)
 {
 	fError = error;
 	return;
 }
 
 
-string	TAStreamFormatter::getWarning() const
+std::string	TAStreamFormatter::getWarning() const
 {
 	return fWarning;
 }
@@ -1212,7 +1212,7 @@ void	TAStreamFormatter::initWarning()
 }
 
 
-void TAStreamFormatter::addWarning(const string warning)
+void TAStreamFormatter::addWarning(const std::string warning)
 {
 	if (fWarning != "")
 		fWarning += "\n                    ";
@@ -1232,9 +1232,9 @@ bool TAStreamFormatter::hasNoObsToRead() const
 ////////////////////////////////////////////////////////////////////////
 //Default Function
 ////////////////////////////////////////////////////////////////////////
-string TAStreamFormatter::separator() const
+std::string TAStreamFormatter::separator() const
 {//default
-	string sep("default");
+	std::string sep("default");
 	return sep;
 }
 
@@ -1259,7 +1259,7 @@ return;
 void TAStreamFormatter::openOutApp()
 {
 	if (fIOType != kWrite && fSStream==0)
-	{fFStream->open(fName.c_str(), ios::out| ios::app);}
+	{fFStream->open(fName.c_str(), std::ios::out| std::ios::app);}
 return;
 }
 
@@ -1288,26 +1288,26 @@ return;
 
 TAStreamFormatter &bin( TAStreamFormatter &s )
 {
-    s.setf(ios::binary /*,ios::basefield*/);
+    s.setf(std::ios::binary /*,ios::basefield*/);
     return s;
 }
 
 
 TAStreamFormatter &oct(TAStreamFormatter &s)
 {
-    s.setf(ios::oct,ios::basefield);
+    s.setf(std::ios::oct, std::ios::basefield);
     return s;
 }
 
 TAStreamFormatter &dec(TAStreamFormatter &s)
 {
-    s.setf(ios::dec,ios::basefield);
+    s.setf(std::ios::dec, std::ios::basefield);
     return s;
 }
 
 TAStreamFormatter &hex(TAStreamFormatter &s)
 {
-    s.setf(ios::hex,ios::basefield);
+    s.setf(std::ios::hex, std::ios::basefield);
     return s;
 }
 
@@ -1332,7 +1332,7 @@ TAStreamFormatter &flush(TAStreamFormatter &s)
 TAStreamFormatter &ws(TAStreamFormatter &s)
 {
     //s.skipWhiteSpace();
-	s.setf(ios::skipws/*,ios::basefield*/);
+	s.setf(std::ios::skipws/*,ios::basefield*/);
     return s;
 }
 
@@ -1346,14 +1346,14 @@ return s;
 
 TAStreamFormatter &left(TAStreamFormatter &s)
 {
-	s.setf(ios::left,ios::adjustfield);
+	s.setf(std::ios::left, std::ios::adjustfield);
 	return s;
 }
 
 
 TAStreamFormatter &right(TAStreamFormatter &s)
 {
-	s.setf(ios::right,ios::adjustfield);
+	s.setf(std::ios::right, std::ios::adjustfield);
 	return s;
 }
 
@@ -1434,13 +1434,13 @@ TSpatialPositionFilter *TAStreamFormatter::getPositionFilter(TCoordSysFactory::E
 }
 
 
-string TAStreamFormatter::getSeparator() const
+std::string TAStreamFormatter::getSeparator() const
 {//returns the string used to separate fields
 	return fSeparator;
 }
 
 
-void TAStreamFormatter::setSeparator(const string& sep)
+void TAStreamFormatter::setSeparator(const std::string& sep)
 {//sets the string used to separate fields
 	fSeparator = sep;
 	return;
@@ -1451,8 +1451,9 @@ void TAStreamFormatter::setSeparator(const string& sep)
 
 
 //test
-string TAStreamFormatter::getString()
-{string s;
+std::string TAStreamFormatter::getString()
+{
+	std::string s;
 s=fSStream->str();
 return s;}
 
@@ -1474,7 +1475,7 @@ void TAStreamFormatter::setGapBetweenData()
 	fLineGap = true;
 }
 
-void	TAStreamFormatter::writeString(const int width, const string data)
+void	TAStreamFormatter::writeString(const int width, const std::string data)
 {
 	this->width(width);
 	(*this) << right << data;
@@ -1483,7 +1484,7 @@ void	TAStreamFormatter::writeString(const int width, const string data)
 
 }
 
-void	TAStreamFormatter::writeStringLeft(const int width, const string data)
+void	TAStreamFormatter::writeStringLeft(const int width, const std::string data)
 {
 	this->width(width);
 	(*this) << left << data << right << getSeparator();

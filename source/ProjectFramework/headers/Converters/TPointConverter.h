@@ -34,7 +34,7 @@ public:
 
 	/*!@name Public member functions*/
 		//@{
-			void	writeName(string ptName, int width);
+			void	writeName(std::string ptName, int width);
 
 			void	writeXYZandH(const TPositionVector& pt);
 
@@ -44,7 +44,7 @@ public:
 			void	writeXYH(	const int width,
 								const int precision,
 								const TLength::EUnits unit,
-								const string separator,
+								const std::string separator,
 								const TLength Xparam,
 								const TLength Yparam,
                         		const TLength Hparam);
@@ -52,12 +52,12 @@ public:
 			void	writeXYZ(	const int width,
 								const int precision,
 								const TLength::EUnits unit,
-								const string separator,
+								const std::string separator,
 								const TPositionVector pt);
 
 			void	write3Coordinates(	const int width,
 										const int precision,
-										const string separator,
+										const std::string separator,
 										const TPositionVector pt);
 
 
@@ -65,22 +65,22 @@ public:
 											const int width,
 											const int precision,
 											const TLength::EUnits unit,
-											const string separator,
+											const std::string separator,
 											const TLength Xparam,
 											const TLength Yparam,
 											const TLength Zparam,
-											const string Dparam,
+											const std::string Dparam,
 											bool isCovar = false);
 
 
 			void	writeCoordinateParam(	const TSpatialStatus::ESpatialStatus status,
 											const int width,
 											const int precision,
-											const string separator,
+											const std::string separator,
                                  const TReal Xparam,
                                  const TReal Yparam,
                                  const TReal Zparam,
-											const string Dparam,
+											const std::string Dparam,
 											bool isCovar = false);
 
 			void	writeN( const int width,

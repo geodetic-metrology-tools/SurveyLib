@@ -16,7 +16,6 @@ Definition of an abstract class for ls calc parameters:
 #endif // _MSC_VER >= 1000
 
 #include <string>
-//using namespace std;
 
 //! Abstract class for ls calc parameters 
 class TALSCalcParameter {

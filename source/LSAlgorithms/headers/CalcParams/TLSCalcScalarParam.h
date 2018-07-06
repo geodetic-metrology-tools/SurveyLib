@@ -12,7 +12,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 #include <list>
 #include <string>
-//using namespace std;
 
 #include "TSpatialPoint.h"
 #include "TSpatialPosition.h"
@@ -29,7 +28,7 @@ public:
 		TLSCalcScalarParam();
 		/*! Constructor
 		/param stores provisional value for the scale */
-      TLSCalcScalarParam(TReal pos, ELSStatus status, string name);
+      TLSCalcScalarParam(TReal pos, ELSStatus status, std::string name);
 		/*! Copy constructor */
 		TLSCalcScalarParam(const TLSCalcScalarParam& source);
 		/*! Destructor */
@@ -106,7 +105,7 @@ private:
 /*!@name Constants definition */
 //@{
 /*! List of ls calc position vector observations  */
-typedef list< TLSCalcScalarParam > LSScalarContainer;
+typedef std::list< TLSCalcScalarParam > LSScalarContainer;
 /*! Iterator of the list of ls calc position vector observations */
 typedef LSScalarContainer::iterator LSScalarIter;
 /*! Constant iterator of the list of ls calc position vector observations */

@@ -354,7 +354,7 @@ void TDataParameters::setPrecision(int precision)
 			setAnglePrecision(anglePrecision);
 		else
 		{
-			const int offset = min(TGeodeticCoordSys::precisionNeeded(fAngleUnits) + anglePrecision, (int) TObservationFormat::EAnglePrecision::kPicogons);
+			const int offset = std::min(TGeodeticCoordSys::precisionNeeded(fAngleUnits) + anglePrecision, (int) TObservationFormat::EAnglePrecision::kPicogons);
 			setAnglePrecision(TObservationFormat::EAnglePrecision(offset));
 		}
 }
@@ -459,7 +459,7 @@ TLocalSystemOrigin* TDataParameters::getLocalSystemOrigin() const
 }
 
 
-const string& TDataParameters::getOriginFile() const
+const std::string& TDataParameters::getOriginFile() const
 {
 	return fOriginFile;
 }
@@ -469,93 +469,92 @@ const string& TDataParameters::getOriginFile() const
 /////////////////////////////////////////////////////////////////////////////
 
 
-string TDataParameters::getRFName() const
+std::string TDataParameters::getRFName() const
 {
 	switch (getRefFrameEnumerator())
 	{
 	case TRefSystemFactory::ERefFrame::kCCS:
-		return string("CCS");
+		return "CCS";
 	case TRefSystemFactory::ERefFrame::kCGRF:
-		return string("CGRF");
+		return "CGRF";
 	case TRefSystemFactory::ERefFrame::kCGRFSphere:
-		return string("CGRFSphere");
+		return "CGRFSphere";
 	case TRefSystemFactory::ERefFrame::kCernX0Y0He:
-		return string("CERN_X0Y0He");
+		return "CERN_X0Y0He";
 	case TRefSystemFactory::ERefFrame::kCernXYHe:
-		return string("CERN_XYHe");
+		return "CERN_XYHe";
 	case TRefSystemFactory::ERefFrame::kCernXYHg00:
-		return string("CERN_XYHg_00");
+		return "CERN_XYHg_00";
 	case TRefSystemFactory::ERefFrame::kCernXYHg00Machine:
-		return string("CERN_XYHg_RS2K");
+		return "CERN_XYHg_RS2K";
 	case TRefSystemFactory::ERefFrame::kCernXYHg00Topo:
-		return string("CERN_XYHg_00topo");
+		return "CERN_XYHg_00topo";
 	case TRefSystemFactory::ERefFrame::kCernXYHg85:
-		return string("CERN_XYHg_85");
+		return "CERN_XYHg_85";
 	case TRefSystemFactory::ERefFrame::kCernXYHg85Machine:
-		return string("CERN_XYHg_LHC");
+		return "CERN_XYHg_LHC";
 	case TRefSystemFactory::ERefFrame::kCERNXYHsSphereSPS:
-		return string("CERN_XYHs_SPS");
+		return "CERN_XYHs_SPS";
 	case TRefSystemFactory::ERefFrame::kCH1903plus:
-		return string("CH1903+");
+		return "CH1903+";
 	case TRefSystemFactory::ERefFrame::kCHTRF95:
-		return string("CHTRF95");
+		return "CHTRF95";
 	case TRefSystemFactory::ERefFrame::kETRF93:
-		return string("ETRF93");
+		return "ETRF93";
 	case TRefSystemFactory::ERefFrame::kFrenchRGF93Zone5:
-		return string("RGF93zone5");
+		return "RGF93zone5";
 	case TRefSystemFactory::ERefFrame::kITRF97:
-		return string("ITRF97");
+		return "ITRF97";
 	case TRefSystemFactory::ERefFrame::kLA1985H0:
-		return string("LA_85");
+		return "LA_85";
 	case TRefSystemFactory::ERefFrame::kLA1985Machine:
-		return string("LA_85Machine");
+		return "LA_85Machine";
 	case TRefSystemFactory::ERefFrame::kLA2000H0:
-		return string("LA_00");
+		return "LA_00";
 	case TRefSystemFactory::ERefFrame::kLA2000Topo:
-		return string("LA_00Topo");
+		return "LA_00Topo";
 	case TRefSystemFactory::ERefFrame::kLA2000Machine:
-		return string("LA_00Machine");
+		return "LA_00Machine";
 	case TRefSystemFactory::ERefFrame::kLambert93:
-		return string("Lambert93");
-		break;
+		return "Lambert93";
 	case TRefSystemFactory::ERefFrame::kLAp0:
-		return string("LA_P0");
+		return "LA_P0";
 	case TRefSystemFactory::ERefFrame::kLASphere:
-		return string("LASphere");
+		return "LASphere";
 	case TRefSystemFactory::ERefFrame::kLGp0:
-		return string("LG_P0");
+		return "LG_P0";
 	case TRefSystemFactory::ERefFrame::kLGSphere:
-		return string("LG_Sphere");
+		return "LG_Sphere";
 	case TRefSystemFactory::ERefFrame::kLGGRS80:
-		return string("LG_GRS80");
+		return "LG_GRS80";
 	case TRefSystemFactory::ERefFrame::kMLA1985H0:
-		return string("MLA_85");
+		return "MLA_85";
 	case TRefSystemFactory::ERefFrame::kMLA1985Machine:
-		return string("MLA_85Machine");
+		return "MLA_85Machine";
 	case TRefSystemFactory::ERefFrame::kMLA2000H0:
-		return string("MLA_00");
+		return "MLA_00";
 	case TRefSystemFactory::ERefFrame::kMLA2000Machine:
-		return string("MLA_00Machine");
+		return "MLA_00Machine";
 	case TRefSystemFactory::ERefFrame::kMLA2000Topo:
-		return string("MLA_00Topo");
+		return "MLA_00Topo";
 	case TRefSystemFactory::ERefFrame::kMLASphere:
-		return string("MLA_Sphere");
+		return "MLA_Sphere";
 	case TRefSystemFactory::ERefFrame::kMLGGRS80:
-		return string("MLG_GRS80");
+		return "MLG_GRS80";
 	case TRefSystemFactory::ERefFrame::kMLGSphere:
-		return string("MLG_Sphere");
+		return "MLG_Sphere";
 	case TRefSystemFactory::ERefFrame::kRGF93:
-		return string("RGF93");
+		return "RGF93";
 	case TRefSystemFactory::ERefFrame::kROMA40:
-		return string("ROMA40");
+		return "ROMA40";
 #ifdef USE_SWISSTOPO
 	case TRefSystemFactory::ERefFrame::kSwissLV03:
-		return string("LV03");
+		return "LV03";
 	case TRefSystemFactory::ERefFrame::kSwissLV95:
-		return string("LV95");
+		return "LV95";
 #endif
 	case TRefSystemFactory::ERefFrame::kWGS84:
-		return string("WGS84");
+		return "WGS84";
 	default: return "";
 	}
 }

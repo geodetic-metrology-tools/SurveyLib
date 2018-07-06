@@ -52,7 +52,7 @@ TSeparatedFormatTStream::TSeparatedFormatTStream(TDataParameters& dp) : TAStream
 }
 
 
-TSeparatedFormatTStream::TSeparatedFormatTStream(const string& str, TDataParameters& dp) : TAStreamFormatter (str, dp)
+TSeparatedFormatTStream::TSeparatedFormatTStream(const std::string& str, TDataParameters& dp) : TAStreamFormatter (str, dp)
 {
 		fSeparator ="   ";
 		fNoObsToRead = false;
@@ -108,9 +108,9 @@ TAStreamFormatter  &TSeparatedFormatTStream::operator>>( TSpatialPoint &point )
 	TSpatialPosition*	position = new TSpatialPosition(fRefFrame);
 	TReal dist=-1;
 	int id=-1;
-	string comment="";
-	string comeol="";
-	string comdb="";
+	std::string comment="";
+	std::string comeol="";
+	std::string comdb="";
 
 	
 	// make sure that the spatial position object was created ok
@@ -287,13 +287,13 @@ TAStreamFormatter&	TSeparatedFormatTStream::operator<<(const TFreeVector& fv )
 //////////////////////////////////////////////////////////////////////////////////////////
 //Member Functions
 //////////////////////////////////////////////////////////////////////////////////////////
-string TSeparatedFormatTStream::getSeparator() const
+std::string TSeparatedFormatTStream::getSeparator() const
 {//returns the string used to separate fields
 	return fSeparator;
 }
 
 
-void TSeparatedFormatTStream::setSeparator(const string& sep)
+void TSeparatedFormatTStream::setSeparator(const std::string& sep)
 {//returns the string used to separate fields
 	fSeparator = sep;
 	return;

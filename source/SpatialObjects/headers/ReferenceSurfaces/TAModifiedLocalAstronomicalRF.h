@@ -41,7 +41,6 @@ class	TGraph;
 #include  "TSpatialOrientation.h"
 
 
-//using namespace std;
 
 
 
@@ -53,7 +52,7 @@ public:
 	/**@name Constructors and Destructors */
 	//@{
 		/// Default constructor
-		TAModifiedLocalAstronomicalRF( const string& name );
+		TAModifiedLocalAstronomicalRF( const std::string& name );
 		/// Destructor
 		virtual  ~TAModifiedLocalAstronomicalRF();
 	//@}

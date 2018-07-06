@@ -134,7 +134,7 @@ int SpatialObjFns::transformToMLA(double x0, double y0, double z0,
 	P0.transform(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
 
 	TRefSystemFactory::EGeoid pGeoid;
-	string cg00("CG2000"), cg85("CG1985"), cgs("SPHERE");
+	std::string cg00("CG2000"), cg85("CG1985"), cgs("SPHERE");
 	if (geoid == cg00)
 		pGeoid = TRefSystemFactory::kCG2000Machine;
 	else if (geoid == cg85)
@@ -190,7 +190,7 @@ int SpatialObjFns::transformFromMLA(double x0, double y0, double z0,
 
 
 	TRefSystemFactory::EGeoid pGeoid;
-	string cg00("CG2000"), cg85("CG1985"), cgs("SPHERE");
+	std::string cg00("CG2000"), cg85("CG1985"), cgs("SPHERE");
 	if (geoid == cg00)
 		pGeoid = TRefSystemFactory::kCG2000Machine;
 	else if (geoid == cg85)

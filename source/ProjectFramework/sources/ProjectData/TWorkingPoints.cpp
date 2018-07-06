@@ -41,14 +41,14 @@ TWorkingPoints::TWorkingPoints(const TWorkingPoints & ori)
 /////////////////////////////////////////////////////////////
 bool TWorkingPoints::addPoint(TSpatialPoint *sp){
 	
-	string empty("");
+	std::string empty("");
 	bool insert_ok = false;
 
 	// check that the point is not already in the list
 	if (pointsMap.find(sp->getName().getName()) == pointsMap.end())
 	{
 		if (((sp->getName()).getName()) == empty){
-			ostringstream oss;
+			std::ostringstream oss;
 			fLastPtNbr ++;
 			oss << "SpPt" << fLastPtNbr;
 			sp->setName(TSpatialPointName(oss.str()));
@@ -69,7 +69,7 @@ bool TWorkingPoints::addPoint(TSpatialPoint *sp){
 /////////////////////////////////////////////////////////////
 bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 	
-	string empty("");
+	std::string empty("");
 	bool insert_ok = false;
 	size_t origNumPoints = fWorkingPoints.size();
 	
@@ -78,7 +78,7 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 	{
 
 		if (((sp->getName()).getName()) == empty){
-			ostringstream oss;
+			std::ostringstream oss;
 			fLastPtNbr ++;
 			oss << "SpPt" << fLastPtNbr;
 			sp->setName(TSpatialPointName(oss.str()));
@@ -101,12 +101,12 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 	{
 	
 		/*PUT HERE FOR NOW*/
-		string name = sp->getName().getName(); 
-		string s = name.substr(0,15);
+		std::string name = sp->getName().getName();
+		std::string s = name.substr(0,15);
 
 		if (s == "Insert_New_Row_")
 		{
-			ostringstream oss;
+			std::ostringstream oss;
 			fLastPtNbr++;
 			oss << name << fLastPtNbr;	
 			sp->setDuplicatePtName(oss.str());
@@ -127,7 +127,7 @@ bool TWorkingPoints::insertPoint(TSpatialPoint *sp, int pos){
 bool TWorkingPoints::deletePoint(PointIterator iter)
 {
 	std::string pName = iter->getName().getName();
-	std::unordered_map<string, PointIterator>::iterator i = pointsMap.find(pName);
+	std::unordered_map<std::string, PointIterator>::iterator i = pointsMap.find(pName);
 
 	if (i == pointsMap.end())
 		return false;
@@ -189,9 +189,9 @@ PointConstIter TWorkingPoints::getPointsEndIterator() const{
 ///////////////////////////////////////////////////////////////////
 // returns an iterator on a point, given its TSpatialPointName
 ///////////////////////////////////////////////////////////////////
-PointIterator TWorkingPoints::getPoint(string spn) {
+PointIterator TWorkingPoints::getPoint(std::string spn) {
 
-	std::unordered_map<string, PointIterator>::iterator i = pointsMap.find(spn);
+	std::unordered_map<std::string, PointIterator>::iterator i = pointsMap.find(spn);
 	if (i == pointsMap.end())
 		return fWorkingPoints.end();
 
@@ -205,9 +205,9 @@ PointIterator TWorkingPoints::getPoint(TSpatialPointName spn) {
 ///////////////////////////////////////////////////////////////////
 // returns a const iterator on a point, given its TSpatialPointName
 ///////////////////////////////////////////////////////////////////
-PointConstIter TWorkingPoints::getPoint(string spn) const{
+PointConstIter TWorkingPoints::getPoint(std::string spn) const{
 
-	std::unordered_map<string, PointIterator>::const_iterator i = pointsMap.find(spn);
+	std::unordered_map<std::string, PointIterator>::const_iterator i = pointsMap.find(spn);
 	if (i == pointsMap.end())
 		return fWorkingPoints.end();
 
@@ -248,7 +248,7 @@ bool TWorkingPoints::renamePoint(const std::string & oldName, const std::string 
 		return false; // No such point
 	if(getPoint(newName)!=getPointsEndIterator())
 		return false; // Cannot rename - would create a duplicate
-	std::unordered_map<string, PointIterator>::iterator iter = pointsMap.find(oldName);
+	std::unordered_map<std::string, PointIterator>::iterator iter = pointsMap.find(oldName);
 	if(iter==pointsMap.end())
 		return false; // Something wrong with this TWorkingPoints
 

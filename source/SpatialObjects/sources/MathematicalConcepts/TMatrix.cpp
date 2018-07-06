@@ -4,7 +4,6 @@
 #include "TSparseMatrix.h"
 #include <TMatrixImpl.h>
 #include <iostream>
-using namespace std;
 
 
 //////////////////////////////////////////////////////////////////////

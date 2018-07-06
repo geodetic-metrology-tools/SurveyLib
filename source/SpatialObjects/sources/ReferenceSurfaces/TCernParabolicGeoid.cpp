@@ -84,7 +84,7 @@ fCalcRFPtr(0), fDefEllPtr(0)
 
 
 
-TCernParabolicGeoid::TCernParabolicGeoid( const string& name, const TReal a,
+TCernParabolicGeoid::TCernParabolicGeoid( const std::string& name, const TReal a,
 										 const TReal b, const TReal ths,
 										 TAReferenceFrame* def, TReferenceEllipsoid* ell,
 										 TAReferenceFrame* calc)

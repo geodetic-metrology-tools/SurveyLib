@@ -22,7 +22,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 //
 class TFreeVector;
 class TPositionVector;
-//using namespace std;
 //
 #include "TCoordSysFactory.h"
 #include  <TAngle.h>
@@ -30,7 +29,6 @@ class TPositionVector;
 #include <string>
 #include <iostream>
 
-//using namespace std;
 
 //
 //typedefs

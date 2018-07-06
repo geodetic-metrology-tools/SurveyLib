@@ -314,13 +314,13 @@ TLocalSystemOrigin* TADataSet::getLocalSystemOrigin() const
 //////////////////////////////////////////////////////////////////////////
 //Wrapper TFileParameters
 //////////////////////////////////////////////////////////////////////////
-bool  TADataSet::setFileName( const string& name)
+bool  TADataSet::setFileName( const std::string& name)
 {//! set the full filename, both path and name
 	return fFileParams.setFileName(name);
 }
 
 
-bool  TADataSet::setTypeFormat( const string& format)
+bool  TADataSet::setTypeFormat( const std::string& format)
 {//! set the file type
 	return fFileParams.setTypeFormat(format);
 }
@@ -333,19 +333,19 @@ void  TADataSet::defaultValues()
 }
 
 
-string  TADataSet::getFileName()  const 
+std::string  TADataSet::getFileName()  const
 {//! get the full filename, both path and name
 	return fFileParams.getFileName();
 }
 
 
-string  TADataSet::getName()  const
+std::string  TADataSet::getName()  const
 {//! get the name of the file
 	return fFileParams.getName();
 }
 
 
-string  TADataSet::getPath()  const
+std::string  TADataSet::getPath()  const
 {//! get the path for the file
 	return fFileParams.getPath();
 }
@@ -389,22 +389,22 @@ TAStreamFormatter::ETextFormat TADataSet::getPunchFileFormat()
 	return fPunchFileFormat;
 }
 
-void TADataSet::setPunchSeparator(string seperator)
+void TADataSet::setPunchSeparator(std::string seperator)
 {
 	fPunchSeparator = seperator;
 }
 
-void TADataSet::setResultsSeparator(string seperator)
+void TADataSet::setResultsSeparator(std::string seperator)
 {
 	fResultsSeparator = seperator;
 }
 
-string TADataSet::getResultsSeparator()
+std::string TADataSet::getResultsSeparator()
 {
 	return fResultsSeparator;
 }
 
-string TADataSet::getPunchSeparator()
+std::string TADataSet::getPunchSeparator()
 {
 	return fPunchSeparator;
 }
@@ -424,12 +424,12 @@ void TADataSet::setNoSpaceBetweenData()
 	fLineSpacing = false;
 }
 
-string TADataSet::getFormatType()
+std::string TADataSet::getFormatType()
 {
 	return fFormatType;
 }
 
-void TADataSet::setFormatType(string fmtType)
+void TADataSet::setFormatType(std::string fmtType)
 {
 	fFormatType = fmtType;
 }

@@ -27,7 +27,7 @@ TCernGridGeoid::TCernGridGeoid() : fName(0), fDownLeft(0,0,0,TCoordSysFactory::k
 }
 
 
-TCernGridGeoid::TCernGridGeoid( const string& name,
+TCernGridGeoid::TCernGridGeoid( const std::string& name,
 								const TMatrix* N, const TMatrix* Eta, const TMatrix* Xsi,
 								const TPositionVector downLeft, const TPositionVector upRight,
 								TAReferenceFrame* def, TReferenceEllipsoid* ell,
@@ -89,7 +89,7 @@ TLength TCernGridGeoid::getN ( const TSpatialPosition& sp) const
 		NValue.setMetresValue( splineInterpolation(fNMatrix, spos) );
 	if (isnan(NValue.getMetresValue()))
 	{
-		stringstream ss;
+		std::stringstream ss;
 		ss << "TNotInLepGridException: getEta function problem with coordinate ";
 		ss << "(" << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() << ","
 			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ","
@@ -132,7 +132,7 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 	}
 	if (isnan(eta.getGonsValue()))
 	{
-		stringstream ss;
+		std::stringstream ss;
 		ss << "TNotInLepGridException: getEta function problem with coordinate ";
 		ss << "(" << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() << ","
 			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ","
@@ -175,7 +175,7 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 	}
 	if (isnan(xsi.getGonsValue()))
 	{
-		stringstream ss;
+		std::stringstream ss;
 		ss << "TNotInLepGridException: getEta function problem with coordinate ";
 		ss << "(" << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() << ","
 			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ","
@@ -220,7 +220,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
 	}
 	if (isnan(fDAlphaValue.getRadiansValue()))
 	{
-		stringstream ss;
+		std::stringstream ss;
 		ss << "TNotInLepGridException: getEta function problem with coordinate ";
 		ss << "(" << position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() << ","
 			<< position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ","
@@ -256,7 +256,7 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& lat
 	}
 	if (isnan(fDAlphaValue.getRadiansValue()))
 	{
-		stringstream ss;
+		std::stringstream ss;
 		ss << "TNotInLepGridException: getEta function problem with coordinate ";
 		ss << "(" << position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() << ","
 			<< position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ","
@@ -310,11 +310,11 @@ TReal TCernGridGeoid::splineInterpolation(const TMatrix& matrix, const TSpatialP
 	
 	TReal N = std::numeric_limits<TReal>::infinity();
 	TReal Xo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getKMetresValue()), Yo(spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getKMetresValue());
-	valarray<TReal> x(matrix.numCols()), y(matrix.numRows()), absx(matrix.numCols()), absy(matrix.numRows());
+	std::valarray<TReal> x(matrix.numCols()), y(matrix.numRows()), absx(matrix.numCols()), absy(matrix.numRows());
 	TReal xmin, ymin, t;
 	int I(-1),J(-1);
 	TMatrix base(4,4), c(4,3), T(1,4), q(1,3), Q(4,3);
-	vector<int> L(4), K(4);
+	std::vector<int> L(4), K(4);
 
 
 	

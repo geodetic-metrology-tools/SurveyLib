@@ -32,7 +32,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 //
 #include  <string>
 #include  <set>
-//using namespace std;
 //
 //class  TVReferenceFrame;
 class	TVTransformation;

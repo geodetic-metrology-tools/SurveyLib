@@ -31,7 +31,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <iostream>
 #include <iomanip>
 #include <stddef.h>
-//using namespace std;
 
 class TAGeoidModel;
 class TReferenceEllipsoid;
@@ -221,13 +220,13 @@ private:
 private:
 	static TRefSystemFactory* fRefSystemFactory; /*!< static member that contains a pointer to the unique instance of TRefSystemFactory */
 
-	vector<TAGeoidModel*> fGeoidList;	/*!< list of pointers to the to-be-defined geoids */
-	vector<TReferenceEllipsoid*> fRefEllList; /*!< list of pointers to the to-be-defined ellipsoids */
-	vector<TAReferenceFrame*> fRefFrameList; /*!< list of pointers to the to-be-defined Ref.Frames */
+	std::vector<TAGeoidModel*> fGeoidList;	/*!< list of pointers to the to-be-defined geoids */
+	std::vector<TReferenceEllipsoid*> fRefEllList; /*!< list of pointers to the to-be-defined ellipsoids */
+	std::vector<TAReferenceFrame*> fRefFrameList; /*!< list of pointers to the to-be-defined Ref.Frames */
 
-	vector<TAReferenceFrame*> fLocalRefFrameList; /*!< list of pointers to the local Ref.Frames */
+	std::vector<TAReferenceFrame*> fLocalRefFrameList; /*!< list of pointers to the local Ref.Frames */
 
-	vector<TARefFrameTransformation*> fTransformList; /*!< list of pointers to the to-be-defined Ref.Frame transformations */
+	std::vector<TARefFrameTransformation*> fTransformList; /*!< list of pointers to the to-be-defined Ref.Frame transformations */
 	//il est important que ce soit une classe TA plutot que TV pour avoir acces au destructeur
 
 

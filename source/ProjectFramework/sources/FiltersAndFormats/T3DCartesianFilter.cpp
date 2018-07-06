@@ -229,7 +229,7 @@ void	T3DCartesianFilter::output(TAStreamFormatter& oStream, const TPositionVecto
 {	// function to put x-, y-, and z-coordinates to a stream object.
 	// Gets the coordinate values from a TPositionVector object
 	
-	string sep =oStream.getSeparator();
+	std::string sep =oStream.getSeparator();
 
 	//outputs the coordinates
 	if (pv.isInitialise())

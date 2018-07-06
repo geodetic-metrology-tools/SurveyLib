@@ -41,14 +41,14 @@ const TReal TModifiedLocalGeodeticRF::precisionPhi = LITERAL(0.00000000000001); 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name ) 
+TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const std::string& name )
 	: TA3DEuclideanRefFrame( name ), fOrientationMatrix(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kLGp0)),
 	fOrigin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF)), fFalseOrigin(TCoordSysFactory::k3DCartesian),fTrafoCGRF(0)
 {	//default constructor
 }
 
 
-TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
+TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const std::string& name,
 											   const TSpatialPosition spos,
 											   TGeodeticRefFrame* GRF) 
 	: TA3DEuclideanRefFrame( name ), /*fEllipsoid( ellipsoid ),*/ fOrigin( spos ),
@@ -61,7 +61,7 @@ TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 }
 
 
-TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
+TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const std::string& name,
 											   const TSpatialPosition spos,
 											   const TFreeVector falseOrigin,
 											   const TSpatialOrientation orientation,
@@ -72,7 +72,7 @@ TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
 }
 
 
-TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const string& name,
+TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const std::string& name,
 								   TSpatialPosition origin, TFreeVector falseOrigin, 
 								   const TAngle gis, const TAngle slope, TGeodeticRefFrame* GRF)
 	: TA3DEuclideanRefFrame(name), fOrigin(origin), fFalseOrigin(falseOrigin), fOrientationMatrix(GRF), fGeodeticSys( GRF ), fTrafoCGRF(0)
