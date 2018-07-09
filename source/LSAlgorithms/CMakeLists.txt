@@ -83,6 +83,6 @@ source_group("CalcParams\\Sources"   		FILES ${CALCPARAMS_CPP})
 ADD_LIBRARY(LSAlgorithms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
 
 # Specify the libraries to link against
-target_link_libraries(LSAlgorithms Tools)
+target_link_libraries(LSAlgorithms Tools Plugins)
 
 
