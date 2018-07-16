@@ -11,7 +11,7 @@ include_directories(${CMAKE_SOURCE_DIR}
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
 					${SURVEYLIB_ROOT}/source/Tools/headers/
-					${SURVEYLIB_ROOT}/source/Plugins/Logs
+					${SURVEYLIB_ROOT}/source/Logs
 )
 
 set(ALGO_HEADERS
@@ -83,6 +83,6 @@ source_group("CalcParams\\Sources"   		FILES ${CALCPARAMS_CPP})
 ADD_LIBRARY(LSAlgorithms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
 
 # Specify the libraries to link against
-target_link_libraries(LSAlgorithms Tools Plugins)
+target_link_libraries(LSAlgorithms Tools Logs)
 
 

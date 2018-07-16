@@ -1,28 +1,29 @@
 # This variables are referenced in other projects, too!
 SET(SURVEYLIB_LIBRARIES
-	Tools
+	Logs
 	LSAlgorithms
 	Plugins
 	ProjectFramework
 	SpatialObjects
 	SpatialObjDLL
+	Tools
 )
 
-SET(SPATIAL_LIBRARIES 
-	AffineTransformations 
+SET(SPATIAL_LIBRARIES
+	AffineTransformations
 	MathematicalConcepts
-	ReferenceSurfaces 
-	RefFrameTransformations 
+	ReferenceSurfaces
+	RefFrameTransformations
 	ShortestPath
-	SpatialObj 
+	SpatialObj
 	SpatialSystems
 )
 
 SET(PROJECTFRAMEWORK_LIBRARIES
-	Converters 
-	FiltersAndFormats 
-	ProjectData 
-	StreamFormatters 
+	Converters
+	FiltersAndFormats
+	ProjectData
+	StreamFormatters
 )
 
 SET(LSALGO_LIBRARIES

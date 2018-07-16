@@ -5,10 +5,10 @@
 
 #include <tut/tut.hpp>
 
-#include "Logs/FileLogHandler.hpp"
-#include "Logs/ILogHandler.hpp"
-#include "Logs/Logger.hpp"
-#include "Logs/LogMessage.hpp"
+#include "FileLogHandler.hpp"
+#include "ILogHandler.hpp"
+#include "Logger.hpp"
+#include "LogMessage.hpp"
 
 namespace tut
 {
