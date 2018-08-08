@@ -52,9 +52,9 @@ public:
 	/** Constructor. */
 	ShareableFrame(std::shared_ptr<ShareableParams> params, const std::string& name="") : _name(name), _params(params) {}
 	ShareableFrame(const ShareableFrame&) = delete; // can't copy (too heavy structure)
-	ShareableFrame(const ShareableFrame&&) = delete;
+	ShareableFrame(ShareableFrame&&) = default;
 	ShareableFrame& operator=(const ShareableFrame&) = delete;
-	ShareableFrame& operator=(const ShareableFrame&&) = delete;
+	ShareableFrame& operator=(ShareableFrame&&) = default;
 
 	/** @return the parent frame */
 	const ShareableFrame* getParentFrame() const noexcept { return _parentFrame; }
@@ -133,7 +133,7 @@ public:
 	 */
 	void add(ShareablePoint* point, size_t position = -1);
 	/**
-	 * Add a new empty frame.
+	 * Add a new empty point.
 	 *
 	 * If position is out of bound, it adds the frame at the end.
 	 *

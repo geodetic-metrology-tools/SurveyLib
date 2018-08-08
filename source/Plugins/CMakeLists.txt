@@ -1,24 +1,31 @@
-include_directories(${CMAKE_SOURCE_DIR}
-	${SURVEYLIB_ROOT}/source/Plugins
+include_directories(
+	${CMAKE_CURRENT_BINARY_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}
+	${SURVEYLIB_ROOT}/source/Logs
 )
 
 set(PLUG_HEADERS
-	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePosition.hpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/IShareablePointsListIO.hpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareableExtraInfos.hpp
 	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareableFrame.hpp
 	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareableParams.hpp
-	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareableExtraInfo.hpp
 	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePoint.hpp
 	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePointsList.hpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePosition.hpp
 )
 
 set(PLUG_SOURCES
-	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePosition.cpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/IShareablePointsListIO.cpp
 	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareableFrame.cpp
 	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePointsList.cpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePosition.cpp
 )
 
 #Create a static library from the object files
 add_library(Plugins STATIC ${PLUG_HEADERS} ${PLUG_SOURCES})
+target_link_libraries(Plugins
+	Logs
+)
 
 # Define IDE folders:
 file(GLOB PLUGINS_SHAREPOINTS ${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/*)

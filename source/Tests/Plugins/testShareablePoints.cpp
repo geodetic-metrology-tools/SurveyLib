@@ -3,7 +3,7 @@
 #include <tut/tut.hpp>
 #include <tut/tut_macros.hpp>
 
-#include "ShareablePoints/ShareableExtraInfo.hpp"
+#include "ShareablePoints/ShareableExtraInfos.hpp"
 #include "ShareablePoints/ShareableFrame.hpp"
 #include "ShareablePoints/ShareableParams.hpp"
 #include "ShareablePoints/ShareablePoint.hpp"
@@ -311,6 +311,29 @@ namespace tut
 			ensure_equals(p.coordsys, TCoordSysFactory::ECoordSys::kGeodetic);
 			ensure(p.extraInfos.empty());
 		}
+	}
+
+	template<>
+	template<>
+	void testobject::test<21>()
+	{
+		set_test_name("ShareableParams: Test of coordsys / string convertors");
+
+		ensure_equals(ShareableParams::coordsysToString(ShareableParams::ECoordSys::k2DCartesian), "k2DCartesian");
+		ensure_equals(ShareableParams::coordsysToString(ShareableParams::ECoordSys::k2DPlusH), "k2DPlusH");
+		ensure_equals(ShareableParams::coordsysToString(ShareableParams::ECoordSys::k3DCartesian), "k3DCartesian");
+		ensure_equals(ShareableParams::coordsysToString(ShareableParams::ECoordSys::kGeodetic), "kGeodetic");
+		ensure_equals(ShareableParams::coordsysToString(ShareableParams::ECoordSys::kGeodeticSphere), "kGeodeticSphere");
+		ensure_equals(ShareableParams::coordsysToString(ShareableParams::ECoordSys::unknown), "unknown");
+
+		ensure_equals(ShareableParams::coordsysFromString("k2DCartesian"), ShareableParams::ECoordSys::k2DCartesian);
+		ensure_equals(ShareableParams::coordsysFromString("k2DPlusH"), ShareableParams::ECoordSys::k2DPlusH);
+		ensure_equals(ShareableParams::coordsysFromString("k3DCartesian"), ShareableParams::ECoordSys::k3DCartesian);
+		ensure_equals(ShareableParams::coordsysFromString("kGeodetic"), ShareableParams::ECoordSys::kGeodetic);
+		ensure_equals(ShareableParams::coordsysFromString("kGeodeticSphere"), ShareableParams::ECoordSys::kGeodeticSphere);
+		ensure_equals(ShareableParams::coordsysFromString("unknown"), ShareableParams::ECoordSys::unknown);
+		ensure_equals(ShareableParams::coordsysFromString("lol"), ShareableParams::ECoordSys::unknown);
+		ensure_equals(ShareableParams::coordsysFromString(""), ShareableParams::ECoordSys::unknown);
 	}
 
 	/* ************************************************** *

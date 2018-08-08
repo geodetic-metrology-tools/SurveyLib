@@ -55,6 +55,24 @@ namespace tut
 			ensure_equals(lm.getFunction(), "func");
 			ensure_equals(lm.getType(), LogMessage::Type::WARNING);
 		}
+		// move
+		{
+			LogMessage l(LogMessage::Type::WARNING, "file", 42, "func", "message");
+			LogMessage lm(std::move(l));
+			ensure_equals(lm.getMessage(), "message");
+			ensure_equals(lm.getFile(), "file");
+			ensure_equals(lm.getLine(), 42);
+			ensure_equals(lm.getFunction(), "func");
+			ensure_equals(lm.getType(), LogMessage::Type::WARNING);
+		}
+		{
+			LogMessage lm = ([]() -> LogMessage { return LogMessage(LogMessage::Type::WARNING, "file", 42, "func", "message"); })();
+			ensure_equals(lm.getMessage(), "message");
+			ensure_equals(lm.getFile(), "file");
+			ensure_equals(lm.getLine(), 42);
+			ensure_equals(lm.getFunction(), "func");
+			ensure_equals(lm.getType(), LogMessage::Type::WARNING);
+		}
 	}
 
 	template<>
