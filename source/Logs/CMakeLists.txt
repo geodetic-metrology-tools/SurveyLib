@@ -17,9 +17,10 @@ set(LOGS_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/LogMessage.cpp
 )
 
-# Define VS folders:
-file(GLOB LOGS_LOGS	Logs/*)
-source_group("Logs"	FILES ${LOGS_LOGS})
-
 #Create a static library from the object files
 add_library(Logs STATIC ${LOGS_HEADERS} ${LOGS_SOURCES})
+
+# Define VS folders:
+file(GLOB LOGS_LOGS ${CMAKE_CURRENT_LIST_DIR}/*)
+source_group("Logs" FILES ${LOGS_LOGS})
+set_target_properties(Logs PROPERTIES FOLDER "SurveyLib")

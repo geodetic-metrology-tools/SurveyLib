@@ -17,9 +17,10 @@ set(PLUG_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePointsList.cpp
 )
 
-# Define IDE folders:
-file(GLOB PLUGINS_SHAREPOINTS	ShareablePoints/*)
-source_group("Plugins\\ShareablePoints"	FILES ${PLUGINS_SHAREPOINTS})
-
 #Create a static library from the object files
 add_library(Plugins STATIC ${PLUG_HEADERS} ${PLUG_SOURCES})
+
+# Define IDE folders:
+file(GLOB PLUGINS_SHAREPOINTS ${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/*)
+source_group("ShareablePoints" FILES ${PLUGINS_SHAREPOINTS})
+set_target_properties(Plugins PROPERTIES FOLDER "SurveyLib")
