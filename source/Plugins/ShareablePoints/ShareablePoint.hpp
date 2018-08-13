@@ -8,7 +8,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 #include <string>
 
-#include "ShareableExtraInfo.hpp"
+#include "ShareableExtraInfos.hpp"
 #include "ShareablePosition.hpp"
 
 class ShareableFrame;

@@ -6,7 +6,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef SHAREABLEPARAMS_HPP
 #define SHAREABLEPARAMS_HPP
 
-#include "ShareableExtraInfo.hpp"
+#include "ShareableExtraInfos.hpp"
 
 /**
  * Parameters for the shareable list of points.
@@ -27,14 +27,58 @@ struct ShareableParams
 	 *
 	 * This enum is compatible with TCoordSysFactory::ECoordSys.
 	 */
-	enum  ECoordSys
+	enum ECoordSys
 	{
 		k3DCartesian = 1,
 		kGeodetic = 2,
 		k2DPlusH = 4,
 		k2DCartesian = 8,
-		kGeodeticSphere = 16
+		kGeodeticSphere = 16,
+		unknown = -1
 	};
+
+	/**
+	 * @return a string representing the given ECoordSys.
+	 * @throw std::ios_base::failure in case of error.
+	 * @see coordsysFromString()
+	 */
+	static std::string coordsysToString(ECoordSys s)
+	{
+		switch (s)
+		{
+		case k3DCartesian:
+			return "k3DCartesian";
+		case kGeodetic:
+			return "kGeodetic";
+		case k2DPlusH:
+			return "k2DPlusH";
+		case k2DCartesian:
+			return "k2DCartesian";
+		case kGeodeticSphere:
+			return "kGeodeticSphere";
+		}
+		return "unknown";
+	}
+
+	/**
+	 * @return a ECoordSys from its string representation.
+	 * @throw std::ios_base::failure in case of error.
+	 * @see coordsysToString()
+	 */
+	static ECoordSys coordsysFromString(const std::string& s)
+	{
+		if (s == "k3DCartesian")
+			return ECoordSys::k3DCartesian;
+		if (s == "kGeodetic")
+			return ECoordSys::kGeodetic;
+		if (s == "k2DPlusH")
+			return ECoordSys::k2DPlusH;
+		if (s == "k2DCartesian")
+			return ECoordSys::k2DCartesian;
+		if (s == "kGeodeticSphere")
+			return ECoordSys::kGeodeticSphere;
+		return ECoordSys::unknown;
+	}
 
 	/** The precision of the floating values (by default 6 floating digits). */
 	int precision = 6;

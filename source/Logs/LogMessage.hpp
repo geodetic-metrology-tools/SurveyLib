@@ -92,9 +92,9 @@ public:
 	 */
 	LogMessage(Type t, const std::string& file, int line, const std::string& func, const std::string& msg = "", bool callLoggerOnDestruct = false);
 	LogMessage(const LogMessage&) = delete; // can't copy
-	LogMessage(const LogMessage&&) = delete;
+	LogMessage(LogMessage&&) = default;
 	LogMessage& operator=(const LogMessage&) = delete;
-	LogMessage& operator=(const LogMessage&&) = delete;
+	LogMessage& operator=(LogMessage&&) = default;
 	~LogMessage();
 
 	/** Append the object to the message. */

@@ -50,6 +50,10 @@ class ShareablePointsList
 {
 public:
 	ShareablePointsList(const std::string& title = "");
+	ShareablePointsList(const ShareablePointsList&) = delete; // can't copy (too heavy structure)
+	ShareablePointsList(ShareablePointsList&&) = default;
+	ShareablePointsList& operator=(const ShareablePointsList&) = delete;
+	ShareablePointsList& operator=(ShareablePointsList&&) = default;
 
 	void setTitle(const std::string& title) { _title = title; }
 	const std::string& getTitle() const noexcept { return _title; }
@@ -62,6 +66,8 @@ public:
 	 * @return the parameters
 	 */
 	ShareableParams& getParams() noexcept { return *_params; }
+	/** @warning This method shouldn't be used!!! It is only here for rare cases of optimization. */
+	std::shared_ptr<ShareableParams>& getParamsPointer() noexcept { return _params; }
 	/**
 	 * Change the root frame.
 	 *

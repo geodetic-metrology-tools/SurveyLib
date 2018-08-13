@@ -98,7 +98,7 @@ std::vector<ShareablePoint*> ShareableFrame::getAllPoints()
 
 void ShareableFrame::setParams(std::shared_ptr<ShareableParams> params)
 {
-	if (_params == params)
+	if (_params.get() == params.get())
 		return;
 	_params = params;
 	// change in children
