@@ -25,7 +25,19 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 */
 class ShareableExtraInfos
 {
+private:
+	/** Config : map of key -> value of the config. */
+	std::unordered_map<std::string, std::string> _extraInfos;
+
 public:
+	/** Default constructor. */
+	ShareableExtraInfos() {}
+	/**
+	 * Initializer list constructor.
+	 * Works like std::map constructor.
+	 */
+	ShareableExtraInfos(std::initializer_list<decltype(ShareableExtraInfos::_extraInfos)::value_type> l) : _extraInfos(l) {}
+
 	/**
 	 * Insert or change a value.
 	 *
@@ -66,10 +78,6 @@ public:
 	/** Tells if the container is empty (size == 0). */
 	bool empty() const noexcept { return _extraInfos.empty(); }
 	const std::unordered_map<std::string, std::string>& getMap() const noexcept { return _extraInfos; }
-
-private:
-	/** Config : map of key -> value of the config. */
-	std::unordered_map<std::string, std::string> _extraInfos;
 };
 
 #endif // SHAREABLEEXTRAINFOS_HPP

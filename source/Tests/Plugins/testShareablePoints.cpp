@@ -258,6 +258,31 @@ namespace tut
 	template<>
 	void testobject::test<10>()
 	{
+		set_test_name("ShareableExtraInfo: Test of constructors");
+
+		{
+			ShareableExtraInfos sei;
+			ensure(sei.empty());
+			ensure_equals(sei.size(), 0);
+		}
+		{
+			ShareableExtraInfos sei {
+				{ "lil", "lol" },
+				{ "lul", "lal" },
+				{ "lel", "lyl" }
+			};
+			ensure_not(sei.empty());
+			ensure_equals(sei.size(), 3);
+			ensure_equals(sei["lil"], "lol");
+			ensure_equals(sei["lul"], "lal");
+			ensure_equals(sei["lel"], "lyl");
+		}
+	}
+
+	template<>
+	template<>
+	void testobject::test<11>()
+	{
 		set_test_name("ShareableExtraInfo: Test of methods");
 
 		ShareableExtraInfos sei;
