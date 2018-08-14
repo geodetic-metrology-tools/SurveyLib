@@ -26,6 +26,51 @@ inline std::unique_ptr<T> remove(std::vector<std::unique_ptr<T>>& vector, const 
 	return nullptr;
 }
 
+ShareableFrame::ShareableFrame(ShareableFrame && other)
+{
+	*this = std::move(other);
+}
+
+ShareableFrame & ShareableFrame::operator=(ShareableFrame && other)
+{
+	_parentFrame = other._parentFrame;
+	_name = std::move(other._name);
+	_translation = std::move(other._translation);
+	_rotation = std::move(other._rotation);
+	_scale = other._scale;
+	_isfreescale = other._isfreescale;
+	_params = std::move(other._params);
+	/** Point children. */
+	_points = std::move(other._points);
+	for (auto& p : _points)
+		p->parent = this;
+	/** Frame children. */
+	_innerFrames = std::move(other._innerFrames);
+	for (auto& f : _innerFrames)
+		f->_parentFrame = this;
+
+	return *this;
+}
+
+bool ShareableFrame::operator==(const ShareableFrame & a) const
+{
+	bool result = _name == a._name &&
+		_translation == a._translation && _rotation == a._rotation &&
+		_scale == a._scale && _isfreescale == a._isfreescale &&
+		_points.size() == a._points.size() && _innerFrames.size() == a._innerFrames.size();
+	for (size_t i = 0; i < _points.size() && result; i++)
+	{
+		if (*_points[i] != *a._points[i])
+			result = false;
+	}
+	for (size_t i = 0; i < _innerFrames.size() && result; i++)
+	{
+		if (*_innerFrames[i] != *a._innerFrames[i])
+			result = false;
+	}
+	return result;
+}
+
 void ShareableFrame::add(ShareableFrame* frame, size_t position)
 {
 	if (!frame)
@@ -98,7 +143,7 @@ std::vector<ShareablePoint*> ShareableFrame::getAllPoints()
 
 void ShareableFrame::setParams(std::shared_ptr<ShareableParams> params)
 {
-	if (_params.get() == params.get())
+	if (_params == params)
 		return;
 	_params = params;
 	// change in children

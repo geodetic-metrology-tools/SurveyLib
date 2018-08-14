@@ -55,6 +55,11 @@ public:
 	ShareablePointsList& operator=(const ShareablePointsList&) = delete;
 	ShareablePointsList& operator=(ShareablePointsList&&) = default;
 
+	/** Comparison operator. Comparison is done on values, not on pointers. */
+	bool operator==(const ShareablePointsList& a) const;
+	/** Comparison operator. Comparison is done on values, not on pointers. */
+	bool operator!=(const ShareablePointsList& a) const { return !(*this == a); }
+
 	void setTitle(const std::string& title) { _title = title; }
 	const std::string& getTitle() const noexcept { return _title; }
 	const ShareableParams& getParams() const noexcept { return *_params; }
@@ -67,6 +72,7 @@ public:
 	 */
 	ShareableParams& getParams() noexcept { return *_params; }
 	/** @warning This method shouldn't be used!!! It is only here for rare cases of optimization. */
+	[[deprecated ("This method shouldn't be used, except for rare cases of optimization.")]]
 	std::shared_ptr<ShareableParams>& getParamsPointer() noexcept { return _params; }
 	/**
 	 * Change the root frame.

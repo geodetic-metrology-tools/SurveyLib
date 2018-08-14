@@ -59,6 +59,24 @@ struct ShareablePoint
 	ShareableExtraInfos extraInfos;
 	/** The frame where the point is. */
 	ShareableFrame * parent = nullptr;
+
+	/**
+	 * Comparison operator.
+	 * The parent is not checked. If all the values are the same but the parent, it returns true.
+	 */
+	bool operator==(const ShareablePoint& a) const
+	{
+		return name == a.name &&
+			position == a.position &&
+			inlineComment == a.inlineComment && headerComment == a.headerComment &&
+			active == a.active &&
+			extraInfos == a.extraInfos;
+	}
+	/**
+	* Comparison operator.
+	* The parent is not checked. If only the parent differs, return false.
+	*/
+	bool operator!=(const ShareablePoint& a) const { return !(*this == a); }
 };
 
 #endif // SHAREABLEPOINT_HPP

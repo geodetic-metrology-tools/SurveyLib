@@ -52,11 +52,11 @@ namespace tut
     {
         set_test_name("Perform a safe conversion between a valid int and TCoordSysFactory::ECoordSys");
 
-		ensure(TCoordSysInfo::toString(static_cast<TCoordSysFactory::ECoordSys>(1)),TCoordSysFactory::k3DCartesian);
-		ensure(TCoordSysInfo::toString(static_cast<TCoordSysFactory::ECoordSys>(2)),TCoordSysFactory::kGeodetic);
-		ensure(TCoordSysInfo::toString(static_cast<TCoordSysFactory::ECoordSys>(4)),TCoordSysFactory::k2DPlusH);
-		ensure(TCoordSysInfo::toString(static_cast<TCoordSysFactory::ECoordSys>(8)),TCoordSysFactory::k2DCartesian);
-		ensure(TCoordSysInfo::toString(static_cast<TCoordSysFactory::ECoordSys>(16)),TCoordSysFactory::kGeodeticSphere);
+		ensure_equals(TCoordSysInfo::toString(static_cast<TCoordSysFactory::ECoordSys>(1)), "k3DCartesian");
+		ensure_equals(TCoordSysInfo::toString(static_cast<TCoordSysFactory::ECoordSys>(2)), "kGeodetic");
+		ensure_equals(TCoordSysInfo::toString(static_cast<TCoordSysFactory::ECoordSys>(4)), "k2DPlusH");
+		ensure_equals(TCoordSysInfo::toString(static_cast<TCoordSysFactory::ECoordSys>(8)), "k2DCartesian");
+		ensure_equals(TCoordSysInfo::toString(static_cast<TCoordSysFactory::ECoordSys>(16)), "kGeodeticSphere");
 
 	}
 
@@ -65,8 +65,12 @@ namespace tut
     void object::test<4>()
     {
         set_test_name("Perform a safe conversion between a valid string and TCoordSysFactory::ECoordSys");
-		//ensure(TCoordSysInfo::fromString("k3DCartesian"), "k3DCartesian");
-		//static std::string fromString (const std::string & systemName);
+
+		ensure_equals(TCoordSysInfo::fromString("k3DCartesian"), TCoordSysFactory::ECoordSys::k3DCartesian);
+		ensure_equals(TCoordSysInfo::fromString("kGeodetic"), TCoordSysFactory::ECoordSys::kGeodetic);
+		ensure_equals(TCoordSysInfo::fromString("k2DPlusH"), TCoordSysFactory::ECoordSys::k2DPlusH);
+		ensure_equals(TCoordSysInfo::fromString("k2DCartesian"), TCoordSysFactory::ECoordSys::k2DCartesian);
+		ensure_equals(TCoordSysInfo::fromString("kGeodeticSphere"), TCoordSysFactory::ECoordSys::kGeodeticSphere);
 	}
 
 }

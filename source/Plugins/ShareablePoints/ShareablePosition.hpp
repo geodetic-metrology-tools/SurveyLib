@@ -144,7 +144,12 @@ struct ShareablePosition
 	 *
 	 * @return true if equals, false otherwise
 	 */
-	constexpr bool operator==(const ShareablePosition& sp) const noexcept { return x == sp.x && y == sp.y && z == sp.z && sigmax == sp.sigmax && sigmay == sp.sigmay && sigmaz == sp.sigmaz && isfreex == sp.isfreex && isfreey == sp.isfreey && isfreez == sp.isfreez; }
+	constexpr bool operator==(const ShareablePosition& sp) const noexcept
+	{
+		return x == sp.x && y == sp.y && z == sp.z &&
+			sigmax == sp.sigmax && sigmay == sp.sigmay && sigmaz == sp.sigmaz &&
+			isfreex == sp.isfreex && isfreey == sp.isfreey && isfreez == sp.isfreez;
+	}
 	/**
 	 * Compares the points.
 	 *

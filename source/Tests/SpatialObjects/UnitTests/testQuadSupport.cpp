@@ -159,12 +159,12 @@ namespace tut
         ensure_equals("/=", a, TReal(25), TReal(1e-9));
     }
 
-    int fun(TReal val) {return 1;}
+    int fun(TReal) {return 1;}
 #if USE_QUAD
-    int fun(double val) {return 2;}
+    int fun(double) {return 2;}
 #endif
-    int fun(long double val) {return 2;}
-    int fun(int val) {return 4;}
+    int fun(long double) {return 2;}
+    int fun(int) {return 4;}
     template<>
 	template<>
 	void object::test<6>()
