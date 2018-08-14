@@ -6,6 +6,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef ISHAREABLEPOINTSLISTIO_HPP
 #define ISHAREABLEPOINTSLISTIO_HPP
 
+#include <exception>
 #include <string>
 
 class ShareableExtraInfos;
@@ -43,7 +44,7 @@ public:
 	const std::string& getFilename() const noexcept { return _filename; }
 
 	virtual ShareablePointsList read() = 0;
-	virtual ShareableExtraInfos readExtraInfo() = 0;
+	virtual ShareableExtraInfos readExtraInfos() = 0;
 	virtual ShareableFrame readFrame() = 0;
 	virtual ShareableParams readParams() = 0;
 	virtual ShareablePoint readPoint() = 0;
@@ -57,12 +58,29 @@ public:
 	virtual void write(const ShareablePosition& position) = 0;
 
 protected:
-	std::ifstream openRead();
-	std::ofstream openWrite();
+	std::ifstream openRead(bool binary=false);
+	std::ofstream openWrite(bool binary=false);
 
 protected:
 	/** Path to the file where to read or write */
 	std::string _filename;
+};
+
+class SPIOException : public std::exception
+{
+public:
+	SPIOException(const std::string& error, const std::string& filename, int offset = -1) : _error(error), _filename(filename), _offset(offset) {}
+
+	virtual const char* what() const noexcept override { return _error.c_str(); }
+
+	const std::string& error() const noexcept { return _error; }
+	const std::string& filename() const noexcept { return _filename; }
+	int offset() const noexcept { return _offset; }
+
+private:
+	std::string _error;
+	std::string _filename;
+	int _offset = -1;
 };
 
 #endif // ISHAREABLEPOINTSLISTIO_HPP
