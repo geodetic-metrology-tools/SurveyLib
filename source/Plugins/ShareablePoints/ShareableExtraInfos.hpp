@@ -38,6 +38,11 @@ public:
 	 */
 	ShareableExtraInfos(std::initializer_list<decltype(ShareableExtraInfos::_extraInfos)::value_type> l) : _extraInfos(l) {}
 
+	/** Comparison operator. */
+	bool operator==(const ShareableExtraInfos& a) const { return _extraInfos == a._extraInfos; }
+	/** Comparison operator. */
+	bool operator!=(const ShareableExtraInfos& a) const { return !(*this == a); }
+
 	/**
 	 * Insert or change a value.
 	 *

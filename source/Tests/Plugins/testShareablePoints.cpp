@@ -1,8 +1,10 @@
 #include <array>
+#include <fstream>
 
 #include <tut/tut.hpp>
 #include <tut/tut_macros.hpp>
 
+#include "ShareablePoints/IShareablePointsListIO.hpp"
 #include "ShareablePoints/ShareableExtraInfos.hpp"
 #include "ShareablePoints/ShareableFrame.hpp"
 #include "ShareablePoints/ShareableParams.hpp"
@@ -74,7 +76,7 @@ namespace tut
 	template<>
 	void testobject::test<3>()
 	{
-		set_test_name("ShareablePosition: Test of operators");
+		set_test_name("ShareablePosition: Test of arithmetic operators");
 
 		// unary operator-
 		{
@@ -250,6 +252,29 @@ namespace tut
 		ensure_equals(out, "x: 1.00 (+- 10.00),	*y: -2.00 (+- 12.00),	z: 3.00 (+- 13.00)");
 	}
 
+	template<>
+	template<>
+	void testobject::test<6>()
+	{
+		set_test_name("ShareablePosition: Test of comparison operators");
+
+		// operator==, operator!=
+		// because of a bug in GCC 6, 7, 8, 9, we need to deactivate constexpr optimization
+		// see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86953
+		ShareablePosition tmp{};
+		ensure(tmp == ShareablePosition{});
+		ensure_not(tmp != ShareablePosition{});
+		tmp = { 12, 13, 14 };
+		ensure(tmp == ShareablePosition{ 12, 13, 14, 0 });
+		ensure_not(tmp != ShareablePosition{ 12, 13, 14, 0 });
+		tmp = { 12, 13, 14, 0.2, 0.3, 0.4, true, false, true };
+		ensure(tmp == ShareablePosition{ 12, 13, 14, 0.2, 0.3, 0.4, true, false, true });
+		ensure_not(tmp != ShareablePosition{ 12, 13, 14, 0.2, 0.3, 0.4, true, false, true });
+		tmp = { 12, 13, 14 };
+		ensure_not(tmp == ShareablePosition{ 12, 13, 14, 1 });
+		ensure(tmp != ShareablePosition{ 12, 13, 14, 1 });
+	}
+
 	/* ************************************************** *
 	 *           TESTS OF SHAREABLEEXTRAINFO              *
 	 * ************************************************** */
@@ -258,7 +283,7 @@ namespace tut
 	template<>
 	void testobject::test<10>()
 	{
-		set_test_name("ShareableExtraInfo: Test of constructors");
+		set_test_name("ShareableExtraInfos: Test of constructors");
 
 		{
 			ShareableExtraInfos sei;
@@ -283,7 +308,7 @@ namespace tut
 	template<>
 	void testobject::test<11>()
 	{
-		set_test_name("ShareableExtraInfo: Test of methods");
+		set_test_name("ShareableExtraInfos: Test of methods");
 
 		ShareableExtraInfos sei;
 		ensure(sei.empty());
@@ -312,6 +337,24 @@ namespace tut
 		sei.clear();
 		ensure(sei.empty());
 		ensure_equals(sei.size(), 0);
+	}
+
+	template<>
+	template<>
+	void testobject::test<12>()
+	{
+		set_test_name("ShareableExtraInfos: Test of comparison operators");
+
+		// operator==
+		ensure(ShareableExtraInfos{} == ShareableExtraInfos{});
+		ensure(ShareableExtraInfos{ { "test", "lol" }, { "re test", "re lol" } } == ShareableExtraInfos{ { "test", "lol" }, { "re test", "re lol" } });
+		ensure_not(ShareableExtraInfos{ { "test", "lol" }, { "re test", "re lol" } } == ShareableExtraInfos{ { "test", "lol" } });
+		ensure_not(ShareableExtraInfos{ { "test", "lol" }, { "retest", "re lol" } } == ShareableExtraInfos{ { "test", "lol" }, { "re test", "re lol" } });
+		// operator!=
+		ensure_not(ShareableExtraInfos{} != ShareableExtraInfos{});
+		ensure_not(ShareableExtraInfos{ { "test", "lol" }, { "re test", "re lol" } } != ShareableExtraInfos{ { "test", "lol" }, { "re test", "re lol" } });
+		ensure(ShareableExtraInfos{ { "test", "lol" }, { "re test", "re lol" } } != ShareableExtraInfos{ { "test", "lol" } });
+		ensure(ShareableExtraInfos{ { "test", "lol" }, { "retest", "re lol" } } != ShareableExtraInfos{ { "test", "lol" }, { "re test", "re lol" } });
 	}
 
 	/* ************************************************** *
@@ -361,6 +404,22 @@ namespace tut
 		ensure_equals(ShareableParams::coordsysFromString(""), ShareableParams::ECoordSys::unknown);
 	}
 
+	template<>
+	template<>
+	void testobject::test<22>()
+	{
+		set_test_name("ShareableParams: Test of comparison operators");
+
+		// operator==
+		ensure(ShareableParams{} == ShareableParams{});
+		ensure(ShareableParams{ 2, ShareableParams::ECoordSys::kGeodetic,{ { "test", "lol" } } } == ShareableParams{ 2, ShareableParams::ECoordSys::kGeodetic,{ { "test", "lol" } } });
+		ensure_not(ShareableParams{ 2, ShareableParams::ECoordSys::k2DCartesian } == ShareableParams{ 2, ShareableParams::ECoordSys::kGeodetic });
+		// operator!=
+		ensure_not(ShareableParams{} != ShareableParams{});
+		ensure_not(ShareableParams{ 2, ShareableParams::ECoordSys::kGeodetic,{ { "test", "lol" } } } != ShareableParams{ 2, ShareableParams::ECoordSys::kGeodetic,{ { "test", "lol" } } });
+		ensure(ShareableParams{ 2, ShareableParams::ECoordSys::k2DCartesian } != ShareableParams{ 2, ShareableParams::ECoordSys::kGeodetic });
+	}
+
 	/* ************************************************** *
 	 *             TESTS OF SHAREABLEPOINT                *
 	 * ************************************************** */
@@ -391,6 +450,27 @@ namespace tut
 			ensure(p.extraInfos.empty());
 			ensure(p.active);
 		}
+	}
+
+	template<>
+	template<>
+	void testobject::test<31>()
+	{
+		set_test_name("ShareablePoint: Test of comparison operators");
+
+		// operator==
+		ensure(ShareablePoint{} == ShareablePoint{});
+		ensure(ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header" } == ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header" });
+		ensure(ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header", true, {} } == ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header", true, {} });
+		// parent shouldn't matter
+		ensure(ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header", false, {}, nullptr } == ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header", false, {}, (ShareableFrame*) 12 });
+		ensure_not(ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header", true, {} } == ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header", false, {} });
+		// operator!=
+		ensure_not(ShareablePoint{} != ShareablePoint{});
+		ensure_not(ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header" } != ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header" });
+		ensure(ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header", true,{} } != ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header", false,{} });
+		ensure(ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "header", false, {} } != ShareablePoint{ "name",{ 1, 2, 3 }, "inline", "inline", false, {} });
+		ensure(ShareablePoint{ "name" } != ShareablePoint{ "NAME" });
 	}
 
 	/* ************************************************** *
@@ -548,6 +628,84 @@ namespace tut
 			ensure_equals(points[i]->name, "p" + std::to_string(i));
 	}
 
+	template<>
+	template<>
+	void testobject::test<44>()
+	{
+		set_test_name("ShareableFrame: Test of comparison operators");
+
+		ShareableFrame f1(std::make_shared<ShareableParams>(), "name");
+		ShareableFrame f2(std::make_shared<ShareableParams>(), "name");
+		// operator==, operator !=
+		ensure(f1 == f2);
+		ensure_not(f1 != f2);
+
+		f2.getParams().precision = 12; // don't care as aprams are not tested
+		ensure(f1 == f2);
+		ensure_not(f1 != f2);
+
+		f1.addFrame();
+		f1.addPoint();
+		f2.addFrame();
+		f2.addPoint();
+		ensure(f1 == f2);
+		ensure_not(f1 != f2);
+
+		f1.addPoint().name = "lol";
+		ensure_not(f1 == f2);
+		ensure(f1 != f2);
+
+		f2.add(new ShareablePoint{ "lol", { 12, 3, 0 } });
+		ensure_not(f1 == f2);
+		ensure(f1 != f2);
+
+		f1.getPoint(1).position = { 12, 3, 0 };
+		ensure(f1 == f2);
+		ensure_not(f1 != f2);
+	}
+
+	template<>
+	template<>
+	void testobject::test<45>()
+	{
+		set_test_name("ShareableFrame: Test of move operators");
+
+		auto createFrame = []() ->ShareableFrame {
+			auto params = std::make_shared<ShareableParams>();
+			ShareableFrame frame(params, "root");
+
+			frame.addPoint().name = "p0";
+			frame.addPoint().name = "p1";
+			frame.addFrame().addPoint().name = "p2";
+			frame.addFrame().addPoint().name = "p3";
+			auto& child3 = frame.addFrame();
+			child3.setName("child3");
+			child3.addPoint().name = "p4";
+			child3.addPoint().name = "p5";
+			child3.addFrame().addPoint().name = "p6";
+			return frame;
+		};
+		
+		// move constructor
+		ShareableFrame frame(createFrame());
+		ensure_equals(frame.getName(), "root");
+		ensure_equals(frame.getPoints().size(), 2);
+		ensure_equals(frame.getFrames().size(), 3);
+		ensure_equals(frame.getFrame(2).getName(), "child3");
+		ensure_equals(frame.getFrame(2).getParentFrame(), &frame);
+		ensure_equals(frame.getFrame(2).getPoint(0).parent, &frame.getFrame(2));
+
+		// move operator
+		ShareableFrame frame2(std::make_shared<ShareableParams>());
+		frame2 = createFrame();
+		ensure_equals(frame2.getName(), "root");
+		ensure_equals(frame2.getPoints().size(), 2);
+		ensure_equals(frame2.getFrames().size(), 3);
+		ensure_equals(frame2.getFrame(2).getName(), "child3");
+		ensure_equals(frame2.getFrame(2).getParentFrame(), &frame2);
+		ensure_equals(frame2.getFrame(2).getPoint(0).parent, &frame2.getFrame(2));
+	}
+
 	/* ************************************************** *
 	 *           TESTS OF SHAREABLEPOINTSLIST             *
 	 * ************************************************** */
@@ -568,5 +726,101 @@ namespace tut
 		ensure(frame.getParentFrame() == nullptr);
 		ensure_equals(&frame.getParams(), &spl.getParams());
 		ensure_equals(&spl.getRootFrame(), &frame);
+	}
+
+	template<>
+	template<>
+	void testobject::test<51>()
+	{
+		set_test_name("ShareablePointsList: Test of comparison operators");
+
+		ShareablePointsList spl1("lol"), spl2("lol");
+
+		// operator==, operator!=
+		ensure(spl1 == spl2);
+		ensure_not(spl1 != spl2);
+
+		spl1.getParams().precision = 12;
+		ensure_not(spl1 == spl2);
+		ensure(spl1 != spl2);
+
+		spl2.getParams().precision = 12;
+		ensure(spl1 == spl2);
+		ensure_not(spl1 != spl2);
+
+		spl1.getRootFrame().addFrame().addPoint();
+		spl2.getRootFrame().addFrame();
+		ensure_not(spl1 == spl2);
+		ensure(spl1 != spl2);
+
+		spl2.getRootFrame().getFrame(0).addPoint();
+		ensure(spl1 == spl2);
+		ensure_not(spl1 != spl2);
+	}
+
+	/* ************************************************** *
+	 *              TESTS OF SPIOException                *
+	 * ************************************************** */
+
+	template<>
+	template<>
+	void testobject::test<60>()
+	{
+		set_test_name("SPIOException: Test of all");
+
+		SPIOException e("error", "filename");
+		ensure_equals(e.error(), "error");
+		ensure_equals(e.what(), "error");
+		ensure_equals(e.filename(), "filename");
+		ensure_equals(e.offset(), -1);
+
+		SPIOException e2("error", "filename", 12);
+		ensure_equals(e.offset(), 12);
+	}
+
+	/* ************************************************** *
+	 *          TESTS OF IShareablePointsListIO           *
+	 * ************************************************** */
+
+	template<>
+	template<>
+	void testobject::test<70>()
+	{
+		set_test_name("IShareablePointsListIO: Test of all");
+
+		class fake : public IShareablePointsListIO
+		{
+		public:
+			fake(const std::string& filename) : IShareablePointsListIO(filename) {}
+
+			virtual ShareablePointsList read() override { return ShareablePointsList(); }
+			virtual ShareableExtraInfos readExtraInfos() override { return ShareableExtraInfos(); }
+			virtual ShareableFrame readFrame() override { return ShareableFrame(std::make_shared<ShareableParams>()); }
+			virtual ShareableParams readParams() override { return ShareableParams(); }
+			virtual ShareablePoint readPoint() override { return ShareablePoint(); }
+			virtual ShareablePosition readPosition() override { return ShareablePosition(); }
+
+			virtual void write(const ShareablePointsList&) override {}
+			virtual void write(const ShareableExtraInfos&) override {}
+			virtual void write(const ShareableFrame&) override {}
+			virtual void write(const ShareableParams&) override {}
+			virtual void write(const ShareablePoint&) override {}
+			virtual void write(const ShareablePosition&) override {}
+
+			std::ifstream openRead(bool binary = false) { return IShareablePointsListIO::openRead(binary); }
+			std::ofstream openWrite(bool binary = false) { return IShareablePointsListIO::openWrite(binary); }
+		};
+
+		fake f("lol");
+		ensure_equals(f.getFilename(), "lol");
+		f.setFilename("T:/his/is/not/a/path");
+		ensure_equals(f.getFilename(), "T:/his/is/not/a/path");
+		ensure_THROW(f.openRead(), SPIOException);
+		ensure_THROW(f.openWrite(), SPIOException);
+
+		f.setFilename("");
+		ensure_equals(f.getFilename(), "");
+		ensure_THROW(f.openRead(), SPIOException);
+		ensure_THROW(f.openWrite(), SPIOException);
 	}
 }

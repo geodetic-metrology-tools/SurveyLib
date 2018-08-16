@@ -10,6 +10,13 @@ ShareablePointsList::ShareablePointsList(const std::string & title) :
 {
 }
 
+bool ShareablePointsList::operator==(const ShareablePointsList & a) const
+{
+	return _title == a._title &&
+		*_params == *a._params &&
+		*_rootFrame == *a._rootFrame;
+}
+
 std::unique_ptr<ShareableFrame> ShareablePointsList::setRootFrame(ShareableFrame * frame)
 {
 	if (_rootFrame.get() == frame)

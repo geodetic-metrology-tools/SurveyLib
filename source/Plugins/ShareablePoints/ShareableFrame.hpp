@@ -52,9 +52,21 @@ public:
 	/** Constructor. */
 	ShareableFrame(std::shared_ptr<ShareableParams> params, const std::string& name="") : _name(name), _params(params) {}
 	ShareableFrame(const ShareableFrame&) = delete; // can't copy (too heavy structure)
-	ShareableFrame(ShareableFrame&&) = default;
+	ShareableFrame(ShareableFrame&& other);
 	ShareableFrame& operator=(const ShareableFrame&) = delete;
-	ShareableFrame& operator=(ShareableFrame&&) = default;
+	ShareableFrame& operator=(ShareableFrame&& other);
+
+	/**
+	* Comparison operator.
+	* The parent and the params are not checked. If all the values are the same but the parent and/or the params, it returns true.
+	* Comparison is done on values, not on pointers.
+	*/
+	bool operator==(const ShareableFrame& a) const;
+	/**
+	* Comparison operator.
+	* The parent and the params are not checked. If only the parent and/or the params differ, return false.
+	*/
+	bool operator!=(const ShareableFrame& a) const { return !(*this == a); }
 
 	/** @return the parent frame */
 	const ShareableFrame* getParentFrame() const noexcept { return _parentFrame; }
@@ -188,7 +200,7 @@ public:
 	void setScale(double scale) noexcept { _scale = scale; }
 	double getScale() const noexcept { return _scale; }
 	void isFreeScale(bool free) noexcept { _isfreescale = free; }
-	double isFreeScale() const noexcept { return _isfreescale; }
+	bool isFreeScale() const noexcept { return _isfreescale; }
 
 	/**
 	 * Change the parameters for this frame and all its children.
