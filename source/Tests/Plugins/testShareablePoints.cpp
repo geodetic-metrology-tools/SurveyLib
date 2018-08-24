@@ -768,13 +768,16 @@ namespace tut
 	{
 		set_test_name("SPIOException: Test of all");
 
-		SPIOException e("error", "filename");
+		SPIOException e("error");
 		ensure_equals(e.error(), "error");
 		ensure_equals(e.what(), "error");
-		ensure_equals(e.filename(), "filename");
+		ensure_equals(e.filename(), "");
+		ensure_equals(e.contents(), "");
 		ensure_equals(e.offset(), -1);
 
-		SPIOException e2("error", "filename", 12);
+		SPIOException e2("error", "filename", "contents", 12);
+		ensure_equals(e.filename(), "filename");
+		ensure_equals(e.contents(), "contents");
 		ensure_equals(e.offset(), 12);
 	}
 
@@ -791,36 +794,36 @@ namespace tut
 		class fake : public IShareablePointsListIO
 		{
 		public:
-			fake(const std::string& filename) : IShareablePointsListIO(filename) {}
+			virtual const std::string& getMIMEType() const { return "fake"; }
 
-			virtual ShareablePointsList read() override { return ShareablePointsList(); }
-			virtual ShareableExtraInfos readExtraInfos() override { return ShareableExtraInfos(); }
-			virtual ShareableFrame readFrame() override { return ShareableFrame(std::make_shared<ShareableParams>()); }
-			virtual ShareableParams readParams() override { return ShareableParams(); }
-			virtual ShareablePoint readPoint() override { return ShareablePoint(); }
-			virtual ShareablePosition readPosition() override { return ShareablePosition(); }
+			virtual ShareablePointsList read(const std::string&) override { return ShareablePointsList(); }
+			virtual ShareableExtraInfos readExtraInfos(const std::string&) override { return ShareableExtraInfos(); }
+			virtual ShareableFrame readFrame(const std::string&) override { return ShareableFrame(std::make_shared<ShareableParams>()); }
+			virtual ShareableParams readParams(const std::string&) override { return ShareableParams(); }
+			virtual ShareablePoint readPoint(const std::string&) override { return ShareablePoint(); }
+			virtual ShareablePosition readPosition(const std::string&) override { return ShareablePosition(); }
 
-			virtual void write(const ShareablePointsList&) override {}
-			virtual void write(const ShareableExtraInfos&) override {}
-			virtual void write(const ShareableFrame&) override {}
-			virtual void write(const ShareableParams&) override {}
-			virtual void write(const ShareablePoint&) override {}
-			virtual void write(const ShareablePosition&) override {}
+			virtual std::string write(const ShareablePointsList&) override { return std::string(); }
+			virtual std::string write(const ShareableExtraInfos&) override { return std::string(); }
+			virtual std::string write(const ShareableFrame&) override { return std::string(); }
+			virtual std::string write(const ShareableParams&) override { return std::string(); }
+			virtual std::string write(const ShareablePoint&) override { return std::string(); }
+			virtual std::string write(const ShareablePosition&) override { return std::string(); }
 
-			std::ifstream openRead(bool binary = false) { return IShareablePointsListIO::openRead(binary); }
-			std::ofstream openWrite(bool binary = false) { return IShareablePointsListIO::openWrite(binary); }
+			std::ifstream openRead(const std::string& filename, bool binary = false) { return IShareablePointsListIO::openRead(filename, binary); }
+			std::ofstream openWrite(const std::string& filename, bool binary = false) { return IShareablePointsListIO::openWrite(filename, binary); }
 		};
 
-		fake f("lol");
-		ensure_equals(f.getFilename(), "lol");
-		f.setFilename("T:/his/is/not/a/path");
-		ensure_equals(f.getFilename(), "T:/his/is/not/a/path");
-		ensure_THROW(f.openRead(), SPIOException);
-		ensure_THROW(f.openWrite(), SPIOException);
+		fake f;
+		ensure_THROW(f.openRead("T:/his/is/not/a/path"), SPIOException);
+		ensure_THROW(f.openWrite("T:/his/is/not/a/path"), SPIOException);
 
-		f.setFilename("");
-		ensure_equals(f.getFilename(), "");
-		ensure_THROW(f.openRead(), SPIOException);
-		ensure_THROW(f.openWrite(), SPIOException);
+		ensure_THROW(f.openRead(""), SPIOException);
+		ensure_THROW(f.openWrite(""), SPIOException);
+
+		const std::string s = "this is so magic!";
+		fake::writeFile("test.txt", s);
+		ensure_equals(fake::readFile("test.txt"), s);
+		std::remove("test.txt");
 	}
 }

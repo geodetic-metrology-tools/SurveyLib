@@ -23,122 +23,135 @@ struct ShareablePosition;
  * @ingroup shpoints
  *
  * In order to serialize a ShareablePointsList into any format, you need to inherit from this class and implement all required functions.
+ *
+ * This class offers methods to de-serialize data from/to strings. Though, it also offers 2 static methods to read/write files: readFile()
+ * and writeFile().
  */
 class IShareablePointsListIO
 {
 public:
 	/**
-	 * Constructor.
-	 *
-	 * @param filename the name (path) of the file to read / write.
+	 * @return a string that represents the content of the file.
+	 * @param filename the path to the file to open
+	 * @param binary if the file should be open in binary mode
 	 */
-	IShareablePointsListIO(std::string filename="") : _filename(filename) {}
+	static std::string readFile(const std::string& filename, bool binary = false);
+	/**
+	 * Write the given contents to the file.
+	 * @param filename the path to the file to open
+	 * @param contents the contents to write
+	 * @param binary if the file should be open in binary mode
+	 */
+	static void writeFile(const std::string& filename, const std::string& contents, bool binary = false);
+
 	virtual ~IShareablePointsListIO() = default;
 
-	/**
-	 * Set the file where to read / write.
-	 * @see getFilename()
-	 */
-	void setFilename(const std::string& filename) { _filename = filename; }
-	/**
-	 * Get the file where to read / write.
-	 * @see setFilename()
-	 */
-	const std::string& getFilename() const noexcept { return _filename; }
+	/** @return the MIME type asociated with the managed format. */
+	virtual const std::string& getMIMEType() const = 0;
 
 	/**
 	 * @return a ShareablePointsList read from the given JSON file.
+	 * @param contents the content containing the structure to read
 	 * @throw SPIOException if an error occurred.
-	* @see write(const ShareablePointsList&)
+	 * @see write(const ShareablePointsList&)
 	 */
-	virtual ShareablePointsList read() = 0;
+	virtual ShareablePointsList read(const std::string& contents) = 0;
 	/**
-	* @return a ShareableExtraInfos read from the given JSON file.
-	* @throw SPIOException if an error occurred.
-	* @see write(const ShareableExtraInfos&)
-	*/
-	virtual ShareableExtraInfos readExtraInfos() = 0;
+	 * @return a ShareableExtraInfos read from the given JSON file.
+	 * @param contents the content containing the structure to read
+	 * @throw SPIOException if an error occurred.
+	 * @see write(const ShareableExtraInfos&)
+	 */
+	virtual ShareableExtraInfos readExtraInfos(const std::string& contents) = 0;
 	/**
-	* @return a ShareableFrame read from the given JSON file.
-	* @throw SPIOException if an error occurred.
-	* @see write(const ShareableFrame&)
-	*/
-	virtual ShareableFrame readFrame() = 0;
+	 * @return a ShareableFrame read from the given JSON file.
+	 * @param contents the content containing the structure to read
+	 * @throw SPIOException if an error occurred.
+	 * @see write(const ShareableFrame&)
+	 */
+	virtual ShareableFrame readFrame(const std::string& contents) = 0;
 	/**
-	* @return a ShareableParams read from the given JSON file.
-	* @throw SPIOException if an error occurred.
-	* @see write(const ShareableParams&)
-	*/
-	virtual ShareableParams readParams() = 0;
+	 * @return a ShareableParams read from the given JSON file.
+	 * @param contents the content containing the structure to read
+	 * @throw SPIOException if an error occurred.
+	 * @see write(const ShareableParams&)
+	 */
+	virtual ShareableParams readParams(const std::string& contents) = 0;
 	/**
-	* @return a ShareablePoint read from the given JSON file.
-	* @throw SPIOException if an error occurred.
-	* @see write(conts ShareablePoint&)
-	*/
-	virtual ShareablePoint readPoint() = 0;
+	 * @return a ShareablePoint read from the given JSON file.
+	 * @param contents the content containing the structure to read
+	 * @throw SPIOException if an error occurred.
+	 * @see write(conts ShareablePoint&)
+	 */
+	virtual ShareablePoint readPoint(const std::string& contents) = 0;
 	/**
-	* @return a ShareablePosition read from the given JSON file.
-	* @throw SPIOException if an error occurred.
-	* @see write(const ShareablePosition&)
-	*/
-	virtual ShareablePosition readPosition() = 0;
+	 * @return a ShareablePosition read from the given JSON file.
+	 * @param contents the content containing the structure to read
+	 * @throw SPIOException if an error occurred.
+	 * @see write(const ShareablePosition&)
+	 */
+	virtual ShareablePosition readPosition(const std::string& contents) = 0;
 
 	/**
-	* Write the ShareablePointsList to the given file.
-	* @throw SPIOException if an error occurred.
-	* @see read()
-	*/
-	virtual void write(const ShareablePointsList& list) = 0;
+	 * Write the ShareablePointsList to the given file.
+	 * @return a string representation of the structure.
+	 * @throw SPIOException if an error occurred.
+	 * @see read()
+	 */
+	virtual std::string write(const ShareablePointsList& list) = 0;
 	/**
-	* Write the ShareableExtraInfos to the given file.
-	* @throw SPIOException if an error occurred.
-	* @see readExtraInfos()
-	*/
-	virtual void write(const ShareableExtraInfos& info) = 0;
+	 * Write the ShareableExtraInfos to the given file.
+	 * @return a string representation of the structure.
+	 * @throw SPIOException if an error occurred.
+	 * @see readExtraInfos()
+	 */
+	virtual std::string write(const ShareableExtraInfos& info) = 0;
 	/**
-	* Write the ShareableFrame to the given file.
-	* @throw SPIOException if an error occurred.
-	* @see readFrame()
-	*/
-	virtual void write(const ShareableFrame& frame) = 0;
+	 * Write the ShareableFrame to the given file.
+	 * @return a string representation of the structure.
+	 * @throw SPIOException if an error occurred.
+	 * @see readFrame()
+	 */
+	virtual std::string write(const ShareableFrame& frame) = 0;
 	/**
-	* Write the ShareableParams to the given file.
-	* @throw SPIOException if an error occurred.
-	* @see readParams()
-	*/
-	virtual void write(const ShareableParams& params) = 0;
+	 * Write the ShareableParams to the given file.
+	 * @return a string representation of the structure.
+	 * @throw SPIOException if an error occurred.
+	 * @see readParams()
+	 */
+	virtual std::string write(const ShareableParams& params) = 0;
 	/**
-	* Write the ShareablePoint to the given file.
-	* @throw SPIOException if an error occurred.
-	* @see readPoint()
-	*/
-	virtual void write(const ShareablePoint& point) = 0;
+	 * Write the ShareablePoint to the given file.
+	 * @return a string representation of the structure.
+	 * @throw SPIOException if an error occurred.
+	 * @see readPoint()
+	 */
+	virtual std::string write(const ShareablePoint& point) = 0;
 	/**
-	* Write the ShareablePosition to the given file.
-	* @throw SPIOException if an error occurred.
-	* @see readPosition()
-	*/
-	virtual void write(const ShareablePosition& position) = 0;
+	 * Write the ShareablePosition to the given file.
+	 * @return a string representation of the structure.
+	 * @throw SPIOException if an error occurred.
+	 * @see readPosition()
+	 */
+	virtual std::string write(const ShareablePosition& position) = 0;
 
 protected:
 	/**
-	 * @return an ifstream that points to getFilename().
+	 * @return an ifstream that points to the filename.
+	 * @param filename the file to open.
 	 * @param binary if true, the file is open in binary mode.
 	 * @throw SPIOException if we can't open the file for any reason.
 	 */
-	std::ifstream openRead(bool binary=false);
+	static std::ifstream openRead(const std::string& filename, bool binary=false);
 	/**
-	* @return an ofstream that points to getFilename().
-	* @param binary if true, the file is open in binary mode.
-	* @throw SPIOException if we can't open the file for any reason.
-	*
-	* The file is open in truncated mode (all previous content if existed is erased).
-	*/
-	std::ofstream openWrite(bool binary=false);
-
-protected:
-	/** Path to the file where to read or write */
-	std::string _filename;
+	 * @return an ofstream that points to the filename.
+	 * @param filename the file to open.
+	 * @param binary if true, the file is open in binary mode.
+	 * @throw SPIOException if we can't open the file for any reason.
+	 *
+	 * The file is open in truncated mode (all previous content if existed is erased).
+	 */
+	static std::ofstream openWrite(const std::string& filename, bool binary=false);
 };
 
 /**
@@ -147,7 +160,7 @@ protected:
  * SPIOException is part of the @ref shpoints module.
  * @ingroup shpoints
  *
- * This class offers a way to store the filename and the offset where the error occurred.
+ * This class offers a way to store the filename, the contents, and the offset where the error occurred.
  */
 class SPIOException : public std::exception
 {
@@ -157,9 +170,11 @@ public:
 	 *
 	 * @param error the error message
 	 * @param filename the path to the file
+	 * @param contents the contents (stringà where the error occurred
 	 * @param offset the offset inside the file where the error occured (by default = -1)
 	 */
-	SPIOException(const std::string& error, const std::string& filename, int offset = -1) : _error(error), _filename(filename), _offset(offset) {}
+	SPIOException(const std::string& error, const std::string& filename = "", const std::string& contents = "", int offset = -1) :
+		_error(error), _filename(filename), _contents(contents), _offset(offset) {}
 
 	virtual const char* what() const noexcept override { return _error.c_str(); }
 
@@ -170,6 +185,8 @@ public:
 	const std::string& error() const noexcept { return _error; }
 	/** @return the filename where the error occurred. */
 	const std::string& filename() const noexcept { return _filename; }
+	/** @return the contents where the error occurred. */
+	const std::string& contents() const noexcept { return _contents; }
 	/** @return the offset in the file where the error occurred, if it is possible to know. -1 otherwise. */
 	int offset() const noexcept { return _offset; }
 
@@ -178,6 +195,8 @@ private:
 	std::string _error;
 	/** The filename related to the error. */
 	std::string _filename;
+	/** The contents related to the error. */
+	std::string _contents;
 	/** the offset inside the file where the error occured. */
 	int _offset = -1;
 };
