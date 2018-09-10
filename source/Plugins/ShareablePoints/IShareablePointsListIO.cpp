@@ -50,7 +50,9 @@
 	 fbuf->pubseekoff(0, file.beg);
 	 auto contents = std::make_unique<char[]>(size);
 	 fbuf->sgetn(contents.get(), size);
-	 return std::string(contents.get(), size);
+	 if (binary)
+		return std::string(contents.get(), size);
+	 return std::string(contents.get());
  }
 
  void IShareablePointsListIO::writeFile(const std::string & filename, const std::string & contents, bool binary)
