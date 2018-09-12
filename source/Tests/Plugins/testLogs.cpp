@@ -140,6 +140,15 @@ namespace tut
 	 *                 TESTS OF LOGGER                    *
 	 * ************************************************** */
 	
+	class DumbHandler : public ILogHandler
+	{
+	public:
+		void log(const LogMessage&) override { DumbHandler::i++; j++; };
+		static size_t i;
+		size_t j = 0;
+	};
+	size_t DumbHandler::i = 0;
+
 	template<>
 	template<>
 	void testobject::test<5>()
@@ -162,39 +171,27 @@ namespace tut
 	{
 		set_test_name("Logger: Test of handlers");
 
-		class DumbHandler : public ILogHandler
-		{
-		public:
-			void log(const LogMessage&) override { i++; };
-			size_t i = 0;
-		};
-
 		auto& logger = Logger::getLogger();
-		DumbHandler h1, h2, h3;
+		auto* h1 = new DumbHandler();
+		auto* h2 = new DumbHandler();
+		auto* h3 = new DumbHandler();
 
-		logger.addHandlers(&h1);
+		ensure_equals(DumbHandler::i, 0u);
+		logger.addHandlers(h1);
 		logger.log(LogMessage(LogMessage::Type::FATAL));
-		ensure_equals(h1.i, 1u);
-		ensure_equals(h2.i, 0u);
-		ensure_equals(h3.i, 0u);
+		ensure_equals(DumbHandler::i, 1u);
 
-		logger.addHandlers(&h2, &h3);
+		logger.addHandlers(h2, h3);
 		logger.log(LogMessage(LogMessage::Type::FATAL));
-		ensure_equals(h1.i, 2u);
-		ensure_equals(h2.i, 1u);
-		ensure_equals(h3.i, 1u);
+		ensure_equals(DumbHandler::i, 4u);
 
-		logger.removeHandler(&h3);
+		logger.removeHandler(h3);
 		logger.log(LogMessage(LogMessage::Type::FATAL));
-		ensure_equals(h1.i, 3u);
-		ensure_equals(h2.i, 2u);
-		ensure_equals(h3.i, 1u);
+		ensure_equals(DumbHandler::i, 6u);
 
 		logger.clearHandlers();
 		logger.log(LogMessage(LogMessage::Type::FATAL));
-		ensure_equals(h1.i, 3u);
-		ensure_equals(h2.i, 2u);
-		ensure_equals(h3.i, 1u);
+		ensure_equals(DumbHandler::i, 6u);
 	}
 
 	template<>
@@ -203,69 +200,63 @@ namespace tut
 	{
 		set_test_name("Logger: Test of log()");
 
-		class DumbHandler : public ILogHandler
-		{
-		public:
-			void log(const LogMessage&) override { i++; };
-			size_t i = 0;
-		};
-
-		DumbHandler h1, h2;
+		auto* h1 = new DumbHandler();
+		auto* h2 = new DumbHandler();
 		auto& logger = Logger::getLogger();
-		logger.addHandlers(&h1, &h2);
+		logger.addHandlers(h1, h2);
 
 		ensure_equals(logger.errorNumber(), 0);
 		ensure_equals(logger.warningNumber(), 0);
 		ensure_not(logger.hasErrors());
 		ensure_not(logger.hasWarnings());
 
-		h1.setThreshold(LogMessage::Type::WARNING);
+		h1->setThreshold(LogMessage::Type::WARNING);
 		logger.log(LogMessage(LogMessage::Type::DEBUG));
 		logger.log(LogMessage(LogMessage::Type::INFO));
 		logger.log(LogMessage(LogMessage::Type::WARNING));
 		logger.log(LogMessage(LogMessage::Type::CRITICAL));
 		logger.log(LogMessage(LogMessage::Type::FATAL));
-		ensure_equals(h1.i, 3u);
-		ensure_equals(h2.i, 3u);
+		ensure_equals(h1->j, 3u);
+		ensure_equals(h2->j, 3u);
 		ensure_equals(logger.errorNumber(), 2);
 		ensure_equals(logger.warningNumber(), 1);
 		ensure(logger.hasErrors());
 		ensure(logger.hasWarnings());
 
-		h1.setThreshold(LogMessage::Type::DEBUG);
+		h1->setThreshold(LogMessage::Type::DEBUG);
 		logger.log(LogMessage(LogMessage::Type::DEBUG));
 		logger.log(LogMessage(LogMessage::Type::INFO));
 		logger.log(LogMessage(LogMessage::Type::WARNING));
 		logger.log(LogMessage(LogMessage::Type::CRITICAL));
 		logger.log(LogMessage(LogMessage::Type::FATAL));
-		ensure_equals(h1.i, 8u); // 3 + 5
-		ensure_equals(h2.i, 6u); // 3 + 3
+		ensure_equals(h1->j, 8u); // 3 + 5
+		ensure_equals(h2->j, 6u); // 3 + 3
 		ensure_equals(logger.errorNumber(), 4);
 		ensure_equals(logger.warningNumber(), 2);
 		ensure(logger.hasErrors());
 		ensure(logger.hasWarnings());
 
-		h1.setThreshold(LogMessage::Type::INFO);
+		h1->setThreshold(LogMessage::Type::INFO);
 		logger.log(LogMessage(LogMessage::Type::DEBUG));
 		logger.log(LogMessage(LogMessage::Type::INFO));
 		logger.log(LogMessage(LogMessage::Type::WARNING));
 		logger.log(LogMessage(LogMessage::Type::CRITICAL));
 		logger.log(LogMessage(LogMessage::Type::FATAL));
-		ensure_equals(h1.i, 12u); // 8 + 4
-		ensure_equals(h2.i, 9u); // 6 + 3
+		ensure_equals(h1->j, 12u); // 8 + 4
+		ensure_equals(h2->j, 9u); // 6 + 3
 		ensure_equals(logger.errorNumber(), 6);
 		ensure_equals(logger.warningNumber(), 3);
 		ensure(logger.hasErrors());
 		ensure(logger.hasWarnings());
 
-		h1.setThreshold(LogMessage::Type::FATAL);
+		h1->setThreshold(LogMessage::Type::FATAL);
 		logger.log(LogMessage(LogMessage::Type::DEBUG));
 		logger.log(LogMessage(LogMessage::Type::INFO));
 		logger.log(LogMessage(LogMessage::Type::WARNING));
 		logger.log(LogMessage(LogMessage::Type::CRITICAL));
 		logger.log(LogMessage(LogMessage::Type::FATAL));
-		ensure_equals(h1.i, 13u); // 12 + 1
-		ensure_equals(h2.i, 12u); // 9 + 3
+		ensure_equals(h1->j, 13u); // 12 + 1
+		ensure_equals(h2->j, 12u); // 9 + 3
 		ensure_equals(logger.errorNumber(), 8);
 		ensure_equals(logger.warningNumber(), 4);
 		ensure(logger.hasErrors());
@@ -282,7 +273,7 @@ namespace tut
 	{
 		set_test_name("MACROS: Test of macros()");
 
-		class DumbHandler : public ILogHandler
+		class DumbHandler2 : public ILogHandler
 		{
 		public:
 			void log(const LogMessage& m) override
@@ -308,18 +299,18 @@ namespace tut
 		};
 
 		auto& logger = Logger::getLogger();
-		DumbHandler h;
-		h.setThreshold(LogMessage::Type::DEBUG);
-		logger.addHandlers(&h);
+		auto* h = new DumbHandler2();
+		h->setThreshold(LogMessage::Type::DEBUG);
+		logger.addHandlers(h);
 		int line = -1;
 
 		line = __LINE__ + 1;
 		logDebug() << "this is" << "an error message:" << 45 << ' ' << 12.3;
-		ensure_equals(h.msg.getType(), LogMessage::Type::DEBUG);
-		ensure_equals(h.msg.getMessage(), "this is an error message: 45   12.3");
-		ensure(iendswith(h.msg.getFile(), "testLogs.cpp"));
-		ensure_equals(h.msg.getLine(), line);
-		ensure(h.msg.getFunction().find("test") != std::string::npos);
+		ensure_equals(h->msg.getType(), LogMessage::Type::DEBUG);
+		ensure_equals(h->msg.getMessage(), "this is an error message: 45   12.3");
+		ensure(iendswith(h->msg.getFile(), "testLogs.cpp"));
+		ensure_equals(h->msg.getLine(), line);
+		ensure(h->msg.getFunction().find("test") != std::string::npos);
 		ensure_equals(logger.errorNumber(), 0);
 		ensure_equals(logger.warningNumber(), 0);
 		ensure_not(logger.hasErrors());
@@ -327,8 +318,8 @@ namespace tut
 
 		line = __LINE__ + 1;
 		logInfo() << "this is" << "an error message:" << 45 << ' ' << 12.3;
-		ensure_equals(h.msg.getType(), LogMessage::Type::INFO);
-		ensure_equals(h.msg.getLine(), line);
+		ensure_equals(h->msg.getType(), LogMessage::Type::INFO);
+		ensure_equals(h->msg.getLine(), line);
 		ensure_equals(logger.errorNumber(), 0);
 		ensure_equals(logger.warningNumber(), 0);
 		ensure_not(logger.hasErrors());
@@ -336,8 +327,8 @@ namespace tut
 		
 		line = __LINE__ + 1;
 		logWarning() << "this is" << "an error message:" << 45 << ' ' << 12.3;
-		ensure_equals(h.msg.getType(), LogMessage::Type::WARNING);
-		ensure_equals(h.msg.getLine(), line);
+		ensure_equals(h->msg.getType(), LogMessage::Type::WARNING);
+		ensure_equals(h->msg.getLine(), line);
 		ensure_equals(logger.errorNumber(), 0);
 		ensure_equals(logger.warningNumber(), 1);
 		ensure_not(logger.hasErrors());
@@ -345,8 +336,8 @@ namespace tut
 
 		line = __LINE__ + 1;
 		logCritical() << "this is" << "an error message:" << 45 << ' ' << 12.3;
-		ensure_equals(h.msg.getType(), LogMessage::Type::CRITICAL);
-		ensure_equals(h.msg.getLine(), line);
+		ensure_equals(h->msg.getType(), LogMessage::Type::CRITICAL);
+		ensure_equals(h->msg.getLine(), line);
 		ensure_equals(logger.errorNumber(), 1);
 		ensure_equals(logger.warningNumber(), 1);
 		ensure(logger.hasErrors());
@@ -354,8 +345,8 @@ namespace tut
 
 		line = __LINE__ + 1;
 		logFatal() << "this is" << "an error message:" << 45 << ' ' << 12.3;
-		ensure_equals(h.msg.getType(), LogMessage::Type::FATAL);
-		ensure_equals(h.msg.getLine(), line);
+		ensure_equals(h->msg.getType(), LogMessage::Type::FATAL);
+		ensure_equals(h->msg.getLine(), line);
 		ensure_equals(logger.errorNumber(), 2);
 		ensure_equals(logger.warningNumber(), 1);
 		ensure(logger.hasErrors());
@@ -373,8 +364,8 @@ namespace tut
 		set_test_name("FileLogHandler: Test of log()");
 
 		auto& logger = Logger::getLogger();
-		FileLogHandler h("./testLogs_test9.log");
-		logger.addHandlers(&h);
+		auto* h = new FileLogHandler("./testLogs_test9.log");
+		logger.addHandlers(h);
 
 		{
 			logCritical() << "lol erreur !!!";

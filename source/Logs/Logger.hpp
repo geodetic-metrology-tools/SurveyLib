@@ -10,6 +10,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <memory>
 #include <unordered_set>
 
+#include "ILogHandler.hpp"
 #include "LogMessage.hpp"
 
 /**
@@ -209,8 +210,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
  */
 #define logFatal() (_logMessage(LogMessage::Type::FATAL))
 
-class ILogHandler;
-
 /**
  * Singleton that dispatch the logs to registered handlers.
  *
@@ -286,11 +285,11 @@ public:
 	 * @param handler the handler to register
 	 * @see removeHandler(), clearHandlers(), ILogHandler
 	 */
-	void addHandlers(ILogHandler * handler) { _handlers.insert(handler); }
+	void addHandlers(ILogHandler * handler) { _handlers.emplace(handler); }
 	/**
 	 * Add handlers.
 	 *
-	 * @param handler, rest the list of pionters to handlers to add.
+	 * @param handler, rest the list of pointers to handlers to add.
 	 * @see addHandlers()
 	 */
 	template<class... Ts>
@@ -299,7 +298,7 @@ public:
 	 * @param handler the handler to remove
 	 * @see addHandlers(), clearHandlers(), ILogHandler
 	 */
-	void removeHandler(ILogHandler * handler) { _handlers.erase(handler); }
+	void removeHandler(ILogHandler * handler);
 	/** @see addHandlers(), removeHandler(), ILogHandler */
 	void clearHandlers() noexcept { _handlers.clear(); }
 
@@ -337,7 +336,7 @@ private:
 	static std::unique_ptr<Logger> _instance;
 
 	/** List of registered handlers. */
-	std::unordered_set<ILogHandler *> _handlers;
+	std::unordered_set<std::unique_ptr<ILogHandler>> _handlers;
 	/** number of errors */
 	size_t _errornumber = 0;
 	/** number of warnings */

@@ -10,6 +10,8 @@ ShareablePointsList::ShareablePointsList(const std::string & title) :
 {
 }
 
+ShareablePointsList::~ShareablePointsList() = default;
+
 bool ShareablePointsList::operator==(const ShareablePointsList & a) const
 {
 	return _title == a._title &&

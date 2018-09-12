@@ -1,5 +1,5 @@
-include_directories(${CMAKE_SOURCE_DIR}
-	${SURVEYLIB_ROOT}/source/Logs
+include_directories(
+	${CMAKE_CURRENT_LIST_DIR}
 )
 
 set(LOGS_HEADERS

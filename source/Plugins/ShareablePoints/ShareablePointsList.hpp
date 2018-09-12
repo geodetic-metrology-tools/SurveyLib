@@ -50,6 +50,7 @@ class ShareablePointsList
 {
 public:
 	ShareablePointsList(const std::string& title = "");
+	~ShareablePointsList();
 	ShareablePointsList(const ShareablePointsList&) = delete; // can't copy (too heavy structure)
 	ShareablePointsList(ShareablePointsList&&) = default;
 	ShareablePointsList& operator=(const ShareablePointsList&) = delete;
