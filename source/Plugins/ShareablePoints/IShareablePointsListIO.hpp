@@ -8,6 +8,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 #include <exception>
 #include <string>
+#include <unordered_set>
 
 class ShareableExtraInfos;
 class ShareableFrame;
@@ -23,6 +24,8 @@ struct ShareablePosition;
  * @ingroup shpoints
  *
  * In order to serialize a ShareablePointsList into any format, you need to inherit from this class and implement all required functions.
+ * The implementations should take in consideration the Fields members (exportFieldsPoint, exportFieldsParams, exportFieldsInfos,
+ * exportFieldsFrame and exportFieldsPointsList) to export only the required data.
  *
  * This class offers methods to de-serialize data from/to strings. Though, it also offers 2 static methods to read/write files: readFile()
  * and writeFile().
@@ -30,6 +33,36 @@ struct ShareablePosition;
 class IShareablePointsListIO
 {
 public:
+	/**
+	 * Represent the different fields that will be written when we serialize a class.
+	 * @see exportFieldsPoint, exportFieldsParams, exportFieldsInfos, exportFieldsFrame, exportFieldsPointsList
+	 */
+	class Fields
+	{
+	public:
+		/**
+		 * Constructor
+		 * @param the list of possible fields for the class.
+		 */
+		Fields(std::initializer_list<std::string> allfields) : allFields(allfields), _selectedFields(allfields) {}
+		/** Add a field to be written. The field has to be in the allFields list. */
+		bool addField(const std::string& field) { if (allFields.find(field) == std::cend(allFields)) return false; return _selectedFields.insert(field).second; }
+		/** Prevent a field to be written. */
+		bool removeField(const std::string& field) { return _selectedFields.erase(field) == 1; }
+		/** Tells if the given field will be written or not. */
+		bool hasField(const std::string& field) const { return _selectedFields.find(field) != std::cend(_selectedFields); }
+		/** Return all the fields that are marked to be written. */
+		const std::unordered_set<std::string>& getFields() const noexcept { return _selectedFields; }
+
+	public:
+		/** The list of all possible fields. */
+		const std::unordered_set<std::string> allFields;
+
+	protected:
+		/** The list of fields that are marked to be written. */
+		std::unordered_set<std::string> _selectedFields;
+	};
+
 	/**
 	 * @return a string that represents the content of the file.
 	 * @param filename the path to the file to open
@@ -152,6 +185,20 @@ protected:
 	 * The file is open in truncated mode (all previous content if existed is erased).
 	 */
 	static std::ofstream openWrite(const std::string& filename, bool binary=false);
+
+public:
+	/** List of fields that will be written when we serialize a ShareablePosition. */
+	Fields exportFieldsPosition{ "x", "y", "z", "sigmax", "sigmay", "sigmaz", "isfreex", "isfreey", "isfreez" };
+	/** List of fields that will be written when we serialize a ShareablePoint. */
+	Fields exportFieldsPoint{ "name", "position", "inlineComment", "headerComment", "active", "extraInfos" };
+	/** List of fields that will be written when we serialize a ShareableParams. */
+	Fields exportFieldsParams{ "precision", "coordsys", "extraInfos" };
+	/** List of fields that will be written when we serialize a ShareableExtraInfos. */
+	Fields exportFieldsInfos{};
+	/** List of fields that will be written when we serialize a ShareableFrame. */
+	Fields exportFieldsFrame{ "name", "translation", "rotation", "scale", "isfreescale", "innerFrames", "points" };
+	/** List of fields that will be written when we serialize a ShareablePointsList. */
+	Fields exportFieldsPointsList{ "title", "params", "rootFrame" };
 };
 
 /**
