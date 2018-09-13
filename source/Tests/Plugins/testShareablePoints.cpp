@@ -825,5 +825,19 @@ namespace tut
 		fake::writeFile("test.txt", s);
 		ensure_equals(fake::readFile("test.txt"), s);
 		std::remove("test.txt");
+
+		// test of Fields
+		ensure(f.exportFieldsPointsList.allFields == std::unordered_set<std::string>{ "title", "params", "rootFrame" });
+		ensure(f.exportFieldsPointsList.getFields() == std::unordered_set<std::string>{ "title", "params", "rootFrame" });
+		ensure_not(f.exportFieldsPointsList.removeField("lol"));
+		ensure_not(f.exportFieldsPointsList.hasField("lol"));
+		ensure(f.exportFieldsPointsList.hasField("params"));
+		ensure(f.exportFieldsPointsList.removeField("params"));
+		ensure_not(f.exportFieldsPointsList.hasField("params"));
+		ensure(f.exportFieldsPointsList.getFields() == std::unordered_set<std::string>{ "title", "rootFrame" });
+		ensure_not(f.exportFieldsPointsList.addField("lol"));
+		ensure_not(f.exportFieldsPointsList.addField("title"));
+		ensure(f.exportFieldsPointsList.addField("params"));
+		ensure(f.exportFieldsPointsList.getFields() == std::unordered_set<std::string>{ "title", "params", "rootFrame" });
 	}
 }
