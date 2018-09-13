@@ -47,8 +47,14 @@ public:
 		Fields(std::initializer_list<std::string> allfields) : allFields(allfields), _selectedFields(allfields) {}
 		/** Add a field to be written. The field has to be in the allFields list. */
 		bool addField(const std::string& field) { if (allFields.find(field) == std::cend(allFields)) return false; return _selectedFields.insert(field).second; }
+		/** Add multiple fields. */
+		template<class... Ts>
+		void addField(const std::string& field, Ts... rest) { addField(field); addField(rest...); }
 		/** Prevent a field to be written. */
 		bool removeField(const std::string& field) { return _selectedFields.erase(field) == 1; }
+		/** Remove multiple fields. */
+		template<class... Ts>
+		void removeField(const std::string& field, Ts... rest) { removeField(field); removeField(rest...); }
 		/** Tells if the given field will be written or not. */
 		bool hasField(const std::string& field) const { return _selectedFields.find(field) != std::cend(_selectedFields); }
 		/** Return all the fields that are marked to be written. */
