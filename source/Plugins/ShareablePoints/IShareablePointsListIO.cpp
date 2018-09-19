@@ -45,14 +45,23 @@
  std::string IShareablePointsListIO::readFile(const std::string & filename, bool binary)
  {
 	 auto file = openRead(filename, binary);
-	 auto fbuf = file.rdbuf();
-	 const std::streampos size = fbuf->pubseekoff(0, file.end);
-	 fbuf->pubseekoff(0, file.beg);
-	 auto contents = std::make_unique<char[]>(size);
-	 fbuf->sgetn(contents.get(), size);
+	 // binary
 	 if (binary)
-		return std::string(contents.get(), size);
-	 return std::string(contents.get());
+	 {
+		 auto fbuf = file.rdbuf();
+		 const std::streampos size = fbuf->pubseekoff(0, file.end);
+		 fbuf->pubseekoff(0, file.beg);
+		 auto contents = std::make_unique<char[]>(size);
+		 fbuf->sgetn(contents.get(), size);
+		 return std::string(contents.get(), size);
+	 }
+	 // ASCII
+	 else
+	 {
+		 std::ostringstream contents;
+		 contents << file.rdbuf();
+		 return(contents.str());
+	 }
  }
 
  void IShareablePointsListIO::writeFile(const std::string & filename, const std::string & contents, bool binary)
