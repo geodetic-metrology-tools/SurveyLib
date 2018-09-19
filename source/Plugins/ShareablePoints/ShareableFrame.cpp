@@ -126,11 +126,11 @@ std::unique_ptr<ShareablePoint> ShareableFrame::removePoint(const ShareablePoint
 	return tmp;
 }
 
-std::vector<ShareablePoint*> ShareableFrame::getAllPoints()
+std::vector<const ShareablePoint*> ShareableFrame::getAllPoints() const
 {
-	std::vector<ShareablePoint*> tmp;
+	std::vector<const ShareablePoint*> tmp;
 	tmp.reserve(_points.size());
-	std::transform(std::begin(_points), std::end(_points), std::back_inserter(tmp), [](auto& ptr) -> ShareablePoint* { return ptr.get(); });
+	std::transform(std::cbegin(_points), std::cend(_points), std::back_inserter(tmp), [](auto& ptr) -> ShareablePoint* { return ptr.get(); });
 
 	for (const auto& f : _innerFrames)
 	{

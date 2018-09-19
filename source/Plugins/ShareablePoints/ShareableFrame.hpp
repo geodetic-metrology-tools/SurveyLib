@@ -182,7 +182,7 @@ public:
 	/** @return the vector of points */
 	const std::vector<std::unique_ptr<ShareablePoint>>& getPoints() const noexcept { return _points; }
 	/** @return a vector with all the points in this frame and its children. */
-	std::vector<ShareablePoint*> getAllPoints();
+	std::vector<const ShareablePoint*> getAllPoints() const;
 	/**
 	 * Removes all points in this frame.
 	 * @warning All points are deleted.
