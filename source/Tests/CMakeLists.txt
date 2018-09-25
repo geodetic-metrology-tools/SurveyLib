@@ -48,7 +48,13 @@ set(PluginsTests_SOURCES
 
 add_executable(UnitTests ${SurveyMain_Tests} ${SpatialObjects_SOURCES} ${SurveyLibDLLTests_SOURCES} ${ProjectFrameworkTests_SOURCES} ${PluginsTests_SOURCES})
 # Specify the libraries to link against
-target_link_libraries (UnitTests SpatialObjects SpatialObjDLL ProjectFramework ProjectFramework Plugins Logs)
+target_link_libraries (UnitTests
+	SpatialObjects
+	SpatialObjDLL
+	ProjectFramework
+	Plugins
+	Logs
+)
 
 source_group("SpatialObjects" FILES ${SpatialObjects_SOURCES})
 source_group("SurveyLibDLL" FILES ${SurveyLibDLLTests_SOURCES})
