@@ -6,6 +6,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef ILOGHANDLER_HPP
 #define ILOGHANDLER_HPP
 
+#include "LogLibGlobals.hpp"
 #include "LogMessage.hpp"
 
 /**
@@ -36,7 +37,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
  *
  * @see logs, FileLogHandler, ConsoleLogHandler
  */
-class ILogHandler
+class SUGL_SHARED_EXPORT ILogHandler
 {
 public:
 	virtual ~ILogHandler() = default;

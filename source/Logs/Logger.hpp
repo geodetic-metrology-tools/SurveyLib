@@ -11,6 +11,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <unordered_set>
 
 #include "ILogHandler.hpp"
+#include "LogLibGlobals.hpp"
 #include "LogMessage.hpp"
 
 /**
@@ -248,7 +249,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
  *
  * @see logs
  */
-class Logger
+class SUGL_SHARED_EXPORT Logger
 {
 public:
 	/** @return the instance of the Logger (singleton) */

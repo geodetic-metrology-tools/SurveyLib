@@ -7,6 +7,7 @@ set(LOGS_HEADERS
 	${CMAKE_CURRENT_LIST_DIR}/FileLogHandler.hpp
 	${CMAKE_CURRENT_LIST_DIR}/ILogHandler.hpp
 	${CMAKE_CURRENT_LIST_DIR}/Logger.hpp
+	${CMAKE_CURRENT_LIST_DIR}/LogLibGlobals.hpp
 	${CMAKE_CURRENT_LIST_DIR}/LogMessage.hpp
 )
 

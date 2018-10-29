@@ -10,6 +10,8 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <string>
 #include <sstream>
 
+#include "LogLibGlobals.hpp"
+
 /**
  * Hold a message to be logged.
  *
@@ -49,7 +51,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
  *
  * @see logs, Logger, logDebug(), logInfo(), logWarning(), logCritical(), logFatal()
  */
-class LogMessage
+class SUGL_SHARED_EXPORT LogMessage
 {
 public:
 	/**
