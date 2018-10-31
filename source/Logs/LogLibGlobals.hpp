@@ -1,11 +1,9 @@
-#if !defined(__linux__) && defined(SUGL_SHARED)
-	#if defined(UIPlugins_EXPORT)
-		# define SUGL_SHARED_EXPORT __declspec(dllexport)
-	#else
-		# define SUGL_SHARED_EXPORT __declspec(dllimport)
-	#endif
-#endif // #ifndef __linux__
+#if !defined(__linux__) && defined(UIPlugins_EXPORT)
+	# define SULIB_SHARED_EXPORT __declspec(dllexport)
+#elif !defined(__linux__) &&  defined(UIPlugins_IMPORT)
+	# define SULIB_SHARED_EXPORT __declspec(dllimport)
+#endif
 
-#ifndef SUGL_SHARED_EXPORT
-	# define SUGL_SHARED_EXPORT
+#ifndef SULIB_SHARED_EXPORT
+	# define SULIB_SHARED_EXPORT
 #endif

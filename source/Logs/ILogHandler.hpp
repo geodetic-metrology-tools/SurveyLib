@@ -37,7 +37,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
  *
  * @see logs, FileLogHandler, ConsoleLogHandler
  */
-class SUGL_SHARED_EXPORT ILogHandler
+class SULIB_SHARED_EXPORT ILogHandler
 {
 public:
 	virtual ~ILogHandler() = default;

@@ -6,13 +6,12 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
 
-#include <functional>
 #include <memory>
-#include <unordered_set>
 
-#include "ILogHandler.hpp"
 #include "LogLibGlobals.hpp"
 #include "LogMessage.hpp"
+
+class ILogHandler;
 
 /**
  * @defgroup logs Logs
@@ -249,7 +248,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
  *
  * @see logs
  */
-class SUGL_SHARED_EXPORT Logger
+class SULIB_SHARED_EXPORT Logger
 {
 public:
 	/** @return the instance of the Logger (singleton) */
@@ -259,6 +258,8 @@ public:
 	Logger(const Logger&&) = delete;
 	Logger& operator=(const Logger&) = delete;
 	Logger& operator=(const Logger&&) = delete;
+
+	~Logger();
 
 	/**
 	 * Log the given message.
@@ -286,7 +287,7 @@ public:
 	 * @param handler the handler to register
 	 * @see removeHandler(), clearHandlers(), ILogHandler
 	 */
-	void addHandlers(ILogHandler * handler) { _handlers.emplace(handler); }
+	void addHandlers(ILogHandler * handler);
 	/**
 	 * Add handlers.
 	 *
@@ -301,47 +302,44 @@ public:
 	 */
 	void removeHandler(ILogHandler * handler);
 	/** @see addHandlers(), removeHandler(), ILogHandler */
-	void clearHandlers() noexcept { _handlers.clear(); }
+	void clearHandlers() noexcept;
 
 	/**
 	 * @return true if some errors have been logged.
 	 * @see errorNumber(), clearCounters()
 	 */
-	bool hasErrors() const noexcept { return _errornumber > 0; }
+	bool hasErrors() const noexcept;
 	/**
 	 * @return the number of logged warnings.
 	 * @see hasErrors(), clearCounters()
 	 */
-	size_t errorNumber() const noexcept { return _errornumber; }
+	size_t errorNumber() const noexcept;
 	/**
 	 * @return true if some warnings have been logged.
 	 * @see warningNumber(), clearCounters()
 	 */
-	bool hasWarnings() const noexcept { return _warningnumber > 0; }
+	bool hasWarnings() const noexcept;
 	/**
 	 * @return the number of logged warnings.
 	 * @see hasWarnings(), clearCounters()
 	 */
-	size_t warningNumber() const noexcept { return _warningnumber; }
+	size_t warningNumber() const noexcept;
 	/**
 	 * Clear the error and warning counters.
 	 * @see hasErrors(), errorNumber(), hasWarnings(), warningNumber()
 	 */
-	void clearCounters() noexcept { _errornumber = _warningnumber = 0; }
+	void clearCounters() noexcept;
 
 private:
-	Logger() = default;
+	Logger();
 
 private:
 	/** Pointer on the current instance (singleton). */
 	static std::unique_ptr<Logger> _instance;
 
-	/** List of registered handlers. */
-	std::unordered_set<std::unique_ptr<ILogHandler>> _handlers;
-	/** number of errors */
-	size_t _errornumber = 0;
-	/** number of warnings */
-	size_t _warningnumber = 0;
+	/** pimpl */
+	class _Logger_pimpl;
+	std::unique_ptr<_Logger_pimpl> _pimpl;
 };
 
 #endif // LOGGER_HPP

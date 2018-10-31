@@ -24,7 +24,7 @@ class LogMessage;
  *
  * @see logs, ILogHandler, ConsoleLogHandler
  */
-class FileLogHandler : public ILogHandler
+class SULIB_SHARED_EXPORT FileLogHandler : public ILogHandler
 {
 public:
 	/** @param file the path to the log file where to write the logs */

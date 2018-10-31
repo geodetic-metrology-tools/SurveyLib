@@ -18,7 +18,7 @@ class LogMessage;
  *
  * @see logs, ILogHandler, FileLogHandler
  */
-class ConsoleLogHandler : public ILogHandler
+class SULIB_SHARED_EXPORT ConsoleLogHandler : public ILogHandler
 {
 public:
 	virtual ~ConsoleLogHandler() = default;
