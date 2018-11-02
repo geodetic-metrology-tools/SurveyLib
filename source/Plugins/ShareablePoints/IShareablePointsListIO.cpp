@@ -1,44 +1,32 @@
 #include "IShareablePointsListIO.hpp"
 
 #include <fstream>
-
-#include "Logger.hpp"
+#include <memory>
+#include <sstream>
 
  std::ifstream IShareablePointsListIO::openRead(const std::string& filename, bool binary)
  {
 	 if (filename.empty())
-	 {
-		 logDebug() << "No file name given, can't open.";
 		 throw SPIOException("No file name given, can't open.");
-	 }
 	 std::ifstream::openmode openmode{};
 	 if (binary)
 		 openmode |= std::ifstream::binary;
 	 std::ifstream file(filename, openmode);
 	 if (!file)
-	 {
-		 logDebug() << "Can't open file" << filename << ".";
 		 throw SPIOException("Can't open file.", filename);
-	 }
 	 return file;
  }
 
  std::ofstream IShareablePointsListIO::openWrite(const std::string& filename, bool binary)
  {
 	 if (filename.empty())
-	 {
-		 logDebug() << "No file name given, can't open.";
 		 throw SPIOException("No file name given, can't open.");
-	 }
 	 std::ofstream::openmode openmode = std::ofstream::trunc;
 	 if (binary)
 		 openmode |= std::ofstream::binary;
 	 std::ofstream file(filename, openmode);
 	 if (!file)
-	 {
-		 logDebug() << "Can't open file" << filename << ".";
 		 throw SPIOException("Can't open file.", filename);
-	 }
 	 return file;
  }
 
