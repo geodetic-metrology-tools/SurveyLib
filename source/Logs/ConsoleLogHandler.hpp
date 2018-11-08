@@ -7,6 +7,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #define CONSOLELOGHANDLER_HPP
 
 #include "ILogHandler.hpp"
+#include "LogLibGlobals.hpp"
 
 class LogMessage;
 
@@ -18,7 +19,7 @@ class LogMessage;
  *
  * @see logs, ILogHandler, FileLogHandler
  */
-class ConsoleLogHandler : public ILogHandler
+class SULIB_SHARED_EXPORT ConsoleLogHandler : public ILogHandler
 {
 public:
 	virtual ~ConsoleLogHandler() = default;

@@ -6,9 +6,11 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef LOGMESSAGE_HPP
 #define LOGMESSAGE_HPP
 
-#include <ctime>
+#include <memory>
 #include <string>
 #include <sstream>
+
+#include "LogLibGlobals.hpp"
 
 /**
  * Hold a message to be logged.
@@ -49,7 +51,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
  *
  * @see logs, Logger, logDebug(), logInfo(), logWarning(), logCritical(), logFatal()
  */
-class LogMessage
+class SULIB_SHARED_EXPORT LogMessage
 {
 public:
 	/**
@@ -92,9 +94,10 @@ public:
 	 */
 	LogMessage(Type t, const std::string& file, int line, const std::string& func, const std::string& msg = "", bool callLoggerOnDestruct = false);
 	LogMessage(const LogMessage&) = delete; // can't copy
-	LogMessage(LogMessage&&) = default;
+	LogMessage(LogMessage&&);
 	LogMessage& operator=(const LogMessage&) = delete;
-	LogMessage& operator=(LogMessage&&) = default;
+	LogMessage& operator=(LogMessage&&);
+
 	~LogMessage();
 
 	/** Append the object to the message. */
@@ -119,32 +122,21 @@ public:
 	 * @see getFile(), getLine(), getFunction()
 	 */
 	std::string getContext() const;
-	void setType(Type t) noexcept { _type = t; }
-	Type getType() const noexcept { return _type; }
-	void setMessage(const std::string& msg) { _message = msg; }
-	const std::string& getMessage() const noexcept { return _message; }
-	void setFile(const std::string& file) { _file = file; }
-	const std::string& getFile() const noexcept { return _file; }
-	void setLine(const int line) noexcept { _line = line; }
-	int getLine() const noexcept { return _line; }
-	void setFunction(const std::string& func) { _function = func; }
-	const std::string& getFunction() const noexcept { return _function; }
+	void setType(Type t) noexcept;
+	Type getType() const noexcept;
+	void setMessage(const std::string& msg);
+	const std::string& getMessage() const noexcept;
+	void setFile(const std::string& file);
+	const std::string& getFile() const noexcept;
+	void setLine(const int line) noexcept;
+	int getLine() const noexcept;
+	void setFunction(const std::string& func);
+	const std::string& getFunction() const noexcept;
 
 private:
-	/** the type of the message */
-	Type _type;
-	/** the file where the event occurred */
-	std::string _file;
-	/** the line in the file */
-	int _line = -1;
-	/** the function responsible for the event */
-	std::string _function;
-	/** the message */
-	std::string _message;
-	/** if true, the object will register itself in the Logger class on destruction */
-	const bool _callLogger = false;
-	/** the date of creation of the object */
-	const std::time_t _creationDate;
+	/** pimpl */
+	class _LogMessage_pimpl;
+	std::unique_ptr<_LogMessage_pimpl> _pimpl;
 };
 
 /**
@@ -187,9 +179,9 @@ LogMessage& LogMessage::operator<<(const T& tolog)
 {
 	std::ostringstream str;
 	str << tolog;
-	if (!_message.empty())
-		_message += ' ';
-	_message += str.str();
+	if (!getMessage().empty())
+		setMessage(getMessage() + ' ');
+	setMessage(getMessage() + str.str());
 	return *this;
 }
 

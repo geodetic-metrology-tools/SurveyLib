@@ -1,6 +1,5 @@
 include_directories(
 	${CMAKE_CURRENT_LIST_DIR}
-	${SURVEYLIB_ROOT}/source/Logs
 )
 
 set(PLUG_HEADERS
@@ -22,9 +21,6 @@ set(PLUG_SOURCES
 
 #Create a static library from the object files
 add_library(Plugins STATIC ${PLUG_HEADERS} ${PLUG_SOURCES})
-target_link_libraries(Plugins
-	Logs
-)
 
 # Define IDE folders:
 file(GLOB PLUGINS_SHAREPOINTS ${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/*)
