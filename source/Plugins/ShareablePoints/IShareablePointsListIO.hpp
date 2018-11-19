@@ -229,6 +229,8 @@ public:
 	SPIOException(const std::string& error, const std::string& filename = "", const std::string& contents = "", int offset = -1) :
 		_error(error), _filename(filename), _contents(contents), _offset(offset) {}
 
+	virtual ~SPIOException() override = default;
+
 	virtual const char* what() const noexcept override { return _error.c_str(); }
 
 	/**

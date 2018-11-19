@@ -22,7 +22,7 @@ class LogMessage;
 class SULIB_SHARED_EXPORT ConsoleLogHandler : public ILogHandler
 {
 public:
-	virtual ~ConsoleLogHandler() = default;
+	virtual ~ConsoleLogHandler() override = default;
 
 	/**
 	 * Print the message in the standard output.

@@ -30,7 +30,7 @@ class SULIB_SHARED_EXPORT FileLogHandler : public ILogHandler
 public:
 	/** @param file the path to the log file where to write the logs */
 	FileLogHandler(const std::string& file = "") : _filePath(file) {}
-	virtual ~FileLogHandler() = default;
+	virtual ~FileLogHandler() override = default;
 
 	/** Write the message to the file. */
 	virtual void log(const LogMessage& message) override;
