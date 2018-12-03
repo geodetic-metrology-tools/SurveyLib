@@ -1,8 +1,15 @@
 #include "IShareablePointsListIO.hpp"
 
+#include <algorithm>
+#include <cctype>
 #include <fstream>
 #include <memory>
 #include <sstream>
+
+bool IShareablePointsListIO::isEmpty(const std::string& contents)const
+{
+	return std::all_of(std::cbegin(contents), std::cend(contents), std::isspace);
+}
 
  std::ifstream IShareablePointsListIO::openRead(const std::string& filename, bool binary)
  {

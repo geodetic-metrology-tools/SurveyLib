@@ -87,6 +87,14 @@ public:
 
 	/** @return the MIME type asociated with the managed format. */
 	virtual const std::string& getMIMEType() const = 0;
+	/**
+	 * Tell if the given content is treated as empty.
+	 * The default only tests if the contents is only composed of whitespaces.
+	 *
+	 * @return true if the content should be treated as empty (only meaningless characters like whitespaces and comments)
+	 */
+	virtual bool isEmpty(const std::string& contents) const;
+
 
 	/**
 	 * @return a ShareablePointsList read from the given JSON file.

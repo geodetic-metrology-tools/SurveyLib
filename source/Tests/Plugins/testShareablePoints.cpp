@@ -815,6 +815,9 @@ namespace tut
 		};
 
 		fake f;
+		ensure(f.isEmpty(" \t\n\r "));
+		ensure_not(f.isEmpty(" \t\n\r lol "));
+
 		ensure_THROW(f.openRead("T:/his/is/not/a/path"), SPIOException);
 		ensure_THROW(f.openWrite("T:/his/is/not/a/path"), SPIOException);
 
