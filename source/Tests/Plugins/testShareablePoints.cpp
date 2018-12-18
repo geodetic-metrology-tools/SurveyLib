@@ -830,7 +830,7 @@ namespace tut
 		std::remove("test.txt");
 
 		// test of Fields
-		ensure(f.exportFieldsPointsList.allFields == std::unordered_set<std::string>{ "title", "params", "rootFrame" });
+		ensure(f.exportFieldsPointsList.getAllFields() == std::unordered_set<std::string>{ "title", "params", "rootFrame" });
 		ensure(f.exportFieldsPointsList.getFields() == std::unordered_set<std::string>{ "title", "params", "rootFrame" });
 		ensure_not(f.exportFieldsPointsList.removeField("lol"));
 		ensure_not(f.exportFieldsPointsList.hasField("lol"));
