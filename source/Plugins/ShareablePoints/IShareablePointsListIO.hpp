@@ -44,9 +44,9 @@ public:
 		 * Constructor
 		 * @param the list of possible fields for the class.
 		 */
-		Fields(std::initializer_list<std::string> allfields) : allFields(allfields), _selectedFields(allfields) {}
+		Fields(std::unordered_set<std::string> allfields) : _allFields(std::move(allfields)), _selectedFields(_allFields) {}
 		/** Add a field to be written. The field has to be in the allFields list. */
-		bool addField(const std::string& field) { if (allFields.find(field) == std::cend(allFields)) return false; return _selectedFields.insert(field).second; }
+		bool addField(const std::string& field) { if (_allFields.find(field) == std::cend(_allFields)) return false; return _selectedFields.insert(field).second; }
 		/** Add multiple fields. */
 		template<class... Ts>
 		void addField(const std::string& field, Ts... rest) { addField(field); addField(rest...); }
@@ -55,16 +55,18 @@ public:
 		/** Remove multiple fields. */
 		template<class... Ts>
 		void removeField(const std::string& field, Ts... rest) { removeField(field); removeField(rest...); }
+		/** Remove all fields to be written */
+		void clear() noexcept { _selectedFields.clear(); }
 		/** Tells if the given field will be written or not. */
 		bool hasField(const std::string& field) const { return _selectedFields.find(field) != std::cend(_selectedFields); }
 		/** Return all the fields that are marked to be written. */
 		const std::unordered_set<std::string>& getFields() const noexcept { return _selectedFields; }
-
-	public:
-		/** The list of all possible fields. */
-		const std::unordered_set<std::string> allFields;
+		/** Return all the possible fields */
+		const std::unordered_set<std::string>& getAllFields() const noexcept { return _allFields; }
 
 	protected:
+		/** The list of all possible fields. */
+		std::unordered_set<std::string> _allFields;
 		/** The list of fields that are marked to be written. */
 		std::unordered_set<std::string> _selectedFields;
 	};
@@ -202,17 +204,17 @@ protected:
 
 public:
 	/** List of fields that will be written when we serialize a ShareablePosition. */
-	Fields exportFieldsPosition{ "x", "y", "z", "sigmax", "sigmay", "sigmaz", "isfreex", "isfreey", "isfreez" };
+	Fields exportFieldsPosition{ { "x", "y", "z", "sigmax", "sigmay", "sigmaz", "isfreex", "isfreey", "isfreez" } };
 	/** List of fields that will be written when we serialize a ShareablePoint. */
-	Fields exportFieldsPoint{ "name", "position", "inlineComment", "headerComment", "active", "extraInfos" };
+	Fields exportFieldsPoint{ { "name", "position", "inlineComment", "headerComment", "active", "extraInfos" } };
 	/** List of fields that will be written when we serialize a ShareableParams. */
-	Fields exportFieldsParams{ "precision", "coordsys", "extraInfos" };
+	Fields exportFieldsParams{ { "precision", "coordsys", "extraInfos" } };
 	/** List of fields that will be written when we serialize a ShareableExtraInfos. */
-	Fields exportFieldsInfos{};
+	Fields exportFieldsInfos{ {} };
 	/** List of fields that will be written when we serialize a ShareableFrame. */
-	Fields exportFieldsFrame{ "name", "translation", "rotation", "scale", "isfreescale", "innerFrames", "points" };
+	Fields exportFieldsFrame{ { "name", "translation", "rotation", "scale", "isfreescale", "innerFrames", "points" } };
 	/** List of fields that will be written when we serialize a ShareablePointsList. */
-	Fields exportFieldsPointsList{ "title", "params", "rootFrame" };
+	Fields exportFieldsPointsList{ { "title", "params", "rootFrame" } };
 };
 
 /**
