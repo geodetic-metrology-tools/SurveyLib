@@ -14,10 +14,17 @@ typedef Eigen::MatrixXd TDenseMatrix;
 typedef Eigen::VectorXd TVector;
 typedef Eigen::Triplet<double> TTriplet;
 
+typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMatrixDouble;
+
 namespace TSparseUtils {
-TSparseMatrix inverse(const TSparseMatrix & matrix, std::string & error);
-// optimized multiplication routine that returns the main diagonal of A*B*A'
-TVector& multABATasDiag(TVector& res, const TSparseMatrix& A, const TSparseMatrix& B);
+
+	bool inverse(const TSparseMatrix& sparseMat, TSparseMatrix& invMat, bool bTryCholeskyFirst = false);
+	
+	bool solveUnique(const TSparseMatrix& matA, const TVector& vectB, TVector& vectX, bool bTryCholeskyFirst = true);
+	
+	// optimized multiplication routine that returns the main diagonal of A*B*A'
+	TVector& multABATasDiag(TVector& res, const TSparseMatrix& A, const TSparseMatrix& B);
+
 }
 
 #endif

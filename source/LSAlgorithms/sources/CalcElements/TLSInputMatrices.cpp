@@ -46,44 +46,30 @@ TLSInputMatrices::~TLSInputMatrices()
 /////////////////////////////////////////////////////////////////////////////////
 //SET FUNCTIONS
 /////////////////////////////////////////////////////////////////////////////////
-void TLSInputMatrices::setDimensions(int unknowns, int equations, int observations,  int cnstrObs)
+
+void TLSInputMatrices::initMatrices(int unknowns, int equations, int observations, int nbCnstrObs, int nbCnstrUnk)
 {//sets the dimensions of the matrices
 
 	fNbUnk = unknowns;
 	fNbObs = observations; // number of observations + constraint observations
 	fNbEqn = equations;
-	fNbCnstrObs = cnstrObs;
-
-	clearMatrices();
-	fMisclosureVector = new TVector(fNbEqn);
-
-	firstDesignMatrix = new TSparseMatrix(equations, unknowns);
-	secondDesignMatrix = new TSparseMatrix(equations, observations /*+ cnstrObs*/);
-	weightMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
-	weightInvMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
-	weightUnkMatrix = new TSparseMatrix(unknowns, unknowns);
-}
-
-
-void TLSInputMatrices::setDimensions(int unknowns, int equations, int observations, int nbCnstrObs, int constraints)
-{//sets the dimensions of the matrices
-
-	fNbUnk = unknowns;
-	fNbObs = observations; // number of observations + constraint observations
-	fNbEqn = equations;
-	fNbCnstr = constraints;
 	fNbCnstrObs = nbCnstrObs;
 
 	clearMatrices();
 	fMisclosureVector = new TVector(fNbEqn);
-	fCnstrMisclosureVector = new TVector(constraints);
 
 	firstDesignMatrix = new TSparseMatrix(equations, unknowns);
 	secondDesignMatrix = new TSparseMatrix(equations, observations /*+ cnstrObs*/);
 	weightMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
 	weightInvMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
 	weightUnkMatrix = new TSparseMatrix(unknowns, unknowns);
-	fCnstrFirstDesignMtrx = new	TSparseMatrix(constraints, unknowns);
+
+	if (nbCnstrUnk != 0)
+	{
+		fNbCnstr = nbCnstrUnk;
+		fCnstrMisclosureVector = new TVector(nbCnstrUnk);
+		fCnstrFirstDesignMtrx = new	TSparseMatrix(nbCnstrUnk, unknowns);
+	}
 }
 
 void TLSInputMatrices::clearMatrices()
@@ -222,44 +208,44 @@ bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, TReal co
 ////////////////////////////////////////////////////////////////////////////////
 //ACCESS METHOD FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
-const TSparseMatrix* TLSInputMatrices::getFirstDgnMtrx() const
+const TSparseMatrix* TLSInputMatrices::getFirstDgnMtrx() const noexcept
 {//returns a reference to the first dgn matrix
 	return firstDesignMatrix;
 }
 
-const TSparseMatrix* TLSInputMatrices::getSecondDgnMtrx() const
+const TSparseMatrix* TLSInputMatrices::getSecondDgnMtrx() const noexcept
 {//returns a reference to the first dgn matrix
 	return secondDesignMatrix;
 }
 
-const TSparseMatrix* TLSInputMatrices::getWeightMtrx() const
+const TSparseMatrix* TLSInputMatrices::getWeightMtrx() const noexcept
 {
 	return weightMatrix;
 }
 
-const TSparseMatrix* TLSInputMatrices::getWeightInvMtrx() const
+const TSparseMatrix* TLSInputMatrices::getWeightInvMtrx() const noexcept
 {
 	return weightInvMatrix;
 }
 
-const TSparseMatrix* TLSInputMatrices::getWeightUnkMtrx() const
+const TSparseMatrix* TLSInputMatrices::getWeightUnkMtrx() const noexcept
 {
 	return weightUnkMatrix;
 }
 
-const TVector& TLSInputMatrices::getMisclosureVctr() const
+const TVector& TLSInputMatrices::getMisclosureVctr() const noexcept
 {// returns a reference to the misclosure vector
 	return *fMisclosureVector;
 }
 
 
-const TSparseMatrix* TLSInputMatrices::getCnstrFirstDgnMtrx() const
+const TSparseMatrix* TLSInputMatrices::getCnstrFirstDgnMtrx() const noexcept
 {//returns a reference to the constraint first dgn matrix
 	return fCnstrFirstDesignMtrx;
 }
 
 
-const TVector& TLSInputMatrices::getCnstrMisclosureVctr() const
+const TVector& TLSInputMatrices::getCnstrMisclosureVctr() const noexcept
 {// returns a reference to the constraint misclosure vector
 	return *fCnstrMisclosureVector;
 }

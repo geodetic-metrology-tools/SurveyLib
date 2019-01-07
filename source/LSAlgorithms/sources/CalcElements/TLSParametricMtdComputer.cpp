@@ -34,11 +34,11 @@ bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsM
 {
 	bool result = false;
 	int nbCnstr = im->getNbrConstraints();
-	if(rm->getSolutionVctr()->size() != 0)
+	if(rm->getSolutionVectByConst()->size() != 0)
 	{
 		if(nbCnstr == 0)
 		{
-			result = computeResultsMtrs(im, rm);
+			result = computeResultsMatrices(im, rm);
 		}
 		else
 		{
@@ -58,123 +58,83 @@ bool TLSParametricMtdComputer::computeResults(TLSInputMatrices* im , TLSResultsM
 ////////////////////////////////////////////////////////////////
 //COMPUTES THE RESULTS MATRICES
 ////////////////////////////////////////////////////////////////
-bool TLSParametricMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm)
+bool TLSParametricMtdComputer::computeResultsMatrices(TLSInputMatrices* im, TLSResultsMatrices* rm)
 {
 	//test if we do not have a 'nullpointer' in a case that the matrices are not initialize
 	if (im->getFirstDgnMtrx() == nullptr || im->getSecondDgnMtrx() == nullptr || im->getWeightInvMtrx() == nullptr)
 		throw std::runtime_error("Any of the design matrices is not initialized!");
 
+	int nbUnk = im->getNbrUnknowns();
+
 	const TSparseMatrix & A = *im->getFirstDgnMtrx();
-	const TSparseMatrix & W = *im->getWeightMtrx();
-	const TVector & misclV = im->getMisclosureVctr();
-	TSparseMatrix N = A.transpose() * W * A;
-	rm->setIntermediateMatrix(N);
+	const TSparseMatrix & Pv = *im->getWeightMtrx();
+	const TVector & W = im->getMisclosureVctr(); // "Fermetures"
+	
+	// Calculates the normal matrix and re-sets it to the main TLSResultsMatrices object
+	TSparseMatrix N(nbUnk, nbUnk);
+	N = A.transpose() * Pv * A;
 
-	Eigen::SimplicialLDLT<TSparseMatrix> chol( N );
-if(chol.info() != Eigen::Success)
-	{
-		// cholesky did not work, try fullPiv
-		typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-		Eigen::FullPivLU<TMat> lu(N);
-
-		if (! lu.isInvertible()) {
-			std::ostringstream foo;
-			foo << "Matrix not inverted.";
-			fError += foo.str();
-			return false;
-		}
-		*(rm->getSolutionVctr()) = lu.solve( -A.transpose() * W * misclV );
-		return true;
-
-	} 
-	else {
-		*(rm->getSolutionVctr()) = chol.solve( -A.transpose() * W * misclV );
-		return true;
-	}
+	TVector solution(nbUnk);
+	if (!TSparseUtils::solveUnique(N, -A.transpose() * Pv * W, solution))  // solution: X = - (At*P*A)-1 * (At*P*F) where P = weights, F = misclosures ("fermetures")
+		return false;
+	
+	// Copies the matrices into the members of the TResultsMatrices object
+	rm->setNormalMatrix(N);
+	rm->setSolutionVect(solution);
+	
+	return true;
 }
 
 
 
-void	TLSParametricMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm)
+bool TLSParametricMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm)
 {
-	if (fError == "")
-	{
-		int nbUnk = inputMtr->getNbrUnknowns();
-		int nbObs = inputMtr->getNbrObservations();
-		TReal sigmaZero2Aposteriori = LITERAL(0.0);
+	if (!fError.empty())
+		return false;
 
-		const TSparseMatrix & A1 = *inputMtr->getFirstDgnMtrx();
-		const TSparseMatrix A1T = A1.transpose();
-		const TSparseMatrix & Pv = *inputMtr->getWeightMtrx();
-		const TSparseMatrix & InvPv = *inputMtr->getWeightInvMtrx();
-		const TVector & misclV = inputMtr->getMisclosureVctr();
-		TVector & solution = *rm->getSolutionVctr();
-		TVector & residuals = *rm->getResidualsVctr();
-		TSparseMatrix & ResCovarMtrx = *rm ->getResCovarMtrx(); 
-		TSparseMatrix & Qxx = *rm->getUnkCovarMtrx();
-		TSparseMatrix N = rm->getIntermediateMatrix();
-		TSparseMatrix MP(nbObs, nbObs);
+	int nbUnk = inputMtr->getNbrUnknowns();
+	int nbObs = inputMtr->getNbrObservations();
+	TReal sigmaZero2Aposteriori = LITERAL(0.0);
 
-		//--------------- Residuals ---------------//
-		residuals = (A1 * solution + misclV);
+	const TSparseMatrix& A = *inputMtr->getFirstDgnMtrx();
+	const TSparseMatrix& Pv = *inputMtr->getWeightMtrx();
+	const TSparseMatrix& InvPv = *inputMtr->getWeightInvMtrx();
+	const TVector&       W = inputMtr->getMisclosureVctr();  // "Fermetures"
 
-		//--------------- Sigma 0 a posteriri ---------------//
-		sigmaZero2Aposteriori = residuals.transpose() * Pv * residuals;
-		if(nbObs != nbUnk)
-			sigmaZero2Aposteriori /= (nbObs - nbUnk);  
-		else
-			fError += "Number of equations equals number of unknowns, causes zero division!";
-		rm->setSigmaZero2(sigmaZero2Aposteriori);
-		struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk);
-		rm->setSigmaZero2Limits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
+	const TVector& solution = *rm->getSolutionVectByConst(); // NB: Solution vector will NOT be recalculated here (just taken from previous results!)
+	const TSparseMatrix& N = *rm->getNormalMatrixByConst();  // NB: Normal matrix will NOT be recalculated here (just taken from previous results!)
 
+	//--------------- Residuals ---------------//
+	// V = A * X + W, where W = misclosures ("fermetures")
+	TVector V(nbObs);
+	V = (A * solution + W);
 
-		//--------------- Unknowns covariance matrix ---------------//
-		typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-		Eigen::FullPivLU<TMat> lu2(N);
-		
-		if (! lu2.isInvertible()) {
-			std::ostringstream foo;
-			foo << "Matrix not inverted.";
-			fError += foo.str();
-			return;
-		}
-		TSparseMatrix Id(nbUnk,nbUnk);
-		for (int i = 0; i<nbUnk; i++)
-			Id.insert(i,i) = 1;
-		
-		Qxx = Id*lu2.inverse();
-		rm->setUnkCovarMtrx(&Qxx);
+	//--------------- Sigma 0 a posteriri ---------------//
+	// s0 = (Vt*P*V)/r   where r = redundancy = n - u 
+	sigmaZero2Aposteriori = V.transpose() * Pv * V;
+	if (nbObs != nbUnk)
+		sigmaZero2Aposteriori /= (nbObs - nbUnk);
+	else
+		fError += "Number of equations equals number of unknowns, causes zero division!";
+	rm->setSigmaZero2(sigmaZero2Aposteriori);
+	struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk);
+	rm->setSigmaZero2Limits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
 
+	//--------------- Unknowns covariance matrix : Qxx = inv(N) ---------------//
+	TSparseMatrix Qxx(nbUnk, nbUnk);
+	if (!TSparseUtils::inverse(N, Qxx, true))
+		return false;
 
-		//--------------- Residual covariance matrix ---------------//
-		Eigen::SimplicialLDLT<TSparseMatrix> chol( N ); 
-		if(chol.info() != Eigen::Success)
-		{
-			// cholesky did not work, try fullPiv
-			typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-			Eigen::FullPivLU<TMat> lu(N);
+	//--------------- Residual covariance matrix: Qvv = inv(P) - A*Qxx*At ---------------//
+	TSparseMatrix Qvv(nbObs, nbObs);
+	Qvv = InvPv - A * Qxx * A.transpose();
 
-			if (! lu.isInvertible()) {
-				std::ostringstream foo;
-				foo << "Matrix not inverted.";
-				fError += foo.str();
-				return;
-			}
-			TSparseMatrix MP1(nbObs,nbUnk);
-			MP1 = A1 * (lu.inverse()) ;
-			MP = MP1 * A1.transpose();
-		} 
-		else
-		{
-			//rm->setIntermediateMatrix(N);
-			TSparseMatrix MP1(nbUnk,nbObs);
-			MP1 = chol.solve(A1T);
-			MP = A1 * MP1 ;
-		} 
-		ResCovarMtrx = InvPv - MP;
-		rm->setResCovarMtrx(&ResCovarMtrx);
-	}
+	// Copies the matrices into the members of the TResultsMatrices object
+	rm->setUnkCovarMtrx(Qxx);
+	rm->setResCovarMtrx(Qvv);
+	rm->setResidualsVect(V);
+
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////

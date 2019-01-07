@@ -26,3 +26,6 @@ target_link_libraries(Tools Logs)
 
 # needed for linux compilation
 set_target_properties(Tools PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# Define IDE folders:
+set_target_properties(Tools PROPERTIES FOLDER "SurveyLib")

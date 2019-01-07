@@ -99,3 +99,7 @@ source_group("StreamFormatters\\Sources"   		FILES ${STREAMFORMATTERS_CPP})
 
 # Create a static library from sources:
 add_library(ProjectFramework STATIC ${ProjectFramework_SOURCES} ${ProjectFramework_HEADERS})
+
+# Define IDE folders:
+set_target_properties(ProjectFramework PROPERTIES FOLDER "SurveyLib")
+

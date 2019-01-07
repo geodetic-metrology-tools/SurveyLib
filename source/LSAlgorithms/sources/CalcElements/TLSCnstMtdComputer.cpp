@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <Eigen/LU>
+#include <Logger.hpp>
 
 
 TLSCnstMtdComputer::TLSCnstMtdComputer()
@@ -22,16 +23,16 @@ bool TLSCnstMtdComputer::computeResults(TLSInputMatrices* im, TLSResultsMatrices
 {
 	bool result = false;
 	int nbCnstr = im->getNbrConstraints();
-	if (rm->getSolutionVctr()->size() != 0)
+	if (rm->getSolutionVectByConst()->size() != 0)
 	{
 		if (nbCnstr != 0)
 		{
-			//result = computeResultsMtrs(im, rm);
+			//result = computeResultsMatrices(im, rm);
 			result = computeFreeResultsMtrs(im, rm);
 		}
 		else
 		{
-			result = computeResultsMtrs(im, rm);
+			result = computeResultsMatrices(im, rm);
 			fError = "We have not necessary constraints!";
 			result = false;
 		}
@@ -40,587 +41,239 @@ bool TLSCnstMtdComputer::computeResults(TLSInputMatrices* im, TLSResultsMatrices
 	return result;
 }
 
+
+
 //!Computes the results matrices
-bool TLSCnstMtdComputer::computeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm)
-{
-	//test if we do not have a 'nullpointer' in a case that the matrices are not initialize
+bool TLSCnstMtdComputer::computeResultsMatrices(TLSInputMatrices* im, TLSResultsMatrices* rm)
+{ 
+	// Test if we do not have a 'nullpointer' in a case that the matrices are not initialize
 	if (im->getFirstDgnMtrx() == nullptr || im->getSecondDgnMtrx() == nullptr || im->getWeightInvMtrx() == nullptr)
 		throw std::runtime_error("Any of the design matrices is not initialized!");
 
 	const TSparseMatrix& A = *im->getFirstDgnMtrx();
 	const TSparseMatrix& B = *im->getSecondDgnMtrx();
 	const TSparseMatrix& InvPv = *im->getWeightInvMtrx();
-	const TVector & misclV = im->getMisclosureVctr(); //W
-	const TSparseMatrix& A2 = *im->getCnstrFirstDgnMtrx();//A2
-	const TSparseMatrix A2Transpose = A2.transpose();//A2
-	const TVector & W2 = im->getCnstrMisclosureVctr(); //W2
+	const TVector & W = im->getMisclosureVctr();          // W : Misclosure vector ("fermetures")
+	const TSparseMatrix& A2 = *im->getCnstrFirstDgnMtrx();     // A2 : First design matrix related to constraints 
+	const TVector & W2 = im->getCnstrMisclosureVctr();         // W2 : Misclosures vector related to constraints 
 
 	int nbUnk = im->getNbrUnknowns();
 	int nbEq = im->getNbrEquations();
 	int nbCnstr = im->getNbrConstraints();
 
-	//Intermediate matrces and vector
-	TSparseMatrix N3(nbCnstr, nbCnstr); //N3 = A2*inv(N2)*transpose(A2)
-	TSparseMatrix N2(nbUnk, nbUnk); //N2 = transpose(A1)*inv(N1)*A1
-	TVector VP(nbUnk); //VP = transpose(A1)*inv(N1)*W
-	TVector VP2(nbUnk); //VP2 = W2 - transpose(A2)*inv(N2)*VP      
+	// Calculate invN1 = inv( B*inv(Pv)*transpose(B) ),  matrix dimensions (nbEq,nbEq)
+	TSparseMatrix invN1(nbEq, nbEq);
+	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1))
+		return false;
 
-	//calculate N1 = B1*inv(Pv1)*transpose(B1)
-	const TSparseMatrix Btransposed = B.transpose();
-	TSparseMatrix N1 = B * InvPv * Btransposed;
+	// Calculate Normal matrix N2 = At * inv( B * inv(P) * Bt ) * A
+	TSparseMatrix N2(nbUnk, nbUnk);
+	N2 = A.transpose() * invN1 * A;
 
-	//Inverse N1
-	Eigen::SimplicialLDLT<TSparseMatrix> chol(N1);
-	if (chol.info() != Eigen::Success)
-	{
-		// cholesky did not work, try fullPiv
-		typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-		Eigen::FullPivLU<TMat> lu(N1);
+	// Corresponding vector VP = At * inv( B * inv(P) * Bt ) * W
+	TVector VP(nbUnk);
+	VP = A.transpose() * invN1  * W;  
 
-		if (!lu.isInvertible()) {
-			std::ostringstream foo;
-			foo << "Matrix not inverted.";
-			fError += foo.str();
-			return false;
-		}
-		// AtInvN1, Intermediate matrix to calcuate N2 and VP
-		TSparseMatrix AtInvN1(nbUnk, nbEq);
-		AtInvN1 = A.transpose() * (lu.inverse());  //AtInvN1 = A1.transpose() * Inv(N1)
-		N2 = AtInvN1 * A;
-		rm->setIntermediateMatrix(N2);
+	// Inverse invN2 = inv( N2 ) = inv( At * inv( B * inv(P) * Bt ) * A )
+	TSparseMatrix invN2(nbUnk, nbUnk);
+	if (!TSparseUtils::inverse(N2, invN2))
+		return false;
 
-		VP = AtInvN1 * misclV;
-	}
-	else
-	{
-		// InvN1A, Intermediate matrix to calcuate N2
-		TSparseMatrix InvN1A(nbEq, nbUnk);
-		InvN1A = chol.solve(A);  // InvN1A = Inv(n1) * A1
-		N2 = A.transpose() * InvN1A;
-		rm->setIntermediateMatrix(N2);
+	//VP2 = W2 - transpose(A2)*inv(N2)*VP  
+	TVector VP2(nbCnstr);
+	VP2 = W2 - A2 * invN2 * VP;
 
-		// InvN1W, Intermediate matrix to calcuate VP
-		TVector InvN1W = chol.solve(misclV);  // InvN1W = inv(N1) * W1
-		VP = A.transpose() * InvN1W;
-	}
+	//Intermediate matrix N3 = A2 * inv(N2) * transpose(A2)
+	TSparseMatrix N3(nbCnstr, nbCnstr); 
+	N3 = A2 * invN2 * A2.transpose();
 
-	//inverse N2
-	Eigen::SimplicialLDLT<TSparseMatrix> chol2(N2);
-	if (chol2.info() != Eigen::Success)
-	{
-		// cholesky did not work, try fullPiv
-		typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-		Eigen::FullPivLU<TMat> lu2(N2);
+	// Intermediate matrix InvN3VP2 = inv(N3)*VP2
+	TVector InvN3VP2(nbCnstr);
+	if (!TSparseUtils::solveUnique(N3, VP2, InvN3VP2))
+		return false;
 
-		if (!lu2.isInvertible()) {
-			std::ostringstream foo;
-			foo << "Matrix not inverted.";
-			fError += foo.str();
-			return false;
-		}
-		// Intermediate matrix to calculate VP2 
-		TVector InvN2VP = lu2.solve(VP);
-		VP2 = W2 - A2*InvN2VP;
+	// rightPart = A2.transpose()*inv(N3)*VP2 + VP
+	TVector rightPart = A2.transpose() * InvN3VP2 + VP;
 
-		// Intermediate matrix to calculate N3
-		TSparseMatrix N3P(nbCnstr, nbUnk);
-		N3P = A2*lu2.inverse();
-		N3 = N3P*A2Transpose;
+	// Solution vector: solution = - inv(N2) * rightPart
+	TVector solution(nbUnk);
+	solution = -invN2 * rightPart;
 
-		//inverse N3
-		Eigen::SimplicialLDLT<TSparseMatrix> chol3(N3);
-		if (chol3.info() != Eigen::Success)
-		{
-			// cholesky did not work, try fullPiv
-			typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-			Eigen::FullPivLU<TMat> lu3(N3);
-
-			if (!lu3.isInvertible()) {
-				std::ostringstream foo;
-				foo << "Matrix not inverted ";
-				fError += foo.str();
-				return false;
-			}
-
-			TVector InvN3VP2 = lu3.solve(VP2);  // InvN3VP2 = inv(n3)*VP2
-			TVector rightPart = A2Transpose * InvN3VP2 + VP;  // rightPart = A2.transpose()*inv(n3)*VP2 + VP
-			*(rm->getSolutionVctr()) = -lu2.solve(rightPart); // solution = - inv(N2) * rightPart
-			return true;
-		}
-		else {
-			TVector InvN3VP2 = chol3.solve(VP2); // InvN3VP2 = inv(n3)*VP2
-			TVector rightPart = A2Transpose * InvN3VP2 + VP; // rightPart = A2.transpose()*inv(n3)*VP2 + VP
-			*(rm->getSolutionVctr()) = -lu2.solve(rightPart); // solution = - inv(N2) * rightPart
-			return true;
-		}
-
-	}
-	else{
-		// Intermediate matrix to calculate VP2
-		TVector InvN2VP = chol2.solve(VP);
-		VP2 = W2 - A2*InvN2VP;
-
-		// Intermediate matrix to calculate N3
-		TSparseMatrix N3P(nbUnk, nbCnstr);
-		N3P = chol2.solve(A2Transpose);
-		N3 = A2*N3P;
-
-		//inverse N3
-		Eigen::SimplicialLDLT<TSparseMatrix> chol3(N3);
-		if (chol3.info() != Eigen::Success)
-		{
-			// cholesky did not work, try fullPiv
-			typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-			Eigen::FullPivLU<TMat> lu3(N3);
-
-			if (!lu3.isInvertible()) {
-				std::ostringstream foo;
-				foo << "Matrix not inverted";
-				fError += foo.str();
-				return false;
-			}
-
-			TVector InvN3VP2 = lu3.solve(VP2); // InvN3VP2 = inv(n3)*VP2
-			TVector rightPart = A2Transpose * InvN3VP2 + VP; // rightPart = A2.transpose()*inv(n3)*VP2 + VP
-			*(rm->getSolutionVctr()) = -chol2.solve(rightPart); // solution = - inv(N2) * rightPart
-			return true;
-		}
-		else {
-			TVector InvN3VP2 = chol3.solve(VP2); // InvN3VP2 = inv(n3)*VP2
-			TVector rightPart = A2Transpose * InvN3VP2 + VP; // rightPart = A2.transpose()*inv(n3)*VP2 + VP
-			*(rm->getSolutionVctr()) = -chol2.solve(rightPart); // solution = - inv(N2) * rightPart
-			return true;
-		}
-	}
+	// Copies the matrices into the members of the TResultsMatrices object
+	rm->setNormalMatrix( N2 );
+	rm->setSolutionVect( solution );
+	return true;
 }
+
+
 
 bool TLSCnstMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResultsMatrices* rm)
 {
-
 	//test if we do not have a 'nullpointer' in a case that the matrices are not initialize
 	if (im->getFirstDgnMtrx() == nullptr || im->getSecondDgnMtrx() == nullptr || im->getWeightInvMtrx() == nullptr)
-		throw std::runtime_error("Any of the design matrices is not initialized!");
+ 		throw std::runtime_error("Any of the design matrices is not initialized!");
 
 	const TSparseMatrix& A = *im->getFirstDgnMtrx();
 	const TSparseMatrix& B = *im->getSecondDgnMtrx();
 	const TSparseMatrix& InvPv = *im->getWeightInvMtrx();
-	const TVector & misclV = im->getMisclosureVctr(); //W
-	const TSparseMatrix& A2 = *im->getCnstrFirstDgnMtrx();//A2
-	const TVector & W2 = im->getCnstrMisclosureVctr(); //W2
+	const TVector&       W = im->getMisclosureVctr();           // W : Misclosures vector ("fermetures")
+	const TSparseMatrix& A2 = *im->getCnstrFirstDgnMtrx(); // A2 : First design matrix part related to constraints only
+	const TVector&       W2 = im->getCnstrMisclosureVctr();     // W2 : Misclosures vector part related to constraints only
 
 	int nbUnk = im->getNbrUnknowns();
 	int nbEq = im->getNbrEquations();
 	int nbCnstr = im->getNbrConstraints();
-
-
-	TSparseMatrix N2(nbUnk, nbUnk); //N2 = transpose(A1)*inv(N1)*A1
-	TVector VP(nbUnk); //VP = transpose(A1)*inv(N1)*W
-
-	//calculate N1 = B1*inv(Pv1)*transpose(B1)
-	const TSparseMatrix Btransposed = B.transpose();
-	TSparseMatrix N1 = B * InvPv * Btransposed;
-	Eigen::SimplicialLDLT<TSparseMatrix> chol(N1);
-
-	if (chol.info() != Eigen::Success)
-	{
-		// cholesky did not work, try fullPiv
-		typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-		Eigen::FullPivLU<TMat> lu(N1);
-
-		if (!lu.isInvertible()) {
-			std::ostringstream foo;
-			foo << "Matrix not inverted.";
-			fError += foo.str();
-			return false;
-		}
-		TSparseMatrix pAtInvN1(nbUnk, nbEq);
-		pAtInvN1 = A.transpose() * (lu.inverse());
-		N2 = pAtInvN1 * A;
-		rm->setIntermediateMatrix(N2);
-		VP = pAtInvN1 * misclV;
-	}
-	else
-	{
-		TSparseMatrix pInvN1A(nbEq, nbUnk);
-		pInvN1A = chol.solve(A);
-		N2 = A.transpose() * pInvN1A;
-		rm->setIntermediateMatrix(N2);
-
-		TVector pInvN1W = chol.solve(misclV);
-		VP = A.transpose() * pInvN1W;
+	
+	// Calculate invN1 = inv( B*inv(Pv)*transpose(B) ),  matrix dimensions (nEq,nEq)
+	TSparseMatrix invN1(nbEq, nbEq);
+	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1))
+	{ 
+		logCritical() << "Matrix B*inv(Pv)*transpose(B) could not be inverted!";
+		return false;
 	}
 
-
+	// Calculate Normal matrix N2 = At * inv( B * inv(P) * Bt ) * A , matrix dimensions (u,u)
+	// and re-sets this new matrix to the main TLSResultsMatrices object.
+	TSparseMatrix N2(nbUnk, nbUnk);
+	N2 = A.transpose() * invN1 * A;
 
 	// construct NBig = (N2, A2t
 	//                   A2, 0  )
 	TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
 	std::vector<TTriplet> coeffs;
 	coeffs.reserve(N2.nonZeros() + 2 * A2.nonZeros());
-	// Fill in the N part
+	
+	// Fill in the N2 part
 	for (int k = 0; k<N2.outerSize(); ++k)
-	{
 		for (TSparseMatrix::InnerIterator it(N2, k); it; ++it)
-		{
 			coeffs.push_back(TTriplet(it.row(), it.col(), it.value()));
-		}
-	}
+
 	// Fill the A2 and A2T
 	for (int k = 0; k<A2.outerSize(); ++k)
-	{
 		for (TSparseMatrix::InnerIterator it(A2, k); it; ++it)
 		{
 			coeffs.push_back(TTriplet(it.row() + N2.rows(), it.col(), it.value())); //A2
 			coeffs.push_back(TTriplet(it.col(), it.row() + N2.cols(), it.value())); // A2T
 		}
+	NBig.setFromTriplets(coeffs.begin(), coeffs.end());
+
+	// Extended vector: appends W2 (constraints misclosures) to the calculated At*inv(N1)*W  vector 
+	TVector VBig(nbUnk + nbCnstr);
+	VBig << A.transpose()*invN1* W, W2;  
+
+	// Calculates solution NBig * X = -VBig and keeps only the part corresponding to adjusted parameters
+	TVector solutionExt(nbUnk + nbCnstr);
+//	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt))
+	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt))
+	{
+		logCritical() << "No solution could be found when solving equation system: Nbig * dX = -VBig (extended matrices with conditions)";
+		return false;
+	}
+
+	TVector solution(nbUnk);
+	solution = solutionExt.head(nbUnk);
+
+	// Copies the matrices into the members of the TResultsMatrices object
+	rm->setNormalMatrix( N2 );
+	rm->setSolutionVect( solution );
+
+	return true;
+}
+
+//
+// for LIBR constraint, same equations as TCombinedMtdComputer
+//
+bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm)
+{
+	if (!fError.empty())
+		return false;
+
+	int nbUnk = inputMtr->getNbrUnknowns();
+	int nbObs = inputMtr->getNbrObservations();
+	int nbEq = inputMtr->getNbrEquations();
+	int nbCnstr = inputMtr->getNbrConstraints();
+	TReal sigmaZero2Aposteriori = LITERAL(0.0);
+
+	if (inputMtr->getFirstDgnMtrx() == nullptr || inputMtr->getSecondDgnMtrx() == nullptr || inputMtr->getWeightMtrx() == nullptr || inputMtr->getWeightInvMtrx() == nullptr ||
+		rm->getSolutionVectByConst() == nullptr || rm->getResidualsVectByConst() == nullptr || rm->getResCovarMtrxByConst() == nullptr)
+		throw std::runtime_error("Any of the design matrices is not initialized!");
+
+	const TSparseMatrix& A = *inputMtr->getFirstDgnMtrx();
+	const TSparseMatrix& B = *inputMtr->getSecondDgnMtrx();
+	const TSparseMatrix& Pv = *inputMtr->getWeightMtrx();
+	const TSparseMatrix& InvPv = *inputMtr->getWeightInvMtrx();
+	const TVector&       W = inputMtr->getMisclosureVctr();
+	const TSparseMatrix& A2 = *inputMtr->getCnstrFirstDgnMtrx();
+
+	const TVector&       solution = *rm->getSolutionVectByConst();  // NB: Solution vector will NOT be recalculated here (just taken from previous results!)
+	const TSparseMatrix& N2 = *rm->getNormalMatrixByConst();        // NB: Normal matrix will NOT be recalculated here (just taken from previous results!)
+
+	//--------------- Residuals ---------------//
+	// Calculate intermediate matrix
+	// S = - inv(P) * Bt *inv( B * inv(P) * Bt )
+
+	TSparseMatrix invN1(nbObs, nbObs);
+	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1))
+		return false;
+	TSparseMatrix S(nbObs, nbEq);
+	S = -InvPv * B.transpose() * invN1;
+
+	// Residuals vector V
+	TVector V(nbObs);
+	V = S * (A * solution + W);
+
+	//--------------- Sigma 0 a posteriri ---------------//
+	sigmaZero2Aposteriori = V.transpose() * Pv * V;
+	if (nbObs + nbCnstr != nbUnk)
+		sigmaZero2Aposteriori /= (nbObs - nbUnk + nbCnstr); // NB Redundancy: Takes into account the number of constraints!
+	else
+		fError += "Number of equations equals number of unknowns, causes zero division!";
+	rm->setSigmaZero2(sigmaZero2Aposteriori);
+	struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk);
+	rm->setSigmaZero2Limits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
+
+	// Intermediate matrix
+	TSparseMatrix invN2(nbUnk, nbUnk);
+	if (!TSparseUtils::inverse(N2, invN2))
+		return false;
+
+	//--------------- Residual covariance matrix ---------------//
+	TSparseMatrix Qvv(nbObs, nbObs);
+	Qvv = S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose();
+
+	//--------------- unknown covariance matrix ---------------//
+
+	// Builds extended matrix NBig = (N2, A2t
+	//                                A2, 0  )
+	TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
+	std::vector<TTriplet> coeffs;
+	coeffs.reserve(N2.nonZeros() + 2 * A2.nonZeros());
+
+	// Fill in the N2 part (normal matrix)
+	for (int k = 0; k < N2.outerSize(); ++k)
+		for (TSparseMatrix::InnerIterator it(N2, k); it; ++it)
+			coeffs.push_back(TTriplet(it.row(), it.col(), it.value()));
+
+	// Fill the A2 and A2T
+	for (int k = 0; k < A2.outerSize(); ++k)
+	{
+		for (TSparseMatrix::InnerIterator it(A2, k); it; ++it)
+		{
+			coeffs.push_back(TTriplet(it.row() + N2.rows(), it.col(), it.value())); // A2
+			coeffs.push_back(TTriplet(it.col(), it.row() + N2.cols(), it.value())); // A2T
+		}
 	}
 	NBig.setFromTriplets(coeffs.begin(), coeffs.end());
 
-	TVector VPBig(VP.rows() + W2.rows());
-	VPBig << VP, W2;
+	// Inverse NBig: Changed the way the extended matrix is inverted (similar method than during the iterative adjustment steps!!!)
+	TSparseMatrix Qxx(nbUnk + nbCnstr, nbUnk + nbCnstr);
+	if (!TSparseUtils::inverse(NBig, Qxx, true))
+		return false;
 
-
-	//inverse N2
-	Eigen::SimplicialLDLT<TSparseMatrix> chol2(NBig);
-	if (chol2.info() != Eigen::Success)
-	{
-		// cholesky did not work, try fullPiv
-		typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-		Eigen::FullPivLU<TMat> lu2(NBig);
-
-		if (!lu2.isInvertible()) {
-			std::ostringstream foo;
-			foo << "Matrix not inverted.";
-			fError += foo.str();
-			return false;
-		}
-
-		TVector sol = -lu2.solve(VPBig);
-		*(rm->getSolutionVctr()) = sol.head(nbUnk);
-		return true;
-	}
-	else {
-		TVector sol = -chol2.solve(VPBig);
-		*(rm->getSolutionVctr()) = sol.head(nbUnk);
-		return true;
-	}
-}
-
-/*
-void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm)
-{
-if (fError == "")
-{
-int nbUnk = inputMtr->getNbrUnknowns();
-int nbObs = inputMtr->getNbrObservations();
-int nbEq = inputMtr->getNbrEquations();
-int nbCnstr = inputMtr->getNbrConstraints();
-TReal sigmaZero2Aposteriori = LITERAL(0.0);
-
-if (inputMtr->getFirstDgnMtrx() == nullptr || inputMtr->getSecondDgnMtrx() == nullptr || inputMtr->getWeightMtrx() == nullptr || inputMtr->getWeightInvMtrx() == nullptr ||
-rm->getSolutionVctr() == nullptr || rm->getResidualsVctr() == nullptr || rm->getResCovarMtrx() == nullptr)
-throw std::runtime_error("Any of the design matrices is not initialized!");
-
-
-const TSparseMatrix &A = *inputMtr->getFirstDgnMtrx();
-const TSparseMatrix AT = A.transpose();
-const TSparseMatrix &B = *inputMtr->getSecondDgnMtrx();
-const TSparseMatrix BT = B.transpose();
-const TSparseMatrix &Pv = *inputMtr->getWeightMtrx();
-const TSparseMatrix &InvPv = *inputMtr->getWeightInvMtrx();
-const TVector & misclV = inputMtr->getMisclosureVctr();
-const TVector & solution = *rm->getSolutionVctr();
-TVector & residuals = *rm->getResidualsVctr();
-TSparseMatrix & ResCovarMtrx = *rm->getResCovarMtrx();
-TSparseMatrix & Qxx = *rm->getUnkCovarMtrx();
-
-const TSparseMatrix & N2 = rm->getIntermediateMatrix();
-const TSparseMatrix N1 = B * InvPv * BT;
-const TSparseMatrix& A2 = *inputMtr->getCnstrFirstDgnMtrx(); //A2
-const TSparseMatrix A2Transpose = A2.transpose(); //A2.transpose()
-//Not used so far, maybe later, commented for now
-//const TVector & W2 = inputMtr->getCnstrMisclosureVctr(); //W2
-
-TSparseMatrix N3(nbCnstr,nbCnstr); //N3 = A2*inv(N2)*transpose(A2)
-TSparseMatrix InvN2(nbUnk, nbUnk);
-TSparseMatrix MPassage(nbUnk, nbUnk); //MPassage = A2.transpose() * InvN3 *A2 * InvN2, use in CX
-TSparseMatrix CX(nbUnk,nbEq); // Matrix defining Qxx : Qxx = CX*N1*CX.transpose()
-TSparseMatrix CV(nbObs, nbEq); //Matrix defining ResCovarMtrx : ResCovarMtrx = CV*N1*CV.transpose()
-
-//--------------- Residuals ---------------//
-//Calculate S= Inv(P)*Bt*inv(N1)
-typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-Eigen::FullPivLU<TMat> lu(N1);
-
-if (! lu.isInvertible()) {
-std::ostringstream foo;
-foo << "TLSCombinedMtdComputer::computeResultsMtrs:\n\tsolution failed.";
-fError += foo.str();
-return;
-}
-TSparseMatrix pS(nbObs, nbEq);
-pS = InvPv * BT * (lu.inverse());
-residuals = - pS * (A * solution + misclV);
-
-// Intermediate matrix,  A1TInvN1 = A1.transpose()*Inv(n1)
-TSparseMatrix A1TInvN1(nbUnk,nbEq);
-A1TInvN1 = AT*lu.inverse();
-
-//--------------- Sigma 0 a posteriri ---------------//
-sigmaZero2Aposteriori = residuals.transpose() * Pv * residuals;
-if(nbObs != nbUnk)
-sigmaZero2Aposteriori /= (nbObs+nbCnstr - nbUnk);
-else
-fError += "Number of equations equals number of unknowns, causes zero division!";
-rm->setSigmaZero2(sigmaZero2Aposteriori);
-struct limits fisherLim = calcSigmaZeroLimits(nbObs+nbCnstr, nbUnk);
-rm->setSigmaZero2Limits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
-
-
-//--------------- Unknowns covariance matrix ---------------//
-//Calculate inverse of N2 (InvN2) using LU decomposition
-typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-Eigen::FullPivLU<TMat> lu2(N2);
-
-if (! lu2.isInvertible()) {
-std::ostringstream foo;
-foo << "TLSCombinedCalculation::computeResultsMtrs:\n\tsolution failed.";
-fError += foo.str();
-return;
-}
-
-//Intermediate matrix A2*invN2
-TSparseMatrix A2InvN2(nbCnstr,nbUnk);
-A2InvN2 = A2*lu2.inverse();
-
-TSparseMatrix Id(nbUnk,nbUnk); // need identity matrix to use .inverse()
-for (int i = 0; i<nbUnk; i++)
-Id.insert(i,i) = 1;
-InvN2 = Id*lu2.inverse();
-
-
-N3 = A2*InvN2*A2Transpose;
-
-//inverse N3
-Eigen::SimplicialLDLT<TSparseMatrix> chol3( N3 );
-
-#ifdef _DEBUG
-std::cout << "TLSCombinedCalculation::computeResultsMtrs, det(N3)=\n " << chol3.determinant() << std::endl;
-#endif
-
-if(chol3.info() != Eigen::Success)
-{
-// cholesky did not work, try fullPiv
-typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-Eigen::FullPivLU<TMat> lu3(N3);
-
-if (! lu3.isInvertible()) {
-std::ostringstream foo;
-foo << "TLSCombinedCalculation::computeResultsMtrs:\n\tsolution failed.";
-fError += foo.str();
-return;
-}
-//Intermediate matrix  A2.transpose() * inv(N3)
-TSparseMatrix A2TInvN3(nbCnstr,nbUnk);
-A2TInvN3 = A2Transpose*lu3.inverse();
-MPassage = A2TInvN3*A2InvN2;
-
-}
-else {
-TSparseMatrix N3A2InvN2(nbCnstr, nbUnk);
-N3A2InvN2 = chol3.solve(A2InvN2);
-MPassage = A2Transpose*N3A2InvN2;
-
-}
-
-CX = InvN2*(MPassage-Id)*A1TInvN1;
-Qxx = CX*N1*CX.transpose();
-rm->setUnkCovarMtrx(&Qxx);
-
-
-//--------------- Residual covariance matrix ---------------//
-TSparseMatrix I(nbEq,nbEq);
-for (int i = 0; i<nbEq; i++)
-I.insert(i,i) = 1;
-
-//inverse N1
-Eigen::SimplicialLDLT<TSparseMatrix> chol4( N1 );
-
-#ifdef _DEBUG
-std::cout << "TLSCombinedCalculation::computeResultsMtrs, det(N1)=\n " << chol4.determinant() << std::endl;
-#endif
-
-if(chol4.info() != Eigen::Success)
-{
-// cholesky did not work, try fullPiv
-typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-Eigen::FullPivLU<TMat> lu4(N1);
-
-if (! lu4.isInvertible()) {
-std::ostringstream foo;
-foo << "TLSCombinedCalculation::computeResultsMtrs:\n\tsolution failed.";
-fError += foo.str();
-return;
-}
-//Calculate CV = - invP* BT * InvN1*(A*CX+I)
-TSparseMatrix BTInvN1(nbObs,nbEq); //intermediate matrix BT * invN1
-BTInvN1 = BT*lu4.inverse();
-CV = -InvPv*BTInvN1*(A*CX+I);
-
-}
-else {
-//Calculate CV = - invP* BT * InvN1*(A*CX+I)
-TSparseMatrix MPass(nbEq,nbEq); // intermediate matrix MPass = InvN1*(A*CX+I)
-TSparseMatrix rightMatrix = A*CX+I;
-MPass = chol4.solve(rightMatrix);
-CV = -InvPv *B.transpose() *MPass;
-
-}
-
-ResCovarMtrx = CV*N1*CV.transpose();
-rm->setResCovarMtrx(&ResCovarMtrx);
-
-}
-}
-
-*/
-
-
-//for LIBR constraint, same equation as TCombinedMtdComputer
-void	TLSCnstMtdComputer::calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm)
-{
-	if (fError == "")
-	{
-		int nbUnk = inputMtr->getNbrUnknowns();
-		int nbObs = inputMtr->getNbrObservations();
-		int nbEq = inputMtr->getNbrEquations();
-		int nbCnstr = inputMtr->getNbrConstraints();
-		TReal sigmaZero2Aposteriori = LITERAL(0.0);
-
-		if (inputMtr->getFirstDgnMtrx() == nullptr || inputMtr->getSecondDgnMtrx() == nullptr || inputMtr->getWeightMtrx() == nullptr || inputMtr->getWeightInvMtrx() == nullptr ||
-			rm->getSolutionVctr() == nullptr || rm->getResidualsVctr() == nullptr || rm->getResCovarMtrx() == nullptr)
-			throw std::runtime_error("Any of the design matrices is not initialized!");
-
-
-		const TSparseMatrix &A = *inputMtr->getFirstDgnMtrx();
-		const TSparseMatrix AT = A.transpose();
-		const TSparseMatrix &B = *inputMtr->getSecondDgnMtrx();
-		const TSparseMatrix BT = B.transpose();
-		const TSparseMatrix &Pv = *inputMtr->getWeightMtrx();
-		const TSparseMatrix &InvPv = *inputMtr->getWeightInvMtrx();
-		const TVector & misclV = inputMtr->getMisclosureVctr();
-		const TVector & solution = *rm->getSolutionVctr();
-		TVector & residuals = *rm->getResidualsVctr();
-		TSparseMatrix & ResCovarMtrx = *rm->getResCovarMtrx();
-		TSparseMatrix & Qxx = *rm->getUnkCovarMtrx();
-		const TSparseMatrix & N2 = rm->getIntermediateMatrix();
-		TSparseMatrix N1 = B * InvPv * BT;
-		const TSparseMatrix& A2 = *inputMtr->getCnstrFirstDgnMtrx();//A2
-
-
-
-		//--------------- Residuals ---------------//
-		//Calculate S= Inv(P)*Bt*inv(N1)
-		typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-		Eigen::FullPivLU<TMat> lu(N1);
-
-		if (!lu.isInvertible()) {
-			std::ostringstream foo;
-			foo << "Matrix not inverted.";
-			fError += foo.str();
-			return;
-		}
-		TSparseMatrix pS(nbObs, nbEq);
-		pS = -InvPv * BT * (lu.inverse());
-
-		residuals = pS * (A * solution + misclV);
-
-		//--------------- Sigma 0 a posteriri ---------------//
-		sigmaZero2Aposteriori = residuals.transpose() * Pv * residuals;
-		if (nbObs != nbUnk)
-			sigmaZero2Aposteriori /= (nbObs - nbUnk);
-		else
-			fError += "Number of equations equals number of unknowns, causes zero division!";
-		rm->setSigmaZero2(sigmaZero2Aposteriori);
-		struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk);
-		rm->setSigmaZero2Limits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
-
-
-		//--------------- Residual and unknown covariance matrix ---------------//
-		//inverse N2
-		Eigen::SimplicialLDLT<TSparseMatrix> chol2(N2);
-		if (chol2.info() != Eigen::Success)
-		{
-			// cholesky did not work, try fullPiv
-			typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-			Eigen::FullPivLU<TMat> lu2(N2);
-
-			if (!lu2.isInvertible()) {
-				std::ostringstream foo;
-				foo << "Matrix not inverted.";
-				fError += foo.str();
-				return;
-			}
-
-			TSparseMatrix SAQ(nbObs, nbUnk);
-			SAQ = pS * A * (lu2.inverse());
-			ResCovarMtrx = pS * B * InvPv - SAQ * AT * pS.transpose();
-		}
-		else {
-			TSparseMatrix QAT(nbUnk, nbEq);
-			QAT = chol2.solve(AT);
-			ResCovarMtrx = pS * B * InvPv - pS * A * QAT * pS.transpose();
-
-		}
-		rm->setResCovarMtrx(&ResCovarMtrx);
-
-		//--------------- unknown covariance matrix ---------------//
-		TSparseMatrix Id(nbUnk + nbCnstr, nbUnk + nbCnstr);
-		for (int i = 0; i<(nbUnk + nbCnstr); i++)
-			Id.insert(i, i) = 1;
-
-		// construct NBig = (N2, A2t
-		//                   A2, 0  )
-		TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
-		std::vector<TTriplet> coeffs;
-		coeffs.reserve(N2.nonZeros() + 2 * A2.nonZeros());
-		// Fill in the N part
-		for (int k = 0; k<N2.outerSize(); ++k)
-		{
-			for (TSparseMatrix::InnerIterator it(N2, k); it; ++it)
-			{
-				coeffs.push_back(TTriplet(it.row(), it.col(), it.value()));
-			}
-		}
-		// Fill the A2 and A2T
-		for (int k = 0; k<A2.outerSize(); ++k)
-		{
-			for (TSparseMatrix::InnerIterator it(A2, k); it; ++it)
-			{
-				coeffs.push_back(TTriplet(it.row() + N2.rows(), it.col(), it.value())); //A2
-				coeffs.push_back(TTriplet(it.col(), it.row() + N2.cols(), it.value())); // A2T
-			}
-		}
-		NBig.setFromTriplets(coeffs.begin(), coeffs.end());
-
-
-		// Inverse NBig: Changed the way the extended matrix is inverted (similar method than during the iterative adjustment steps!!!)
-		Eigen::SimplicialLDLT<TSparseMatrix> cholBig(NBig);
-		if (chol2.info() != Eigen::Success)
-		{
-			// cholesky did not work, try fullPiv
-			typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> TMat;
-			Eigen::FullPivLU<TMat> luBig(NBig);
-			if (!luBig.isInvertible())
-				return;
-			Qxx = luBig.inverse().sparseView();
-		}
-		else {
-			TSparseMatrix IdMat(NBig.rows(), NBig.cols());
-			IdMat.setIdentity();
-			Qxx = cholBig.solve(Id);
-		}
-		rm->setUnkCovarMtrx(&Qxx);
-		
-	}
+	// Copies the matrices into the members of the TResultsMatrices object
+	rm->setUnkCovarMtrx(Qxx); // IMPORTANT NOTE: this variance-covariance matrix has a dimension of ( u + c, u + c ), where c = number of constraints, u = number of unknowns.
+	rm->setResCovarMtrx(Qvv);
+	rm->setResidualsVect(V);
+	
+	return true;
 }
