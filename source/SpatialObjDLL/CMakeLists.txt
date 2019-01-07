@@ -30,3 +30,6 @@ target_link_libraries (SpatialObjDLL
 
 # needed for linux compilation
 set_target_properties(SpatialObjDLL PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# Define IDE folders:
+set_target_properties(SpatialObjDLL PROPERTIES FOLDER "SurveyLib")

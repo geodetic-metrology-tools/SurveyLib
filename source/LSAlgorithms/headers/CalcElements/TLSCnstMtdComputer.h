@@ -36,19 +36,16 @@ public:
 	virtual ~TLSCnstMtdComputer();
 
 	//!Verify the number of unknowns and run the calculation
-	virtual bool computeResults(TLSInputMatrices*, TLSResultsMatrices*);
+	bool computeResults(TLSInputMatrices*, TLSResultsMatrices*) override;
 
 	//!Computes the results matrices with cnstr
-	virtual bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
+	bool computeResultsMatrices(TLSInputMatrices*, TLSResultsMatrices*) override;
 
 	//!Computes the results matrices for a free calculation
 	bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
 
-	//!Computes the residual vector and the varaiance covariance matrices
-	//virtual void calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr,TLSResultsMatrices* rm);
-
 	//!Computes the residual vector and the varaiance covariance matrices for a free calculation
-	void calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm);
+	bool calcResidusAndVarCovMatrix(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm) override;
 
 private:
 	int		count;

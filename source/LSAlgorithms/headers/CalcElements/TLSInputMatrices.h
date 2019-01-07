@@ -29,96 +29,138 @@ public:
 	//@}
 
 
-	/*!@name Set methods*/
+	/*!@name Setting methods*/
 	//@{
-		/*!
-			\brief Sets the dimensions of the matrices
-
-			\param[in] nbUnknowns the survey network's number of unknowns
-			\param[in] nbEquations the survey network's number of equations
-			\param[in] nbObservations the survey network's number of observations
-			\param[in] nbObservations the survey network's number of observation constraints
-		*/
-		virtual void setDimensions(int nbUnknowns, int nbEquations, int nbObservations, int nbCnstrObs);
-	
 		/*! \brief Sets the dimensions of the matrices
-			
 			\param[in] nbUnknowns the survey network's number of unknowns
 			\param[in] nbEquations the survey network's number of equations
 			\param[in] nbObservations the survey network's number of observations
 			\param[in] nbConstraints the free survey network's number of observation constraints
 			\param[in] constraints the free survey network's number of constraints
 		*/
-		virtual void setDimensions(int unknowns, int equations, int observations, int nbCnstrObs, int constraints);
+		void initMatrices(int unknowns, int equations, int observations, int nbCnstrObs, int nbCnstrUnk = 0);
 	
-		//!Sets a coefficient of the first design matrix
-		virtual bool setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
-		//!Sets a coefficient of the second design matrix
-		virtual bool setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
-		//!Sets a coefficient of the misclosure vector
-		virtual bool setMisclosureVectorElement(MatrixIndex row, TReal coeff);
-		//!Sets a coefficient of the weight matrix
-		virtual bool setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
-		//!Sets a coefficient of the inverted weight matrix
-		virtual bool setWeightInvMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
-		//!Sets a coefficient of the weight matrix for the unknowns
-		virtual bool setWeightUnkMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
-		//!Sets a coefficient of the constraint first design matrix 
-		virtual bool setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
-		//!Sets a coefficient of the constraint misclosure vector
-		virtual bool setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff);
+
+		/*!	\brief Set the value of an element of the first design matrix in the adjustment (A-matrix)
+			\param[in] row of the desired element
+			\param[in] column of the desired element
+			\param[in] coefficient: value of the desired element
+		*/
+		bool setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+
+		/*!	\brief Set the value of an element of the second design matrix in the adjustment (B-matrix)
+			\param[in] row of the desired element
+			\param[in] column of the desired element
+			\param[in] coefficient: value of the desired element
+		*/
+		bool setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+
+		/*!	\brief Set the value of a misclosure vector (W or "Fermetures" vector)
+			\param[in] row of the desired element
+			\param[in] coeff: value of the desired misclosure
+		*/
+		bool setMisclosureVectorElement(MatrixIndex row, TReal coeff);
+
+		/*!	\brief Set the value of an element of the observations weight matrix in the adjustment (P-matrix)
+			\param[in] row of the desired element
+			\param[in] column of the desired element
+			\param[in] coefficient: value of the desired element
+		*/
+		bool setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+
+		/*!	\brief Set the value of an element of the inverted osbservations weight matrix in the adjustment (invP-matrix)
+			\param[in] row of the desired element
+			\param[in] column of the desired element
+			\param[in] coefficient: value of the desired element
+		*/
+		bool setWeightInvMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+
+		/*!	\brief Set the value of an element of the parameters (i.e. unknowns) weight matrix in the adjustment (Pxx-matrix)
+			\param[in] row of the desired element
+			\param[in] column of the desired element
+			\param[in] coefficient: value of the desired element
+		*/
+		bool setWeightUnkMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+
+		/*!	\brief Set the value of an element of the constraints first design matrix (A2-submatrix)
+			\param[in] row of the desired element
+			\param[in] column of the desired element
+			\param[in] coefficient: value of the desired element
+		*/
+		bool setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+
+		/*!	\brief Set the value of an element of the constraints misclosure vector (W2-submatrix)
+			\param[in] row of the desired element
+			\param[in] coeff: value of the desired element
+		*/
+		bool setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff);
 	//@}
 
-	 /// Returns the number of unknowns
-	 virtual int		getNbrUnknowns() const;
-	 /// Returns the number of observations
-	 virtual int		getNbrObservations() const;
-	 /// Returns the number of equations
-	 virtual int		getNbrEquations()const;
-	 /// Returns the number of observations constraints
-	 virtual int		getNbrConstraintObs()const;
-	 /// Returns the number of constraints
-	 virtual int		getNbrConstraints()const;
+
+	/*!@name Getting methods*/
+	//@{
+		/*!	\brief Returns the number of unknowns */
+		int	getNbrUnknowns() const;
+
+		/*!	\brief Returns the number of observations */
+		int	getNbrObservations() const;
+
+		/*!	\brief Returns the number of equations */
+		int	getNbrEquations()const;
+
+		/*!	\brief Returns the number of observations constraints */
+		int	getNbrConstraintObs()const;
+
+		/*!	\brief Returns the number of parameters constraints */
+		int	getNbrConstraints()const;
+		
+		/*!	\brief Returns a const reference (pointer) to the first design matrix allocated here*/
+		const TSparseMatrix* getFirstDgnMtrx() const noexcept;
+
+		/*!	\brief Returns a const reference (pointer) to the second design matrix allocated here*/
+		const TSparseMatrix* getSecondDgnMtrx() const noexcept;
+
+		/*!	\brief Returns a const reference (pointer) to the weight matrix allocated here*/
+		const TSparseMatrix* getWeightMtrx() const noexcept;
+
+		/*!	\brief Returns a const reference (pointer) to the inverted weight matrix allocated here*/
+		const TSparseMatrix* getWeightInvMtrx() const noexcept;
+
+		/*!	\brief Returns a const reference (pointer) to the parameters-weight matrix allocated here*/
+		const TSparseMatrix* getWeightUnkMtrx() const noexcept;
+
+		/*!	\brief Returns a const reference (pointer) to the misclosure vector allocated here*/
+		const TVector&	getMisclosureVctr() const noexcept;
+
+		/*!	\brief Returns a const reference (pointer) to the constraints first design submatrix allocated here*/
+		const TSparseMatrix* getCnstrFirstDgnMtrx() const noexcept;
+
+		/*!	\brief Returns a const reference (pointer) to the constraints misclosure subvector allocated here*/
+		const TVector&	getCnstrMisclosureVctr() const noexcept;
+	//@}
 
 
-	/// Returns a const reference to the first design matrix
-	const TSparseMatrix* getFirstDgnMtrx() const;
-	/// Returns a const reference to the second design matrix
-	const TSparseMatrix* getSecondDgnMtrx() const;
-	/// Returns a const reference to the weight matrix
-	const TSparseMatrix* getWeightMtrx() const;
-	/// Returns a const reference to the inverted weight matrix
-	const TSparseMatrix* getWeightInvMtrx() const;
-	/// Returns a const reference to the weight matrix for the unknowns
-	const TSparseMatrix* getWeightUnkMtrx() const;
-	/// Returns a const reference to the misclosure vector
-	const TVector&	getMisclosureVctr() const;
-	/// Returns a const reference to the constraint first design matrix
-	const TSparseMatrix*	getCnstrFirstDgnMtrx() const;
-	/// Returns a const reference to the constraint misclosure vector
-	const TVector&	getCnstrMisclosureVctr() const;
 	/// Debug method
 	void saveMatricesToFile(int nbIter) const;
 
 private:
 
-	MatrixIndex		fNbUnk; /*!< number of unknowns: u */
-	MatrixIndex		fNbObs; /*!< number of observations: o */
-	MatrixIndex		fNbEqn; /*!< number of equations: e */
-	int fNbCnstrObs; /*!< number of constraint observations */
-	MatrixIndex		fNbCnstr;/*!<number of constraint: c */
+	MatrixIndex		fNbUnk;      /*!< u : number of unknowns */
+	MatrixIndex		fNbObs;      /*!< o : number of observations */
+	MatrixIndex		fNbEqn;      /*!< e : number of equations */
+	int				fNbCnstrObs; /*!< number of constraint observations */
+	MatrixIndex		fNbCnstr;    /*!< c : number of constraints on parameters */
 
+	TVector*		fMisclosureVector;  /*!< vector (o x 1) for misclosure errors */
 
-	TVector*	fMisclosureVector; /*!< vector (u) for misclosure errors */
+	TSparseMatrix*	fCnstrFirstDesignMtrx;  /*!< matrix A2 (c x u) for constraints first design submatrix*/
+	TVector*		fCnstrMisclosureVector; /*!< vector W2 (c x 1) for constraints misclosure subvector */
 
-	TSparseMatrix*	fCnstrFirstDesignMtrx; /*!< matrix (u x c) for the parametric part of the model */
-	TVector*	fCnstrMisclosureVector; /*!< vector for misclosure errors */
-
-	TSparseMatrix*	firstDesignMatrix; /*!< matrix (u x e) for the parametric part of the model */
-	TSparseMatrix*	secondDesignMatrix; /*!< matrix (o x e) for the conditional part of the model  */
-	TSparseMatrix*	weightMatrix; /*!< matrix (o x o) for observations weights */
-	TSparseMatrix*	weightInvMatrix; /*!< matrix (o x o) for observations weights */
-	TSparseMatrix*	weightUnkMatrix; /*!< matrix (o x o) for unknowns weights */
+	TSparseMatrix*	firstDesignMatrix;  /*!< matrix A (e x u) */
+	TSparseMatrix*	secondDesignMatrix; /*!< matrix B (e x o) */
+	TSparseMatrix*	weightMatrix;       /*!< matrix P (o x o) for observations weights */
+	TSparseMatrix*	weightInvMatrix;    /*!< matrix invP (o x o) for observations weights */
+	TSparseMatrix*	weightUnkMatrix;    /*!< matrix Pxx (u x u) for unknowns weights */
 
 	void clearMatrices();
 };

@@ -6,6 +6,7 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransf
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
+					${SURVEYLIB_ROOT}/source/Logs
 					)
 
 IF(USE_SWISSTOPO)
@@ -265,10 +266,12 @@ source_group("SpatialObj\\Sources"   				FILES ${SPATIALOBJ_CPP})
 source_group("SpatialSystems\\Headers"   			FILES ${SPATIALSYSTEM_H})
 source_group("SpatialSystems\\Sources"   			FILES ${SPATIALSYSTEM_CPP})
 
-
 # Create a static library from sources:
 add_library(SpatialObjects STATIC ${SpatialObject_SOURCES} ${SpatialObject_HEADERS})
 
 
 # needed for linux compilation
 set_target_properties(SpatialObjects PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# Define IDE folders:
+set_target_properties(SpatialObjects PROPERTIES FOLDER "SurveyLib")

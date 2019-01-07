@@ -14,7 +14,6 @@ class TLSResultsMatrices;
 
 /*!
 	\ingroup CalcElements
-
 	\brief Least squares computer used when the obseved values can be separated from the unknowns of the model (parametric case), it should not be used if this condition is not fullfilled.
 */
 class TLSParametricMtdComputer:public TALSComputer
@@ -28,19 +27,17 @@ public:
 	virtual ~TLSParametricMtdComputer();
 
 	///Verify the number of unknowns and run the calculation
-	virtual bool computeResults(TLSInputMatrices*, TLSResultsMatrices*);
+	bool computeResults(TLSInputMatrices*, TLSResultsMatrices*) override;
 
 	///Computes the results matrices for the parametric case
-	virtual bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
-
-	///Computes the results matrices for a free calculation
-	//bool computeFreeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*);
+	bool computeResultsMatrices(TLSInputMatrices*, TLSResultsMatrices*) override;
 
 	///Computes the residual vector and the varaiance covariance matrices
-	virtual void calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr,TLSResultsMatrices* rm	);
+	bool calcResidusAndVarCovMatrix(const TLSInputMatrices* inputMtr,TLSResultsMatrices* rm	) override;
 
 private:
-	int				count;
+
+	int	count;
 };
 
 #endif

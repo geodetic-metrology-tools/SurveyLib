@@ -43,10 +43,10 @@ public:
 	virtual bool computeResults(TLSInputMatrices*, TLSResultsMatrices*) = 0;
 
 	//!Computes the results matrices
-	virtual bool computeResultsMtrs(TLSInputMatrices*, TLSResultsMatrices*) = 0;
+	virtual bool computeResultsMatrices(TLSInputMatrices*, TLSResultsMatrices*) = 0;
 
 	//!Computes the residual vector and the varaiance covariance matrices
-	virtual void calcResiduAndVarCovMatrice(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm) = 0;
+	virtual bool calcResidusAndVarCovMatrix(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm) = 0;
 
 	//!Calculate the hypothesis testing limits for the sigma zero a posteriori
 	struct limits	calcSigmaZeroLimits(const int nbObs, const int nbUnk);

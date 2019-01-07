@@ -62,8 +62,14 @@ set(ALGO_SOURCES
 	sources/CalcParams/TLSCalcPosVectorParam.cpp
 	sources/CalcParams/TLSCalcScalarParam.cpp
 	sources/CalcParams/TLSCalcWorkingPosVec.cpp
-	
 )
+
+#Create a static library from the object files
+ADD_LIBRARY(LSAlgorithms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
+
+# Specify the libraries to link against
+target_link_libraries(LSAlgorithms Tools Logs)
+
 
 # Define VS folders:
 file(GLOB ADJUSTABLEOBJECT_H 			headers/AdjustableObjects/*.*)
@@ -79,10 +85,4 @@ source_group("CalcElements\\Sources"   		FILES ${CALCELMT_CPP})
 source_group("CalcParams\\Headers"   		FILES ${CALCPARAMS_H})
 source_group("CalcParams\\Sources"   		FILES ${CALCPARAMS_CPP})
 
-#Create a static library from the object files
-ADD_LIBRARY(LSAlgorithms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
-
-# Specify the libraries to link against
-target_link_libraries(LSAlgorithms Tools Logs)
-
-
+set_target_properties(LSAlgorithms PROPERTIES FOLDER "SurveyLib")
