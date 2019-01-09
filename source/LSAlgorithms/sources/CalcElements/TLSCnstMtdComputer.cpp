@@ -214,7 +214,10 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 
 	TSparseMatrix invN1(nbObs, nbObs);
 	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1))
+	{
+		logCritical() << "Could not invert intermediate matrix N1 = B * InvPv * B.transpose()";
 		return false;
+	}
 	TSparseMatrix S(nbObs, nbEq);
 	S = -InvPv * B.transpose() * invN1;
 
@@ -232,14 +235,6 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 	struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk);
 	rm->setSigmaZero2Limits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
 
-	// Intermediate matrix
-	TSparseMatrix invN2(nbUnk, nbUnk);
-	if (!TSparseUtils::inverse(N2, invN2))
-		return false;
-
-	//--------------- Residual covariance matrix ---------------//
-	TSparseMatrix Qvv(nbObs, nbObs);
-	Qvv = S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose();
 
 	//--------------- unknown covariance matrix ---------------//
 
@@ -268,11 +263,30 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 	// Inverse NBig: Changed the way the extended matrix is inverted (similar method than during the iterative adjustment steps!!!)
 	TSparseMatrix Qxx(nbUnk + nbCnstr, nbUnk + nbCnstr);
 	if (!TSparseUtils::inverse(NBig, Qxx, true))
+	{
+		logCritical() << "In LIBR calculation, the extended normal matrix NBig could not be inverted!";
 		return false;
+	}
+
+	//--------------- Residual covariance matrix ---------------//
+	// Intermediate matrix
+	TSparseMatrix invN2(nbUnk, nbUnk);
+	if (!TSparseUtils::inverse(N2, invN2))
+	{
+		// FRK (09/01/18): This matrix is theoretically NEVER invertible!!! => We should use the extended NBig matrix for that and define other formulaes
+		logWarning() << "Could not invert normal matrix N2";
+	}
+	else
+	{
+		// FRK (09/01/18): needs STILL TO BE STUDIED for calculating variances on residual errors and related statistics !!!
+		// See above remark!!!
+		TSparseMatrix Qvv(nbObs, nbObs);
+		Qvv = S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose();
+		rm->setResCovarMtrx(Qvv);
+	}
 
 	// Copies the matrices into the members of the TResultsMatrices object
 	rm->setUnkCovarMtrx(Qxx); // IMPORTANT NOTE: this variance-covariance matrix has a dimension of ( u + c, u + c ), where c = number of constraints, u = number of unknowns.
-	rm->setResCovarMtrx(Qvv);
 	rm->setResidualsVect(V);
 	
 	return true;
