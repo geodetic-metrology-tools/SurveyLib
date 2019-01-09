@@ -8,7 +8,7 @@
 
 bool IShareablePointsListIO::isEmpty(const std::string& contents)const
 {
-	return std::all_of(std::cbegin(contents), std::cend(contents), [](char c) -> bool { return std::isspace(static_cast<unsigned char>(c)); });
+	return contents.empty() || std::all_of(std::cbegin(contents), std::cend(contents), [](char c) -> bool { return std::isspace(static_cast<unsigned char>(c)) || std::iscntrl(static_cast<unsigned char>(c)); });
 }
 
  std::ifstream IShareablePointsListIO::openRead(const std::string& filename, bool binary)
