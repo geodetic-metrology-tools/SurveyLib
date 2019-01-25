@@ -26,7 +26,7 @@ public:
 		\param[in] number of unkwnons (enabling the dimensioning of the matrices (set to zero)
 		\param[in] number of observations (enabling the dimensioning of the matrices (set to zero)
 	*/
-//	TLSResultsMatrices(int numUnknowns, int numObs);
+	TLSResultsMatrices(int numUnknowns, int numObs);
 
 
 	/*! \brief Constructor
@@ -41,7 +41,7 @@ public:
 		\param[in] numConstraints indicates the number of constraints added for a free network
 		calculation
 	*/
-//	TLSResultsMatrices(UEOIndices ueoi, int numConstraints);
+	TLSResultsMatrices(UEOIndices ueoi, int numConstraints);
 
 	//!Destructor
 	virtual ~TLSResultsMatrices();

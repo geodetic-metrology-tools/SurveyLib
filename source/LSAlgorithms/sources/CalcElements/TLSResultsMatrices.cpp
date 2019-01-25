@@ -24,7 +24,7 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 	fSigmaZero2 = NO_VALf;
 }
 
-/*
+
 TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi, int numConstraints)
 {
 	// constructor dimensioning the matrices
@@ -49,7 +49,7 @@ TLSResultsMatrices::TLSResultsMatrices(int numUnknowns,int numObs)
 
 	fSigmaZero2 = NO_VALf;
 }
-*/
+
 
 TLSResultsMatrices::~TLSResultsMatrices()
 {
