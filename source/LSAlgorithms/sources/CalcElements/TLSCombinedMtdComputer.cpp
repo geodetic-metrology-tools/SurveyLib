@@ -60,7 +60,7 @@ bool TLSCombinedMtdComputer::computeResultsMatrices(TLSInputMatrices* im, TLSRes
 
 	//calculate intermediate matrix invN1 = inv ( B * inv(P) * Bt )
 	TSparseMatrix invN1(nbEq, nbEq);
-	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1))
+	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1, true))
 		return false;
 
 	//Normal matrix N2 = At * inv(N1) * A
