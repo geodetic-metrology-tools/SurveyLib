@@ -1,7 +1,6 @@
 #include <algorithm>
-#include <cctype>
+#include <locale>
 #include <fstream>
-#include <memory>
 #include <sstream>
 
 #include "IShareablePointsListIO.hpp"
@@ -9,7 +8,7 @@
 
 bool IShareablePointsListIO::isEmpty(const std::string& contents)const
 {
-	return contents.empty() || std::all_of(std::cbegin(contents), std::cend(contents), [](char c) -> bool { return std::isspace(static_cast<unsigned char>(c)) || std::iscntrl(static_cast<unsigned char>(c)); });
+	return contents.empty() || std::all_of(std::cbegin(contents), std::cend(contents), [](auto c) -> bool { return std::isspace(c, std::locale()) || std::iscntrl(c, std::locale()); });
 }
 
  std::ifstream IShareablePointsListIO::openRead(const std::string& filename, bool binary)
