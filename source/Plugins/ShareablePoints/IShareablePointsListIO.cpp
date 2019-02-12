@@ -1,10 +1,11 @@
-#include "IShareablePointsListIO.hpp"
-
 #include <algorithm>
 #include <cctype>
 #include <fstream>
 #include <memory>
 #include <sstream>
+
+#include "IShareablePointsListIO.hpp"
+#include "SPIOException.hpp"
 
 bool IShareablePointsListIO::isEmpty(const std::string& contents)const
 {

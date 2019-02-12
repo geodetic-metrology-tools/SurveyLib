@@ -1,8 +1,7 @@
-#include "ShareableFrame.hpp"
-
 #include <algorithm>
 #include <iterator>
 
+#include "ShareableFrame.hpp"
 #include "ShareablePoint.hpp"
 
 template<class T>

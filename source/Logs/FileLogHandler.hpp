@@ -6,10 +6,10 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef FILELOGHANDLER_HPP
 #define FILELOGHANDLER_HPP
 
+#include <string>
+
 #include "ILogHandler.hpp"
 #include "LogLibGlobals.hpp"
-
-#include <string>
 
 class LogMessage;
 

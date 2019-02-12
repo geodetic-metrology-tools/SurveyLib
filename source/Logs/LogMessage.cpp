@@ -1,10 +1,9 @@
-#include "LogMessage.hpp"
-
 #include <chrono>
 #include <ctime>
 #include <iomanip>
 
 #include "Logger.hpp"
+#include "LogMessage.hpp"
 
 class LogMessage::_LogMessage_pimpl
 {

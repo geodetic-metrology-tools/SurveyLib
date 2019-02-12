@@ -6,7 +6,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef ISHAREABLEPOINTSLISTIO_HPP
 #define ISHAREABLEPOINTSLISTIO_HPP
 
-#include <exception>
 #include <string>
 #include <unordered_set>
 
@@ -215,55 +214,6 @@ public:
 	Fields exportFieldsFrame{ { "name", "translation", "rotation", "scale", "isfreescale", "innerFrames", "points" } };
 	/** List of fields that will be written when we serialize a ShareablePointsList. */
 	Fields exportFieldsPointsList{ { "title", "params", "rootFrame" } };
-};
-
-/**
- * Exception class for IO operations on @ref shpoints object.
- *
- * SPIOException is part of the @ref shpoints module.
- * @ingroup shpoints
- *
- * This class offers a way to store the filename, the contents, and the offset where the error occurred.
- */
-class SPIOException : public std::exception
-{
-public:
-	/**
-	 * Constructor.
-	 *
-	 * @param error the error message
-	 * @param filename the path to the file
-	 * @param contents the contents (stringà where the error occurred
-	 * @param offset the offset inside the file where the error occured (by default = -1)
-	 */
-	SPIOException(const std::string& error, const std::string& filename = "", const std::string& contents = "", int offset = -1) :
-		_error(error), _filename(filename), _contents(contents), _offset(offset) {}
-
-	virtual ~SPIOException() override = default;
-
-	virtual const char* what() const noexcept override { return _error.c_str(); }
-
-	/**
-	 * @return the error message as a string.
-	 * @see what()
-	 */
-	const std::string& error() const noexcept { return _error; }
-	/** @return the filename where the error occurred. */
-	const std::string& filename() const noexcept { return _filename; }
-	/** @return the contents where the error occurred. */
-	const std::string& contents() const noexcept { return _contents; }
-	/** @return the offset in the file where the error occurred, if it is possible to know. -1 otherwise. */
-	int offset() const noexcept { return _offset; }
-
-private:
-	/** The error message. */
-	std::string _error;
-	/** The filename related to the error. */
-	std::string _filename;
-	/** The contents related to the error. */
-	std::string _contents;
-	/** the offset inside the file where the error occured. */
-	int _offset = -1;
 };
 
 #endif // ISHAREABLEPOINTSLISTIO_HPP

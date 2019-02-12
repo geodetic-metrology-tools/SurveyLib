@@ -1,5 +1,4 @@
 #include "ShareablePointsList.hpp"
-
 #include "ShareableFrame.hpp"
 #include "ShareableParams.hpp"
 
