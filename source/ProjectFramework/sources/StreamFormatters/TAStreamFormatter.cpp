@@ -519,6 +519,11 @@ int	TAStreamFormatter::getWidthFormat() const
 	return fWidth;
 }
 
+
+std::string TAStreamFormatter::getFileName() const
+{/*!get the stream's filename*/
+	return fName;
+}
 	
 int	TAStreamFormatter::getPrecisionFormat() const
 {/*!get the stream's precision*/

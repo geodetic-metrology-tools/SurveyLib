@@ -165,8 +165,6 @@ public:
 	virtual void	setFileName(std::string const& Name);
 	//@}
 
-
-
 	/*!@member functions: get*/
 	//@{
 	/*!get angle's units*/
@@ -186,6 +184,9 @@ public:
 
 	/*!get the stream's width*/
 	virtual	int	getWidthFormat() const;
+
+	/*!get the attached filename*/
+	virtual std::string getFileName() const;
 
 	/*!get the stream's precision*/
 	virtual	int	getPrecisionFormat() const;
