@@ -68,7 +68,7 @@ set(ALGO_SOURCES
 ADD_LIBRARY(LSAlgorithms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
 
 # Specify the libraries to link against
-target_link_libraries(LSAlgorithms Tools Logs)
+target_link_libraries(LSAlgorithms Tools Logs SpatialObjects)
 
 
 # Define VS folders:
