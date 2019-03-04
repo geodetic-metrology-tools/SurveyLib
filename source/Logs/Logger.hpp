@@ -334,9 +334,6 @@ private:
 	Logger();
 
 private:
-	/** Pointer on the current instance (singleton). */
-	static std::unique_ptr<Logger> _instance;
-
 	/** pimpl */
 	class _Logger_pimpl;
 	std::unique_ptr<_Logger_pimpl> _pimpl;

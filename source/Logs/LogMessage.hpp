@@ -80,7 +80,7 @@ public:
 	 * @param t the type of the message
 	 * @param msg the message
 	 */
-	LogMessage(Type t, const std::string& msg = "");
+	LogMessage(Type t, std::string msg = "");
 	/**
 	 * Internal constructor, you shouldn't use it.
 	 *
@@ -92,7 +92,7 @@ public:
 	 * @param callLoggerOnDestruct boolean that says if the LogMessage should register itself in the Logger class when destroyed.
 	 *                             This is true when the LogMessage has been created with a macro, otherwise you should let it to false.
 	 */
-	LogMessage(Type t, const std::string& file, int line, const std::string& func, const std::string& msg = "", bool callLoggerOnDestruct = false);
+	LogMessage(Type t, std::string file, int line, std::string func, std::string msg = "", bool callLoggerOnDestruct = false);
 	LogMessage(const LogMessage&) = delete; // can't copy
 	LogMessage(LogMessage&&);
 	LogMessage& operator=(const LogMessage&) = delete;
@@ -124,13 +124,13 @@ public:
 	std::string getContext() const;
 	void setType(Type t) noexcept;
 	Type getType() const noexcept;
-	void setMessage(const std::string& msg);
+	void setMessage(std::string msg) noexcept;
 	const std::string& getMessage() const noexcept;
-	void setFile(const std::string& file);
+	void setFile(std::string file) noexcept;
 	const std::string& getFile() const noexcept;
 	void setLine(const int line) noexcept;
 	int getLine() const noexcept;
-	void setFunction(const std::string& func);
+	void setFunction(std::string func) noexcept;
 	const std::string& getFunction() const noexcept;
 
 private:

@@ -28,8 +28,8 @@ public:
 	 * @param contents the contents (string where the error occurred)
 	 * @param offset the offset inside the file where the error occured (by default = -1)
 	 */
-	SPIOException(const std::string& error, const std::string& filename = "", const std::string& contents = "", int offset = -1) :
-		_error(error), _filename(filename), _contents(contents), _offset(offset) {}
+	SPIOException(std::string error, std::string filename = "", std::string contents = "", int offset = -1) :
+		_error(std::move(error)), _filename(std::move(filename)), _contents(std::move(contents)), _offset(offset) {}
 
 	virtual ~SPIOException() override = default;
 

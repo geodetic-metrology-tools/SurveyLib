@@ -50,29 +50,29 @@ class ShareableFrame
 {
 public:
 	/** Constructor. */
-	ShareableFrame(std::shared_ptr<ShareableParams> params, const std::string& name="") : _name(name), _params(params) {}
+	ShareableFrame(std::shared_ptr<ShareableParams> params, std::string name="") noexcept : _name(std::move(name)), _params(std::move(params)) {}
 	ShareableFrame(const ShareableFrame&) = delete; // can't copy (too heavy structure)
-	ShareableFrame(ShareableFrame&& other);
+	ShareableFrame(ShareableFrame&& other) noexcept;
 	ShareableFrame& operator=(const ShareableFrame&) = delete;
-	ShareableFrame& operator=(ShareableFrame&& other);
+	ShareableFrame& operator=(ShareableFrame&& other) noexcept;
 
 	/**
 	* Comparison operator.
 	* The parent and the params are not checked. If all the values are the same but the parent and/or the params, it returns true.
 	* Comparison is done on values, not on pointers.
 	*/
-	bool operator==(const ShareableFrame& a) const;
+	bool operator==(const ShareableFrame& a) const noexcept;
 	/**
 	* Comparison operator.
 	* The parent and the params are not checked. If only the parent and/or the params differ, return false.
 	*/
-	bool operator!=(const ShareableFrame& a) const { return !(*this == a); }
+	bool operator!=(const ShareableFrame& a) const noexcept { return !(*this == a); }
 
 	/** @return the parent frame */
 	const ShareableFrame* getParentFrame() const noexcept { return _parentFrame; }
 	/** @return the parent frame */
 	ShareableFrame* getParentFrame() noexcept { return _parentFrame; }
-	void setName(const std::string& name) { _name = name; }
+	void setName(std::string name) noexcept { _name = std::move(name); }
 	const std::string& getName() const noexcept { return _name; }
 
 	/**
@@ -191,10 +191,10 @@ public:
 	/** @return the number of children points */
 	size_t sizePoints() const noexcept { return _points.size(); }
 
-	void setTranslation(const ShareablePosition& translation) noexcept { _translation = translation; }
+	void setTranslation(ShareablePosition translation) noexcept { _translation = std::move(translation); }
 	const ShareablePosition& getTranslation() const noexcept { return _translation; }
 	ShareablePosition& getTranslation() noexcept { return _translation; }
-	void setRotation(const ShareablePosition& rotation) noexcept { _rotation = rotation; }
+	void setRotation(ShareablePosition rotation) noexcept { _rotation = std::move(rotation); }
 	const ShareablePosition& getRotation() const noexcept { return _rotation; }
 	ShareablePosition& getRotation() noexcept { return _rotation; }
 	void setScale(double scale) noexcept { _scale = scale; }

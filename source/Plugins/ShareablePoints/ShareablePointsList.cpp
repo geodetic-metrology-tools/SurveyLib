@@ -2,8 +2,8 @@
 #include "ShareableFrame.hpp"
 #include "ShareableParams.hpp"
 
-ShareablePointsList::ShareablePointsList(const std::string & title) :
-	_title(title),
+ShareablePointsList::ShareablePointsList(std::string title) :
+	_title(std::move(title)),
 	_params(new ShareableParams()),
 	_rootFrame(std::make_unique<ShareableFrame>(_params))
 {
@@ -11,7 +11,7 @@ ShareablePointsList::ShareablePointsList(const std::string & title) :
 
 ShareablePointsList::~ShareablePointsList() = default;
 
-bool ShareablePointsList::operator==(const ShareablePointsList & a) const
+bool ShareablePointsList::operator==(const ShareablePointsList & a) const noexcept
 {
 	return _title == a._title &&
 		*_params == *a._params &&

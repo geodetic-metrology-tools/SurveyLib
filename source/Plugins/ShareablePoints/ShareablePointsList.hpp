@@ -49,7 +49,7 @@ struct ShareableParams;
 class ShareablePointsList
 {
 public:
-	ShareablePointsList(const std::string& title = "");
+	ShareablePointsList(std::string title = "");
 	~ShareablePointsList();
 	ShareablePointsList(const ShareablePointsList&) = delete; // can't copy (too heavy structure)
 	ShareablePointsList(ShareablePointsList&&) = default;
@@ -57,11 +57,11 @@ public:
 	ShareablePointsList& operator=(ShareablePointsList&&) = default;
 
 	/** Comparison operator. Comparison is done on values, not on pointers. */
-	bool operator==(const ShareablePointsList& a) const;
+	bool operator==(const ShareablePointsList& a) const noexcept;
 	/** Comparison operator. Comparison is done on values, not on pointers. */
-	bool operator!=(const ShareablePointsList& a) const { return !(*this == a); }
+	bool operator!=(const ShareablePointsList& a) const noexcept { return !(*this == a); }
 
-	void setTitle(const std::string& title) { _title = title; }
+	void setTitle(std::string title) noexcept { _title = std::move(title); }
 	const std::string& getTitle() const noexcept { return _title; }
 	const ShareableParams& getParams() const noexcept { return *_params; }
 	/**

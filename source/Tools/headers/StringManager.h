@@ -48,7 +48,7 @@ std::string ltrim(std::string str);
 std::string rtrim(std::string str);
 
 /** @return a copy of the string with all whitespaces on the sides removed */
-inline std::string trim(std::string str) { return rtrim(ltrim(std::move(str))); }
+inline std::string trim(std::string str) { return rtrim(std::move(ltrim(std::move(str)))); }
 
 /** @return a vector of strings, representing the splitted version of the input based on the given split character */
 std::vector<std::string> split(const std::string& base, char c = ' ');
