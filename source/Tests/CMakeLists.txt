@@ -1,18 +1,3 @@
-include_directories (${TUT_INCLUDE_PATH}
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
-					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/Converters
-					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/StreamFormatters
-					${SURVEYLIB_ROOT}/source/SpatialObjDLL/headers
-					${SURVEYLIB_ROOT}/source/Logs
-					${SURVEYLIB_ROOT}/source/Plugins
-)
-
 set(SurveyMain_Tests
 	${CMAKE_CURRENT_LIST_DIR}/main.cpp
 )
@@ -46,17 +31,47 @@ set(PluginsTests_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/Plugins/testShareablePoints.cpp
 )
 
-add_executable(UnitTests ${SurveyMain_Tests} ${SpatialObjects_SOURCES} ${SurveyLibDLLTests_SOURCES} ${ProjectFrameworkTests_SOURCES} ${PluginsTests_SOURCES})
-# Specify the libraries to link against
+set(ToolsTests_SOURCES
+	${CMAKE_CURRENT_LIST_DIR}/Tools/testStringManager.cpp
+)
+
+add_executable(UnitTests
+	${SurveyMain_Tests}
+	${SpatialObjects_SOURCES}
+	${SurveyLibDLLTests_SOURCES}
+	${ProjectFrameworkTests_SOURCES}
+	${PluginsTests_SOURCES}
+	${ToolsTests_SOURCES}
+)
+target_include_directories(UnitTests PRIVATE
+	# TUT
+	${TUT_INCLUDE_PATH}
+	# SurveyLib
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
+	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/Converters
+	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/StreamFormatters
+	${SURVEYLIB_ROOT}/source/SpatialObjDLL/headers
+	${SURVEYLIB_ROOT}/source/Logs
+	${SURVEYLIB_ROOT}/source/Plugins
+	${SURVEYLIB_ROOT}/source/Tools/headers
+)
 target_link_libraries (UnitTests
 	SpatialObjects
 	SpatialObjDLL
 	ProjectFramework
 	Plugins
 	Logs
+	Tools
 )
 
 source_group("SpatialObjects" FILES ${SpatialObjects_SOURCES})
 source_group("SurveyLibDLL" FILES ${SurveyLibDLLTests_SOURCES})
 source_group("ProjectFramework" FILES ${ProjectFrameworkTests_SOURCES})
 source_group("Plugins" FILES ${PluginsTests_SOURCES})
+source_group("Tools" FILES ${ToolsTests_SOURCES})

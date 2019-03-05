@@ -9,7 +9,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <string>
 #include <unordered_map>
 
-
 /**
  * Container class that can keep additional information about points or parameters.
  *
@@ -39,9 +38,9 @@ public:
 	ShareableExtraInfos(std::initializer_list<decltype(ShareableExtraInfos::_extraInfos)::value_type> l) : _extraInfos(l) {}
 
 	/** Comparison operator. */
-	bool operator==(const ShareableExtraInfos& a) const { return _extraInfos == a._extraInfos; }
+	bool operator==(const ShareableExtraInfos& a) const noexcept { return _extraInfos == a._extraInfos; }
 	/** Comparison operator. */
-	bool operator!=(const ShareableExtraInfos& a) const { return !(*this == a); }
+	bool operator!=(const ShareableExtraInfos& a) const noexcept { return !(*this == a); }
 
 	/**
 	 * Insert or change a value.

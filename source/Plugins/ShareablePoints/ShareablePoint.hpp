@@ -64,7 +64,7 @@ struct ShareablePoint
 	 * Comparison operator.
 	 * The parent is not checked. If all the values are the same but the parent, it returns true.
 	 */
-	bool operator==(const ShareablePoint& a) const
+	bool operator==(const ShareablePoint& a) const noexcept
 	{
 		return name == a.name &&
 			position == a.position &&
@@ -76,7 +76,7 @@ struct ShareablePoint
 	* Comparison operator.
 	* The parent is not checked. If only the parent differs, return false.
 	*/
-	bool operator!=(const ShareablePoint& a) const { return !(*this == a); }
+	bool operator!=(const ShareablePoint& a) const noexcept { return !(*this == a); }
 };
 
 #endif // SHAREABLEPOINT_HPP

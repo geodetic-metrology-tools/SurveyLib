@@ -11,6 +11,7 @@
 #include "ShareablePoints/ShareablePoint.hpp"
 #include "ShareablePoints/ShareablePointsList.hpp"
 #include "ShareablePoints/ShareablePosition.hpp"
+#include "ShareablePoints/SPIOException.hpp"
 
 #include "TCoordSysFactory.h"
 

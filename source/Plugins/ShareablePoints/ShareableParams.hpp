@@ -90,8 +90,8 @@ struct ShareableParams
 	/** Some optional extra information. */
 	ShareableExtraInfos extraInfos;
 
-	bool operator==(const ShareableParams& a) const { return precision == a.precision && coordsys == a.coordsys && extraInfos == a.extraInfos; }
-	bool operator!=(const ShareableParams& a) const { return !(*this == a); }
+	bool operator==(const ShareableParams& a) const noexcept { return precision == a.precision && coordsys == a.coordsys && extraInfos == a.extraInfos; }
+	bool operator!=(const ShareableParams& a) const noexcept { return !(*this == a); }
 };
 
 #endif // SHAREABLEPARAMS_HPP

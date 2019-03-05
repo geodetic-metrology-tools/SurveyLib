@@ -1,10 +1,9 @@
-#include "LogMessage.hpp"
-
 #include <chrono>
 #include <ctime>
 #include <iomanip>
 
 #include "Logger.hpp"
+#include "LogMessage.hpp"
 
 class LogMessage::_LogMessage_pimpl
 {
@@ -25,21 +24,21 @@ public:
 	const bool callLogger = false;
 };
 
-LogMessage::LogMessage(Type t, const std::string & msg) : _pimpl(new _LogMessage_pimpl{
+LogMessage::LogMessage(Type t, std::string msg) : _pimpl(new _LogMessage_pimpl{
 	t,
-	msg,
+	std::move(msg),
 	std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())
 	})
 {
 }
 
-LogMessage::LogMessage(Type t, const std::string & file, int line, const std::string & func, const std::string & msg, bool callLoggerOnDestruct) : _pimpl(new _LogMessage_pimpl{
+LogMessage::LogMessage(Type t, std::string file, int line, std::string func, std::string msg, bool callLoggerOnDestruct) : _pimpl(new _LogMessage_pimpl{
 	t,
-	msg,
+	std::move(msg),
 	std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()),
-	file,
+	std::move(file),
 	line,
-	func,
+	std::move(func),
 	callLoggerOnDestruct
 	})
 {
@@ -83,9 +82,9 @@ LogMessage::Type LogMessage::getType() const noexcept
 	return _pimpl->type;
 }
 
-void LogMessage::setMessage(const std::string & msg)
+void LogMessage::setMessage(std::string msg) noexcept
 {
-	_pimpl->message = msg;
+	_pimpl->message = std::move(msg);
 }
 
 const std::string & LogMessage::getMessage() const noexcept
@@ -93,9 +92,9 @@ const std::string & LogMessage::getMessage() const noexcept
 	return _pimpl->message;
 }
 
-void LogMessage::setFile(const std::string & file)
+void LogMessage::setFile(std::string file) noexcept
 {
-	_pimpl->file = file;
+	_pimpl->file = std::move(file);
 }
 
 const std::string & LogMessage::getFile() const noexcept
@@ -113,9 +112,9 @@ int LogMessage::getLine() const noexcept
 	return _pimpl->line;
 }
 
-void LogMessage::setFunction(const std::string & func)
+void LogMessage::setFunction(std::string func) noexcept
 {
-	_pimpl->function = func;
+	_pimpl->function = std::move(func);
 }
 
 const std::string & LogMessage::getFunction() const noexcept

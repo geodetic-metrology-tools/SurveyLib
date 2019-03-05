@@ -6,7 +6,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef SHAREABLEPOSITION_HPP
 #define SHAREABLEPOSITION_HPP
 
-#include <cmath>
 #include <string>
 
 /**

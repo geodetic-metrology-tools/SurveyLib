@@ -1,7 +1,8 @@
-#include "ShareablePosition.hpp"
-
+#include <cmath>
 #include <iomanip>
 #include <sstream>
+
+#include "ShareablePosition.hpp"
 
 const ShareablePosition& ShareablePosition::operator+=(const ShareablePosition & sp) noexcept
 {

@@ -16,13 +16,10 @@ public:
 	size_t warningnumber = 0;
 };
 
-std::unique_ptr<Logger> Logger::_instance = nullptr;
-
 Logger & Logger::getLogger()
 {
-	if (!_instance)
-		_instance.reset(new Logger());
-	return *_instance;
+	static Logger instance;
+	return instance;
 }
 
 Logger::~Logger() = default;

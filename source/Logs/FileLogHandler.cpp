@@ -1,8 +1,7 @@
-#include "FileLogHandler.hpp"
-
 #include <fstream>
 #include <string>
 
+#include "FileLogHandler.hpp"
 #include "LogMessage.hpp"
 
 void FileLogHandler::log(const LogMessage & message)

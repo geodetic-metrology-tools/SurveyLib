@@ -1,8 +1,7 @@
-#include "ShareableFrame.hpp"
-
 #include <algorithm>
 #include <iterator>
 
+#include "ShareableFrame.hpp"
 #include "ShareablePoint.hpp"
 
 template<class T>
@@ -26,12 +25,12 @@ inline std::unique_ptr<T> remove(std::vector<std::unique_ptr<T>>& vector, const 
 	return nullptr;
 }
 
-ShareableFrame::ShareableFrame(ShareableFrame && other)
+ShareableFrame::ShareableFrame(ShareableFrame && other) noexcept
 {
 	*this = std::move(other);
 }
 
-ShareableFrame & ShareableFrame::operator=(ShareableFrame && other)
+ShareableFrame & ShareableFrame::operator=(ShareableFrame && other) noexcept
 {
 	_parentFrame = other._parentFrame;
 	_name = std::move(other._name);
@@ -52,7 +51,7 @@ ShareableFrame & ShareableFrame::operator=(ShareableFrame && other)
 	return *this;
 }
 
-bool ShareableFrame::operator==(const ShareableFrame & a) const
+bool ShareableFrame::operator==(const ShareableFrame & a) const noexcept
 {
 	bool result = _name == a._name &&
 		_translation == a._translation && _rotation == a._rotation &&

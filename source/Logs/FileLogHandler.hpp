@@ -6,10 +6,10 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef FILELOGHANDLER_HPP
 #define FILELOGHANDLER_HPP
 
+#include <string>
+
 #include "ILogHandler.hpp"
 #include "LogLibGlobals.hpp"
-
-#include <string>
 
 class LogMessage;
 
@@ -29,13 +29,13 @@ class SULIB_SHARED_EXPORT FileLogHandler : public ILogHandler
 {
 public:
 	/** @param file the path to the log file where to write the logs */
-	FileLogHandler(const std::string& file = "") : _filePath(file) {}
+	FileLogHandler(std::string file = "") noexcept : ILogHandler(), _filePath(std::move(file)) {}
 	virtual ~FileLogHandler() override = default;
 
 	/** Write the message to the file. */
 	virtual void log(const LogMessage& message) override;
 
-	void setLogFile(const std::string& file) { _filePath = file; }
+	void setLogFile(std::string file) noexcept { _filePath = std::move(file); }
 	const std::string& getLogFile() const noexcept { return _filePath; }
 
 private:

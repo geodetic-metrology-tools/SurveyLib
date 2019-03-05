@@ -1,8 +1,7 @@
-#include "ConsoleLogHandler.hpp"
-
 #include <iostream>
 #include <string>
 
+#include "ConsoleLogHandler.hpp"
 #include "LogMessage.hpp"
 
 void ConsoleLogHandler::log(const LogMessage & message)

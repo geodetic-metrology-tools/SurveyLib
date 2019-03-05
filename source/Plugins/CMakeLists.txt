@@ -10,6 +10,7 @@ set(PLUG_HEADERS
 	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePoint.hpp
 	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePointsList.hpp
 	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/ShareablePosition.hpp
+	${CMAKE_CURRENT_LIST_DIR}/ShareablePoints/SPIOException.hpp
 )
 
 set(PLUG_SOURCES
