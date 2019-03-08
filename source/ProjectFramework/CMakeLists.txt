@@ -1,23 +1,3 @@
-if(!UNIX)
-	CMAKE_POLICY(SET CMP0022 NEW)
-	CMAKE_POLICY(SET CMP0038 NEW)
-endif()
-
-# set include directories needed by this library
-include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
-					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/Converters
-					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/FiltersAndFormats
-					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/ProjectData
-					${SURVEYLIB_ROOT}/source/ProjectFramework/headers/StreamFormatters
-					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcParams
-					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcElements)
-
 # Create a variable containing all .cpp files:
 set(ProjectFramework_SOURCES 
 	sources/Converters/TAConverter.cpp
@@ -98,8 +78,31 @@ source_group("StreamFormatters\\Headers"   		FILES ${STREAMFORMATTERS_H})
 source_group("StreamFormatters\\Sources"   		FILES ${STREAMFORMATTERS_CPP})
 
 # Create a static library from sources:
-add_library(ProjectFramework STATIC ${ProjectFramework_SOURCES} ${ProjectFramework_HEADERS})
+add_library(ProjectFramework STATIC
+	${ProjectFramework_SOURCES}
+	${ProjectFramework_HEADERS}
+)
+target_include_directories(ProjectFramework PRIVATE
+	# SurveyLib
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
+	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/Converters
+	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/FiltersAndFormats
+	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/ProjectData
+	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/StreamFormatters
+	${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcParams
+	${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcElements
+	${SURVEYLIB_ROOT}/source/Tools/headers
+)
+target_link_libraries(ProjectFramework
+	# SurveyLib
+	Tools
+)
 
 # Define IDE folders:
 set_target_properties(ProjectFramework PROPERTIES FOLDER "SurveyLib")
-

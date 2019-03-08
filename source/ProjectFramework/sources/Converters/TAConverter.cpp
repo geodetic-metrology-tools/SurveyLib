@@ -14,10 +14,11 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 
 /////////////////////////////////////////////////////////////////////
 // other forward declarations
-#include "TAConverter.h"
-#include "TAStreamFormatter.h"
 #include <stdio.h>
 #include <string.h>
+#include <StringManager.h>
+#include "TAConverter.h"
+#include "TAStreamFormatter.h"
 
 /////////////////////////////////////////////////////////////////////
 
@@ -27,13 +28,6 @@ Copyright 2003 CERN EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
-
-inline bool isDelim(const char c, const char* delims, int ndelims) {
-	for (int i = 0; i < ndelims; i++) {
-		if (c == delims[i]) return true;
-	}
-	return false;
-}
 
 
 const std::vector<std::string> TAConverter::tokenizeString(const std::string& str, const char* delims) {
