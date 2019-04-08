@@ -127,7 +127,7 @@ bool TLSParametricMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices
 
 	//--------------- Residual covariance matrix: Qvv = inv(P) - A*Qxx*At ---------------//
 	TSparseMatrix Qvv(nbObs, nbObs);
-	Qvv = InvPv - A * Qxx * A.transpose();
+	Qvv = InvPv - static_cast<TSparseMatrix>(A * Qxx * A.transpose());
 
 	// Copies the matrices into the members of the TResultsMatrices object
 	rm->setUnkCovarMtrx(Qxx);

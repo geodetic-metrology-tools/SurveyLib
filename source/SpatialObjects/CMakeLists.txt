@@ -273,5 +273,10 @@ add_library(SpatialObjects STATIC ${SpatialObject_SOURCES} ${SpatialObject_HEADE
 # needed for linux compilation
 set_target_properties(SpatialObjects PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
+# disable multi-process compilation for swisstopo
+if(USE_SWISSTOPO AND MSVC)
+	target_compile_options(SpatialObjects PRIVATE "/MP1")
+endif()
+
 # Define IDE folders:
 set_target_properties(SpatialObjects PROPERTIES FOLDER "SurveyLib")
