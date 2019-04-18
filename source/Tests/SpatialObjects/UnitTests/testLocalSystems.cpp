@@ -143,9 +143,10 @@ namespace tut
 		TSpatialPosition pnorth(p_trafo[2]);
 		pnorth.setCoordinates(pnorthv);
 
-		TReal d = pnorth.getCoordinates(k3D).getX().getMetresValue()-
-			      p_theo.data[2]->getCoordinates(k3D).getX().getMetresValue();
-		ensure_distance("Difference in X must be 0 after moving north", TReal(0), d, TReal(1e-5));
+		{
+			TReal d = pnorth.getCoordinates(k3D).getX().getMetresValue() - p_theo.data[2]->getCoordinates(k3D).getX().getMetresValue();
+			ensure_distance("Difference in X must be 0 after moving north", TReal(0), d, TReal(1e-5));
+		}
 
 		
 		// CCRF test points constructed from base point
@@ -331,7 +332,7 @@ namespace tut
 			ensure_distance("Testing distance between expected and calculated points (at p0)", TReal(0), d, TReal(1e-5));
 		}
 
-		if (0 && test1_ok) {
+		if (test1_ok) {
 			// transform the manually rotated points from a north-LG to CGRF and test if they become the 0..100 points in the MLG
 			TSpatialPosition p_trafo2base(GRF, 4393822.13218031, 467629.008429449, 4584913.91387969, k3D);
 			TLocalSystemOrigin lso2(p_trafo2base, TAngle(0), TAngle(0), "LSO NOT p0 pt NORTH");

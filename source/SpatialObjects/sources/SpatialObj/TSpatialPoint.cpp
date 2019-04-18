@@ -99,7 +99,7 @@ TSpatialPoint&  TSpatialPoint::operator=(const TSpatialPoint& tsp)
 	return *this;
 }
 
-void TSpatialPoint::swap(TSpatialPoint & other) throw() {
+void TSpatialPoint::swap(TSpatialPoint & other) noexcept {
 	using std::swap;
 	swap(fUsedInCalc, other.fUsedInCalc);
 	swap(fName, other.fName);

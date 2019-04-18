@@ -1,7 +1,7 @@
 // TDataParameters.h
 //
 /*
-© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*! The parameters of a dataset. Identifies the :
@@ -73,7 +73,7 @@ public:
 		/// copy assignment operator
 		TDataParameters& operator=(TDataParameters); // Pass-by-value, simpler and better in C++0x
         
-        void swap(TDataParameters & other) throw();
+        void swap(TDataParameters & other) noexcept;
 
 		/// equivalence operator
 		bool	operator==(const TDataParameters& );
@@ -180,7 +180,7 @@ private:
 
 namespace std {
     template<>
-    inline void swap(TDataParameters & lhs, TDataParameters & rhs)
+    inline void swap(TDataParameters & lhs, TDataParameters & rhs) noexcept
     {
         lhs.swap(rhs);
     }

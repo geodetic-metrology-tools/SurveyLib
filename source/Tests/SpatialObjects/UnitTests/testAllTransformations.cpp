@@ -111,8 +111,8 @@ namespace tut
 		*/
 
 		TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::_swisstopo_transformation_LV95;
-		for (auto& line = refpt.begin(); line != refpt.end(); line++) {
-			std::stringstream indataLV95(*line);
+		for (auto& line : refpt) {
+			std::stringstream indataLV95(line);
 			std::string pointName;
 			double xCoordLV95, yCoordLV95;
 			indataLV95 >> pointName >> xCoordLV95 >> yCoordLV95;
@@ -171,8 +171,8 @@ namespace tut
 		*/
 
 		TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::LHC_CHpts;
-		for (auto& line = refpt.begin(); line != refpt.end(); line++) {
-			std::stringstream indataCCS(*line);
+		for (auto& line : refpt) {
+			std::stringstream indataCCS(line);
 			std::string pointName;
 			double xCoordCCS, yCoordCCS;
 			indataCCS >> pointName >> xCoordCCS >> yCoordCCS;
@@ -233,8 +233,8 @@ namespace tut
 		*/
 
 		TrafoTestPoints::TTestPoints& refpt = TrafoTestPoints::_swisstopo_transformation_LV03;
-		for (auto& line = refpt.begin(); line != refpt.end(); line++) {
-			std::stringstream indataLV03(*line);
+		for (auto& line : refpt) {
+			std::stringstream indataLV03(line);
 			std::string pointName;
 			double xCoordLV03, yCoordLV03;
 			indataLV03 >> pointName >> xCoordLV03 >> yCoordLV03;

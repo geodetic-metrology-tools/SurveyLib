@@ -220,7 +220,6 @@ set(SpatialObject_HEADERS
 	headers/SpatialSystems/TSpatialVector.h
 )
 
-
 #Add transformations if Swisstopo is used
 IF(USE_SWISSTOPO)
 	set(SpatialObject_SOURCES 
@@ -268,7 +267,10 @@ source_group("SpatialSystems\\Sources"   			FILES ${SPATIALSYSTEM_CPP})
 
 # Create a static library from sources:
 add_library(SpatialObjects STATIC ${SpatialObject_SOURCES} ${SpatialObject_HEADERS})
-
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(SpatialObjects PRIVATE optimized OpenMP::OpenMP_CXX)
+endif()
 
 # needed for linux compilation
 set_target_properties(SpatialObjects PROPERTIES POSITION_INDEPENDENT_CODE ON)

@@ -795,7 +795,11 @@ namespace tut
 		class fake : public IShareablePointsListIO
 		{
 		public:
-			virtual const std::string& getMIMEType() const { return "fake"; }
+			virtual const std::string &getMIMEType() const
+			{
+				static std::string fake = "fake";
+				return fake;
+			}
 
 			virtual ShareablePointsList read(const std::string&) override { return ShareablePointsList(); }
 			virtual ShareableExtraInfos readExtraInfos(const std::string&) override { return ShareableExtraInfos(); }

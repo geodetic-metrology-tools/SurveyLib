@@ -1,6 +1,6 @@
 // TSpatialPoint.h
 /*
-© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*!	  
@@ -53,7 +53,7 @@ public:
 		//TSpatialPoint( const string& name, const char point, const string& classifier );
 		//TSpatialPoint( const string& name, const char point, const string& classifier, TSpatialPosition * );
 
-		void swap(TSpatialPoint &) throw();
+		void swap(TSpatialPoint &) noexcept;
 		
 		/*!Destructor */
 		virtual  ~TSpatialPoint();
@@ -241,7 +241,7 @@ protected:
 
 namespace std {
 template <>
-inline void swap(TSpatialPoint & first, TSpatialPoint & second)
+inline void swap(TSpatialPoint & first, TSpatialPoint & second) noexcept
 {
 	first.swap(second);
 }

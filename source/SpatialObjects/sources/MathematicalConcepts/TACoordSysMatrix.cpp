@@ -58,14 +58,14 @@ return;
 }
 
 
-void TACoordSysMatrix::setCoordSysTRotation(TRotationMatrix* mx, TCoordSysFactory::ECoordSys en)
+void TACoordSysMatrix::setCoordSysTRotation(TRotationMatrix* rotmx, TCoordSysFactory::ECoordSys en)
 {//set the coordinate system for a rotation matrix
 	if (en==TCoordSysFactory::k3DCartesian)
 		fCoordSys=TCoordSysFactory::getCoordSysFactoryPtr()->getCoordSys(en);
 	else
 		for (int i=0; i<3; i++)
 			for (int j=0; j<3; j++)
-				mx->setC(i,j,NO_VALf);
+				rotmx->setC(i,j,NO_VALf);
 
 }	
 

@@ -42,9 +42,6 @@ namespace tut
     {
         set_test_name("SurveyLib DLL test");
 
-		int returnData = 0;
-
-		
 		double x = 0.0;
 		double y = 0.0;
 		double z = 0.0;

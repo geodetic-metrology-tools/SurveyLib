@@ -14,7 +14,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////////
-TCernGridGeoid::TCernGridGeoid() : fName(0), fDownLeft(0,0,0,TCoordSysFactory::k3DCartesian),
+TCernGridGeoid::TCernGridGeoid() : fName(""), fDownLeft(0,0,0,TCoordSysFactory::k3DCartesian),
  fUpRight(0,0,0,TCoordSysFactory::k3DCartesian)
 {//Default constructor
 	fNMatrix = 0;
@@ -286,8 +286,8 @@ bool TCernGridGeoid::isInGrid(const TSpatialPosition& point) const
 	if ((x >= xdl) && (x <= xur) && (y >= ydl) && (y <= yur))
 		return true;
 	// if fast comparison isn't enough, we go to real double comparison
-	const TReal epsilon = std::numeric_limits<TReal>::epsilon() * 1000000;
-	const TReal min = std::numeric_limits<TReal>::min();
+	constexpr TReal epsilon = std::numeric_limits<TReal>::epsilon() * 1000000;
+	constexpr TReal min = std::numeric_limits<TReal>::min();
 	if (x < xdl && std::abs(x - xdl) > epsilon && std::abs(x - xdl) > min)
 		return false;
 	if (x > xur && std::abs(x - xur) > epsilon && std::abs(x - xur) > min)

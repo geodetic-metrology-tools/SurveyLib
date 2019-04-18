@@ -50,7 +50,7 @@ public:
 
 		//!Copy Constructor 
 		TMatrix(const  TMatrix&);
-        void swap(TMatrix & other) throw();
+        void swap(TMatrix & other) noexcept;
 
 		//!Destructor
 		virtual  ~TMatrix();
