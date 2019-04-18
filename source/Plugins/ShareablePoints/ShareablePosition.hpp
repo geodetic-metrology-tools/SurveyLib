@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2018. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2018. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -14,14 +14,14 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
  * ShareablePosition is part of the @ref shpoints module.
  * @ingroup shpoints
  *
- * This class is a POD ([Plain Old Data](https://stackoverflow.com/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special/7189821#7189821)). It holds the
- * 3D coordinates of a point, along with their accuracy (sigma).
+ * This class is a POD ([Plain Old Data](https://stackoverflow.com/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special/7189821#7189821)). It holds
+ * the 3D coordinates of a point, along with their accuracy (sigma).
  *
  * A position is composed of:
  * - 3D coordinates (`x`, `y`, `z`). Note that `z` may be interprated as `h`
  * - a confidence interval for all the coordinates (`sigmax`, `sigmay`, `sigmaz`)
- * - a freedom (flexibility) for all the coordinates (`isfreex`, `isfreey`, `isfreez`). This freedom is mainly used by LGC and tells if the coordinate can be changed during
- *   the calculation
+ * - a freedom (flexibility) for all the coordinates (`isfreex`, `isfreey`, `isfreez`). This freedom is mainly used by LGC and tells if the coordinate can be changed
+ * during the calculation
  *
  * You can create a ShareablePoint with an initializer list, as explained here: https://en.cppreference.com/w/cpp/language/aggregate_initialization (notice the benefits
  * of C++20, not available yet in MSVC 2017).
@@ -61,36 +61,36 @@ struct ShareablePosition
 	bool isfreez;
 
 	/** @return the opposit point (-x, -y, -z), with the same accuracy (same sigmas) */
-	friend constexpr const ShareablePosition operator-(const ShareablePosition& sp) noexcept { return -1 * sp; }
+	friend constexpr const ShareablePosition operator-(const ShareablePosition &sp) noexcept { return -1 * sp; }
 	/**
 	 * Return the substraction between this point and sp.
 	 *
 	 * @param sp1, sp2 the points to substract
 	 * @return the substraction between 2 points (sigmas are changed too accroding to the formula in the class description)
 	 */
-	friend const ShareablePosition operator-(ShareablePosition sp1, const ShareablePosition& sp2) noexcept { return sp1 -= sp2; }
+	friend const ShareablePosition operator-(ShareablePosition sp1, const ShareablePosition &sp2) noexcept { return sp1 -= sp2; }
 	/**
 	 * Return the addition between this point and sp.
 	 *
 	 * @param sp1, sp2 the points to add
 	 * @return the addition between 2 points (sigmas are changed too accroding to the formula in the class description)
 	 */
-	friend const ShareablePosition operator+(ShareablePosition sp1, const ShareablePosition& sp2) noexcept { return sp1 += sp2; }
+	friend const ShareablePosition operator+(ShareablePosition sp1, const ShareablePosition &sp2) noexcept { return sp1 += sp2; }
 	/**
-	* Return the multiplication between this point and a scalar.
-	*
-	* @param sp1 the points that will be multiplied
-	* @param f the scalar
-	* @return the multiplication between this point and a scalar.
-	*/
+	 * Return the multiplication between this point and a scalar.
+	 *
+	 * @param sp1 the points that will be multiplied
+	 * @param f the scalar
+	 * @return the multiplication between this point and a scalar.
+	 */
 	friend constexpr const ShareablePosition operator*(ShareablePosition sp1, double f) noexcept { return sp1 *= f; }
 	/**
-	* Return the multiplication between this point and a scalar.
-	*
-	* @param f the scalar
-	* @param sp1 the points that will be multiplied
-	* @return the multiplication between this point and a scalar.
-	*/
+	 * Return the multiplication between this point and a scalar.
+	 *
+	 * @param f the scalar
+	 * @param sp1 the points that will be multiplied
+	 * @return the multiplication between this point and a scalar.
+	 */
 	friend constexpr const ShareablePosition operator*(double f, ShareablePosition sp1) noexcept { return sp1 *= f; }
 	/**
 	 * Return the division between this point and a scalar.
@@ -108,7 +108,7 @@ struct ShareablePosition
 	 * @return the current point (this)
 	 * @see operator+()
 	 */
-	const ShareablePosition& operator+=(const ShareablePosition& sp) noexcept;
+	const ShareablePosition &operator+=(const ShareablePosition &sp) noexcept;
 	/**
 	 * Substract sp to the current point.
 	 *
@@ -118,7 +118,7 @@ struct ShareablePosition
 	 * @return the current point (this)
 	 * @see operator-()
 	 */
-	const ShareablePosition& operator-=(const ShareablePosition& sp) noexcept { return *this += (-sp); }
+	const ShareablePosition &operator-=(const ShareablePosition &sp) noexcept { return *this += (-sp); }
 	/**
 	 * Multiply this point with a scalar.
 	 *
@@ -126,7 +126,13 @@ struct ShareablePosition
 	 * @return the current point (this)
 	 * @see operator*()
 	 */
-	constexpr const ShareablePosition& operator*=(double f) noexcept { x *= f; y *= f; z *= f; return *this; }
+	constexpr const ShareablePosition &operator*=(double f) noexcept
+	{
+		x *= f;
+		y *= f;
+		z *= f;
+		return *this;
+	}
 	/**
 	 * Divide this point with a scalar.
 	 *
@@ -134,7 +140,7 @@ struct ShareablePosition
 	 * @return the current point (this)
 	 * @see operator/()
 	 */
-	constexpr const ShareablePosition& operator/=(double f) noexcept { return *this *= (1 / f); }
+	constexpr const ShareablePosition &operator/=(double f) noexcept { return *this *= (1 / f); }
 
 	/**
 	 * Compare the points.
@@ -143,18 +149,18 @@ struct ShareablePosition
 	 *
 	 * @return true if equals, false otherwise
 	 */
-	constexpr bool operator==(const ShareablePosition& sp) const noexcept
+	constexpr bool operator==(const ShareablePosition &sp) const noexcept
 	{
-		return x == sp.x && y == sp.y && z == sp.z &&
-			sigmax == sp.sigmax && sigmay == sp.sigmay && sigmaz == sp.sigmaz &&
-			isfreex == sp.isfreex && isfreey == sp.isfreey && isfreez == sp.isfreez;
+		return x == sp.x && y == sp.y && z == sp.z
+			&& sigmax == sp.sigmax && sigmay == sp.sigmay && sigmaz == sp.sigmaz
+			&& isfreex == sp.isfreex && isfreey == sp.isfreey && isfreez == sp.isfreez;
 	}
 	/**
 	 * Compares the points.
 	 *
 	 * @see operator==()
 	 */
-	constexpr bool operator!=(const ShareablePosition& sp) const noexcept { return !(*this == sp); }
+	constexpr bool operator!=(const ShareablePosition &sp) const noexcept { return !(*this == sp); }
 
 	/**
 	 * Return a string representation of the point.

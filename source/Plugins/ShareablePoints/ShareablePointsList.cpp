@@ -1,4 +1,5 @@
 #include "ShareablePointsList.hpp"
+
 #include "ShareableFrame.hpp"
 #include "ShareableParams.hpp"
 
@@ -11,14 +12,12 @@ ShareablePointsList::ShareablePointsList(std::string title) :
 
 ShareablePointsList::~ShareablePointsList() = default;
 
-bool ShareablePointsList::operator==(const ShareablePointsList & a) const noexcept
+bool ShareablePointsList::operator==(const ShareablePointsList &a) const noexcept
 {
-	return _title == a._title &&
-		*_params == *a._params &&
-		*_rootFrame == *a._rootFrame;
+	return _title == a._title && *_params == *a._params && *_rootFrame == *a._rootFrame;
 }
 
-std::unique_ptr<ShareableFrame> ShareablePointsList::setRootFrame(ShareableFrame * frame)
+std::unique_ptr<ShareableFrame> ShareablePointsList::setRootFrame(ShareableFrame *frame)
 {
 	if (_rootFrame.get() == frame)
 		return nullptr;

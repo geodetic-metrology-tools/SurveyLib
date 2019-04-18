@@ -29,21 +29,26 @@ public:
 	 * @param offset the offset inside the file where the error occured (by default = -1)
 	 */
 	SPIOException(std::string error, std::string filename = "", std::string contents = "", int offset = -1) :
-		_error(std::move(error)), _filename(std::move(filename)), _contents(std::move(contents)), _offset(offset) {}
+		_error(std::move(error)),
+		_filename(std::move(filename)),
+		_contents(std::move(contents)),
+		_offset(offset)
+	{
+	}
 
 	virtual ~SPIOException() override = default;
 
-	virtual const char* what() const noexcept override { return _error.c_str(); }
+	virtual const char *what() const noexcept override { return _error.c_str(); }
 
 	/**
 	 * @return the error message as a string.
 	 * @see what()
 	 */
-	const std::string& error() const noexcept { return _error; }
+	const std::string &error() const noexcept { return _error; }
 	/** @return the filename where the error occurred. */
-	const std::string& filename() const noexcept { return _filename; }
+	const std::string &filename() const noexcept { return _filename; }
 	/** @return the contents where the error occurred. */
-	const std::string& contents() const noexcept { return _contents; }
+	const std::string &contents() const noexcept { return _contents; }
 	/** @return the offset in the file where the error occurred, if it is possible to know. -1 otherwise. */
 	int offset() const noexcept { return _offset; }
 

@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2018. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2018. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -65,7 +65,7 @@ struct ShareableParams
 	 * @throw std::ios_base::failure in case of error.
 	 * @see coordsysToString()
 	 */
-	static ECoordSys coordsysFromString(const std::string& s)
+	static ECoordSys coordsysFromString(const std::string &s)
 	{
 		if (s == "k3DCartesian")
 			return ECoordSys::k3DCartesian;
@@ -90,8 +90,8 @@ struct ShareableParams
 	/** Some optional extra information. */
 	ShareableExtraInfos extraInfos;
 
-	bool operator==(const ShareableParams& a) const noexcept { return precision == a.precision && coordsys == a.coordsys && extraInfos == a.extraInfos; }
-	bool operator!=(const ShareableParams& a) const noexcept { return !(*this == a); }
+	bool operator==(const ShareableParams &a) const noexcept { return precision == a.precision && coordsys == a.coordsys && extraInfos == a.extraInfos; }
+	bool operator!=(const ShareableParams &a) const noexcept { return !(*this == a); }
 };
 
 #endif // SHAREABLEPARAMS_HPP
