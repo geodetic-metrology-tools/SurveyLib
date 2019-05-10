@@ -1,7 +1,8 @@
-#include <fstream>
-
 #include <chrono>
+#include <filesystem>
+#include <fstream>
 #include <iomanip>
+#include <sstream>
 
 #include <tut/tut.hpp>
 
@@ -125,7 +126,7 @@ void testobject::test<3>()
 
 template<>
 template<>
-void testobject::test<4>()
+void testobject::test<10>()
 {
 	set_test_name("ILogHandler: Test of getters & setters");
 
@@ -160,7 +161,7 @@ size_t DumbHandler::i = 0;
 
 template<>
 template<>
-void testobject::test<5>()
+void testobject::test<20>()
 {
 	set_test_name("Logger: Test of getInstance");
 
@@ -176,7 +177,7 @@ void testobject::test<5>()
 
 template<>
 template<>
-void testobject::test<6>()
+void testobject::test<21>()
 {
 	set_test_name("Logger: Test of handlers");
 
@@ -205,7 +206,7 @@ void testobject::test<6>()
 
 template<>
 template<>
-void testobject::test<7>()
+void testobject::test<22>()
 {
 	set_test_name("Logger: Test of log()");
 
@@ -278,7 +279,7 @@ void testobject::test<7>()
 
 template<>
 template<>
-void testobject::test<8>()
+void testobject::test<30>()
 {
 	set_test_name("MACROS: Test of macros()");
 
@@ -373,7 +374,7 @@ void testobject::test<8>()
 
 template<>
 template<>
-void testobject::test<9>()
+void testobject::test<40>()
 {
 	set_test_name("FileLogHandler: Test of log()");
 
@@ -395,6 +396,52 @@ void testobject::test<9>()
 
 	ensure(contents.find("ERROR: 'lol erreur !!!'") != std::string::npos);
 
-	std::remove("./testLogs_test9.log");
+	std::filesystem::remove("./testLogs_test9.log");
+}
+
+template<>
+template<>
+void testobject::test<41>()
+{
+	set_test_name("FileLogHandler: Test of addDate()");
+
+	std::string relative = "file.log";
+	std::string absolute = "C:/file.log";
+	std::string noext = "/file";
+
+	auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	std::stringstream oss;
+	oss << std::put_time(std::localtime(&now), "%F");
+	ensure_equals(FileLogHandler::addDate(relative), "file_" + oss.str() + ".log");
+	ensure_equals(FileLogHandler::addDate(absolute), "C:/file_" + oss.str() + ".log");
+	ensure_equals(FileLogHandler::addDate(noext), "/file_" + oss.str());
+}
+
+template<>
+template<>
+void testobject::test<42>()
+{
+	set_test_name("FileLogHandler: Test of removeOldLogs()");
+
+	std::stringstream oss;
+
+	auto date = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now() - std::chrono::hours(15 * 24));
+	oss << std::put_time(std::localtime(&date), "%F");
+	const std::string past = "file_" + oss.str() + ".log";
+	const std::string now = FileLogHandler::addDate("file.log");
+	{
+		std::ofstream pastf(past);
+		pastf << "past\n";
+		std::ofstream nowf(now);
+		pastf << "now\n";
+	}
+	ensure(std::filesystem::exists(past));
+	ensure(std::filesystem::exists(now));
+
+	FileLogHandler::removeOldLogs("./file.log", 5);
+	ensure_not(std::filesystem::exists(past));
+	ensure(std::filesystem::exists(now));
+
+	std::filesystem::remove(now);
 }
 } // namespace tut
