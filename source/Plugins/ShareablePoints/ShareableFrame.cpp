@@ -1,11 +1,12 @@
+#include "ShareableFrame.hpp"
+
 #include <algorithm>
 #include <iterator>
 
-#include "ShareableFrame.hpp"
 #include "ShareablePoint.hpp"
 
 template<class T>
-inline std::unique_ptr<T> remove(std::vector<std::unique_ptr<T>>& vector, size_t position)
+inline std::unique_ptr<T> remove(std::vector<std::unique_ptr<T>> &vector, size_t position)
 {
 	if (position >= vector.size())
 		return nullptr;
@@ -15,7 +16,7 @@ inline std::unique_ptr<T> remove(std::vector<std::unique_ptr<T>>& vector, size_t
 }
 
 template<class T>
-inline std::unique_ptr<T> remove(std::vector<std::unique_ptr<T>>& vector, const T & elt)
+inline std::unique_ptr<T> remove(std::vector<std::unique_ptr<T>> &vector, const T &elt)
 {
 	for (auto it = std::cbegin(vector); it != std::cend(vector); it++)
 	{
@@ -25,12 +26,12 @@ inline std::unique_ptr<T> remove(std::vector<std::unique_ptr<T>>& vector, const 
 	return nullptr;
 }
 
-ShareableFrame::ShareableFrame(ShareableFrame && other) noexcept
+ShareableFrame::ShareableFrame(ShareableFrame &&other) noexcept
 {
 	*this = std::move(other);
 }
 
-ShareableFrame & ShareableFrame::operator=(ShareableFrame && other) noexcept
+ShareableFrame &ShareableFrame::operator=(ShareableFrame &&other) noexcept
 {
 	_parentFrame = other._parentFrame;
 	_name = std::move(other._name);
@@ -41,17 +42,17 @@ ShareableFrame & ShareableFrame::operator=(ShareableFrame && other) noexcept
 	_params = std::move(other._params);
 	/** Point children. */
 	_points = std::move(other._points);
-	for (auto& p : _points)
+	for (auto &p : _points)
 		p->parent = this;
 	/** Frame children. */
 	_innerFrames = std::move(other._innerFrames);
-	for (auto& f : _innerFrames)
+	for (auto &f : _innerFrames)
 		f->_parentFrame = this;
 
 	return *this;
 }
 
-bool ShareableFrame::operator==(const ShareableFrame & a) const noexcept
+bool ShareableFrame::operator==(const ShareableFrame &a) const noexcept
 {
 	bool result = _name == a._name &&
 		_translation == a._translation && _rotation == a._rotation &&
@@ -70,11 +71,11 @@ bool ShareableFrame::operator==(const ShareableFrame & a) const noexcept
 	return result;
 }
 
-void ShareableFrame::add(ShareableFrame* frame, size_t position)
+void ShareableFrame::add(ShareableFrame *frame, size_t position)
 {
 	if (!frame)
 		return;
-	const auto& it = (position >= _innerFrames.size()) ? std::cend(_innerFrames) : std::cbegin(_innerFrames) + position;
+	const auto &it = (position >= _innerFrames.size()) ? std::cend(_innerFrames) : std::cbegin(_innerFrames) + position;
 
 	// if the frame was owned, we remove it from its parent
 	if (frame->_parentFrame)
@@ -91,18 +92,18 @@ std::unique_ptr<ShareableFrame> ShareableFrame::removeFrame(size_t position)
 	return tmp;
 }
 
-std::unique_ptr<ShareableFrame> ShareableFrame::removeFrame(const ShareableFrame & frame)
+std::unique_ptr<ShareableFrame> ShareableFrame::removeFrame(const ShareableFrame &frame)
 {
 	auto tmp = remove(_innerFrames, frame);
 	tmp->_parentFrame = nullptr;
 	return tmp;
 }
 
-void ShareableFrame::add(ShareablePoint* point, size_t position)
+void ShareableFrame::add(ShareablePoint *point, size_t position)
 {
 	if (!point)
 		return;
-	const auto& it = (position >= _points.size()) ? std::cend(_points) : std::cbegin(_points) + position;
+	const auto &it = (position >= _points.size()) ? std::cend(_points) : std::cbegin(_points) + position;
 
 	// if the frame was owned, we remove it from its parent
 	if (point->parent)
@@ -118,25 +119,25 @@ std::unique_ptr<ShareablePoint> ShareableFrame::removePoint(size_t position)
 	return tmp;
 }
 
-std::unique_ptr<ShareablePoint> ShareableFrame::removePoint(const ShareablePoint & point)
+std::unique_ptr<ShareablePoint> ShareableFrame::removePoint(const ShareablePoint &point)
 {
 	auto tmp = remove(_points, point);
 	tmp->parent = nullptr;
 	return tmp;
 }
 
-std::vector<const ShareablePoint*> ShareableFrame::getAllPoints() const
+std::vector<const ShareablePoint *> ShareableFrame::getAllPoints() const
 {
-	std::vector<const ShareablePoint*> tmp;
+	std::vector<const ShareablePoint *> tmp;
 	tmp.reserve(_points.size());
-	std::transform(std::cbegin(_points), std::cend(_points), std::back_inserter(tmp), [](auto& ptr) -> ShareablePoint* { return ptr.get(); });
+	std::transform(std::cbegin(_points), std::cend(_points), std::back_inserter(tmp), [](auto &ptr) -> ShareablePoint * { return ptr.get(); });
 
-	for (const auto& f : _innerFrames)
+	for (const auto &f : _innerFrames)
 	{
 		auto vector = f->getAllPoints();
 		tmp.insert(std::end(tmp), std::make_move_iterator(std::begin(vector)), std::make_move_iterator(std::end(vector)));
 	}
-	
+
 	return tmp;
 }
 
@@ -146,7 +147,7 @@ void ShareableFrame::setParams(std::shared_ptr<ShareableParams> params)
 		return;
 	_params = params;
 	// change in children
-	for (auto& f : _innerFrames)
+	for (auto &f : _innerFrames)
 	{
 		if (f->_params != params)
 			f->setParams(params);

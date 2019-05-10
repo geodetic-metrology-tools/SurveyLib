@@ -33,7 +33,7 @@ const TReal TCernParabolicGeoid::scaleFactorM = LITERAL(0.01);
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-TCernParabolicGeoid::TCernParabolicGeoid() :fName(0), fDefRFPtr(0),
+TCernParabolicGeoid::TCernParabolicGeoid() :fName(""), fDefRFPtr(0),
 fCalcRFPtr(0), fDefEllPtr(0)
 {
 	fA = 0;

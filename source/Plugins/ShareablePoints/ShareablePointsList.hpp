@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2018. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2018. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -51,19 +51,19 @@ class ShareablePointsList
 public:
 	ShareablePointsList(std::string title = "");
 	~ShareablePointsList();
-	ShareablePointsList(const ShareablePointsList&) = delete; // can't copy (too heavy structure)
-	ShareablePointsList(ShareablePointsList&&) = default;
-	ShareablePointsList& operator=(const ShareablePointsList&) = delete;
-	ShareablePointsList& operator=(ShareablePointsList&&) = default;
+	ShareablePointsList(const ShareablePointsList &) = delete; // can't copy (too heavy structure)
+	ShareablePointsList(ShareablePointsList &&) = default;
+	ShareablePointsList &operator=(const ShareablePointsList &) = delete;
+	ShareablePointsList &operator=(ShareablePointsList &&) = default;
 
 	/** Comparison operator. Comparison is done on values, not on pointers. */
-	bool operator==(const ShareablePointsList& a) const noexcept;
+	bool operator==(const ShareablePointsList &a) const noexcept;
 	/** Comparison operator. Comparison is done on values, not on pointers. */
-	bool operator!=(const ShareablePointsList& a) const noexcept { return !(*this == a); }
+	bool operator!=(const ShareablePointsList &a) const noexcept { return !(*this == a); }
 
 	void setTitle(std::string title) noexcept { _title = std::move(title); }
-	const std::string& getTitle() const noexcept { return _title; }
-	const ShareableParams& getParams() const noexcept { return *_params; }
+	const std::string &getTitle() const noexcept { return _title; }
+	const ShareableParams &getParams() const noexcept { return *_params; }
 	/**
 	 * Return the parameters.
 	 *
@@ -71,10 +71,12 @@ public:
 	 *
 	 * @return the parameters
 	 */
-	ShareableParams& getParams() noexcept { return *_params; }
+	ShareableParams &getParams() noexcept { return *_params; }
 	/** @warning This method shouldn't be used!!! It is only here for rare cases of optimization. */
-	[[deprecated ("This method shouldn't be used, except for rare cases of optimization.")]]
-	std::shared_ptr<ShareableParams>& getParamsPointer() noexcept { return _params; }
+	[[deprecated("This method shouldn't be used, except for rare cases of optimization.")]] std::shared_ptr<ShareableParams> &getParamsPointer() noexcept
+	{
+		return _params;
+	}
 	/**
 	 * Change the root frame.
 	 *
@@ -90,9 +92,8 @@ public:
 	 * @return the previous root frame.
 	 */
 	std::unique_ptr<ShareableFrame> setRootFrame(ShareableFrame *frame);
-	const ShareableFrame& getRootFrame() const { return *_rootFrame; }
-	ShareableFrame& getRootFrame() { return *_rootFrame; }
-
+	const ShareableFrame &getRootFrame() const { return *_rootFrame; }
+	ShareableFrame &getRootFrame() { return *_rootFrame; }
 
 private:
 	/** If the project has a title, the title of the project. */

@@ -67,9 +67,8 @@ const std::vector<std::string> TAConverter::tokenizeString(const std::string& st
 /////////////////////////////////////////////////////////////////////////////
 //constructor / destructor
 /////////////////////////////////////////////////////////////////////////////
-TAConverter::TAConverter()
-{//default constructor
-	fStream = 0;
+TAConverter::TAConverter() : fStream(0)
+{
 }
 
 TAConverter::TAConverter(TAStreamFormatter& stream)

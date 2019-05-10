@@ -18,8 +18,8 @@ bool inverse(const TSparseMatrix& sparseMat, TSparseMatrix& invMat, bool bTryCho
 {
 	invMat.setZero();
 	
-	int nRows = sparseMat.rows();
-	int nCols = sparseMat.cols();
+	auto nRows = sparseMat.rows();
+	auto nCols = sparseMat.cols();
 
 	if (nRows == nCols)
 	{
@@ -106,11 +106,12 @@ bool solveUnique(const TSparseMatrix& matA, const TVector& vectB, TVector& vectX
 
 inline double ABij(const TSparseMatrix& A, const TSparseMatrix& B, int i, int j)
 {
-	const int u(A.cols());
+	const Eigen::Index u(A.cols());
 	double sum(0.0);
 
 #pragma omp parallel for reduction(+ : sum)
-	for (int r = 0; r < u; r++) {
+	for (Eigen::Index r = 0; r < u; r++)
+	{
 		sum += A.coeff(i, r)*B.coeff(r, j);
 	}
 
@@ -126,19 +127,21 @@ inline double ABij(const TSparseMatrix& A, const TSparseMatrix& B, int i, int j)
 
 TVector& multABATasDiag(TVector& res, const TSparseMatrix& A, const TSparseMatrix& B)
 {
-	const int obs(A.rows());
-	const int ukn(A.cols());
+	const auto obs(A.rows());
+	const auto ukn(A.cols());
 
 	res.resize(obs);
 	res.setZero();
 
 	//TSparseMatrix AB(A*B);
 #pragma omp parallel for
-	for (int n = 0; n < obs; n++) {
-		for (int u = 0; u < ukn; u++) {
+	for (Eigen::Index n = 0; n < obs; n++)
+	{
+		for (Eigen::Index u = 0; u < ukn; u++)
+		{
 			// for unknowns (u= num unknowns)
 			//double abij = AB.coeff(n,u) ;
-			double abij = ABij(A, B, n, u);
+			double abij = ABij(A, B, (int)n, (int)u);
 			res(n) += abij * A.coeff(n, u);
 		}
 	}

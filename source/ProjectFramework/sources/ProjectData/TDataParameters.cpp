@@ -80,7 +80,7 @@ TDataParameters&  TDataParameters::operator=(TDataParameters rhs )
     return *this;    // our (old) resources get destroyed with rhs (copy)
 }
 
-void TDataParameters::swap(TDataParameters & other) throw()
+void TDataParameters::swap(TDataParameters & other) noexcept
 {
     std::swap(fRefFrame,other.fRefFrame);
     std::swap(fRefFrameEnum,other.fRefFrameEnum);

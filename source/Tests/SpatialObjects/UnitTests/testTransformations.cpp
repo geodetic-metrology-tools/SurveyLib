@@ -156,7 +156,6 @@ namespace tut
 
         // Inverse transformation - take the CH1903+ result and convert back
         position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
-		auto x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 		ensure_equals("ETRF93 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4273147.936), static_cast<TReal>(0.001));
 		ensure_equals("ETRF93 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(575368.294), static_cast<TReal>(0.001));
 		ensure_equals("ETRF93 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4684903.639), static_cast<TReal>(0.001));

@@ -36,7 +36,7 @@ TMatrix::TMatrix(const TMatrix & source)
 	//setStatus( source.getStatus() );
 }
 
-void TMatrix::swap(TMatrix & other) throw()
+void TMatrix::swap(TMatrix & other) noexcept
 {
     using std::swap;
     swap(fImpl, other.fImpl);

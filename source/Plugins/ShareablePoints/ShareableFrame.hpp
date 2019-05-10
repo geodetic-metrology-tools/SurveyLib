@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2018. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2018. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -50,30 +50,30 @@ class ShareableFrame
 {
 public:
 	/** Constructor. */
-	ShareableFrame(std::shared_ptr<ShareableParams> params, std::string name="") noexcept : _name(std::move(name)), _params(std::move(params)) {}
-	ShareableFrame(const ShareableFrame&) = delete; // can't copy (too heavy structure)
-	ShareableFrame(ShareableFrame&& other) noexcept;
-	ShareableFrame& operator=(const ShareableFrame&) = delete;
-	ShareableFrame& operator=(ShareableFrame&& other) noexcept;
+	ShareableFrame(std::shared_ptr<ShareableParams> params, std::string name = "") noexcept : _name(std::move(name)), _params(std::move(params)) {}
+	ShareableFrame(const ShareableFrame &) = delete; // can't copy (too heavy structure)
+	ShareableFrame(ShareableFrame &&other) noexcept;
+	ShareableFrame &operator=(const ShareableFrame &) = delete;
+	ShareableFrame &operator=(ShareableFrame &&other) noexcept;
 
 	/**
-	* Comparison operator.
-	* The parent and the params are not checked. If all the values are the same but the parent and/or the params, it returns true.
-	* Comparison is done on values, not on pointers.
-	*/
-	bool operator==(const ShareableFrame& a) const noexcept;
+	 * Comparison operator.
+	 * The parent and the params are not checked. If all the values are the same but the parent and/or the params, it returns true.
+	 * Comparison is done on values, not on pointers.
+	 */
+	bool operator==(const ShareableFrame &a) const noexcept;
 	/**
-	* Comparison operator.
-	* The parent and the params are not checked. If only the parent and/or the params differ, return false.
-	*/
-	bool operator!=(const ShareableFrame& a) const noexcept { return !(*this == a); }
+	 * Comparison operator.
+	 * The parent and the params are not checked. If only the parent and/or the params differ, return false.
+	 */
+	bool operator!=(const ShareableFrame &a) const noexcept { return !(*this == a); }
 
 	/** @return the parent frame */
-	const ShareableFrame* getParentFrame() const noexcept { return _parentFrame; }
+	const ShareableFrame *getParentFrame() const noexcept { return _parentFrame; }
 	/** @return the parent frame */
-	ShareableFrame* getParentFrame() noexcept { return _parentFrame; }
+	ShareableFrame *getParentFrame() noexcept { return _parentFrame; }
 	void setName(std::string name) noexcept { _name = std::move(name); }
-	const std::string& getName() const noexcept { return _name; }
+	const std::string &getName() const noexcept { return _name; }
 
 	/**
 	 * Add the given frame as a child frame.
@@ -87,7 +87,7 @@ public:
 	 * @param frame the new frame
 	 * @param position the insertion position
 	 */
-	void add(ShareableFrame* frame, size_t position = -1);
+	void add(ShareableFrame *frame, size_t position = -1);
 	/**
 	 * Add a new empty frame.
 	 *
@@ -96,7 +96,12 @@ public:
 	 * @param position the insertion position
 	 * @return the created frame
 	 */
-	ShareableFrame& addFrame(size_t position = -1) { auto f = new ShareableFrame(_params); add(f, position); return *f; }
+	ShareableFrame &addFrame(size_t position = -1)
+	{
+		auto f = new ShareableFrame(_params);
+		add(f, position);
+		return *f;
+	}
 	/**
 	 * Removes the frame.
 	 *
@@ -118,13 +123,13 @@ public:
 	 * @param frame the frame to remove
 	 * @return the removed frame, or nullptr
 	 */
-	std::unique_ptr<ShareableFrame> removeFrame(const ShareableFrame& frame);
+	std::unique_ptr<ShareableFrame> removeFrame(const ShareableFrame &frame);
 	/** @return the frame */
-	const ShareableFrame& getFrame(size_t position) const { return *_innerFrames[position]; }
+	const ShareableFrame &getFrame(size_t position) const { return *_innerFrames[position]; }
 	/** @return the frame */
-	ShareableFrame& getFrame(size_t position) { return *_innerFrames[position]; }
+	ShareableFrame &getFrame(size_t position) { return *_innerFrames[position]; }
 	/** @return the vector of subframes */
-	const std::vector<std::unique_ptr<ShareableFrame>>& getFrames() const noexcept { return _innerFrames; }
+	const std::vector<std::unique_ptr<ShareableFrame>> &getFrames() const noexcept { return _innerFrames; }
 	/**
 	 * Removes all subframes.
 	 * @warning All frames are deleted.
@@ -143,7 +148,7 @@ public:
 	 * @param point the new frame
 	 * @param position the insertion position
 	 */
-	void add(ShareablePoint* point, size_t position = -1);
+	void add(ShareablePoint *point, size_t position = -1);
 	/**
 	 * Add a new empty point.
 	 *
@@ -152,7 +157,12 @@ public:
 	 * @param position the insertion position
 	 * @return the created frame
 	 */
-	ShareablePoint& addPoint(size_t position = -1) { auto p = new ShareablePoint(); add(p, position); return *p; }
+	ShareablePoint &addPoint(size_t position = -1)
+	{
+		auto p = new ShareablePoint();
+		add(p, position);
+		return *p;
+	}
 	/**
 	 * Removes the point.
 	 *
@@ -174,15 +184,15 @@ public:
 	 * @param point the frame to remove
 	 * @return the removed frame, or nullptr
 	 */
-	std::unique_ptr<ShareablePoint> removePoint(const ShareablePoint& point);
+	std::unique_ptr<ShareablePoint> removePoint(const ShareablePoint &point);
 	/** @return the point */
-	const ShareablePoint& getPoint(size_t position) const { return *_points[position]; }
+	const ShareablePoint &getPoint(size_t position) const { return *_points[position]; }
 	/** @return the point */
-	ShareablePoint& getPoint(size_t position) { return *_points[position]; }
+	ShareablePoint &getPoint(size_t position) { return *_points[position]; }
 	/** @return the vector of points */
-	const std::vector<std::unique_ptr<ShareablePoint>>& getPoints() const noexcept { return _points; }
+	const std::vector<std::unique_ptr<ShareablePoint>> &getPoints() const noexcept { return _points; }
 	/** @return a vector with all the points in this frame and its children. */
-	std::vector<const ShareablePoint*> getAllPoints() const;
+	std::vector<const ShareablePoint *> getAllPoints() const;
 	/**
 	 * Removes all points in this frame.
 	 * @warning All points are deleted.
@@ -192,11 +202,11 @@ public:
 	size_t sizePoints() const noexcept { return _points.size(); }
 
 	void setTranslation(ShareablePosition translation) noexcept { _translation = std::move(translation); }
-	const ShareablePosition& getTranslation() const noexcept { return _translation; }
-	ShareablePosition& getTranslation() noexcept { return _translation; }
+	const ShareablePosition &getTranslation() const noexcept { return _translation; }
+	ShareablePosition &getTranslation() noexcept { return _translation; }
 	void setRotation(ShareablePosition rotation) noexcept { _rotation = std::move(rotation); }
-	const ShareablePosition& getRotation() const noexcept { return _rotation; }
-	ShareablePosition& getRotation() noexcept { return _rotation; }
+	const ShareablePosition &getRotation() const noexcept { return _rotation; }
+	ShareablePosition &getRotation() noexcept { return _rotation; }
 	void setScale(double scale) noexcept { _scale = scale; }
 	double getScale() const noexcept { return _scale; }
 	void isFreeScale(bool free) noexcept { _isfreescale = free; }
@@ -213,7 +223,7 @@ public:
 	 * @params the new parameters
 	 */
 	void setParams(std::shared_ptr<ShareableParams> params);
-	const ShareableParams& getParams() const noexcept { return *_params; }
+	const ShareableParams &getParams() const noexcept { return *_params; }
 	/**
 	 * Return the parameters.
 	 *
@@ -221,17 +231,17 @@ public:
 	 *
 	 * @return the parameters
 	 */
-	ShareableParams& getParams() noexcept { return *_params; }
+	ShareableParams &getParams() noexcept { return *_params; }
 
 private:
 	/** The parent frame (null if the frame is the root). */
-	ShareableFrame * _parentFrame = nullptr;
+	ShareableFrame *_parentFrame = nullptr;
 	/** The name of the frame. */
 	std::string _name;
 	/** The translation from the parent frame. */
-	ShareablePosition _translation = { 0, 0, 0, 0, 0, 0, false, false, false };
+	ShareablePosition _translation = {0, 0, 0, 0, 0, 0, false, false, false};
 	/** The rotation from the parent frame. */
-	ShareablePosition _rotation = { 0, 0, 0, 0, 0, 0, false, false, false };
+	ShareablePosition _rotation = {0, 0, 0, 0, 0, 0, false, false, false};
 	/** Scale factor from the parent frame. */
 	double _scale = 1;
 	/** Tells if the scale is flexible (free, known). */
