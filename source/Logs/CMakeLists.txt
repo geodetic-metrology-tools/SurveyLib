@@ -20,6 +20,9 @@ set(LOGS_SOURCES
 
 #Create a static library from the object files
 add_library(Logs STATIC ${LOGS_HEADERS} ${LOGS_SOURCES})
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+	target_link_libraries(Logs stdc++fs)
+endif()
 
 # Define VS folders:
 file(GLOB LOGS_LOGS ${CMAKE_CURRENT_LIST_DIR}/*)

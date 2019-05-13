@@ -1,10 +1,62 @@
+#include "FileLogHandler.hpp"
+
+#include <chrono>
+#include <filesystem>
 #include <fstream>
+#include <iomanip>
+#include <regex>
+#include <sstream>
 #include <string>
 
-#include "FileLogHandler.hpp"
+#include "Logger.hpp"
 #include "LogMessage.hpp"
 
-void FileLogHandler::log(const LogMessage & message)
+const char *DATEFORMAT = "%Y-%m-%d";
+
+std::string FileLogHandler::addDate(const std::string &filename)
+{
+	namespace fs = std::filesystem;
+	using chrono = std::chrono::system_clock;
+
+	const fs::path file = filename;
+	const std::string extension = file.extension().string();
+
+	auto now = chrono::to_time_t(chrono::now());
+	std::ostringstream oss;
+	oss << (file.parent_path() / file.stem()).string() << '_' << std::put_time(std::localtime(&now), DATEFORMAT) << extension;
+	return oss.str();
+}
+
+void FileLogHandler::removeOldLogs(const std::string &filename, int nbdays)
+{
+	namespace fs = std::filesystem;
+	using chrono = std::chrono::system_clock;
+
+	const fs::path filepath = filename;
+	std::regex regx((filepath.stem()).string() + R"""(_(\d{4}-\d{2}-\d{2}))""" + filepath.extension().string() + '$');
+	std::smatch match;
+	std::string file, date;
+
+	for (const auto &f : fs::directory_iterator(filepath.parent_path()))
+	{
+		file = f.path().string();
+		if (!f.exists() || !f.is_regular_file() || !std::regex_search(file, match, regx))
+			continue;
+		date = match[1];
+		// we check if the file is old enough
+		std::tm tm = {};
+		std::istringstream iss(date);
+		iss >> std::get_time(&tm, DATEFORMAT);
+		auto chronodate = chrono::from_time_t(std::mktime(&tm));
+		if (chronodate < chrono::now() - std::chrono::hours(nbdays * 24))
+		{
+			fs::remove(f);
+			logInfo() << "Log file '" << file << "' has been removed.";
+		}
+	}
+}
+
+void FileLogHandler::log(const LogMessage &message)
 {
 	if (_filePath.empty())
 		return;

@@ -24,6 +24,9 @@ add_library(Tools STATIC ${Tools_SOURCES} ${Tools_HEADERS})
 
 # Link static libraries to the current one
 target_link_libraries(Tools Logs)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+	target_link_libraries(Tools stdc++fs)
+endif()
 
 # needed for linux compilation
 set_target_properties(Tools PROPERTIES POSITION_INDEPENDENT_CODE ON)

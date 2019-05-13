@@ -32,6 +32,7 @@ set(PluginsTests_SOURCES
 )
 
 set(ToolsTests_SOURCES
+	${CMAKE_CURRENT_LIST_DIR}/Tools/testFileUtils.cpp
 	${CMAKE_CURRENT_LIST_DIR}/Tools/testStringManager.cpp
 )
 
