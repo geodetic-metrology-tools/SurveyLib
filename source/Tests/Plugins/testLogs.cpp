@@ -382,9 +382,7 @@ void testobject::test<40>()
 	auto *h = new FileLogHandler("./testLogs_test9.log");
 	logger.addHandlers(h);
 
-	{
-		logCritical() << "lol erreur !!!";
-	}
+	logCritical() << "lol erreur !!!";
 
 	std::ifstream f("./testLogs_test9.log");
 	std::string contents;
@@ -403,6 +401,19 @@ template<>
 template<>
 void testobject::test<41>()
 {
+	set_test_name("FileLogHandler: Test of log() to bad file");
+
+	auto &logger = Logger::getLogger();
+	auto *h = new FileLogHandler("CZY:/file*bad");
+	logger.addHandlers(h);
+
+	logWarning() << "lol erreur !!!"; // if throw, test fails
+}
+
+template<>
+template<>
+void testobject::test<42>()
+{
 	set_test_name("FileLogHandler: Test of addDate()");
 
 	std::string relative = "file.log";
@@ -419,7 +430,7 @@ void testobject::test<41>()
 
 template<>
 template<>
-void testobject::test<42>()
+void testobject::test<43>()
 {
 	set_test_name("FileLogHandler: Test of removeOldLogs()");
 

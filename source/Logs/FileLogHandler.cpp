@@ -8,8 +8,8 @@
 #include <sstream>
 #include <string>
 
-#include "Logger.hpp"
 #include "LogMessage.hpp"
+#include "Logger.hpp"
 
 const char *DATEFORMAT = "%Y-%m-%d";
 
@@ -50,8 +50,15 @@ void FileLogHandler::removeOldLogs(const std::string &filename, int nbdays)
 		auto chronodate = chrono::from_time_t(std::mktime(&tm));
 		if (chronodate < chrono::now() - std::chrono::hours(nbdays * 24))
 		{
-			fs::remove(f);
-			logInfo() << "Log file '" << file << "' has been removed.";
+			try
+			{
+				fs::remove(f);
+				logInfo() << "Log file '" << file << "' has been removed.";
+			}
+			catch (const fs::filesystem_error &e)
+			{
+				logDebug() << "Can't remove file '" << file << "':" << e.what();
+			}
 		}
 	}
 }
@@ -61,7 +68,17 @@ void FileLogHandler::log(const LogMessage &message)
 	if (_filePath.empty())
 		return;
 
-	std::ofstream file(_filePath, std::ofstream::app);
+	std::ofstream file;
+	try
+	{
+		file.open(_filePath, std::ofstream::app);
+		if (!file)
+			return;
+	}
+	catch (const std::exception &e)
+	{
+		return; // we can't notify the error here, we are in the logging loop...
+	}
 
 	file << message.getDate() << ' ' << message.getType() << ": '" << message.getMessage() << "'";
 	if (message.getType() == LogMessage::Type::DEBUG || message.getType() >= LogMessage::Type::CRITICAL)
