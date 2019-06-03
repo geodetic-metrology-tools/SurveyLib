@@ -1,4 +1,4 @@
-include: "https://gitlab.cern.ch/apc/susofts/shared/sus_ci_cppworker/raw/master/.gitlab-ci-TEMPLATE.yml"
+include: "https://apc-dev.web.cern.ch/ci/scripts/gitlab-ci-susoft.yml"
 
 ##################
 # LINUX BUILDS   #
@@ -6,14 +6,11 @@ include: "https://gitlab.cern.ch/apc/susofts/shared/sus_ci_cppworker/raw/master/
 
 # Build all targets and run the tests
 linux_build_and_test:
-    script:
-        - echo "Building all targets | -j$(nproc)"
-        - $CMAKEBIN --build . -j $(nproc) --config Release
-        - echo "Running the tests"
-        - ./staging/UnitTests
+    extends: .linux_build_and_test
 
 # Build and upload the libSpatialObjDLL.so
 linux_release:
+    extends: .linux_release
     script:
         - echo "Building shared object library | -j$(nproc)"
         - $CMAKEBIN --build . -j $(nproc) --config Release --target SpatialObjDLL
@@ -29,14 +26,11 @@ linux_release:
 
 # Build all targets and run the tests
 windows64_build_and_test:
-    script:
-        - echo "Building all targets"
-        - cmake --build . -j %NUMBER_OF_PROCESSORS% --config Release
-        - echo "Running the tests"
-        - staging\UnitTests.exe
+    extends: .windows64_build_and_test
 
 # Build and upload the SpatialObjDLL.dll
 windows64_release:
+    extends: .windows64_release
     script:
         - echo "Building shared object library"
         - cmake --build . -j %NUMBER_OF_PROCESSORS% --config Release --target SpatialObjDLL
