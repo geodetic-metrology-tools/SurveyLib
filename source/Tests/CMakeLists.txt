@@ -71,6 +71,12 @@ target_link_libraries (UnitTests
 	Tools
 )
 
+add_test(
+	NAME UnitTests
+	COMMAND $<TARGET_FILE_NAME:UnitTests>
+	WORKING_DIRECTORY $<TARGET_FILE_DIR:UnitTests>
+)
+
 source_group("SpatialObjects" FILES ${SpatialObjects_SOURCES})
 source_group("SurveyLibDLL" FILES ${SurveyLibDLLTests_SOURCES})
 source_group("ProjectFramework" FILES ${ProjectFrameworkTests_SOURCES})
