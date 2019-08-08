@@ -62,8 +62,15 @@ LogMessage & LogMessage::operator<<(std::basic_ostream<char, std::char_traits<ch
 
 std::string LogMessage::getDate(const std::string & format) const
 {
+#ifdef _MSC_VER
+#	define LOCALTIME(time, timeres) localtime_s((timeres), (time))
+#else
+#	define LOCALTIME(time, timeres) localtime_r((time), (timeres))
+#endif
+	std::tm timeres;
+	LOCALTIME(&_pimpl->creationDate, &timeres);
 	std::ostringstream str;
-	str << std::put_time(std::localtime(&_pimpl->creationDate), format.c_str());
+	str << std::put_time(&timeres, format.c_str());
 	return str.str();
 }
 
