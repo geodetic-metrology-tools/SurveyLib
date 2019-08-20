@@ -15,6 +15,11 @@ const char *DATEFORMAT = "%Y-%m-%d";
 
 std::string FileLogHandler::addDate(const std::string &filename)
 {
+#ifdef _MSC_VER
+#	define LOCALTIME(time, timeres) localtime_s((timeres), (time))
+#else
+#	define LOCALTIME(time, timeres) localtime_r((time), (timeres))
+#endif
 	namespace fs = std::filesystem;
 	using chrono = std::chrono::system_clock;
 
@@ -22,8 +27,10 @@ std::string FileLogHandler::addDate(const std::string &filename)
 	const std::string extension = file.extension().string();
 
 	auto now = chrono::to_time_t(chrono::now());
+	std::tm timeres;
+	LOCALTIME(&now, &timeres);
 	std::ostringstream oss;
-	oss << (file.parent_path() / file.stem()).string() << '_' << std::put_time(std::localtime(&now), DATEFORMAT) << extension;
+	oss << (file.parent_path() / file.stem()).string() << '_' << std::put_time(&timeres, DATEFORMAT) << extension;
 	return oss.str();
 }
 
@@ -75,7 +82,7 @@ void FileLogHandler::log(const LogMessage &message)
 		if (!file)
 			return;
 	}
-	catch (const std::exception &e)
+	catch (const std::exception &)
 	{
 		return; // we can't notify the error here, we are in the logging loop...
 	}
