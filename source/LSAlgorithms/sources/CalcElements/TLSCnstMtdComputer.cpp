@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <Eigen/LU>
+#include <Eigen/SparseQR>
 #include <Logger.hpp>
 
 
@@ -163,12 +164,14 @@ bool TLSCnstMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResults
 
 	// Calculates solution NBig * X = -VBig and keeps only the part corresponding to adjusted parameters
 	TVector solutionExt(nbUnk + nbCnstr);
-//	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt))
-	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt))
+
+	//	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt))
+	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt,false))
 	{
 		logCritical() << "No solution could be found when solving equation system: Nbig * dX = -VBig (extended matrices with conditions)";
 		return false;
 	}
+	
 
 	TVector solution(nbUnk);
 	solution = solutionExt.head(nbUnk);
@@ -262,16 +265,19 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 
 	// Inverse NBig: Changed the way the extended matrix is inverted (similar method than during the iterative adjustment steps!!!)
 	TSparseMatrix Qxx(nbUnk + nbCnstr, nbUnk + nbCnstr);
-	if (!TSparseUtils::inverse(NBig, Qxx, true))
+
+	// ----------Normal method-----------
+	
+	if (!TSparseUtils::inverse(NBig, Qxx, false))
 	{
 		logCritical() << "In LIBR calculation, the extended normal matrix NBig could not be inverted!";
 		return false;
 	}
-
+	
 	//--------------- Residual covariance matrix ---------------//
 	// Intermediate matrix
 	TSparseMatrix invN2(nbUnk, nbUnk);
-	if (!TSparseUtils::inverse(N2, invN2))
+	if (!TSparseUtils::inverse(N2, invN2,false))
 	{
 		// FRK (09/01/18): This matrix is theoretically NEVER invertible!!! => We should use the extended NBig matrix for that and define other formulaes
 		logWarning() << "Could not invert normal matrix N2";
