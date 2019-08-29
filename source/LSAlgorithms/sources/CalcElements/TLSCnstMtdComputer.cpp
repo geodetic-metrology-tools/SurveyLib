@@ -127,7 +127,7 @@ bool TLSCnstMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResults
 	
 	// Calculate invN1 = inv( B*inv(Pv)*transpose(B) ),  matrix dimensions (nEq,nEq)
 	TSparseMatrix invN1(nbEq, nbEq);
-	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1))
+	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1),false,false)
 	{ 
 		logCritical() << "Matrix B*inv(Pv)*transpose(B) could not be inverted!";
 		return false;
@@ -166,7 +166,7 @@ bool TLSCnstMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResults
 	TVector solutionExt(nbUnk + nbCnstr);
 
 	//	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt))
-	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt,false))
+	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt, false, false))
 	{
 		logCritical() << "No solution could be found when solving equation system: Nbig * dX = -VBig (extended matrices with conditions)";
 		return false;
@@ -216,7 +216,7 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 	// S = - inv(P) * Bt *inv( B * inv(P) * Bt )
 
 	TSparseMatrix invN1(nbObs, nbObs);
-	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1))
+	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1), false, false)
 	{
 		logCritical() << "Could not invert intermediate matrix N1 = B * InvPv * B.transpose()";
 		return false;
@@ -268,7 +268,7 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 
 	// ----------Normal method-----------
 	
-	if (!TSparseUtils::inverse(NBig, Qxx, false))
+	if (!TSparseUtils::inverse(NBig, Qxx, false, false))
 	{
 		logCritical() << "In LIBR calculation, the extended normal matrix NBig could not be inverted!";
 		return false;
@@ -277,7 +277,13 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 	//--------------- Residual covariance matrix ---------------//
 	// Intermediate matrix
 	TSparseMatrix invN2(nbUnk, nbUnk);
-	if (!TSparseUtils::inverse(N2, invN2,false))
+	/*
+	invN2 = Qxx.topLeftCorner(nbUnk, nbUnk);
+	TSparseMatrix Qvv(nbObs, nbObs);
+	Qvv = S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose();
+	rm->setResCovarMtrx(Qvv);
+	*/
+	if (!TSparseUtils::inverse(N2, invN2, false, false))
 	{
 		// FRK (09/01/18): This matrix is theoretically NEVER invertible!!! => We should use the extended NBig matrix for that and define other formulaes
 		logWarning() << "Could not invert normal matrix N2";
@@ -290,7 +296,7 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 		Qvv = S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose();
 		rm->setResCovarMtrx(Qvv);
 	}
-
+	
 	// Copies the matrices into the members of the TResultsMatrices object
 	rm->setUnkCovarMtrx(Qxx); // IMPORTANT NOTE: this variance-covariance matrix has a dimension of ( u + c, u + c ), where c = number of constraints, u = number of unknowns.
 	rm->setResidualsVect(V);

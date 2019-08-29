@@ -15,7 +15,7 @@ namespace TSparseUtils {
 		\param[in]  sparseMat The sparse matrix to be inverted
 		\param[out] invMat    The resulting inverted matrix.
 */
-bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCholeskyFirst)
+bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCholeskyFirst, bool bTryFullPivotSecond)
 {
 	invMat.setZero();
 
@@ -47,21 +47,23 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 		else
 			logDebug() << "Cholesky method failed to invert the matrix!";
 	}
-	/*
+
 	// Cholesky method does not work, try FullPiv
 	// LU decomposition of any matrix, with complete pivoting : the matrix A is decomposed as
 	// A = P ^ { -1 } L U Q^{ -1 },  where L is unit -lower-triangular, U is upper-triangular, and P and Q are permutation matrices.
-	Eigen::FullPivLU<TMatrixDouble> luMat(sparseMat);
-	if (luMat.isInvertible())
+	if (bTryFullPivotSecond)
 	{
-		invMat = luMat.inverse().sparseView();
-		logDebug() << "FullPivLU method is used to invert the matrix!";
-		return true;
+		Eigen::FullPivLU<TMatrixDouble> luMat(sparseMat.toDense());
+		if (luMat.isInvertible())
+		{
+			invMat = luMat.inverse().sparseView();
+			logDebug() << "FullPivLU method is used to invert the matrix!";
+			return true;
 	}
 	else
 		logDebug() << "FullPivLU method failed to invert the matrix!";
-		*/
-	/*
+	}
+
 	// If both are not working, use Sparse LU
 	Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> LuMat;
 	LuMat.analyzePattern(sparseMat);
@@ -75,36 +77,15 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 	invMat = LuMat.solve(IdMat);
 	if (LuMat.info() == Eigen::Success) 
 	{
-		logDebug() << "SparseQR method method is used to invert the matrix!";
-		return true;
-	}
-	else
-	{
-		logDebug() << "SparseQR method failed to invert the matrix!!";
-		return false;
-	}
-	*/
-	// If the trhee are not working, use Sparse QR
-	Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> QrMat;
-	QrMat.analyzePattern(sparseMat);
-	QrMat.factorize(sparseMat);
-	QrMat.compute(sparseMat);
-	if (QrMat.info() != Eigen::Success)
-	{
-		logDebug() << "Decomposition with the SparseLU method failed to invert the matrix!!";
-		return false;
-	}
-	invMat = QrMat.solve(IdMat);
-	if (QrMat.info() != Eigen::Success) 
-	{
 		logDebug() << "SparseLU method method is used to invert the matrix!";
-		return false;
+		return true;
 	}
 	else
 	{
 		logDebug() << "SparseLU method failed to invert the matrix!!";
-		return true;
+		return false;
 	}
+	
 }
 
 /*!
@@ -114,7 +95,7 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 		\param[out] vectX The resulting solution vector.
 */
 
-bool solveUnique(const TSparseMatrix& matA, const TVector& vectB, TVector& vectX, bool bTryCholeskyFirst)
+bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool bTryCholeskyFirst, bool bTryFullPivotSecond)
 {
 	vectX.setZero();
 
@@ -139,41 +120,20 @@ bool solveUnique(const TSparseMatrix& matA, const TVector& vectB, TVector& vectX
 		else
 			logDebug() << "Cholesky method failed for solving the equations system!";
 	}
-	/*
-	// Cholesky method does not work, try FullPiv
-	Eigen::FullPivLU<TMatrixDouble> luMat(matA);
-	if (luMat.isInvertible())
-	{
-		vectX = luMat.solve(vectB);
-		logDebug() << "FullPivLU method is used for solving the equations system!";
-		return true;
-	}
-	else
-		logDebug() << "FullPivLU method failed for solving the equations system!";
-	*/
 
-	/*
-	// If both are not working, use Sparse LU
-	Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> LuMat;
-	LuMat.analyzePattern(matA);
-	LuMat.factorize(matA);
-	LuMat.compute(matA);
-	if (LuMat.info() != Eigen::Success)
+	// Cholesky method does not work, try FullPiv
+	if (bTryFullPivotSecond)
 	{
-		logDebug() << "Decomposition with the SparseQR method failed to invert the matrix!!";
-		return false;
+		Eigen::FullPivLU<TMatrixDouble> luMat(matA.toDense());
+		if (luMat.isInvertible())
+		{
+			vectX = luMat.solve(vectB);
+			logDebug() << "FullPivLU method is used for solving the equations system!";
+			return true;
+		}
+		else
+			logDebug() << "FullPivLU method failed for solving the equations system!";
 	}
-	vectX = LuMat.solve(vectB);
-	if (LuMat.info() == Eigen::Success)
-	{
-		logDebug() << "SparseQR method method is used to invert the matrix!";
-		return true;
-	}
-	else
-	{
-		logDebug() << "SparseQR method failed to invert the matrix!!";
-	}
-	*/
 	
 	// If both are not working, use Sparse QR
 	Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> QrMat;
