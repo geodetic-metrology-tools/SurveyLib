@@ -136,8 +136,10 @@ bool TLSCombinedMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* 
 		return false;
 
 	// Variance-covariance matrix of the observation residues ( dimension nObs * nObs )
+	// GKA (26/09/2019) : Qvv is changed from Qvv = S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose() to the actual solution: see "a synthesis of recent advances in the method of least squares" from Krakiwsky
+
 	TSparseMatrix Qvv(nbObs, nbObs);
-	Qvv = S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose();
+	Qvv = InvPv * B.transpose() * invN1 * B * InvPv - InvPv * B.transpose() * invN1 * A * Qxx * A.transpose() * invN1 * B * InvPv;
 
 	// Copies the matrices into the members of the TResultsMatrices object
 	rm->setResCovarMtrx(Qvv);
