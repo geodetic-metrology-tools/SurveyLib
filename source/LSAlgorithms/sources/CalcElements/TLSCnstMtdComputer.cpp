@@ -289,9 +289,10 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 		// FRK (09/01/18): needs STILL TO BE STUDIED for calculating variances on residual errors and related statistics !!!
 		// See above remark!!!
 		// GKA (26/09/2019) : Qvv is changed from Qvv = S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose() to the actual solution: see "a synthesis of recent advances in the method of least squares" from Krakiwsky
+		// according to literature: Qvv = InvPv * B.transpose() * invN1 * B * InvPv - InvPv * B.transpose() * invN1 * A * invN2 * A.transpose() * invN1 * B * InvPv;
 
 		TSparseMatrix Qvv(nbObs, nbObs);
-		Qvv = InvPv * B.transpose() * invN1 * B * InvPv - InvPv * B.transpose() * invN1 * A * invN2 * A.transpose() * invN1 * B * InvPv;
+		Qvv = - S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose();
 		rm->setResCovarMtrx(Qvv);
 	}
 	
