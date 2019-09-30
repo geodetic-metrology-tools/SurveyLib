@@ -1,4 +1,5 @@
 #include <Eigen/LU>
+#include <Eigen/SparseQR>
 
 #include "TSparseMatrix.h"
 #include <iostream>
@@ -14,49 +15,78 @@ namespace TSparseUtils {
 		\param[in]  sparseMat The sparse matrix to be inverted
 		\param[out] invMat    The resulting inverted matrix.
 */
-bool inverse(const TSparseMatrix& sparseMat, TSparseMatrix& invMat, bool bTryCholeskyFirst)
+bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCholeskyFirst, bool bTryFullPivotSecond)
 {
 	invMat.setZero();
-	
+
 	auto nRows = sparseMat.rows();
 	auto nCols = sparseMat.cols();
 
-	if (nRows == nCols)
+	if (nRows != nCols)
 	{
-		if (bTryCholeskyFirst)  // By default, does not try this method
-		{
-			// LDL^T Cholesky factorizations without square root of sparse matrices that are selfadjoint and positive definite
-			Eigen::SimplicialLDLT<TSparseMatrix> cholMat(sparseMat);
-			if (cholMat.info() == Eigen::Success)
-			{
-				// Cholesky method is used to invert the matrix. solving the equation: N * X = Id => X = inv(N) 
-				TSparseMatrix IdMat(nRows, nRows);
-				IdMat.setIdentity();
-				invMat = cholMat.solve(IdMat);
-				return true;
-			}
-		}
+		logDebug() << "The given matrix A is not a square matrix to inverse!";
+		return false;
+	}
 
-		// LU decomposition of any matrix, with complete pivoting : the matrix A is decomposed as  
-		// A = P ^ { -1 } L U Q^{ -1 },  where L is unit -lower-triangular, U is upper-triangular, and P and Q are permutation matrices.
-		Eigen::FullPivLU<TMatrixDouble> luMat(sparseMat);
-		if (!luMat.isInvertible())
+	// Setting the identity matrix
+	TSparseMatrix IdMat(nRows, nRows);
+	IdMat.setIdentity();
+
+	// By default, tries Cholesky method first
+	if (bTryCholeskyFirst)
+	{
+		// LDL^T Cholesky factorizations without square root of sparse matrices that are selfadjoint and positive definite
+		Eigen::SimplicialLDLT<TSparseMatrix> cholMat(sparseMat);
+		if (cholMat.info() == Eigen::Success)
 		{
-			// Add some log with the new LOG static library
-			// error = "Matrix not inverted (neither Cholesky nor FullPivLU Methods worked!)";
-			return false;
+			// Uses Cholesky method
+			invMat = cholMat.solve(IdMat);
+			logDebug() << "Cholesky method is used to invert the matrix!";
+			return true;
 		}
-		invMat = luMat.inverse().sparseView();
+		else
+			logDebug() << "Cholesky method failed to invert the matrix!";
+	}
+
+	// Cholesky method does not work, try FullPiv
+	// LU decomposition of any matrix, with complete pivoting : the matrix A is decomposed as
+	// A = P ^ { -1 } L U Q^{ -1 },  where L is unit -lower-triangular, U is upper-triangular, and P and Q are permutation matrices.
+	if (bTryFullPivotSecond)
+	{
+		Eigen::FullPivLU<TMatrixDouble> luMat(sparseMat.toDense());
+		if (luMat.isInvertible())
+		{
+			invMat = luMat.inverse().sparseView();
+			logDebug() << "FullPivLU method is used to invert the matrix!";
+			return true;
+	}
+	else
+		logDebug() << "FullPivLU method failed to invert the matrix!";
+	}
+
+	// If both are not working, use Sparse LU
+	Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> LuMat;
+	LuMat.analyzePattern(sparseMat);
+	LuMat.factorize(sparseMat);
+	LuMat.compute(sparseMat);
+	if (LuMat.info() != Eigen::Success) 
+	{
+		logDebug() << "Decomposition with the SparseQR method failed to invert the matrix!!";
+		return false;
+	}
+	invMat = LuMat.solve(IdMat);
+	if (LuMat.info() == Eigen::Success) 
+	{
+		logDebug() << "SparseLU method method is used to invert the matrix!";
 		return true;
 	}
 	else
 	{
-		// Add some log with the new LOG static library
-		// error = "The given matrix is not a square matrix and cannot be inverted!";
+		logDebug() << "SparseLU method failed to invert the matrix!!";
 		return false;
 	}
+	
 }
-
 
 /*!
 		\brief Solves the matricial equation A * X = B, where A is a squared sparse matrix, X and B are vectors
@@ -65,42 +95,67 @@ bool inverse(const TSparseMatrix& sparseMat, TSparseMatrix& invMat, bool bTryCho
 		\param[out] vectX The resulting solution vector.
 */
 
-bool solveUnique(const TSparseMatrix& matA, const TVector& vectB, TVector& vectX, bool bTryCholeskyFirst)
+bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool bTryCholeskyFirst, bool bTryFullPivotSecond)
 {
 	vectX.setZero();
 
-	if (matA.rows() == matA.cols() && vectB.rows() == matA.rows())  // A must be a square matrix in our case, and the number of B vector elements must be the same!
+	 // A must be a square matrix in our case, and the number of B vector elements must be the same!
+	if (matA.rows() != matA.cols() || vectB.rows() != matA.rows())
 	{
-		if (bTryCholeskyFirst)  // By default, tries this method first
-		{
-			Eigen::SimplicialLDLT<TSparseMatrix> cholMat(matA);
-			if (cholMat.info() == Eigen::Success)
-			{
-				// Uses Cholesky method
-				vectX = cholMat.solve(vectB);
-				return true;
-			}
-			else
-				logDebug() << "Cholesky method failed for solving the equations system!";
-		}
-
-		// Cholesky method does not work, try FullPiv
-		Eigen::FullPivLU<TMatrixDouble> luMat(matA);
-		if (!luMat.isInvertible())
-		{
-			logDebug() << "FullPivLU method failed for solving the equations system!";
-			return false;
-		}
-		vectX = luMat.solve(vectB);
-		return true;
-	}
-	else
-	{
-		// Add some log with the new LOG static library
 		logDebug() << "The given matrix A is not a square matrix, or the number of vector B elements does not correspond to A dimensions!";
 		return false;
 	}
 
+	// By default, tries Cholesky method first
+	if (bTryCholeskyFirst) 
+	{
+		Eigen::SimplicialLDLT<TSparseMatrix> cholMat(matA);
+		if (cholMat.info() == Eigen::Success)
+		{
+			// Uses Cholesky method
+			vectX = cholMat.solve(vectB);
+			logDebug() << "Cholesky method is used for solving the equations system!";
+			return true;
+		}
+		else
+			logDebug() << "Cholesky method failed for solving the equations system!";
+	}
+
+	// Cholesky method does not work, try FullPiv
+	if (bTryFullPivotSecond)
+	{
+		Eigen::FullPivLU<TMatrixDouble> luMat(matA.toDense());
+		if (luMat.isInvertible())
+		{
+			vectX = luMat.solve(vectB);
+			logDebug() << "FullPivLU method is used for solving the equations system!";
+			return true;
+		}
+		else
+			logDebug() << "FullPivLU method failed for solving the equations system!";
+	}
+	
+	// If both are not working, use Sparse QR
+	Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> QrMat;
+	QrMat.analyzePattern(matA);
+	QrMat.factorize(matA);
+	QrMat.compute(matA);
+	if (QrMat.info() != Eigen::Success) 
+	{
+		logDebug() << "Decomposition with the SparseQR method failed!";
+		return false;
+	}
+	vectX = QrMat.solve(vectB);
+	if (QrMat.info() != Eigen::Success) 
+	{
+		logDebug() << "SparseQR method failed for solving the equations system!";
+		return false;
+	}
+	else
+	{
+		logDebug() << "SparseQR method is used for solving the equations system!";
+		return true;
+	}
 }
 
 
