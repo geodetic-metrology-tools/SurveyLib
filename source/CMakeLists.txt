@@ -32,8 +32,8 @@ include("../../SUSoftCMakeCommon/CMakeLists.txt")
 
 # Set version number and provide a header file with corresponding defines
 set (SurveyLib_VERSION_MAJOR 4)
-set (SurveyLib_VERSION_MINOR 0)
-set (SurveyLib_VERSION_PATCH 0)
+set (SurveyLib_VERSION_MINOR 01)
+set (SurveyLib_VERSION_PATCH 00)
 
 configure_file (
   "${CMAKE_SOURCE_DIR}/SurveryLibVersion.in"
