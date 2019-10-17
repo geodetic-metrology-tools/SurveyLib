@@ -11,6 +11,7 @@ linux_build_and_test:
 # Build and upload the libSpatialObjDLL.so
 linux_release:
     extends: .linux_release
+    needs: ["linux_build_and_test"]
     script:
         - echo "Building shared object library | -j$(nproc)"
         - $CMAKEBIN --build . -j $(nproc) --config Release --target SpatialObjDLL
@@ -31,6 +32,7 @@ windows64_build_and_test:
 # Build and upload the SpatialObjDLL.dll
 windows64_release:
     extends: .windows64_release
+    needs: ["windows64_build_and_test"]
     script:
         - echo "Building shared object library"
         - cmake --build . -j %NUMBER_OF_PROCESSORS% --config Release --target SpatialObjDLL
@@ -53,6 +55,7 @@ windows32_build_and_test:
 # Build and upload the SpatialObjDLL.dll
 windows32_release:
     extends: windows64_release
+    needs: ["windows32_build_and_test"]
     tags:
         - windows
         - x32
