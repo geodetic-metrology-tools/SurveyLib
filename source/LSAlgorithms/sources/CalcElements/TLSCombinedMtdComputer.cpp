@@ -131,8 +131,9 @@ bool TLSCombinedMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* 
 
 	//--------------- Variance-Covariance matrices ---------------//
 	// Variance-covariance matrix of the unknowns Qxx = inv( N2 );
+	// GKA (28/10/2019): Try Cholesky first enabled for the computation of precisions in Chaba 
 	TSparseMatrix Qxx(nbUnk, nbUnk);
-	if (!TSparseUtils::inverse(N2, Qxx))
+	if (!TSparseUtils::inverse(N2, Qxx,true))
 		return false;
 
 	// Variance-covariance matrix of the observation residues ( dimension nObs * nObs )
