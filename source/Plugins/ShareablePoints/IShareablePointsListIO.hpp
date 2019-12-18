@@ -99,6 +99,11 @@ public:
 
 	virtual ~IShareablePointsListIO() = default;
 
+	/** @return true if it reads / write utf8 */
+	virtual bool utf8() const noexcept { return _utf8; }
+	/** @param isutf8 tells if we should read / write utf8 */
+	virtual void utf8(bool isutf8) noexcept { _utf8 = isutf8; }
+
 	/** @return the MIME type asociated with the managed format. */
 	virtual const std::string &getMIMEType() const = 0;
 	/**
@@ -226,6 +231,9 @@ public:
 	Fields exportFieldsFrame{{"name", "translation", "rotation", "scale", "isfreescale", "innerFrames", "points"}};
 	/** List of fields that will be written when we serialize a ShareablePointsList. */
 	Fields exportFieldsPointsList{{"title", "params", "rootFrame"}};
+
+private:
+	bool _utf8 = true;
 };
 
 #endif // ISHAREABLEPOINTSLISTIO_HPP
