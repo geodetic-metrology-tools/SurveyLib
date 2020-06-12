@@ -376,20 +376,20 @@ void TRefSystemFactory::init()
 	for(i = 0; i < n.size(); i++)
 	{
 		for (j = 0; j < n[i].size(); j++)
-			(*NMatrix0)(i,j) = n[i][j];
+			(*NMatrix0)((int)i,(int)j) = n[i][j];
 	}
 
 
 	for (i = 0; i <eta.size(); i++)
 	{
 		for (j = 0; j < eta[i].size(); j++)
-			(*EtaMatrix0)(i,j) = eta[i][j];
+			(*EtaMatrix0)((int)i, (int)j) = eta[i][j];
 	}
 
 	for (i = 0; i < xsi.size(); i++)
 	{
 		for (j = 0; j < xsi[i].size(); j++)
-			(*XsiMatrix0)(i,j) = xsi[i][j];
+			(*XsiMatrix0)((int)i, (int)j) = xsi[i][j];
 	}
 
 
@@ -472,20 +472,20 @@ void TRefSystemFactory::init()
 	for (i = 0; i < nTopo.size(); i++)
 	{
 		for (j = 0; j < nTopo[i].size(); j++)
-			(*NMatrixTopo)(i,j) = nTopo[i][j];
+			(*NMatrixTopo)((int)i, (int)j) = nTopo[i][j];
 	}
 
 
 	for (i = 0; i < etaTopo.size(); i++)
 	{
 		for (j = 0; j < etaTopo[i].size(); j++)
-			(*EtaMatrixTopo)(i,j) = etaTopo[i][j];
+			(*EtaMatrixTopo)((int)i, (int)j) = etaTopo[i][j];
 	}
 
 	for (i = 0; i < xsiTopo.size(); i++)
 	{
 		for (j = 0; j < xsiTopo[i].size(); j++)
-			(*XsiMatrixTopo)(i,j) = xsiTopo[i][j];
+			(*XsiMatrixTopo)((int)i, (int)j) = xsiTopo[i][j];
 	}
 
 
@@ -569,20 +569,20 @@ void TRefSystemFactory::init()
 	for (i = 0; i < (int)nLEP.size(); i++)
 	{
 		for (j = 0; j < (int)nLEP[i].size(); j++)
-			(*NMatrixLEP)(i,j) = nLEP[i][j];
+			(*NMatrixLEP)((int)i, (int)j) = nLEP[i][j];
 	}
 
 
 	for (i = 0; i < (int)etaLEP.size(); i++)
 	{
 		for (j = 0; j < (int)etaLEP[i].size(); j++)
-			(*EtaMatrixLEP)(i,j) = etaLEP[i][j];
+			(*EtaMatrixLEP)((int)i, (int)j) = etaLEP[i][j];
 	}
 
 	for (i = 0; i < (int)xsiLEP.size(); i++)
 	{
 		for (j = 0; j < (int)xsiLEP[i].size(); j++)
-			(*XsiMatrixLEP)(i,j) = xsiLEP[i][j];
+			(*XsiMatrixLEP)((int)i, (int)j) = xsiLEP[i][j];
 	}
 
 

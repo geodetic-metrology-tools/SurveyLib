@@ -11,7 +11,8 @@
 #include "LogMessage.hpp"
 #include "Logger.hpp"
 
-const char *DATEFORMAT = "%Y-%m-%d";
+constexpr char *FILEDATEFORMAT = "%Y-%m-%d";
+constexpr char *LOGDATEFORMAT = "%d/%m/%Y %T";
 
 std::string FileLogHandler::addDate(const std::string &filename)
 {
@@ -30,7 +31,7 @@ std::string FileLogHandler::addDate(const std::string &filename)
 	std::tm timeres;
 	LOCALTIME(&now, &timeres);
 	std::ostringstream oss;
-	oss << (file.parent_path() / file.stem()).string() << '_' << std::put_time(&timeres, DATEFORMAT) << extension;
+	oss << (file.parent_path() / file.stem()).string() << '_' << std::put_time(&timeres, FILEDATEFORMAT) << extension;
 	return oss.str();
 }
 
@@ -53,7 +54,7 @@ void FileLogHandler::removeOldLogs(const std::string &filename, int nbdays)
 		// we check if the file is old enough
 		std::tm tm = {};
 		std::istringstream iss(date);
-		iss >> std::get_time(&tm, DATEFORMAT);
+		iss >> std::get_time(&tm, FILEDATEFORMAT);
 		auto chronodate = chrono::from_time_t(std::mktime(&tm));
 		if (chronodate < chrono::now() - std::chrono::hours(nbdays * 24))
 		{
@@ -87,7 +88,7 @@ void FileLogHandler::log(const LogMessage &message)
 		return; // we can't notify the error here, we are in the logging loop...
 	}
 
-	file << message.getDate() << ' ' << message.getType() << ": '" << message.getMessage() << "'";
+	file << message.getDate(LOGDATEFORMAT) << ' ' << message.getType() << ": '" << message.getMessage() << "'";
 	if (message.getType() == LogMessage::Type::DEBUG || message.getType() >= LogMessage::Type::CRITICAL)
 		file << "\n\t" << message.getContext();
 	file << std::endl;

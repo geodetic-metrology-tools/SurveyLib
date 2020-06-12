@@ -1,6 +1,6 @@
 //  TRefSystemFactory.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*! A singleton class listing reference surface, reference frame and reference frame transformation.
@@ -230,7 +230,9 @@ private:
 	//il est important que ce soit une classe TA plutot que TV pour avoir acces au destructeur
 
 
-	TGeodeticRefFrame *fCGRF, *fCGRFSphere, *fCGRF2;
+	TGeodeticRefFrame *fCGRF = nullptr;
+	TGeodeticRefFrame *fCGRFSphere = nullptr;
+	TGeodeticRefFrame *fCGRF2 = nullptr;
 };
 /*@}*/
 

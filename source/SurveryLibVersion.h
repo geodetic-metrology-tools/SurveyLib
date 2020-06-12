@@ -5,8 +5,8 @@
 #include <cstdio>
 
 #define SurveyLib_VERSION_MAJOR 4
-#define SurveyLib_VERSION_MINOR 0
-#define SurveyLib_VERSION_PATCH 0
+#define SurveyLib_VERSION_MINOR 01
+#define SurveyLib_VERSION_PATCH 00
 
 static std::string getSurveyLibVersion(void) {
 	static char str[128];
