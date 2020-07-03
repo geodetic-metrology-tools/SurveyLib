@@ -71,6 +71,12 @@ TAngle::TAngle(const TReal value, EUnits unit)
 
 void TAngle::normaliseAngle()
 {
+	if ((fValue > PI - seuil()) || (fValue < -PI + seuil()))
+	{
+		double intpart, fractpart;
+		fractpart = modf(fValue / TWOPI, &intpart);
+		fValue = fValue - intpart * TWOPI;
+	}   
     while (fValue > PI - seuil())
         fValue -= TWOPI;
    
