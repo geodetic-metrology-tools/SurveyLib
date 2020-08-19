@@ -124,6 +124,19 @@ bool T3DCartesianCoordSys::setAllRotations(TRotationMatrix* mx, TRotationMatrix:
 	setC(mx, 2,2, ycos*xcos);
 	//mx->setStatus(TVNumericValue::kFixed);
 	break;
+
+	case (TRotationMatrix::kRxyz):
+	setC(mx, 0, 0, zcos*ycos );
+	setC(mx, 0, 1, zsin*ycos );
+	setC(mx, 0, 2, -ysin);
+	setC(mx, 1, 0, zcos*ysin*xsin-zsin*xcos);
+	setC(mx, 1, 1, zsin*ysin*xsin+zcos*xcos);
+	setC(mx, 1, 2, ycos*xsin);
+	setC(mx, 2, 0, zcos*ysin*xcos+zsin*xsin);
+	setC(mx, 2, 1, zsin*ysin*xcos-zcos*xsin);
+	setC(mx, 2, 2, ycos*xcos);
+	// mx->setStatus(TVNumericValue::kFixed);
+	break;
 	}
 	return true;
 }
@@ -138,56 +151,30 @@ struct Angles T3DCartesianCoordSys::getAngles(const TRotationMatrix* mx, const T
 	switch (kR){
 	case (TRotationMatrix::kRzyx):
 		{	
-			//omega = ang.aTan2(-getC(mx,2,1),getC(mx,2,2)).getRadiansValue();
-			//kappa = ang.aTan2(-getC(mx,1,0),getC(mx,0,0)).getRadiansValue();
-			//phi = ang.aTan2((getC(mx,2,0)),sqrtq(powq(getC(mx,0,0),2)+powq(getC(mx,1,0),2))).getRadiansValue();
-			//
-			//om.setRadiansValue(omega);
-			//p.setRadiansValue(phi);
-			//k.setRadiansValue(kappa);
-			//
-			//if ( getC(mx,2,2) == 0 || getC(mx,2,1) == 0) 
-			//	om.setRadiansValue(NO_VALf);
-			//
-			//
-			//if ( (getC(mx,0,0) == 0)  || ((getC(mx,2,0) == 0) & (getC(mx,1,0) == 0))) 
-			//	p.setRadiansValue(NO_VALf);
-			//
-			//
-			//if ( getC(mx,0,0) == 0  || getC(mx,1,0) == 0) 
-			//	k.setRadiansValue(NO_VALf);
-			//
-			//
-			//
-			//xyz.omega = om;
-			//xyz.phi = p;
-			//xyz.kappa = k;
-
-			if (getC(mx, 2, 0) < 1)
+			// no solution can be found if sin phi = 1 or -1, gimbal lock problem
+			if (getC(mx, 2, 0) == 1)
 			{
-				if (getC(mx, 2, 0) > -1)
-				{
-					omega = ang.aTan2(-getC(mx, 2, 1), getC(mx, 2, 2)).getRadiansValue();
-					kappa = ang.aTan2(-getC(mx,1,0),getC(mx,0,0)).getRadiansValue();
-					phi = ang.aSin((getC(mx,2,0))).getRadiansValue();
-				}
-				else  //mx(2,0) = -1
-				{
-					omega = 0.0;
-					kappa = ang.aTan2(getC(mx, 1, 2), getC(mx, 1, 1)).getRadiansValue();
-					phi = -PI_2;
-				}
+				om.setRadiansValue(NO_VALf);
+				p.setRadiansValue(PI_2);
+				k.setRadiansValue(NO_VALf);
 			}
-			else  //mx(2,0) = 1
+			else if (getC(mx, 2, 0) == -1)
 			{
-				omega = 0.0;
-				kappa = ang.aTan2(getC(mx, 1, 2), getC(mx, 1, 1)).getRadiansValue();
-				phi = PI_2;
+				om.setRadiansValue(NO_VALf);
+				p.setRadiansValue(-PI_2);
+				k.setRadiansValue(NO_VALf);
 			}
+			else
+			{
+				omega = ang.aTan2(-getC(mx, 2, 1), getC(mx, 2, 2)).getRadiansValue();
+				kappa = ang.aTan2(-getC(mx, 1, 0), getC(mx, 0, 0)).getRadiansValue();
+				phi = ang.aSin((getC(mx, 2, 0))).getRadiansValue();
+				om.setRadiansValue(omega);
+				p.setRadiansValue(phi);
+				k.setRadiansValue(kappa);
+			}		
+			
 
-			om.setRadiansValue(omega);
-			p.setRadiansValue(phi);
-			k.setRadiansValue(kappa);
 			xyz.omega = om;
 			xyz.phi = p;
 			xyz.kappa = k;
@@ -225,6 +212,37 @@ struct Angles T3DCartesianCoordSys::getAngles(const TRotationMatrix* mx, const T
 			xyz.phi=p;
 			xyz.kappa=k;
 		}
+		break;
+
+	case (TRotationMatrix::kRxyz):
+		{
+		//no solution can be found if sin phi = 1 or -1, gimbal lock problem
+		if (getC(mx, 2, 0) == 1)
+		{
+			om.setRadiansValue(NO_VALf);
+			p.setRadiansValue(-PI_2);
+			k.setRadiansValue(NO_VALf);
+		}
+		else if (getC(mx, 2, 0) == -1)
+		{
+			om.setRadiansValue(NO_VALf);
+			p.setRadiansValue(PI_2);
+			k.setRadiansValue(NO_VALf);
+		}
+		else
+		{
+			phi = ang.aSin(-getC(mx, 0, 2)).getRadiansValue();
+			kappa = ang.aTan2(getC(mx, 0, 1), getC(mx, 0, 0)).getRadiansValue();
+			omega = ang.aTan2(getC(mx, 1, 2), getC(mx, 2, 2)).getRadiansValue();
+			om.setRadiansValue(omega);
+			p.setRadiansValue(phi);
+			k.setRadiansValue(kappa);
+		}
+
+		xyz.omega = om;
+		xyz.phi = p;
+		xyz.kappa = k;
+	}
 		break;
 	}
 	return xyz;
