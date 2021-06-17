@@ -23,10 +23,13 @@ std::unique_ptr<ShareableFrame> ShareablePointsList::setRootFrame(ShareableFrame
 		return nullptr;
 	if (frame && frame->getParentFrame()) // we need to change its parent
 		frame = frame->getParentFrame()->removeFrame(*frame).release();
-	if (frame)
-		frame->setParams(_params);
-
 	auto tmp = std::unique_ptr<ShareableFrame>(frame);
+
+	// Swaps just the frames
 	std::swap(tmp, _rootFrame);
+	// Set params for ShareablePointsList, slight overhead as new params have to be created
+	_params = std::make_shared<ShareableParams>(_rootFrame->getParams());
+	_rootFrame->setParams(_params); // Propagate the pointer
+
 	return tmp;
 }

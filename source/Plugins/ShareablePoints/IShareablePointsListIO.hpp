@@ -115,42 +115,42 @@ public:
 	virtual bool isEmpty(const std::string &contents) const;
 
 	/**
-	 * @return a ShareablePointsList read from the given JSON file.
+	 * @return a ShareablePointsList read for the given contents.
 	 * @param contents the content containing the structure to read
 	 * @throw SPIOException if an error occurred.
 	 * @see write(const ShareablePointsList&)
 	 */
 	virtual ShareablePointsList read(const std::string &contents) = 0;
 	/**
-	 * @return a ShareableExtraInfos read from the given JSON file.
+	 * @return a ShareableExtraInfos read for the given contents.
 	 * @param contents the content containing the structure to read
 	 * @throw SPIOException if an error occurred.
 	 * @see write(const ShareableExtraInfos&)
 	 */
 	virtual ShareableExtraInfos readExtraInfos(const std::string &contents) = 0;
 	/**
-	 * @return a ShareableFrame read from the given JSON file.
+	 * @return a ShareableFrame read for the given contents.
 	 * @param contents the content containing the structure to read
 	 * @throw SPIOException if an error occurred.
 	 * @see write(const ShareableFrame&)
 	 */
 	virtual ShareableFrame readFrame(const std::string &contents) = 0;
 	/**
-	 * @return a ShareableParams read from the given JSON file.
+	 * @return a ShareableParams read for the given contents.
 	 * @param contents the content containing the structure to read
 	 * @throw SPIOException if an error occurred.
 	 * @see write(const ShareableParams&)
 	 */
 	virtual ShareableParams readParams(const std::string &contents) = 0;
 	/**
-	 * @return a ShareablePoint read from the given JSON file.
+	 * @return a ShareablePoint read for the given contents.
 	 * @param contents the content containing the structure to read
 	 * @throw SPIOException if an error occurred.
 	 * @see write(conts ShareablePoint&)
 	 */
 	virtual ShareablePoint readPoint(const std::string &contents) = 0;
 	/**
-	 * @return a ShareablePosition read from the given JSON file.
+	 * @return a ShareablePosition read for the given contents.
 	 * @param contents the content containing the structure to read
 	 * @throw SPIOException if an error occurred.
 	 * @see write(const ShareablePosition&)

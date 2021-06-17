@@ -725,6 +725,13 @@ void testobject::test<50>()
 	ensure(frame.getParentFrame() == nullptr);
 	ensure_equals(&frame.getParams(), &spl.getParams());
 	ensure_equals(&spl.getRootFrame(), &frame);
+
+	ShareablePointsList new_spl;
+	new_spl.getParams().coordsys = ShareableParams::ECoordSys::k2DPlusH;
+	std::unique_ptr<ShareableFrame> outputFrame = spl.setRootFrame(new ShareableFrame(std::move(new_spl.getRootFrame())));
+	ensure_equals(&spl.getParams(), &spl.getRootFrame().getParams()); // Addresses shared in the list
+	ensure(&spl.getParams() != &outputFrame->getParams()); // Addresses different between swapped frames
+	ensure(spl.getParams() != outputFrame->getParams()); // Values different between swapped frames
 }
 
 template<>
