@@ -99,7 +99,7 @@ void	TSpatialPointName::setName( const std::string &name )
 		int i;
 
 		//test the name length
-		if (name.length() != 13) throw "point name conversion not possible";
+		if (name.length() != 13) throw std::logic_error("point name conversion not possible");
 
 		//cut 6 first caracteres to give the classe
 		fClassification = (name.substr(0, 6));
@@ -134,7 +134,7 @@ std::string	TSpatialPointName::getName() const
 		// test classe & name length and replace void by _
 		if (fClassification.length() > 6 || fElement.length() > 6 
 			||  fName.length() > 1)
-		throw "point name conversion not possible";
+		throw std::logic_error("point name conversion not possible");
 
 		std::string s(fClassification);
 		if (fClassification.length() <6) s.resize(6,'_');
@@ -188,9 +188,9 @@ bool TSpatialPointName::operator<( const TSpatialPointName &right ) const{
 	bool answer=false;
 	bool answerFound=false;
 
-	//Name Point et Class ne sont pas concaténés pour la comparaison car si par ex. les
-	//deux Name n'ont pas la même longueur des caractères de l'un vont être comparés 
-	//avec des caractères qui sont de Point ou Class de l'autre  
+	//Name Point et Class ne sont pas concatÃ©nÃ©s pour la comparaison car si par ex. les
+	//deux Name n'ont pas la mÃªme longueur des caractÃ¨res de l'un vont Ãªtre comparÃ©s 
+	//avec des caractÃ¨res qui sont de Point ou Class de l'autre  
 
 	if (fName<right.fName){
 		answer=true;
