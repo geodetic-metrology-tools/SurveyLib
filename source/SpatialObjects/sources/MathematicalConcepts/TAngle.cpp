@@ -380,7 +380,7 @@ TReal TAngle::tangenth() const
 
 TAngle TAngle::aCos(const TReal x)
 {//determines the arccosine of a TReal as a TAngle
-	if (-LITERAL(1.0)>x  ||  x>LITERAL(1.0)) throw "incorrect value";
+	if (-LITERAL(1.0)>x  ||  x>LITERAL(1.0)) throw std::logic_error("incorrect value");
 
 	TAngle angle(acosq(x));
 	return angle;
@@ -389,7 +389,7 @@ TAngle TAngle::aCos(const TReal x)
 
 TAngle TAngle::aSin(const TReal x)
 {//determines the arcsine of a TReal as a TAngle
-	if (-LITERAL(1.0)>x  ||  x>LITERAL(1.0)) throw "incorrect value";
+	if (-LITERAL(1.0) > x || x > LITERAL(1.0)) throw std::logic_error("incorrect value");
 
 	TAngle angle(asinq(x));
 	return angle;
