@@ -1,6 +1,6 @@
 // TGeodeticRefFrame.cpp
 //
-/** A Geodetic Ellisoidal Reference Frame. 
+/** A Geodetic Ellipsoidal Reference Frame. 
     Deals with requests for Spatial Position coordinates
     appropriate to a Geodetic reference frame.
 
@@ -39,8 +39,18 @@ TGeodeticRefFrame::TGeodeticRefFrame( const std::string& name )
 
 TGeodeticRefFrame::TGeodeticRefFrame( const std::string& name, TReferenceEllipsoid* ell )
 	: TA3DEuclideanRefFrame( name )
-{	// constructor taking the name of the reference frame
+{	// constructor taking the name of the reference frame and the associated ellipsoid
 	fEllipsoid = ell;
+}
+
+TGeodeticRefFrame::TGeodeticRefFrame(const std::string& name, TReferenceEllipsoid* ell, int* solution, TReal* refEpoch)
+	: TA3DEuclideanRefFrame(name)
+{   // Constructor taking the name of the reference frame, its solution, the epoch and the associated ellipsoid.
+	// Constructor defining ITRFyy at epoch xxxx.xx or ETRFzz at epoch kkkk.kk
+	fEllipsoid = ell;
+	fSolution = solution;
+	fRefEpoch = refEpoch;
+
 }
 
 // **Deliberately not implemented**

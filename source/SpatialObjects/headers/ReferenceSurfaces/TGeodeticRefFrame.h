@@ -1,6 +1,6 @@
 //  TGeodeticRefFrame.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /** A Geodetic Ellisoidal Reference Frame. 
@@ -54,8 +54,12 @@ public:
 		/// Constructor taking the name of the reference frame
 		explicit TGeodeticRefFrame( const std::string& name );
 
-		/// Constructor taking the name of the reference frame
+		/// Constructor taking the name of the reference frame and the associated ellipsoid
 		TGeodeticRefFrame( const std::string& name, TReferenceEllipsoid* ell);
+
+		/// Constructor taking the name of the reference frame, its solution, the epoch and the associated ellipsoid.
+		/// Constructor defining ITRFyy at epoch xxxx.xx or ETRFzz at epoch kkkk.kk
+		TGeodeticRefFrame(const std::string& name, TReferenceEllipsoid* ell, int* solution, TReal* refEpoch);
 
 		/// Destructor
 		virtual  ~TGeodeticRefFrame();
@@ -113,7 +117,9 @@ private:
 
 	/**@name Private Attributes*/
 	//@{	
-		TReferenceEllipsoid *fEllipsoid; /*!< pointer to the reference ellispoid */
+		TReferenceEllipsoid *fEllipsoid; /*!< pointer to the reference ellipsoid */
+		int* fSolution; /*!< pointer to the reference solution for ETRF and ITRF (2014, 2008, 2005, ...) */
+		TReal* fRefEpoch; /*!< pointer to the reference epoch of the solution*/
 	//@}
 
 	//ClassDef(TGeodeticRefFrame, 1)

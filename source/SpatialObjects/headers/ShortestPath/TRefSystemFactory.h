@@ -78,6 +78,7 @@ public:
 			kCCS_new             = 10,
 			kLAp0_new            = 11,
 			kLGp0_new            = 12,
+			kTRF                 = 13,
 			// Projections:
 			kCernXYHe            = 100, 
 			kCernX0Y0He          = 101, 

@@ -146,6 +146,7 @@ void TRefSystemFactory::init()
 	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf("ITRF97"), wgs("WGS84"), roma("ROMA40");
 	std::string ccs("CCS"), etrf("ETRF93");
 	std::string cgrf2("new_CGRF");
+	std::string trf("TRF");
 	
 		//new CGRF (coordinate of P0 have been changed)
 	TGeodeticRefFrame* pCGRF2 = new TGeodeticRefFrame(cgrf2, pGRS80);
@@ -170,6 +171,12 @@ void TRefSystemFactory::init()
 	pITRF97->setRefFrameId(kITRF97);
 	fRefFrameList.push_back(pITRF97);
 
+	    //ITRF or ETRF
+	TGeodeticRefFrame* pTRF = new TGeodeticRefFrame(trf, pGRS80);
+	pTRF->setRefFrameId(kTRF);
+	fRefFrameList.push_back(pTRF);
+
+
 		// FrenchRGF93 zone 5
     TAReferenceFrame* pFrenchRGF93Zone5 = new TRGF93CC46Projection("FrenchRGF93Zone5");
     pFrenchRGF93Zone5->setRefFrameId(kFrenchRGF93Zone5);
@@ -180,7 +187,7 @@ void TRefSystemFactory::init()
 	pLambert93->setRefFrameId(kLambert93);
     fRefFrameList.push_back(pLambert93);
 
-        // ETRF93
+    // ETRF93
 	TGeodeticRefFrame* pETRF93 = new TGeodeticRefFrame(etrf, pGRS80);
 	pETRF93->setRefFrameId(kETRF93);
 	fRefFrameList.push_back(pETRF93);
@@ -831,7 +838,14 @@ void TRefSystemFactory::init()
 		fTransformList.push_back(t2a);
 		fTransformList.push_back(t2b);
 	}
+	{
+		////////////////////////////////////////////////////////////////
+		// Transformation ITRF-ITRF, ITRF-ETRF or ETRF-ETRF
+		////////////////////////////////////////////////////////////////
 
+		
+
+	}
     {
         ////////////////////////////////////////////////////////////////
 		// Helmert Transformation between ETRF93 (ep1993) and CH1903plus
