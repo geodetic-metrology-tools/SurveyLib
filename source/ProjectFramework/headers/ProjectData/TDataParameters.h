@@ -110,7 +110,6 @@ public:
 		/// set angle, length and coordinate precisions, based on the integer arguement
 		void	setPrecision(int precision);
 
-
 		///set the point name's width
 		void	setPointNameWidth(const int);
 
@@ -146,6 +145,7 @@ public:
 		/// get the point name's width 
 		int										getPointNameWidth() const;
 
+
 		TLocalSystemOrigin* getLocalSystemOrigin() const;
 		const std::string& getOriginFile() const;
 			
@@ -159,7 +159,7 @@ private:
     TRefSystemFactory::ERefFrame			    fRefFrameEnum;
 	ECoordUnit									fCoordUnit;
     TLocalSystemOrigin*             			fLSO;
-	std::string										fOriginFile;
+	std::string									fOriginFile;
 	TCoordSysFactory::ECoordSys					fCoordSys;
 
 	TAngle::EUnits								fAngleUnits;
@@ -168,6 +168,8 @@ private:
 	TObservationFormat::EAnglePrecision			fAnglePrecision;
 	TObservationFormat::ELengthPrecision		fLengthPrecision;
 	TPointFormat::ECoordPrecision				fCoordPrecision;
+
+	double										fCoordEpoch;
 
 	int											fPointNameWidth;
 

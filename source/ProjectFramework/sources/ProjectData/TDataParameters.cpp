@@ -98,16 +98,16 @@ void TDataParameters::swap(TDataParameters & other) noexcept
 
 bool  TDataParameters::operator==(const TDataParameters& rhs )
 {//Equivalence operator
-	return	fRefFrameEnum == rhs.getRefFrameEnumerator() && 
+	return	fRefFrameEnum == rhs.getRefFrameEnumerator() &&
 		fCoordUnit == rhs.fCoordUnit &&
-        fLSO == rhs.fLSO &&
+		fLSO == rhs.fLSO &&
 		fCoordSys == rhs.getCoordinateSystem() &&
-		fAngleUnits == rhs.getAngleUnits() && 
-		fLengthUnits == rhs.getLengthUnits() && 
-		fAnglePrecision == rhs.getAnglePrecision() && 
-		fLengthPrecision == rhs.getLengthPrecision() && 
+		fAngleUnits == rhs.getAngleUnits() &&
+		fLengthUnits == rhs.getLengthUnits() &&
+		fAnglePrecision == rhs.getAnglePrecision() &&
+		fLengthPrecision == rhs.getLengthPrecision() &&
 		fCoordPrecision == rhs.getCoordPrecision() &&
-		fPointNameWidth==rhs.fPointNameWidth;
+		fPointNameWidth == rhs.fPointNameWidth;
 }
 
 
@@ -171,7 +171,8 @@ bool  TDataParameters::setRefFrame(TRefSystemFactory::ERefFrame rf)
 		//set unit to [m] for non geodetic reference frame
 		if(	fRefFrameEnum != TRefSystemFactory::kCGRF && fRefFrameEnum != TRefSystemFactory::kWGS84 && 
 			fRefFrameEnum != TRefSystemFactory::kROMA40 && fRefFrameEnum != TRefSystemFactory::kITRF97 &&
-			fRefFrameEnum != TRefSystemFactory::kETRF93
+			fRefFrameEnum != TRefSystemFactory::kETRF93 && fRefFrameEnum != TRefSystemFactory::kITRF &&
+			fRefFrameEnum != TRefSystemFactory::kETRF
 			&& fRefFrameEnum != TRefSystemFactory::kCGRFSphere
 			&& fRefFrameEnum != TRefSystemFactory::kCH1903plus
 			&& fRefFrameEnum != TRefSystemFactory::kCHTRF95
@@ -215,7 +216,8 @@ bool  TDataParameters::setUnits( const TDataParameters::ECoordUnit& units )
 
 	if(	fRefFrameEnum == TRefSystemFactory::kCGRF || fRefFrameEnum == TRefSystemFactory::kWGS84 || 
 		fRefFrameEnum == TRefSystemFactory::kROMA40 || fRefFrameEnum == TRefSystemFactory::kITRF97 ||
-		fRefFrameEnum == TRefSystemFactory::kETRF93 || fRefFrameEnum == TRefSystemFactory::kCH1903plus)
+		fRefFrameEnum == TRefSystemFactory::kETRF93 || fRefFrameEnum == TRefSystemFactory::kCH1903plus ||
+		fRefFrameEnum == TRefSystemFactory::kITRF || fRefFrameEnum == TRefSystemFactory::kETRF )
 	{
 		if ( units == kDMS )
 		{
@@ -366,7 +368,6 @@ void  TDataParameters::setPointNameWidth(const int width )
 	return; 
 }
 
-
 bool TDataParameters::setLocalSystemOrigin(const TLocalSystemOrigin & LSO)
 {
     if(TRefFrameInfo::isLocalRefFrame(fRefFrameEnum)
@@ -448,7 +449,7 @@ TPointFormat::ECoordPrecision  TDataParameters::getCoordPrecision() const
 
 
 int  TDataParameters::getPointNameWidth() const
-{//! get the coord precision 
+{//! get the point name width 
 	return fPointNameWidth;
 }
 
@@ -555,6 +556,10 @@ std::string TDataParameters::getRFName() const
 #endif
 	case TRefSystemFactory::ERefFrame::kWGS84:
 		return "WGS84";
+	case TRefSystemFactory::ERefFrame::kITRF:
+		return "ITRF";
+	case TRefSystemFactory::ERefFrame::kETRF:
+		return "ETRF";
 	default: return "";
 	}
 }
