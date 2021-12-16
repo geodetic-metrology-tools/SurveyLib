@@ -36,6 +36,7 @@ class TAGeoidModel;
 class TReferenceEllipsoid;
 class TAReferenceFrame;
 class TGeodeticRefFrame;
+class TTerrestrialReferenceFrame;
 class TModifiedLocalAstronomicalRF;
 
 class TARefFrameTransformation;
@@ -78,8 +79,8 @@ public:
 			kCCS_new             = 10,
 			kLAp0_new            = 11,
 			kLGp0_new            = 12,
-			kITRF                = 13,
-			kETRF                = 14,
+			kTRFin               = 13,
+			kTRFout              = 14,
 			// Projections:
 			kCernXYHe            = 100, 
 			kCernX0Y0He          = 101, 
@@ -151,7 +152,7 @@ public:
 			kCGRF22CCS, kCGRF22WGS, kCGRF22ITRF97,
 
 			//ITRF 2 ETRF (test)
-			kITRF2ETRF, kETRF2ITRF
+			kTRFin2TRFout, kTRFout2TRFin
 		};
 	//@}
 	

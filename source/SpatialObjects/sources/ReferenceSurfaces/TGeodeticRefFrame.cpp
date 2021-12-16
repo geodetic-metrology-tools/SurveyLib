@@ -43,16 +43,6 @@ TGeodeticRefFrame::TGeodeticRefFrame( const std::string& name, TReferenceEllipso
 	fEllipsoid = ell;
 }
 
-TGeodeticRefFrame::TGeodeticRefFrame(const std::string& name, TReferenceEllipsoid* ell, int* solution, TReal* refEpoch)
-	: TA3DEuclideanRefFrame(name)
-{   // Constructor taking the name of the reference frame, its solution, the epoch and the associated ellipsoid.
-	// Constructor defining ITRFyy at epoch xxxx.xx or ETRFzz at epoch kkkk.kk
-	fEllipsoid = ell;
-	fSolution = solution;
-	fRefEpoch = refEpoch;
-
-}
-
 // **Deliberately not implemented**
 //TGeodeticRefFrame::TGeodeticRefFrame( const  TGeodeticRefFrame& original )
 //{	// copy constructor

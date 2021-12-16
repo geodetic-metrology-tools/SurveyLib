@@ -45,10 +45,10 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("kCH1903plus","CH1903+", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kCGRF_new,
 			TDetails("kCGRF2", "new CERN GRF", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
-		tmp->insert(std::make_pair(TRefSystemFactory::kITRF,
-			TDetails("kITRF", "Iternational Terrestrial Reference Frame (ITRF)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
-		tmp->insert(std::make_pair(TRefSystemFactory::kETRF,
-			TDetails("kETRF", "European Terrestrial Reference Frame (ETRF)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kTRFin,
+			TDetails("kTRFin", "Terrestrial Reference Frame (ITRF or ETRF)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kTRFout,
+			TDetails("kTRFout", "Terrestrial Reference Frame (ITRF or ETRF)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
         tmp->insert(std::make_pair(TRefSystemFactory::kCernXYHe, 
             TDetails("kCernXYHe","CERN XYHe", TCoordSysFactory::k2DPlusH)));
         tmp->insert(std::make_pair(TRefSystemFactory::kCernX0Y0He, 

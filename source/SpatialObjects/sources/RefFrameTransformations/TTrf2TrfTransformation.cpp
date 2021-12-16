@@ -18,6 +18,10 @@
 // other forward declarations
 
 #include  "TTrf2TrfTransformation.h"
+#include  "THelmertTransformation.h"
+#include  "TCompositeAffTransform.h"
+#include  "THelmertRefFrameTransform.h"
+#include  "TAReferenceFrame.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -30,19 +34,29 @@
 // CONSTRUCTOR / DESTRUCTOR
 //////////////////////////////////////////////////////////////////////
 TTrf2TrfTransformation::TTrf2TrfTransformation()
-	: fFrom(0), fTo(0)
+	: fFrom(0), fTo(0), fTransform(0)
 {	// default constructor
 }
 
 
 TTrf2TrfTransformation::TTrf2TrfTransformation(TTerrestrialReferenceFrame* from,
-	TTerrestrialReferenceFrame* to)
-	: fFrom(from), fTo(to)
+											   TTerrestrialReferenceFrame* to,
+											   THelmertTransformation* transform)
+: fFrom(from), fTo(to), fTransform(0)
 {	// constructor taking pointers to the source and destination reference frames
 }
 
+TTrf2TrfTransformation::TTrf2TrfTransformation(TTerrestrialReferenceFrame* from,
+											   TTerrestrialReferenceFrame* to,
+											   const TScaleFactor& enlarg, const TRotation& rot, const TTranslation& transl)
+: fFrom(from), fTo(to), fTransform(0)
+{
+	setTransform(enlarg, rot, transl);
+}
+
+
 TTrf2TrfTransformation::TTrf2TrfTransformation(const  TTrf2TrfTransformation& original)
-	: fFrom(0), fTo(0)
+	: fFrom(0), fTo(0), fTransform(0)
 {// copy constructor
 	*this = original;
 }
@@ -55,6 +69,15 @@ TTrf2TrfTransformation::~TTrf2TrfTransformation()
 //MEMBER FUNCTIONS
 //////////////////////////////////////////////////////////////////////
 
+void TTrf2TrfTransformation::calcDeltaEpoch()
+{
+	
+	this->setDetltaEpoch (this->fFrom->getEpoch() - this->fTo->getEpoch());
+	//this->getSourceFrame()->epoch
+
+}
+
+
 TTrf2TrfTransformation& TTrf2TrfTransformation::operator=(const TTrf2TrfTransformation& right)
 {	// Copy Assignment operator
 	if (this != &right)
@@ -64,6 +87,35 @@ TTrf2TrfTransformation& TTrf2TrfTransformation::operator=(const TTrf2TrfTransfor
 	}
 	return *this;
 }
+
+TTrf2TrfTransformation* TTrf2TrfTransformation::clone() const
+{// Return a pointer to a clone of this reference frame
+	TTrf2TrfTransformation* result = new TTrf2TrfTransformation();
+	result->setSourceFrame(this->getSourceFrame());
+	result->setDestinationFrame(this->getDestinationFrame());
+	result->setTransform(this->getTransform()->clone());
+	return result;
+}
+
+
+TTrf2TrfTransformation* TTrf2TrfTransformation::inverse() const
+{// Return a pointer to the inverse of this transformtion
+
+	TTrf2TrfTransformation* inver = this->clone();
+	inver->invert();
+	return inver;
+}
+
+
+void  TTrf2TrfTransformation::invert()
+{
+	TTerrestrialReferenceFrame* tmp = getSourceFrame();
+	this->setSourceFrame(getDestinationFrame());
+	this->setDestinationFrame(tmp);
+	this->getTransform()->invert();
+	return;
+}
+
 
 
 bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const

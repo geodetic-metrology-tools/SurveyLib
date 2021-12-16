@@ -11,9 +11,17 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #endif
 
 #include  "TARefFrameTransformation.h"
-#include <TTerrestrialReferenceFrame.h>
+#include  "TSpatialPosition.h"
+#include  "TTerrestrialReferenceFrame.h"
+//#include  "THelmertRefFrameTransform.h"
 
+class  THelmertTransformation;
+class  TScaleFactor;
+class  TRotation;
+class  TTranslation;
 
+/*!\ingroup spatialobjects
+	@{*/
 
 //! The definition of the transformation between two terrestrial reference frames (ITRF or ETRF)
 class TTrf2TrfTransformation : public TARefFrameTransformation //: public TObject  
@@ -26,9 +34,11 @@ public:
 	TTrf2TrfTransformation();
 
 	/// Constructor taking pointers to the source and destination reference frames
-	TTrf2TrfTransformation(TTerrestrialReferenceFrame* from, TTerrestrialReferenceFrame* to);
+	TTrf2TrfTransformation(TTerrestrialReferenceFrame* from, TTerrestrialReferenceFrame* to, THelmertTransformation*);
 
-	
+	/// Constructor taking parameters of a THelmertTransformation
+	TTrf2TrfTransformation(TTerrestrialReferenceFrame* from, TTerrestrialReferenceFrame* to, const TScaleFactor&, const TRotation&, const TTranslation&);
+
 	/// Copy Constructor 
 	TTrf2TrfTransformation(const  TTrf2TrfTransformation&);
 
@@ -39,6 +49,8 @@ public:
 
 	/**@name Member Functions */
 	//@{
+
+	
 		/// Copy Assignment Operator 
 	TTrf2TrfTransformation& operator=(const TTrf2TrfTransformation&);
 
@@ -57,13 +69,22 @@ public:
 	/// Return the destination frame
 	virtual TTerrestrialReferenceFrame* getDestinationFrame() const { return fTo; }
 
+	/// Return the helmert transformation
+	virtual THelmertTransformation*     getTransform() const { return fTransform; }
+
 	/// Set the source frame
 	virtual void						setSourceFrame(TTerrestrialReferenceFrame* from) { fFrom = from; return; }
 
 	/// Set the destination frame
 	virtual void						setDestinationFrame(TTerrestrialReferenceFrame* to) { fTo = to; return; }
 
-		/// transform a position vector
+	/// Set the Helmert transformation
+	virtual void						setTransform(THelmertTransformation* helmert);
+
+	/// Set the helmert transformation using the parameters of the transformation
+	virtual void						setTransform(const TScaleFactor&, const TRotation&, const TTranslation&);
+
+	/// transform a position vector
 	virtual  bool						transform(TPositionVector& pv) const;
 
 	/// transform a free vector
@@ -73,16 +94,28 @@ public:
 	virtual  bool						transform(TRotationMatrix& rmx) const;
 
 	bool								isInitialised() const { return (fFrom != 0 && fTo != 0); }
+
+	///  Set the difference of epoch
+	virtual void						setDetltaEpoch(TReal deltaE) { fDeltaEpoch = deltaE; return; }
+
+	/// Return the difference of epoch
+	virtual TReal						getDeltatEpoch() const { return fDeltaEpoch; }
+
+
+	virtual void calcDeltaEpoch();
 	//@}
 
 	
 
 private:
-
+	
+	THelmertTransformation* fTransform;
 	TTerrestrialReferenceFrame* fFrom;
 	TTerrestrialReferenceFrame* fTo;
+	
+	TReal fDeltaEpoch;
 
 };
-
+/*@}*/
 
 #endif // SU_TRF_2_TRF

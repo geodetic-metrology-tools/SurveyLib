@@ -23,6 +23,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 // Forward declarations
 //
 #include  "TA3DEuclideanRefFrame.h"
+#include  "TGeodeticRefFrame.h"
 
 //
 //
@@ -33,14 +34,36 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	@{*/
 
 //! A Geocentric terrestrial Reference Frame
-class TTerrestrialReferenceFrame : public TA3DEuclideanRefFrame //: public TObject  
+class TTerrestrialReferenceFrame : public TGeodeticRefFrame //: public TObject  
 {
 
 public:
-	TTerrestrialReferenceFrame();
-	~TTerrestrialReferenceFrame();
+	/**@name Constructors and Destructors */
+//@{
+
+	/// Constructor taking the name of the reference frame, the associated ellipsoid and epoch
+	TTerrestrialReferenceFrame(const std::string& name, TReferenceEllipsoid* ell, TReal& epoch);
+
+	/// Destructor
+	virtual ~TTerrestrialReferenceFrame();
+	//@}
+
+
+	/**@name Member Functions */
+	//@{
+
+	//! return the epoch of the coordinates
+	virtual TReal getEpoch() const { return fEpoch; }
+	
+	//! set the epoch of the coordinates
+	virtual bool setEpoch(TReal epoch);
+	 
+
+	//@}
 
 private:
+	TReal fEpoch;                   ///*!< pointer to the current epoch */
+
 
 };
 
