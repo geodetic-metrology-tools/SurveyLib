@@ -28,7 +28,6 @@ TTerrestrialReferenceFrame::TTerrestrialReferenceFrame(const std::string& name, 
 		fEpoch = epoch;
 }
 
-
 TTerrestrialReferenceFrame::~TTerrestrialReferenceFrame()
 {
 }
@@ -37,7 +36,7 @@ TTerrestrialReferenceFrame::~TTerrestrialReferenceFrame()
 // Member Functions
 //////////////////////////////////////////////////////////////////////
 
-bool	TTerrestrialReferenceFrame::setEpoch(const TReal epoch)
+bool	TTerrestrialReferenceFrame::setEpoch(TReal epoch)
 {	// set the epoch of the coordinates
 
 	this->fEpoch = epoch;

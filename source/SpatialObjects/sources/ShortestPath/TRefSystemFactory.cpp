@@ -149,8 +149,8 @@ void TRefSystemFactory::init()
 	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf97("ITRF97"), wgs("WGS84"), roma("ROMA40");
 	std::string ccs("CCS"), etrf93("ETRF93");
 	std::string cgrf2("new_CGRF");
-	std::string trfin("ITRF_input");
-	std::string trfout("TRF_output");
+	std::string itrf2("ITRF");
+	std::string etrf("ETRF");
 	
 		//new CGRF (coordinate of P0 have been changed)
 	TGeodeticRefFrame* pCGRF2 = new TGeodeticRefFrame(cgrf2, pGRS80);
@@ -175,20 +175,21 @@ void TRefSystemFactory::init()
 	pITRF97->setRefFrameId(kITRF97);
 	fRefFrameList.push_back(pITRF97);
 
-	    //Generic TRF (ITRF or ETRF solution at specified epoch)
+	    //Generic ITRF solution at specified epoch
 	TReal initEpoch = -9999.9;
-	TReal initEpoch2 = -9998.9;
-	TTerrestrialReferenceFrame* pTRFin = new TTerrestrialReferenceFrame(trfin, pGRS80, initEpoch);
+	TTerrestrialReferenceFrame* pITRF = new TTerrestrialReferenceFrame(itrf2, pGRS80, initEpoch);
 	//TGeodeticRefFrame* pITRF = new TGeodeticRefFrame(itrf, pGRS80);
-	pTRFin->setRefFrameId(kTRFin);
-	fRefFrameList.push_back(pTRFin);
+	pITRF->setRefFrameId(kITRF);
+	fRefFrameList.push_back(pITRF);
+	fITRF = pITRF;
 
-		//Generic ETRF 
-	TTerrestrialReferenceFrame* pTRFout = new TTerrestrialReferenceFrame(trfout, pGRS80, initEpoch2);
+		//Generic ETRF solution at specified epoch
+	TReal initEpoch2 = -9999.9;
+	TTerrestrialReferenceFrame* pETRF = new TTerrestrialReferenceFrame(etrf, pGRS80, initEpoch2);
 	//TGeodeticRefFrame* pETRF = new TGeodeticRefFrame(etrf, pGRS80);
-	pTRFout->setRefFrameId(kTRFout);
-	fRefFrameList.push_back(pTRFout);
-
+	pETRF->setRefFrameId(kETRF);
+	fRefFrameList.push_back(pETRF);
+	fETRF = pETRF;
 
 		// FrenchRGF93 zone 5
     TAReferenceFrame* pFrenchRGF93Zone5 = new TRGF93CC46Projection("FrenchRGF93Zone5");
@@ -874,13 +875,13 @@ void TRefSystemFactory::init()
 		TTranslation transl4(Tx4, Ty4, Tz4);
 		// There is no scaling:
 		TScaleFactor enl4(LITERAL(1.000000000000000));
-		TTrf2TrfTransformation* pTRFin2TRFout = new TTrf2TrfTransformation(pTRFin, pTRFout, enl4, r4, transl4);
-		pTRFin2TRFout->setTransformId(kTRFin2TRFout);
-		fTransformList.push_back(pTRFin2TRFout);
+		TTrf2TrfTransformation* pITRF2ETRF = new TTrf2TrfTransformation(pITRF, pETRF, enl4, r4, transl4);
+		pITRF2ETRF->setTransformId(kITRF2ETRF);
+		fTransformList.push_back(pITRF2ETRF);
 		//Inverse
-		TTrf2TrfTransformation* pTRFout2TRFin = pTRFin2TRFout->inverse();
-		pTRFout2TRFin->setTransformId(kTRFout2TRFin);
-		fTransformList.push_back(pTRFout2TRFin);
+		TTrf2TrfTransformation* pETRF2ITRF = pITRF2ETRF->inverse();
+		pETRF2ITRF->setTransformId(kETRF2ITRF);
+		fTransformList.push_back(pETRF2ITRF);
 		
 
 	}
@@ -1234,6 +1235,16 @@ TGeodeticRefFrame* TRefSystemFactory::getGeoRefFrame(const ERefFrame refFrameId)
 	//TODO@*@
 	///
 	//exit(EXIT_FAILURE);
+}
+
+TTerrestrialReferenceFrame* TRefSystemFactory::getTerrRefFrame(const ERefFrame refFrameId)
+{
+	if (refFrameId == kITRF)
+		return fITRF;
+
+	if (refFrameId == kETRF)
+		return fETRF;
+
 }
 
 

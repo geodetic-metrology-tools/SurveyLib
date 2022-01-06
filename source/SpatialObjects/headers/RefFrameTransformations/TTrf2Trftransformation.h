@@ -96,13 +96,13 @@ public:
 	bool								isInitialised() const { return (fFrom != 0 && fTo != 0); }
 
 	///  Set the difference of epoch
-	virtual void						setDetltaEpoch(TReal deltaE) { fDeltaEpoch = deltaE; return; }
+	virtual void						setDeltaEpoch(TReal deltaE) { fDeltaEpoch = deltaE; return; }
 
 	/// Return the difference of epoch
-	virtual TReal						getDeltatEpoch() const { return fDeltaEpoch; }
+	virtual TReal						getDeltaEpoch() const { return fDeltaEpoch; }
 
-
-	virtual void calcDeltaEpoch();
+	///  Calculate the difference of epoch
+	virtual void						calcDeltaEpoch();
 	//@}
 
 	

@@ -72,8 +72,7 @@ TTrf2TrfTransformation::~TTrf2TrfTransformation()
 void TTrf2TrfTransformation::calcDeltaEpoch()
 {
 	
-	this->setDetltaEpoch (this->fFrom->getEpoch() - this->fTo->getEpoch());
-	//this->getSourceFrame()->epoch
+	this->setDeltaEpoch (this->fFrom->getEpoch() - this->fTo->getEpoch());
 
 }
 
@@ -121,6 +120,11 @@ void  TTrf2TrfTransformation::invert()
 bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 {// transform a position vector
 	bool result = false;
+
+	TReal deltaEpoch = fFrom->getEpoch() - fTo->getEpoch();
+	TFreeVector newTransla = fTransform->getTranslation().getVector() * deltaEpoch;
+
+	fTransform->setTranslation(newTransla);
 
 	if (isInitialised())
 		result = fTransform->transform(pv);

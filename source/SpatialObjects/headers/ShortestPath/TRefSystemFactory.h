@@ -79,8 +79,8 @@ public:
 			kCCS_new             = 10,
 			kLAp0_new            = 11,
 			kLGp0_new            = 12,
-			kTRFin               = 13,
-			kTRFout              = 14,
+			kITRF               = 13,
+			kETRF              = 14,
 			// Projections:
 			kCernXYHe            = 100, 
 			kCernX0Y0He          = 101, 
@@ -152,7 +152,7 @@ public:
 			kCGRF22CCS, kCGRF22WGS, kCGRF22ITRF97,
 
 			//ITRF 2 ETRF (test)
-			kTRFin2TRFout, kTRFout2TRFin
+			kITRF2ETRF, kETRF2ITRF
 		};
 	//@}
 	
@@ -193,6 +193,9 @@ public:
 		\param reference frame id
 		\return an error message (cerr) if the id is not cooresponding to a TGeodeticRefFrame*/
 		TGeodeticRefFrame*	getGeoRefFrame(const ERefFrame refFrameId);
+
+		//return a point to a Terrestrial Reference Frame
+		TTerrestrialReferenceFrame* getTerrRefFrame (const ERefFrame refFrameId);
 
 		//return a pointer to a new Local ref Frame and put it in a list in order to be deleted
 		TAReferenceFrame* getNewLocalRefFrame();
@@ -240,6 +243,9 @@ private:
 	TGeodeticRefFrame *fCGRF = nullptr;
 	TGeodeticRefFrame *fCGRFSphere = nullptr;
 	TGeodeticRefFrame *fCGRF2 = nullptr;
+
+	TTerrestrialReferenceFrame* fITRF = nullptr;
+	TTerrestrialReferenceFrame* fETRF = nullptr;
 };
 /*@}*/
 
