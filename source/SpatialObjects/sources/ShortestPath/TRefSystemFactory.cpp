@@ -176,16 +176,16 @@ void TRefSystemFactory::init()
 	fRefFrameList.push_back(pITRF97);
 
 	    //Generic ITRF solution at specified epoch
-	TReal initEpoch = -9999.9;
-	TTerrestrialReferenceFrame* pITRF = new TTerrestrialReferenceFrame(itrf2, pGRS80, initEpoch);
+	TReal initEpochITRF = -9999.9;
+	TTerrestrialReferenceFrame* pITRF = new TTerrestrialReferenceFrame(itrf2, pGRS80, initEpochITRF);
 	//TGeodeticRefFrame* pITRF = new TGeodeticRefFrame(itrf, pGRS80);
 	pITRF->setRefFrameId(kITRF);
 	fRefFrameList.push_back(pITRF);
 	fITRF = pITRF;
 
 		//Generic ETRF solution at specified epoch
-	TReal initEpoch2 = -9999.9;
-	TTerrestrialReferenceFrame* pETRF = new TTerrestrialReferenceFrame(etrf, pGRS80, initEpoch2);
+	TReal initEpochETRF = -9999.9;
+	TTerrestrialReferenceFrame* pETRF = new TTerrestrialReferenceFrame(etrf, pGRS80, initEpochETRF);
 	//TGeodeticRefFrame* pETRF = new TGeodeticRefFrame(etrf, pGRS80);
 	pETRF->setRefFrameId(kETRF);
 	fRefFrameList.push_back(pETRF);
@@ -867,7 +867,9 @@ void TRefSystemFactory::init()
 		// Transformation ITRF-ETRF, ETRF-ITRF (simple test)
 		////////////////////////////////////////////////////////////////
 	{
+		/*
 		// There is no rotation:
+
 		TRotation r4(TRotationMatrix::kRzyx, 0, 0, 0);
 		// Total translation resulting from epoch changes and Reference Frame changes:
 		// TODO:
@@ -882,7 +884,76 @@ void TRefSystemFactory::init()
 		TTrf2TrfTransformation* pETRF2ITRF = pITRF2ETRF->inverse();
 		pETRF2ITRF->setTransformId(kETRF2ITRF);
 		fTransformList.push_back(pETRF2ITRF);
+		*/
 		
+		//Transformation parameters from ITRF2014 to past ITRFs and their rates
+		//Data format: Tx[mm], Ty[mm], Tz[mm],D (scale factor) [ppb], Rx [0.001"], Ry [0.001"], Rz [0.001"],Epoch, vTx [mm/yr], vTy [mm/yr], vTz [mm/yr], vD [ppb/yr], vRx [0.001"/yr], vRy [0.001"/yr], vRz [0.001"/yr]
+		//https://itrf.ensg.ign.fr/doc_ITRF/Transfo-ITRF2014_ITRFs.txt
+		//Altamimi, Z., Rebischung, P., Métivier, L., & Collilieux, X. (2016). ITRF2014: A new release of the International Terrestrial Reference Frame modeling nonlinear station motions. Journal of Geophysical Research: Solid Earth, 121(8), 6109-6131.
+		static const std::array<std::array<TReal, 15>, 12> coeffITRF2014_toPastITRF = { {
+			{LITERAL(1.6),LITERAL(1.9),LITERAL(2.4),LITERAL(-0.02),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00),LITERAL(2010.0),LITERAL(0.0),LITERAL(0.0),LITERAL(-0.1),LITERAL(0.03),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00)}, //ITRF2008
+			{LITERAL(2.6),LITERAL(1.0),LITERAL(-2.3),LITERAL(0.92),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00),LITERAL(2010.0),LITERAL(0.3),LITERAL(0.0),LITERAL(-0.1),LITERAL(0.03),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00)},//ITRF2005
+			{LITERAL(0.7),LITERAL(1.2),LITERAL(-26.1),LITERAL(2.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00),LITERAL(2010.0),LITERAL(0.1),LITERAL(0.1),LITERAL(-1.9),LITERAL(0.11),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00)},//ITRF2000
+			{LITERAL(7.4),LITERAL(-0.5),LITERAL(-62.8),LITERAL(3.80),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF97
+			{LITERAL(7.4),LITERAL(-0.5),LITERAL(-62.8),LITERAL(3.80),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF96
+			{LITERAL(7.4),LITERAL(-0.5),LITERAL(-62.8),LITERAL(3.80),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF94
+			{LITERAL(-50.4),LITERAL(3.3),LITERAL(-60.2),LITERAL(4.29),LITERAL(-2.81),LITERAL(-3.38),LITERAL(0.40),LITERAL(2010.0),LITERAL(-2.8),LITERAL(-0.1),LITERAL(-2.5),LITERAL(0.12),LITERAL(-0.11),LITERAL(-0.19),LITERAL(0.07)},//ITRF93
+			{LITERAL(15.4),LITERAL(1.5),LITERAL(-70.8),LITERAL(3.09),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF92
+			{LITERAL(27.4),LITERAL(15.5),LITERAL(-76.8),LITERAL(4.49),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF91
+			{LITERAL(25.4),LITERAL(11.5),LITERAL(-92.8),LITERAL(4.79),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF90
+			{LITERAL(30.4),LITERAL(35.5),LITERAL(-130.8),LITERAL(8.19),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF89
+			{LITERAL(25.4),LITERAL(-0.5),LITERAL(-154.8),LITERAL(11.29),LITERAL(0.10),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)}//ITRF88
+		} };
+
+		//Transformation parameters from ITRFyy to past ETRFyy at epoch 1989.0 and their rates
+		//Data format: Tx[mm], Ty[mm], Tz[mm],D (scale factor) [ppb], Rx [0.001"], Ry [0.001"], Rz [0.001"],Epoch, vTx [mm/yr], vTy [mm/yr], vTz [mm/yr], vD [ppb/yr], vRx [0.001"/yr], vRy [0.001"/yr], vRz [0.001"/yr]
+		//Altamimi, Z. (2018) EUREF Technical Note 1: Relationship and Transformation between the Internationaland the European Terrestrial Reference Systems
+		static const std::array<std::array<TReal, 15>, 11> coeffITRFyy_toETRFyy = { {
+			{LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.085),LITERAL(0.531),LITERAL(-0.770)},//ETRF2014
+			{LITERAL(56.0),LITERAL(48.0),LITERAL(-37.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.054),LITERAL(0.518),LITERAL(-0.781)}, //ETRF2005
+			{LITERAL(54.0),LITERAL(51.0),LITERAL(-48.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.081),LITERAL(0.490),LITERAL(-0.792)}, //ETRF2000
+			{LITERAL(41.0),LITERAL(41.0),LITERAL(-49.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.200),LITERAL(0.500),LITERAL(-0.650)}, //ETRF97
+			{LITERAL(41.0),LITERAL(41.0),LITERAL(-49.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.200),LITERAL(0.500),LITERAL(-0.650)}, //ETRF96
+			{LITERAL(41.0),LITERAL(41.0),LITERAL(-49.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.200),LITERAL(0.500),LITERAL(-0.650)}, //ETRF94
+			{LITERAL(19.0),LITERAL(53.0),LITERAL(-21.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.320),LITERAL(0.780),LITERAL(-0.670)}, //ETRF93
+			{LITERAL(38.0),LITERAL(40.0),LITERAL(-37.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.210),LITERAL(0.520),LITERAL(-0.680)}, //ETRF92
+			{LITERAL(21.0),LITERAL(25.0),LITERAL(-37.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.210),LITERAL(0.520),LITERAL(-0.680)}, //ETRF91
+			{LITERAL(19.0),LITERAL(28.0),LITERAL(-23.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.110),LITERAL(0.570),LITERAL(-0.710)}, //ETRF90
+			{LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.110),LITERAL(0.570),LITERAL(-0.710)} //ETRF89
+		} };
+
+		TMatrix* itrf2014_toPastITRF = new TMatrix(12, 15);
+		TMatrix* itrfyy_toETRFyy = new TMatrix(11, 15);
+		for (i = 0; i < coeffITRF2014_toPastITRF.size(); i++)
+		{
+			for (j = 0; j < coeffITRF2014_toPastITRF[i].size(); j++)
+				(*itrf2014_toPastITRF)((int)i, (int)j) = coeffITRF2014_toPastITRF[i][j];
+		}
+
+		for (i = 0; i < coeffITRFyy_toETRFyy.size(); i++)
+		{
+			for (j = 0; j < coeffITRFyy_toETRFyy[i].size(); j++)
+				(*itrfyy_toETRFyy)((int)i, (int)j) = coeffITRFyy_toETRFyy[i][j];
+		}
+
+		TTrf2TrfTransformation* pITRF2ETRF = new TTrf2TrfTransformation(pITRF, pETRF, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRF2ETRF->setTransformId(kITRF2ETRF);
+		fTransformList.push_back(pITRF2ETRF);
+
+		TTrf2TrfTransformation* pETRF2ITRF = new TTrf2TrfTransformation(pETRF, pITRF, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pETRF2ITRF->setTransformId(kETRF2ITRF);
+		fTransformList.push_back(pETRF2ITRF);
+
+
+		TTrf2TrfTransformation* pITRF2ITRF = new TTrf2TrfTransformation(pITRF, pITRF, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRF2ITRF->setTransformId(kITRF2ITRF);
+		fTransformList.push_back(pITRF2ITRF);
+
+
+		TTrf2TrfTransformation* pETRF2ETRF = new TTrf2TrfTransformation(pETRF, pETRF, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pETRF2ETRF->setTransformId(kETRF2ETRF);
+		fTransformList.push_back(pETRF2ETRF);
+
 
 	}
     
@@ -1244,6 +1315,9 @@ TTerrestrialReferenceFrame* TRefSystemFactory::getTerrRefFrame(const ERefFrame r
 
 	if (refFrameId == kETRF)
 		return fETRF;
+
+	std::cerr << "Error : Id. not in RefFrameList" << std::endl;
+	throw TNotInGraphException("TNotInGraphException");
 
 }
 

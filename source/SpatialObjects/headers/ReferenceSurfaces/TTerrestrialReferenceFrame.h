@@ -54,15 +54,22 @@ public:
 
 	//! return the epoch of the coordinates
 	virtual TReal getEpoch() const { return fEpoch; }
-	
+
+	//! set the solution of the coordinates
+	virtual std::string getSolution() const { return fSolution; }
+
 	//! set the epoch of the coordinates
 	virtual bool setEpoch(TReal epoch);
+
+	//! set the solution of the coordinates
+	virtual bool setSolution(std::string solution);
 	 
 
 	//@}
 
 private:
 	TReal fEpoch;                   ///*!< pointer to the current epoch */
+	std::string	fSolution;			///*!Choosen solution */
 
 
 };

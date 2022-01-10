@@ -87,6 +87,7 @@ public:
 		/*!Operator * for a TPositionVector
 			\return a TPositionVector */
 		TPositionVector operator*(const TPositionVector& ) const;
+
 		//@}
 
 		

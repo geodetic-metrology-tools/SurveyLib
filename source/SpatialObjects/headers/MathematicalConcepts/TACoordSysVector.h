@@ -1,6 +1,6 @@
 // TACoordSysVector.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /** Abstract class use for explain TPositionVector and TFreeVector in a Coordonate System */
@@ -28,7 +28,7 @@ class TVCoordinateSystem;
 /*! \ingroup MathematicalConcepts
 	@{*/
 
-//! Abstract class use for explain TPositionVector and TFreeVector
+//! Abstract class use for explain TPositionVector, TFreeVector and TVelocityVector
 class  TACoordSysVector
 {
 public:

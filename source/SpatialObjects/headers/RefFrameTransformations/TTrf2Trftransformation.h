@@ -39,6 +39,9 @@ public:
 	/// Constructor taking parameters of a THelmertTransformation
 	TTrf2TrfTransformation(TTerrestrialReferenceFrame* from, TTerrestrialReferenceFrame* to, const TScaleFactor&, const TRotation&, const TTranslation&);
 
+	/// Constructor taking parameters of the full coefficient table
+	TTrf2TrfTransformation::TTrf2TrfTransformation(TTerrestrialReferenceFrame* from, TTerrestrialReferenceFrame* to, const TMatrix* coeffTransfoITRF, const TMatrix* coeffTransfoETRF);
+
 	/// Copy Constructor 
 	TTrf2TrfTransformation(const  TTrf2TrfTransformation&);
 
@@ -87,12 +90,12 @@ public:
 	/// transform a position vector
 	virtual  bool						transform(TPositionVector& pv) const;
 
-	/// transform a free vector
+/*	/// transform a free vector
 	virtual  bool						transform(TFreeVector& fv) const;
 
 	/// transform a Rotation Matrix
 	virtual  bool						transform(TRotationMatrix& rmx) const;
-
+*/
 	bool								isInitialised() const { return (fFrom != 0 && fTo != 0); }
 
 	///  Set the difference of epoch
@@ -103,6 +106,31 @@ public:
 
 	///  Calculate the difference of epoch
 	virtual void						calcDeltaEpoch();
+
+	/// Find the correct parameters
+	int									findITRFSolution(TTerrestrialReferenceFrame* refFrame) const;
+
+	/// Find the correct parameters
+	int									findETRFSolution(TTerrestrialReferenceFrame* refFrame) const;
+
+	///  Compute the local velocity of the point (ITRF2014 plate motion model)
+	TPositionVector TTrf2TrfTransformation::itrf2014velocity(TPositionVector& pv) const;
+
+	/// Apply plate velocity
+	TPositionVector TTrf2TrfTransformation::applyPlateVelocity(TPositionVector& pv, TPositionVector& velocityVec, TReal deltaEpoch) const;
+
+	/// ITRF to ITRF transformation
+	//THelmertTransformation TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector& pv, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* itrfOut) const;
+	bool TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector& pv, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* itrfOut) const;
+
+	///ITRF to ITRF transformation rate
+	THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPastITRF, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* itrfOut) const;
+
+	///ITRF to ETRF transformation
+	bool TTrf2TrfTransformation::itrf2etrf(TMatrix coeffITRFyy_toETRFyy, TPositionVector& pv, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* etrfOut) const;
+
+	/// ITRF to ETRF transformation rate
+	THelmertTransformation TTrf2TrfTransformation::itrf2etrfRate(TMatrix coeffITRFyy_toETRFyy, TTerrestrialReferenceFrame* etrfOut) const;
 	//@}
 
 	
@@ -114,6 +142,8 @@ private:
 	TTerrestrialReferenceFrame* fTo;
 	
 	TReal fDeltaEpoch;
+	TMatrix fcoeff_toPastITRF;
+	TMatrix fcoeff_ITRFtoETRF;
 
 };
 /*@}*/

@@ -147,6 +147,12 @@ void	TGraph::init()
 	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF2ETRF),
 		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF2ITRF));
 
+	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF2ITRF),
+		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF2ITRF));
+
+	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF2ETRF),
+		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF2ETRF));
+
 
 	return;
 }
@@ -335,7 +341,7 @@ void TGraph::insert(TARefFrameTransformation* refFrameTrans, TARefFrameTransform
 
 
 void TGraph::path(std::vector<int>& trans, std::vector<int>& pred, std::vector<TTransformWrapper>& transform, int start)
-{// find the shortest a RF and all the otehers in the graph
+{// find the shortest a RF and all the others in the graph
 
 	trans = std::vector<int>(C.size(), 5000);
 	trans[start] = 0;

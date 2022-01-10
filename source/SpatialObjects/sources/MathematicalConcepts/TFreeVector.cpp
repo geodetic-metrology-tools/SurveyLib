@@ -96,7 +96,7 @@ TFreeVector TFreeVector::operator-( const TFreeVector& second)
 
 
 TFreeVector& TFreeVector::operator-=( const TFreeVector& second)
-{//!Add two FreeVector and replace *this
+{//!Substract two FreeVector and replace *this
 	*this=(*this)-second;
 	return (*this);
 }

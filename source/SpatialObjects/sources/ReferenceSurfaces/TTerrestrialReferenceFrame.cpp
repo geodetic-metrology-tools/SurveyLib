@@ -26,6 +26,7 @@ TTerrestrialReferenceFrame::TTerrestrialReferenceFrame(const std::string& name, 
 	: TGeodeticRefFrame(name, ell)
 {	// constructor taking the name of the reference frame, the associated ellipsoid and the epoch of the coordinates
 		fEpoch = epoch;
+		fSolution = "noSolution";
 }
 
 TTerrestrialReferenceFrame::~TTerrestrialReferenceFrame()
@@ -41,6 +42,13 @@ bool	TTerrestrialReferenceFrame::setEpoch(TReal epoch)
 
 	this->fEpoch = epoch;
 
+
+	return true;
+}
+
+bool TTerrestrialReferenceFrame::setSolution(std::string solution)
+{  // set the specific solution
+	this->fSolution = solution;
 
 	return true;
 }

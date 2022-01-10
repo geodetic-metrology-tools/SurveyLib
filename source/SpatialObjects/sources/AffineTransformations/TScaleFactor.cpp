@@ -121,6 +121,11 @@ TReal TScaleFactor::getScaleFactor() const
    return fScaleFactor;
 }
 
+void TScaleFactor::setScaleFactor(TReal sf)
+{ //!  Set the factor of ScaleFactor
+	fScaleFactor = sf;
+}
+
 bool TScaleFactor::isInitialise() const
 {
 	if (fScaleFactor == NO_VALf)
