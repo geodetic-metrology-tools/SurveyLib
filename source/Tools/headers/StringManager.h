@@ -9,6 +9,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <locale>
 #include <string>
 #include <vector>
+#include <codecvt>
 
 #if defined(__linux__) || defined(__APPLE__)
 	#include <unistd.h>

@@ -82,7 +82,7 @@ add_library(ProjectFramework STATIC
 	${ProjectFramework_SOURCES}
 	${ProjectFramework_HEADERS}
 )
-target_include_directories(ProjectFramework PRIVATE
+target_include_directories(ProjectFramework PUBLIC
 	# SurveyLib
 	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
 	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj

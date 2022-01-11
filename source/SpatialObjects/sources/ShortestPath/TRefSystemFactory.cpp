@@ -55,8 +55,10 @@
 #include <TXYHe2X0Y0HeTransformation.h>
 #include <TXYHg2XYHeTransformation.h>
 #include <TXYHe2XYHgTransformation.h>
-#include <TLV95Transformation.h>
-#include <TLV03Transformation.h>
+#ifdef USE_SWISSTOPO
+	#include <TLV95Transformation.h>
+	#include <TLV03Transformation.h>
+#endif
 #include <TRGF93CC46Transformation.h>
 #include <TLambert93Transformation.h>
 

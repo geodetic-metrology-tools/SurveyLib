@@ -10,7 +10,7 @@
 
 static std::string getSurveyLibVersion(void) {
 	static char str[128];
-	_snprintf(str, 128, "v%d.%02d.%02d", SurveyLib_VERSION_MAJOR, SurveyLib_VERSION_MINOR, SurveyLib_VERSION_PATCH);
+	snprintf(str, 128, "v%d.%02d.%02d", SurveyLib_VERSION_MAJOR, SurveyLib_VERSION_MINOR, SurveyLib_VERSION_PATCH);
 	return std::string(str);
 }
 
