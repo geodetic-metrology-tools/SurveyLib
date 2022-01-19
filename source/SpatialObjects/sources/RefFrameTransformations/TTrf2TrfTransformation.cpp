@@ -139,8 +139,6 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 	TAngle rX_rad(0), rY_rad(0), rZ_rad(0), rX_rad_yr(0), rY_rad_yr(0), rZ_rad_yr(0); //rotation (radians and radians/year)
 	TReal ; //velocity (meters per year)
 
-	//TFreeVector newTransla = fTransform->getTranslation().getVector() * deltaEpoch;
-
 	if (fFrom->getSolution().find("ITRF") != std::string::npos)
 	{
 		if (fFrom->getSolution() != "ITRF 2014")
@@ -190,7 +188,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 		//Velocity and rates
 		TPositionVector velITRF_2014 = itrf2014velocity(pv);
 		THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(fcoeff_toPastITRF, fFrom, fTo);
-		TPositionVector velITRF_yy = velITRF_2014 + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor() + itrf2itrfTransfoRate.getRotation().getRotationMatrix() * velITRF_2014;
+		TPositionVector velITRF_yy = velITRF_2014 + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor() + itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pv;
 
 
 		result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);
@@ -208,16 +206,15 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 		pv = applyPlateVelocity(pv, velETRF_yy, deltaEpoch);
 
 	}
-	/*
-	TTranslation currentTransla(tX_m, tY_m, tZ_m);
-	TRotation currentRota(TRotationMatrix::kRxyz, rX_rad, rY_rad, rZ_rad);
-	fTransform->setTranslation(currentTransla);
-	fTransform->setScaleFactor(d);
-	fTransform->setRotation(currentRota);
 
-	if (isInitialised())
-		result = fTransform->transform(pv);
-*/
+	// Transformation between ETRF and ITRF
+	else if (fFrom->getSolution().find("ETRF") != std::string::npos && fTo->getSolution().find("ITRF") != std::string::npos)
+	{
+		//Transfo ETRFxx -> ITRFxx @ input epoch
+		result = itrf2etrf(fcoeff_ITRFtoETRF, pv, fFrom, fTo);
+
+	}
+
 	return result;
 }
 
@@ -342,7 +339,7 @@ TPositionVector TTrf2TrfTransformation::itrf2014velocity(TPositionVector& pv) co
 	velocityMat.setC(1, 1, 0);
 	velocityMat.setC(2, 2, 0);
 
-	TPositionVector velocityVec = velocityMat * pv;
+	TPositionVector velocityVec = velocityMat * pv * (-1); //Need to multiply by -1 to get the velocity going to the future
 
 	return velocityVec;
 
@@ -353,7 +350,6 @@ TPositionVector TTrf2TrfTransformation::applyPlateVelocity(TPositionVector& pv, 
 	return pv_transla;
 }
 
-//THelmertTransformation TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector& pv, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* itrfOut) const {
 bool TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector & pv, TTerrestrialReferenceFrame * itrfIn, TTerrestrialReferenceFrame * itrfOut) const {
 
 	bool result = false;
@@ -372,20 +368,20 @@ bool TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector
 	{
 		//Get transformation parameters in the matrix
 		//Translation, rotations and scale factor and rates
-		tX_m.setMetresValue((coeff_toPastITRF(solInput, 0) - coeff_toPastITRF(solOutput, 0)) * MM2M);
-		tY_m.setMetresValue((coeff_toPastITRF(solInput, 1) - coeff_toPastITRF(solOutput, 1)) * MM2M);
-		tZ_m.setMetresValue((coeff_toPastITRF(solInput, 2) - coeff_toPastITRF(solOutput, 2)) * MM2M);
-		d.setScaleFactor((coeff_toPastITRF(solInput, 3) - coeff_toPastITRF(solOutput, 3)) * pow(10, -9));
-		rX_rad.setRadiansValue((coeff_toPastITRF(solInput, 4) - coeff_toPastITRF(solOutput, 4)) * pow(10, -3) / 3600 * DEG2RAD);
-		rY_rad.setRadiansValue((coeff_toPastITRF(solInput, 5) - coeff_toPastITRF(solOutput, 5)) * pow(10, -3) / 3600 * DEG2RAD);
-		rZ_rad.setRadiansValue((coeff_toPastITRF(solInput, 6) - coeff_toPastITRF(solOutput, 6)) * pow(10, -3) / 3600 * DEG2RAD);
-		tXv_m_yr.setMetresValue((coeff_toPastITRF(solInput, 8) - coeff_toPastITRF(solOutput, 8)) * MM2M);
-		tYv_m_yr.setMetresValue((coeff_toPastITRF(solInput, 9) - coeff_toPastITRF(solOutput, 9)) * MM2M);
-		tZv_m_yr.setMetresValue((coeff_toPastITRF(solInput, 10) - coeff_toPastITRF(solOutput, 10)) * MM2M);
-		dv_yr.setScaleFactor((coeff_toPastITRF(solInput, 11) - coeff_toPastITRF(solOutput, 11)) * pow(10, -9));
-		rXv_rad_yr.setRadiansValue((coeff_toPastITRF(solInput, 12) - coeff_toPastITRF(solOutput, 11)) * pow(10, -3) / 3600 * DEG2RAD);
-		rYv_rad_yr.setRadiansValue((coeff_toPastITRF(solInput, 13) - coeff_toPastITRF(solOutput, 13)) * pow(10, -3) / 3600 * DEG2RAD);
-		rZv_rad_yr.setRadiansValue((coeff_toPastITRF(solInput, 14) - coeff_toPastITRF(solOutput, 14)) * pow(10, -3) / 3600 * DEG2RAD);
+		tX_m.setMetresValue((coeff_toPastITRF(solOutput, 0) - coeff_toPastITRF(solInput, 0)) * MM2M);
+		tY_m.setMetresValue((coeff_toPastITRF(solOutput, 1) - coeff_toPastITRF(solInput, 1)) * MM2M);
+		tZ_m.setMetresValue((coeff_toPastITRF(solOutput, 2) - coeff_toPastITRF(solInput, 2)) * MM2M);
+		d.setScaleFactor((coeff_toPastITRF(solOutput, 3) - coeff_toPastITRF(solInput, 3)) * pow(10, -9));
+		rX_rad.setRadiansValue((coeff_toPastITRF(solOutput, 4) - coeff_toPastITRF(solInput, 4)) * pow(10, -3) / 3600 * DEG2RAD);
+		rY_rad.setRadiansValue((coeff_toPastITRF(solOutput, 5) - coeff_toPastITRF(solInput, 5)) * pow(10, -3) / 3600 * DEG2RAD);
+		rZ_rad.setRadiansValue((coeff_toPastITRF(solOutput, 6) - coeff_toPastITRF(solInput, 6)) * pow(10, -3) / 3600 * DEG2RAD);
+		tXv_m_yr.setMetresValue((coeff_toPastITRF(solOutput, 8) - coeff_toPastITRF(solInput, 8)) * MM2M);
+		tYv_m_yr.setMetresValue((coeff_toPastITRF(solOutput, 9) - coeff_toPastITRF(solInput, 9)) * MM2M);
+		tZv_m_yr.setMetresValue((coeff_toPastITRF(solOutput, 10) - coeff_toPastITRF(solInput, 10)) * MM2M);
+		dv_yr.setScaleFactor((coeff_toPastITRF(solOutput, 11) - coeff_toPastITRF(solInput, 11)) * pow(10, -9));
+		rXv_rad_yr.setRadiansValue((coeff_toPastITRF(solOutput, 12) - coeff_toPastITRF(solInput, 12)) * pow(10, -3) / 3600 * DEG2RAD);
+		rYv_rad_yr.setRadiansValue((coeff_toPastITRF(solOutput, 13) - coeff_toPastITRF(solInput, 13)) * pow(10, -3) / 3600 * DEG2RAD);
+		rZv_rad_yr.setRadiansValue((coeff_toPastITRF(solOutput, 14) - coeff_toPastITRF(solInput, 14)) * pow(10, -3) / 3600 * DEG2RAD);
 	}
 	else if (solInput < solOutput) //Reference Frame is ITRF2014
 	{
@@ -438,10 +434,9 @@ bool TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector
 
 THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPastITRF, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* itrfOut) const {
 	int solInput = 0, solOutput = 0;
-	TLength tX_m(0), tY_m(0), tZ_m(0), tXv_m_yr(0), tYv_m_yr(0), tZv_m_yr(0); //translation (meters and meters per year)
-	TScaleFactor d(0), dv_yr(0); //scale factor
-	TAngle rX_rad(0), rY_rad(0), rZ_rad(0), rXv_rad_yr(0), rYv_rad_yr(0), rZv_rad_yr(0); //rotation (radians and radians/year)
-	TReal; //velocity (meters per year)
+	TLength tXv_m_yr(0), tYv_m_yr(0), tZv_m_yr(0); //translation rate meters per year
+	TScaleFactor d(0), dv_yr(0); //scale factor rate
+	TAngle rXv_rad_yr(0), rYv_rad_yr(0), rZv_rad_yr(0); //rotation rate radians/year
 
 	if (itrfIn->getSolution() != "ITRF 2014")
 		solInput = findITRFSolution(itrfIn);
@@ -451,13 +446,13 @@ THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPas
 
 	if (itrfIn->getSolution() != "ITRF 2014" && itrfOut->getSolution() != "ITRF 2014")
 	{
-		tXv_m_yr.setMetresValue((coeff_toPastITRF(solInput, 8) - coeff_toPastITRF(solOutput, 8)) * MM2M);
-		tYv_m_yr.setMetresValue((coeff_toPastITRF(solInput, 9) - coeff_toPastITRF(solOutput, 9)) * MM2M);
-		tZv_m_yr.setMetresValue((coeff_toPastITRF(solInput, 10) - coeff_toPastITRF(solOutput, 10)) * MM2M);
-		dv_yr.setScaleFactor((coeff_toPastITRF(solInput, 11) - coeff_toPastITRF(solOutput, 11)) * pow(10, -9));
-		rXv_rad_yr.setRadiansValue((coeff_toPastITRF(solInput, 12) - coeff_toPastITRF(solOutput, 12)) * pow(10, -3) / 3600 * DEG2RAD);
-		rYv_rad_yr.setRadiansValue((coeff_toPastITRF(solInput, 13) - coeff_toPastITRF(solOutput, 13)) * pow(10, -3) / 3600 * DEG2RAD);
-		rZv_rad_yr.setRadiansValue((coeff_toPastITRF(solInput, 14) - coeff_toPastITRF(solOutput, 14)) * pow(10, -3) / 3600 * DEG2RAD);
+		tXv_m_yr.setMetresValue((coeff_toPastITRF(solOutput, 8) - coeff_toPastITRF(solInput, 8)) * MM2M);
+		tYv_m_yr.setMetresValue((coeff_toPastITRF(solOutput, 9) - coeff_toPastITRF(solInput, 9)) * MM2M);
+		tZv_m_yr.setMetresValue((coeff_toPastITRF(solOutput, 10) - coeff_toPastITRF(solInput, 10)) * MM2M);
+		dv_yr.setScaleFactor((coeff_toPastITRF(solOutput, 11) - coeff_toPastITRF(solInput, 11)) * pow(10, -9));
+		rXv_rad_yr.setRadiansValue((coeff_toPastITRF(solOutput, 12) - coeff_toPastITRF(solInput, 12)) * pow(10, -3) / 3600 * DEG2RAD);
+		rYv_rad_yr.setRadiansValue((coeff_toPastITRF(solOutput, 13) - coeff_toPastITRF(solInput, 13)) * pow(10, -3) / 3600 * DEG2RAD);
+		rZv_rad_yr.setRadiansValue((coeff_toPastITRF(solOutput, 14) - coeff_toPastITRF(solInput, 14)) * pow(10, -3) / 3600 * DEG2RAD);
 	}
 	else if (solInput < solOutput) //Input Frame is ITRF2014
 	{
@@ -471,7 +466,7 @@ THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPas
 	}
 
 	TTranslation translaRate(tXv_m_yr, tYv_m_yr, tZv_m_yr);
-	TRotationMatrix currentRotaRateMat(TRotationMatrix::kRxyz, -rX_rad, -rY_rad, -rZ_rad);
+	TRotationMatrix currentRotaRateMat(TRotationMatrix::kRxyz, -rXv_rad_yr, -rYv_rad_yr, -rZv_rad_yr);
 	currentRotaRateMat.setC(0, 0, 0);
 	currentRotaRateMat.setC(1, 1, 0);
 	currentRotaRateMat.setC(2, 2, 0);
@@ -495,7 +490,7 @@ bool TTrf2TrfTransformation::itrf2etrf(TMatrix coeffITRFyy_toETRFyy, TPositionVe
 	tX_m.setMetresValue(coeffITRFyy_toETRFyy(solOutput, 0) * MM2M);
 	tY_m.setMetresValue(coeffITRFyy_toETRFyy(solOutput, 1) * MM2M);
 	tZ_m.setMetresValue(coeffITRFyy_toETRFyy(solOutput, 2) * MM2M);
-	d.setScaleFactor(coeffITRFyy_toETRFyy(solInput, 3) * pow(10, -9));
+	d.setScaleFactor(coeffITRFyy_toETRFyy(solOutput, 3) * pow(10, -9));
 	rX_rad.setRadiansValue(coeffITRFyy_toETRFyy(solOutput, 4) * pow(10, -3) / 3600 * DEG2RAD);
 	rY_rad.setRadiansValue(coeffITRFyy_toETRFyy(solOutput, 5) * pow(10, -3) / 3600 * DEG2RAD);
 	rZ_rad.setRadiansValue(coeffITRFyy_toETRFyy(solOutput, 6) * pow(10, -3) / 3600 * DEG2RAD);
