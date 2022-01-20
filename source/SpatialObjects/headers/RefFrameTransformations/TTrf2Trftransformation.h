@@ -127,10 +127,10 @@ public:
 	THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPastITRF, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* itrfOut) const;
 
 	///ITRF to ETRF transformation
-	bool TTrf2TrfTransformation::itrf2etrf(TMatrix coeffITRFyy_toETRFyy, TPositionVector& pv, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* etrfOut) const;
+	bool TTrf2TrfTransformation::itrf2etrf(TMatrix coeffITRFyy_toETRFyy, TPositionVector& pv, TTerrestrialReferenceFrame* itrf, TTerrestrialReferenceFrame* etrf, bool inverse) const;
 
 	/// ITRF to ETRF transformation rate
-	THelmertTransformation TTrf2TrfTransformation::itrf2etrfRate(TMatrix coeffITRFyy_toETRFyy, TTerrestrialReferenceFrame* etrfOut) const;
+	THelmertTransformation TTrf2TrfTransformation::itrf2etrfRate(TMatrix coeffITRFyy_toETRFyy, TTerrestrialReferenceFrame* etrf, bool inverse) const;
 	//@}
 
 	

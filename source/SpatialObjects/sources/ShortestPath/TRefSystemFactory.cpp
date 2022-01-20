@@ -864,10 +864,10 @@ void TRefSystemFactory::init()
 	}
 	
 		////////////////////////////////////////////////////////////////
-		// Transformation ITRF-ETRF, ETRF-ITRF (simple test)
+		// Transformation ITRF-ETRF, ETRF-ITRF
 		////////////////////////////////////////////////////////////////
 	{
-		/*
+		/* Simple test
 		// There is no rotation:
 
 		TRotation r4(TRotationMatrix::kRzyx, 0, 0, 0);
