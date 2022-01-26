@@ -149,8 +149,10 @@ void TRefSystemFactory::init()
 	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf97("ITRF97"), wgs("WGS84"), roma("ROMA40");
 	std::string ccs("CCS"), etrf93("ETRF93");
 	std::string cgrf2("new_CGRF");
-	std::string itrf2("ITRF");
-	std::string etrf("ETRF");
+	std::string itrfIn("ITRFin");
+	std::string itrfOut("ITRFout");
+	std::string etrfIn("ETRFin");
+	std::string etrfOut("ETRFout");
 	
 		//new CGRF (coordinate of P0 have been changed)
 	TGeodeticRefFrame* pCGRF2 = new TGeodeticRefFrame(cgrf2, pGRS80);
@@ -175,21 +177,31 @@ void TRefSystemFactory::init()
 	pITRF97->setRefFrameId(kITRF97);
 	fRefFrameList.push_back(pITRF97);
 
-	    //Generic ITRF solution at specified epoch
+	    //Generic ITRF solution at specified epoch (input)
 	TReal initEpochITRF = -9999.9;
-	TTerrestrialReferenceFrame* pITRF = new TTerrestrialReferenceFrame(itrf2, pGRS80, initEpochITRF);
-	//TGeodeticRefFrame* pITRF = new TGeodeticRefFrame(itrf, pGRS80);
-	pITRF->setRefFrameId(kITRF);
-	fRefFrameList.push_back(pITRF);
-	fITRF = pITRF;
+	TTerrestrialReferenceFrame* pITRFin = new TTerrestrialReferenceFrame(itrfIn, pGRS80, initEpochITRF);
+	pITRFin->setRefFrameId(kITRFin);
+	fRefFrameList.push_back(pITRFin);
+	fITRFin = pITRFin;
 
-		//Generic ETRF solution at specified epoch
+	//Generic ITRF solution at specified epoch (output)
+	TTerrestrialReferenceFrame* pITRFout = new TTerrestrialReferenceFrame(itrfOut, pGRS80, initEpochITRF);
+	pITRFout->setRefFrameId(kITRFout);
+	fRefFrameList.push_back(pITRFout);
+	fITRFout = pITRFout;
+
+	//Generic ETRF solution at specified epoch (input)
 	TReal initEpochETRF = -9999.9;
-	TTerrestrialReferenceFrame* pETRF = new TTerrestrialReferenceFrame(etrf, pGRS80, initEpochETRF);
-	//TGeodeticRefFrame* pETRF = new TGeodeticRefFrame(etrf, pGRS80);
-	pETRF->setRefFrameId(kETRF);
-	fRefFrameList.push_back(pETRF);
-	fETRF = pETRF;
+	TTerrestrialReferenceFrame* pETRFin = new TTerrestrialReferenceFrame(etrfIn, pGRS80, initEpochETRF);
+	pETRFin->setRefFrameId(kETRFin);
+	fRefFrameList.push_back(pETRFin);
+	fETRFin = pETRFin;
+
+	//Generic ETRF solution at specified epoch (output)
+	TTerrestrialReferenceFrame* pETRFout = new TTerrestrialReferenceFrame(etrfOut, pGRS80, initEpochETRF);
+	pETRFout->setRefFrameId(kETRFout);
+	fRefFrameList.push_back(pETRFout);
+	fETRFout = pETRFout;
 
 		// FrenchRGF93 zone 5
     TAReferenceFrame* pFrenchRGF93Zone5 = new TRGF93CC46Projection("FrenchRGF93Zone5");
@@ -936,23 +948,23 @@ void TRefSystemFactory::init()
 				(*itrfyy_toETRFyy)((int)i, (int)j) = coeffITRFyy_toETRFyy[i][j];
 		}
 
-		TTrf2TrfTransformation* pITRF2ETRF = new TTrf2TrfTransformation(pITRF, pETRF, itrf2014_toPastITRF, itrfyy_toETRFyy);
-		pITRF2ETRF->setTransformId(kITRF2ETRF);
-		fTransformList.push_back(pITRF2ETRF);
+		TTrf2TrfTransformation* pITRFin2ETRFout = new TTrf2TrfTransformation(pITRFin, pETRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRFin2ETRFout->setTransformId(kITRFin2ETRFout);
+		fTransformList.push_back(pITRFin2ETRFout);
 
-		TTrf2TrfTransformation* pETRF2ITRF = new TTrf2TrfTransformation(pETRF, pITRF, itrf2014_toPastITRF, itrfyy_toETRFyy);
-		pETRF2ITRF->setTransformId(kETRF2ITRF);
-		fTransformList.push_back(pETRF2ITRF);
-
-
-		TTrf2TrfTransformation* pITRF2ITRF = new TTrf2TrfTransformation(pITRF, pITRF, itrf2014_toPastITRF, itrfyy_toETRFyy);
-		pITRF2ITRF->setTransformId(kITRF2ITRF);
-		fTransformList.push_back(pITRF2ITRF);
+		TTrf2TrfTransformation* pETRFin2ITRFout = new TTrf2TrfTransformation(pETRFin, pITRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pETRFin2ITRFout->setTransformId(kETRFin2ITRFout);
+		fTransformList.push_back(pETRFin2ITRFout);
 
 
-		TTrf2TrfTransformation* pETRF2ETRF = new TTrf2TrfTransformation(pETRF, pETRF, itrf2014_toPastITRF, itrfyy_toETRFyy);
-		pETRF2ETRF->setTransformId(kETRF2ETRF);
-		fTransformList.push_back(pETRF2ETRF);
+		TTrf2TrfTransformation* pITRFin2ITRFout = new TTrf2TrfTransformation(pITRFin, pITRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRFin2ITRFout->setTransformId(kITRFin2ITRFout);
+		fTransformList.push_back(pITRFin2ITRFout);
+
+
+		TTrf2TrfTransformation* pETRFin2ETRFout = new TTrf2TrfTransformation(pETRFin, pETRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pETRFin2ETRFout->setTransformId(kETRFin2ETRFout);
+		fTransformList.push_back(pETRFin2ETRFout);
 
 
 	}
@@ -1262,7 +1274,6 @@ TReferenceEllipsoid* TRefSystemFactory::getEllipsoid(const ERefEll ellId)
 	//exit(EXIT_FAILURE);
 }
 
-
 TAReferenceFrame* TRefSystemFactory::getRefFrame(const ERefFrame refFrameId)
 {//return a pointer to the ref frame askes for
 	std::vector<TAReferenceFrame*>::iterator iter = fRefFrameList.begin();
@@ -1309,18 +1320,21 @@ TGeodeticRefFrame* TRefSystemFactory::getGeoRefFrame(const ERefFrame refFrameId)
 }
 
 TTerrestrialReferenceFrame* TRefSystemFactory::getTerrRefFrame(const ERefFrame refFrameId)
+//TAReferenceFrame* TRefSystemFactory::getTerrRefFrame(const ERefFrame refFrameId)
 {
-	if (refFrameId == kITRF)
-		return fITRF;
-
-	if (refFrameId == kETRF)
-		return fETRF;
+	if (refFrameId == kITRFin)
+		return fITRFin;
+	else if (refFrameId == kITRFout)
+		return fITRFout;
+	else if (refFrameId == kETRFin)
+		return fETRFin;
+	else if (refFrameId == kETRFout)
+		return fETRFout;
 
 	std::cerr << "Error : Id. not in RefFrameList" << std::endl;
 	throw TNotInGraphException("TNotInGraphException");
 
 }
-
 
 TARefFrameTransformation* TRefSystemFactory::getTransformation(const ERefFrameTransform id)
 {//return a pointer to the ref frame transformation asked for

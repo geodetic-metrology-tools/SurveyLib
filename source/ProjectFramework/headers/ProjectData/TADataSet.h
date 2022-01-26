@@ -139,9 +139,6 @@ public:
 		/// set the origin of the local system used
 		bool	setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin>);
 
-		/// set the epoch of the coordinates
-		void	setCoordEpoch(const TReal epoch);
-
 		/// get the reference system identifier
 		TAReferenceFrame*	getRefFrame();
 
@@ -172,8 +169,6 @@ public:
 		/// get a pointer to the origin of the local system used
         TLocalSystemOrigin* getLocalSystemOrigin() const;
 
-		/// get the epoch of the coordinates
-		TReal getCoordEpoch() const;
 	//@}
 	
 		

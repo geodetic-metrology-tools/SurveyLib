@@ -137,7 +137,8 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 	TLength tX_m(0), tY_m(0), tZ_m(0), vX_m_yr(0), vY_m_yr(0), vZ_m_yr(0); //translation (meters and meters per year)
 	TScaleFactor d(0), d_yr(0); //scale factor
 	TAngle rX_rad(0), rY_rad(0), rZ_rad(0), rX_rad_yr(0), rY_rad_yr(0), rZ_rad_yr(0); //rotation (radians and radians/year)
-	TReal ; //velocity (meters per year)
+
+	
 
 	if (fFrom->getSolution().find("ITRF") != std::string::npos)
 	{
@@ -167,7 +168,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 		//Velocity and rates
 		THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(fcoeff_toPastITRF, fFrom, fTo);
 		TPositionVector velITRF_2014 = itrf2014velocity(pv);
-		TPositionVector velITRF_yy = velITRF_2014 + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor() + itrf2itrfTransfoRate.getRotation().getRotationMatrix() * velITRF_2014;
+		TPositionVector velITRF_yy = velITRF_2014 + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor() + itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pv;
 
 		//Position
 		result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);

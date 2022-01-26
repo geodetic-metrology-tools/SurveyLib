@@ -37,6 +37,7 @@ class TSpatialStatus;
 class TGeodeticRefFrame;
 class TModifiedLocalGeodeticRF;
 class TModifiedLocalAstronomicalRF;
+class TTerrestrialReferenceFrame;
 
 #include  <TAngle.h>
 #include  "TLength.h"

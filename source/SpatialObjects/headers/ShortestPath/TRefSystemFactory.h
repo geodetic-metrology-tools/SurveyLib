@@ -79,8 +79,10 @@ public:
 			kCCS_new             = 10,
 			kLAp0_new            = 11,
 			kLGp0_new            = 12,
-			kITRF               = 13,
-			kETRF              = 14,
+			kITRFin              = 13,
+			kITRFout			 = 14,
+			kETRFin              = 15,
+			kETRFout			 = 16,
 			// Projections:
 			kCernXYHe            = 100, 
 			kCernX0Y0He          = 101, 
@@ -151,8 +153,8 @@ public:
 			kCCS2CGRF2, kWGS2CGRF2, kITRF972CGRF2,
 			kCGRF22CCS, kCGRF22WGS, kCGRF22ITRF97,
 
-			//ITRF 2 ETRF (test)
-			kITRF2ETRF, kITRF2ITRF, kETRF2ETRF, kETRF2ITRF
+			//Transformation between ITRF and ETRF
+			kITRFin2ETRFout, kITRFin2ITRFout, kETRFin2ETRFout, kETRFin2ITRFout
 		};
 	//@}
 	
@@ -244,8 +246,10 @@ private:
 	TGeodeticRefFrame *fCGRFSphere = nullptr;
 	TGeodeticRefFrame *fCGRF2 = nullptr;
 
-	TTerrestrialReferenceFrame* fITRF = nullptr;
-	TTerrestrialReferenceFrame* fETRF = nullptr;
+	TTerrestrialReferenceFrame* fITRFin = nullptr;
+	TTerrestrialReferenceFrame* fITRFout = nullptr;
+	TTerrestrialReferenceFrame* fETRFin = nullptr;
+	TTerrestrialReferenceFrame* fETRFout = nullptr;
 };
 /*@}*/
 

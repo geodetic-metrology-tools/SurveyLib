@@ -97,6 +97,12 @@ public:
 		/*!return true if the reference frame is in graph, so return false only for MLA*/
 		virtual bool						isInGraph() const {return true; };
 
+		//! return the epoch of the coordinates if there is one (ITRF and ETRF)
+		virtual TReal						getEpoch() const { TReal epoch; return epoch; }
+
+		//! rteturn the solution of the reference frame if there is one (ITRF and ETRF)
+		virtual std::string					getSolution() const { std::string solution; return solution; }
+
 
 	//@}
 

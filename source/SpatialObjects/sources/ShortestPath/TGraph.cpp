@@ -144,14 +144,14 @@ void	TGraph::init()
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCCS2CGRFSphere),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCGRFSphere2CCS));
 
-	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF2ETRF),
-		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF2ITRF));
+	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRFin2ETRFout),
+		    TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRFin2ITRFout));
 
-	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF2ITRF),
-		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF2ITRF));
+	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRFin2ITRFout),
+		    TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRFin2ITRFout));
 
-	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF2ETRF),
-		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF2ETRF));
+	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRFin2ETRFout),
+		    TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRFin2ETRFout));
 
 
 	return;

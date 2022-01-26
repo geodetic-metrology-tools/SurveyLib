@@ -62,8 +62,7 @@ public:
 	virtual bool setEpoch(TReal epoch);
 
 	//! set the solution of the coordinates
-	virtual bool setSolution(std::string solution);
-	 
+	virtual bool setSolution(std::string solution);	 
 
 	//@}
 

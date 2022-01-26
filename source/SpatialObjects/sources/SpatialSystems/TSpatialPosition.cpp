@@ -173,7 +173,7 @@ bool TSpatialPosition::setCoordinates(const TPositionVector& pv)
 
 bool TSpatialPosition::transform(TAReferenceFrame* to)
 {//transformation between 2 RF
-	if ( this->getRefFrame() == to && to->getName() != "ITRF" && to->getName() != "ETRF")
+	if ( this->getRefFrame() == to)
 	{ return true; }
 
 	else

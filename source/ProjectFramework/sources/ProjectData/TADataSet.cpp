@@ -250,13 +250,6 @@ bool	TADataSet::setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> lso)
 	return fDataParams.setLocalSystemOrigin(lso);
 }
 
-//! set the epoch of the coordinates
-void TADataSet::setCoordEpoch(const TReal epoch)
-{
-	return fDataParams.setCoordEpoch(epoch);
-}
-
-
 TAReferenceFrame*	TADataSet::getRefFrame()
 {//! get the reference system identifier
 	return fDataParams.getRefFrame();
@@ -314,12 +307,6 @@ int  TADataSet::getPointNameWidth() const
 TLocalSystemOrigin* TADataSet::getLocalSystemOrigin() const
 {
 	return fDataParams.getLocalSystemOrigin();
-}
-
-//! get the epoch of the coordinates
-TReal TADataSet::getCoordEpoch() const
-{
-	return fDataParams.getCoordEpoch();
 }
 
 //////////////////////////////////////////////////////////////////////////
