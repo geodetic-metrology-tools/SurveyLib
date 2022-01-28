@@ -83,6 +83,8 @@ public:
 
 		bool	isOriginExpected() const;
 
+		bool	trfInfoExpected() const;
+
 		/// set the reference system identifier
 		bool	setRefFrame(TRefSystemFactory::ERefFrame);
 
@@ -157,7 +159,7 @@ public:
 		/// get the epoch of the coordinates
 		TReal									getCoordEpoch() const;
 
-		/// get the epoch of the coordinates
+		/// get the solution
 		std::string								getSolution() const;
 
 		std::string getRFName() const;

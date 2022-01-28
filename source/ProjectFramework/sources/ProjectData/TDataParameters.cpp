@@ -137,6 +137,10 @@ bool	TDataParameters::isOriginExpected() const
 	return TRefFrameInfo::isLocalRefFrame(fRefFrameEnum);
 }
 
+bool	TDataParameters::trfInfoExpected() const
+{
+	return TRefFrameInfo::isTerrestrialRefFrame(fRefFrameEnum);
+}
 
 
 ////////////////////////////////////////////////////////////////////////
