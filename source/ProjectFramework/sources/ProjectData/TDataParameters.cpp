@@ -45,6 +45,8 @@ TDataParameters::TDataParameters()
 	fAnglePrecision = TObservationFormat::k10Microgons;
 	fLengthPrecision = TObservationFormat::k10Micrometres;
 	fCoordPrecision = TPointFormat::kMillimetre;
+	fCoordEpoch = -9999.9;
+	fSolution = "noSolution";
 	fPointNameWidth=7;
 }
 
@@ -60,6 +62,8 @@ TDataParameters::TDataParameters(const TDataParameters& original )
 , fAnglePrecision(original.fAnglePrecision)
 , fLengthPrecision(original.fLengthPrecision)
 , fCoordPrecision(original.fCoordPrecision)
+, fCoordEpoch(original.fCoordEpoch)
+, fSolution(original.fSolution)
 , fPointNameWidth(original.fPointNameWidth)
 {
 }
@@ -93,6 +97,8 @@ void TDataParameters::swap(TDataParameters & other) noexcept
     std::swap(fAnglePrecision,other.fAnglePrecision);
     std::swap(fLengthPrecision,other.fLengthPrecision);
     std::swap(fCoordPrecision,other.fCoordPrecision);
+	std::swap(fCoordEpoch, other.fCoordEpoch);
+	std::swap(fSolution, other.fSolution);
     std::swap(fPointNameWidth,other.fPointNameWidth);
 }
 
@@ -397,6 +403,14 @@ void TDataParameters::setOriginFile(const std::string &f)
 	fOriginFile = f;
 }
 
+void TDataParameters::setCoordEpoch(const TReal epoch) {
+	fCoordEpoch = epoch;
+}
+
+void TDataParameters::setSolution(const std::string solution) {
+	fSolution = solution;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 //get Functions
@@ -465,6 +479,16 @@ TLocalSystemOrigin* TDataParameters::getLocalSystemOrigin() const
 const std::string& TDataParameters::getOriginFile() const
 {
 	return fOriginFile;
+}
+
+TReal TDataParameters::getCoordEpoch() const
+{
+	return fCoordEpoch;
+}
+
+std::string TDataParameters::getSolution() const
+{
+	return fSolution;
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -117,6 +117,13 @@ public:
         bool    setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> lso);
 		void	setOriginFile(const std::string &);
 
+		/// set the epoch of the coordiantes
+		void	setCoordEpoch(TReal epoch);
+
+		///set the solution
+		void	setSolution(std::string solution);
+
+
 		/// get the reference system identifier
 		TAReferenceFrame*	getRefFrame() const;
 
@@ -146,7 +153,12 @@ public:
 
 		TLocalSystemOrigin* getLocalSystemOrigin() const;
 		const std::string& getOriginFile() const;
-			
+
+		/// get the epoch of the coordinates
+		TReal									getCoordEpoch() const;
+
+		/// get the epoch of the coordinates
+		std::string								getSolution() const;
 
 		std::string getRFName() const;
 	//@}
@@ -168,6 +180,8 @@ private:
 	TPointFormat::ECoordPrecision				fCoordPrecision;
 
 	int											fPointNameWidth;
+	TReal										fCoordEpoch;
+	std::string									fSolution;
 
 	TAStreamFormatter::ETextFormat punchFileFormat;
 	TAStreamFormatter::ETextFormat resultsFileFormat;

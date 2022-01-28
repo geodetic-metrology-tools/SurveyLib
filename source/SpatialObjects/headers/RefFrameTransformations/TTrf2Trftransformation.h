@@ -13,7 +13,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include  "TARefFrameTransformation.h"
 #include  "TSpatialPosition.h"
 #include  "TTerrestrialReferenceFrame.h"
-//#include  "THelmertRefFrameTransform.h"
 
 class  THelmertTransformation;
 class  TScaleFactor;
@@ -40,7 +39,7 @@ public:
 	TTrf2TrfTransformation(TTerrestrialReferenceFrame* from, TTerrestrialReferenceFrame* to, const TScaleFactor&, const TRotation&, const TTranslation&);
 
 	/// Constructor taking parameters of the full coefficient table
-	TTrf2TrfTransformation::TTrf2TrfTransformation(TTerrestrialReferenceFrame* from, TTerrestrialReferenceFrame* to, const TMatrix* coeffTransfoITRF, const TMatrix* coeffTransfoETRF);
+	TTrf2TrfTransformation(TTerrestrialReferenceFrame* from, TTerrestrialReferenceFrame* to, const TMatrix* coeffTransfoITRF, const TMatrix* coeffTransfoETRF);
 
 	/// Copy Constructor 
 	TTrf2TrfTransformation(const  TTrf2TrfTransformation&);

@@ -46,13 +46,13 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
 		tmp->insert(std::make_pair(TRefSystemFactory::kCGRF_new,
 			TDetails("kCGRF2", "new CERN GRF", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kITRFin,
-			TDetails("kITRF", "Internation Terrestrial Reference Frame (ITRF)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+			TDetails("kITRFin", "Internation Terrestrial Reference Frame (ITRF input)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kITRFout,
-			TDetails("kITRF", "Internation Terrestrial Reference Frame (ITRF)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+			TDetails("kITRFout", "Internation Terrestrial Reference Frame (ITRF output)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kETRFin,
-			TDetails("kETRF", "European Terrestrial Reference Frame (ETRF)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+			TDetails("kETRFin", "European Terrestrial Reference Frame (ETRF input)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kETRFout,
-			TDetails("kETRF", "European Terrestrial Reference Frame (ETRF)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+			TDetails("kETRFout", "European Terrestrial Reference Frame (ETRF output)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
         tmp->insert(std::make_pair(TRefSystemFactory::kCernXYHe, 
             TDetails("kCernXYHe","CERN XYHe", TCoordSysFactory::k2DPlusH)));
         tmp->insert(std::make_pair(TRefSystemFactory::kCernX0Y0He, 
@@ -250,7 +250,7 @@ bool TRefFrameInfo::isLocalRefFrame(int frame)
     MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
     if(iter!=getMapping().end())
 	{
-		return iter->second.fLocal;
+			return iter->second.fLocal;
 	}
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
@@ -263,6 +263,16 @@ bool TRefFrameInfo::isRotatedLocalRefFrame(int frame) {
 		return (iter->second.fRefFrameName.find("kML") == 0);
 	}
 	throw std::invalid_argument("Unknown ERefFrame value");}
+
+bool TRefFrameInfo::isTerrestrialRefFrame(int frame) {
+	MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
+	if (iter != getMapping().end())
+	{
+		return ((iter->second.fRefFrameName.find("kITRF") != std::string::npos) ||
+			(iter->second.fRefFrameName.find("kETRF") != std::string::npos));
+	}
+	throw std::invalid_argument("Unknown ERefFrame value");
+}
 
 TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso)
 {

@@ -121,6 +121,7 @@ public:
 	
    static bool isLocalRefFrame(int frame);
    static bool isRotatedLocalRefFrame(int frame);
+   static bool isTerrestrialRefFrame(int frame);
 
    static TAReferenceFrame* getReferenceFrame(int frame, const TLocalSystemOrigin* lso = NULL);
 };

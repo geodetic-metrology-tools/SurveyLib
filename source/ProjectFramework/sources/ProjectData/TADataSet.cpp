@@ -250,6 +250,19 @@ bool	TADataSet::setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> lso)
 	return fDataParams.setLocalSystemOrigin(lso);
 }
 
+//! set the epoch of the coordinates
+void TADataSet::setCoordEpoch(const TReal epoch)
+{
+	return fDataParams.setCoordEpoch(epoch);
+}
+
+//! set the solution of the coordinates
+void TADataSet::setSolution(const std::string solution)
+{
+	return fDataParams.setSolution(solution);
+}
+
+
 TAReferenceFrame*	TADataSet::getRefFrame()
 {//! get the reference system identifier
 	return fDataParams.getRefFrame();
@@ -308,6 +321,19 @@ TLocalSystemOrigin* TADataSet::getLocalSystemOrigin() const
 {
 	return fDataParams.getLocalSystemOrigin();
 }
+
+//! get the epoch of the coordinates
+TReal TADataSet::getCoordEpoch() const
+{
+	return fDataParams.getCoordEpoch();
+}
+
+//! get the solution of the coordinates
+std::string TADataSet::getSolution() const
+{
+	return fDataParams.getSolution();
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //Wrapper TFileParameters
