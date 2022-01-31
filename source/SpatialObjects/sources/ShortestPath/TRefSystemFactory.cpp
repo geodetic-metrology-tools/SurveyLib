@@ -879,25 +879,6 @@ void TRefSystemFactory::init()
 		// Transformation ITRF-ETRF, ETRF-ITRF
 		////////////////////////////////////////////////////////////////
 	{
-		/* Simple test
-		// There is no rotation:
-
-		TRotation r4(TRotationMatrix::kRzyx, 0, 0, 0);
-		// Total translation resulting from epoch changes and Reference Frame changes:
-		// TODO:
-		TLength Tx4(LITERAL(1.1)), Ty4(LITERAL(2.2)), Tz4(LITERAL(3.3));
-		TTranslation transl4(Tx4, Ty4, Tz4);
-		// There is no scaling:
-		TScaleFactor enl4(LITERAL(1.000000000000000));
-		TTrf2TrfTransformation* pITRF2ETRF = new TTrf2TrfTransformation(pITRF, pETRF, enl4, r4, transl4);
-		pITRF2ETRF->setTransformId(kITRF2ETRF);
-		fTransformList.push_back(pITRF2ETRF);
-		//Inverse
-		TTrf2TrfTransformation* pETRF2ITRF = pITRF2ETRF->inverse();
-		pETRF2ITRF->setTransformId(kETRF2ITRF);
-		fTransformList.push_back(pETRF2ITRF);
-		*/
-		
 		//Transformation parameters from ITRF2014 to past ITRFs and their rates
 		//Data format: Tx[mm], Ty[mm], Tz[mm],D (scale factor) [ppb], Rx [0.001"], Ry [0.001"], Rz [0.001"],Epoch, vTx [mm/yr], vTy [mm/yr], vTz [mm/yr], vD [ppb/yr], vRx [0.001"/yr], vRy [0.001"/yr], vRz [0.001"/yr]
 		//https://itrf.ensg.ign.fr/doc_ITRF/Transfo-ITRF2014_ITRFs.txt
@@ -1320,7 +1301,6 @@ TGeodeticRefFrame* TRefSystemFactory::getGeoRefFrame(const ERefFrame refFrameId)
 }
 
 TTerrestrialReferenceFrame* TRefSystemFactory::getTerrRefFrame(const ERefFrame refFrameId)
-//TAReferenceFrame* TRefSystemFactory::getTerrRefFrame(const ERefFrame refFrameId)
 {
 	if (refFrameId == kITRFin)
 		return fITRFin;
@@ -1376,6 +1356,14 @@ bool TRefSystemFactory::isInRFFactory( const TAReferenceFrame* rf )
 	}
 
 	return false;
+}
+
+void TRefSystemFactory::updateTerrestrialRefFrame(TReal epoch, std::string solution, ERefFrame frame)
+{// Update terrestrial reference frame with current epoch and solution
+
+	getTerrRefFrame(frame)->setSolution(solution);
+	getTerrRefFrame(frame)->setEpoch(epoch);
+
 }
 
 

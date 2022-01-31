@@ -367,7 +367,7 @@ TPositionVector TTrf2TrfTransformation::applyPlateVelocity(TPositionVector& pv, 
 bool TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector & pv, TTerrestrialReferenceFrame * itrfIn, TTerrestrialReferenceFrame * itrfOut) const {
 
 	bool result = false;
-	int solInput = 0, solOutput = 0;
+	int solInput = -1, solOutput = -1;
 	TLength tX_m(0), tY_m(0), tZ_m(0), tXv_m_yr(0), tYv_m_yr(0), tZv_m_yr(0); //translation (meters and meters per year)
 	TScaleFactor d(0), dv_yr(0); //scale factor
 	TAngle rX_rad(0), rY_rad(0), rZ_rad(0), rXv_rad_yr(0), rYv_rad_yr(0), rZv_rad_yr(0); //rotation (radians and radians/year)
@@ -464,7 +464,7 @@ bool TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector
 }
 
 THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPastITRF, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* itrfOut) const {
-	int solInput = 0, solOutput = 0;
+	int solInput = -1, solOutput = -1;
 	TLength tXv_m_yr(0), tYv_m_yr(0), tZv_m_yr(0); //translation rate meters per year
 	TScaleFactor d(0), dv_yr(0); //scale factor rate
 	TAngle rXv_rad_yr(0), rYv_rad_yr(0), rZv_rad_yr(0); //rotation rate radians/year
@@ -485,7 +485,7 @@ THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPas
 		rYv_rad_yr.setRadiansValue((coeff_toPastITRF(solOutput, 13) - coeff_toPastITRF(solInput, 13)) * pow(10, -3) / 3600 * DEG2RAD);
 		rZv_rad_yr.setRadiansValue((coeff_toPastITRF(solOutput, 14) - coeff_toPastITRF(solInput, 14)) * pow(10, -3) / 3600 * DEG2RAD);
 	}
-	else if (solInput < solOutput) //Input Frame is ITRF2014
+	else if (itrfIn->getSolution() == "ITRF 2014") 
 	{
 		tXv_m_yr.setMetresValue(coeff_toPastITRF(solOutput, 8) * MM2M);
 		tYv_m_yr.setMetresValue(coeff_toPastITRF(solOutput, 9) * MM2M);
@@ -494,6 +494,16 @@ THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPas
 		rXv_rad_yr.setRadiansValue(coeff_toPastITRF(solOutput, 12) * pow(10, -3) / 3600 * DEG2RAD);
 		rYv_rad_yr.setRadiansValue(coeff_toPastITRF(solOutput, 13) * pow(10, -3) / 3600 * DEG2RAD);
 		rZv_rad_yr.setRadiansValue(coeff_toPastITRF(solOutput, 14) * pow(10, -3) / 3600 * DEG2RAD);
+	}
+	else if (itrfOut->getSolution() == "ITRF 2014")
+	{
+		tXv_m_yr.setMetresValue(-coeff_toPastITRF(solOutput, 8) * MM2M);
+		tYv_m_yr.setMetresValue(-coeff_toPastITRF(solOutput, 9) * MM2M);
+		tZv_m_yr.setMetresValue(-coeff_toPastITRF(solOutput, 10) * MM2M);
+		dv_yr.setScaleFactor(-coeff_toPastITRF(solOutput, 11) * pow(10, -9));
+		rXv_rad_yr.setRadiansValue(-coeff_toPastITRF(solOutput, 12) * pow(10, -3) / 3600 * DEG2RAD);
+		rYv_rad_yr.setRadiansValue(-coeff_toPastITRF(solOutput, 13) * pow(10, -3) / 3600 * DEG2RAD);
+		rZv_rad_yr.setRadiansValue(-coeff_toPastITRF(solOutput, 14) * pow(10, -3) / 3600 * DEG2RAD);
 	}
 
 	TTranslation translaRate(tXv_m_yr, tYv_m_yr, tZv_m_yr);

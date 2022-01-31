@@ -199,6 +199,9 @@ public:
 		//return a point to a Terrestrial Reference Frame
 		TTerrestrialReferenceFrame* getTerrRefFrame (const ERefFrame refFrameId);
 
+		// Update terrestrial reference frame with current epoch and solution
+		void updateTerrestrialRefFrame(TReal epoch, std::string solution, ERefFrame frame);
+
 		//return a pointer to a new Local ref Frame and put it in a list in order to be deleted
 		TAReferenceFrame* getNewLocalRefFrame();
 

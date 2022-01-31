@@ -421,7 +421,7 @@ void TDataParameters::setSolution(const std::string solution) {
 //////////////////////////////////////////////////////////////////////
 TAReferenceFrame*  TDataParameters::getRefFrame() const
 {//! get the reference system identifier
-    return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fLSO);
+    return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fLSO, fCoordEpoch, fSolution);
 }
 
 

@@ -274,7 +274,7 @@ bool TRefFrameInfo::isTerrestrialRefFrame(int frame) {
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
 
-TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso)
+TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso, TReal epoch, std::string solution)
 {
 	bool isdefinedlocal = false;
 	TRefSystemFactory::EGeoid localgeoid = TRefSystemFactory::kNoGeoid;
@@ -282,6 +282,14 @@ TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSyste
 
 	if (refFrame >= TRefSystemFactory::kMLA1985Machine && 
 		refFrame <= TRefSystemFactory::kLGSphere) isdefinedlocal = true;
+
+	if (refFrame == TRefSystemFactory::kITRFin ||
+		refFrame == TRefSystemFactory::kITRFout ||
+		refFrame == TRefSystemFactory::kETRFin ||
+		refFrame == TRefSystemFactory::kETRFout)
+	{
+		TRefSystemFactory::getRefSystemFactory()->TRefSystemFactory::updateTerrestrialRefFrame(epoch, solution, refFrame);
+	}
 
 	if (isdefinedlocal && lso == NULL) 
 		throw std::invalid_argument("LocalSystemOrigin required for the local reference frames!");
