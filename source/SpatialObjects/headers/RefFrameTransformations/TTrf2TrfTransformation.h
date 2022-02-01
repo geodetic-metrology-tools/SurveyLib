@@ -131,6 +131,9 @@ public:
 	TFreeVector transformETRFVelocity(TPositionVector &pv, TFreeVector &velITRF_yy, THelmertTransformation &itrf2etrfTransfoRate) const;
 
 
+	/// Transform ITRF2014 velocity into another ITRF
+	TPositionVector itrf2014velocityToOtherITRF(TMatrix coeff_toPastITRF, TPositionVector& pv, TPositionVector& velITRF2014, TTerrestrialReferenceFrame* itrfIn) const;
+
 	/// ITRF to ITRF transformation
 	bool itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector& pv, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* itrfOut) const;
 
