@@ -166,12 +166,15 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 	{
 		//Transformation ITRFxx -> ITRF yy @input epoch
 		//Velocity and rates
-		THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(fcoeff_toPastITRF, fFrom, fTo);
-		TPositionVector velITRF_2014 = itrf2014velocity(pv);
-		TPositionVector velITRF_yy = velITRF_2014 + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor() + itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pv;
+		TPositionVector velITRF_yy = itrf2014velocity(pv);
+		if (fFrom->getSolution() != fTo->getSolution())
+		{
+			THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(fcoeff_toPastITRF, fFrom, fTo);
+			TPositionVector velITRF_yy = velITRF_yy + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor() + itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pv;
 
-		//Position
-		result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);
+			//Position
+			result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);
+		}
 
 		//Transfo to ITRFyy @ output epoch
 		TReal deltaEpoch = fTo->getEpoch() - fFrom->getEpoch();
@@ -187,13 +190,17 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 
 		// Transfo ITRFxx -> ITRFyy @ input epoch
 		//Velocity and rates
-		TPositionVector velITRF_2014 = itrf2014velocity(pv);
-		THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(fcoeff_toPastITRF, fFrom, fTo);
-		TPositionVector velITRF_yy = velITRF_2014 + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor() + itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pv;
+		TPositionVector velITRF_yy = itrf2014velocity(pv);
 
+		if (fFrom->getSolution() != fTo->getSolution())
+		{
+			//Velocity and rates
+			THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(fcoeff_toPastITRF, fFrom, fTo);
+			TPositionVector velITRF_yy = velITRF_yy + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor() + itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pv;
 
-		result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);
-
+			//Position
+			result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);
+		}
 		
 		// Transfo ITRFyy -> ETRFyy @ input epoch
 		fTo->setSolution(fTo->getSolution().replace(0, 4, "ETRF"));
@@ -215,9 +222,13 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 		result = itrf2etrf(fcoeff_ITRFtoETRF, pv, fTo, fFrom, 1);
 
 		//Transfo ITRFxx -> ITRFyy @ input epoch
-		//Find equivalent ITRF and convert○
+		//Find equivalent ITRF and convert
 		fFrom->setSolution(fFrom->getSolution().replace(0, 4, "ITRF"));
-		result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);
+
+		if (fFrom->getSolution() != fTo->getSolution())
+		{
+			result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);
+		}
 
 		//Transfo to ITRFFyy @ output epoch
 		TPositionVector velITRF_2014 = itrf2014velocity(pv); //We do not consider the small realignement of velocities (smaller than 1mm/yr)
@@ -226,6 +237,41 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 
 		//Reset starting solution
 		fFrom->setSolution(fFrom->getSolution().replace(0, 4, "ETRF"));
+
+	}
+
+	//Transformation between ETRF and ETRF
+	else if (fFrom->getSolution().find("ETRF") != std::string::npos && fTo->getSolution().find("ETRF") != std::string::npos)
+	{
+		if (fFrom->getSolution() != fTo->getSolution())
+		{
+			// Transfo ETRFxx -> ITRFxx @ input epoch
+			result = itrf2etrf(fcoeff_ITRFtoETRF, pv, fTo, fFrom, 1);
+
+			//Transfo ITRFxx -> ITRFyy @ input epoch
+			//Find equivalent ITRF and convert
+			fFrom->setSolution(fFrom->getSolution().replace(0, 4, "ITRF"));
+			result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);
+
+			//Velocity and rates (ITRF)
+			TPositionVector velITRF_2014 = itrf2014velocity(pv);
+			THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(fcoeff_toPastITRF, fFrom, fTo);
+			TPositionVector velITRF_yy = velITRF_2014 + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor() + itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pv;
+
+			// Transfo ITRFyy -> ETRFyy @ input epoch
+			fTo->setSolution(fTo->getSolution().replace(0, 4, "ETRF"));
+			THelmertTransformation itrf2etrfTransfoRate = itrf2etrfRate(fcoeff_ITRFtoETRF, fTo, 0);
+			TPositionVector velETRF_yy = velITRF_yy + itrf2etrfTransfoRate.getTranslation().getVector() + itrf2etrfTransfoRate.getRotation().getRotationMatrix() * pv;
+			result = itrf2etrf(fcoeff_ITRFtoETRF, pv, fFrom, fTo, 0);
+
+			//Transfo to ETRFyy @ output epoch
+			TReal deltaEpoch = fTo->getEpoch() - fFrom->getEpoch();
+			pv = applyPlateVelocity(pv, velETRF_yy, deltaEpoch);
+
+		}
+
+		//Else (only epoch change in the same ETRF):
+		//we do nothing: ETRF is comobile with the Eurasian plate, no change of coordinates if there is only a change of epoch
 
 	}
 
@@ -497,13 +543,13 @@ THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPas
 	}
 	else if (itrfOut->getSolution() == "ITRF 2014")
 	{
-		tXv_m_yr.setMetresValue(-coeff_toPastITRF(solOutput, 8) * MM2M);
-		tYv_m_yr.setMetresValue(-coeff_toPastITRF(solOutput, 9) * MM2M);
-		tZv_m_yr.setMetresValue(-coeff_toPastITRF(solOutput, 10) * MM2M);
-		dv_yr.setScaleFactor(-coeff_toPastITRF(solOutput, 11) * pow(10, -9));
-		rXv_rad_yr.setRadiansValue(-coeff_toPastITRF(solOutput, 12) * pow(10, -3) / 3600 * DEG2RAD);
-		rYv_rad_yr.setRadiansValue(-coeff_toPastITRF(solOutput, 13) * pow(10, -3) / 3600 * DEG2RAD);
-		rZv_rad_yr.setRadiansValue(-coeff_toPastITRF(solOutput, 14) * pow(10, -3) / 3600 * DEG2RAD);
+		tXv_m_yr.setMetresValue(-coeff_toPastITRF(solInput, 8) * MM2M);
+		tYv_m_yr.setMetresValue(-coeff_toPastITRF(solInput, 9) * MM2M);
+		tZv_m_yr.setMetresValue(-coeff_toPastITRF(solInput, 10) * MM2M);
+		dv_yr.setScaleFactor(-coeff_toPastITRF(solInput, 11) * pow(10, -9));
+		rXv_rad_yr.setRadiansValue(-coeff_toPastITRF(solInput, 12) * pow(10, -3) / 3600 * DEG2RAD);
+		rYv_rad_yr.setRadiansValue(-coeff_toPastITRF(solInput, 13) * pow(10, -3) / 3600 * DEG2RAD);
+		rZv_rad_yr.setRadiansValue(-coeff_toPastITRF(solInput, 14) * pow(10, -3) / 3600 * DEG2RAD);
 	}
 
 	TTranslation translaRate(tXv_m_yr, tYv_m_yr, tZv_m_yr);

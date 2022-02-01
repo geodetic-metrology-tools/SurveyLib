@@ -21,11 +21,11 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-TTerrestrialReferenceFrame::TTerrestrialReferenceFrame(const std::string& name, TReferenceEllipsoid* ell , TReal& epoch)
+TTerrestrialReferenceFrame::TTerrestrialReferenceFrame(const std::string& name, TReferenceEllipsoid* ell , TReal& epoch, std::string& solution)
 	: TGeodeticRefFrame(name, ell)
-{	// constructor taking the name of the reference frame, the associated ellipsoid and the epoch of the coordinates
+{	// constructor taking the name of the reference frame, the associated ellipsoid, the epoch of the coordinates and the specific solution
 		fEpoch = epoch;
-		fSolution = "noSolution";
+		fSolution = solution;
 }
 
 TTerrestrialReferenceFrame::~TTerrestrialReferenceFrame()

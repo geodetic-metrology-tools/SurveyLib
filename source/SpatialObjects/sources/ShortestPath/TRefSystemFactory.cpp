@@ -176,29 +176,30 @@ void TRefSystemFactory::init()
 	TGeodeticRefFrame* pITRF97 = new TGeodeticRefFrame(itrf97, pGRS80);
 	pITRF97->setRefFrameId(kITRF97);
 	fRefFrameList.push_back(pITRF97);
-
-	    //Generic ITRF solution at specified epoch (input)
+	
+	//Generic ITRF solution at specified epoch (input)
 	TReal initEpochITRF = -9999.9;
-	TTerrestrialReferenceFrame* pITRFin = new TTerrestrialReferenceFrame(itrfIn, pGRS80, initEpochITRF);
+	std::string initSolution = "noSolution";
+	TTerrestrialReferenceFrame* pITRFin = new TTerrestrialReferenceFrame(itrfIn, pGRS80, initEpochITRF, initSolution);
 	pITRFin->setRefFrameId(kITRFin);
 	fRefFrameList.push_back(pITRFin);
 	fITRFin = pITRFin;
 
 	//Generic ITRF solution at specified epoch (output)
-	TTerrestrialReferenceFrame* pITRFout = new TTerrestrialReferenceFrame(itrfOut, pGRS80, initEpochITRF);
+	TTerrestrialReferenceFrame* pITRFout = new TTerrestrialReferenceFrame(itrfOut, pGRS80, initEpochITRF, initSolution);
 	pITRFout->setRefFrameId(kITRFout);
 	fRefFrameList.push_back(pITRFout);
 	fITRFout = pITRFout;
 
 	//Generic ETRF solution at specified epoch (input)
 	TReal initEpochETRF = -9999.9;
-	TTerrestrialReferenceFrame* pETRFin = new TTerrestrialReferenceFrame(etrfIn, pGRS80, initEpochETRF);
+	TTerrestrialReferenceFrame* pETRFin = new TTerrestrialReferenceFrame(etrfIn, pGRS80, initEpochETRF, initSolution);
 	pETRFin->setRefFrameId(kETRFin);
 	fRefFrameList.push_back(pETRFin);
 	fETRFin = pETRFin;
 
 	//Generic ETRF solution at specified epoch (output)
-	TTerrestrialReferenceFrame* pETRFout = new TTerrestrialReferenceFrame(etrfOut, pGRS80, initEpochETRF);
+	TTerrestrialReferenceFrame* pETRFout = new TTerrestrialReferenceFrame(etrfOut, pGRS80, initEpochETRF, initSolution);
 	pETRFout->setRefFrameId(kETRFout);
 	fRefFrameList.push_back(pETRFout);
 	fETRFout = pETRFout;

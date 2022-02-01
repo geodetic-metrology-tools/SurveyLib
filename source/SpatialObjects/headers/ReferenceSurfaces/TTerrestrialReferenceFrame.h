@@ -41,8 +41,8 @@ public:
 	/**@name Constructors and Destructors */
 //@{
 
-	/// Constructor taking the name of the reference frame, the associated ellipsoid and epoch
-	TTerrestrialReferenceFrame(const std::string& name, TReferenceEllipsoid* ell, TReal& epoch);
+	/// Constructor taking the name of the reference frame, the associated ellipsoid, epoch and solution
+	TTerrestrialReferenceFrame(const std::string& name, TReferenceEllipsoid* ell, TReal& epoch, std::string& solution);
 
 	/// Destructor
 	virtual ~TTerrestrialReferenceFrame();
