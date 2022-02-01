@@ -95,7 +95,7 @@ public:
 	/// transform a Rotation Matrix
 	virtual  bool						transform(TRotationMatrix& rmx) const;
 */
-	bool								isInitialised() const { return (fFrom != 0 && fTo != 0); }
+	bool								isInitialised() const;
 
 	///  Set the difference of epoch
 	virtual void						setDeltaEpoch(TReal deltaE) { fDeltaEpoch = deltaE; return; }
@@ -117,6 +117,9 @@ public:
 
 	/// Apply plate velocity
 	TPositionVector applyPlateVelocity(TPositionVector& pv, TPositionVector& velocityVec, TReal deltaEpoch) const;
+
+	/// Transform ITRF2014 velocity into another ITRF
+	TPositionVector itrf2014velocityToOtherITRF(TMatrix coeff_toPastITRF, TPositionVector& pv, TPositionVector& velITRF2014, TTerrestrialReferenceFrame* itrfIn) const;
 
 	/// ITRF to ITRF transformation
 	//THelmertTransformation TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector& pv, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* itrfOut) const;

@@ -92,15 +92,6 @@ void	TGraph::init()
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972CGRF),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCGRF2ITRF97));
 
-	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972ETRF93),
-			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932ITRF97));
-
-	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932kCHTRF95),
-			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCHTRF952kETRF93));
-
-	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932kRGF93),
-			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kRGF932kETRF93));
-
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932CH1903plus),
             TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCH1903plus2ETRF93));
 #ifdef USE_SWISSTOPO
@@ -153,6 +144,21 @@ void	TGraph::init()
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRFin2ETRFout),
 		    TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRFin2ETRFout));
 
+	insert (TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRFin2ITRF97),
+		    TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972ITRFout));
+
+	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972ETRF93),
+		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932ITRF97));
+
+	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972RGF93),
+		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kRGF932ITRF97));
+
+	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972CHTRF95),
+		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCHTRF952ITRF97));
+
+	
+	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972ETRFout),
+		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRFin2ITRF97));
 
 	return;
 }

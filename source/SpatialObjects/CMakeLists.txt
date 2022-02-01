@@ -66,6 +66,7 @@ set(SpatialObject_SOURCES
 	sources/ReferenceSurfaces/TGraphMLARF.cpp
 	sources/ReferenceSurfaces/TModifiedLocalAstronomicalRF.cpp
 	sources/ReferenceSurfaces/TModifiedLocalGeodeticRF.cpp
+	sources/ReferenceSurfaces/TTerrestrialReferenceFrame.cpp
 	sources/ReferenceSurfaces/TReferenceEllipsoid.cpp
 	sources/ReferenceSurfaces/TX0Y0HeProjection.cpp
 	sources/ReferenceSurfaces/TXYHeProjection.cpp
@@ -82,6 +83,7 @@ set(SpatialObject_SOURCES
 	sources/RefFrameTransformations/TMLA2XYHeTransformation.cpp
 	sources/RefFrameTransformations/TMLA2XYHsTransformation.cpp
 	sources/RefFrameTransformations/TRGF93CC46Transformation.cpp
+	sources/RefFrameTransformations/TTrf2TrfTransformation.cpp
 	sources/RefFrameTransformations/TX0Y0He2XYHeTransformation.cpp
 	sources/RefFrameTransformations/TXYHe2MLATransformation.cpp
 	sources/RefFrameTransformations/TXYHe2X0Y0HeTransformation.cpp
@@ -170,6 +172,7 @@ set(SpatialObject_HEADERS
 	headers/ReferenceSurfaces/TReferenceEllipsoid.h
 	headers/ReferenceSurfaces/TReferenceFrameServer.h
 	headers/ReferenceSurfaces/TRGF93CC46Projection.h
+	headers/ReferenceSurfaces/TTerrestrialReferenceFrame.h
 	headers/ReferenceSurfaces/TVGeoidModel.h
 	headers/ReferenceSurfaces/TVReferenceFrame.h
 	headers/ReferenceSurfaces/TX0Y0HeProjection.h
@@ -187,6 +190,7 @@ set(SpatialObject_HEADERS
 	headers/RefFrameTransformations/TMLA2XYHeTransformation.h
 	headers/RefFrameTransformations/TMLA2XYHsTransformation.h
 	headers/RefFrameTransformations/TRGF93CC46Transformation.h
+	headers/RefFrameTransformations/TTrf2TrfTransformation.h
 	headers/RefFrameTransformations/TVRefFrameTransformation.h
 	headers/RefFrameTransformations/TVTransformation.h
 	headers/RefFrameTransformations/TX0Y0He2XYHeTransformation.h

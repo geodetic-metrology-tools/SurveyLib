@@ -63,7 +63,7 @@
 #endif
 #include <TRGF93CC46Transformation.h>
 #include <TLambert93Transformation.h>
-#include <TTrf2Trftransformation.h>
+#include <TTrf2TrfTransformation.h>
 
 
 #include "TRefSystemFactory.h"
@@ -172,11 +172,13 @@ void TRefSystemFactory::init()
 	fRefFrameList.push_back(pCGRFs);
 	fCGRFSphere = pCGRFs;
 
-		// ITRF97
-	TGeodeticRefFrame* pITRF97 = new TGeodeticRefFrame(itrf97, pGRS80);
+		// ITRF97 at epoch 1998.5.Link between global and local frames
+	TReal epoch = 1998.5;
+	std::string solution = "ITRF 97";
+	TTerrestrialReferenceFrame* pITRF97 = new TTerrestrialReferenceFrame(itrf97, pGRS80, epoch, solution);
 	pITRF97->setRefFrameId(kITRF97);
 	fRefFrameList.push_back(pITRF97);
-	
+
 	//Generic ITRF solution at specified epoch (input)
 	TReal initEpochITRF = -9999.9;
 	std::string initSolution = "noSolution";
@@ -215,17 +217,26 @@ void TRefSystemFactory::init()
     fRefFrameList.push_back(pLambert93);
 
     // ETRF93
-	TGeodeticRefFrame* pETRF93 = new TGeodeticRefFrame(etrf93, pGRS80);
+	epoch = 1993;
+	solution = "ETRF 93";
+	TTerrestrialReferenceFrame* pETRF93 = new TTerrestrialReferenceFrame(etrf93, pGRS80, epoch, solution);
+	//TGeodeticRefFrame* pETRF93 = new TGeodeticRefFrame(etrf93, pGRS80);
 	pETRF93->setRefFrameId(kETRF93);
 	fRefFrameList.push_back(pETRF93);
 
 	// RGF93
-	TGeodeticRefFrame* pRGF93 = new TGeodeticRefFrame("RGF93", pGRS80);
+	epoch = 2019;
+	solution = "ETRF 2000";
+	TTerrestrialReferenceFrame* pRGF93 = new TTerrestrialReferenceFrame("RGF93", pGRS80, epoch, solution);
+	//TGeodeticRefFrame* pRGF93 = new TGeodeticRefFrame("RGF93", pGRS80);
 	pRGF93->setRefFrameId(kRGF93);
 	fRefFrameList.push_back(pRGF93);
 
 	// CHTRF95
-	TGeodeticRefFrame* pCHTRF95 = new TGeodeticRefFrame("CHTRF95", pGRS80);
+	epoch = 1993;
+	solution = "ETRF 93";
+	TTerrestrialReferenceFrame* pCHTRF95 = new TTerrestrialReferenceFrame("CHTRF95", pGRS80, epoch, solution);
+	//TGeodeticRefFrame* pCHTRF95 = new TGeodeticRefFrame("CHTRF95", pGRS80);
 	pCHTRF95->setRefFrameId(kCHTRF95);
 	fRefFrameList.push_back(pCHTRF95);
 
@@ -838,44 +849,6 @@ void TRefSystemFactory::init()
 		fTransformList.push_back(pCGRF2ITRF97);
 	}
 
-	
-		// Helmert Transformation between ITRF97 (ep1998.5) and ETRF93
-	{
-		// There is no rotation:
-		TRotation r3(TRotationMatrix::kRzyx, 0, 0, 0);
-		// Total translation resulting from epoch changes and Reference Frame changes:
-		// TODO:
-		TLength Tx3(LITERAL(0.163550)), Ty3(LITERAL(-0.131900)), Tz3(LITERAL(-0.142100));
-		TTranslation transl3(Tx3, Ty3, Tz3);
-		// There is no scaling:
-		TScaleFactor enl3(LITERAL(1.000000000000000));
-		THelmertRefFrameTransform* pITRF972ETRF93 = new THelmertRefFrameTransform(pITRF97, pETRF93, enl3, r3, transl3);
-		pITRF972ETRF93->setTransformId(kITRF972ETRF93);
-		fTransformList.push_back(pITRF972ETRF93);
-		//Inverse
-		TARefFrameTransformation* pETRF932ITRF97 = pITRF972ETRF93->inverse(); //utilise new
-		pETRF932ITRF97->setTransformId(kETRF932ITRF97);
-		fTransformList.push_back(pETRF932ITRF97);
-	}
-
-	
-		// kETRF93 == kRGF93 == kCHTRF95
-	{
-		THelmertRefFrameTransform * t1a = new THelmertRefFrameTransform(pETRF93, pRGF93, TScaleFactor(1.0), TRotation(TRotationMatrix::kRzyx, 0, 0, 0), TTranslation(TLength(0),TLength(0),TLength(0)));
-		t1a->setTransformId(kETRF932kRGF93);
-		THelmertRefFrameTransform * t1b = t1a->inverse();
-		t1b->setTransformId(kRGF932kETRF93);
-		fTransformList.push_back(t1a);
-		fTransformList.push_back(t1b);
-
-		THelmertRefFrameTransform * t2a = new THelmertRefFrameTransform(pETRF93, pCHTRF95, TScaleFactor(1.0), TRotation(TRotationMatrix::kRzyx, 0, 0, 0), TTranslation(TLength(0),TLength(0),TLength(0)));
-		t2a->setTransformId(kETRF932kCHTRF95);
-		THelmertRefFrameTransform * t2b = t1a->inverse();
-		t2b->setTransformId(kCHTRF952kETRF93);
-		fTransformList.push_back(t2a);
-		fTransformList.push_back(t2b);
-	}
-	
 		////////////////////////////////////////////////////////////////
 		// Transformation ITRF-ETRF, ETRF-ITRF
 		////////////////////////////////////////////////////////////////
@@ -930,24 +903,69 @@ void TRefSystemFactory::init()
 				(*itrfyy_toETRFyy)((int)i, (int)j) = coeffITRFyy_toETRFyy[i][j];
 		}
 
+		// Transformtion between ITRF and ETRF
 		TTrf2TrfTransformation* pITRFin2ETRFout = new TTrf2TrfTransformation(pITRFin, pETRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
 		pITRFin2ETRFout->setTransformId(kITRFin2ETRFout);
 		fTransformList.push_back(pITRFin2ETRFout);
-
+		// Inverse
 		TTrf2TrfTransformation* pETRFin2ITRFout = new TTrf2TrfTransformation(pETRFin, pITRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
 		pETRFin2ITRFout->setTransformId(kETRFin2ITRFout);
 		fTransformList.push_back(pETRFin2ITRFout);
 
+		// Transformation between any ITRF an ITRF97 (ep 1998.5)
+		TTrf2TrfTransformation* pITRFin2ITRF97 = new TTrf2TrfTransformation(pITRFin, pITRF97, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRFin2ITRF97->setTransformId(kITRFin2ITRF97);
+		fTransformList.push_back(pITRFin2ITRF97);
+		// Inverse
+		TTrf2TrfTransformation* pITRF972ITRFout = new TTrf2TrfTransformation(pITRF97, pITRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRF972ITRFout->setTransformId(kITRF972ITRFout);
+		fTransformList.push_back(pITRF972ITRFout);
 
+		// Transformation between any ETRF an ITRF97 (ep 1998.5)
+		TTrf2TrfTransformation *pITRF972ETRFout = new TTrf2TrfTransformation(pITRF97, pETRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRF972ETRFout->setTransformId(kITRF972ETRFout);
+		fTransformList.push_back(pITRF972ETRFout);
+		// Inverse
+		TTrf2TrfTransformation *pETRFin2ITRF97 = new TTrf2TrfTransformation(pETRFin, pITRF97, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pETRFin2ITRF97->setTransformId(kETRFin2ITRF97);
+		fTransformList.push_back(pETRFin2ITRF97);
+
+		// Transformation between 2 ITRF
 		TTrf2TrfTransformation* pITRFin2ITRFout = new TTrf2TrfTransformation(pITRFin, pITRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
 		pITRFin2ITRFout->setTransformId(kITRFin2ITRFout);
 		fTransformList.push_back(pITRFin2ITRFout);
 
-
+		// Transformation between 2 ETRF
 		TTrf2TrfTransformation* pETRFin2ETRFout = new TTrf2TrfTransformation(pETRFin, pETRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
 		pETRFin2ETRFout->setTransformId(kETRFin2ETRFout);
 		fTransformList.push_back(pETRFin2ETRFout);
+		
+		// Transformation between ITRF97 (ep1998.5) and ETRF93 (ep 1993.0)
+		TTrf2TrfTransformation *pITRF972ETRF93 = new TTrf2TrfTransformation(pITRF97, pETRF93, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRF972ETRF93->setTransformId(kITRF972ETRF93);
+		fTransformList.push_back(pITRF972ETRF93);
+		//Inverse
+		TTrf2TrfTransformation *pETRF932ITRF97 = new TTrf2TrfTransformation(pETRF93, pITRF97, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pETRF932ITRF97->setTransformId(kETRF932ITRF97);
+		fTransformList.push_back(pETRF932ITRF97);
 
+		// Transformation between ITRF97 (ep1998.5) and RGF93
+		TTrf2TrfTransformation *pITRF972RGF93 = new TTrf2TrfTransformation(pITRF97, pRGF93, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRF972RGF93->setTransformId(kITRF972RGF93);
+		fTransformList.push_back(pITRF972RGF93);
+		// Inverse
+		TTrf2TrfTransformation *pRGF932ITRF97 = new TTrf2TrfTransformation(pRGF93, pITRF97, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pRGF932ITRF97->setTransformId(kRGF932ITRF97);
+		fTransformList.push_back(pRGF932ITRF97);
+
+		// Transformation between ITRF97 (ep1998.5) and CHTRF95
+		TTrf2TrfTransformation *pITRF972CHTRF95 = new TTrf2TrfTransformation(pITRF97, pCHTRF95, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRF972CHTRF95->setTransformId(kITRF972CHTRF95);
+		fTransformList.push_back(pITRF972CHTRF95);
+		// Inverse
+		TTrf2TrfTransformation *pCHTRF952ITRF97 = new TTrf2TrfTransformation(pCHTRF95, pITRF97, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pCHTRF952ITRF97->setTransformId(kCHTRF952ITRF97);
+		fTransformList.push_back(pCHTRF952ITRF97);
 
 	}
     
