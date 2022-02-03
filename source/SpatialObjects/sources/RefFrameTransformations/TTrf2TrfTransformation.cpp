@@ -128,6 +128,15 @@ void  TTrf2TrfTransformation::invert()
 	return;
 }
 
+TFreeVector TTrf2TrfTransformation::positionToFree(TPositionVector &pv) const
+{// Convert a position vector in free vector (required for working with velocities)
+	TFreeVector fv;
+	fv.setX(pv.getX());
+	fv.setY(pv.getY());
+	fv.setZ(pv.getZ());
+	return fv;
+}
+
 bool TTrf2TrfTransformation::isInitialised() const
 {
 	bool init = false;
@@ -180,7 +189,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 			// Velocity and rates
 
 			// No matter the reference frame, coordinates of pv are a sufficient approximation
-			TPositionVector velITRF_yy = itrf2014velocity(pv);
+			TFreeVector velITRF_yy = itrf2014velocity(pv);
 			if (fFrom->getSolution() != "ITRF 2014")
 			{ // Transformation of velocity vector from ITRF2014 to input reference frame
 				velITRF_yy = itrf2014velocityToOtherITRF(fcoeff_toPastITRF, pv, velITRF_yy, fFrom);
@@ -188,8 +197,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 			if (fFrom->getSolution() != fTo->getSolution())
 			{
 				THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(fcoeff_toPastITRF, fFrom, fTo);
-				velITRF_yy = velITRF_yy + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor()
-					+ itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pv;
+				velITRF_yy = transformITRFVelocity(pv, velITRF_yy, itrf2itrfTransfoRate);
 
 				// Position
 				result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);
@@ -208,7 +216,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 
 			// Transfo ITRFxx -> ITRFyy @ input epoch
 			// Velocity and rates
-			TPositionVector velITRF_yy = itrf2014velocity(pv);
+			TFreeVector velITRF_yy = itrf2014velocity(pv);
 
 			if (fFrom->getSolution() != "ITRF 2014")
 			{ // Transformation of velocity vector from ITRF2014 to input reference frame
@@ -219,8 +227,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 			{
 				// Velocity and rates
 				THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(fcoeff_toPastITRF, fFrom, fTo);
-				velITRF_yy = velITRF_yy + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor()
-					+ itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pv;
+				velITRF_yy = transformITRFVelocity(pv, velITRF_yy, itrf2itrfTransfoRate);
 
 				// Position
 				result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);
@@ -230,7 +237,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 			fTo->setSolution(fTo->getSolution().replace(0, 4, "ETRF"));
 
 			THelmertTransformation itrf2etrfTransfoRate = itrf2etrfRate(fcoeff_ITRFtoETRF, fTo, 0);
-			TPositionVector velETRF_yy = velITRF_yy + itrf2etrfTransfoRate.getTranslation().getVector() + itrf2etrfTransfoRate.getRotation().getRotationMatrix() * pv;
+			TFreeVector velETRF_yy = transformETRFVelocity(pv, velITRF_yy, itrf2etrfTransfoRate);
 			result = itrf2etrf(fcoeff_ITRFtoETRF, pv, fFrom, fTo, 0);
 
 			// Transfo to ETRFyy @ output epoch
@@ -254,7 +261,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 			}
 
 			// Transfo to ITRFFyy @ output epoch
-			TPositionVector velITRF_yy = itrf2014velocity(pv);
+			TFreeVector velITRF_yy = itrf2014velocity(pv);
 			if (fTo->getSolution() != "ITRF 2014")
 			{ // Transformation of velocity vector from ITRF2014 to input reference frame
 				velITRF_yy = itrf2014velocityToOtherITRF(fcoeff_toPastITRF, pv, velITRF_yy, fTo);
@@ -281,20 +288,19 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 				result = itrf2itrf(fcoeff_toPastITRF, pv, fFrom, fTo);
 
 				// Velocity and rates (ITRF)
-				TPositionVector velITRF_yy = itrf2014velocity(pv);
+				TFreeVector velITRF_yy = itrf2014velocity(pv);
 				if (fFrom->getSolution() != "ITRF 2014")
 				{ // Transformation of velocity vector from ITRF2014 to input reference frame
 					velITRF_yy = itrf2014velocityToOtherITRF(fcoeff_toPastITRF, pv, velITRF_yy, fFrom);
 				}
 
 				THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(fcoeff_toPastITRF, fFrom, fTo);
-				velITRF_yy = velITRF_yy + itrf2itrfTransfoRate.getTranslation().getVector() + pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor()
-					+ itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pv;
+				velITRF_yy = transformITRFVelocity(pv, velITRF_yy, itrf2itrfTransfoRate);
 
 				// Transfo ITRFyy -> ETRFyy @ input epoch
 				fTo->setSolution(fTo->getSolution().replace(0, 4, "ETRF"));
 				THelmertTransformation itrf2etrfTransfoRate = itrf2etrfRate(fcoeff_ITRFtoETRF, fTo, 0);
-				TPositionVector velETRF_yy = velITRF_yy + itrf2etrfTransfoRate.getTranslation().getVector() + itrf2etrfTransfoRate.getRotation().getRotationMatrix() * pv;
+				TFreeVector velETRF_yy = transformETRFVelocity(pv, velITRF_yy, itrf2itrfTransfoRate);
 				result = itrf2etrf(fcoeff_ITRFtoETRF, pv, fFrom, fTo, 0);
 
 				// Transfo to ETRFyy @ output epoch
@@ -417,8 +423,9 @@ void TTrf2TrfTransformation::setTransform(const TScaleFactor& scale, const TRota
 	return;
 }
 
-TPositionVector TTrf2TrfTransformation::itrf2014velocity(TPositionVector& pv) const {
+TFreeVector TTrf2TrfTransformation::itrf2014velocity(TPositionVector& pv) const {
 
+	TFreeVector pvFree = positionToFree(pv);
 
 	//Zuheir Altamimi, Laurent Métivier, Paul Rebischung, Hélène Rouby, Xavier Collilieux, ITRF2014 plate motion model, Geophysical Journal International, Volume 209, Issue 3, June 2017, Pages 1906–1912, https://doi.org/10.1093/gji/ggx136
 	//CERN is located on the eurasian (EURA) plate
@@ -433,28 +440,48 @@ TPositionVector TTrf2TrfTransformation::itrf2014velocity(TPositionVector& pv) co
 	velocityMat.setC(1, 1, 0);
 	velocityMat.setC(2, 2, 0);
 
-	TPositionVector velocityVec = velocityMat * pv * (-1); //Need to multiply by -1 to get the velocity going to the future
+	TFreeVector velocityVec = velocityMat * pvFree * (-1); //Need to multiply by -1 to get the velocity going to the future
 
+	
 	return velocityVec;
 
 }
 
-TPositionVector TTrf2TrfTransformation::itrf2014velocityToOtherITRF(TMatrix coeff_toPastITRF, TPositionVector& pv, TPositionVector& velITRF2014, TTerrestrialReferenceFrame* itrfIn) const {
+TFreeVector TTrf2TrfTransformation::itrf2014velocityToOtherITRF(TMatrix coeff_toPastITRF, TPositionVector& pv, TFreeVector& velITRF2014, TTerrestrialReferenceFrame* itrfIn) const {
+
+	TFreeVector pv_Free;
+	pv_Free.setX(pv.getX());
+
 	std::string name = "itrf14";
 	TReal epoch = fFrom->getEpoch();
 	std::string solution = "ITRF 2014";
 	TTerrestrialReferenceFrame* itrf2014 = new TTerrestrialReferenceFrame(name, TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), epoch, solution);
 	THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(coeff_toPastITRF, itrf2014, itrfIn);
-	TPositionVector velITRF_yy = velITRF2014 + itrf2itrfTransfoRate.getTranslation().getVector()
-		+ pv * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor()
-		+ itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pv;
+	TFreeVector velITRF_yy = transformITRFVelocity(pv, velITRF2014, itrf2itrfTransfoRate);
 
 	return velITRF_yy;
 
 }
 
-TPositionVector TTrf2TrfTransformation::applyPlateVelocity(TPositionVector& pv, TPositionVector& velocityVec,  TReal deltaEpoch) const {
-	TPositionVector pv_transla = velocityVec * deltaEpoch + pv;
+TFreeVector TTrf2TrfTransformation::transformITRFVelocity(TPositionVector &pv, TFreeVector &velITRF_yy, THelmertTransformation &itrf2itrfTransfoRate) const
+{
+	TFreeVector pvFree = positionToFree(pv);
+	velITRF_yy = velITRF_yy + itrf2itrfTransfoRate.getTranslation().getVector()
+							+ pvFree * itrf2itrfTransfoRate.getScaleFactor().getScaleFactor()
+							+ itrf2itrfTransfoRate.getRotation().getRotationMatrix() * pvFree;
+	return velITRF_yy;
+}
+
+TFreeVector TTrf2TrfTransformation::transformETRFVelocity(TPositionVector &pv, TFreeVector &velITRF_yy, THelmertTransformation &itrf2etrfTransfoRate) const
+{
+	TFreeVector pvFree = positionToFree(pv);
+	TFreeVector velETRF_yy = velITRF_yy + itrf2etrfTransfoRate.getTranslation().getVector()
+										+ itrf2etrfTransfoRate.getRotation().getRotationMatrix() * pvFree;
+	return velETRF_yy;
+}
+
+TPositionVector TTrf2TrfTransformation::applyPlateVelocity(TPositionVector& pv, TFreeVector& velocityVec,  TReal deltaEpoch) const {
+	TPositionVector pv_transla = pv + velocityVec * deltaEpoch;
 	return pv_transla;
 }
 
@@ -549,7 +576,8 @@ bool TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector
 	TRotation currentRota(currentRotaMat);
 	THelmertTransformation itrf2itrfTransfo(d, currentRota, currentTransla);
 
-	pv = pv + currentTransla.getVector() + pv * d.getScaleFactor() + currentRota.getRotationMatrix() * pv;
+	TFreeVector pvFree = positionToFree(pv);
+	pv = pv + currentTransla.getVector() + pvFree * d.getScaleFactor() + currentRota.getRotationMatrix() * pvFree;
 
 	return result = true;
 
@@ -668,18 +696,17 @@ bool TTrf2TrfTransformation::itrf2etrf(TMatrix coeffITRFyy_toETRFyy, TPositionVe
 	TRotation currentRotaRate(currentRotaRateMat);
 	THelmertTransformation itrf2etrfTransfo(d, currentRota, currentTransla);
 
+	TFreeVector pvFree = positionToFree(pv);
+
 	if (!inverse)
 	{
-		pv = pv + currentTransla.getVector() + pv * d.getScaleFactor() + currentRotaRate.getRotationMatrix() * pv * (startEpoch - 1989.0);
+		pv = pv + currentTransla.getVector() + pvFree * d.getScaleFactor() + currentRotaRate.getRotationMatrix() * pvFree * (startEpoch - 1989.0);
 	}
 	else
 	{
-		pv = pv - currentTransla.getVector() - pv * d.getScaleFactor() - currentRotaRate.getRotationMatrix() * pv * (startEpoch - 1989.0);
+		pv = pv - currentTransla.getVector() - pvFree * d.getScaleFactor() - currentRotaRate.getRotationMatrix() * pvFree * (startEpoch - 1989.0);
 	}
-	/*
-	if (isInitialised())
-		result = itrf2etrfTransfo.transform(pv);
-    */
+	
 	return result = true;
 
 }

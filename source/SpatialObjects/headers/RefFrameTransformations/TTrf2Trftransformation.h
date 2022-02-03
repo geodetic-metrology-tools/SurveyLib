@@ -65,6 +65,9 @@ public:
 	//! Invert the transformation, replaces the current transformation parameters
 	virtual void  invert();
 
+	//! Convert a position vector in free vector (required for working with velocities)
+	TFreeVector positionToFree(TPositionVector &pv) const;
+
 	/// Return the source frame
 	virtual TTerrestrialReferenceFrame* getSourceFrame() const { return fFrom; }
 
@@ -113,16 +116,22 @@ public:
 	int									findETRFSolution(TTerrestrialReferenceFrame* refFrame) const;
 
 	///  Compute the local velocity of the point (ITRF2014 plate motion model)
-	TPositionVector itrf2014velocity(TPositionVector& pv) const;
+	TFreeVector itrf2014velocity(TPositionVector& pv) const;
 
 	/// Apply plate velocity
-	TPositionVector applyPlateVelocity(TPositionVector& pv, TPositionVector& velocityVec, TReal deltaEpoch) const;
+	TPositionVector applyPlateVelocity(TPositionVector& pv, TFreeVector& velocityVec, TReal deltaEpoch) const;
 
 	/// Transform ITRF2014 velocity into another ITRF
-	TPositionVector itrf2014velocityToOtherITRF(TMatrix coeff_toPastITRF, TPositionVector& pv, TPositionVector& velITRF2014, TTerrestrialReferenceFrame* itrfIn) const;
+	TFreeVector itrf2014velocityToOtherITRF(TMatrix coeff_toPastITRF, TPositionVector& pv, TFreeVector& velITRF2014, TTerrestrialReferenceFrame* itrfIn) const;
+
+	/// Apply velocity translation, rotation and scale factor rates (ITRF to ITRF)
+	TFreeVector transformITRFVelocity(TPositionVector &pv, TFreeVector &velITRF_yy, THelmertTransformation &itrf2itrfTransfoRate) const;
+
+	/// Apply velocity translation, rotation and scale factor rates (ITRF to ETRF)
+	TFreeVector transformETRFVelocity(TPositionVector &pv, TFreeVector &velITRF_yy, THelmertTransformation &itrf2etrfTransfoRate) const;
+
 
 	/// ITRF to ITRF transformation
-	//THelmertTransformation TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector& pv, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* itrfOut) const;
 	bool itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector& pv, TTerrestrialReferenceFrame* itrfIn, TTerrestrialReferenceFrame* itrfOut) const;
 
 	///ITRF to ITRF transformation rate

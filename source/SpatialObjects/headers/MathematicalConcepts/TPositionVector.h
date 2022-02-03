@@ -69,10 +69,10 @@ public:
 		TPositionVector& operator-=(const TFreeVector& );
 
 		//!Add two TPositionVector objects and return a PositionVector
-		TPositionVector operator+(const TPositionVector&);
+		//TPositionVector operator+(const TPositionVector&);
 
 		//!substract two TPositionVector objects and return a FreeVector
-		TPositionVector operator-(const TPositionVector& );
+		TFreeVector operator-(const TPositionVector& );
 		
 		//!Multiply a TPositionVector object by a TDouble
 		TPositionVector operator*(const TDouble&);

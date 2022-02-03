@@ -89,9 +89,9 @@ TPositionVector& TPositionVector::operator-=(const TFreeVector& second) {
 }
 
 
-TPositionVector TPositionVector::operator-( const TPositionVector& second)
+TFreeVector TPositionVector::operator-( const TPositionVector& second)
 {//!substract two TPositionVector objects and return a FreeVector
-	TPositionVector resultat (getCoordSys());
+	TFreeVector resultat(getCoordSys());
 	bool fContinue = second.isInitialise() && this->isInitialise();
 	if (fContinue && testCoordSysCart(second.getCoordSys()) == true)
 	{
@@ -103,9 +103,9 @@ TPositionVector TPositionVector::operator-( const TPositionVector& second)
 	return resultat;
 }
 
-
-TPositionVector TPositionVector::operator+(const TPositionVector& second)
-{//!Add two TPositionVector objects and return a PositionVector
+/*
+TPositionVector TPositionVector::operator+(const TFreeVector& second)
+{//!Add a TPositionVector and a TFreeVector objects and return a PositionVector
 	TPositionVector resultat(getCoordSys());
 	bool fContinue = second.isInitialise() && this->isInitialise();
 	if (fContinue && testCoordSysCart(second.getCoordSys()) == true)
@@ -117,6 +117,7 @@ TPositionVector TPositionVector::operator+(const TPositionVector& second)
 
 	return resultat;
 }
+*/
 
 TPositionVector TPositionVector::operator*( const TDouble& factor)
 {//!Multiplication by a TDouble object
@@ -200,10 +201,12 @@ TLength TPositionVector::dist(const TPositionVector& pv) const
 {//!Give the distance between this and a second point defined by theirs position vector
 	TFreeVector fv (getCoordSys());
 	TPositionVector vect(*this);
+	fv = vect - pv;
+	/*
 	fv.setX(vect.getX() - pv.getX());
 	fv.setY(vect.getY() - pv.getY());
 	fv.setZ(vect.getZ() - pv.getZ());
-	//fv = vect - pv;
+	*/
 	return fv.length();
 }
 
