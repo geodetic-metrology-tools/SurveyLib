@@ -68,9 +68,6 @@ public:
 		//!substract a FreeVector from aPositionVector and replace this
 		TPositionVector& operator-=(const TFreeVector& );
 
-		//!Add two TPositionVector objects and return a PositionVector
-		//TPositionVector operator+(const TPositionVector&);
-
 		//!substract two TPositionVector objects and return a FreeVector
 		TFreeVector operator-(const TPositionVector& );
 		

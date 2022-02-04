@@ -103,22 +103,6 @@ TFreeVector TPositionVector::operator-( const TPositionVector& second)
 	return resultat;
 }
 
-/*
-TPositionVector TPositionVector::operator+(const TFreeVector& second)
-{//!Add a TPositionVector and a TFreeVector objects and return a PositionVector
-	TPositionVector resultat(getCoordSys());
-	bool fContinue = second.isInitialise() && this->isInitialise();
-	if (fContinue && testCoordSysCart(second.getCoordSys()) == true)
-	{
-		resultat.setX(getX() + second.getX());
-		resultat.setY(getY() + second.getY());
-		resultat.setZ(getZ() + second.getZ());
-	}
-
-	return resultat;
-}
-*/
-
 TPositionVector TPositionVector::operator*( const TDouble& factor)
 {//!Multiplication by a TDouble object
 	TPositionVector resultat (getCoordSys());
@@ -202,11 +186,6 @@ TLength TPositionVector::dist(const TPositionVector& pv) const
 	TFreeVector fv (getCoordSys());
 	TPositionVector vect(*this);
 	fv = vect - pv;
-	/*
-	fv.setX(vect.getX() - pv.getX());
-	fv.setY(vect.getY() - pv.getY());
-	fv.setZ(vect.getZ() - pv.getZ());
-	*/
 	return fv.length();
 }
 
