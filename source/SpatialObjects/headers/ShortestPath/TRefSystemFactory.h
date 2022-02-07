@@ -144,7 +144,7 @@ public:
 			kSwissLV952SwissLV03, kSwissLV032SwissLV95,
 #endif
 			kETRF932FrenchRGF93, kFrenchRGF932ETRF93,
-			kETRF932kLambert93, kLambert932ETRF93,
+			kRGF932Lambert93, kLambert932RGF93,
 			
 			//new
 			kCCS2CGRF2, kWGS2CGRF2, kITRF972CGRF2,

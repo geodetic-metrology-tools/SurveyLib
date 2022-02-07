@@ -105,8 +105,7 @@ namespace tut
 
 		/*
 		*
-		*Read the file with coordinates in LV95 transformed on Swisstopo web site
-		*and compare with transformation from CSGEO
+		*Read the file with coordinates transformed with CSGEO in LV95 and compare with current transformation
 		*
 		*/
 
@@ -181,8 +180,8 @@ namespace tut
 			std::map<std::string, TSpatialPosition>::const_iterator it = afterTransformationCCS.find(pointName);
 			if(it != afterTransformationCCS.end())
 			{
-				ensure_equals("CCS X", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(xCoordCCS), static_cast<TReal>(0.002));
-				ensure_equals("CCS Y", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(yCoordCCS), static_cast<TReal>(0.004));
+				ensure_equals("CCS X", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(xCoordCCS), static_cast<TReal>(0.001));
+				ensure_equals("CCS Y", it->second.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(yCoordCCS), static_cast<TReal>(0.001));
 			}
 			else
 			{
@@ -337,7 +336,7 @@ namespace tut
 
 		/*
 		*
-		*Transform coordinates to Swiss Lambert93
+		*Transform coordinates to French Lambert93
 		*
 		*/
 		std::map<std::string, TSpatialPosition> afterTransformationLambert93;
@@ -367,8 +366,8 @@ namespace tut
 			std::map<std::string, TSpatialPosition>::const_iterator it = afterTransformationLambert93.find(pointName);
 			if(it != afterTransformationLambert93.end())
 			{
-				ensure_equals("Swiss LV95 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(xCoordLambert93), static_cast<TReal>(0.001));
-				ensure_equals("Swiss LV95 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(yCoordLambert93), static_cast<TReal>(0.001));
+				ensure_equals("Lambert 93 X", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(xCoordLambert93), static_cast<TReal>(0.001));
+				ensure_equals("Lambert 93 Y", it->second.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(yCoordLambert93), static_cast<TReal>(0.001));
 			}
 			else
 			{

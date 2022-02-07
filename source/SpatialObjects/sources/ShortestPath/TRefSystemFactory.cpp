@@ -1030,15 +1030,15 @@ void TRefSystemFactory::init()
 
 	
         ////////////////////////////////////////////////////////////////
-		// Transformation between ETRF93 and Lambert93
+		// Transformation between RGF93v2b and Lambert93
         ////////////////////////////////////////////////////////////////
 	{
 		TLambert93Transformation * pTrans = new TLambert93Transformation(true);
-        pTrans->setTransformId(kETRF932kLambert93);
+        pTrans->setTransformId(kRGF932Lambert93);
 		fTransformList.push_back(pTrans);
 		//Inverse
 		TARefFrameTransformation* pInverse = pTrans->inverse();
-        pInverse->setTransformId(kLambert932ETRF93);
+        pInverse->setTransformId(kLambert932RGF93);
         fTransformList.push_back(pInverse);
 	}
             

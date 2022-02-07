@@ -22,7 +22,7 @@ namespace tut
     template<>
     void object::test<1>()
     {
-        set_test_name("Transforming a TSpatialPosition from ETRF93 into RGF93 CC46");
+        set_test_name("Transforming a TSpatialPosition from RGF93 into RGF93 CC46");
         TPositionVector position(4407040.76287, 449723.28541, 4573892.46194, TCoordSysFactory::k3DCartesian);
         TRGF93ZoneTransformation trans(true);
         ensure("Transform returns true", trans.transform(position));

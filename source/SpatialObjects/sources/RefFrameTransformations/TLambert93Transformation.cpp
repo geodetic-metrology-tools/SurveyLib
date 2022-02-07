@@ -54,8 +54,8 @@ namespace
 }
 
 
-TLambert93Transformation::TLambert93Transformation(bool fromETRF93)
-: fFromETRF93(fromETRF93)
+TLambert93Transformation::TLambert93Transformation(bool fromRGF93)
+: fFromRGF93(fromRGF93)
 {
 	/*
 	std::cout << "####" << std::endl;
@@ -81,32 +81,32 @@ TLambert93Transformation * TLambert93Transformation::clone() const
 
 TLambert93Transformation * TLambert93Transformation::inverse() const
 {
-    return new TLambert93Transformation(!fFromETRF93);
+    return new TLambert93Transformation(!fFromRGF93);
 }
 
 TAReferenceFrame * TLambert93Transformation::getSourceFrame() const
 {
     return TRefFrameInfo::getReferenceFrame(
-        fFromETRF93 ? TRefSystemFactory::kETRF93 : TRefSystemFactory::kLambert93);
+        fFromRGF93 ? TRefSystemFactory::kRGF93 : TRefSystemFactory::kLambert93);
 }
 
 TAReferenceFrame * TLambert93Transformation::getDestinationFrame() const
 {
     return TRefFrameInfo::getReferenceFrame(
-        fFromETRF93 ? TRefSystemFactory::kLambert93 : TRefSystemFactory::kETRF93);
+        fFromRGF93 ? TRefSystemFactory::kLambert93 : TRefSystemFactory::kRGF93);
 }
 
 bool TLambert93Transformation::transform(TPositionVector & pv) const
 {
-    if(fFromETRF93)
-        return transformFromETRF93(pv);
-    return transformToETRF93(pv);
+    if(fFromRGF93)
+        return transformFromRGF93(pv);
+    return transformToRGF93(pv);
 }
 
 //////////////////////////////////////////////////////
 
 
-bool TLambert93Transformation::transformToETRF93(TPositionVector & pv) const
+bool TLambert93Transformation::transformToRGF93(TPositionVector & pv) const
 {
     //transform x y h
     TSpatialPosition position(getSourceFrame());
@@ -149,7 +149,7 @@ bool TLambert93Transformation::transformToETRF93(TPositionVector & pv) const
     return true;
 
 }
-bool TLambert93Transformation::transformFromETRF93(TPositionVector & pv) const
+bool TLambert93Transformation::transformFromRGF93(TPositionVector & pv) const
 {
     //transform phi lambda h
     TSpatialPosition position(getSourceFrame());

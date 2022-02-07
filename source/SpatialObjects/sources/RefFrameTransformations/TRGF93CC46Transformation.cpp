@@ -52,8 +52,8 @@ namespace
 }
 
 
-TRGF93ZoneTransformation::TRGF93ZoneTransformation(bool fromETRF93)
-: fFromETRF93(fromETRF93)
+TRGF93ZoneTransformation::TRGF93ZoneTransformation(bool fromRGF93)
+: fFromRGF93(fromRGF93)
 {
 }
 
@@ -64,32 +64,32 @@ TRGF93ZoneTransformation * TRGF93ZoneTransformation::clone() const
 
 TRGF93ZoneTransformation * TRGF93ZoneTransformation::inverse() const
 {
-    return new TRGF93ZoneTransformation(!fFromETRF93);
+    return new TRGF93ZoneTransformation(!fFromRGF93);
 }
 
 TAReferenceFrame * TRGF93ZoneTransformation::getSourceFrame() const
 {
     return TRefFrameInfo::getReferenceFrame(
-        fFromETRF93 ? TRefSystemFactory::kETRF93 : TRefSystemFactory::kFrenchRGF93Zone5);
+        fFromRGF93 ? TRefSystemFactory::kRGF93 : TRefSystemFactory::kFrenchRGF93Zone5);
 }
 
 TAReferenceFrame * TRGF93ZoneTransformation::getDestinationFrame() const
 {
     return TRefFrameInfo::getReferenceFrame(
-        fFromETRF93 ? TRefSystemFactory::kFrenchRGF93Zone5 : TRefSystemFactory::kETRF93);
+        fFromRGF93 ? TRefSystemFactory::kFrenchRGF93Zone5 : TRefSystemFactory::kRGF93);
 }
 
 bool TRGF93ZoneTransformation::transform(TPositionVector & pv) const
 {
-    if(fFromETRF93)
-        return transformFromETRF93(pv);
-    return transformToETRF93(pv);
+    if(fFromRGF93)
+        return transformFromRGF93(pv);
+    return transformToRGF93(pv);
 }
 
 //////////////////////////////////////////////////////
 
 
-bool TRGF93ZoneTransformation::transformToETRF93(TPositionVector & pv) const
+bool TRGF93ZoneTransformation::transformToRGF93(TPositionVector & pv) const
 {
      //transform x y h
     TSpatialPosition position(getSourceFrame());
@@ -132,7 +132,7 @@ bool TRGF93ZoneTransformation::transformToETRF93(TPositionVector & pv) const
     return true;
 
 }
-bool TRGF93ZoneTransformation::transformFromETRF93(TPositionVector & pv) const
+bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
 {
     //transform phi lambda h
     TSpatialPosition position(getSourceFrame());

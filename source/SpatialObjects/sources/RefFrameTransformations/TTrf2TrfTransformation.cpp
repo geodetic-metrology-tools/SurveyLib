@@ -276,6 +276,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 		// Transformation between ETRF and ETRF
 		else if (fFrom->getSolution().find("ETRF") != std::string::npos && fTo->getSolution().find("ETRF") != std::string::npos)
 		{
+			TFreeVector velETRF_yy;
 			if (fFrom->getSolution() != fTo->getSolution())
 			{
 				// Transfo ETRFxx -> ITRFxx @ input epoch
@@ -289,30 +290,41 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 
 				// Velocity and rates (ITRF)
 				TFreeVector velITRF_yy = itrf2014velocity(pv);
-				if (fFrom->getSolution() != "ITRF 2014")
-				{ // Transformation of velocity vector from ITRF2014 to input reference frame
-					velITRF_yy = itrf2014velocityToOtherITRF(fcoeff_toPastITRF, pv, velITRF_yy, fFrom);
+				if (fTo->getSolution() != "ITRF 2014")
+				{ // Transformation of velocity vector from ITRF2014 to output reference frame
+					velITRF_yy = itrf2014velocityToOtherITRF(fcoeff_toPastITRF, pv, velITRF_yy, fTo);
 				}
-
-				THelmertTransformation itrf2itrfTransfoRate = itrf2itrfRate(fcoeff_toPastITRF, fFrom, fTo);
-				velITRF_yy = transformITRFVelocity(pv, velITRF_yy, itrf2itrfTransfoRate);
 
 				// Transfo ITRFyy -> ETRFyy @ input epoch
 				fTo->setSolution(fTo->getSolution().replace(0, 4, "ETRF"));
 				THelmertTransformation itrf2etrfTransfoRate = itrf2etrfRate(fcoeff_ITRFtoETRF, fTo, 0);
-				TFreeVector velETRF_yy = transformETRFVelocity(pv, velITRF_yy, itrf2itrfTransfoRate);
+				velETRF_yy = transformETRFVelocity(pv, velITRF_yy, itrf2etrfTransfoRate);
 				result = itrf2etrf(fcoeff_ITRFtoETRF, pv, fFrom, fTo, 0);
+			}
+			else
+			{
+				// Find equivalent ITRF and convert velocity
+				fTo->setSolution(fTo->getSolution().replace(0, 4, "ITRF"));
 
-				// Transfo to ETRFyy @ output epoch
-				TReal deltaEpoch = fTo->getEpoch() - fFrom->getEpoch();
-				pv = applyPlateVelocity(pv, velETRF_yy, deltaEpoch);
+				TFreeVector velITRF_yy = itrf2014velocity(pv);
+				if (fTo->getSolution() != "ITRF 2014")
+				{ // Transformation of velocity vector from ITRF2014 to output reference frame
+					velITRF_yy = itrf2014velocityToOtherITRF(fcoeff_toPastITRF, pv, velITRF_yy, fTo);
+				}
 
-				// Reset starting solution
-				fFrom->setSolution(fFrom->getSolution().replace(0, 4, "ETRF"));
+				// Transfo vel ITRFyy -> vel ETRFyy
+				fTo->setSolution(fTo->getSolution().replace(0, 4, "ETRF"));
+				THelmertTransformation itrf2etrfTransfoRate = itrf2etrfRate(fcoeff_ITRFtoETRF, fTo, 0);
+				velETRF_yy = transformETRFVelocity(pv, velITRF_yy, itrf2etrfTransfoRate);
 			}
 
-			// Else (only epoch change in the same ETRF):
-			// we do nothing: ETRF is comobile with the Eurasian plate, no change of coordinates if there is only a change of epoch
+			// Transfo to ETRFyy @ output epoch
+			TReal deltaEpoch = fTo->getEpoch() - fFrom->getEpoch();
+			pv = applyPlateVelocity(pv, velETRF_yy, deltaEpoch);
+
+			// Reset starting solution
+			fFrom->setSolution(fFrom->getSolution().replace(0, 4, "ETRF"));
+			
 		}
 	}
 	return result;

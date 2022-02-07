@@ -105,8 +105,8 @@ void	TGraph::init()
     insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932FrenchRGF93),
             TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kFrenchRGF932ETRF93));
 
-	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932kLambert93),
-            TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kLambert932ETRF93));
+	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kRGF932Lambert93),
+            TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kLambert932RGF93));
 
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kXYHe2CCS),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCCS2XYHe));
@@ -138,6 +138,9 @@ void	TGraph::init()
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRFin2ETRFout),
 		    TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRFin2ITRFout));
 
+	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRFin2ITRFout),
+			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRFin2ETRFout));
+
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRFin2ITRFout),
 		    TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRFin2ITRFout));
 
@@ -156,7 +159,6 @@ void	TGraph::init()
 	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972CHTRF95),
 		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCHTRF952ITRF97));
 
-	
 	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972ETRFout),
 		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRFin2ITRF97));
 
