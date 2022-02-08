@@ -6,6 +6,7 @@ std::wstring Behavior::ErrorMessage[ERR_endOfTheWorld] =
 	L"",										// ERR_noError
 	L"Files saved",								// ERR_savingOk
 	L"Action canceled",							// ERR_actionCanceled
+	L"Negative Scale found",					// ERR_NegativeScale
 	L"Project file is missing",					// ERR_projectFileMissing
 	L"Input file is missing or corrupted",		// ERR_inputFileMissing
 	L"Input file exists but can't be read",		// ERR_fileUnReadable
@@ -41,6 +42,20 @@ Behavior Behavior::extract(BehaviorCode const& code)
 		errors.erase(pos);
 	}
 
+	return extractedError;
+}
+
+Behavior Behavior::filterType(Behavior::Type const &type)
+{
+	Behavior extractedError;
+	//if const auto &pos = errors.find(code);
+	for (auto& err : errors)
+	{
+		if (Behavior(err.first, err.second).getType() == type)
+		{
+			extractedError += Behavior(err.first, err.second);
+		}
+	}
 	return extractedError;
 }
 
@@ -101,6 +116,7 @@ Behavior::Type Behavior::getType() const
 		case Behavior::ERR_ignoreChanges:
 		case Behavior::ERR_readingContent:
 		case Behavior::ERR_virtualProjectRemoved:
+		case Behavior::ERR_NegativeScale:
 			return Type::Warning;
 
 		default:

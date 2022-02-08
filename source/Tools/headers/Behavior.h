@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*!
@@ -33,6 +33,8 @@ public:
 		ERR_savingOk,
 		//! Can be pushed when an action is canceled
 		ERR_actionCanceled,
+		//! Negative Scale found after a first iteration and resolved (used by Chaba)
+		ERR_NegativeScale,
 		//! Can be pushed when a project file is missing
 		ERR_projectFileMissing,
 		//! Can be pushed when a input file is missing 
@@ -59,7 +61,8 @@ public:
 		ERR_unknownReferenceFrame,
 		//! Usefull within CSGeo
 		ERR_virtualProjectRemoved,
-
+	
+		
 		//error for LS process:
 		//! error with the input data
 		ERR_inputData,
@@ -117,6 +120,9 @@ public:
 	//! Retrieves a unique error from *this, by removing the code from *this. 
 	//  If the code doesn't belong to this, it returns an empty error.
 	Behavior extract(BehaviorCode const& code);
+
+	//! Retrieves all the errors from a certain type
+	Behavior filterType(Behavior::Type const &Type);
 
 	//! Returns the numbers of codes include ERR_noError
 	size_t size() const { return errors.size(); }
