@@ -1,92 +1,73 @@
-/*SURVEYLIB VERSION !!!!!!!!!!!!!!!!!!!!!!!*/
+// TALTSvd.h : implementation file
+// class making an approximative best fit between points
+// the class is the minimal required for chaba
 
-//TLSInputMatrices.h : implementation file
-// class for input matrices as defined for survey purposes
-// and for the least squares solving algorithm
-/***DEBUG*///
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
-#include "Logger.hpp"
 #include "TALTSvd.h"
-#include <Eigen/SVD>
-#include <Eigen/Dense>
 
-#include "TRotationMatrix.h"
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+
+#include <Eigen/Dense>
+#include <Eigen/SVD>
+
+#include "Logger.hpp"
 
 /////////////////////////////////////////////////////////////////////////////////
-//CONSTRUCTOR / DESTRUCTOR
+// CONSTRUCTOR / DESTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////
 TALTSvd::TALTSvd()
-{//Constructor
-	ActiveMatrix = nullptr; /*!< matrix A (3 x eq) */
-	PassiveMatrix = nullptr; /*!< matrix B (3 x eq) */
-	ResultRotMatrix.identity();
-
-	fNbDim = 0;
-	fNbEqn = 0;
+{ // Constructor
 }
 
-
-TALTSvd::~TALTSvd()
-{//Destructor
-	clearMatrices();
-}
-
-
-
 /////////////////////////////////////////////////////////////////////////////////
-//SET FUNCTIONS
+// MEMBER FUNCTIONS
 /////////////////////////////////////////////////////////////////////////////////
 
-void TALTSvd::initMatrices(int equations, int dimension )
-{//sets the dimensions of the matrices
+void TALTSvd::initMatrices(int equations, int dimension)
+{ // sets the dimensions of the matrices
 
 	fNbDim = dimension;
 	fNbEqn = equations;
 
 	clearMatrices();
-
-	ActiveMatrix = new TSparseMatrix(equations, dimension);
-	PassiveMatrix = new TSparseMatrix(equations, dimension);
-	ResultRotMatrix.identity();
-
+	
+	ActiveMatrix = std::make_unique<TSparseMatrix>(equations, dimension);
+	PassiveMatrix = std::make_unique<TSparseMatrix>(equations, dimension);
+	ResultRotMatrix = std::make_unique<TRotationMatrix>();
 }
 
 void TALTSvd::clearMatrices()
 {
-	if (ActiveMatrix != nullptr) {
-		delete ActiveMatrix;
-		ActiveMatrix = nullptr;
-	}
-	if (PassiveMatrix != nullptr) {
-		delete PassiveMatrix;
-		PassiveMatrix = nullptr;
-	}
+	ActiveMatrix.reset();
+	PassiveMatrix.reset();
+	ResultRotMatrix.reset();
 }
-
 
 bool TALTSvd::setActiveMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
+	try
+	{
 		if (0 <= row && row < fNbEqn && 0 <= column && column < fNbDim)
 			ActiveMatrix->insert(row, column) = coeff;
 	}
-	catch (...) {
+	catch (...)
+	{
 		return false;
 	}
 	return true;
 }
 
-
 bool TALTSvd::setPassiveMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
+	try
+	{
 		if (0 <= row && row < fNbEqn && 0 <= column && column < fNbDim)
 			PassiveMatrix->insert(row, column) = coeff;
 	}
-	catch (...) {
+	catch (...)
+	{
 		return false;
 	}
 	return true;
@@ -100,7 +81,7 @@ bool TALTSvd::setRotationMtrxElement(TDenseMatrix RotationMatrix)
 		{
 			for (int col = 0; col < 3; col++)
 			{
-				ResultRotMatrix.setC(row, col, RotationMatrix(row, col));
+				ResultRotMatrix->setC(row, col, RotationMatrix(row, col));
 			}
 		}
 	}
@@ -111,17 +92,19 @@ bool TALTSvd::setRotationMtrxElement(TDenseMatrix RotationMatrix)
 	return true;
 }
 
-
 bool TALTSvd::computeRotMatrx()
 {
 	try
 	{
+		// Make a SVD decomposition and extract the U and V matrices
 		Eigen::JacobiSVD<TDenseMatrix> svd(PassiveMatrix->toDense().transpose() * ActiveMatrix->toDense(), Eigen::ComputeFullU | Eigen::ComputeFullV);
 
 		TDenseMatrix u = svd.matrixU();
 		TDenseMatrix v = svd.matrixV();
 
 		// Compute R = V * U'
+
+		// if det(U) * det(V) <0 the third column should be *-1
 		if (u.determinant() * v.determinant() < 0)
 		{
 			for (int row = 0; row < 3; row++)
@@ -142,7 +125,11 @@ Angles TALTSvd::getAngles(TRotationMatrix::ERotationType kR)
 { // calculate the angles from the matrix with the specified rotation order
 
 	Angles xyz;
-	xyz = ResultRotMatrix.getAngles(kR);
+	xyz = ResultRotMatrix->getAngles(kR);
 
 	return xyz;
 }
+
+/////////////////////////////////////////////////////////////////////////////////
+// END
+/////////////////////////////////////////////////////////////////////////////////

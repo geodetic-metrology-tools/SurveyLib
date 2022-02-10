@@ -48,7 +48,7 @@ Behavior Behavior::extract(BehaviorCode const& code)
 Behavior Behavior::filterType(Behavior::Type const &type)
 {
 	Behavior extractedError;
-	//if const auto &pos = errors.find(code);
+
 	for (auto& err : errors)
 	{
 		if (Behavior(err.first, err.second).getType() == type)
