@@ -241,8 +241,8 @@ namespace tut
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
         ensure("Transformation OK", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95)));
-        ensure_distance("LV95 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
-		ensure_distance("LV95 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
+		ensure_distance("LV95 E", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
+		ensure_distance("LV95 N", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
 		ensure_distance("LV95 H", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
 #endif
 	}
@@ -258,7 +258,7 @@ namespace tut
 #ifndef _WIN32
         skip();
 #else
-        TPositionVector pv(1268507.870, 2617306.920, (457.138 /*- 1.2233*/), TCoordSysFactory::k2DPlusH);
+		TPositionVector pv(2617306.920, 1268507.870, (457.138 /*- 1.2233*/), TCoordSysFactory::k2DPlusH);
 		
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
