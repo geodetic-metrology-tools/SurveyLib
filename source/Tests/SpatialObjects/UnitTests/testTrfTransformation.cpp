@@ -672,7 +672,6 @@ void object::test<26>()
 }
 
 
-/* To be implemented after bug fixed on http://epncb.oma.be/_productsservices/coord_trans/index.php
 template<>
 template<>
 void object::test<27>()
@@ -691,11 +690,11 @@ void object::test<27>()
 	ensure("Setting the coordinates of TSpatialPosition", position.setCoordinates(pv));
 	ensure("Transform returns true", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFout, nullptr, 2022.5, "ETRF 2005")));
 
-	ensure_equals("ETRF 2005 at 2022.5 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(),
+	ensure_equals("ETRF 2005 at 2022.5 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4395209.7020),
 		static_cast<TReal>(0.001));
-	ensure_equals("ETRF 2005 at 2022.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(),
+	ensure_equals("ETRF 2005 at 2022.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(467745.7737),
 		static_cast<TReal>(0.001));
-	ensure_equals("ETRF 2005 at 2022.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(),
+	ensure_equals("ETRF 2005 at 2022.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4583513.2036),
 		static_cast<TReal>(0.001));
 }
 
@@ -717,16 +716,14 @@ void object::test<28>()
 	ensure("Setting the coordinates of TSpatialPosition", position.setCoordinates(pv));
 	ensure("Transform returns true", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFout, nullptr, 2022.5, "ETRF 2014")));
 
-	ensure_equals("ETRF 2014 at 2022.5 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(),
+	ensure_equals("ETRF 2014 at 2022.5 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4395209.6428),
 		static_cast<TReal>(0.001));
-	ensure_equals("ETRF 2014 at 2022.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(),
+	ensure_equals("ETRF 2014 at 2022.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(467745.7089),
 		static_cast<TReal>(0.001));
-	ensure_equals("ETRF 2014 at 2022.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(),
+	ensure_equals("ETRF 2014 at 2022.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4583513.2312),
 		static_cast<TReal>(0.001));
 }
 
-
-*/
 
 template<>
 template<>

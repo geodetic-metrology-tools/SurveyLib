@@ -28,7 +28,7 @@ class TVCoordinateSystem;
 /*! \ingroup MathematicalConcepts
 	@{*/
 
-//! Abstract class use for explain TPositionVector, TFreeVector and TVelocityVector
+//! Abstract class use for explain TPositionVector and TFreeVector
 class  TACoordSysVector
 {
 public:
