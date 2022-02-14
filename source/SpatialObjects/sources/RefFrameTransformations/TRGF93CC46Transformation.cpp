@@ -5,6 +5,12 @@
 #include <assert.h>
 #define  _USE_MATH_DEFINES
 #include <math.h>
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <array>
 
 /////////////////////////////////////////////////////////
 
@@ -52,8 +58,8 @@ namespace
 }
 
 
-TRGF93ZoneTransformation::TRGF93ZoneTransformation(bool fromRGF93)
-: fFromRGF93(fromRGF93)
+TRGF93ZoneTransformation::TRGF93ZoneTransformation(bool fromRGF93, bool ellipsHeight)
+	: fFromRGF93(fromRGF93), fEllipsHeight(ellipsHeight)
 {
 }
 
@@ -64,19 +70,39 @@ TRGF93ZoneTransformation * TRGF93ZoneTransformation::clone() const
 
 TRGF93ZoneTransformation * TRGF93ZoneTransformation::inverse() const
 {
-    return new TRGF93ZoneTransformation(!fFromRGF93);
+    return new TRGF93ZoneTransformation(!fFromRGF93, fEllipsHeight);
 }
 
 TAReferenceFrame * TRGF93ZoneTransformation::getSourceFrame() const
 {
-    return TRefFrameInfo::getReferenceFrame(
-        fFromRGF93 ? TRefSystemFactory::kRGF93 : TRefSystemFactory::kFrenchRGF93Zone5);
+	if (fFromRGF93)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93);
+	}
+	else if (fEllipsHeight)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_eh);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf);
+	}
 }
 
 TAReferenceFrame * TRGF93ZoneTransformation::getDestinationFrame() const
 {
-    return TRefFrameInfo::getReferenceFrame(
-        fFromRGF93 ? TRefSystemFactory::kFrenchRGF93Zone5 : TRefSystemFactory::kRGF93);
+	if (!fFromRGF93)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93);
+	}
+	else if (fEllipsHeight)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_eh);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf);
+	}
 }
 
 bool TRGF93ZoneTransformation::transform(TPositionVector & pv) const
@@ -96,9 +122,18 @@ bool TRGF93ZoneTransformation::transformToRGF93(TPositionVector & pv) const
 	if(!position.setCoordinates(pv))
         return false;
 
-    const double X = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
+	const double X = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
     const double Y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
-    const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+    double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+
+	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
+	{
+		// We call Circé developped by the french IGN to convert altitude into ellipsoidal height
+
+		const char *cmd = "\"C:/Program Files (x86)/IGN/Circe 5-3-1/circeFR.exe\" --metadataFile=C:/ProgramData/IGN/Circe/5-3-1/Service-public/France/DataFRnew.txt --sourceCRS=RGF93CC46. --sourceFormat=ENH.METERS.RADIANS --targetCRS=RGF93CC46.IGN69 --targetFormat=ENVCS.METERS.DEGREES --displayPrecision=0.001 --plainDMS --gridLoading=BINARY 1934271.341 5239057.929 620.5";
+
+		std::string result = execCirce(cmd);
+	}
 
     double R = sqrt((X-Xs)*(X-Xs)+ (Y-Ys)*(Y-Ys));
     double gama = atan((X-Xs)/(Ys-Y)); 
@@ -143,6 +178,18 @@ bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
     const double lambda = position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue();
     const double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
 
+	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
+	{
+		// We call Circé developped by the french IGN to convert altitude into ellipsoidal height
+
+		const char *cmd = "C:/Program Files (x86)/IGN/Circe 5-3-1/circeFR.exe "
+						  "--metadataFile=C:/ProgramData/IGN/Circe/5-3-1/Service-public/France/DataFRnew.txt --sourceCRS=RGF93CC46. "
+						  "--sourceFormat=ENH.METERS.RADIANS --targetCRS=RGF93CC46.IGN69 --targetFormat=ENVCS.METERS.DEGREES --displayPrecision=0.001 --plainDMS "
+						  "--gridLoading=BINARY 1934271.341 5239057.929 620.5";
+
+		std::string result = execCirce(cmd);
+	}
+
     double L =  0.5 * log((1+sin(phi))/(1-sin(phi)))   - (e/2) * log((1+e*sin(phi))/(1-e*sin(phi)));
 
     double R = C*exp(-n*L);
@@ -155,4 +202,19 @@ bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
 
     return true;
 
+}
+
+std::string TRGF93ZoneTransformation::execCirce(const char *cmd) const
+{
+	std::array<char, 128> buffer;
+	std::string result;
+	std::shared_ptr<FILE> pipe(_popen(cmd, "r"), _pclose);
+	if (!pipe)
+		throw std::runtime_error("popen() failed!");
+	while (!feof(pipe.get()))
+	{
+		if (fgets(buffer.data(), 128, pipe.get()) != nullptr)
+			result += buffer.data();
+	}
+	return result;
 }

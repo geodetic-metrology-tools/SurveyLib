@@ -54,8 +54,8 @@ namespace
 }
 
 
-TLambert93Transformation::TLambert93Transformation(bool fromRGF93)
-: fFromRGF93(fromRGF93)
+TLambert93Transformation::TLambert93Transformation(bool fromRGF93, bool ellipsHeight)
+	: fFromRGF93(fromRGF93), fEllipsHeight(ellipsHeight)
 {
 	/*
 	std::cout << "####" << std::endl;
@@ -81,19 +81,39 @@ TLambert93Transformation * TLambert93Transformation::clone() const
 
 TLambert93Transformation * TLambert93Transformation::inverse() const
 {
-    return new TLambert93Transformation(!fFromRGF93);
+    return new TLambert93Transformation(!fFromRGF93, fEllipsHeight);
 }
 
 TAReferenceFrame * TLambert93Transformation::getSourceFrame() const
 {
-    return TRefFrameInfo::getReferenceFrame(
-        fFromRGF93 ? TRefSystemFactory::kRGF93 : TRefSystemFactory::kLambert93);
+	if (fFromRGF93)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93);
+	}
+	else if (fEllipsHeight)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_eh);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf);
+	}   
 }
 
 TAReferenceFrame * TLambert93Transformation::getDestinationFrame() const
 {
-    return TRefFrameInfo::getReferenceFrame(
-        fFromRGF93 ? TRefSystemFactory::kLambert93 : TRefSystemFactory::kRGF93);
+	if (!fFromRGF93)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93);
+	}
+	else if (fEllipsHeight)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_eh);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf);
+	}
 }
 
 bool TLambert93Transformation::transform(TPositionVector & pv) const

@@ -97,11 +97,14 @@ public:
             kSwissLV95           = 109,
             kSwissLV03           = 110,
 #endif
-			kFrenchRGF93Zone5    = 205,
-			kLambert93			 = 206,
-			//The same as ETRF93
-			kRGF93               = 207,
-			kCHTRF95             = 208,
+			//Franch system
+			kFrenchRGF93_CC46_eh = 205,
+			kFrenchRGF93_CC46_raf = 206,
+			kLambert93_eh		 = 207,
+			kLambert93_raf		 = 208,			
+			kRGF93               = 209,
+
+			kCHTRF95             = 210,
 			// Local Reference Frames:
 			kMLA1985Machine      = 1000,
 			kMLA2000Machine      = 1001,
@@ -143,8 +146,8 @@ public:
 			kCH1903plus2SwissLV95, kSwissLV952CH1903plus,
 			kSwissLV952SwissLV03, kSwissLV032SwissLV95,
 #endif
-			kETRF932FrenchRGF93, kFrenchRGF932ETRF93,
-			kRGF932Lambert93, kLambert932RGF93,
+			kCC46eh2RGF93, kRGF932CC46eh, kCC46raf2RGF93, kRGF932CC46raf, 
+			kRGF932Lambert93eh, kLambert93eh2RGF93, kRGF932Lambert93raf, kLambert93raf2RGF93,
 			
 			//new
 			kCCS2CGRF2, kWGS2CGRF2, kITRF972CGRF2,

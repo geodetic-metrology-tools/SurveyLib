@@ -532,8 +532,10 @@ std::string TDataParameters::getRFName() const
 		return "CHTRF95";
 	case TRefSystemFactory::ERefFrame::kETRF93:
 		return "ETRF93";
-	case TRefSystemFactory::ERefFrame::kFrenchRGF93Zone5:
-		return "RGF93zone5";
+	case TRefSystemFactory::ERefFrame::kFrenchRGF93_CC46_eh:
+		return "RGF93_CC46_eh";
+	case TRefSystemFactory::ERefFrame::kFrenchRGF93_CC46_raf:
+		return "RGF93_CC46_ign69";
 	case TRefSystemFactory::ERefFrame::kITRF97:
 		return "ITRF97";
 	case TRefSystemFactory::ERefFrame::kLA1985H0:
@@ -546,8 +548,10 @@ std::string TDataParameters::getRFName() const
 		return "LA_00Topo";
 	case TRefSystemFactory::ERefFrame::kLA2000Machine:
 		return "LA_00Machine";
-	case TRefSystemFactory::ERefFrame::kLambert93:
-		return "Lambert93";
+	case TRefSystemFactory::ERefFrame::kLambert93_eh:
+		return "Lambert93_eh";
+	case TRefSystemFactory::ERefFrame::kLambert93_raf:
+		return "Lambert93_ign69";
 	case TRefSystemFactory::ERefFrame::kLAp0:
 		return "LA_P0";
 	case TRefSystemFactory::ERefFrame::kLASphere:

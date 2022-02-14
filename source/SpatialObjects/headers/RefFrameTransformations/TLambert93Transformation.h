@@ -15,7 +15,7 @@ After the update of the definition of the french coordinate system, RGF93 and ET
 class TLambert93Transformation : public TARefFrameTransformation
 {
 public:
-    explicit TLambert93Transformation(bool fromRGF93);
+    explicit TLambert93Transformation(bool fromRGF93, bool ellipsHeight);
 
     TLambert93Transformation * clone() const;
 	TLambert93Transformation * inverse() const;
@@ -31,7 +31,8 @@ private:
     bool transformFromRGF93(TPositionVector & pv) const;
     bool transformToRGF93(TPositionVector & pv) const;
 	
-    const bool fFromRGF93;    
+    const bool fFromRGF93;
+	const bool fEllipsHeight;
 };
 
 #endif
