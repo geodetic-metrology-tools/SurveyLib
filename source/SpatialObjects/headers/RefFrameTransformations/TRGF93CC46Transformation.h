@@ -31,6 +31,9 @@ private:
     bool transformFromRGF93(TPositionVector & pv) const;
     bool transformToRGF93(TPositionVector & pv) const;
 	std::string execCirce(const char *cmd) const;
+	void readCirceResult(std::string result, double & z) const;
+	void circeTransfoRafToH(const double & X, const double & Y, double & h) const;
+
 
     const bool fFromRGF93;
 	const bool fEllipsHeight;

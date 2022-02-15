@@ -12,6 +12,10 @@
 #include <string>
 #include <array>
 
+#include <filesystem>
+#include <iostream>
+#include <sstream>
+
 /////////////////////////////////////////////////////////
 
 // Anonymous namespace for local constants
@@ -129,10 +133,7 @@ bool TRGF93ZoneTransformation::transformToRGF93(TPositionVector & pv) const
 	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
 	{
 		// We call Circé developped by the french IGN to convert altitude into ellipsoidal height
-
-		const char *cmd = "\"C:/Program Files (x86)/IGN/Circe 5-3-1/circeFR.exe\" --metadataFile=C:/ProgramData/IGN/Circe/5-3-1/Service-public/France/DataFRnew.txt --sourceCRS=RGF93CC46. --sourceFormat=ENH.METERS.RADIANS --targetCRS=RGF93CC46.IGN69 --targetFormat=ENVCS.METERS.DEGREES --displayPrecision=0.001 --plainDMS --gridLoading=BINARY 1934271.341 5239057.929 620.5";
-
-		std::string result = execCirce(cmd);
+		circeTransfoRafToH(X, Y, h);
 	}
 
     double R = sqrt((X-Xs)*(X-Xs)+ (Y-Ys)*(Y-Ys));
@@ -176,18 +177,16 @@ bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
 
     const double phi = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue();
     const double lambda = position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue();
-    const double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
+    double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
 
 	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
 	{
 		// We call Circé developped by the french IGN to convert altitude into ellipsoidal height
 
-		const char *cmd = "C:/Program Files (x86)/IGN/Circe 5-3-1/circeFR.exe "
-						  "--metadataFile=C:/ProgramData/IGN/Circe/5-3-1/Service-public/France/DataFRnew.txt --sourceCRS=RGF93CC46. "
-						  "--sourceFormat=ENH.METERS.RADIANS --targetCRS=RGF93CC46.IGN69 --targetFormat=ENVCS.METERS.DEGREES --displayPrecision=0.001 --plainDMS "
-						  "--gridLoading=BINARY 1934271.341 5239057.929 620.5";
+		const char *cmd = "\"..\\..\\ext\\Circe\\circeFR.exe\" --metadataFile=../../../ext/Circe/Data/DataFRnew.txt --sourceCRS=RGF93CC46. --sourceFormat=ENH.METERS.RADIANS --targetCRS=RGF93CC46.IGN69 --targetFormat=ENVCS.METERS.DEGREES --displayPrecision=0.001 --plainDMS --gridLoading=BINARY 1934271.341 5239057.929 620.5";
 
 		std::string result = execCirce(cmd);
+		readCirceResult(result, h);
 	}
 
     double L =  0.5 * log((1+sin(phi))/(1-sin(phi)))   - (e/2) * log((1+e*sin(phi))/(1-e*sin(phi)));
@@ -204,6 +203,23 @@ bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
 
 }
 
+void TRGF93ZoneTransformation::circeTransfoRafToH(const double & X, const double & Y, double & h) const
+{
+	std::string circePath = "\"..\\..\\ext\\Circe\\";
+	std::string circeOption = "--sourceCRS=RGF93CC46.IGN69 "
+							  "--sourceFormat=ENV.METERS.RADIANS "
+							  "--targetCRS=RGF93CC46. "
+							  "--targetFormat=ENHCS.METERS.DEGREES "
+							  "--displayPrecision=0.001 --plainDMS --gridLoading=BINARY";
+
+	std::string cmdString = circePath + "circeFR.exe\"" + " --metadataFile=../../ext/Circe/Data/DataFRnew.txt "
+									  + circeOption + " " + std::to_string(X) + " "	+ std::to_string(Y) + " " + std::to_string(h);
+
+	const char *cmd = cmdString.c_str();
+	std::string result = execCirce(cmd);
+	readCirceResult(result, h);
+}
+
 std::string TRGF93ZoneTransformation::execCirce(const char *cmd) const
 {
 	std::array<char, 128> buffer;
@@ -217,4 +233,16 @@ std::string TRGF93ZoneTransformation::execCirce(const char *cmd) const
 			result += buffer.data();
 	}
 	return result;
+}
+
+void TRGF93ZoneTransformation::readCirceResult(std::string result, double& h) const
+{
+	std::stringstream ss(result);
+	double x, y, conv, scale, sigmaZ;
+	std::string infoGeoid1, infoGeoid2, sep, unit;
+
+	ss >> x >> y >> h >> conv >> scale >> infoGeoid1 >> infoGeoid2 >> sep >> sigmaZ >> unit;
+
+
+
 }
