@@ -168,6 +168,7 @@ bool TRGF93ZoneTransformation::transformToRGF93(TPositionVector & pv) const
     return true;
 
 }
+
 bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
 {
     //transform phi lambda h
@@ -179,23 +180,25 @@ bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
     const double lambda = position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue();
     double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
 
-	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
-	{
-		// We call Circé developped by the french IGN to convert altitude into ellipsoidal height
-
-		const char *cmd = "\"..\\..\\ext\\Circe\\circeFR.exe\" --metadataFile=../../../ext/Circe/Data/DataFRnew.txt --sourceCRS=RGF93CC46. --sourceFormat=ENH.METERS.RADIANS --targetCRS=RGF93CC46.IGN69 --targetFormat=ENVCS.METERS.DEGREES --displayPrecision=0.001 --plainDMS --gridLoading=BINARY 1934271.341 5239057.929 620.5";
-
-		std::string result = execCirce(cmd);
-		readCirceResult(result, h);
-	}
-
-    double L =  0.5 * log((1+sin(phi))/(1-sin(phi)))   - (e/2) * log((1+e*sin(phi))/(1-e*sin(phi)));
+	double L =  0.5 * log((1+sin(phi))/(1-sin(phi)))   - (e/2) * log((1+e*sin(phi))/(1-e*sin(phi)));
 
     double R = C*exp(-n*L);
     double gama = n*(lambda-lambda0);
 
     double X = Xs + R*sin(gama);
     double Y = Ys - R*cos(gama);
+
+	TPositionVector tmp = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);
+	TSpatialPosition outpos(getDestinationFrame());
+	if (!outpos.setCoordinates(tmp))
+	{
+		return false;
+	}
+	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
+	{
+		// We call Circé developped by the french IGN to convert ellipsoidal height into altitude
+		circeTransfoHToRaf(X, Y, h);
+	}
 
     pv = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);
 
@@ -210,10 +213,27 @@ void TRGF93ZoneTransformation::circeTransfoRafToH(const double & X, const double
 							  "--sourceFormat=ENV.METERS.RADIANS "
 							  "--targetCRS=RGF93CC46. "
 							  "--targetFormat=ENHCS.METERS.DEGREES "
-							  "--displayPrecision=0.001 --plainDMS --gridLoading=BINARY";
+							  "--displayPrecision=0.00001 --plainDMS --gridLoading=BINARY";
 
 	std::string cmdString = circePath + "circeFR.exe\"" + " --metadataFile=../../ext/Circe/Data/DataFRnew.txt "
 									  + circeOption + " " + std::to_string(X) + " "	+ std::to_string(Y) + " " + std::to_string(h);
+
+	const char *cmd = cmdString.c_str();
+	std::string result = execCirce(cmd);
+	readCirceResult(result, h);
+}
+
+void TRGF93ZoneTransformation::circeTransfoHToRaf(const double &X, const double &Y, double &h) const
+{
+	std::string circePath = "\"..\\..\\ext\\Circe\\";
+	std::string circeOption = "--sourceCRS=RGF93CC46. "
+							  "--sourceFormat=ENH.METERS.RADIANS "
+							  "--targetCRS=RGF93CC46.IGN69 "
+							  "--targetFormat=ENVCS.METERS.DEGREES "
+							  "--displayPrecision=0.00001 --plainDMS --gridLoading=BINARY";
+
+	std::string cmdString = circePath + "circeFR.exe\"" + " --metadataFile=../../ext/Circe/Data/DataFRnew.txt " + circeOption + " " + std::to_string(X) + " "
+		+ std::to_string(Y) + " " + std::to_string(h);
 
 	const char *cmd = cmdString.c_str();
 	std::string result = execCirce(cmd);

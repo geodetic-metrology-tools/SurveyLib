@@ -31,7 +31,7 @@ namespace tut
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
 
 		ensure("Transform returns true", 
-			position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93)));
+			position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_eh)));
 
 
         //TLambert93Transformation trans(true);
@@ -64,7 +64,7 @@ namespace tut
         set_test_name("Transforming a TSpatialPosition from Lambert93 into RGF93v2b");
         TPositionVector pv(1082722.205, 7001994.409, (400.157), TCoordSysFactory::k2DPlusH); 
 		
-		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93));
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_eh));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
 
 		ensure("Transform returns true", 

@@ -288,7 +288,7 @@ namespace tut
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
 
-        position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93Zone5));     
+        position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_eh));     
 
         ensure_distance("RGF93 CC46 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1918471.0676), static_cast<TReal>(0.0001));
 		ensure_distance("RGF93 CC46 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(5215917.6067), static_cast<TReal>(0.0001));
@@ -302,7 +302,7 @@ namespace tut
 		set_test_name("Bug fix - did not convert back from RGF93_5 to CCS");
 		TPositionVector pv(1934404.452, 5230706.747, 531.563, TCoordSysFactory::k2DPlusH);
 
-		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93Zone5));
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_eh));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
 
 		position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCCS));     

@@ -28,9 +28,9 @@ namespace tut
         set_test_name("Iterating over the all registered ERefFrame values");
 
 #ifdef _WIN32
-		size_t nbtrans = 46;
+		size_t nbtrans = 48;
 #else
-		size_t nbtrans = 44;
+		size_t nbtrans = 46;
 #endif
 		TRefFrameInfo::RefFrameSet set = TRefFrameInfo::getRefFrameSet();
 		ensure_equals(set.count(TRefSystemFactory::kITRF97),1);

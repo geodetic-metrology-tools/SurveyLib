@@ -8,6 +8,7 @@
 # - `EIGEN_INCLUDE_PATH`: The path to Eigen folder
 # - `REFRAME_LIBRARY_DIR`: The path to Reframe folder
 # - `TUT_INCLUDE_PATH`: The path to Tut folder
+# - `CIRCE_EXEC_DIR`: The path to Circe executable folder
 # - `VCREDIST_INSTALLER_PATH`: The path to the folder holding the VCRedist installer
 
 cmake_minimum_required(VERSION 3.6)
@@ -28,7 +29,7 @@ set(CREATE_DOC ON)
 set(DOXYGEN_CONF_PATH ".")
 set(ENABLE_CONSOLE ON)
 
-include("../../SUSoftCMakeCommon/CMakeLists.txt")
+include("../../../SUSoftCMakeCommon/CMakeLists.txt")
 
 # Set version number and provide a header file with corresponding defines
 set (SurveyLib_VERSION_MAJOR 4)
