@@ -12,6 +12,8 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransf
 
 )
 
+add_definitions(-DCIRCE_EXEC_DIR="${CIRCE_EXEC_DIR}")
+
 IF(USE_SWISSTOPO)
 	include_directories(C:/Windows/System32
 		${REFRAME_LIBRARY_DIR}

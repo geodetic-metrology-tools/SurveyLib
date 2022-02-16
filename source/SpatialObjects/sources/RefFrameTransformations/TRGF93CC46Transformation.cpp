@@ -16,6 +16,11 @@
 #include <iostream>
 #include <sstream>
 
+#ifdef CIRCE_EXEC_DIR
+	# define CIRCE_DIR CIRCE_EXEC_DIR
+#endif // !
+
+
 /////////////////////////////////////////////////////////
 
 // Anonymous namespace for local constants
@@ -208,15 +213,15 @@ bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
 
 void TRGF93ZoneTransformation::circeTransfoRafToH(const double & X, const double & Y, double & h) const
 {
-	std::string circePath = "\"..\\..\\ext\\Circe\\";
+	std::string circePath = CIRCE_DIR;
 	std::string circeOption = "--sourceCRS=RGF93CC46.IGN69 "
 							  "--sourceFormat=ENV.METERS.RADIANS "
 							  "--targetCRS=RGF93CC46. "
 							  "--targetFormat=ENHCS.METERS.DEGREES "
 							  "--displayPrecision=0.00001 --plainDMS --gridLoading=BINARY";
 
-	std::string cmdString = circePath + "circeFR.exe\"" + " --metadataFile=../../ext/Circe/Data/DataFRnew.txt "
-									  + circeOption + " " + std::to_string(X) + " "	+ std::to_string(Y) + " " + std::to_string(h);
+	std::string cmdString = "\"" + circePath + "/circeFR.exe\"" + " --metadataFile=" + circePath + "/Data/DataFRnew.txt " + circeOption + " "
+							+ std::to_string(X) + " " + std::to_string(Y) + " " + std::to_string(h);
 
 	const char *cmd = cmdString.c_str();
 	std::string result = execCirce(cmd);
@@ -225,15 +230,15 @@ void TRGF93ZoneTransformation::circeTransfoRafToH(const double & X, const double
 
 void TRGF93ZoneTransformation::circeTransfoHToRaf(const double &X, const double &Y, double &h) const
 {
-	std::string circePath = "\"..\\..\\ext\\Circe\\";
+	std::string circePath = CIRCE_DIR;
 	std::string circeOption = "--sourceCRS=RGF93CC46. "
 							  "--sourceFormat=ENH.METERS.RADIANS "
 							  "--targetCRS=RGF93CC46.IGN69 "
 							  "--targetFormat=ENVCS.METERS.DEGREES "
 							  "--displayPrecision=0.00001 --plainDMS --gridLoading=BINARY";
 
-	std::string cmdString = circePath + "circeFR.exe\"" + " --metadataFile=../../ext/Circe/Data/DataFRnew.txt " + circeOption + " " + std::to_string(X) + " "
-		+ std::to_string(Y) + " " + std::to_string(h);
+	std::string cmdString = "\"" + circePath + "/circeFR.exe\"" + " --metadataFile=" + circePath + "/Data/DataFRnew.txt " + circeOption + " "
+							+ std::to_string(X) + " " + std::to_string(Y) + " " + std::to_string(h);
 
 	const char *cmd = cmdString.c_str();
 	std::string result = execCirce(cmd);
