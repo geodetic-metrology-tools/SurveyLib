@@ -13,12 +13,11 @@
 #include <array>
 
 #include <filesystem>
-#include <iostream>
 #include <sstream>
 
 #ifdef CIRCE_EXEC_DIR
 	# define CIRCE_DIR CIRCE_EXEC_DIR
-#endif // !
+#endif
 
 
 /////////////////////////////////////////////////////////

@@ -5,6 +5,15 @@
 #include <assert.h>
 #define  _USE_MATH_DEFINES
 #include <math.h>
+#include <array>
+#include <string>
+#include <filesystem>
+#include <iostream>
+#include <sstream>
+
+#ifdef CIRCE_EXEC_DIR
+#	define CIRCE_DIR CIRCE_EXEC_DIR
+#endif 
 
 /////////////////////////////////////////////////////////
 
@@ -135,7 +144,13 @@ bool TLambert93Transformation::transformToRGF93(TPositionVector & pv) const
 
     const double X = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
     const double Y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
-    const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+    double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+
+	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf))
+	{
+		// We call Circé developped by the french IGN to convert altitude into ellipsoidal height
+		circeTransfoRafToH(X, Y, h);
+	}
 
 	double R = sqrt((X - XS)*(X - XS)+ (Y - YS)*(Y - YS));
     double gamma = atan((X - XS)/(YS - Y));
@@ -178,18 +193,90 @@ bool TLambert93Transformation::transformFromRGF93(TPositionVector & pv) const
 
     const double phi = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue();
     const double lambda = position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue();
-    const double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
+    double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
 
 	double L = log(tan(M_PI/4 + phi/2) * pow(  ( (1-e * sin(phi))/(1+e * sin(phi)) ),(e/2)  ));
 
 	double X = XS + C*exp(-n*L)*sin(n*(lambda-lambda_c));
 	double Y = YS - C*exp(-n*L)*cos(n*(lambda-lambda_c));
 
+	TPositionVector tmp = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);
+	TSpatialPosition outpos(getDestinationFrame());
+	if (!outpos.setCoordinates(tmp))
+	{
+		return false;
+	}
+	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf))
+	{
+		// We call Circé developped by the french IGN to convert ellipsoidal height into altitude
+		circeTransfoHToRaf(X, Y, h);
+	}
+
+
     pv = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);
 
     return true;
 
 }
+
+void TLambert93Transformation::circeTransfoRafToH(const double &X, const double &Y, double &h) const
+{
+	std::string circePath = CIRCE_DIR;
+	std::string circeOption = "--sourceCRS=RGF93LAMB93.IGN69 "
+							  "--sourceFormat=ENV.METERS.RADIANS "
+							  "--targetCRS=RGF93LAMB93. "
+							  "--targetFormat=ENHCS.METERS.DEGREES "
+							  "--displayPrecision=0.00001 --plainDMS --gridLoading=BINARY";
+
+	std::string cmdString = "\"" + circePath + "/circeFR.exe\"" + " --metadataFile=" + circePath + "/Data/DataFRnew.txt " + circeOption + " " + std::to_string(X) + " "
+		+ std::to_string(Y) + " " + std::to_string(h);
+
+	const char *cmd = cmdString.c_str();
+	std::string result = execCirce(cmd);
+	readCirceResult(result, h);
+}
+
+void TLambert93Transformation::circeTransfoHToRaf(const double &X, const double &Y, double &h) const
+{
+	std::string circePath = CIRCE_DIR;
+	std::string circeOption = "--sourceCRS=RGF93LAMB93. "
+							  "--sourceFormat=ENH.METERS.RADIANS "
+							  "--targetCRS=RGF93LAMB93.IGN69 "
+							  "--targetFormat=ENVCS.METERS.DEGREES "
+							  "--displayPrecision=0.00001 --plainDMS --gridLoading=BINARY";
+
+	std::string cmdString = "\"" + circePath + "/circeFR.exe\"" + " --metadataFile=" + circePath + "/Data/DataFRnew.txt " + circeOption + " " + std::to_string(X) + " "
+		+ std::to_string(Y) + " " + std::to_string(h);
+
+	const char *cmd = cmdString.c_str();
+	std::string result = execCirce(cmd);
+	readCirceResult(result, h);
+}
+
+std::string TLambert93Transformation::execCirce(const char *cmd) const
+{
+	std::array<char, 128> buffer;
+	std::string result;
+	std::shared_ptr<FILE> pipe(_popen(cmd, "r"), _pclose);
+	if (!pipe)
+		throw std::runtime_error("popen() failed!");
+	while (!feof(pipe.get()))
+	{
+		if (fgets(buffer.data(), 128, pipe.get()) != nullptr)
+			result += buffer.data();
+	}
+	return result;
+}
+
+void TLambert93Transformation::readCirceResult(std::string result, double &h) const
+{
+	std::stringstream ss(result);
+	double x, y, conv, scale, sigmaZ;
+	std::string infoGeoid1, infoGeoid2, sep, unit;
+
+	ss >> x >> y >> h >> conv >> scale >> infoGeoid1 >> infoGeoid2 >> sep >> sigmaZ >> unit;
+}
+
 
 // TLambert93Transformation& TLambert93Transformation::operator=(const TLambert93Transformation& fLambert)
 // {
