@@ -31,19 +31,6 @@ private:
     bool transformFromRGF93(TPositionVector & pv) const;
     bool transformToRGF93(TPositionVector & pv) const;
 
-	/// Execute Circe program with the given command
-	std::string execCirce(const char *cmd) const;
-
-	/// Extract Circe output
-	void readCirceResult(std::string result, double & z) const;
-
-	/// Convert RGF-IGN69 altitude into GRS80 ellipsoidal height using RAF20 altimetric conversion grid
-	void circeTransfoRafToH(const double & X, const double & Y, double & h) const;
-
-	/// Convert GRS80 ellipsoidal height into RGF-IGN69 altitude using RAF20 altimetric conversion grid
-	void circeTransfoHToRaf(const double &X, const double &Y, double &h) const;
-
-
     const bool fFromRGF93;
 	const bool fEllipsHeight;
 };

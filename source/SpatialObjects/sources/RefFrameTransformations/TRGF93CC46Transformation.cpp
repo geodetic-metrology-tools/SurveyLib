@@ -1,23 +1,13 @@
 #include <TRGF93CC46Transformation.h>
 
 #include <TRefFrameInfo.h>
+#include <TNotInGeoidGridException.h>
+#include <CirceIGN.h>
 
 #include <assert.h>
 #define  _USE_MATH_DEFINES
 #include <math.h>
-#include <cstdio>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <array>
 
-#include <filesystem>
-#include <sstream>
-
-#ifdef CIRCE_EXEC_DIR
-	# define CIRCE_DIR CIRCE_EXEC_DIR
-#endif
 
 
 /////////////////////////////////////////////////////////
@@ -137,7 +127,7 @@ bool TRGF93ZoneTransformation::transformToRGF93(TPositionVector & pv) const
 	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
 	{
 		// We call Circé developped by the french IGN to convert altitude into ellipsoidal height
-		circeTransfoRafToH(X, Y, h);
+		circeIGN::circeTransfoRafToH(false, X, Y, h);
 	}
 
     double R = sqrt((X-Xs)*(X-Xs)+ (Y-Ys)*(Y-Ys));
@@ -201,72 +191,11 @@ bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
 	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
 	{
 		// We call Circé developped by the french IGN to convert ellipsoidal height into altitude
-		circeTransfoHToRaf(X, Y, h);
+		circeIGN::circeTransfoHToRaf(false, X, Y, h);
 	}
 
     pv = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);
 
     return true;
-
-}
-
-void TRGF93ZoneTransformation::circeTransfoRafToH(const double & X, const double & Y, double & h) const
-{
-	std::string circePath = CIRCE_DIR;
-	std::string circeOption = "--sourceCRS=RGF93CC46.IGN69 "
-							  "--sourceFormat=ENV.METERS.RADIANS "
-							  "--targetCRS=RGF93CC46. "
-							  "--targetFormat=ENHCS.METERS.DEGREES "
-							  "--displayPrecision=0.00001 --plainDMS --gridLoading=BINARY";
-
-	std::string cmdString = "\"" + circePath + "/circeFR.exe\"" + " --metadataFile=" + circePath + "/Data/DataFRnew.txt " + circeOption + " "
-							+ std::to_string(X) + " " + std::to_string(Y) + " " + std::to_string(h);
-
-	const char *cmd = cmdString.c_str();
-	std::string result = execCirce(cmd);
-	readCirceResult(result, h);
-}
-
-void TRGF93ZoneTransformation::circeTransfoHToRaf(const double &X, const double &Y, double &h) const
-{
-	std::string circePath = CIRCE_DIR;
-	std::string circeOption = "--sourceCRS=RGF93CC46. "
-							  "--sourceFormat=ENH.METERS.RADIANS "
-							  "--targetCRS=RGF93CC46.IGN69 "
-							  "--targetFormat=ENVCS.METERS.DEGREES "
-							  "--displayPrecision=0.00001 --plainDMS --gridLoading=BINARY";
-
-	std::string cmdString = "\"" + circePath + "/circeFR.exe\"" + " --metadataFile=" + circePath + "/Data/DataFRnew.txt " + circeOption + " "
-							+ std::to_string(X) + " " + std::to_string(Y) + " " + std::to_string(h);
-
-	const char *cmd = cmdString.c_str();
-	std::string result = execCirce(cmd);
-	readCirceResult(result, h);
-}
-
-std::string TRGF93ZoneTransformation::execCirce(const char *cmd) const
-{
-	std::array<char, 128> buffer;
-	std::string result;
-	std::shared_ptr<FILE> pipe(_popen(cmd, "r"), _pclose);
-	if (!pipe)
-		throw std::runtime_error("popen() failed!");
-	while (!feof(pipe.get()))
-	{
-		if (fgets(buffer.data(), 128, pipe.get()) != nullptr)
-			result += buffer.data();
-	}
-	return result;
-}
-
-void TRGF93ZoneTransformation::readCirceResult(std::string result, double& h) const
-{
-	std::stringstream ss(result);
-	double x, y, conv, scale, sigmaZ;
-	std::string infoGeoid1, infoGeoid2, sep, unit;
-
-	ss >> x >> y >> h >> conv >> scale >> infoGeoid1 >> infoGeoid2 >> sep >> sigmaZ >> unit;
-
-
 
 }
