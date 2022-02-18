@@ -72,10 +72,14 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
         tmp->insert(std::make_pair(TRefSystemFactory::kCGRFSphere,
             TDetails("kCGRFSphere","CERN GRF sphere", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 #ifdef USE_SWISSTOPO
-        tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV95,
+        tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV95_eh,
             TDetails("kSwissLV95","Swiss LV95 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
-        tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV03,
+        tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV03_eh,
             TDetails("kSwissLV03","Swiss LV03 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV95_ortho,
+			TDetails("kSwissLV95", "Swiss LV95 (orthometric height)", TCoordSysFactory::k2DPlusH)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV03_ortho,
+			TDetails("kSwissLV03", "Swiss LV03 (orthometric height)", TCoordSysFactory::k2DPlusH)));
 #endif
         tmp->insert(std::make_pair(TRefSystemFactory::kFrenchRGF93_CC46_eh,
             TDetails("kFrenchRGF93_CC46_eh","French RGF93 CC46 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));

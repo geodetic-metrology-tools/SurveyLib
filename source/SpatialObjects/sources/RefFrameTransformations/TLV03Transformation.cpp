@@ -52,13 +52,13 @@ TLV03Transformation * TLV03Transformation::inverse() const
 TAReferenceFrame * TLV03Transformation::getSourceFrame() const
 {
     return TRefFrameInfo::getReferenceFrame(
-        fFromLV95 ? TRefSystemFactory::kSwissLV95 : TRefSystemFactory::kSwissLV03);
+        fFromLV95 ? TRefSystemFactory::kSwissLV95_eh : TRefSystemFactory::kSwissLV03_eh);
 }
 
 TAReferenceFrame * TLV03Transformation::getDestinationFrame() const
 {
     return TRefFrameInfo::getReferenceFrame(
-        fFromLV95 ? TRefSystemFactory::kSwissLV03 : TRefSystemFactory::kSwissLV95);
+        fFromLV95 ? TRefSystemFactory::kSwissLV03_eh : TRefSystemFactory::kSwissLV95_eh);
 }
 
 bool TLV03Transformation::transform(TPositionVector & pv) const
@@ -153,8 +153,8 @@ bool TLV03Transformation::computeSwissRefFrame(double & coordinate_x, double & c
 	
 	else if (result== -6)
 	{
-		std::cerr<<"Error: 6 input and output reference frames (planimetry and altimetry) are the same, there isn’t any transformation to do!"<<std::endl;
-		throw std::logic_error("Error: 6 input and output reference frames (planimetry and altimetry) are the same, there isn’t any transformation to do!");
+		std::cerr<<"Error: 6 input and output reference frames (planimetry and altimetry) are the same, there isnâ€™t any transformation to do!"<<std::endl;
+		throw std::logic_error("Error: 6 input and output reference frames (planimetry and altimetry) are the same, there isnâ€™t any transformation to do!");
 	}
 	
 	else if (result== -10)

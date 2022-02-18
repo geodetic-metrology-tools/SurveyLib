@@ -194,6 +194,7 @@ set(SpatialObject_HEADERS
 	headers/RefFrameTransformations/TMLA2XYHeTransformation.h
 	headers/RefFrameTransformations/TMLA2XYHsTransformation.h
 	headers/RefFrameTransformations/TRGF93CC46Transformation.h
+	headers/RefFrameTransformations/ReframeSwisstopo.h
 	headers/RefFrameTransformations/TTrf2TrfTransformation.h
 	headers/RefFrameTransformations/TVRefFrameTransformation.h
 	headers/RefFrameTransformations/TVTransformation.h

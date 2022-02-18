@@ -95,11 +95,17 @@ void	TGraph::init()
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRF932CH1903plus),
             TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCH1903plus2ETRF93));
 #ifdef USE_SWISSTOPO
-    insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCH1903plus2SwissLV95),
-            TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV952CH1903plus));
+    insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCH1903plus2SwissLV95eh),
+            TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV95eh2CH1903plus));
 
-    insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV952SwissLV03),
-            TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV032SwissLV95));
+    insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV95eh2SwissLV03eh),
+            TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV03eh2SwissLV95eh));
+
+	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV95eh2SwissLV95ortho),
+		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV95ortho2SwissLV95eh));
+
+	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV03eh2SwissLV03ortho),
+		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV03ortho2SwissLV03eh));
 #endif
 
     insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kRGF932CC46eh),

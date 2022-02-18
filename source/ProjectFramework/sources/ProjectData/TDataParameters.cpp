@@ -583,10 +583,14 @@ std::string TDataParameters::getRFName() const
 	case TRefSystemFactory::ERefFrame::kROMA40:
 		return "ROMA40";
 #ifdef USE_SWISSTOPO
-	case TRefSystemFactory::ERefFrame::kSwissLV03:
-		return "LV03";
-	case TRefSystemFactory::ERefFrame::kSwissLV95:
-		return "LV95";
+	case TRefSystemFactory::ERefFrame::kSwissLV03_eh:
+		return "LV03_eh";
+	case TRefSystemFactory::ERefFrame::kSwissLV03_ortho:
+		return "LV03_ortho";
+	case TRefSystemFactory::ERefFrame::kSwissLV95_eh:
+		return "LV95_eh";
+	case TRefSystemFactory::ERefFrame::kSwissLV95_ortho:
+		return "LV95_ortho";
 #endif
 	case TRefSystemFactory::ERefFrame::kWGS84:
 		return "WGS84";

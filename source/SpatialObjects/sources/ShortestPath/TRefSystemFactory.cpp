@@ -254,14 +254,22 @@ void TRefSystemFactory::init()
 	fRefFrameList.push_back(pCH1903plus);
 #ifdef USE_SWISSTOPO
         // Swiss LV95
-    TAReferenceFrame* pLV95 = new TLV95Projection("LV95");
-    pLV95->setRefFrameId(kSwissLV95);
-    fRefFrameList.push_back(pLV95);
+    TAReferenceFrame* pLV95_eh = new TLV95Projection("LV95_eh");
+    pLV95_eh->setRefFrameId(kSwissLV95_eh);
+    fRefFrameList.push_back(pLV95_eh);
+
+	TAReferenceFrame *pLV95_ortho = new TLV95Projection("LV95_ortho");
+	pLV95_ortho->setRefFrameId(kSwissLV95_ortho);
+	fRefFrameList.push_back(pLV95_ortho);
 
         // Swiss LV03
-    TAReferenceFrame* pLV03 = new TLV03Projection("LV03");
-    pLV03->setRefFrameId(kSwissLV03);
-    fRefFrameList.push_back(pLV03);
+    TAReferenceFrame* pLV03_eh = new TLV03Projection("LV03_eh");
+    pLV03_eh->setRefFrameId(kSwissLV03_eh);
+    fRefFrameList.push_back(pLV03_eh);
+
+	TAReferenceFrame *pLV03_ortho = new TLV03Projection("LV03_ortho");
+	pLV03_ortho->setRefFrameId(kSwissLV03_ortho);
+	fRefFrameList.push_back(pLV03_ortho);
 #endif
 		// WGS84
 	TGeodeticRefFrame* pWGS = new TGeodeticRefFrame(wgs, pWGSEll);
@@ -999,27 +1007,51 @@ void TRefSystemFactory::init()
 #ifdef USE_SWISSTOPO
     {
         ////////////////////////////////////////////////////////////////
-		// Transformation between CH1903plus and LV95
+		// Transformation between CH1903plus and LV95 (ellipsoidal height)
         ////////////////////////////////////////////////////////////////
         TLV95Transformation * pTrans = new TLV95Transformation(true);
-        pTrans->setTransformId(kCH1903plus2SwissLV95);
+        pTrans->setTransformId(kCH1903plus2SwissLV95eh);
 		fTransformList.push_back(pTrans);
 		//Inverse
 		TARefFrameTransformation* pInverse = pTrans->inverse();
-        pInverse->setTransformId(kSwissLV952CH1903plus);
+        pInverse->setTransformId(kSwissLV95eh2CH1903plus);
         fTransformList.push_back(pInverse);
 	}
     {
         ////////////////////////////////////////////////////////////////
-		// Transformation between LV95 and LV03
+		// Transformation between LV95 and LV03 (ellipsoidal height)
         ////////////////////////////////////////////////////////////////
         TLV03Transformation * pTrans = new TLV03Transformation(true);
-        pTrans->setTransformId(kSwissLV952SwissLV03);
+        pTrans->setTransformId(kSwissLV95eh2SwissLV03eh);
 		fTransformList.push_back(pTrans);
 		//Inverse
 		TARefFrameTransformation* pInverse = pTrans->inverse();
-        pInverse->setTransformId(kSwissLV032SwissLV95);
+        pInverse->setTransformId(kSwissLV03eh2SwissLV95eh);
         fTransformList.push_back(pInverse);
+	}
+	{
+		////////////////////////////////////////////////////////////////
+		// Transformation between LV95 (ellipsoidal height) and LV95 (orthometric height)
+		////////////////////////////////////////////////////////////////
+		TLV03Transformation *pTrans = new TLV03Transformation(true);
+		pTrans->setTransformId(kSwissLV95ortho2SwissLV95eh);
+		fTransformList.push_back(pTrans);
+		// Inverse
+		TARefFrameTransformation *pInverse = pTrans->inverse();
+		pInverse->setTransformId(kSwissLV95eh2SwissLV95ortho);
+		fTransformList.push_back(pInverse);
+	}
+	{
+		////////////////////////////////////////////////////////////////
+		// Transformation between LV03 (ellipsoidal height) and LV03 (orthometric height)
+		////////////////////////////////////////////////////////////////
+		TLV03Transformation *pTrans = new TLV03Transformation(true);
+		pTrans->setTransformId(kSwissLV03ortho2SwissLV03eh);
+		fTransformList.push_back(pTrans);
+		// Inverse
+		TARefFrameTransformation *pInverse = pTrans->inverse();
+		pInverse->setTransformId(kSwissLV03eh2SwissLV03ortho);
+		fTransformList.push_back(pInverse);
 	}
 #endif
     

@@ -49,13 +49,13 @@ TLV95Transformation * TLV95Transformation::inverse() const
 TAReferenceFrame * TLV95Transformation::getSourceFrame() const
 {
     return TRefFrameInfo::getReferenceFrame(
-        fFromCH1903plus ? TRefSystemFactory::kCH1903plus : TRefSystemFactory::kSwissLV95);
+        fFromCH1903plus ? TRefSystemFactory::kCH1903plus : TRefSystemFactory::kSwissLV95_eh);
 }
 
 TAReferenceFrame * TLV95Transformation::getDestinationFrame() const
 {
     return TRefFrameInfo::getReferenceFrame(
-        fFromCH1903plus ? TRefSystemFactory::kSwissLV95 : TRefSystemFactory::kCH1903plus);
+        fFromCH1903plus ? TRefSystemFactory::kSwissLV95_eh : TRefSystemFactory::kCH1903plus);
 }
 
 bool TLV95Transformation::transform(TPositionVector & pv) const
