@@ -4,6 +4,7 @@
 
 #include <assert.h>
 #include <math.h>
+#include <ReframeSwisstopo.h>
 
 // Anonymous namespace for local constants
 namespace
@@ -31,8 +32,8 @@ namespace
     const int LV95_X_OFFSET = 1200000;
 }
 
-TLV95Transformation::TLV95Transformation(bool fromCH1903plus)
-: fFromCH1903plus(fromCH1903plus)
+TLV95Transformation::TLV95Transformation(bool fromCH1903plus, bool ellipsHeight)
+	: fFromCH1903plus(fromCH1903plus), fEllipsHeight(ellipsHeight)
 {
 }
 
@@ -43,19 +44,39 @@ TLV95Transformation * TLV95Transformation::clone() const
 
 TLV95Transformation * TLV95Transformation::inverse() const
 {
-    return new TLV95Transformation(!fFromCH1903plus);
+	return new TLV95Transformation(!fFromCH1903plus, fEllipsHeight);
 }
 
 TAReferenceFrame * TLV95Transformation::getSourceFrame() const
 {
-    return TRefFrameInfo::getReferenceFrame(
-        fFromCH1903plus ? TRefSystemFactory::kCH1903plus : TRefSystemFactory::kSwissLV95_eh);
+	if (fFromCH1903plus)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus);
+	}
+	else if (fEllipsHeight)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_eh);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ortho);
+	}
 }
 
 TAReferenceFrame * TLV95Transformation::getDestinationFrame() const
 {
-    return TRefFrameInfo::getReferenceFrame(
-        fFromCH1903plus ? TRefSystemFactory::kSwissLV95_eh : TRefSystemFactory::kCH1903plus);
+	if (!fFromCH1903plus)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus);
+	}
+	else if (fEllipsHeight)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_eh);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ortho);
+	}
 }
 
 bool TLV95Transformation::transform(TPositionVector & pv) const
@@ -79,7 +100,7 @@ bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
 
     const double phi = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue();
     const double lam = position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue();
-    const double h   = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
+    double h   = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
     
     // Auxiliary value:
     const double S = - alpha * log(tan(PI/4 - phi/2)) - (alpha*sqrt(E2))/2 * log((1+sqrt(E2)*sin(phi))/(1-sqrt(E2)*sin(phi)))+K;
@@ -108,6 +129,21 @@ bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
 	double E = Y;
 	double N = X;
 
+	TPositionVector tmp = TPositionVector(E, N, h, TCoordSysFactory::k2DPlusH);
+	TSpatialPosition outpos(getDestinationFrame());
+	if (!outpos.setCoordinates(tmp))
+	{
+		return false;
+	}
+	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ortho))
+	{
+
+		// We call the dll Reframe developped by Swisstopo to convert ellipsoidal height into altitude
+		ReframeWrapper reframeLibObj;
+
+		bool outsideChenyx06 = !reframeLibObj.ComputeReframe(E, N, h, ReframeWrapper::LV95, ReframeWrapper::LV95, ReframeWrapper::Ellipsoid, ReframeWrapper::LHN95);
+	}
+
     pv = TPositionVector(E, N, h, TCoordSysFactory::k2DPlusH);
 
     return true;
@@ -125,9 +161,16 @@ bool TLV95Transformation::transformToCH1903plus(TPositionVector & pv) const
 	if(!position.setCoordinates(pv))
         return false;
 
-    const double e = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
-    const double n = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
-    const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+    double e = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
+    double n = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
+    double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+
+	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ortho))
+	{
+		// We call  dll Reframe developped by Swisstopo to convert altitude into ellipsoidal height
+		ReframeWrapper reframeLibObj;
+		bool outsideChenyx06 = !reframeLibObj.ComputeReframe(e, n, h, ReframeWrapper::LV95, ReframeWrapper::LV95, ReframeWrapper::LHN95, ReframeWrapper::Ellipsoid);
+	}
 
 	// projection plane (x, y) to sphere (l_, b_)
     const double Y = e - LV95_Y_OFFSET;
