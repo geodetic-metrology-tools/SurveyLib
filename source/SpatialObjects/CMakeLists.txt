@@ -76,6 +76,7 @@ set(SpatialObject_SOURCES
 	sources/RefFrameTransformations/TARefFrameTransformation.cpp
 	sources/RefFrameTransformations/TGC2LGTransformation.cpp
 	sources/RefFrameTransformations/TGC2MLATransformation.cpp
+	sources/RefFrameTransformations/TGeodetic2Mercator.cpp
 	sources/RefFrameTransformations/THelmertRefFrameTransform.cpp
 	sources/RefFrameTransformations/TLA2LGTransformation.cpp
 	sources/RefFrameTransformations/TLambert93Transformation.cpp
@@ -177,6 +178,7 @@ set(SpatialObject_HEADERS
 	headers/ReferenceSurfaces/TReferenceFrameServer.h
 	headers/ReferenceSurfaces/TRGF93CC46Projection.h
 	headers/ReferenceSurfaces/TTerrestrialReferenceFrame.h
+	headers/ReferenceSurfaces/TTransverseMercatorProjection.h
 	headers/ReferenceSurfaces/TVGeoidModel.h
 	headers/ReferenceSurfaces/TVReferenceFrame.h
 	headers/ReferenceSurfaces/TX0Y0HeProjection.h
@@ -185,6 +187,7 @@ set(SpatialObject_HEADERS
 	headers/RefFrameTransformations/TARefFrameTransformation.h
 	headers/RefFrameTransformations/TGC2LGTransformation.h
 	headers/RefFrameTransformations/TGC2MLATransformation.h
+	headers/RefFrameTransformations/TGeodetic2Mercator.h
 	headers/RefFrameTransformations/THelmertRefFrameTransform.h
 	headers/RefFrameTransformations/TLA2LGTransformation.h
 	headers/RefFrameTransformations/TLambert93Transformation.h

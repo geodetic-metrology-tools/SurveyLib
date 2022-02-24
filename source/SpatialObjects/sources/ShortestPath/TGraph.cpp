@@ -74,6 +74,9 @@ void	TGraph::init()
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCCS2CGRF),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCGRF2CCS));
 
+	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCGRF2CGRFMercator),
+		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCGRFMercator2CGRF));
+
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kLAp02LGp0),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kLGp02LAp0));
 

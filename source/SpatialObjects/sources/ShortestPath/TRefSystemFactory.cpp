@@ -39,6 +39,7 @@
 #include <TLV03Projection.h>
 #include <TRGF93CC46Projection.h>
 #include <TLambert93Projection.h>
+#include <TTransverseMercatorProjection.h>
 
 
 #include <TMLA2GCTransformation.h>
@@ -49,6 +50,7 @@
 #include <TLG2LATransformation.h>
 #include <TLG2GCTransformation.h>
 #include <TGC2LGTransformation.h>
+#include <TGeodetic2Mercator.h>
 #include <THelmertTransformation.h>
 #include <THelmertRefFrameTransform.h>
 #include <TXYHe2MLATransformation.h>
@@ -171,6 +173,11 @@ void TRefSystemFactory::init()
 	pCGRFs->setRefFrameId(kCGRFSphere);
 	fRefFrameList.push_back(pCGRFs);
 	fCGRFSphere = pCGRFs;
+
+		// CGRF Transverse Mercator Projection
+	TAReferenceFrame *pCGRFtm_eh = new TTransverseMercatorProjection("CGRFtm_eh");
+	pCGRFtm_eh->setRefFrameId(kCGRFMercator_eh);
+	fRefFrameList.push_back(pCGRFtm_eh);
 
 		// ITRF97 at epoch 1998.5.Link between global and local frames
 	TReal epoch = 1998.5;
@@ -748,6 +755,17 @@ void TRefSystemFactory::init()
 		TARefFrameTransformation* pCGRF2CCS = pCCS2CGRF->inverse(); //utilise new
 		pCGRF2CCS->setTransformId(kCGRF2CCS);
 		fTransformList.push_back(pCGRF2CCS);
+	}
+
+	//Conversion between CGRF (ellipsoid) and CGRF (Transverse Mercator projection)
+	{
+		TGeodetic2Mercator *pCGRF2CGRFMercator = new TGeodetic2Mercator(true);
+		pCGRF2CGRFMercator->setTransformId(kCGRF2CGRFMercator);
+		fTransformList.push_back(pCGRF2CGRFMercator);
+		// Inverse
+		TARefFrameTransformation *pCGRFMercator2CGRF = pCGRF2CGRFMercator->inverse(); // utilise new
+		pCGRFMercator2CGRF->setTransformId(kCGRFMercator2CGRF);
+		fTransformList.push_back(pCGRFMercator2CGRF);
 	}
 
 	// Transformation between CCS and CGRFSphere

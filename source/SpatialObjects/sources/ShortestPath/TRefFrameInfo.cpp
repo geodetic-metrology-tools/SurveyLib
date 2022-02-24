@@ -71,6 +71,8 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("kCERNXYHsSphereSPS","CERN XYHs (SPS)", TCoordSysFactory::k2DPlusH)));
         tmp->insert(std::make_pair(TRefSystemFactory::kCGRFSphere,
             TDetails("kCGRFSphere","CERN GRF sphere", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kCGRFMercator_eh,
+            TDetails("kCGRFMercator_eh","CERN GRF Transverse Mercator Projection", TCoordSysFactory::k2DPlusH)));
 #ifdef USE_SWISSTOPO
         tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV95_eh,
             TDetails("kSwissLV95_eh","Swiss LV95 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
