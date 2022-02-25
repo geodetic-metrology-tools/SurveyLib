@@ -7,10 +7,16 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransf
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
 					${SURVEYLIB_ROOT}/source/Logs
-					)
+					# Eigen
+					${EIGEN_INCLUDE_PATH}
+
+)
 
 IF(USE_SWISSTOPO)
-	include_directories(C:/Windows/System32)
+	include_directories(C:/Windows/System32
+		${REFRAME_LIBRARY_DIR}
+	)
+	link_directories(${REFRAME_LIBRARY_DIR})
 ENDIF()
 
 # Create a variable containing all .cpp files:
@@ -271,6 +277,20 @@ find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
     target_link_libraries(SpatialObjects PRIVATE optimized OpenMP::OpenMP_CXX)
 endif()
+
+# link directories
+target_include_directories(SpatialObjects PUBLIC
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
+	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
+	${SURVEYLIB_ROOT}/source/Logs
+	# Eigen
+	${EIGEN_INCLUDE_PATH}
+)
 
 # needed for linux compilation
 set_target_properties(SpatialObjects PROPERTIES POSITION_INDEPENDENT_CODE ON)
