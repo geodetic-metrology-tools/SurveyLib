@@ -30,7 +30,7 @@ set(CREATE_DOC ON)
 set(DOXYGEN_CONF_PATH ".")
 set(ENABLE_CONSOLE ON)
 
-include("../../../SUSoftCMakeCommon/CMakeLists.txt")
+include("../../SUSoftCMakeCommon/CMakeLists.txt")
 
 # Set version number and provide a header file with corresponding defines
 set (SurveyLib_VERSION_MAJOR 4)

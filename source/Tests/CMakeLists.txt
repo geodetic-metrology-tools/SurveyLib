@@ -84,3 +84,5 @@ source_group("SurveyLibDLL" FILES ${SurveyLibDLLTests_SOURCES})
 source_group("ProjectFramework" FILES ${ProjectFrameworkTests_SOURCES})
 source_group("Plugins" FILES ${PluginsTests_SOURCES})
 source_group("Tools" FILES ${ToolsTests_SOURCES})
+
+copyReframeDLL(UnitTests)
