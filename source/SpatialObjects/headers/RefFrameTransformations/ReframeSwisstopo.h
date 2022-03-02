@@ -2,7 +2,7 @@
 #ifndef SURVEYLIB_TSWISS_TRANSFO
 #	define SURVEYLIB_TSWISS_TRANSFO
 
-#pragma comment(lib, "C:/susoft/ext/Reframe2016/ReframeLibWrapper.lib")
+#pragma comment(lib, "ReframeLibWrapper.lib")
 
 //#include "ReframeWrapper.h" 
 

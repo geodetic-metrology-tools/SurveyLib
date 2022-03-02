@@ -139,7 +139,7 @@ namespace tut
 
 		ensure_equals(TRefFrameInfo::getAllowedCoordSysCount(TRefSystemFactory::kCCS), 1);
         ensure_equals(TRefFrameInfo::getAllowedCoordSysCount(TRefSystemFactory::kITRF97), 2);
-		ensure_equals(TRefFrameInfo::getAllowedCoordSysCount(TRefSystemFactory::kSwissLV03), 1);
+		ensure_equals(TRefFrameInfo::getAllowedCoordSysCount(TRefSystemFactory::kSwissLV03_eh), 1);
 #endif
     }
 
