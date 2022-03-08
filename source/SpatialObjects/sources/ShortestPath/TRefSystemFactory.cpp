@@ -1052,7 +1052,7 @@ void TRefSystemFactory::init()
         ////////////////////////////////////////////////////////////////
 		// Transformation between LV95 and LV03 (ellipsoidal height)
         ////////////////////////////////////////////////////////////////
-        TLV03Transformation * pTrans = new TLV03Transformation(true);
+        TLV03Transformation * pTrans = new TLV03Transformation(true, true);
         pTrans->setTransformId(kSwissLV95eh2SwissLV03eh);
 		fTransformList.push_back(pTrans);
 		//Inverse
@@ -1063,26 +1063,14 @@ void TRefSystemFactory::init()
 
 	{
 		////////////////////////////////////////////////////////////////
-		// Transformation between LV95 (ellipsoidal height) and LV95 (orthometric height)
+		// Transformation between LV95 (ellipsoidal height) and LV03 (orthometric height)
 		////////////////////////////////////////////////////////////////
-		TLV03Transformation *pTrans = new TLV03Transformation(true);
-		pTrans->setTransformId(kSwissLV95ortho2SwissLV95eh);
+		TLV03Transformation *pTrans = new TLV03Transformation(true, false);
+		pTrans->setTransformId(kSwissLV95eh2SwissLV03ortho);
 		fTransformList.push_back(pTrans);
 		// Inverse
 		TARefFrameTransformation *pInverse = pTrans->inverse();
-		pInverse->setTransformId(kSwissLV95eh2SwissLV95ortho);
-		fTransformList.push_back(pInverse);
-	}
-	{
-		////////////////////////////////////////////////////////////////
-		// Transformation between LV03 (ellipsoidal height) and LV03 (orthometric height)
-		////////////////////////////////////////////////////////////////
-		TLV03Transformation *pTrans = new TLV03Transformation(true);
-		pTrans->setTransformId(kSwissLV03ortho2SwissLV03eh);
-		fTransformList.push_back(pTrans);
-		// Inverse
-		TARefFrameTransformation *pInverse = pTrans->inverse();
-		pInverse->setTransformId(kSwissLV03eh2SwissLV03ortho);
+		pInverse->setTransformId(kSwissLV03ortho2SwissLV95eh);
 		fTransformList.push_back(pInverse);
 	}
 #endif

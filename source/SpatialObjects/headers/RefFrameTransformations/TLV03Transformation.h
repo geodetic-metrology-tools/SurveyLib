@@ -5,10 +5,11 @@
 #include  <TARefFrameTransformation.h>
 #include  <TSpatialPosition.h>
 
+
 class TLV03Transformation : public TARefFrameTransformation
 {
 public:
-    explicit TLV03Transformation(bool fFromLV95);
+	explicit TLV03Transformation(bool fFromLV95, bool ellipsHeight);
 
 	TLV03Transformation * clone() const;
 	TLV03Transformation * inverse() const;
@@ -20,9 +21,9 @@ public:
 
 private:
 	TLV03Transformation & operator=(const TLV03Transformation &);  // non copyable
-    bool computeSwissRefFrame(double & coordinate_x, double & coordinate_y, double & coordinate_z, int reframe_in, int reframe_out) const;
 
     const bool fFromLV95;
+	const bool fEllipsHeight;
 
 };
 
