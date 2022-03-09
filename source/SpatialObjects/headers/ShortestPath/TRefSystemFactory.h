@@ -98,7 +98,7 @@ public:
             kSwissLV95_eh        = 109,
             kSwissLV03_eh        = 110,
 			kSwissLV95_ortho	 = 111,
-			kSwissLV03_ortho	 = 112,
+			kSwissLV03_ln02	 = 112,
 #endif
 			//Franch system
 			kFrenchRGF93_CC46_eh = 205,
@@ -147,7 +147,7 @@ public:
 			kETRF932CH1903plus, kCH1903plus2ETRF93,
 #ifdef USE_SWISSTOPO
 			kCH1903plus2SwissLV95eh, kSwissLV95eh2CH1903plus, kCH1903plus2SwissLV95ortho, kSwissLV95ortho2CH1903plus, 
-			kSwissLV95eh2SwissLV03eh, kSwissLV03eh2SwissLV95eh,kSwissLV95eh2SwissLV03ortho, kSwissLV03ortho2SwissLV95eh,
+			kSwissLV95eh2SwissLV03eh, kSwissLV03eh2SwissLV95eh,kSwissLV95eh2SwissLV03ln02, kSwissLV03ln022SwissLV95eh,
 #endif
 			kCC46eh2RGF93, kRGF932CC46eh, kCC46raf2RGF93, kRGF932CC46raf, 
 			kRGF932Lambert93eh, kLambert93eh2RGF93, kRGF932Lambert93raf, kLambert93raf2RGF93,

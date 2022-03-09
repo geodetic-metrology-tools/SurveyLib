@@ -274,9 +274,9 @@ void TRefSystemFactory::init()
     pLV03_eh->setRefFrameId(kSwissLV03_eh);
     fRefFrameList.push_back(pLV03_eh);
 
-	TAReferenceFrame *pLV03_ortho = new TLV03Projection("LV03_ortho");
-	pLV03_ortho->setRefFrameId(kSwissLV03_ortho);
-	fRefFrameList.push_back(pLV03_ortho);
+	TAReferenceFrame *pLV03_ln02 = new TLV03Projection("LV03_ln02");
+	pLV03_ln02->setRefFrameId(kSwissLV03_ln02);
+	fRefFrameList.push_back(pLV03_ln02);
 #endif
 		// WGS84
 	TGeodeticRefFrame* pWGS = new TGeodeticRefFrame(wgs, pWGSEll);
@@ -1063,14 +1063,14 @@ void TRefSystemFactory::init()
 
 	{
 		////////////////////////////////////////////////////////////////
-		// Transformation between LV95 (ellipsoidal height) and LV03 (orthometric height)
+		// Transformation between LV95 (ellipsoidal height) and LV03 (leveled height)
 		////////////////////////////////////////////////////////////////
 		TLV03Transformation *pTrans = new TLV03Transformation(true, false);
-		pTrans->setTransformId(kSwissLV95eh2SwissLV03ortho);
+		pTrans->setTransformId(kSwissLV95eh2SwissLV03ln02);
 		fTransformList.push_back(pTrans);
 		// Inverse
 		TARefFrameTransformation *pInverse = pTrans->inverse();
-		pInverse->setTransformId(kSwissLV03ortho2SwissLV95eh);
+		pInverse->setTransformId(kSwissLV03ln022SwissLV95eh);
 		fTransformList.push_back(pInverse);
 	}
 #endif

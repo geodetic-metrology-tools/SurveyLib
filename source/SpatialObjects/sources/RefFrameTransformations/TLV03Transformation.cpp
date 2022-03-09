@@ -32,7 +32,7 @@ TAReferenceFrame * TLV03Transformation::getSourceFrame() const
 	}
 	else
 	{
-		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03_ortho);
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03_ln02);
 	}
 }
 
@@ -48,7 +48,7 @@ TAReferenceFrame * TLV03Transformation::getDestinationFrame() const
 	}
 	else
 	{
-		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03_ortho);
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03_ln02);
 	}
 }
 
@@ -75,7 +75,7 @@ bool TLV03Transformation::transform(TPositionVector & pv) const
 		}
 		else
 		{
-			outsideChenyx06 = !reframeLibObj.ComputeReframe(x, y, h, ReframeWrapper::LV95, ReframeWrapper::LV03_Military, ReframeWrapper::Ellipsoid, ReframeWrapper::LHN95);
+			outsideChenyx06 = !reframeLibObj.ComputeReframe(x, y, h, ReframeWrapper::LV95, ReframeWrapper::LV03_Military, ReframeWrapper::Ellipsoid, ReframeWrapper::LN02);
 			result = true;
 		}
 	}
@@ -88,7 +88,7 @@ bool TLV03Transformation::transform(TPositionVector & pv) const
 		}
 		else
 		{
-			outsideChenyx06 = !reframeLibObj.ComputeReframe(x, y, h, ReframeWrapper::LV03_Military, ReframeWrapper::LV95, ReframeWrapper::LHN95, ReframeWrapper::Ellipsoid);
+			outsideChenyx06 = !reframeLibObj.ComputeReframe(x, y, h, ReframeWrapper::LV03_Military, ReframeWrapper::LV95, ReframeWrapper::LN02, ReframeWrapper::Ellipsoid);
 			result = true;
 		}
 	}

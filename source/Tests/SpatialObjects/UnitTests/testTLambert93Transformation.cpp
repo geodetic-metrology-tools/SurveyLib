@@ -40,7 +40,7 @@ namespace tut
 		//Comparison with coordinates computed using IGN Circé software
         ensure_equals("Lambert 93 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1082722.205), static_cast<TReal>(0.001));
 		ensure_equals("Lambert 93 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(7001994.409), static_cast<TReal>(0.001));
-		ensure_equals("Lambert 93 H (ellipsoidal height)", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(),static_cast<TReal>(400.157 /*- 1.2233*/), static_cast<TReal>(0.001));
+		ensure_equals("Lambert 93 H (ellipsoidal height)", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(),static_cast<TReal>(400.157 ), static_cast<TReal>(0.001));
 	}
 
     template<>
