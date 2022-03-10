@@ -53,6 +53,7 @@ set(SpatialObject_SOURCES
 	sources/MathematicalConcepts/TRotationMatrix.cpp
 	sources/MathematicalConcepts/TScalar.cpp
 	sources/MathematicalConcepts/TSparseMatrix.cpp
+	sources/ReferenceSurfaces/FrenchRAF20.cpp
 	sources/ReferenceSurfaces/T3DLocalRefFrame.cpp
 	sources/ReferenceSurfaces/TA2DPlus1MapProjection.cpp
 	sources/ReferenceSurfaces/TA3DEuclideanRefFrame.cpp
@@ -154,6 +155,7 @@ set(SpatialObject_HEADERS
 	headers/MathematicalConcepts/TScalar.h
 	headers/MathematicalConcepts/TSparseMatrix.h
 	headers/MathematicalConcepts/TVCoordinateSystem.h
+	headers/ReferenceSurfaces/FrenchRAF20.h
 	headers/ReferenceSurfaces/T3DLocalRefFrame.h
 	headers/ReferenceSurfaces/TA2DPlus1MapProjection.h
 	headers/ReferenceSurfaces/TA3DEuclideanRefFrame.h

@@ -2,7 +2,7 @@
 
 #include <TRefFrameInfo.h>
 #include <TNotInGeoidGridException.h>
-#include <CirceIGN.h>
+#include <FrenchRAF20.h>
 
 #include <assert.h>
 #define  _USE_MATH_DEFINES
@@ -124,12 +124,6 @@ bool TRGF93ZoneTransformation::transformToRGF93(TPositionVector & pv) const
     const double Y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
     double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
 
-	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
-	{
-		// We call Circé developped by the french IGN to convert altitude into ellipsoidal height
-		circeIGN::circeTransfoRafToH(false, X, Y, h);
-	}
-
     double R = sqrt((X-Xs)*(X-Xs)+ (Y-Ys)*(Y-Ys));
     double gama = atan((X-Xs)/(Ys-Y)); 
 
@@ -149,6 +143,12 @@ bool TRGF93ZoneTransformation::transformToRGF93(TPositionVector & pv) const
         if(delta<1e-10)
         break;
     }
+
+	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
+	{
+		// We convert altitude into ellipsoidal height
+		FrenchRAF20::circeTransfoRafToH(phi, lambda, h);
+	}
 
 	//pv = TPositionVector(phi, lambda, h, TCoordSysFactory::kGeodetic);
 	// We can't leave it in the Geodetic form. Other code expects to get Cartesian
@@ -190,8 +190,8 @@ bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
 	}
 	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
 	{
-		// We call Circé developped by the french IGN to convert ellipsoidal height into altitude
-		circeIGN::circeTransfoHToRaf(false, X, Y, h);
+		// We convert ellipsoidal height into altitude
+		FrenchRAF20::circeTransfoHToRaf(phi, lambda, h);
 	}
 
     pv = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);

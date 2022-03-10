@@ -2,7 +2,7 @@
 
 #include <TRefFrameInfo.h>
 #include <TNotInGeoidGridException.h>
-#include <CirceIGN.h>
+#include <FrenchRAF20.h>
 
 
 #include <assert.h>
@@ -140,12 +140,6 @@ bool TLambert93Transformation::transformToRGF93(TPositionVector & pv) const
     const double Y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
     double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
 
-	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf))
-	{
-		// We call Circé developped by the french IGN to convert altitude into ellipsoidal height
-		circeIGN::circeTransfoRafToH(true, X, Y, h);
-	}
-
 	double R = sqrt((X - XS)*(X - XS)+ (Y - YS)*(Y - YS));
     double gamma = atan((X - XS)/(YS - Y));
 
@@ -166,6 +160,12 @@ bool TLambert93Transformation::transformToRGF93(TPositionVector & pv) const
 		if(delta<1e-11)
 			break;
 
+	}
+
+	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf))
+	{
+		// We convert altitude into ellipsoidal height
+		FrenchRAF20::circeTransfoRafToH(phi, lambda, h);
 	}
 
     TPositionVector tmp = TPositionVector(phi, lambda, h, TCoordSysFactory::kGeodetic);
@@ -202,8 +202,8 @@ bool TLambert93Transformation::transformFromRGF93(TPositionVector & pv) const
 	}
 	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf))
 	{
-		// We call Circé developped by the french IGN to convert ellipsoidal height into altitude
-		circeIGN::circeTransfoHToRaf(true, X, Y, h);
+		// We convert ellipsoidal height into altitude
+		FrenchRAF20::circeTransfoHToRaf(phi, lambda, h);
 	}
 
 
