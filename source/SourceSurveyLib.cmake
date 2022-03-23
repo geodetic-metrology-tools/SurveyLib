@@ -14,31 +14,6 @@ ENDIF()
 
 IF(USE_SWISSTOPO)
 	MESSAGE(STATUS "[STATUS] Swisstopo transformations enabled.")
-	IF(NOT EXISTS "${REFRAME_LIBRARY_DIR}/swisstopoReframeLib.tlb")
-		# Try a different name
-		IF(NOT EXISTS "${REFRAME_LIBRARY_DIR}/swisstopoReframeLib.tlb")
-			MESSAGE(FATAL_ERROR "[ERROR] Cannot find swisstopoReframeLib.tlb in ${REFRAME_LIBRARY_DIR}")
-		ELSE()
-			MESSAGE(STATUS "[STATUS] Found swisstopoReframeLib.tlb in ${REFRAME_LIBRARY_DIR}")
-			LINK_DIRECTORIES(${REFRAME_LIBRARY_DIR})
-			INCLUDE_DIRECTORIES(${REFRAME_LIBRARY_DIR})
-		ENDIF()
-	ELSE()
-		MESSAGE(STATUS "[STATUS] Found swisstopoReframeLib.tlb in ${REFRAME_LIBRARY_DIR}")
-		LINK_DIRECTORIES(${REFRAME_LIBRARY_DIR})
-		INCLUDE_DIRECTORIES(${REFRAME_LIBRARY_DIR})
-	ENDIF()
-	IF(NOT EXISTS "${REFRAME_LIBRARY_DIR}/swisstopoReframeLib.dll")
-		# Try a different name
-		IF(NOT EXISTS "${REFRAME_LIBRARY_DIR}/swisstopoReframeLib.dll")
-			MESSAGE(FATAL_ERROR "[ERROR] Cannot find swisstopoReframeLib.tlb in ${REFRAME_LIBRARY_DIR}")
-		ELSE()
-			MESSAGE(STATUS "[STATUS] Found swisstopoReframeLib.tlb in ${REFRAME_LIBRARY_DIR}")
-		ENDIF()
-	ELSE()
-		MESSAGE(STATUS "[STATUS] Found swisstopoReframeLib.dll in ${REFRAME_LIBRARY_DIR}")
-	ENDIF()
-	
 	IF(NOT EXISTS "${REFRAME2016_LIBRARY_DIR}/ReframeLibWrapper.dll")
 		MESSAGE(FATAL_ERROR "[ERROR] Cannot find ReframeLibWrapper.dll in ${REFRAME2016_LIBRARY_DIR}")
 	ELSEIF(NOT EXISTS "${REFRAME2016_LIBRARY_DIR}/ReframeLibWrapper.lib")
@@ -59,7 +34,7 @@ ELSE(USE_SWISSTOPO)
 ENDIF(USE_SWISSTOPO)
 
 INCLUDE_DIRECTORIES(${EIGEN_INCLUDE_PATH} ${SURVEYLIB_INCLUDE_PATH})
-	
+
 IF(CMAKE_PROJECT_NAME STREQUAL "SurveyLib")
 	# Includes for all subprojects
 	# In-tree build

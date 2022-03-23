@@ -3,6 +3,8 @@
 
 #include <Quad.h>
 
+
+
 	/**
 	 *
 	 * Management of French RAF 20 altimetric conversion grid
@@ -24,10 +26,7 @@ void circeTransfoRafToH(const double &latitude_rgf93_rad, const double &longitud
 /// Convert GRS80 ellipsoidal height into RGF-IGN69 altitude using RAF20 altimetric conversion grid
 void circeTransfoHToRaf(const double &latitude_rgf93_rad, const double &longitude_rgf93_rad, double &h);
 
-
-std::ifstream& GotoLine(std::ifstream &file, unsigned int num);
-
-
+//std::ifstream& GotoLine(std::ifstream &file, unsigned int num);
 }
 
 

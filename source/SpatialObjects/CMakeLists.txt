@@ -95,7 +95,6 @@ set(SpatialObject_SOURCES
 	sources/RefFrameTransformations/TXYHg2XYHeTransformation.cpp
 	sources/RefFrameTransformations/TXYHs2MLATransformation.cpp
 	sources/RefFrameTransformations/TXYH2CCS.cpp
-	sources/RefFrameTransformations/CirceIGN.cpp
 	sources/ShortestPath/TGraph.cpp
 	sources/ShortestPath/TLocalSystemOrigin.cpp
 	sources/ShortestPath/TRefFrameInfo.cpp
@@ -211,7 +210,6 @@ set(SpatialObject_HEADERS
 	headers/RefFrameTransformations/TXYHs2MLATransformation.h
 	headers/RefFrameTransformations/TXYH2CCS.h
 	headers/RefFrameTransformations/GeodeticConstants.h
-	headers/RefFrameTransformations/CirceIGN.h
 	headers/ShortestPath/DynamicPriorityQueue.h
 	headers/ShortestPath/PtrGreater.h
 	headers/ShortestPath/TGraph.h

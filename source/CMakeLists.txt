@@ -6,10 +6,8 @@
 #
 # - `BOOST_ROOT`: The path to Boost folder
 # - `EIGEN_INCLUDE_PATH`: The path to Eigen folder
-# - `REFRAME_LIBRARY_DIR`: The path to Reframe folder
 # - `REFRAME2016_LIBRARY_DIR`: The path to Reframe 2016 folder 
 # - `TUT_INCLUDE_PATH`: The path to Tut folder
-# - `CIRCE_EXEC_DIR`: The path to Circe executable folder
 # - `VCREDIST_INSTALLER_PATH`: The path to the folder holding the VCRedist installer
 
 cmake_minimum_required(VERSION 3.6)
