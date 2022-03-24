@@ -30,7 +30,7 @@ namespace tut
 #ifdef _WIN32
 		size_t nbtrans = 51;
 #else
-		size_t nbtrans = 49;
+		size_t nbtrans = 47;
 #endif
 		TRefFrameInfo::RefFrameSet set = TRefFrameInfo::getRefFrameSet();
 		ensure_equals(set.count(TRefSystemFactory::kITRF97),1);
