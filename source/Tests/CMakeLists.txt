@@ -85,4 +85,6 @@ source_group("ProjectFramework" FILES ${ProjectFrameworkTests_SOURCES})
 source_group("Plugins" FILES ${PluginsTests_SOURCES})
 source_group("Tools" FILES ${ToolsTests_SOURCES})
 
-copyReframeDLL(UnitTests)
+if(USE_SWISSTOPO)
+	copyReframeDLL(UnitTests)
+endif()
