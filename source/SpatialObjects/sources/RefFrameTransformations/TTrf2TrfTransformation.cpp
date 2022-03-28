@@ -321,7 +321,6 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 			// Transfo to ETRFyy @ output epoch
 			TReal deltaEpoch = fTo->getEpoch() - fFrom->getEpoch();
 			pv = applyPlateVelocity(pv, velETRF_yy, deltaEpoch);
-		}
 
 			// Reset starting solution
 			fFrom->setSolution(fFrom->getSolution().replace(0, 4, "ETRF"));

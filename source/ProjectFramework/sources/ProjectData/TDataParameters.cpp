@@ -510,6 +510,8 @@ std::string TDataParameters::getRFName() const
 		return "CGRF";
 	case TRefSystemFactory::ERefFrame::kCGRFSphere:
 		return "CGRFSphere";
+	case TRefSystemFactory::ERefFrame::kCGRFMercator_eh:
+		return "CGRFMercator_eh";
 	case TRefSystemFactory::ERefFrame::kCernX0Y0He:
 		return "CERN_X0Y0He";
 	case TRefSystemFactory::ERefFrame::kCernXYHe:
