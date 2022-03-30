@@ -1,6 +1,6 @@
 // TVReferenceFrame.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*!	 
@@ -37,6 +37,7 @@ class TSpatialStatus;
 class TGeodeticRefFrame;
 class TModifiedLocalGeodeticRF;
 class TModifiedLocalAstronomicalRF;
+class TTerrestrialReferenceFrame;
 
 #include  <TAngle.h>
 #include  "TLength.h"
@@ -100,6 +101,7 @@ public:
 
 			//! Default method for setting a rotation matrix in a spatial orientation
 			virtual bool setElements(TSpatialOrientation* so, const TRotationMatrix& rm) = 0;
+
 		//@}
 
 		/*@name Transformation of reference frames methods*/

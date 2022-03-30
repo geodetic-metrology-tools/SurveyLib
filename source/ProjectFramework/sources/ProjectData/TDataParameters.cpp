@@ -45,6 +45,8 @@ TDataParameters::TDataParameters()
 	fAnglePrecision = TObservationFormat::k10Microgons;
 	fLengthPrecision = TObservationFormat::k10Micrometres;
 	fCoordPrecision = TPointFormat::kMillimetre;
+	fCoordEpoch = -9999.9;
+	fSolution = "noSolution";
 	fPointNameWidth=7;
 }
 
@@ -60,6 +62,8 @@ TDataParameters::TDataParameters(const TDataParameters& original )
 , fAnglePrecision(original.fAnglePrecision)
 , fLengthPrecision(original.fLengthPrecision)
 , fCoordPrecision(original.fCoordPrecision)
+, fCoordEpoch(original.fCoordEpoch)
+, fSolution(original.fSolution)
 , fPointNameWidth(original.fPointNameWidth)
 {
 }
@@ -93,21 +97,23 @@ void TDataParameters::swap(TDataParameters & other) noexcept
     std::swap(fAnglePrecision,other.fAnglePrecision);
     std::swap(fLengthPrecision,other.fLengthPrecision);
     std::swap(fCoordPrecision,other.fCoordPrecision);
+	std::swap(fCoordEpoch, other.fCoordEpoch);
+	std::swap(fSolution, other.fSolution);
     std::swap(fPointNameWidth,other.fPointNameWidth);
 }
 
 bool  TDataParameters::operator==(const TDataParameters& rhs )
 {//Equivalence operator
-	return	fRefFrameEnum == rhs.getRefFrameEnumerator() && 
+	return	fRefFrameEnum == rhs.getRefFrameEnumerator() &&
 		fCoordUnit == rhs.fCoordUnit &&
-        fLSO == rhs.fLSO &&
+		fLSO == rhs.fLSO &&
 		fCoordSys == rhs.getCoordinateSystem() &&
-		fAngleUnits == rhs.getAngleUnits() && 
-		fLengthUnits == rhs.getLengthUnits() && 
-		fAnglePrecision == rhs.getAnglePrecision() && 
-		fLengthPrecision == rhs.getLengthPrecision() && 
+		fAngleUnits == rhs.getAngleUnits() &&
+		fLengthUnits == rhs.getLengthUnits() &&
+		fAnglePrecision == rhs.getAnglePrecision() &&
+		fLengthPrecision == rhs.getLengthPrecision() &&
 		fCoordPrecision == rhs.getCoordPrecision() &&
-		fPointNameWidth==rhs.fPointNameWidth;
+		fPointNameWidth == rhs.fPointNameWidth;
 }
 
 
@@ -131,6 +137,10 @@ bool	TDataParameters::isOriginExpected() const
 	return TRefFrameInfo::isLocalRefFrame(fRefFrameEnum);
 }
 
+bool	TDataParameters::trfInfoExpected() const
+{
+	return TRefFrameInfo::isTerrestrialRefFrame(fRefFrameEnum);
+}
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -167,11 +177,13 @@ bool  TDataParameters::setRefFrame(TRefSystemFactory::ERefFrame rf)
 			fLSO = nullptr;
 			fOriginFile = "";
 		}
-		
+				
 		//set unit to [m] for non geodetic reference frame
 		if(	fRefFrameEnum != TRefSystemFactory::kCGRF && fRefFrameEnum != TRefSystemFactory::kWGS84 && 
 			fRefFrameEnum != TRefSystemFactory::kROMA40 && fRefFrameEnum != TRefSystemFactory::kITRF97 &&
-			fRefFrameEnum != TRefSystemFactory::kETRF93
+			fRefFrameEnum != TRefSystemFactory::kETRF93 &&
+			fRefFrameEnum != TRefSystemFactory::kITRFin && fRefFrameEnum != TRefSystemFactory::kITRFout &&
+			fRefFrameEnum != TRefSystemFactory::kETRFin && fRefFrameEnum != TRefSystemFactory::kETRFout
 			&& fRefFrameEnum != TRefSystemFactory::kCGRFSphere
 			&& fRefFrameEnum != TRefSystemFactory::kCH1903plus
 			&& fRefFrameEnum != TRefSystemFactory::kCHTRF95
@@ -215,7 +227,9 @@ bool  TDataParameters::setUnits( const TDataParameters::ECoordUnit& units )
 
 	if(	fRefFrameEnum == TRefSystemFactory::kCGRF || fRefFrameEnum == TRefSystemFactory::kWGS84 || 
 		fRefFrameEnum == TRefSystemFactory::kROMA40 || fRefFrameEnum == TRefSystemFactory::kITRF97 ||
-		fRefFrameEnum == TRefSystemFactory::kETRF93 || fRefFrameEnum == TRefSystemFactory::kCH1903plus)
+		fRefFrameEnum == TRefSystemFactory::kETRF93 || fRefFrameEnum == TRefSystemFactory::kCH1903plus ||
+		fRefFrameEnum == TRefSystemFactory::kITRFin || fRefFrameEnum == TRefSystemFactory::kITRFout ||
+		fRefFrameEnum == TRefSystemFactory::kETRFin || fRefFrameEnum == TRefSystemFactory::kETRFout )
 	{
 		if ( units == kDMS )
 		{
@@ -366,7 +380,6 @@ void  TDataParameters::setPointNameWidth(const int width )
 	return; 
 }
 
-
 bool TDataParameters::setLocalSystemOrigin(const TLocalSystemOrigin & LSO)
 {
     if(TRefFrameInfo::isLocalRefFrame(fRefFrameEnum)
@@ -394,13 +407,21 @@ void TDataParameters::setOriginFile(const std::string &f)
 	fOriginFile = f;
 }
 
+void TDataParameters::setCoordEpoch(const TReal epoch) {
+	fCoordEpoch = epoch;
+}
+
+void TDataParameters::setSolution(const std::string solution) {
+	fSolution = solution;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 //get Functions
 //////////////////////////////////////////////////////////////////////
 TAReferenceFrame*  TDataParameters::getRefFrame() const
 {//! get the reference system identifier
-    return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fLSO);;
+    return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fLSO, fCoordEpoch, fSolution);
 }
 
 
@@ -448,7 +469,7 @@ TPointFormat::ECoordPrecision  TDataParameters::getCoordPrecision() const
 
 
 int  TDataParameters::getPointNameWidth() const
-{//! get the coord precision 
+{//! get the point name width 
 	return fPointNameWidth;
 }
 
@@ -462,6 +483,16 @@ TLocalSystemOrigin* TDataParameters::getLocalSystemOrigin() const
 const std::string& TDataParameters::getOriginFile() const
 {
 	return fOriginFile;
+}
+
+TReal TDataParameters::getCoordEpoch() const
+{
+	return fCoordEpoch;
+}
+
+std::string TDataParameters::getSolution() const
+{
+	return fSolution;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -555,6 +586,14 @@ std::string TDataParameters::getRFName() const
 #endif
 	case TRefSystemFactory::ERefFrame::kWGS84:
 		return "WGS84";
+	case TRefSystemFactory::ERefFrame::kITRFin:
+		return "ITRF_Input";
+	case TRefSystemFactory::ERefFrame::kITRFout:
+		return "ITRF_Output";
+	case TRefSystemFactory::ERefFrame::kETRFin:
+		return "ETRF_input";
+	case TRefSystemFactory::ERefFrame::kETRFout:
+		return "ETRF_output";
 	default: return "";
 	}
 }

@@ -36,6 +36,7 @@ class TAGeoidModel;
 class TReferenceEllipsoid;
 class TAReferenceFrame;
 class TGeodeticRefFrame;
+class TTerrestrialReferenceFrame;
 class TModifiedLocalAstronomicalRF;
 
 class TARefFrameTransformation;
@@ -78,6 +79,10 @@ public:
 			kCCS_new             = 10,
 			kLAp0_new            = 11,
 			kLGp0_new            = 12,
+			kITRFin              = 13,
+			kITRFout			 = 14,
+			kETRFin              = 15,
+			kETRFout			 = 16,
 			// Projections:
 			kCernXYHe            = 100, 
 			kCernX0Y0He          = 101, 
@@ -122,30 +127,37 @@ public:
       };
 
 		/*! Enumerator for transformations between Ref.Frames implemented in the factory */
-		enum  ERefFrameTransform {	kCCS2CGRF, kLAp02LGp0, kLGp02CGRF, kLAp02CCS,
-									kROMA2WGS, kWGS2CGRF, kXYHe2CCS, kX0Y0He2XYHe,
-									kXYHg2XYHe, kXYHg2XYHe00Topo, kXYHg2XYHe00Machine, 
-									kXYHg2XYHe85, kXYHg2XYHe85Machine, kXYHsSphereSPS2CCS,
-									kCCS2CGRFSphere, 
-									kCGRF2CCS, kLGp02LAp0, kCGRF2LGp0, kCCS2LAp0,
-									kWGS2ROMA, kCGRF2WGS, kCCS2XYHe, kXYHe2X0Y0He,
-									kXYHe2XYHg, kXYHe00Topo2XYHg, kXYHe00Machine2XYHg, 
-									kXYHe852XYHg, kXYHe85Machine2XYHg, kCCS2XYHsSphereSPS,
-									kCGRFSphere2CCS, kITRF972CGRF, kCGRF2ITRF97, 
-									kITRF972ETRF93, kETRF932ITRF97,
-                                    kETRF932CH1903plus, kCH1903plus2ETRF93,
+		enum  ERefFrameTransform {
+			kCCS2CGRF, kLAp02LGp0, kLGp02CGRF, kLAp02CCS,
+			kROMA2WGS, kWGS2CGRF, kXYHe2CCS, kX0Y0He2XYHe,
+			kXYHg2XYHe, kXYHg2XYHe00Topo, kXYHg2XYHe00Machine,
+			kXYHg2XYHe85, kXYHg2XYHe85Machine, kXYHsSphereSPS2CCS,
+			kCCS2CGRFSphere,
+			kCGRF2CCS, kLGp02LAp0, kCGRF2LGp0, kCCS2LAp0,
+			kWGS2ROMA, kCGRF2WGS, kCCS2XYHe, kXYHe2X0Y0He,
+			kXYHe2XYHg, kXYHe00Topo2XYHg, kXYHe00Machine2XYHg,
+			kXYHe852XYHg, kXYHe85Machine2XYHg, kCCS2XYHsSphereSPS,
+			kCGRFSphere2CCS, kITRF972CGRF, kCGRF2ITRF97,
+			kETRF932CH1903plus, kCH1903plus2ETRF93,
 #ifdef USE_SWISSTOPO
-                                    kCH1903plus2SwissLV95, kSwissLV952CH1903plus,
-                                    kSwissLV952SwissLV03, kSwissLV032SwissLV95,
+			kCH1903plus2SwissLV95, kSwissLV952CH1903plus,
+			kSwissLV952SwissLV03, kSwissLV032SwissLV95,
 #endif
-                                    kETRF932FrenchRGF93, kFrenchRGF932ETRF93,
-									kETRF932kLambert93, kLambert932ETRF93,
-									kETRF932kCHTRF95, kCHTRF952kETRF93,
-									kETRF932kRGF93, kRGF932kETRF93,
+			kETRF932FrenchRGF93, kFrenchRGF932ETRF93,
+			kRGF932Lambert93, kLambert932RGF93,
+			
+			//new
+			kCCS2CGRF2, kWGS2CGRF2, kITRF972CGRF2,
+			kCGRF22CCS, kCGRF22WGS, kCGRF22ITRF97,
 
-									//new
-									kCCS2CGRF2, kWGS2CGRF2, kITRF972CGRF2,
-									kCGRF22CCS, kCGRF22WGS, kCGRF22ITRF97
+			//Transformation between ITRF and ETRF
+			kITRFin2ETRFout, kITRFin2ITRFout, kETRFin2ETRFout, kETRFin2ITRFout,
+			kITRF972ETRF93, kETRF932ITRF97,
+			kITRF972ETRFout, kETRFin2ITRF97,
+			kITRFin2ITRF97, kITRF972ITRFout,
+			kITRF972RGF93, kRGF932ITRF97,
+			kITRF972CHTRF95, kCHTRF952ITRF97
+
 		};
 	//@}
 	
@@ -186,6 +198,12 @@ public:
 		\param reference frame id
 		\return an error message (cerr) if the id is not cooresponding to a TGeodeticRefFrame*/
 		TGeodeticRefFrame*	getGeoRefFrame(const ERefFrame refFrameId);
+
+		//return a point to a Terrestrial Reference Frame
+		TTerrestrialReferenceFrame* getTerrRefFrame (const ERefFrame refFrameId);
+
+		// Update terrestrial reference frame with current epoch and solution
+		void updateTerrestrialRefFrame(TReal epoch, std::string solution, ERefFrame frame);
 
 		//return a pointer to a new Local ref Frame and put it in a list in order to be deleted
 		TAReferenceFrame* getNewLocalRefFrame();
@@ -233,6 +251,11 @@ private:
 	TGeodeticRefFrame *fCGRF = nullptr;
 	TGeodeticRefFrame *fCGRFSphere = nullptr;
 	TGeodeticRefFrame *fCGRF2 = nullptr;
+
+	TTerrestrialReferenceFrame* fITRFin = nullptr;
+	TTerrestrialReferenceFrame* fITRFout = nullptr;
+	TTerrestrialReferenceFrame* fETRFin = nullptr;
+	TTerrestrialReferenceFrame* fETRFout = nullptr;
 };
 /*@}*/
 

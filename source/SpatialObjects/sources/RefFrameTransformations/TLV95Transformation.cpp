@@ -67,6 +67,11 @@ bool TLV95Transformation::transform(TPositionVector & pv) const
 
 bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
 {
+	/* Reference:
+	Formules et constantes pour le calcul de la projection cylindrique à axe oblique et pour la transformation entre des systèmes de référence
+	Swisstopo, 2016
+	*/
+
    //transform phi lambda h
     TSpatialPosition position(getSourceFrame());
 	if(!position.setCoordinates(pv))
@@ -99,25 +104,34 @@ bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
     Y+=LV95_Y_OFFSET;
     X+=LV95_X_OFFSET;
 
-    pv = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);
+	// East and North Coordinates
+	double E = Y;
+	double N = X;
+
+    pv = TPositionVector(E, N, h, TCoordSysFactory::k2DPlusH);
 
     return true;
 }
 
 bool TLV95Transformation::transformToCH1903plus(TPositionVector & pv) const
 {
+	/* Reference:
+	Formules et constantes pour le calcul de la projection cylindrique à axe oblique et pour la transformation entre des systèmes de référence
+	Swisstopo, 2016
+	*/
+
     //transform phi lambda h
     TSpatialPosition position(getSourceFrame());
 	if(!position.setCoordinates(pv))
         return false;
 
-    const double x = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
-    const double y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
+    const double e = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
+    const double n = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
     const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
 
-    // projection plane (x, y) to sphere (l_, b_)
-    const double Y = y - LV95_Y_OFFSET;
-    const double X = x - LV95_X_OFFSET; 
+	// projection plane (x, y) to sphere (l_, b_)
+    const double Y = e - LV95_Y_OFFSET;
+    const double X = n - LV95_X_OFFSET; 
     const double l_ = Y/R;
     const double b_ = 2 * (atan(exp(X/R)) - PI/4);
 

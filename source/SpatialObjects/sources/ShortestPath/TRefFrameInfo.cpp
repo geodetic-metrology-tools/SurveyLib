@@ -45,8 +45,14 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("kCH1903plus","CH1903+", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kCGRF_new,
 			TDetails("kCGRF2", "new CERN GRF", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
-		 
-		 
+		tmp->insert(std::make_pair(TRefSystemFactory::kITRFin,
+			TDetails("kITRFin", "Internation Terrestrial Reference Frame (ITRF input)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kITRFout,
+			TDetails("kITRFout", "Internation Terrestrial Reference Frame (ITRF output)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kETRFin,
+			TDetails("kETRFin", "European Terrestrial Reference Frame (ETRF input)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kETRFout,
+			TDetails("kETRFout", "European Terrestrial Reference Frame (ETRF output)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
         tmp->insert(std::make_pair(TRefSystemFactory::kCernXYHe, 
             TDetails("kCernXYHe","CERN XYHe", TCoordSysFactory::k2DPlusH)));
         tmp->insert(std::make_pair(TRefSystemFactory::kCernX0Y0He, 
@@ -77,7 +83,7 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
 			TDetails("kLambert93","French Lambert93", TCoordSysFactory::k2DPlusH)));
 		//RGF93 CHTRF95
 		tmp->insert(std::make_pair(TRefSystemFactory::kRGF93,
-            TDetails("kRGF93","RGF93", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+            TDetails("kRGF93","RGF93 v2b", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kCHTRF95,
             TDetails("kCHTRF95","CHTRF95", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 		//
@@ -244,7 +250,7 @@ bool TRefFrameInfo::isLocalRefFrame(int frame)
     MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
     if(iter!=getMapping().end())
 	{
-		return iter->second.fLocal;
+			return iter->second.fLocal;
 	}
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
@@ -258,7 +264,17 @@ bool TRefFrameInfo::isRotatedLocalRefFrame(int frame) {
 	}
 	throw std::invalid_argument("Unknown ERefFrame value");}
 
-TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso)
+bool TRefFrameInfo::isTerrestrialRefFrame(int frame) {
+	MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
+	if (iter != getMapping().end())
+	{
+		return ((iter->second.fRefFrameName.find("kITRF") != std::string::npos) ||
+			(iter->second.fRefFrameName.find("kETRF") != std::string::npos));
+	}
+	throw std::invalid_argument("Unknown ERefFrame value");
+}
+
+TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso, TReal epoch, std::string solution)
 {
 	bool isdefinedlocal = false;
 	TRefSystemFactory::EGeoid localgeoid = TRefSystemFactory::kNoGeoid;
@@ -266,6 +282,14 @@ TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSyste
 
 	if (refFrame >= TRefSystemFactory::kMLA1985Machine && 
 		refFrame <= TRefSystemFactory::kLGSphere) isdefinedlocal = true;
+
+	if (refFrame == TRefSystemFactory::kITRFin ||
+		refFrame == TRefSystemFactory::kITRFout ||
+		refFrame == TRefSystemFactory::kETRFin ||
+		refFrame == TRefSystemFactory::kETRFout)
+	{
+		TRefSystemFactory::getRefSystemFactory()->TRefSystemFactory::updateTerrestrialRefFrame(epoch, solution, refFrame);
+	}
 
 	if (isdefinedlocal && lso == NULL) 
 		throw std::invalid_argument("LocalSystemOrigin required for the local reference frames!");

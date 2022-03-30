@@ -83,6 +83,8 @@ public:
 
 		bool	isOriginExpected() const;
 
+		bool	trfInfoExpected() const;
+
 		/// set the reference system identifier
 		bool	setRefFrame(TRefSystemFactory::ERefFrame);
 
@@ -110,13 +112,18 @@ public:
 		/// set angle, length and coordinate precisions, based on the integer arguement
 		void	setPrecision(int precision);
 
-
 		///set the point name's width
 		void	setPointNameWidth(const int);
 
         bool	setLocalSystemOrigin(const TLocalSystemOrigin &);
         bool    setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> lso);
 		void	setOriginFile(const std::string &);
+
+		/// set the epoch of the coordiantes
+		void	setCoordEpoch(TReal epoch);
+
+		///set the solution
+		void	setSolution(std::string solution);
 
 
 		/// get the reference system identifier
@@ -148,7 +155,12 @@ public:
 
 		TLocalSystemOrigin* getLocalSystemOrigin() const;
 		const std::string& getOriginFile() const;
-			
+
+		/// get the epoch of the coordinates
+		TReal									getCoordEpoch() const;
+
+		/// get the solution
+		std::string								getSolution() const;
 
 		std::string getRFName() const;
 	//@}
@@ -159,7 +171,7 @@ private:
     TRefSystemFactory::ERefFrame			    fRefFrameEnum;
 	ECoordUnit									fCoordUnit;
     TLocalSystemOrigin*             			fLSO;
-	std::string										fOriginFile;
+	std::string									fOriginFile;
 	TCoordSysFactory::ECoordSys					fCoordSys;
 
 	TAngle::EUnits								fAngleUnits;
@@ -170,6 +182,8 @@ private:
 	TPointFormat::ECoordPrecision				fCoordPrecision;
 
 	int											fPointNameWidth;
+	TReal										fCoordEpoch;
+	std::string									fSolution;
 
 	TAStreamFormatter::ETextFormat punchFileFormat;
 	TAStreamFormatter::ETextFormat resultsFileFormat;

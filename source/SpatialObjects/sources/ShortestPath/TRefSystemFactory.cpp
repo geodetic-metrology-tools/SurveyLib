@@ -24,6 +24,7 @@
 
 #include <TReferenceEllipsoid.h>
 #include <TGeodeticRefFrame.h>
+#include <TTerrestrialReferenceFrame.h>
 #include <TAModifiedLocalAstronomicalRF.h>
 #include <TModifiedLocalAstronomicalRF.h>
 #include <TGraphMLARF.h>
@@ -38,6 +39,7 @@
 #include <TLV03Projection.h>
 #include <TRGF93CC46Projection.h>
 #include <TLambert93Projection.h>
+
 
 #include <TMLA2GCTransformation.h>
 #include <TGC2MLATransformation.h>
@@ -61,6 +63,7 @@
 #endif
 #include <TRGF93CC46Transformation.h>
 #include <TLambert93Transformation.h>
+#include <TTrf2TrfTransformation.h>
 
 
 #include "TRefSystemFactory.h"
@@ -143,9 +146,13 @@ void TRefSystemFactory::init()
 
 
 	// Definition of the reference frame list
-	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf("ITRF97"), wgs("WGS84"), roma("ROMA40");
-	std::string ccs("CCS"), etrf("ETRF93");
+	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf97("ITRF97"), wgs("WGS84"), roma("ROMA40");
+	std::string ccs("CCS"), etrf93("ETRF93");
 	std::string cgrf2("new_CGRF");
+	std::string itrfIn("ITRFin");
+	std::string itrfOut("ITRFout");
+	std::string etrfIn("ETRFin");
+	std::string etrfOut("ETRFout");
 	
 		//new CGRF (coordinate of P0 have been changed)
 	TGeodeticRefFrame* pCGRF2 = new TGeodeticRefFrame(cgrf2, pGRS80);
@@ -165,10 +172,39 @@ void TRefSystemFactory::init()
 	fRefFrameList.push_back(pCGRFs);
 	fCGRFSphere = pCGRFs;
 
-		// ITRF97
-	TGeodeticRefFrame* pITRF97 = new TGeodeticRefFrame(itrf, pGRS80);
+		// ITRF97 at epoch 1998.5.Link between global and local frames
+	TReal epoch = 1998.5;
+	std::string solution = "ITRF 97";
+	TTerrestrialReferenceFrame* pITRF97 = new TTerrestrialReferenceFrame(itrf97, pGRS80, epoch, solution);
 	pITRF97->setRefFrameId(kITRF97);
 	fRefFrameList.push_back(pITRF97);
+
+	//Generic ITRF solution at specified epoch (input)
+	TReal initEpochITRF = -9999.9;
+	std::string initSolution = "noSolution";
+	TTerrestrialReferenceFrame* pITRFin = new TTerrestrialReferenceFrame(itrfIn, pGRS80, initEpochITRF, initSolution);
+	pITRFin->setRefFrameId(kITRFin);
+	fRefFrameList.push_back(pITRFin);
+	fITRFin = pITRFin;
+
+	//Generic ITRF solution at specified epoch (output)
+	TTerrestrialReferenceFrame* pITRFout = new TTerrestrialReferenceFrame(itrfOut, pGRS80, initEpochITRF, initSolution);
+	pITRFout->setRefFrameId(kITRFout);
+	fRefFrameList.push_back(pITRFout);
+	fITRFout = pITRFout;
+
+	//Generic ETRF solution at specified epoch (input)
+	TReal initEpochETRF = -9999.9;
+	TTerrestrialReferenceFrame* pETRFin = new TTerrestrialReferenceFrame(etrfIn, pGRS80, initEpochETRF, initSolution);
+	pETRFin->setRefFrameId(kETRFin);
+	fRefFrameList.push_back(pETRFin);
+	fETRFin = pETRFin;
+
+	//Generic ETRF solution at specified epoch (output)
+	TTerrestrialReferenceFrame* pETRFout = new TTerrestrialReferenceFrame(etrfOut, pGRS80, initEpochETRF, initSolution);
+	pETRFout->setRefFrameId(kETRFout);
+	fRefFrameList.push_back(pETRFout);
+	fETRFout = pETRFout;
 
 		// FrenchRGF93 zone 5
     TAReferenceFrame* pFrenchRGF93Zone5 = new TRGF93CC46Projection("FrenchRGF93Zone5");
@@ -180,18 +216,27 @@ void TRefSystemFactory::init()
 	pLambert93->setRefFrameId(kLambert93);
     fRefFrameList.push_back(pLambert93);
 
-        // ETRF93
-	TGeodeticRefFrame* pETRF93 = new TGeodeticRefFrame(etrf, pGRS80);
+    // ETRF93
+	epoch = 1993;
+	solution = "ETRF 93";
+	TTerrestrialReferenceFrame* pETRF93 = new TTerrestrialReferenceFrame(etrf93, pGRS80, epoch, solution);
+	//TGeodeticRefFrame* pETRF93 = new TGeodeticRefFrame(etrf93, pGRS80);
 	pETRF93->setRefFrameId(kETRF93);
 	fRefFrameList.push_back(pETRF93);
 
 	// RGF93
-	TGeodeticRefFrame* pRGF93 = new TGeodeticRefFrame("RGF93", pGRS80);
+	epoch = 2019;
+	solution = "ETRF 2000";
+	TTerrestrialReferenceFrame* pRGF93 = new TTerrestrialReferenceFrame("RGF93", pGRS80, epoch, solution);
+	//TGeodeticRefFrame* pRGF93 = new TGeodeticRefFrame("RGF93", pGRS80);
 	pRGF93->setRefFrameId(kRGF93);
 	fRefFrameList.push_back(pRGF93);
 
 	// CHTRF95
-	TGeodeticRefFrame* pCHTRF95 = new TGeodeticRefFrame("CHTRF95", pGRS80);
+	epoch = 1993;
+	solution = "ETRF 93";
+	TTerrestrialReferenceFrame* pCHTRF95 = new TTerrestrialReferenceFrame("CHTRF95", pGRS80, epoch, solution);
+	//TGeodeticRefFrame* pCHTRF95 = new TGeodeticRefFrame("CHTRF95", pGRS80);
 	pCHTRF95->setRefFrameId(kCHTRF95);
 	fRefFrameList.push_back(pCHTRF95);
 
@@ -665,120 +710,128 @@ void TRefSystemFactory::init()
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// Definition of the CERN's ref. frames transformations
 
-
-	// Transformation between CERN projection XYHs and CCS
-	TXYHs2MLATransformation* pXYHs2CCS = new TXYHs2MLATransformation(pCernXYHs);
-	pXYHs2CCS->setTransformId( kXYHsSphereSPS2CCS);
-	fTransformList.push_back(pXYHs2CCS);
-	//Inverse
-	TARefFrameTransformation* pCCS2XYHs = pXYHs2CCS->inverse(); //utilise new
-	pCCS2XYHs->setTransformId( kCCS2XYHsSphereSPS);
-	fTransformList.push_back(pCCS2XYHs);
-
+		// Transformation between CERN projection XYHs and CCS
+	{
+		TXYHs2MLATransformation* pXYHs2CCS = new TXYHs2MLATransformation(pCernXYHs);
+		pXYHs2CCS->setTransformId(kXYHsSphereSPS2CCS);
+		fTransformList.push_back(pXYHs2CCS);
+		//Inverse
+		TARefFrameTransformation* pCCS2XYHs = pXYHs2CCS->inverse(); //utilise new
+		pCCS2XYHs->setTransformId(kCCS2XYHsSphereSPS);
+		fTransformList.push_back(pCCS2XYHs);
+	}
 
 	// Transformation between CCS and CGRF
 	/*Il est equivalent de mettre CG2000 ou CG1985 car les parametres du geoide au niveau de P0,
 	servant a definir la transformation sont equivalent*/
-	TMLA2GCTransformation* pCCS2CGRF = new TMLA2GCTransformation(pCCS, pCG1985Machine);
-	pCCS2CGRF->setTransformId(kCCS2CGRF);
-	fTransformList.push_back(pCCS2CGRF);
+	{
+		TMLA2GCTransformation* pCCS2CGRF = new TMLA2GCTransformation(pCCS, pCG1985Machine);
+		pCCS2CGRF->setTransformId(kCCS2CGRF);
+		fTransformList.push_back(pCCS2CGRF);
 		//Inverse
-	TARefFrameTransformation* pCGRF2CCS = pCCS2CGRF->inverse(); //utilise new
-	pCGRF2CCS->setTransformId(kCGRF2CCS);
-	fTransformList.push_back(pCGRF2CCS);
-
+		TARefFrameTransformation* pCGRF2CCS = pCCS2CGRF->inverse(); //utilise new
+		pCGRF2CCS->setTransformId(kCGRF2CCS);
+		fTransformList.push_back(pCGRF2CCS);
+	}
 
 	// Transformation between CCS and CGRFSphere
 	//rotation pour diriger les axes du CGRFs parallele a ceux du CGRF
-	TAngle rx, ry, rz;
-	rx.setGonsValue(-LITERAL(42.726243230216));
-	ry.setGonsValue(-LITERAL(25.285434244947));
-	rz.setGonsValue(-LITERAL(77.864346765085));
-	TRotation rs(TRotationMatrix::kRzyx, rx.getRadiansValue(), ry.getRadiansValue(), rz.getRadiansValue());
-	//translation pour situer le centre de la sphere
-	TLength txs (LITERAL(4381882.331989)), tys (LITERAL(461505.530464)), tzs (LITERAL(4598944.364158));
-	TTranslation transls(txs, tys, tzs);
-	//facteur d echelle
-	TScaleFactor ks (LITERAL(1.0));
-	THelmertRefFrameTransform* pCCS2CGRFs = new THelmertRefFrameTransform(pCCS, pCGRFs, ks, rs, transls);
-	pCCS2CGRFs->setTransformId(kCCS2CGRFSphere);
-	fTransformList.push_back(pCCS2CGRFs);
+	{
+		TAngle rx, ry, rz;
+		rx.setGonsValue(-LITERAL(42.726243230216));
+		ry.setGonsValue(-LITERAL(25.285434244947));
+		rz.setGonsValue(-LITERAL(77.864346765085));
+		TRotation rs(TRotationMatrix::kRzyx, rx.getRadiansValue(), ry.getRadiansValue(), rz.getRadiansValue());
+		//translation pour situer le centre de la sphere
+		TLength txs(LITERAL(4381882.331989)), tys(LITERAL(461505.530464)), tzs(LITERAL(4598944.364158));
+		TTranslation transls(txs, tys, tzs);
+		//facteur d echelle
+		TScaleFactor ks(LITERAL(1.0));
+		THelmertRefFrameTransform* pCCS2CGRFs = new THelmertRefFrameTransform(pCCS, pCGRFs, ks, rs, transls);
+		pCCS2CGRFs->setTransformId(kCCS2CGRFSphere);
+		fTransformList.push_back(pCCS2CGRFs);
 		//Inverse
-	TARefFrameTransformation* pCGRFs2CCS = pCCS2CGRFs->inverse();//utilise new
-	pCGRFs2CCS->setTransformId(kCGRFSphere2CCS);
-	fTransformList.push_back(pCGRFs2CCS);
-
+		TARefFrameTransformation* pCGRFs2CCS = pCCS2CGRFs->inverse();//utilise new
+		pCGRFs2CCS->setTransformId(kCGRFSphere2CCS);
+		fTransformList.push_back(pCGRFs2CCS);
+	}
 
 	// Transformation between LAp0 and LGp0
-	TLA2LGTransformation* pLAp02LGp0 = new TLA2LGTransformation(pLAp0);
-	pLAp02LGp0->setTransformId(kLAp02LGp0);
-	fTransformList.push_back(pLAp02LGp0);
-	//Inverse
-	TARefFrameTransformation* pLGp02LAp0 = pLAp02LGp0->inverse(); //utilise new
-	pLGp02LAp0->setTransformId(kLGp02LAp0);
-	fTransformList.push_back(pLGp02LAp0);
-
+	{
+		TLA2LGTransformation* pLAp02LGp0 = new TLA2LGTransformation(pLAp0);
+		pLAp02LGp0->setTransformId(kLAp02LGp0);
+		fTransformList.push_back(pLAp02LGp0);
+		//Inverse
+		TARefFrameTransformation* pLGp02LAp0 = pLAp02LGp0->inverse(); //utilise new
+		pLGp02LAp0->setTransformId(kLGp02LAp0);
+		fTransformList.push_back(pLGp02LAp0);
+	}
 
 	//Transformation between LGp0 and CGRF
-	TLG2GCTransformation* pLGp02CGRF = new TLG2GCTransformation(pLGp0);
-	pLGp02CGRF->setTransformId(kLGp02CGRF);
-	fTransformList.push_back(pLGp02CGRF);
-	//Inverse
-	TARefFrameTransformation* pCGRF2LGp0 = pLGp02CGRF->inverse(); //utilise new
-	pCGRF2LGp0->setTransformId(kCGRF2LGp0);
-	fTransformList.push_back(pCGRF2LGp0);
-
+	{
+		TLG2GCTransformation* pLGp02CGRF = new TLG2GCTransformation(pLGp0);
+		pLGp02CGRF->setTransformId(kLGp02CGRF);
+		fTransformList.push_back(pLGp02CGRF);
+		//Inverse
+		TARefFrameTransformation* pCGRF2LGp0 = pLGp02CGRF->inverse(); //utilise new
+		pCGRF2LGp0->setTransformId(kCGRF2LGp0);
+		fTransformList.push_back(pCGRF2LGp0);
+	}
 
 	// Helmert Transformation between LAp0 and CCS
-	TRotation r(TRotationMatrix::kRzyx, 0, 0, -(kappa.getRadiansValue()));
-	TTranslation transl(falseOrigin.getX(), falseOrigin.getY(),	(falseOrigin.getZ()) );
-	TScaleFactor enl(LITERAL(1.0));
-	THelmertRefFrameTransform* pLAp02CCS = new THelmertRefFrameTransform(pLAp0, pCCS, enl, r, transl);
-	pLAp02CCS->setTransformId(kLAp02CCS);
-	fTransformList.push_back(pLAp02CCS);
-	//Inverse
-	TARefFrameTransformation* pCCS2LAp0 = pLAp02CCS->inverse(); //utilise new
-	pCCS2LAp0->setTransformId(kCCS2LAp0);
-	fTransformList.push_back(pCCS2LAp0);
-
+	{
+		TRotation r(TRotationMatrix::kRzyx, 0, 0, -(kappa.getRadiansValue()));
+		TTranslation transl(falseOrigin.getX(), falseOrigin.getY(), (falseOrigin.getZ()));
+		TScaleFactor enl(LITERAL(1.0));
+		THelmertRefFrameTransform* pLAp02CCS = new THelmertRefFrameTransform(pLAp0, pCCS, enl, r, transl);
+		pLAp02CCS->setTransformId(kLAp02CCS);
+		fTransformList.push_back(pLAp02CCS);
+		//Inverse
+		TARefFrameTransformation* pCCS2LAp0 = pLAp02CCS->inverse(); //utilise new
+		pCCS2LAp0->setTransformId(kCCS2LAp0);
+		fTransformList.push_back(pCCS2LAp0);
+	}
 	
 	// Helmert Transformation between ROMA40 and WGS84
-	TAngle om1, p1, k1;
-	om1.setDMSValue(0, 0, -LITERAL(1.822));
-	p1.setDMSValue(0, 0, LITERAL(3.235));
-	k1.setDMSValue(0, 0, -LITERAL(0.762));
-	TRotation r1(TRotationMatrix::kRzyx, om1.getRadiansValue(), p1.getRadiansValue(), k1.getRadiansValue());
-	TLength tx(-LITERAL(54.62)), ty(-LITERAL(24.26)), tz(LITERAL(17.75));
-	TTranslation transl1(tx, ty, tz);
-	TScaleFactor enl1(LITERAL(1.0) - LITERAL(0.00002801));
-	THelmertRefFrameTransform* pROMA2WGS = new THelmertRefFrameTransform(pROMA, pWGS, enl1, r1, transl1);
-	pROMA2WGS->setTransformId(kROMA2WGS);
-	fTransformList.push_back(pROMA2WGS);
+	{
+		TAngle om1, p1, k1;
+		om1.setDMSValue(0, 0, -LITERAL(1.822));
+		p1.setDMSValue(0, 0, LITERAL(3.235));
+		k1.setDMSValue(0, 0, -LITERAL(0.762));
+		TRotation r1(TRotationMatrix::kRzyx, om1.getRadiansValue(), p1.getRadiansValue(), k1.getRadiansValue());
+		TLength tx(-LITERAL(54.62)), ty(-LITERAL(24.26)), tz(LITERAL(17.75));
+		TTranslation transl1(tx, ty, tz);
+		TScaleFactor enl1(LITERAL(1.0) - LITERAL(0.00002801));
+		THelmertRefFrameTransform* pROMA2WGS = new THelmertRefFrameTransform(pROMA, pWGS, enl1, r1, transl1);
+		pROMA2WGS->setTransformId(kROMA2WGS);
+		fTransformList.push_back(pROMA2WGS);
 		//Inverse
-	TARefFrameTransformation* pWGS2ROMA = pROMA2WGS->inverse(); //utilise new
-	pWGS2ROMA->setTransformId(kWGS2ROMA);
-	fTransformList.push_back(pWGS2ROMA);
-
+		TARefFrameTransformation* pWGS2ROMA = pROMA2WGS->inverse(); //utilise new
+		pWGS2ROMA->setTransformId(kWGS2ROMA);
+		fTransformList.push_back(pWGS2ROMA);
+	}
 	
 	// Helmert Transformation between WGS84 and CGRF
-	TAngle om2, p2, k2;
-	om2.setGonsValue(-LITERAL(0.0003314103458));
-	p2.setGonsValue(LITERAL(0.0022563667184));
-	k2.setGonsValue(LITERAL(0.0008629680740));
-	TRotation r2(TRotationMatrix::kRzyx, om2.getRadiansValue(), p2.getRadiansValue(), k2.getRadiansValue());
-	TLength Tx(LITERAL(114.1736041)), Ty(LITERAL(114.1154332)), Tz(-LITERAL(178.5526666));
-	TTranslation transl2(Tx, Ty, Tz);
-	TScaleFactor enl2(LITERAL(0.999998644222261));
-	THelmertRefFrameTransform* pWGS2CGRF = new THelmertRefFrameTransform(pWGS, pCGRF, enl2, r2, transl2);
-	pWGS2CGRF->setTransformId(kWGS2CGRF);
-	fTransformList.push_back(pWGS2CGRF);
-		//Inverse
-	TARefFrameTransformation* pCGRF2WGS = pWGS2CGRF->inverse(); //utilise new
-	pCGRF2WGS->setTransformId(kCGRF2WGS);
-	fTransformList.push_back(pCGRF2WGS);
-
 	{
+		TAngle om2, p2, k2;
+		om2.setGonsValue(-LITERAL(0.0003314103458));
+		p2.setGonsValue(LITERAL(0.0022563667184));
+		k2.setGonsValue(LITERAL(0.0008629680740));
+		TRotation r2(TRotationMatrix::kRzyx, om2.getRadiansValue(), p2.getRadiansValue(), k2.getRadiansValue());
+		TLength Tx(LITERAL(114.1736041)), Ty(LITERAL(114.1154332)), Tz(-LITERAL(178.5526666));
+		TTranslation transl2(Tx, Ty, Tz);
+		TScaleFactor enl2(LITERAL(0.999998644222261));
+		THelmertRefFrameTransform* pWGS2CGRF = new THelmertRefFrameTransform(pWGS, pCGRF, enl2, r2, transl2);
+		pWGS2CGRF->setTransformId(kWGS2CGRF);
+		fTransformList.push_back(pWGS2CGRF);
+		//Inverse
+		TARefFrameTransformation* pCGRF2WGS = pWGS2CGRF->inverse(); //utilise new
+		pCGRF2WGS->setTransformId(kCGRF2WGS);
+		fTransformList.push_back(pCGRF2WGS);
+	}
+	
 		// Helmert Transformation between ITRF97 (ep1998.5) and CGRF
+	{
 		TAngle om3, p3, k3;
 		om3.setGonsValue(LITERAL(399.999533213524));
 		p3.setGonsValue(LITERAL(0.001825157943));
@@ -796,46 +849,130 @@ void TRefSystemFactory::init()
 		fTransformList.push_back(pCGRF2ITRF97);
 	}
 
+		////////////////////////////////////////////////////////////////
+		// Transformation ITRF-ETRF, ETRF-ITRF
+		////////////////////////////////////////////////////////////////
 	{
-		// Helmert Transformation between ITRF97 (ep1998.5) and ETRF93
-		// There is no rotation:
-		TRotation r3(TRotationMatrix::kRzyx, 0, 0, 0);
-		// Total translation resulting from epoch changes and Reference Frame changes:
-		// TODO:
-		TLength Tx3(LITERAL(0.163550)), Ty3(LITERAL(-0.131900)), Tz3(LITERAL(-0.142100));
-		TTranslation transl3(Tx3, Ty3, Tz3);
-		// There is no scaling:
-		TScaleFactor enl3(LITERAL(1.000000000000000));
-		THelmertRefFrameTransform* pITRF972ETRF93 = new THelmertRefFrameTransform(pITRF97, pETRF93, enl3, r3, transl3);
+		//Transformation parameters from ITRF2014 to past ITRFs and their rates
+		//Data format: Tx[mm], Ty[mm], Tz[mm],D (scale factor) [ppb], Rx [0.001"], Ry [0.001"], Rz [0.001"],Epoch, vTx [mm/yr], vTy [mm/yr], vTz [mm/yr], vD [ppb/yr], vRx [0.001"/yr], vRy [0.001"/yr], vRz [0.001"/yr]
+		//https://itrf.ensg.ign.fr/doc_ITRF/Transfo-ITRF2014_ITRFs.txt
+		//Altamimi, Z., Rebischung, P., Métivier, L., & Collilieux, X. (2016). ITRF2014: A new release of the International Terrestrial Reference Frame modeling nonlinear station motions. Journal of Geophysical Research: Solid Earth, 121(8), 6109-6131.
+		static const std::array<std::array<TReal, 15>, 12> coeffITRF2014_toPastITRF = { {
+			{LITERAL(1.6),LITERAL(1.9),LITERAL(2.4),LITERAL(-0.02),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00),LITERAL(2010.0),LITERAL(0.0),LITERAL(0.0),LITERAL(-0.1),LITERAL(0.03),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00)}, //ITRF2008
+			{LITERAL(2.6),LITERAL(1.0),LITERAL(-2.3),LITERAL(0.92),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00),LITERAL(2010.0),LITERAL(0.3),LITERAL(0.0),LITERAL(-0.1),LITERAL(0.03),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00)},//ITRF2005
+			{LITERAL(0.7),LITERAL(1.2),LITERAL(-26.1),LITERAL(2.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00),LITERAL(2010.0),LITERAL(0.1),LITERAL(0.1),LITERAL(-1.9),LITERAL(0.11),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00)},//ITRF2000
+			{LITERAL(7.4),LITERAL(-0.5),LITERAL(-62.8),LITERAL(3.80),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF97
+			{LITERAL(7.4),LITERAL(-0.5),LITERAL(-62.8),LITERAL(3.80),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF96
+			{LITERAL(7.4),LITERAL(-0.5),LITERAL(-62.8),LITERAL(3.80),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF94
+			{LITERAL(-50.4),LITERAL(3.3),LITERAL(-60.2),LITERAL(4.29),LITERAL(-2.81),LITERAL(-3.38),LITERAL(0.40),LITERAL(2010.0),LITERAL(-2.8),LITERAL(-0.1),LITERAL(-2.5),LITERAL(0.12),LITERAL(-0.11),LITERAL(-0.19),LITERAL(0.07)},//ITRF93
+			{LITERAL(15.4),LITERAL(1.5),LITERAL(-70.8),LITERAL(3.09),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF92
+			{LITERAL(27.4),LITERAL(15.5),LITERAL(-76.8),LITERAL(4.49),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF91
+			{LITERAL(25.4),LITERAL(11.5),LITERAL(-92.8),LITERAL(4.79),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF90
+			{LITERAL(30.4),LITERAL(35.5),LITERAL(-130.8),LITERAL(8.19),LITERAL(0.00),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},//ITRF89
+			{LITERAL(25.4),LITERAL(-0.5),LITERAL(-154.8),LITERAL(11.29),LITERAL(0.10),LITERAL(0.00),LITERAL(0.26),LITERAL(2010.0),LITERAL(0.1),LITERAL(-0.5),LITERAL(-3.3),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)}//ITRF88
+		} };
+
+		//Transformation parameters from ITRFyy to past ETRFyy at epoch 1989.0 and their rates
+		//Data format: Tx[mm], Ty[mm], Tz[mm],D (scale factor) [ppb], Rx [0.001"], Ry [0.001"], Rz [0.001"],Epoch, vTx [mm/yr], vTy [mm/yr], vTz [mm/yr], vD [ppb/yr], vRx [0.001"/yr], vRy [0.001"/yr], vRz [0.001"/yr]
+		//Altamimi, Z. (2018) EUREF Technical Note 1: Relationship and Transformation between the Internationaland the European Terrestrial Reference Systems
+		static const std::array<std::array<TReal, 15>, 11> coeffITRFyy_toETRFyy = { {
+			{LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.085),LITERAL(0.531),LITERAL(-0.770)},//ETRF2014
+			{LITERAL(56.0),LITERAL(48.0),LITERAL(-37.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.054),LITERAL(0.518),LITERAL(-0.781)}, //ETRF2005
+			{LITERAL(54.0),LITERAL(51.0),LITERAL(-48.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.081),LITERAL(0.490),LITERAL(-0.792)}, //ETRF2000
+			{LITERAL(41.0),LITERAL(41.0),LITERAL(-49.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.200),LITERAL(0.500),LITERAL(-0.650)}, //ETRF97
+			{LITERAL(41.0),LITERAL(41.0),LITERAL(-49.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.200),LITERAL(0.500),LITERAL(-0.650)}, //ETRF96
+			{LITERAL(41.0),LITERAL(41.0),LITERAL(-49.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.200),LITERAL(0.500),LITERAL(-0.650)}, //ETRF94
+			{LITERAL(19.0),LITERAL(53.0),LITERAL(-21.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.320),LITERAL(0.780),LITERAL(-0.670)}, //ETRF93
+			{LITERAL(38.0),LITERAL(40.0),LITERAL(-37.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.210),LITERAL(0.520),LITERAL(-0.680)}, //ETRF92
+			{LITERAL(21.0),LITERAL(25.0),LITERAL(-37.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.210),LITERAL(0.520),LITERAL(-0.680)}, //ETRF91
+			{LITERAL(19.0),LITERAL(28.0),LITERAL(-23.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.110),LITERAL(0.570),LITERAL(-0.710)}, //ETRF90
+			{LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.110),LITERAL(0.570),LITERAL(-0.710)} //ETRF89
+		} };
+
+		TMatrix* itrf2014_toPastITRF = new TMatrix(12, 15);
+		TMatrix* itrfyy_toETRFyy = new TMatrix(11, 15);
+		for (i = 0; i < coeffITRF2014_toPastITRF.size(); i++)
+		{
+			for (j = 0; j < coeffITRF2014_toPastITRF[i].size(); j++)
+				(*itrf2014_toPastITRF)((int)i, (int)j) = coeffITRF2014_toPastITRF[i][j];
+		}
+
+		for (i = 0; i < coeffITRFyy_toETRFyy.size(); i++)
+		{
+			for (j = 0; j < coeffITRFyy_toETRFyy[i].size(); j++)
+				(*itrfyy_toETRFyy)((int)i, (int)j) = coeffITRFyy_toETRFyy[i][j];
+		}
+
+		// Transformtion between ITRF and ETRF
+		TTrf2TrfTransformation* pITRFin2ETRFout = new TTrf2TrfTransformation(pITRFin, pETRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRFin2ETRFout->setTransformId(kITRFin2ETRFout);
+		fTransformList.push_back(pITRFin2ETRFout);
+		// Inverse
+		TTrf2TrfTransformation* pETRFin2ITRFout = new TTrf2TrfTransformation(pETRFin, pITRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pETRFin2ITRFout->setTransformId(kETRFin2ITRFout);
+		fTransformList.push_back(pETRFin2ITRFout);
+
+		// Transformation between any ITRF an ITRF97 (ep 1998.5)
+		TTrf2TrfTransformation* pITRFin2ITRF97 = new TTrf2TrfTransformation(pITRFin, pITRF97, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRFin2ITRF97->setTransformId(kITRFin2ITRF97);
+		fTransformList.push_back(pITRFin2ITRF97);
+		// Inverse
+		TTrf2TrfTransformation* pITRF972ITRFout = new TTrf2TrfTransformation(pITRF97, pITRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRF972ITRFout->setTransformId(kITRF972ITRFout);
+		fTransformList.push_back(pITRF972ITRFout);
+
+		// Transformation between any ETRF an ITRF97 (ep 1998.5)
+		TTrf2TrfTransformation *pITRF972ETRFout = new TTrf2TrfTransformation(pITRF97, pETRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRF972ETRFout->setTransformId(kITRF972ETRFout);
+		fTransformList.push_back(pITRF972ETRFout);
+		// Inverse
+		TTrf2TrfTransformation *pETRFin2ITRF97 = new TTrf2TrfTransformation(pETRFin, pITRF97, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pETRFin2ITRF97->setTransformId(kETRFin2ITRF97);
+		fTransformList.push_back(pETRFin2ITRF97);
+
+		// Transformation between 2 ITRF
+		TTrf2TrfTransformation* pITRFin2ITRFout = new TTrf2TrfTransformation(pITRFin, pITRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRFin2ITRFout->setTransformId(kITRFin2ITRFout);
+		fTransformList.push_back(pITRFin2ITRFout);
+
+		// Transformation between 2 ETRF
+		TTrf2TrfTransformation* pETRFin2ETRFout = new TTrf2TrfTransformation(pETRFin, pETRFout, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pETRFin2ETRFout->setTransformId(kETRFin2ETRFout);
+		fTransformList.push_back(pETRFin2ETRFout);
+		
+		// Transformation between ITRF97 (ep1998.5) and ETRF93 (ep 1993.0)
+		TTrf2TrfTransformation *pITRF972ETRF93 = new TTrf2TrfTransformation(pITRF97, pETRF93, itrf2014_toPastITRF, itrfyy_toETRFyy);
 		pITRF972ETRF93->setTransformId(kITRF972ETRF93);
 		fTransformList.push_back(pITRF972ETRF93);
 		//Inverse
-		TARefFrameTransformation* pETRF932ITRF97 = pITRF972ETRF93->inverse(); //utilise new
+		TTrf2TrfTransformation *pETRF932ITRF97 = new TTrf2TrfTransformation(pETRF93, pITRF97, itrf2014_toPastITRF, itrfyy_toETRFyy);
 		pETRF932ITRF97->setTransformId(kETRF932ITRF97);
 		fTransformList.push_back(pETRF932ITRF97);
+
+		// Transformation between ITRF97 (ep1998.5) and RGF93
+		TTrf2TrfTransformation *pITRF972RGF93 = new TTrf2TrfTransformation(pITRF97, pRGF93, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRF972RGF93->setTransformId(kITRF972RGF93);
+		fTransformList.push_back(pITRF972RGF93);
+		// Inverse
+		TTrf2TrfTransformation *pRGF932ITRF97 = new TTrf2TrfTransformation(pRGF93, pITRF97, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pRGF932ITRF97->setTransformId(kRGF932ITRF97);
+		fTransformList.push_back(pRGF932ITRF97);
+
+		// Transformation between ITRF97 (ep1998.5) and CHTRF95
+		TTrf2TrfTransformation *pITRF972CHTRF95 = new TTrf2TrfTransformation(pITRF97, pCHTRF95, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pITRF972CHTRF95->setTransformId(kITRF972CHTRF95);
+		fTransformList.push_back(pITRF972CHTRF95);
+		// Inverse
+		TTrf2TrfTransformation *pCHTRF952ITRF97 = new TTrf2TrfTransformation(pCHTRF95, pITRF97, itrf2014_toPastITRF, itrfyy_toETRFyy);
+		pCHTRF952ITRF97->setTransformId(kCHTRF952ITRF97);
+		fTransformList.push_back(pCHTRF952ITRF97);
+
 	}
-
-	{
-		// kETRF93 == kRGF93 == kCHTRF95
-		THelmertRefFrameTransform * t1a = new THelmertRefFrameTransform(pETRF93, pRGF93, TScaleFactor(1.0), TRotation(TRotationMatrix::kRzyx, 0, 0, 0), TTranslation(TLength(0),TLength(0),TLength(0)));
-		t1a->setTransformId(kETRF932kRGF93);
-		THelmertRefFrameTransform * t1b = t1a->inverse();
-		t1b->setTransformId(kRGF932kETRF93);
-		fTransformList.push_back(t1a);
-		fTransformList.push_back(t1b);
-
-		THelmertRefFrameTransform * t2a = new THelmertRefFrameTransform(pETRF93, pCHTRF95, TScaleFactor(1.0), TRotation(TRotationMatrix::kRzyx, 0, 0, 0), TTranslation(TLength(0),TLength(0),TLength(0)));
-		t2a->setTransformId(kETRF932kCHTRF95);
-		THelmertRefFrameTransform * t2b = t1a->inverse();
-		t2b->setTransformId(kCHTRF952kETRF93);
-		fTransformList.push_back(t2a);
-		fTransformList.push_back(t2b);
-	}
-
-    {
+    
         ////////////////////////////////////////////////////////////////
 		// Helmert Transformation between ETRF93 (ep1993) and CH1903plus
         ////////////////////////////////////////////////////////////////
+	{
 		// There is no rotation:
 		TRotation r3(TRotationMatrix::kRzyx, 0, 0, 0);
 		// Total translation resulting from epoch changes and Reference Frame changes:
@@ -877,11 +1014,12 @@ void TRefSystemFactory::init()
         fTransformList.push_back(pInverse);
 	}
 #endif
-    {
+    
         ////////////////////////////////////////////////////////////////
 		// Transformation between ETRF93 and RGF93
         ////////////////////////////////////////////////////////////////
-        TRGF93ZoneTransformation * pTrans = new TRGF93ZoneTransformation(true);
+	{
+		TRGF93ZoneTransformation * pTrans = new TRGF93ZoneTransformation(true);
         pTrans->setTransformId(kETRF932FrenchRGF93);
 		fTransformList.push_back(pTrans);
 		//Inverse
@@ -890,16 +1028,17 @@ void TRefSystemFactory::init()
         fTransformList.push_back(pInverse);
 	}
 
+	
+        ////////////////////////////////////////////////////////////////
+		// Transformation between RGF93v2b and Lambert93
+        ////////////////////////////////////////////////////////////////
 	{
-        ////////////////////////////////////////////////////////////////
-		// Transformation between ETRF93 and Lambert93
-        ////////////////////////////////////////////////////////////////
-        TLambert93Transformation * pTrans = new TLambert93Transformation(true);
-        pTrans->setTransformId(kETRF932kLambert93);
+		TLambert93Transformation * pTrans = new TLambert93Transformation(true);
+        pTrans->setTransformId(kRGF932Lambert93);
 		fTransformList.push_back(pTrans);
 		//Inverse
 		TARefFrameTransformation* pInverse = pTrans->inverse();
-        pInverse->setTransformId(kLambert932ETRF93);
+        pInverse->setTransformId(kLambert932RGF93);
         fTransformList.push_back(pInverse);
 	}
             
@@ -1135,7 +1274,6 @@ TReferenceEllipsoid* TRefSystemFactory::getEllipsoid(const ERefEll ellId)
 	//exit(EXIT_FAILURE);
 }
 
-
 TAReferenceFrame* TRefSystemFactory::getRefFrame(const ERefFrame refFrameId)
 {//return a pointer to the ref frame askes for
 	std::vector<TAReferenceFrame*>::iterator iter = fRefFrameList.begin();
@@ -1181,6 +1319,21 @@ TGeodeticRefFrame* TRefSystemFactory::getGeoRefFrame(const ERefFrame refFrameId)
 	//exit(EXIT_FAILURE);
 }
 
+TTerrestrialReferenceFrame* TRefSystemFactory::getTerrRefFrame(const ERefFrame refFrameId)
+{
+	if (refFrameId == kITRFin)
+		return fITRFin;
+	else if (refFrameId == kITRFout)
+		return fITRFout;
+	else if (refFrameId == kETRFin)
+		return fETRFin;
+	else if (refFrameId == kETRFout)
+		return fETRFout;
+
+	std::cerr << "Error : Id. not in RefFrameList" << std::endl;
+	throw TNotInGraphException("TNotInGraphException");
+
+}
 
 TARefFrameTransformation* TRefSystemFactory::getTransformation(const ERefFrameTransform id)
 {//return a pointer to the ref frame transformation asked for
@@ -1222,6 +1375,14 @@ bool TRefSystemFactory::isInRFFactory( const TAReferenceFrame* rf )
 	}
 
 	return false;
+}
+
+void TRefSystemFactory::updateTerrestrialRefFrame(TReal epoch, std::string solution, ERefFrame frame)
+{// Update terrestrial reference frame with current epoch and solution
+
+	getTerrRefFrame(frame)->setSolution(solution);
+	getTerrRefFrame(frame)->setEpoch(epoch);
+
 }
 
 

@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -121,8 +121,9 @@ public:
 	
    static bool isLocalRefFrame(int frame);
    static bool isRotatedLocalRefFrame(int frame);
+   static bool isTerrestrialRefFrame(int frame);
 
-   static TAReferenceFrame * getReferenceFrame(int frame, const TLocalSystemOrigin * lso = NULL);
+   static TAReferenceFrame* getReferenceFrame(int frame, const TLocalSystemOrigin* lso = NULL, TReal epoch = -9999.9, std::string solution = "noSolution");
 };
 
 

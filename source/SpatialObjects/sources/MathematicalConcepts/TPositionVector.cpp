@@ -91,7 +91,7 @@ TPositionVector& TPositionVector::operator-=(const TFreeVector& second) {
 
 TFreeVector TPositionVector::operator-( const TPositionVector& second)
 {//!substract two TPositionVector objects and return a FreeVector
-	TFreeVector resultat (getCoordSys());
+	TFreeVector resultat(getCoordSys());
 	bool fContinue = second.isInitialise() && this->isInitialise();
 	if (fContinue && testCoordSysCart(second.getCoordSys()) == true)
 	{
@@ -102,7 +102,6 @@ TFreeVector TPositionVector::operator-( const TPositionVector& second)
 
 	return resultat;
 }
-
 
 TPositionVector TPositionVector::operator*( const TDouble& factor)
 {//!Multiplication by a TDouble object

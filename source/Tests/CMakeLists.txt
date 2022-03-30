@@ -12,6 +12,7 @@ set(SpatialObjects_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testTRGF93Transformation.cpp
 	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testTLambert93Transformation.cpp
 	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testTRefFrameInfo.cpp
+	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testTrfTransformation.cpp
 	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testTCernGridGeoid.cpp
 	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testAllTransformations.cpp
 	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testTCoordSysInfo.cpp

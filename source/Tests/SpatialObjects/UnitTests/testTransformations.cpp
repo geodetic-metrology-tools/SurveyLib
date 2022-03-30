@@ -28,23 +28,25 @@ namespace tut
 	template<>
 	void object::test<1>()
 	{
-        set_test_name("Converting Zimmerwald cartesian ITRF97->ETRF93 and ETRF93->ITRF97");
-		TPositionVector pv(4331297.1801, 567555.7634, 4633133.8516, TCoordSysFactory::k3DCartesian);
+		//Test modified after the implementation of standard transformation model between ITRF and ETRF (feb. 2022)
+        set_test_name("Converting Zimmerwald cartesian ETRF93 at epoch 1993.0 -> ITRF 97 at epoch 1998.5 and ITRF 97 at epoch 1998.5 ->  ETRF93 at epoch 1993.0");
+		TPositionVector pv(4331297.348, 567555.639, 4633133.728, TCoordSysFactory::k3DCartesian);
+		//Position given by Swisstopo (valid since 2018)
 		
-        TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRF97));
+        TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
 
-        position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
+        position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRF97));
 
-		ensure_equals("ETRF93 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.34365), static_cast<TReal>(0.00001));
-		ensure_equals("ETRF93 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.63150), static_cast<TReal>(0.00001));
-		ensure_equals("ETRF93 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.70950), static_cast<TReal>(0.00001));
+		ensure_equals("ITRF 97 at epoch 1998.5 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.185), static_cast<TReal>(0.001));
+		ensure_equals("ITRF 97 at epoch 1998.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.767), static_cast<TReal>(0.001));
+		ensure_equals("ITRF 97 at epoch 1998.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.864), static_cast<TReal>(0.001));
 
         // Inverse transformation - take the ETRF result and convert back
-        position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRF97));
-		ensure_equals("ITRF97 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.1801), static_cast<TReal>(0.00001));
-		ensure_equals("ITRF97 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.7634), static_cast<TReal>(0.00001));
-		ensure_equals("ITRF97 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.8516), static_cast<TReal>(0.00001));
+        position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
+		ensure_equals("ETRF 93 at epoch 1993.0 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.348), static_cast<TReal>(0.001));
+		ensure_equals("ETRF 93 at epoch 1993.0 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.639), static_cast<TReal>(0.001));
+		ensure_equals("ETRF 93 at epoch 1993.0 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.728), static_cast<TReal>(0.001));
 	}
 
     template<>
@@ -239,8 +241,8 @@ namespace tut
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
         ensure("Transformation OK", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95)));
-        ensure_distance("LV95 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
-		ensure_distance("LV95 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
+		ensure_distance("LV95 E", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(2617306.920), static_cast<TReal>(0.001));
+		ensure_distance("LV95 N", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(1268507.870), static_cast<TReal>(0.001));
 		ensure_distance("LV95 H", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<TReal>(457.138 /*- 1.2233*/), static_cast<TReal>(0.001));
 #endif
 	}
@@ -256,7 +258,7 @@ namespace tut
 #ifndef _WIN32
         skip();
 #else
-        TPositionVector pv(1268507.870, 2617306.920, (457.138 /*- 1.2233*/), TCoordSysFactory::k2DPlusH);
+		TPositionVector pv(2617306.920, 1268507.870, (457.138 /*- 1.2233*/), TCoordSysFactory::k2DPlusH);
 		
         TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
@@ -280,10 +282,10 @@ namespace tut
 	template<>
 	void object::test<10>()
 	{
-        set_test_name("Transforming Bellegard from ETRF93 into RGF93 CC46");
+        set_test_name("Transforming Bellegard from RGF93 into RGF93 CC46");
         TPositionVector pv(4407040.76287, 449723.28541, 4573892.46194, TCoordSysFactory::k3DCartesian);
       
-        TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
+        TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93));
 		ensure("Setting the coordinates of TSpatialPosition",position.setCoordinates(pv));
 
         position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93Zone5));     

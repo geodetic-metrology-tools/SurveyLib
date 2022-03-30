@@ -1,6 +1,6 @@
 // TAReferenceFrame.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*!  
@@ -94,9 +94,16 @@ public:
 		//! transformation from this reference frame to CGRF (in case of a reference frame not included in TGraph)
 		virtual TARefFrameTransformation*   getRFTransfo2CGRF();
 
-		/*!return true if the refernec frame is in graph,
-		so return false only for MLA*/
+		/*!return true if the reference frame is in graph, so return false only for MLA*/
 		virtual bool						isInGraph() const {return true; };
+
+		//! return the epoch of the coordinates if there is one (ITRF and ETRF)
+		virtual TReal						getEpoch() const { TReal epoch; return epoch; }
+
+		//! rteturn the solution of the reference frame if there is one (ITRF and ETRF)
+		virtual std::string					getSolution() const { std::string solution; return solution; }
+
+
 	//@}
 
 protected:
@@ -122,6 +129,7 @@ protected:
 
 		//! set the rotation matrix of a spatial orientation
 		virtual bool setOrientation(TSpatialOrientation* so, const TRotationMatrix& rm);
+
 	//@}
 
 
