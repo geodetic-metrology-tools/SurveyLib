@@ -6,7 +6,7 @@
 #
 # - `BOOST_ROOT`: The path to Boost folder
 # - `EIGEN_INCLUDE_PATH`: The path to Eigen folder
-# - `REFRAME_LIBRARY_DIR`: The path to Reframe folder
+# - `REFRAME2016_LIBRARY_DIR`: The path to Reframe 2016 folder 
 # - `TUT_INCLUDE_PATH`: The path to Tut folder
 # - `VCREDIST_INSTALLER_PATH`: The path to the folder holding the VCRedist installer
 

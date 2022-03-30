@@ -1,6 +1,9 @@
 #include <TLambert93Transformation.h>
 
 #include <TRefFrameInfo.h>
+#include <TNotInGeoidGridException.h>
+#include <FrenchRAF20.h>
+
 
 #include <assert.h>
 #define  _USE_MATH_DEFINES
@@ -54,8 +57,8 @@ namespace
 }
 
 
-TLambert93Transformation::TLambert93Transformation(bool fromRGF93)
-: fFromRGF93(fromRGF93)
+TLambert93Transformation::TLambert93Transformation(bool fromRGF93, bool ellipsHeight)
+	: fFromRGF93(fromRGF93), fEllipsHeight(ellipsHeight)
 {
 	/*
 	std::cout << "####" << std::endl;
@@ -81,19 +84,39 @@ TLambert93Transformation * TLambert93Transformation::clone() const
 
 TLambert93Transformation * TLambert93Transformation::inverse() const
 {
-    return new TLambert93Transformation(!fFromRGF93);
+    return new TLambert93Transformation(!fFromRGF93, fEllipsHeight);
 }
 
 TAReferenceFrame * TLambert93Transformation::getSourceFrame() const
 {
-    return TRefFrameInfo::getReferenceFrame(
-        fFromRGF93 ? TRefSystemFactory::kRGF93 : TRefSystemFactory::kLambert93);
+	if (fFromRGF93)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93);
+	}
+	else if (fEllipsHeight)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_eh);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf);
+	}   
 }
 
 TAReferenceFrame * TLambert93Transformation::getDestinationFrame() const
 {
-    return TRefFrameInfo::getReferenceFrame(
-        fFromRGF93 ? TRefSystemFactory::kLambert93 : TRefSystemFactory::kRGF93);
+	if (!fFromRGF93)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93);
+	}
+	else if (fEllipsHeight)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_eh);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf);
+	}
 }
 
 bool TLambert93Transformation::transform(TPositionVector & pv) const
@@ -115,7 +138,7 @@ bool TLambert93Transformation::transformToRGF93(TPositionVector & pv) const
 
     const double X = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
     const double Y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
-    const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+    double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
 
 	double R = sqrt((X - XS)*(X - XS)+ (Y - YS)*(Y - YS));
     double gamma = atan((X - XS)/(YS - Y));
@@ -139,6 +162,12 @@ bool TLambert93Transformation::transformToRGF93(TPositionVector & pv) const
 
 	}
 
+	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf))
+	{
+		// We convert altitude into ellipsoidal height
+		FrenchRAF20::circeTransfoRafToH(phi, lambda, h);
+	}
+
     TPositionVector tmp = TPositionVector(phi, lambda, h, TCoordSysFactory::kGeodetic);
 	TSpatialPosition outpos(getDestinationFrame());
 	if(!outpos.setCoordinates(tmp))
@@ -158,12 +187,25 @@ bool TLambert93Transformation::transformFromRGF93(TPositionVector & pv) const
 
     const double phi = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue();
     const double lambda = position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue();
-    const double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
+    double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
 
 	double L = log(tan(M_PI/4 + phi/2) * pow(  ( (1-e * sin(phi))/(1+e * sin(phi)) ),(e/2)  ));
 
 	double X = XS + C*exp(-n*L)*sin(n*(lambda-lambda_c));
 	double Y = YS - C*exp(-n*L)*cos(n*(lambda-lambda_c));
+
+	TPositionVector tmp = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);
+	TSpatialPosition outpos(getDestinationFrame());
+	if (!outpos.setCoordinates(tmp))
+	{
+		return false;
+	}
+	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf))
+	{
+		// We convert ellipsoidal height into altitude
+		FrenchRAF20::circeTransfoHToRaf(phi, lambda, h);
+	}
+
 
     pv = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);
 

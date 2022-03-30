@@ -28,9 +28,9 @@ namespace tut
         set_test_name("Iterating over the all registered ERefFrame values");
 
 #ifdef _WIN32
-		size_t nbtrans = 46;
+		size_t nbtrans = 51;
 #else
-		size_t nbtrans = 44;
+		size_t nbtrans = 47;
 #endif
 		TRefFrameInfo::RefFrameSet set = TRefFrameInfo::getRefFrameSet();
 		ensure_equals(set.count(TRefSystemFactory::kITRF97),1);
@@ -139,7 +139,7 @@ namespace tut
 
 		ensure_equals(TRefFrameInfo::getAllowedCoordSysCount(TRefSystemFactory::kCCS), 1);
         ensure_equals(TRefFrameInfo::getAllowedCoordSysCount(TRefSystemFactory::kITRF97), 2);
-		ensure_equals(TRefFrameInfo::getAllowedCoordSysCount(TRefSystemFactory::kSwissLV03), 1);
+		ensure_equals(TRefFrameInfo::getAllowedCoordSysCount(TRefSystemFactory::kSwissLV03_eh), 1);
 #endif
     }
 

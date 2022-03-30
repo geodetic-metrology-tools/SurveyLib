@@ -93,15 +93,21 @@ public:
 			kCernXYHg85Machine   = 106, 
 			kCERNXYHsSphereSPS   = 107, 
 			kCGRFSphere          = 108,
+			kCGRFMercator_eh	 = 113,
 #ifdef USE_SWISSTOPO
-            kSwissLV95           = 109,
-            kSwissLV03           = 110,
+            kSwissLV95_eh        = 109,
+            kSwissLV03_eh        = 110,
+			kSwissLV95_ortho	 = 111,
+			kSwissLV03_ln02	 = 112,
 #endif
-			kFrenchRGF93Zone5    = 205,
-			kLambert93			 = 206,
-			//The same as ETRF93
-			kRGF93               = 207,
-			kCHTRF95             = 208,
+			//Franch system
+			kFrenchRGF93_CC46_eh = 205,
+			kFrenchRGF93_CC46_raf = 206,
+			kLambert93_eh		 = 207,
+			kLambert93_raf		 = 208,			
+			kRGF93               = 209,
+
+			kCHTRF95             = 210,
 			// Local Reference Frames:
 			kMLA1985Machine      = 1000,
 			kMLA2000Machine      = 1001,
@@ -132,19 +138,19 @@ public:
 			kROMA2WGS, kWGS2CGRF, kXYHe2CCS, kX0Y0He2XYHe,
 			kXYHg2XYHe, kXYHg2XYHe00Topo, kXYHg2XYHe00Machine,
 			kXYHg2XYHe85, kXYHg2XYHe85Machine, kXYHsSphereSPS2CCS,
-			kCCS2CGRFSphere,
+			kCCS2CGRFSphere, kCGRF2CGRFMercator,
 			kCGRF2CCS, kLGp02LAp0, kCGRF2LGp0, kCCS2LAp0,
 			kWGS2ROMA, kCGRF2WGS, kCCS2XYHe, kXYHe2X0Y0He,
 			kXYHe2XYHg, kXYHe00Topo2XYHg, kXYHe00Machine2XYHg,
 			kXYHe852XYHg, kXYHe85Machine2XYHg, kCCS2XYHsSphereSPS,
-			kCGRFSphere2CCS, kITRF972CGRF, kCGRF2ITRF97,
+			kCGRFSphere2CCS, kCGRFMercator2CGRF, kITRF972CGRF, kCGRF2ITRF97,
 			kETRF932CH1903plus, kCH1903plus2ETRF93,
 #ifdef USE_SWISSTOPO
-			kCH1903plus2SwissLV95, kSwissLV952CH1903plus,
-			kSwissLV952SwissLV03, kSwissLV032SwissLV95,
+			kCH1903plus2SwissLV95eh, kSwissLV95eh2CH1903plus, kCH1903plus2SwissLV95ortho, kSwissLV95ortho2CH1903plus, 
+			kSwissLV95eh2SwissLV03eh, kSwissLV03eh2SwissLV95eh,kSwissLV95eh2SwissLV03ln02, kSwissLV03ln022SwissLV95eh,
 #endif
-			kETRF932FrenchRGF93, kFrenchRGF932ETRF93,
-			kRGF932Lambert93, kLambert932RGF93,
+			kCC46eh2RGF93, kRGF932CC46eh, kCC46raf2RGF93, kRGF932CC46raf, 
+			kRGF932Lambert93eh, kLambert93eh2RGF93, kRGF932Lambert93raf, kLambert93raf2RGF93,
 			
 			//new
 			kCCS2CGRF2, kWGS2CGRF2, kITRF972CGRF2,

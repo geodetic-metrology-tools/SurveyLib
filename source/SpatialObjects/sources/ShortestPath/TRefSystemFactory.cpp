@@ -39,6 +39,7 @@
 #include <TLV03Projection.h>
 #include <TRGF93CC46Projection.h>
 #include <TLambert93Projection.h>
+#include <TTransverseMercatorProjection.h>
 
 
 #include <TMLA2GCTransformation.h>
@@ -49,6 +50,7 @@
 #include <TLG2LATransformation.h>
 #include <TLG2GCTransformation.h>
 #include <TGC2LGTransformation.h>
+#include <TGeodetic2Mercator.h>
 #include <THelmertTransformation.h>
 #include <THelmertRefFrameTransform.h>
 #include <TXYHe2MLATransformation.h>
@@ -172,6 +174,11 @@ void TRefSystemFactory::init()
 	fRefFrameList.push_back(pCGRFs);
 	fCGRFSphere = pCGRFs;
 
+		// CGRF Transverse Mercator Projection
+	TAReferenceFrame *pCGRFtm_eh = new TTransverseMercatorProjection("CGRFtm_eh");
+	pCGRFtm_eh->setRefFrameId(kCGRFMercator_eh);
+	fRefFrameList.push_back(pCGRFtm_eh);
+
 		// ITRF97 at epoch 1998.5.Link between global and local frames
 	TReal epoch = 1998.5;
 	std::string solution = "ITRF 97";
@@ -206,15 +213,23 @@ void TRefSystemFactory::init()
 	fRefFrameList.push_back(pETRFout);
 	fETRFout = pETRFout;
 
-		// FrenchRGF93 zone 5
-    TAReferenceFrame* pFrenchRGF93Zone5 = new TRGF93CC46Projection("FrenchRGF93Zone5");
-    pFrenchRGF93Zone5->setRefFrameId(kFrenchRGF93Zone5);
-    fRefFrameList.push_back(pFrenchRGF93Zone5);
+		// FrenchRGF93 zone 5 (CC46)
+    TAReferenceFrame* pFrenchRGF93_CC46_eh = new TRGF93CC46Projection("FrenchRGF93_CC46_eh");
+    pFrenchRGF93_CC46_eh->setRefFrameId(kFrenchRGF93_CC46_eh);
+    fRefFrameList.push_back(pFrenchRGF93_CC46_eh);
+
+	TAReferenceFrame *pFrenchRGF93_CC46_raf = new TRGF93CC46Projection("FrenchRGF93_CC46_raf");
+	pFrenchRGF93_CC46_raf->setRefFrameId(kFrenchRGF93_CC46_raf);
+	fRefFrameList.push_back(pFrenchRGF93_CC46_raf);	
 
 	// Lambert93
-	TAReferenceFrame* pLambert93 = new TLambert93Projection("Lambert93");
-	pLambert93->setRefFrameId(kLambert93);
-    fRefFrameList.push_back(pLambert93);
+	TAReferenceFrame* pLambert93_eh = new TLambert93Projection("Lambert93_eh");
+	pLambert93_eh->setRefFrameId(kLambert93_eh);
+    fRefFrameList.push_back(pLambert93_eh);
+
+	TAReferenceFrame *pLambert93_raf = new TLambert93Projection("Lambert93_raf");
+	pLambert93_raf->setRefFrameId(kLambert93_raf);
+	fRefFrameList.push_back(pLambert93_raf);
 
     // ETRF93
 	epoch = 1993;
@@ -246,14 +261,22 @@ void TRefSystemFactory::init()
 	fRefFrameList.push_back(pCH1903plus);
 #ifdef USE_SWISSTOPO
         // Swiss LV95
-    TAReferenceFrame* pLV95 = new TLV95Projection("LV95");
-    pLV95->setRefFrameId(kSwissLV95);
-    fRefFrameList.push_back(pLV95);
+    TAReferenceFrame* pLV95_eh = new TLV95Projection("LV95_eh");
+    pLV95_eh->setRefFrameId(kSwissLV95_eh);
+    fRefFrameList.push_back(pLV95_eh);
+
+	TAReferenceFrame *pLV95_ortho = new TLV95Projection("LV95_ortho");
+	pLV95_ortho->setRefFrameId(kSwissLV95_ortho);
+	fRefFrameList.push_back(pLV95_ortho);
 
         // Swiss LV03
-    TAReferenceFrame* pLV03 = new TLV03Projection("LV03");
-    pLV03->setRefFrameId(kSwissLV03);
-    fRefFrameList.push_back(pLV03);
+    TAReferenceFrame* pLV03_eh = new TLV03Projection("LV03_eh");
+    pLV03_eh->setRefFrameId(kSwissLV03_eh);
+    fRefFrameList.push_back(pLV03_eh);
+
+	TAReferenceFrame *pLV03_ln02 = new TLV03Projection("LV03_ln02");
+	pLV03_ln02->setRefFrameId(kSwissLV03_ln02);
+	fRefFrameList.push_back(pLV03_ln02);
 #endif
 		// WGS84
 	TGeodeticRefFrame* pWGS = new TGeodeticRefFrame(wgs, pWGSEll);
@@ -734,6 +757,17 @@ void TRefSystemFactory::init()
 		fTransformList.push_back(pCGRF2CCS);
 	}
 
+	//Conversion between CGRF (ellipsoid) and CGRF (Transverse Mercator projection)
+	{
+		TGeodetic2Mercator *pCGRF2CGRFMercator = new TGeodetic2Mercator(true);
+		pCGRF2CGRFMercator->setTransformId(kCGRF2CGRFMercator);
+		fTransformList.push_back(pCGRF2CGRFMercator);
+		// Inverse
+		TARefFrameTransformation *pCGRFMercator2CGRF = pCGRF2CGRFMercator->inverse(); // utilise new
+		pCGRFMercator2CGRF->setTransformId(kCGRFMercator2CGRF);
+		fTransformList.push_back(pCGRFMercator2CGRF);
+	}
+
 	// Transformation between CCS and CGRFSphere
 	//rotation pour diriger les axes du CGRFs parallele a ceux du CGRF
 	{
@@ -991,41 +1025,77 @@ void TRefSystemFactory::init()
 #ifdef USE_SWISSTOPO
     {
         ////////////////////////////////////////////////////////////////
-		// Transformation between CH1903plus and LV95
+		// Transformation between CH1903plus and LV95 (ellipsoidal height)
         ////////////////////////////////////////////////////////////////
-        TLV95Transformation * pTrans = new TLV95Transformation(true);
-        pTrans->setTransformId(kCH1903plus2SwissLV95);
+        TLV95Transformation * pTrans = new TLV95Transformation(true, true);
+        pTrans->setTransformId(kCH1903plus2SwissLV95eh);
 		fTransformList.push_back(pTrans);
 		//Inverse
 		TARefFrameTransformation* pInverse = pTrans->inverse();
-        pInverse->setTransformId(kSwissLV952CH1903plus);
+        pInverse->setTransformId(kSwissLV95eh2CH1903plus);
         fTransformList.push_back(pInverse);
 	}
+	{
+		////////////////////////////////////////////////////////////////
+		// Transformation between CH1903plus and LV95 (orthometric height)
+		////////////////////////////////////////////////////////////////
+		TLV95Transformation *pTrans = new TLV95Transformation(true, false);
+		pTrans->setTransformId(kCH1903plus2SwissLV95ortho);
+		fTransformList.push_back(pTrans);
+		// Inverse
+		TARefFrameTransformation *pInverse = pTrans->inverse();
+		pInverse->setTransformId(kSwissLV95ortho2CH1903plus);
+		fTransformList.push_back(pInverse);
+	}
+
     {
         ////////////////////////////////////////////////////////////////
-		// Transformation between LV95 and LV03
+		// Transformation between LV95 and LV03 (ellipsoidal height)
         ////////////////////////////////////////////////////////////////
-        TLV03Transformation * pTrans = new TLV03Transformation(true);
-        pTrans->setTransformId(kSwissLV952SwissLV03);
+        TLV03Transformation * pTrans = new TLV03Transformation(true, true);
+        pTrans->setTransformId(kSwissLV95eh2SwissLV03eh);
 		fTransformList.push_back(pTrans);
 		//Inverse
 		TARefFrameTransformation* pInverse = pTrans->inverse();
-        pInverse->setTransformId(kSwissLV032SwissLV95);
+        pInverse->setTransformId(kSwissLV03eh2SwissLV95eh);
         fTransformList.push_back(pInverse);
+	}
+
+	{
+		////////////////////////////////////////////////////////////////
+		// Transformation between LV95 (ellipsoidal height) and LV03 (leveled height)
+		////////////////////////////////////////////////////////////////
+		TLV03Transformation *pTrans = new TLV03Transformation(true, false);
+		pTrans->setTransformId(kSwissLV95eh2SwissLV03ln02);
+		fTransformList.push_back(pTrans);
+		// Inverse
+		TARefFrameTransformation *pInverse = pTrans->inverse();
+		pInverse->setTransformId(kSwissLV03ln022SwissLV95eh);
+		fTransformList.push_back(pInverse);
 	}
 #endif
     
         ////////////////////////////////////////////////////////////////
-		// Transformation between ETRF93 and RGF93
+		// Transformation between projected CC46 and RGF93
         ////////////////////////////////////////////////////////////////
 	{
-		TRGF93ZoneTransformation * pTrans = new TRGF93ZoneTransformation(true);
-        pTrans->setTransformId(kETRF932FrenchRGF93);
-		fTransformList.push_back(pTrans);
+		//Ellipsoidal height
+		TRGF93ZoneTransformation * pRGF932CC46eh = new TRGF93ZoneTransformation(true, true);
+		pRGF932CC46eh->setTransformId(kRGF932CC46eh);
+		fTransformList.push_back(pRGF932CC46eh);
 		//Inverse
-		TARefFrameTransformation* pInverse = pTrans->inverse();
-        pInverse->setTransformId(kFrenchRGF932ETRF93);
-        fTransformList.push_back(pInverse);
+		TARefFrameTransformation *pCC46eh2RGF93 = pRGF932CC46eh->inverse();
+		pCC46eh2RGF93->setTransformId(kCC46eh2RGF93);
+		fTransformList.push_back(pCC46eh2RGF93);
+
+		//Altitude NGF-IGN69
+		TRGF93ZoneTransformation *pRGF932CC46raf = new TRGF93ZoneTransformation(true, false);
+		pRGF932CC46raf->setTransformId(kRGF932CC46raf);
+		fTransformList.push_back(pRGF932CC46raf);
+		// Inverse
+		TARefFrameTransformation *pCC46raf2RGF93 = pRGF932CC46raf->inverse();
+		pCC46raf2RGF93->setTransformId(kCC46raf2RGF93);
+		fTransformList.push_back(pCC46raf2RGF93);
 	}
 
 	
@@ -1033,13 +1103,23 @@ void TRefSystemFactory::init()
 		// Transformation between RGF93v2b and Lambert93
         ////////////////////////////////////////////////////////////////
 	{
-		TLambert93Transformation * pTrans = new TLambert93Transformation(true);
-        pTrans->setTransformId(kRGF932Lambert93);
-		fTransformList.push_back(pTrans);
+		//Ellipsoidal height
+		TLambert93Transformation *pRGF932Lambert93eh = new TLambert93Transformation(true, true);
+		pRGF932Lambert93eh->setTransformId(kRGF932Lambert93eh);
+		fTransformList.push_back(pRGF932Lambert93eh);
 		//Inverse
-		TARefFrameTransformation* pInverse = pTrans->inverse();
-        pInverse->setTransformId(kLambert932RGF93);
-        fTransformList.push_back(pInverse);
+		TARefFrameTransformation *pLambert93eh2RGF93 = pRGF932Lambert93eh->inverse();
+		pLambert93eh2RGF93->setTransformId(kLambert93eh2RGF93);
+		fTransformList.push_back(pLambert93eh2RGF93);
+
+		//Altiude NGF-IGN69
+		TLambert93Transformation *pRGF932Lambert93raf = new TLambert93Transformation(true, false);
+		pRGF932Lambert93raf->setTransformId(kRGF932Lambert93raf);
+		fTransformList.push_back(pRGF932Lambert93raf);
+		// Inverse
+		TARefFrameTransformation *pLambert93raf2RGF93 = pRGF932Lambert93raf->inverse();
+		pLambert93raf2RGF93->setTransformId(kLambert93raf2RGF93);
+		fTransformList.push_back(pLambert93raf2RGF93);
 	}
             
 	// Transformation between CERN projection XYHe and CCS

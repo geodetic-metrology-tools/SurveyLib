@@ -7,7 +7,7 @@
 class TLV95Transformation : public TARefFrameTransformation
 {
 public:
-    explicit TLV95Transformation(bool fromCH1903plus);
+	explicit TLV95Transformation(bool fromCH1903plus, bool ellipsHeight);
 
 	TLV95Transformation * clone() const;
 	TLV95Transformation * inverse() const;
@@ -23,6 +23,7 @@ private:
     bool transformToCH1903plus(TPositionVector & pv) const;
 
     const bool fFromCH1903plus;
+	const bool fEllipsHeight;
 	
 	TLV95Transformation & operator=(const TLV95Transformation&);  // non copyable
 };

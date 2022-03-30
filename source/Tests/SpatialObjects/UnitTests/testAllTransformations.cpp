@@ -98,7 +98,7 @@ namespace tut
 		std::map<std::string, TSpatialPosition> afterTransformation95;
 		for (std::map<std::string, TSpatialPosition>::iterator iter = beforeTransformation.begin(); iter != beforeTransformation.end(); iter++)
 		{
-			bool result = iter->second.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95)); 
+			bool result = iter->second.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_eh)); 
 			ensure("Transformation should return true", result);
 			afterTransformation95.insert(std::pair<std::string, TSpatialPosition>(iter->first, iter->second));
 		}
@@ -145,7 +145,7 @@ namespace tut
 		*
 		*/
 
-		TRefSystemFactory::ERefFrame frame = TRefSystemFactory::kSwissLV95;
+		TRefSystemFactory::ERefFrame frame = TRefSystemFactory::kSwissLV95_eh;
 		TPointsMap beforeTransformation = readPoints(TrafoTestPoints::_swisstopo_transformation_LV95, frame);
 
 
@@ -219,7 +219,7 @@ namespace tut
 		std::map<std::string, TSpatialPosition> afterTransformation03;
 		for (std::map<std::string, TSpatialPosition>::iterator iter = beforeTransformation.begin(); iter != beforeTransformation.end(); iter++)
 		{
-			bool result = iter->second.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03)); 
+			bool result = iter->second.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03_eh)); 
 			ensure("Transformation should return true", result);
 			afterTransformation03.insert(std::pair<std::string, TSpatialPosition>(iter->first, iter->second));
 		}
@@ -281,7 +281,7 @@ namespace tut
 		std::map<std::string, TSpatialPosition> afterTransformationRGF93CC46;
 		for (std::map<std::string, TSpatialPosition>::iterator iter = beforeTransformation.begin(); iter != beforeTransformation.end(); iter++)
 		{
-			bool result = iter->second.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93Zone5)); 
+			bool result = iter->second.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_eh)); 
 			ensure("Transformation should return true", result);
 			afterTransformationRGF93CC46.insert(std::pair<std::string, TSpatialPosition>(iter->first, iter->second));
 		}
@@ -342,7 +342,7 @@ namespace tut
 		std::map<std::string, TSpatialPosition> afterTransformationLambert93;
 		for (std::map<std::string, TSpatialPosition>::iterator iter = beforeTransformation.begin(); iter != beforeTransformation.end(); iter++)
 		{
-			bool result = iter->second.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93)); 
+			bool result = iter->second.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_eh)); 
 			ensure("Transformation should return true", result);
 			afterTransformationLambert93.insert(std::pair<std::string, TSpatialPosition>(iter->first, iter->second));
 		}

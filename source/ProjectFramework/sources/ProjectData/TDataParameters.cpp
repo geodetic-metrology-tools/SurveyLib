@@ -510,6 +510,8 @@ std::string TDataParameters::getRFName() const
 		return "CGRF";
 	case TRefSystemFactory::ERefFrame::kCGRFSphere:
 		return "CGRFSphere";
+	case TRefSystemFactory::ERefFrame::kCGRFMercator_eh:
+		return "CGRFMercator_eh";
 	case TRefSystemFactory::ERefFrame::kCernX0Y0He:
 		return "CERN_X0Y0He";
 	case TRefSystemFactory::ERefFrame::kCernXYHe:
@@ -532,8 +534,10 @@ std::string TDataParameters::getRFName() const
 		return "CHTRF95";
 	case TRefSystemFactory::ERefFrame::kETRF93:
 		return "ETRF93";
-	case TRefSystemFactory::ERefFrame::kFrenchRGF93Zone5:
-		return "RGF93zone5";
+	case TRefSystemFactory::ERefFrame::kFrenchRGF93_CC46_eh:
+		return "RGF93_CC46_eh";
+	case TRefSystemFactory::ERefFrame::kFrenchRGF93_CC46_raf:
+		return "RGF93_CC46_ign69";
 	case TRefSystemFactory::ERefFrame::kITRF97:
 		return "ITRF97";
 	case TRefSystemFactory::ERefFrame::kLA1985H0:
@@ -546,8 +550,10 @@ std::string TDataParameters::getRFName() const
 		return "LA_00Topo";
 	case TRefSystemFactory::ERefFrame::kLA2000Machine:
 		return "LA_00Machine";
-	case TRefSystemFactory::ERefFrame::kLambert93:
-		return "Lambert93";
+	case TRefSystemFactory::ERefFrame::kLambert93_eh:
+		return "Lambert93_eh";
+	case TRefSystemFactory::ERefFrame::kLambert93_raf:
+		return "Lambert93_ign69";
 	case TRefSystemFactory::ERefFrame::kLAp0:
 		return "LA_P0";
 	case TRefSystemFactory::ERefFrame::kLASphere:
@@ -579,10 +585,14 @@ std::string TDataParameters::getRFName() const
 	case TRefSystemFactory::ERefFrame::kROMA40:
 		return "ROMA40";
 #ifdef USE_SWISSTOPO
-	case TRefSystemFactory::ERefFrame::kSwissLV03:
-		return "LV03";
-	case TRefSystemFactory::ERefFrame::kSwissLV95:
-		return "LV95";
+	case TRefSystemFactory::ERefFrame::kSwissLV03_eh:
+		return "LV03_eh";
+	case TRefSystemFactory::ERefFrame::kSwissLV03_ln02:
+		return "LV03_ln02";
+	case TRefSystemFactory::ERefFrame::kSwissLV95_eh:
+		return "LV95_eh";
+	case TRefSystemFactory::ERefFrame::kSwissLV95_ortho:
+		return "LV95_ortho";
 #endif
 	case TRefSystemFactory::ERefFrame::kWGS84:
 		return "WGS84";

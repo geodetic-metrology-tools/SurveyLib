@@ -1,10 +1,14 @@
 #include <TRGF93CC46Transformation.h>
 
 #include <TRefFrameInfo.h>
+#include <TNotInGeoidGridException.h>
+#include <FrenchRAF20.h>
 
 #include <assert.h>
 #define  _USE_MATH_DEFINES
 #include <math.h>
+
+
 
 /////////////////////////////////////////////////////////
 
@@ -52,8 +56,8 @@ namespace
 }
 
 
-TRGF93ZoneTransformation::TRGF93ZoneTransformation(bool fromRGF93)
-: fFromRGF93(fromRGF93)
+TRGF93ZoneTransformation::TRGF93ZoneTransformation(bool fromRGF93, bool ellipsHeight)
+	: fFromRGF93(fromRGF93), fEllipsHeight(ellipsHeight)
 {
 }
 
@@ -64,19 +68,39 @@ TRGF93ZoneTransformation * TRGF93ZoneTransformation::clone() const
 
 TRGF93ZoneTransformation * TRGF93ZoneTransformation::inverse() const
 {
-    return new TRGF93ZoneTransformation(!fFromRGF93);
+    return new TRGF93ZoneTransformation(!fFromRGF93, fEllipsHeight);
 }
 
 TAReferenceFrame * TRGF93ZoneTransformation::getSourceFrame() const
 {
-    return TRefFrameInfo::getReferenceFrame(
-        fFromRGF93 ? TRefSystemFactory::kRGF93 : TRefSystemFactory::kFrenchRGF93Zone5);
+	if (fFromRGF93)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93);
+	}
+	else if (fEllipsHeight)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_eh);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf);
+	}
 }
 
 TAReferenceFrame * TRGF93ZoneTransformation::getDestinationFrame() const
 {
-    return TRefFrameInfo::getReferenceFrame(
-        fFromRGF93 ? TRefSystemFactory::kFrenchRGF93Zone5 : TRefSystemFactory::kRGF93);
+	if (!fFromRGF93)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93);
+	}
+	else if (fEllipsHeight)
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_eh);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf);
+	}
 }
 
 bool TRGF93ZoneTransformation::transform(TPositionVector & pv) const
@@ -96,9 +120,9 @@ bool TRGF93ZoneTransformation::transformToRGF93(TPositionVector & pv) const
 	if(!position.setCoordinates(pv))
         return false;
 
-    const double X = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
+	const double X = position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue();
     const double Y = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
-    const double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
+    double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
 
     double R = sqrt((X-Xs)*(X-Xs)+ (Y-Ys)*(Y-Ys));
     double gama = atan((X-Xs)/(Ys-Y)); 
@@ -120,6 +144,12 @@ bool TRGF93ZoneTransformation::transformToRGF93(TPositionVector & pv) const
         break;
     }
 
+	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
+	{
+		// We convert altitude into ellipsoidal height
+		FrenchRAF20::circeTransfoRafToH(phi, lambda, h);
+	}
+
 	//pv = TPositionVector(phi, lambda, h, TCoordSysFactory::kGeodetic);
 	// We can't leave it in the Geodetic form. Other code expects to get Cartesian
     TPositionVector tmp = TPositionVector(phi, lambda, h, TCoordSysFactory::kGeodetic);
@@ -132,6 +162,7 @@ bool TRGF93ZoneTransformation::transformToRGF93(TPositionVector & pv) const
     return true;
 
 }
+
 bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
 {
     //transform phi lambda h
@@ -141,15 +172,27 @@ bool TRGF93ZoneTransformation::transformFromRGF93(TPositionVector & pv) const
 
     const double phi = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue();
     const double lambda = position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue();
-    const double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
+    double h = position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue();
 
-    double L =  0.5 * log((1+sin(phi))/(1-sin(phi)))   - (e/2) * log((1+e*sin(phi))/(1-e*sin(phi)));
+	double L =  0.5 * log((1+sin(phi))/(1-sin(phi)))   - (e/2) * log((1+e*sin(phi))/(1-e*sin(phi)));
 
     double R = C*exp(-n*L);
     double gama = n*(lambda-lambda0);
 
     double X = Xs + R*sin(gama);
     double Y = Ys - R*cos(gama);
+
+	TPositionVector tmp = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);
+	TSpatialPosition outpos(getDestinationFrame());
+	if (!outpos.setCoordinates(tmp))
+	{
+		return false;
+	}
+	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kFrenchRGF93_CC46_raf))
+	{
+		// We convert ellipsoidal height into altitude
+		FrenchRAF20::circeTransfoHToRaf(phi, lambda, h);
+	}
 
     pv = TPositionVector(X, Y, h, TCoordSysFactory::k2DPlusH);
 
