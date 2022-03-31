@@ -4,9 +4,6 @@
 
 #pragma comment(lib, "ReframeLibWrapper.lib")
 
-//#include "ReframeWrapper.h" 
-
-
 #endif
 
 class __declspec(dllimport) ReframeWrapper
