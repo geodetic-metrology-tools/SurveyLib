@@ -259,7 +259,8 @@ void	TGeodeticFilter::output(TAStreamFormatter& oStream, const TPositionVector& 
 			oStream.setWidthFormat(width + 3);
 			oStream.setPrecisionFormat(precision + 6);
 		}
-		else if (	oStream.getAngleUnits() == TAngle::kGons && 
+		else if (	(oStream.getAngleUnits() == TAngle::kGons ||
+					 oStream.getAngleUnits() == TAngle::kDeciDegs) && 
 					oStream.getCoordSys() == TCoordSysFactory::kGeodetic)
 		{
 			oStream.setWidthFormat(width + 1);

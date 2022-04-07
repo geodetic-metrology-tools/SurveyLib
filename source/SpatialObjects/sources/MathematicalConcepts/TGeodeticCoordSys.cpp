@@ -31,6 +31,8 @@ int TGeodeticCoordSys::precisionNeeded(TAngle::EUnits unit)
 		return 2;
 	case TAngle::EUnits::kCCs:
 		return 1;
+	case TAngle::EUnits::kDeciDegs:
+		return 5;	
 	}
 	return 0;
 }

@@ -23,7 +23,7 @@ member functions provide ArcSine, ArcCosine, and ArcTangent operators.
 Patterns:
 
  
-Copyright 1999-2002, Mark Jones, EST/SU. All rights reserved.
+Copyright 1999-2022, CERN. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 
@@ -62,6 +62,7 @@ TAngle::TAngle(const TReal value, EUnits unit)
       case EUnits::kGons:        setGonsValue(value); break;
       case EUnits::kCCs:         setGonsValue(value*CC2GON); break;
       case EUnits::k100MicroGons:setGonsValue(value*CC2GON); break;
+      case EUnits::kDeciDegs:    setDeciDegsValue(value); break;
    }
 }
 
@@ -155,6 +156,20 @@ bool	TAngle::setDMSValue(const	Degrees	degs,
 	//normalise the radians value
 	normaliseAngle();
 
+
+	return true;
+}
+
+
+
+bool	TAngle::setDeciDegsValue(const TReal value)
+{ // set the angle value to the given decimal degree value
+
+	// convert the given value to radians
+	fValue = value * DEG2RAD;
+
+	// normalise the radians value
+	normaliseAngle();
 
 	return true;
 }
@@ -475,4 +490,23 @@ TReal	TAngle::getSignedCCValue() const
 Degrees	TAngle::getDegreesValue() const
 {	// get the integer degrees of the angular value 
    return Degrees(fValue * RAD2DEG);
+}
+
+TReal TAngle::getDeciDegsValue() const
+{ // get the decimal degrees angular value for the angle
+	// return the converted angular value
+	TReal gValue = fValue;
+	while (gValue < 0)
+	{
+		gValue += 2 * M_PI;
+	}
+	while (gValue >= 2 * M_PI - seuil())
+	{
+		gValue -= 2 * M_PI;
+	}
+	if (gValue < 0)
+	{
+		gValue = 0;
+	}
+	return (gValue * RAD2DEG);
 }

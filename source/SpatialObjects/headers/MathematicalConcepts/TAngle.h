@@ -1,14 +1,14 @@
 // TAngle.h
 /*
-© Copyright CERN 2000-2017. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2022. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*!
 The TAngle class represents a mathematical angle value.
 
-The angle may be set with a numerical value in radians, gons or 
-DMS (sexagesimal), likewise the value may be obtained in any of 
-these units.
+The angle may be set with a numerical value in radians, gons, 
+decimal degrees, or DMS (sexagesimal), likewise the value may be obtained
+in any of these units.
  
 Angular values are normalised to ensure they lie be between
 -2Pi and 2Pi radians (or the equivalent for other angular units).
@@ -70,7 +70,8 @@ public:
         kGons = 1,
         k100MicroGons = 2,
         kDMS = 3,
-        kCCs = 4
+        kCCs = 4,
+		kDeciDegs = 5
     }; 
 	//@}
 	
@@ -105,6 +106,8 @@ public:
     bool setGonsValue(TReal);
 	/*! Sets the angle value in degre, minutes, seconds */
 	bool setDMSValue( Degrees, Minutes, Seconds );
+	/*! Sets the angle value in decimal degrees */
+	bool setDeciDegsValue(TReal);
 	//@}
 
 	/*!@name Access methods  */
@@ -121,6 +124,8 @@ public:
    Minutes getMinutesValue() const;
 	/*! Gets part of the angle value in sec */
    Seconds getSecondsValue() const;
+	/*! Gets the angle value in decimal degrees */
+   TReal getDeciDegsValue() const;
 	//@}
 
 	/*!@name Algebraic operators */
