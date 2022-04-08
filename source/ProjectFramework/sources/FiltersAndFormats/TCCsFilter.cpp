@@ -51,7 +51,7 @@ TCCsFilter::~TCCsFilter()
 
 TCCsFilter *TCCsFilter::instance()
 {
-	if( fFilter == 0 )
+	if( fFilter == nullptr )
 	{
 		fFilter = new TCCsFilter;
 	}

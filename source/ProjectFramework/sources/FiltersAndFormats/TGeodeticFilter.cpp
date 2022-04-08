@@ -56,7 +56,7 @@ TGeodeticFilter::~TGeodeticFilter()
 
 TGeodeticFilter  *TGeodeticFilter::instance()
 {
-	if( fCoorSys == 0 )
+	if( fCoorSys == nullptr )
 	{
 		fCoorSys = new TGeodeticFilter;
 	}

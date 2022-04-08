@@ -51,7 +51,7 @@ TRadiansFilter::~TRadiansFilter()
 
 TRadiansFilter *TRadiansFilter::instance()
 {
-	if( fFilter == 0 )
+	if( fFilter == nullptr )
 	{
 		fFilter = new TRadiansFilter;
 	}

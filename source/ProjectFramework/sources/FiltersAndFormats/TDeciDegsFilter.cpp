@@ -12,14 +12,12 @@
 //////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////
-// For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// Other forward declarations
+
 #include "TAngle.h"
 #include "TDeciDegsFilter.h"
 #include "TObservationFormat.h"
 #include "TPointFormat.h"
+
 //////////////////////////////////////////////////////////////////////
 
 // ClassImp(TDeciDegsFilter)
@@ -47,7 +45,7 @@ TDeciDegsFilter::~TDeciDegsFilter()
 
 TDeciDegsFilter *TDeciDegsFilter::instance()
 {
-	if (fFilter == 0)
+	if (fFilter == nullptr)
 	{
 		fFilter = new TDeciDegsFilter;
 	}

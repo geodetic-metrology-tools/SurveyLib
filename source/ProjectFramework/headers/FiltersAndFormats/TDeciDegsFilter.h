@@ -85,7 +85,6 @@ private:
 	/*!copy constructor declaration*/
 	TDeciDegsFilter(const TDeciDegsFilter &);
 
-	// ClassDef(TGonsFilter, 1)
 };
 
 /*@}*/

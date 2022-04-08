@@ -101,13 +101,13 @@ public:
 	/*!@name Setting methods */
 	//@{
 	/*! Sets the angle value in radians */
-    bool setRadiansValue(TReal);
+    void setRadiansValue(TReal);
 	/*! Sets the angle value in gons */
-    bool setGonsValue(TReal);
+    void setGonsValue(TReal);
 	/*! Sets the angle value in degre, minutes, seconds */
 	bool setDMSValue( Degrees, Minutes, Seconds );
 	/*! Sets the angle value in decimal degrees */
-	bool setDeciDegsValue(TReal);
+	void setDeciDegsValue(TReal);
 	//@}
 
 	/*!@name Access methods  */

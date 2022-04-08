@@ -87,20 +87,18 @@ void TAngle::normaliseAngle()
 }
 
 
-bool	TAngle::setRadiansValue(const TReal value)
+void	TAngle::setRadiansValue(const TReal value)
 {	// set the angle value to the given radians value
 		
 	fValue = value;
 	
 	//normalise the radians value
 	normaliseAngle();			
-
-	return true;
 }
 
 
 
-bool	TAngle::setGonsValue(const TReal value)
+void	TAngle::setGonsValue(const TReal value)
 {	// set the angle value to the given gons value
 	
 	// convert the given value to radians
@@ -108,8 +106,6 @@ bool	TAngle::setGonsValue(const TReal value)
 
 	//normalise the radians value
 	normaliseAngle();
-
-	return true;
 }
 
 
@@ -162,7 +158,7 @@ bool	TAngle::setDMSValue(const	Degrees	degs,
 
 
 
-bool	TAngle::setDeciDegsValue(const TReal value)
+void	TAngle::setDeciDegsValue(const TReal value)
 { // set the angle value to the given decimal degree value
 
 	// convert the given value to radians
@@ -170,8 +166,6 @@ bool	TAngle::setDeciDegsValue(const TReal value)
 
 	// normalise the radians value
 	normaliseAngle();
-
-	return true;
 }
 
 
