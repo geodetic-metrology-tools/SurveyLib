@@ -9,17 +9,9 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransf
 					${SURVEYLIB_ROOT}/source/Logs
 					# Eigen
 					${EIGEN_INCLUDE_PATH}
-
 )
 
 add_definitions(-DCIRCE_EXEC_DIR="${CIRCE_EXEC_DIR}")
-
-IF(USE_SWISSTOPO)
-	include_directories(C:/Windows/System32
-		${REFRAME_LIBRARY_DIR}
-	)
-	link_directories(${REFRAME_LIBRARY_DIR})
-ENDIF()
 
 # Create a variable containing all .cpp files:
 set(SpatialObject_SOURCES 
@@ -239,20 +231,6 @@ set(SpatialObject_HEADERS
 	headers/SpatialSystems/TSpatialVector.h
 )
 
-#Add transformations if Swisstopo is used
-IF(USE_SWISSTOPO)
-	set(SpatialObject_SOURCES 
-		${SpatialObject_SOURCES}
-		sources/RefFrameTransformations/TLV03Transformation.cpp
-		sources/RefFrameTransformations/TLV95Transformation.cpp
-	)
-	set(SpatialObject_HEADERS 
-		${SpatialObject_HEADERS}
-		headers/RefFrameTransformations/TLV03Transformation.h
-		headers/RefFrameTransformations/TLV95Transformation.h
-	)
-ENDIF(USE_SWISSTOPO)
-
 # Define VS folders:
 file(GLOB AFFINETRANSFORMATION_H 		headers/AffineTransformations/*.*)
 file(GLOB AFFINETRANSFORMATION_CPP		sources/AffineTransformations/*.*)
@@ -284,8 +262,45 @@ source_group("SpatialObj\\Sources"   				FILES ${SPATIALOBJ_CPP})
 source_group("SpatialSystems\\Headers"   			FILES ${SPATIALSYSTEM_H})
 source_group("SpatialSystems\\Sources"   			FILES ${SPATIALSYSTEM_CPP})
 
+#Add transformations if Swisstopo is used
+IF(USE_SWISSTOPO)
+	set(SpatialObject_SOURCES 
+		${SpatialObject_SOURCES}
+		sources/RefFrameTransformations/TLV03Transformation.cpp
+		sources/RefFrameTransformations/TLV95Transformation.cpp
+	)
+	set(SpatialObject_HEADERS 
+		${SpatialObject_HEADERS}
+		headers/RefFrameTransformations/TLV03Transformation.h
+		headers/RefFrameTransformations/TLV95Transformation.h
+	)
+	
+	MESSAGE(STATUS "[STATUS] Swisstopo transformations enabled.")
+	IF(NOT EXISTS "${REFRAME2016_LIBRARY_DIR}/ReframeLibWrapper.dll")
+		MESSAGE(FATAL_ERROR "[ERROR] Cannot find ReframeLibWrapper.dll in ${REFRAME2016_LIBRARY_DIR}")
+	ELSEIF(NOT EXISTS "${REFRAME2016_LIBRARY_DIR}/ReframeLibWrapper.lib")
+		MESSAGE(FATAL_ERROR "[ERROR] Cannot find ReframeLibWrapper.lib in ${REFRAME2016_LIBRARY_DIR}")
+	ELSEIF(NOT EXISTS "${REFRAME2016_LIBRARY_DIR}/swisstopo.data.dll")
+		MESSAGE(FATAL_ERROR "[ERROR] Cannot find swisstopo.data.dll in ${REFRAME2016_LIBRARY_DIR}")
+	ELSEIF(NOT EXISTS "${REFRAME2016_LIBRARY_DIR}/swisstopo.reframelib.dll")
+		MESSAGE(FATAL_ERROR "[ERROR] Cannot find wisstopo.reframelib.dll in ${REFRAME2016_LIBRARY_DIR}")
+	ELSE()
+		MESSAGE(STATUS "[STATUS] Found ReframeLib Files in ${REFRAME2016_LIBRARY_DIR}")
+	ENDIF()
+ELSE(USE_SWISSTOPO)
+	MESSAGE(STATUS "[STATUS] Swisstopo transformations disabled.")
+ENDIF(USE_SWISSTOPO)
+
 # Create a static library from sources:
 add_library(SpatialObjects STATIC ${SpatialObject_SOURCES} ${SpatialObject_HEADERS})
+IF(USE_SWISSTOPO)
+	target_include_directories(SpatialObjects PUBLIC ${REFRAME2016_LIBRARY_DIR})
+	target_link_directories(SpatialObjects PUBLIC ${REFRAME2016_LIBRARY_DIR})
+	# Anything that depends on SpatialObjects will have the flag set
+	target_compile_definitions(SpatialObjects PUBLIC -DUSE_SWISSTOPO)
+ENDIF(USE_SWISSTOPO)
+
+
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
     target_link_libraries(SpatialObjects PRIVATE optimized OpenMP::OpenMP_CXX)

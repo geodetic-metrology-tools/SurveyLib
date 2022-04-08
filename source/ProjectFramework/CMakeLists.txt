@@ -84,13 +84,6 @@ add_library(ProjectFramework STATIC
 )
 target_include_directories(ProjectFramework PUBLIC
 	# SurveyLib
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
 	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/Converters
 	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/FiltersAndFormats
 	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/ProjectData
@@ -102,6 +95,7 @@ target_include_directories(ProjectFramework PUBLIC
 target_link_libraries(ProjectFramework
 	# SurveyLib
 	Tools
+	SpatialObjects
 )
 
 # Define IDE folders:
