@@ -8,6 +8,7 @@ set(ProjectFramework_SOURCES
 	sources/FiltersAndFormats/T2DPlusHFilter.cpp
 	sources/FiltersAndFormats/T3DCartesianFilter.cpp
 	sources/FiltersAndFormats/TCCsFilter.cpp
+	sources/FiltersAndFormats/TDeciDegsFilter.cpp
 	sources/FiltersAndFormats/TDMSFilter.cpp
 	sources/FiltersAndFormats/TGeodeticFilter.cpp
 	sources/FiltersAndFormats/TGonsFilter.cpp
@@ -38,6 +39,7 @@ set(ProjectFramework_HEADERS
 	headers/FiltersAndFormats/T3DCartesianFilter.h
 	headers/FiltersAndFormats/TAngleFilter.h
 	headers/FiltersAndFormats/TCCsFilter.h
+	headers/FiltersAndFormats/TDeciDegsFilter.h
 	headers/FiltersAndFormats/TDMSFilter.h
 	headers/FiltersAndFormats/TGeodeticFilter.h
 	headers/FiltersAndFormats/TGonsFilter.h

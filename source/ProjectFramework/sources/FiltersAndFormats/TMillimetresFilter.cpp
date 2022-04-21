@@ -54,7 +54,7 @@ TMillimetresFilter::~TMillimetresFilter()
 
 TMillimetresFilter *TMillimetresFilter::instance()
 {	// get the instance of a TMillimetresFilter
-	if( fFilter == 0 )
+	if( fFilter == nullptr )
 	{
 		fFilter = new TMillimetresFilter;
 	}

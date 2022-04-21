@@ -9,7 +9,7 @@
 // the decorator pattern.
 // 
 //
-// Copyright 2002-2008, M. Jones  CERN, TS/SU. All rights reserved.
+// Copyright 2002-2022, CERN. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////
@@ -35,6 +35,7 @@
 
 #include	"TAngleFilter.h"
 #include	"TDMSFilter.h"
+#include	"TDeciDegsFilter.h"
 #include	"TGonsFilter.h"
 #include	"T100MicroGonsFilter.h"
 #include	"TCCsFilter.h"
@@ -1385,6 +1386,9 @@ TAngleFilter *TAStreamFormatter::getAngleFilter( TAngle::EUnits units )
 		break;
 	case TAngle::kCCs:
 		filter = TCCsFilter::instance();
+		break;
+	case TAngle::kDeciDegs:
+		filter = TDeciDegsFilter::instance();
 		break;
 	default:
 		// undefined angle filter requested

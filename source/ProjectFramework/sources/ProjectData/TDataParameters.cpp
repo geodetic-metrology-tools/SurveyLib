@@ -6,7 +6,7 @@
 // Patterns:
 //
 // 
-// Copyright 2000 CERN EST/SU. All rights reserved.
+// Copyright 2000-2022 CERN EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 
@@ -239,6 +239,11 @@ bool  TDataParameters::setUnits( const TDataParameters::ECoordUnit& units )
 		else if (units == kGons )
 		{
 			fAngleUnits = TAngle::kGons;  
+			setCoordSys(TCoordSysFactory::kGeodetic);
+		}
+		else if (units == kDeciDegs)
+		{
+			fAngleUnits = TAngle::kDeciDegs;
 			setCoordSys(TCoordSysFactory::kGeodetic);
 		}
 		else if (units == kMetric )

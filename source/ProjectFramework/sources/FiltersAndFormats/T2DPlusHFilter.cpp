@@ -53,7 +53,7 @@ T2DPlusHFilter::~T2DPlusHFilter()
 //////////////////////////////////////////////////////////////////////
 T2DPlusHFilter  *T2DPlusHFilter::instance()
 {/*!return the unique class component*/
-	if( fCoorSys == 0 )
+	if( fCoorSys == nullptr )
 	{
 		fCoorSys = new T2DPlusHFilter;
 	}

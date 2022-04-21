@@ -51,7 +51,7 @@ TKilometresFilter::~TKilometresFilter()
 
 TKilometresFilter *TKilometresFilter::instance()
 {	// get the instance of a TMetresFilter
-	if( fFilter == 0 )
+	if( fFilter == nullptr )
 	{
 		fFilter = new TKilometresFilter;
 	}

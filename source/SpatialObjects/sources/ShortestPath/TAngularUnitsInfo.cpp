@@ -17,6 +17,7 @@ const TAngularUnitsInfo::AngleUnitsMapType & TAngularUnitsInfo::getAngleUnitsMap
 		tmp->insert(std::make_pair(2, std::make_pair("k100MicroGons", "100MicroGons")));
 		tmp->insert(std::make_pair(3, std::make_pair("kDMS", "DMS")));
 		tmp->insert(std::make_pair(4, std::make_pair("kCCs", "CCs")));
+		tmp->insert(std::make_pair(5, std::make_pair("kDeciDegs", "DeciDegs")));
 
 		mapping = std::move(tmp);
 	}

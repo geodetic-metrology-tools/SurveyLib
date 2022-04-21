@@ -1,89 +1,82 @@
-// TGonsFilter.cpp
+// TDeciDegsFilter.cpp
 //
 // Concrete Class of the TAngleFilter PABC.
-// Handles the IO of an TAngle object angles in a text stream with 
-// gons units. 
-// 
+// Handles the IO of an TAngle object angles in a text stream with
+// decimal degrees units.
+//
 // Patterns:
 // This class is a Singleton.
-// Works as a Strategy of a TTStreamFormatter object. 
+// Works as a Strategy of a TTStreamFormatter object.
 //
-// Copyright 1999,2000, CERN, EST/SU. All rights reserved.
+// Copyright 1999,2022, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
-
 
 ////////////////////////////////////////////////////////////////
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// Other forward declarations
+
 #include "TAngle.h"
+#include "TDeciDegsFilter.h"
 #include "TObservationFormat.h"
 #include "TPointFormat.h"
-#include "TGonsFilter.h"
+
 //////////////////////////////////////////////////////////////////////
 
-
-//ClassImp(TGonsFilter)
-
-
+// ClassImp(TDeciDegsFilter)
 
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
-TGonsFilter *TGonsFilter::fFilter = 0;
-
+TDeciDegsFilter *TDeciDegsFilter::fFilter = 0;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-TGonsFilter::TGonsFilter()
-{}
+TDeciDegsFilter::TDeciDegsFilter()
+{
+}
 
-TGonsFilter::~TGonsFilter()
-{}
-
+TDeciDegsFilter::~TDeciDegsFilter()
+{
+}
 
 //////////////////////////////////////////////////////////////////////
 // Member Functions
 //////////////////////////////////////////////////////////////////////
 
-TGonsFilter *TGonsFilter::instance()
+TDeciDegsFilter *TDeciDegsFilter::instance()
 {
-	if( fFilter == nullptr )
+	if (fFilter == nullptr)
 	{
-		fFilter = new TGonsFilter;
+		fFilter = new TDeciDegsFilter;
 	}
 
 	return fFilter;
 }
 
-
-void	TGonsFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
-{	// function to get a gons angle from a QTextStream object
+void TDeciDegsFilter::input(TAStreamFormatter &iStream, TAngle &angle) const
+{ // function to get a decimal degrees angle from a QTextStream object
 	// and set the value in a TAngle object
-	TReal	gons;
+	TReal deciDegs;
 
 	iStream.skipWhiteSpace();
-	if(iStream.peek()=='\n')
-	{//check if there's coordinate to read
-		angle.setGonsValue(NO_VALf);
+	if (iStream.peek() == '\n')
+	{ // check if there's coordinate to read
+		angle.setDeciDegsValue(NO_VALf);
 		iStream.setError("No angle value to read");
 	}
 
 	else
 	{
-		iStream >> gons;
-		if(!(iStream.fail()))
-			angle.setGonsValue(gons);
+		iStream >> deciDegs;
+		if (!(iStream.fail()))
+			angle.setDeciDegsValue(deciDegs);
 		else
 		{
-			angle.setGonsValue(NO_VALf);
-			//make iStream's flags to "goodbit"
+			angle.setDeciDegsValue(NO_VALf);
+			// make iStream's flags to "goodbit"
 			iStream.clear();
-			//read the wrong gons value
-			while(iStream.peek()!=' ' && iStream.peek()!='\n')
+			// read the wrong decimal degrees value
+			while (iStream.peek() != ' ' && iStream.peek() != '\n')
 			{
 				iStream.readChar();
 			}
@@ -91,16 +84,14 @@ void	TGonsFilter::input(TAStreamFormatter& iStream, TAngle& angle)const
 		}
 	}
 
-	
-	
 	return;
 }
 
 /////////////////////////////////////////////////////////
-// outputs an angle formatted in Gons units to the stream
+// outputs an angle formatted in decimal degrees units to the stream
 /////////////////////////////////////////////////////////
-void	TGonsFilter::output(TAStreamFormatter& oStream,const TAngle& angle)const
-{	// function to put a gons angle to a QTextStream object.
+void TDeciDegsFilter::output(TAStreamFormatter &oStream, const TAngle &angle) const
+{ // function to put a decimal degree angle to a QTextStream object.
 	// Gets the value from a TAngle object
 
 	oStream.setf(std::ios::fixed, std::ios::floatfield);
@@ -109,18 +100,14 @@ void	TGonsFilter::output(TAStreamFormatter& oStream,const TAngle& angle)const
 
 	// provisoire
 	TAngle a(angle);
-	if (a.getRadiansValue()<LITERAL(0.0))
-      a += (2.0*TAngle::pi());
-	
-   oStream << a.getGonsValue();
-	
+	if (a.getRadiansValue() < LITERAL(0.0))
+		a += (2.0 * TAngle::pi());
+
+	oStream << a.getDeciDegsValue();
+
 	return;
 }
 
-
-
-
 //////////////////////////////////////////////////////////////////////
-// End 
+// End
 //////////////////////////////////////////////////////////////////////
-

@@ -48,7 +48,7 @@ T100MicroGonsFilter::~T100MicroGonsFilter()
 
 T100MicroGonsFilter *T100MicroGonsFilter::instance()
 {
-	if( fFilter == 0 )
+	if( fFilter == nullptr )
 	{
 		fFilter = new T100MicroGonsFilter;
 	}

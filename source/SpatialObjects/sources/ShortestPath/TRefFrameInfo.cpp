@@ -278,8 +278,10 @@ bool TRefFrameInfo::isTerrestrialRefFrame(int frame) {
 	MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
 	if (iter != getMapping().end())
 	{
-		return ((iter->second.fRefFrameName.find("kITRF") != std::string::npos) ||
-			(iter->second.fRefFrameName.find("kETRF") != std::string::npos));
+		return ((iter->second.fRefFrameName.find("kITRFin") != std::string::npos) ||
+			(iter->second.fRefFrameName.find("kITRFout") != std::string::npos) ||
+			(iter->second.fRefFrameName.find("kETRFin") != std::string::npos) ||
+			(iter->second.fRefFrameName.find("kETRFout") != std::string::npos));
 	}
 	throw std::invalid_argument("Unknown ERefFrame value");
 }

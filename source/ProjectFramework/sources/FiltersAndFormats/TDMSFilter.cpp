@@ -54,7 +54,7 @@ TDMSFilter::~TDMSFilter()
 
 TDMSFilter *TDMSFilter::instance()
 {
-	if( fFilter == 0 )
+	if( fFilter == nullptr )
 	{
 		fFilter = new TDMSFilter();
 	}

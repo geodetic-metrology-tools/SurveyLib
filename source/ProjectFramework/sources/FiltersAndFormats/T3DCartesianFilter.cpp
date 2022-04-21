@@ -54,7 +54,7 @@ T3DCartesianFilter::~T3DCartesianFilter()
 
 T3DCartesianFilter  *T3DCartesianFilter::instance()
 {
-	if( fCoorSys == 0 )
+	if( fCoorSys == nullptr )
 	{
 		fCoorSys = new T3DCartesianFilter;
 	}

@@ -51,7 +51,7 @@ TMetresFilter::~TMetresFilter()
 
 TMetresFilter *TMetresFilter::instance()
 {	// get the instance of a TMetresFilter
-	if( fFilter == 0 )
+	if( fFilter == nullptr )
 	{
 		fFilter = new TMetresFilter;
 	}
