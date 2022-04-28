@@ -396,12 +396,12 @@ bool TDataParameters::setLocalSystemOrigin(const TLocalSystemOrigin & LSO)
 	}
 	return false;
 }
-bool TDataParameters::setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> lso)
+bool TDataParameters::setLocalSystemOrigin(TLocalSystemOrigin* lso)
 {
     if(TRefFrameInfo::isLocalRefFrame(fRefFrameEnum)
 		&& fRefFrame == 0)
 	{
-        fLSO = lso.get();
+        fLSO = lso;
         return true;
     }
     return false;
