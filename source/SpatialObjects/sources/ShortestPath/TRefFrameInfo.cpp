@@ -86,7 +86,7 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
         tmp->insert(std::make_pair(TRefSystemFactory::kFrenchRGF93_CC46_eh,
             TDetails("kFrenchRGF93_CC46_eh","French RGF93 CC46 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kFrenchRGF93_CC46_raf,
-            TDetails("kFrenchRGF93_CC46_raf","French RGF93 CC46 (IGN-IGN69)", TCoordSysFactory::k2DPlusH)));
+            TDetails("kFrenchRGF93_CC46_raf","French RGF93 CC46 (NGF-IGN69)", TCoordSysFactory::k2DPlusH)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kLambert93_eh,
 			TDetails("kLambert93_eh","French Lambert93 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kLambert93_raf,
