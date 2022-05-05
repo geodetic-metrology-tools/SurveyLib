@@ -45,7 +45,7 @@ TDataParameters::TDataParameters()
 	fAnglePrecision = TObservationFormat::k10Microgons;
 	fLengthPrecision = TObservationFormat::k10Micrometres;
 	fCoordPrecision = TPointFormat::kMillimetre;
-	fCoordEpoch = -9999.9;
+	fCoordEpoch = NO_VALf;
 	fSolution = "noSolution";
 	fPointNameWidth=7;
 }

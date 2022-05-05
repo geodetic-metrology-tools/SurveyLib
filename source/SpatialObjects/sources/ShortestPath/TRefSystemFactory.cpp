@@ -187,7 +187,7 @@ void TRefSystemFactory::init()
 	fRefFrameList.push_back(pITRF97);
 
 	//Generic ITRF solution at specified epoch (input)
-	TReal initEpochITRF = -9999.9;
+	TReal initEpochITRF = NO_VALf;
 	std::string initSolution = "noSolution";
 	TTerrestrialReferenceFrame* pITRFin = new TTerrestrialReferenceFrame(itrfIn, pGRS80, initEpochITRF, initSolution);
 	pITRFin->setRefFrameId(kITRFin);
@@ -201,7 +201,7 @@ void TRefSystemFactory::init()
 	fITRFout = pITRFout;
 
 	//Generic ETRF solution at specified epoch (input)
-	TReal initEpochETRF = -9999.9;
+	TReal initEpochETRF = NO_VALf;
 	TTerrestrialReferenceFrame* pETRFin = new TTerrestrialReferenceFrame(etrfIn, pGRS80, initEpochETRF, initSolution);
 	pETRFin->setRefFrameId(kETRFin);
 	fRefFrameList.push_back(pETRFin);
