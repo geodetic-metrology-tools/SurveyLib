@@ -16,17 +16,6 @@ SpatialObjFns::SpatialObjFns()
 // N value for CG2000 at 0-level
 int SpatialObjFns::getCG2000N0( double  x, double  y, double* N)
 {
-	//TTLength le(8.8);
-	//le.getKMetresValue();
-
-	double lim = 0.000000001;
-	// test to know if the origin is in the Cern grid for geoid definition
-	if ( (x<(-5000+lim)) || (x>(6000-lim)) || (y<lim) || (y>(12000-lim)) )
-	{
-		return 0;
-	}
-	
-
 	// get the CCS spatial position corresponding to the double values
 	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
 	TPositionVector vector(x,y,0.0, TCoordSysFactory::k3DCartesian);
@@ -44,13 +33,6 @@ int SpatialObjFns::getCG2000N0( double  x, double  y, double* N)
 // N value for CG2000 at LEP-level
 int SpatialObjFns::getCG2000NMachine( double  x, double  y, double* N)
 {
-	double lim = 0.000000001;
-	// test to know if the origin is in the Cern grid for geoid definition
-	if ( (x<(-5000+lim)) || (x>(6000-lim)) || (y<lim) || (y>(12000-lim)) )
-	{
-		return 0;
-	}
-
 	// get the CCS spatial position corresponding to the double values
 	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
 	TPositionVector vector(x,y,0.0, TCoordSysFactory::k3DCartesian);
@@ -228,15 +210,6 @@ int SpatialObjFns::transformFromMLA(double x0, double y0, double z0,
 // coordinates of a point on the vertical of another
 int SpatialObjFns::descenteVert(double x, double y, double h, double deltaH, double* xt, double* yt, double* ht)
 {
-
-	double lim = 0.000000001;
-	// test to know if the origin is in the Cern grid for geoid definition
-	if ( (x<(-5000+lim)) || (x>(6000-lim)) || (y<lim) || (y>12000-lim) )
-	{
-		return 0;
-	}
-
-
 	//Create the old point
 	TPositionVector oldPtVec(x,y,h,TCoordSysFactory::k2DPlusH);
 

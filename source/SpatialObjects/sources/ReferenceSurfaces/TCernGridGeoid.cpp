@@ -90,7 +90,7 @@ TLength TCernGridGeoid::getN ( const TSpatialPosition& sp) const
 	if (isnan(NValue.getMetresValue()))
 	{
 		std::stringstream ss;
-		ss << "TNotInLepGridException: getEta function problem with coordinate ";
+		ss << "TNotInLepGridException: getN function problem with coordinate ";
 		ss << "(" << spos.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue() << ","
 			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue() << ","
 			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
