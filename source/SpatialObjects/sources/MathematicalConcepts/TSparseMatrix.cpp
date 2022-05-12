@@ -66,8 +66,6 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 
 	// If both are not working, use Sparse LU
 	Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> LuMat;
-	LuMat.analyzePattern(sparseMat);
-	LuMat.factorize(sparseMat);
 	LuMat.compute(sparseMat);
 	if (LuMat.info() != Eigen::Success) 
 	{
@@ -137,8 +135,6 @@ bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX
 	
 	// If both are not working, use Sparse QR
 	Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> QrMat;
-	QrMat.analyzePattern(matA);
-	QrMat.factorize(matA);
 	QrMat.compute(matA);
 	if (QrMat.info() != Eigen::Success) 
 	{
