@@ -267,32 +267,19 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 	TSparseMatrix Qxx(nbUnk + nbCnstr, nbUnk + nbCnstr);
 
 	// ----------Normal method-----------
-	
+
+	// Intermediate matrix
+	TSparseMatrix invN2(nbUnk, nbUnk);
+
 	if (!TSparseUtils::inverse(NBig, Qxx, false, false))
 	{
 		logCritical() << "In LIBR calculation, the extended normal matrix NBig could not be inverted!";
 		return false;
-	}
-	
-	//--------------- Residual covariance matrix ---------------//
-	// Intermediate matrix
-	TSparseMatrix invN2(nbUnk, nbUnk);
-
-	if (!TSparseUtils::inverse(N2, invN2, false, false))
+	} else
 	{
-		// FRK (09/01/18): This matrix is theoretically NEVER invertible!!! => We should use the extended NBig matrix for that and define other formulas
-		// GKA (26/09/2019) : Use of a LU decomposition to inverse the matrix, no need from the matrix to be invertible.
-		logWarning() << "Could not invert normal matrix N2";
-	}
-	else
-	{
-		// FRK (09/01/18): needs STILL TO BE STUDIED for calculating variances on residual errors and related statistics !!!
-		// See above remark!!!
-		// GKA (26/09/2019) : Qvv is changed from Qvv = S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose() to the actual solution: see "a synthesis of recent advances in the method of least squares" from Krakiwsky
-		// according to literature: Qvv = InvPv * B.transpose() * invN1 * B * InvPv - InvPv * B.transpose() * invN1 * A * invN2 * A.transpose() * invN1 * B * InvPv;
-
+		invN2 = Qxx.topLeftCorner(nbUnk, nbUnk);
 		TSparseMatrix Qvv(nbObs, nbObs);
-		Qvv = - S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose();
+		Qvv = -S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose();
 		rm->setResCovarMtrx(Qvv);
 	}
 	
