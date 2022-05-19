@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -85,6 +85,9 @@ public:
 	/*! \brief Returns a pointer to the normal matrix (matrix content cannot be changed when receiving this pointer) */
 	const TSparseMatrix* getNormalMatrixByConst() const noexcept {return fNormalMatrix; }
 
+	/*! \brief Returns the weighted EMQ DD indicator 	*/
+	TReal getWeightedEmqDd() const { return fWeightedEmqDd; }
+
 	/*! \brief Returns the squared sigma zero 	*/
 	TReal getSigmaZero2() const { return fSigmaZero2; }
 
@@ -99,6 +102,10 @@ public:
 
 	/*!@name Setting methods*/
 	//@{
+
+	/*! \brief Sets the weigthed EMQ DD indicator 	*/
+	void setWeightedEmqDd(TReal e) { fWeightedEmqDd = e; }
+
 	/*! \brief Sets the sigma zero 	*/
 	void setSigmaZero2(TReal s){ fSigmaZero2 = s;}
 
@@ -139,6 +146,7 @@ private:
 	TSparseMatrix*	fUnkCovarianceMtrx; /*!< Qxx matrix (u x u) containing the variances and covariances for unknowns */
 	TSparseMatrix*	fNormalMatrix;  /*!< N matrix (u x u) is the normal matrix */
 
+	TReal fWeightedEmqDd; 
 	TReal fSigmaZero2; /*!< calculated "average variance" on residues */
 	TReal fSigmaZero2LowLimit;
 	TReal fSigmaZero2UpLimit;

@@ -119,6 +119,35 @@ bool TLSCombinedMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* 
 	TVector V(nbObs);
 	V = S * (A * solution + W);  // vector dimension = nbObs
 
+	//--------------- Weighted EMQ DD ---------------//
+
+	double sumWeightedEmQDd = 0.0;							  // variable to accumulate the weighted misclosures.
+	double sigmaRef = sqrt(pow2(0.000001) + pow2(0.000001));  // combined reference sigma according to the default value: s = 0.000001.
+	double sigmaCoo1 = 0.0;			// sigma of a coordinate in the active file.
+	double sigmaCoo2 = 0.0;			// sigma of a coordinate in the pasive file.
+	double sigmaW = 0.0;			// combined sigma of the two aforementioned sigma values.
+	double Pw = 0.0;				// combined weight of the aforementioned combined sigma.
+	int cnt = 0;					// index iterating the values 0, 1, 2, used to each coordinate with the two aforementioned sigma values.
+	int indexW = 0;					// index of the coordinates in the W (misclosure) vector: size (nbEq, 1).
+	int indexPv1 = 0;				// index of the weight of the active file in the Pv (weight) matrix: size (2*nbEq, 2*nbEq).
+	int indexPv2 = 0;				// index of the weight of the passive file in the Pv (weight) matrix: size (2*nbEq, 2*nbEq).
+	for (int i = 0; i < nbEq; i++)  // loop for each coordinate.
+	{
+		if (i % 3 == 0)
+		{
+			cnt += 1;
+		}
+		indexW = i;
+		indexPv1 = i + 3 * (cnt - 1);
+		indexPv2 = i + 3 * cnt;
+		sigmaCoo1 = 1 / sqrt(Pv.coeff(indexPv1, indexPv1));
+		sigmaCoo2 = 1 / sqrt(Pv.coeff(indexPv2, indexPv2));
+		sigmaW = sqrt(pow2(sigmaCoo1) + pow2(sigmaCoo2));
+		Pw = pow2(sigmaRef) / pow2(sigmaW);
+		sumWeightedEmQDd += pow2(W.coeff(indexW)) * Pw;
+	}
+	rm->setWeightedEmqDd(sqrt(sumWeightedEmQDd / (nbEq / 3)) * 1000);	// multiply by 1000 to convert metres to millimetres.
+
 	//--------------- Sigma 0 a posteriri ---------------//
 	sigmaZero2Aposteriori = V.transpose() * Pv * V;
 	if (nbObs != nbUnk)
