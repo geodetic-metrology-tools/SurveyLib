@@ -20,6 +20,7 @@ std::wstring Behavior::ErrorMessage[ERR_endOfTheWorld] =
 	L"Unknown Exception when transforming",		// ERR_unknownExcptInTransformation
 	L"Unknown Reference Frame",					// ERR_unknownReferenceFrame
 	L"Virtual project removed because empty",	// ERR_virtualProjectRemoved
+	L"Misc. Warning",	  						// ERR_miscWarning
 	L"Error in the Input Data (LS process)",	// ERR_inputData
 	L"Error in the Least Square Process",		// ERR_LSCalculation
 	L"Problem with results",					// ERR_results
@@ -117,6 +118,7 @@ Behavior::Type Behavior::getType() const
 		case Behavior::ERR_readingContent:
 		case Behavior::ERR_virtualProjectRemoved:
 		case Behavior::ERR_NegativeScale:
+		case Behavior::ERR_miscWarning:
 			return Type::Warning;
 
 		default:

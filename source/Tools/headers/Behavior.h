@@ -61,6 +61,8 @@ public:
 		ERR_unknownReferenceFrame,
 		//! Usefull within CSGeo
 		ERR_virtualProjectRemoved,
+		//! Misc Warning
+		ERR_miscWarning,
 	
 		
 		//error for LS process:
