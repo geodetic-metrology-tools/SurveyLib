@@ -53,7 +53,9 @@ bool TLSCnstMtdComputer::computeResultsMatrices(TLSInputMatrices* im, TLSResults
 
 	const TSparseMatrix& A = *im->getFirstDgnMtrx();
 	const TSparseMatrix& B = *im->getSecondDgnMtrx();
+	const TSparseMatrix& invB = *im->getSecondDgnInvMtrx();
 	const TSparseMatrix& InvPv = *im->getWeightInvMtrx();
+	const TSparseMatrix& Pv = *im->getWeightMtrx();
 	const TVector & W = im->getMisclosureVctr();          // W : Misclosure vector ("fermetures")
 	const TSparseMatrix& A2 = *im->getCnstrFirstDgnMtrx();     // A2 : First design matrix related to constraints 
 	const TVector & W2 = im->getCnstrMisclosureVctr();         // W2 : Misclosures vector related to constraints 
@@ -64,8 +66,7 @@ bool TLSCnstMtdComputer::computeResultsMatrices(TLSInputMatrices* im, TLSResults
 
 	// Calculate invN1 = inv( B*inv(Pv)*transpose(B) ),  matrix dimensions (nbEq,nbEq)
 	TSparseMatrix invN1(nbEq, nbEq);
-	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1))
-		return false;
+	invN1 = invB.transpose() * Pv * invB;
 
 	// Calculate Normal matrix N2 = At * inv( B * inv(P) * Bt ) * A
 	TSparseMatrix N2(nbUnk, nbUnk);
@@ -116,7 +117,9 @@ bool TLSCnstMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResults
 
 	const TSparseMatrix& A = *im->getFirstDgnMtrx();
 	const TSparseMatrix& B = *im->getSecondDgnMtrx();
+	const TSparseMatrix& invB = *im->getSecondDgnInvMtrx();
 	const TSparseMatrix& InvPv = *im->getWeightInvMtrx();
+	const TSparseMatrix& Pv = *im->getWeightMtrx();
 	const TVector&       W = im->getMisclosureVctr();           // W : Misclosures vector ("fermetures")
 	const TSparseMatrix& A2 = *im->getCnstrFirstDgnMtrx(); // A2 : First design matrix part related to constraints only
 	const TVector&       W2 = im->getCnstrMisclosureVctr();     // W2 : Misclosures vector part related to constraints only
@@ -127,11 +130,7 @@ bool TLSCnstMtdComputer::computeFreeResultsMtrs(TLSInputMatrices* im, TLSResults
 	
 	// Calculate invN1 = inv( B*inv(Pv)*transpose(B) ),  matrix dimensions (nEq,nEq)
 	TSparseMatrix invN1(nbEq, nbEq);
-	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1,false,false))
-	{ 
-		logCritical() << "Matrix B*inv(Pv)*transpose(B) could not be inverted!";
-		return false;
-	}
+	invN1 = invB.transpose() * Pv * invB;
 
 	// Calculate Normal matrix N2 = At * inv( B * inv(P) * Bt ) * A , matrix dimensions (u,u)
 	// and re-sets this new matrix to the main TLSResultsMatrices object.
@@ -202,7 +201,8 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 		throw std::runtime_error("Any of the design matrices is not initialized!");
 
 	const TSparseMatrix& A = *inputMtr->getFirstDgnMtrx();
-	const TSparseMatrix& B = *inputMtr->getSecondDgnMtrx();
+	//const TSparseMatrix& B = *inputMtr->getSecondDgnMtrx();
+	const TSparseMatrix& invB = *inputMtr->getSecondDgnInvMtrx();
 	const TSparseMatrix& Pv = *inputMtr->getWeightMtrx();
 	const TSparseMatrix& InvPv = *inputMtr->getWeightInvMtrx();
 	const TVector&       W = inputMtr->getMisclosureVctr();
@@ -214,19 +214,16 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 	//--------------- Residuals ---------------//
 	// Calculate intermediate matrix
 	// S = - inv(P) * Bt *inv( B * inv(P) * Bt )
+	// can be simplified to S=-invB
 
 	TSparseMatrix invN1(nbObs, nbObs);
-	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1, false, false))
-	{
-		logCritical() << "Could not invert intermediate matrix N1 = B * InvPv * B.transpose()";
-		return false;
-	}
-	TSparseMatrix S(nbObs, nbEq);
-	S = -InvPv * B.transpose() * invN1;
+	invN1 = invB.transpose() * Pv * invB;
+	//TSparseMatrix S(nbObs, nbEq);
+	//S = -InvPv * B.transpose() * invN1;
 
 	// Residuals vector V
 	TVector V(nbObs);
-	V = S * (A * solution + W);
+	V = -invB * (A * solution + W);
 
 	//--------------- Sigma 0 a posteriri ---------------//
 	sigmaZero2Aposteriori = V.transpose() * Pv * V;
@@ -279,7 +276,9 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 	{
 		invN2 = Qxx.topLeftCorner(nbUnk, nbUnk);
 		TSparseMatrix Qvv(nbObs, nbObs);
-		Qvv = -S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose();
+		//Qvv = -S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose();
+		// simplifying
+		Qvv = InvPv - invB * A * invN2 * A.transpose() * invB.transpose();
 		rm->setResCovarMtrx(Qvv);
 	}
 	

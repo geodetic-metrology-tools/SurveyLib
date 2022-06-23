@@ -59,6 +59,10 @@ public:
 			\param[in] row of the desired element
 			\param[in] coeff: value of the desired misclosure
 		*/
+		bool setSecondDgnMtrxBlock(MatrixIndex first_index, Eigen::MatrixXd block);
+
+		/*!	\brief Set a block in the second design matrix. Each block corresponds to one mathematical observation equation. Also sets the inverse block.
+		*/
 		bool setMisclosureVectorElement(MatrixIndex row, TReal coeff);
 
 		/*!	\brief Set the value of an element of the observations weight matrix in the adjustment (P-matrix)
@@ -120,6 +124,9 @@ public:
 		/*!	\brief Returns a const reference (pointer) to the second design matrix allocated here*/
 		const TSparseMatrix* getSecondDgnMtrx() const noexcept;
 
+		/*!	\brief Returns a const reference (pointer) to the inverse second design matrix allocated here*/
+		const TSparseMatrix* getSecondDgnInvMtrx() const noexcept;
+
 		/*!	\brief Returns a const reference (pointer) to the weight matrix allocated here*/
 		const TSparseMatrix* getWeightMtrx() const noexcept;
 
@@ -158,6 +165,7 @@ private:
 
 	TSparseMatrix*	firstDesignMatrix;  /*!< matrix A (e x u) */
 	TSparseMatrix*	secondDesignMatrix; /*!< matrix B (e x o) */
+	TSparseMatrix*	secondDesignInvMatrix; /*!< matrix B^-1 (e x o) */
 	TSparseMatrix*	weightMatrix;       /*!< matrix P (o x o) for observations weights */
 	TSparseMatrix*	weightInvMatrix;    /*!< matrix invP (o x o) for observations weights */
 	TSparseMatrix*	weightUnkMatrix;    /*!< matrix Pxx (u x u) for unknowns weights */
