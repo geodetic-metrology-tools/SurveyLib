@@ -137,7 +137,7 @@ public:
 		void	setPointNameWidth(const int);
 
 		/// set the origin of the local system used
-		bool	setLocalSystemOrigin(TLocalSystemOrigin*);
+		bool	setLocalSystemOrigin(std::shared_ptr <TLocalSystemOrigin>);
 
 		/// set the epoch of the coordinates
 		void	setCoordEpoch(const TReal epoch);
