@@ -100,5 +100,8 @@ target_link_libraries(ProjectFramework
 	SpatialObjects
 )
 
+# needed for linux compilation
+set_target_properties(ProjectFramework PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 # Define IDE folders:
 set_target_properties(ProjectFramework PROPERTIES FOLDER "SurveyLib")

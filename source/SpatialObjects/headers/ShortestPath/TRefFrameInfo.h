@@ -123,7 +123,7 @@ public:
    static bool isRotatedLocalRefFrame(int frame);
    static bool isTerrestrialRefFrame(int frame);
 
-   static TAReferenceFrame* getReferenceFrame(int frame, const TLocalSystemOrigin* lso = NULL, TReal epoch = -9999.9, std::string solution = "noSolution");
+   static TAReferenceFrame* getReferenceFrame(int frame, const TLocalSystemOrigin* lso = NULL, TReal epoch = NO_VALf, std::string solution = "noSolution");
 };
 
 

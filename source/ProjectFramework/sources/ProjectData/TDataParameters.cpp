@@ -45,7 +45,7 @@ TDataParameters::TDataParameters()
 	fAnglePrecision = TObservationFormat::k10Microgons;
 	fLengthPrecision = TObservationFormat::k10Micrometres;
 	fCoordPrecision = TPointFormat::kMillimetre;
-	fCoordEpoch = -9999.9;
+	fCoordEpoch = NO_VALf;
 	fSolution = "noSolution";
 	fPointNameWidth=7;
 }
@@ -396,7 +396,7 @@ bool TDataParameters::setLocalSystemOrigin(const TLocalSystemOrigin & LSO)
 	}
 	return false;
 }
-bool TDataParameters::setLocalSystemOrigin(std::shared_ptr<TLocalSystemOrigin> lso)
+bool TDataParameters::setLocalSystemOrigin(std::shared_ptr <TLocalSystemOrigin> lso)
 {
     if(TRefFrameInfo::isLocalRefFrame(fRefFrameEnum)
 		&& fRefFrame == 0)

@@ -141,7 +141,7 @@ bool TTrf2TrfTransformation::isInitialised() const
 {
 	bool init = false;
 	if (fFrom != 0 && fTo != 0 &&
-		fFrom->getEpoch() != -9999.9 && fTo->getEpoch() != -9999.9 &&
+		fFrom->getEpoch() != NO_VALf && fTo->getEpoch() != NO_VALf &&
 		fFrom->getSolution() != "noSolution" && fTo->getSolution() != "noSolution")
 	{
 		init = true;
@@ -504,7 +504,7 @@ bool TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector
 	TLength tX_m(0), tY_m(0), tZ_m(0), tXv_m_yr(0), tYv_m_yr(0), tZv_m_yr(0); //translation (meters and meters per year)
 	TScaleFactor d(0), dv_yr(0); //scale factor
 	TAngle rX_rad(0), rY_rad(0), rZ_rad(0), rXv_rad_yr(0), rYv_rad_yr(0), rZv_rad_yr(0); //rotation (radians and radians/year)
-	TReal startEpoch = -9999.9;
+	TReal startEpoch = NO_VALf;
 
 
 	if (itrfIn->getSolution() != "ITRF 2014")
@@ -658,7 +658,7 @@ bool TTrf2TrfTransformation::itrf2etrf(TMatrix coeffITRFyy_toETRFyy, TPositionVe
 	TLength tX_m(0), tY_m(0), tZ_m(0), tXv_m_yr(0), tYv_m_yr(0), tZv_m_yr(0); //translation (meters and meters per year)
 	TScaleFactor d(0), dv_yr(0); //scale factor
 	TAngle rX_rad(0), rY_rad(0), rZ_rad(0), rXv_rad_yr(0), rYv_rad_yr(0), rZv_rad_yr(0); //rotation (radians and radians/year)
-	TReal startEpoch = -9999.9;
+	TReal startEpoch = NO_VALf;
 
 	solEtrf = findETRFSolution(etrf);
 
