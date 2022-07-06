@@ -78,10 +78,14 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("kSwissLV95_eh","Swiss LV95 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
         tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV03_eh,
             TDetails("kSwissLV03_eh","Swiss LV03 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV03_lhn95,
+			TDetails("kSwissLV03_lhn95", "Swiss LV03 (LHN95 (orthometric) height)", TCoordSysFactory::k2DPlusH)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV95_ortho,
 			TDetails("kSwissLV95_ortho", "Swiss LV95 (LHN95 (orthometric) height)", TCoordSysFactory::k2DPlusH)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV03_ln02,
 			TDetails("kSwissLV03_ln02", "Swiss LV03 (LN02 (leveled) height)", TCoordSysFactory::k2DPlusH)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV95_ln02,
+			TDetails("kSwissLV95_ln02", "Swiss LV95 (LN02 (leveled) height)", TCoordSysFactory::k2DPlusH)));
 #endif
         tmp->insert(std::make_pair(TRefSystemFactory::kFrenchRGF93_CC46_eh,
             TDetails("kFrenchRGF93_CC46_eh","French RGF93 CC46 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));

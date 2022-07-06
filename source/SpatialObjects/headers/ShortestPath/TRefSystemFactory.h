@@ -93,12 +93,14 @@ public:
 			kCernXYHg85Machine   = 106, 
 			kCERNXYHsSphereSPS   = 107, 
 			kCGRFSphere          = 108,
-			kCGRFMercator_eh	 = 113,
+			kCGRFMercator_eh	 = 115,
 #ifdef USE_SWISSTOPO
             kSwissLV95_eh        = 109,
             kSwissLV03_eh        = 110,
 			kSwissLV95_ortho	 = 111,
 			kSwissLV03_ln02	 = 112,
+			kSwissLV95_ln02		 = 113,
+			kSwissLV03_lhn95	 = 114,
 #endif
 			//Franch system
 			kFrenchRGF93_CC46_eh = 205,
@@ -148,6 +150,7 @@ public:
 #ifdef USE_SWISSTOPO
 			kCH1903plus2SwissLV95eh, kSwissLV95eh2CH1903plus, kCH1903plus2SwissLV95ortho, kSwissLV95ortho2CH1903plus, 
 			kSwissLV95eh2SwissLV03eh, kSwissLV03eh2SwissLV95eh,kSwissLV95eh2SwissLV03ln02, kSwissLV03ln022SwissLV95eh,
+			kSwissLV95eh2SwissLV03lhn95, kSwissLV03lhn952SwissLV95eh, kCH1903plus2SwissLV95ln02, kSwissLV95ln022CH1903plus,
 #endif
 			kCC46eh2RGF93, kRGF932CC46eh, kCC46raf2RGF93, kRGF932CC46raf, 
 			kRGF932Lambert93eh, kLambert93eh2RGF93, kRGF932Lambert93raf, kLambert93raf2RGF93,

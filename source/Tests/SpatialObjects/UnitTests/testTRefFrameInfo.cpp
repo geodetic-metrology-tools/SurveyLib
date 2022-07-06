@@ -28,7 +28,7 @@ namespace tut
         set_test_name("Iterating over the all registered ERefFrame values");
 
 #ifdef _WIN32
-		size_t nbtrans = 51;
+		size_t nbtrans = 53;
 #else
 		size_t nbtrans = 47;
 #endif
