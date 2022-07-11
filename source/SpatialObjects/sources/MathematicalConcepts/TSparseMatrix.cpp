@@ -2,14 +2,11 @@
 #include <Eigen/SparseQR>
 #include <Eigen/Dense>
 
-#include <omp.h>
 #include "TSparseMatrix.h"
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <Logger.hpp>
-#include <chrono>
-#include <fstream>
 
 namespace TSparseUtils {
 
@@ -21,9 +18,6 @@ namespace TSparseUtils {
 */
 bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCholeskyFirst, bool bTryFullPivotSecond)
 {
-  // initialization prevents that we can set invMat = densemat.sparseView() if
-  // we use alternative solve method
-	//
 
 	auto nRows = sparseMat.rows();
 	auto nCols = sparseMat.cols();

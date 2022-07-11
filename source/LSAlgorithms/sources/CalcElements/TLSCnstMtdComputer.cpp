@@ -201,7 +201,6 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 		throw std::runtime_error("Any of the design matrices is not initialized!");
 
 	const TSparseMatrix& A = *inputMtr->getFirstDgnMtrx();
-	//const TSparseMatrix& B = *inputMtr->getSecondDgnMtrx();
 	const TSparseMatrix& invB = *inputMtr->getSecondDgnInvMtrx();
 	const TSparseMatrix& Pv = *inputMtr->getWeightMtrx();
 	const TSparseMatrix& InvPv = *inputMtr->getWeightInvMtrx();
@@ -218,8 +217,6 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 
 	TSparseMatrix invN1(nbObs, nbObs);
 	invN1 = invB.transpose() * Pv * invB;
-	//TSparseMatrix S(nbObs, nbEq);
-	//S = -InvPv * B.transpose() * invN1;
 
 	// Residuals vector V
 	TVector V(nbObs);
@@ -276,8 +273,6 @@ bool TLSCnstMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* inpu
 	{
 		invN2 = Qxx.topLeftCorner(nbUnk, nbUnk);
 		TSparseMatrix Qvv(nbObs, nbObs);
-		//Qvv = -S * B * InvPv - S * A * invN2 * A.transpose() * S.transpose();
-		// simplifying
 		Qvv = InvPv - invB * A * invN2 * A.transpose() * invB.transpose();
 		rm->setResCovarMtrx(Qvv);
 	}

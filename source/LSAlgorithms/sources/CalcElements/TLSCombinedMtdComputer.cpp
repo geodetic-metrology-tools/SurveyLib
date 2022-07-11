@@ -6,7 +6,6 @@
 #include <iostream>
 #include <sstream>
 #include <Eigen/LU>
-#include <chrono>
 
 
 
@@ -53,7 +52,6 @@ bool TLSCombinedMtdComputer::computeResultsMatrices(TLSInputMatrices* im, TLSRes
 		throw std::runtime_error("Any of the design matrices is not initialized!");
 	
 	const TSparseMatrix& A = *im->getFirstDgnMtrx();	
-	//const TSparseMatrix& B = *im->getSecondDgnMtrx();
 	const TSparseMatrix& invB = *im->getSecondDgnInvMtrx();
 	const TSparseMatrix& InvPv = *im->getWeightInvMtrx();
 	const TSparseMatrix& Pv = *im->getWeightMtrx();
@@ -102,7 +100,7 @@ bool TLSCombinedMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* 
 
 	const TSparseMatrix &A = *inputMtr->getFirstDgnMtrx();
 	const TSparseMatrix &B = *inputMtr->getSecondDgnMtrx();
-	const TSparseMatrix& invB = *inputMtr->getSecondDgnInvMtrx();
+	const TSparseMatrix &invB = *inputMtr->getSecondDgnInvMtrx();
 	const TSparseMatrix &Pv = *inputMtr->getWeightMtrx();
 	const TSparseMatrix &InvPv = *inputMtr->getWeightInvMtrx();
 	const TVector & W = inputMtr->getMisclosureVctr();
@@ -114,13 +112,6 @@ bool TLSCombinedMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* 
 	TSparseMatrix invN1(nbEq, nbEq);
 	invN1 = invB.transpose()*Pv*invB;
 
-	//Calculate S = Inv(P) * Bt * inv(N1)
-	//TSparseMatrix S(nbObs, nbEq);
-	//S = -InvPv * B.transpose() * invN1;
-	// this simplifies
-	// S=-InvPv*BT*invBT*Pv*invB=-invB
-	// S = -invB;
-	// so no need for S at all anymore
 
 	//--------------- Residuals ---------------//
 	TVector V(nbObs);
@@ -144,13 +135,11 @@ bool TLSCombinedMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* 
 		return false;
 
 	// Variance-covariance matrix of the observation residues ( dimension nObs * nObs )
-	// GKA (26/09/2019) : Qvv is changed from Qvv = S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose() to the actual solution: see "a synthesis of recent advances in the method of least squares" from Krakiwsky
-	// according to literature: Qvv = InvPv * B.transpose() * invN1 * B * InvPv - InvPv * B.transpose() * invN1 * A * Qxx * A.transpose() * invN1 * B * InvPv;
 
 	TSparseMatrix Qvv(nbObs, nbObs);
-	// Qvv = - S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose();
-	// this simplifies because S=-invB
-	Qvv = InvPv - invB * A * Qxx * A.transpose() * invB.transpose();
+	TSparseMatrix invBA = invB*A;
+	TDenseMatrix QAinvBT = Qxx *invBA.transpose();
+	Qvv = InvPv -  invBA*QAinvBT;
 	
 	// Copies the matrices into the members of the TResultsMatrices object
 	rm->setResCovarMtrx(Qvv);

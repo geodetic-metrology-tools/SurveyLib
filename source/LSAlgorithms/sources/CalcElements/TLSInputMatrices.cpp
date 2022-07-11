@@ -149,16 +149,15 @@ bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex first_index, Eigen::Mat
 		// set the blocks of the second design matrix. immediately also set the inverse blocks
 		Eigen::MatrixXd block_inverse = block.lu().solve(Eigen::MatrixXd::Identity(block.rows(), block.rows()));
 		int dim = block.rows();
-		if (dim == block.cols())
+		if (dim != block.cols())
+			return false;
+		// write the block into the second design matrix
+		for (int row = 0; row < dim; row++)
 		{
-			// write the block into the second design matrix
-			for (int row = 0; row < dim; row++)
+			for (int col = 0; col < dim; col++)
 			{
-				for (int col = 0; col < dim; col++)
-				{
-					secondDesignMatrix->insert(first_index + row, first_index + col) = block(row, col);
-					secondDesignInvMatrix->insert(first_index + row, first_index + col) = block_inverse(row, col);
-				}
+				secondDesignMatrix->insert(first_index + row, first_index + col) = block(row, col);
+				secondDesignInvMatrix->insert(first_index + row, first_index + col) = block_inverse(row, col);
 			}
 		}
 	}
@@ -403,3 +402,4 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 /////////////////////////////////////////////////////////////////////////////////
 //END
 /////////////////////////////////////////////////////////////////////////////////
+
