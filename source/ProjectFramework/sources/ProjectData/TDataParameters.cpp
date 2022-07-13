@@ -598,6 +598,10 @@ std::string TDataParameters::getRFName() const
 		return "LV95_eh";
 	case TRefSystemFactory::ERefFrame::kSwissLV95_ortho:
 		return "LV95_ortho";
+	case TRefSystemFactory::ERefFrame::kSwissLV03_lhn95:
+		return "LV03_lhn95";
+	case TRefSystemFactory::ERefFrame::kSwissLV95_ln02:
+		return "LV95_ln02";
 #endif
 	case TRefSystemFactory::ERefFrame::kWGS84:
 		return "WGS84";

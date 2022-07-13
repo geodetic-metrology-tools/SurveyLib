@@ -32,8 +32,8 @@ namespace
     const int LV95_X_OFFSET = 1200000;
 }
 
-TLV95Transformation::TLV95Transformation(bool fromCH1903plus, bool ellipsHeight)
-	: fFromCH1903plus(fromCH1903plus), fEllipsHeight(ellipsHeight)
+TLV95Transformation::TLV95Transformation(bool fromCH1903plus, std::string fVerticalDatum)
+	: fFromCH1903plus(fromCH1903plus), fVerticalDatum(fVerticalDatum)
 {
 }
 
@@ -44,7 +44,7 @@ TLV95Transformation * TLV95Transformation::clone() const
 
 TLV95Transformation * TLV95Transformation::inverse() const
 {
-	return new TLV95Transformation(!fFromCH1903plus, fEllipsHeight);
+	return new TLV95Transformation(!fFromCH1903plus, fVerticalDatum);
 }
 
 TAReferenceFrame * TLV95Transformation::getSourceFrame() const
@@ -53,13 +53,17 @@ TAReferenceFrame * TLV95Transformation::getSourceFrame() const
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus);
 	}
-	else if (fEllipsHeight)
+	else if (fVerticalDatum == "eh")
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_eh);
 	}
-	else
+	else if (fVerticalDatum == "lhn95")
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ortho);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ln02);
 	}
 }
 
@@ -69,13 +73,17 @@ TAReferenceFrame * TLV95Transformation::getDestinationFrame() const
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus);
 	}
-	else if (fEllipsHeight)
+	else if (fVerticalDatum == "eh")
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_eh);
 	}
-	else
+	else if (fVerticalDatum == "lhn95")
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ortho);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ln02);
 	}
 }
 
@@ -143,6 +151,13 @@ bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
 
 		bool outsideChenyx06 = !reframeLibObj.ComputeReframe(E, N, h, ReframeWrapper::LV95, ReframeWrapper::LV95, ReframeWrapper::Ellipsoid, ReframeWrapper::LHN95);
 	}
+	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ln02))
+	{
+		// We call the dll Reframe developped by Swisstopo to convert ellipsoidal height into altitude
+		ReframeWrapper reframeLibObj;
+
+		bool outsideChenyx06 = !reframeLibObj.ComputeReframe(E, N, h, ReframeWrapper::LV95, ReframeWrapper::LV95, ReframeWrapper::Ellipsoid, ReframeWrapper::LN02);
+	}
 
     pv = TPositionVector(E, N, h, TCoordSysFactory::k2DPlusH);
 
@@ -170,6 +185,12 @@ bool TLV95Transformation::transformToCH1903plus(TPositionVector & pv) const
 		// We call  dll Reframe developped by Swisstopo to convert altitude into ellipsoidal height
 		ReframeWrapper reframeLibObj;
 		bool outsideChenyx06 = !reframeLibObj.ComputeReframe(e, n, h, ReframeWrapper::LV95, ReframeWrapper::LV95, ReframeWrapper::LHN95, ReframeWrapper::Ellipsoid);
+	}
+	else if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ln02))
+	{
+		// We call  dll Reframe developped by Swisstopo to convert altitude into ellipsoidal height
+		ReframeWrapper reframeLibObj;
+		bool outsideChenyx06 = !reframeLibObj.ComputeReframe(e, n, h, ReframeWrapper::LV95, ReframeWrapper::LV95, ReframeWrapper::LN02, ReframeWrapper::Ellipsoid);
 	}
 
 	// projection plane (x, y) to sphere (l_, b_)

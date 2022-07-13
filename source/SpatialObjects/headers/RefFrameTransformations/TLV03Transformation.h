@@ -9,7 +9,7 @@
 class TLV03Transformation : public TARefFrameTransformation
 {
 public:
-	explicit TLV03Transformation(bool fFromLV95, bool ellipsHeight);
+	explicit TLV03Transformation(bool fFromLV95, std::string fVerticalDatum);
 
 	TLV03Transformation * clone() const;
 	TLV03Transformation * inverse() const;
@@ -23,7 +23,7 @@ private:
 	TLV03Transformation & operator=(const TLV03Transformation &);  // non copyable
 
     const bool fFromLV95;
-	const bool fEllipsHeight;
+	const std::string fVerticalDatum;
 
 };
 

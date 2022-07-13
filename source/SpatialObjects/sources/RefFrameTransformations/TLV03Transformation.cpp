@@ -6,7 +6,7 @@
 #include <iostream>
 #include <sstream>
 
-TLV03Transformation::TLV03Transformation(bool fFromLV95, bool ellipsHeight) : fFromLV95(fFromLV95), fEllipsHeight(ellipsHeight)
+TLV03Transformation::TLV03Transformation(bool fFromLV95, std::string fVerticalDatum) : fFromLV95(fFromLV95), fVerticalDatum(fVerticalDatum)
 {
 }
 
@@ -17,7 +17,7 @@ TLV03Transformation * TLV03Transformation::clone() const
 
 TLV03Transformation * TLV03Transformation::inverse() const
 {
-	return new TLV03Transformation(!fFromLV95, fEllipsHeight);
+	return new TLV03Transformation(!fFromLV95, fVerticalDatum);
 }
 
 TAReferenceFrame * TLV03Transformation::getSourceFrame() const
@@ -26,13 +26,17 @@ TAReferenceFrame * TLV03Transformation::getSourceFrame() const
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_eh);
 	}
-	else if (fEllipsHeight)
+	else if (fVerticalDatum == "eh")
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03_eh);
 	}
-	else
+	else if (fVerticalDatum == "ln02")
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03_ln02);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03_lhn95);
 	}
 }
 
@@ -42,13 +46,17 @@ TAReferenceFrame * TLV03Transformation::getDestinationFrame() const
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_eh);
 	}
-	else if (fEllipsHeight)
+	else if (fVerticalDatum == "eh")
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03_eh);
 	}
-	else
+	else if(fVerticalDatum == "ln02")
 	{
 		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03_ln02);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV03_lhn95);
 	}
 }
 
@@ -68,27 +76,37 @@ bool TLV03Transformation::transform(TPositionVector & pv) const
 	ReframeWrapper reframeLibObj;
 	if (fFromLV95)
 	{
-		if (fEllipsHeight)
+		if (fVerticalDatum == "eh")
 		{
 			outsideChenyx06 = !reframeLibObj.ComputeReframe(x, y, h, ReframeWrapper::LV95, ReframeWrapper::LV03_Military, ReframeWrapper::Ellipsoid, ReframeWrapper::Ellipsoid);
 			result = true;
 		}
-		else
+		else if (fVerticalDatum == "ln02")
 		{
 			outsideChenyx06 = !reframeLibObj.ComputeReframe(x, y, h, ReframeWrapper::LV95, ReframeWrapper::LV03_Military, ReframeWrapper::Ellipsoid, ReframeWrapper::LN02);
+			result = true;
+		}
+		else
+		{
+			outsideChenyx06 = !reframeLibObj.ComputeReframe(x, y, h, ReframeWrapper::LV95, ReframeWrapper::LV03_Military, ReframeWrapper::Ellipsoid, ReframeWrapper::LHN95);
 			result = true;
 		}
 	}
 	else
 	{
-		if (fEllipsHeight)
+		if (fVerticalDatum == "eh")
 		{
 			outsideChenyx06 = !reframeLibObj.ComputeReframe(x, y, h, ReframeWrapper::LV03_Military, ReframeWrapper::LV95, ReframeWrapper::Ellipsoid, ReframeWrapper::Ellipsoid);
 			result = true;
 		}
-		else
+		else if (fVerticalDatum == "ln02")
 		{
 			outsideChenyx06 = !reframeLibObj.ComputeReframe(x, y, h, ReframeWrapper::LV03_Military, ReframeWrapper::LV95, ReframeWrapper::LN02, ReframeWrapper::Ellipsoid);
+			result = true;
+		}
+		else
+		{
+			outsideChenyx06 = !reframeLibObj.ComputeReframe(x, y, h, ReframeWrapper::LV03_Military, ReframeWrapper::LV95, ReframeWrapper::LHN95, ReframeWrapper::Ellipsoid);
 			result = true;
 		}
 	}
