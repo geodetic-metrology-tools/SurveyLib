@@ -99,7 +99,7 @@ TAReferenceFrame * TLambert93Transformation::getSourceFrame() const
 	}
 	else
 	{
-		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf);
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_ign69);
 	}   
 }
 
@@ -115,7 +115,7 @@ TAReferenceFrame * TLambert93Transformation::getDestinationFrame() const
 	}
 	else
 	{
-		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf);
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_ign69);
 	}
 }
 
@@ -162,7 +162,7 @@ bool TLambert93Transformation::transformToRGF93(TPositionVector & pv) const
 
 	}
 
-	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf))
+	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_ign69))
 	{
 		// We convert altitude into ellipsoidal height
 		FrenchRAF20::circeTransfoRafToH(phi, lambda, h);
@@ -200,7 +200,7 @@ bool TLambert93Transformation::transformFromRGF93(TPositionVector & pv) const
 	{
 		return false;
 	}
-	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf))
+	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_ign69))
 	{
 		// We convert ellipsoidal height into altitude
 		FrenchRAF20::circeTransfoHToRaf(phi, lambda, h);

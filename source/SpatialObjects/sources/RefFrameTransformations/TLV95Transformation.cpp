@@ -59,7 +59,7 @@ TAReferenceFrame * TLV95Transformation::getSourceFrame() const
 	}
 	else if (fVerticalDatum == "lhn95")
 	{
-		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ortho);
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_lhn95);
 	}
 	else
 	{
@@ -79,7 +79,7 @@ TAReferenceFrame * TLV95Transformation::getDestinationFrame() const
 	}
 	else if (fVerticalDatum == "lhn95")
 	{
-		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ortho);
+		return TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_lhn95);
 	}
 	else
 	{
@@ -143,7 +143,7 @@ bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
 	{
 		return false;
 	}
-	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ortho))
+	else if (outpos.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_lhn95))
 	{
 
 		// We call the dll Reframe developped by Swisstopo to convert ellipsoidal height into altitude
@@ -180,7 +180,7 @@ bool TLV95Transformation::transformToCH1903plus(TPositionVector & pv) const
     double n = position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue();
     double h = position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue();
 
-	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_ortho))
+	if (position.getRefFrame() == TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kSwissLV95_lhn95))
 	{
 		// We call  dll Reframe developped by Swisstopo to convert altitude into ellipsoidal height
 		ReframeWrapper reframeLibObj;

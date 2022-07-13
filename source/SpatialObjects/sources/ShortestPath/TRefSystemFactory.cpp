@@ -218,8 +218,8 @@ void TRefSystemFactory::init()
     pFrenchRGF93_CC46_eh->setRefFrameId(kFrenchRGF93_CC46_eh);
     fRefFrameList.push_back(pFrenchRGF93_CC46_eh);
 
-	TAReferenceFrame *pFrenchRGF93_CC46_raf = new TRGF93CC46Projection("FrenchRGF93_CC46_raf");
-	pFrenchRGF93_CC46_raf->setRefFrameId(kFrenchRGF93_CC46_raf);
+	TAReferenceFrame *pFrenchRGF93_CC46_raf = new TRGF93CC46Projection("FrenchRGF93_CC46_ign69");
+	pFrenchRGF93_CC46_raf->setRefFrameId(kFrenchRGF93_CC46_ign69);
 	fRefFrameList.push_back(pFrenchRGF93_CC46_raf);	
 
 	// Lambert93
@@ -227,8 +227,8 @@ void TRefSystemFactory::init()
 	pLambert93_eh->setRefFrameId(kLambert93_eh);
     fRefFrameList.push_back(pLambert93_eh);
 
-	TAReferenceFrame *pLambert93_raf = new TLambert93Projection("Lambert93_raf");
-	pLambert93_raf->setRefFrameId(kLambert93_raf);
+	TAReferenceFrame *pLambert93_raf = new TLambert93Projection("Lambert93_ign69");
+	pLambert93_raf->setRefFrameId(kLambert93_ign69);
 	fRefFrameList.push_back(pLambert93_raf);
 
     // ETRF93
@@ -265,9 +265,9 @@ void TRefSystemFactory::init()
     pLV95_eh->setRefFrameId(kSwissLV95_eh);
     fRefFrameList.push_back(pLV95_eh);
 
-	TAReferenceFrame *pLV95_ortho = new TLV95Projection("LV95_ortho");
-	pLV95_ortho->setRefFrameId(kSwissLV95_ortho);
-	fRefFrameList.push_back(pLV95_ortho);
+	TAReferenceFrame *pLV95_lhn95 = new TLV95Projection("LV95_lhn95");
+	pLV95_lhn95->setRefFrameId(kSwissLV95_lhn95);
+	fRefFrameList.push_back(pLV95_lhn95);
 
 	TAReferenceFrame *pLV95_ln02 = new TLV95Projection("LV95_ln02");
 	pLV95_ln02->setRefFrameId(kSwissLV95_ln02);
@@ -1049,11 +1049,11 @@ void TRefSystemFactory::init()
 		// Transformation between CH1903plus and LV95 (orthometric height)
 		////////////////////////////////////////////////////////////////
 		TLV95Transformation *pTrans = new TLV95Transformation(true, "lhn95");
-		pTrans->setTransformId(kCH1903plus2SwissLV95ortho);
+		pTrans->setTransformId(kCH1903plus2SwissLV95lhn95);
 		fTransformList.push_back(pTrans);
 		// Inverse
 		TARefFrameTransformation *pInverse = pTrans->inverse();
-		pInverse->setTransformId(kSwissLV95ortho2CH1903plus);
+		pInverse->setTransformId(kSwissLV95lhn952CH1903plus);
 		fTransformList.push_back(pInverse);
 	}
 	{
@@ -1123,7 +1123,7 @@ void TRefSystemFactory::init()
 
 		//Altitude NGF-IGN69
 		TRGF93ZoneTransformation *pRGF932CC46raf = new TRGF93ZoneTransformation(true, false);
-		pRGF932CC46raf->setTransformId(kRGF932CC46raf);
+		pRGF932CC46raf->setTransformId(kRGF932CC46ign69);
 		fTransformList.push_back(pRGF932CC46raf);
 		// Inverse
 		TARefFrameTransformation *pCC46raf2RGF93 = pRGF932CC46raf->inverse();
@@ -1146,13 +1146,13 @@ void TRefSystemFactory::init()
 		fTransformList.push_back(pLambert93eh2RGF93);
 
 		//Altiude NGF-IGN69
-		TLambert93Transformation *pRGF932Lambert93raf = new TLambert93Transformation(true, false);
-		pRGF932Lambert93raf->setTransformId(kRGF932Lambert93raf);
-		fTransformList.push_back(pRGF932Lambert93raf);
+		TLambert93Transformation *pRGF932Lambert93ign69 = new TLambert93Transformation(true, false);
+		pRGF932Lambert93ign69->setTransformId(kRGF932Lambert93ign69);
+		fTransformList.push_back(pRGF932Lambert93ign69);
 		// Inverse
-		TARefFrameTransformation *pLambert93raf2RGF93 = pRGF932Lambert93raf->inverse();
-		pLambert93raf2RGF93->setTransformId(kLambert93raf2RGF93);
-		fTransformList.push_back(pLambert93raf2RGF93);
+		TARefFrameTransformation *pLambert93ign692RGF93 = pRGF932Lambert93ign69->inverse();
+		pLambert93ign692RGF93->setTransformId(kLambert93ign692RGF93);
+		fTransformList.push_back(pLambert93ign692RGF93);
 	}
             
 	// Transformation between CERN projection XYHe and CCS
