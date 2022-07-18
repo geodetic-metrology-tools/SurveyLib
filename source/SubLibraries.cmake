@@ -6,6 +6,7 @@ SET(SURVEYLIB_LIBRARIES
 	ProjectFramework
 	SpatialObjects
 	SpatialObjDLL
+	Serialization
 	Tools
 )
 

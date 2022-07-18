@@ -304,6 +304,10 @@ if(OpenMP_CXX_FOUND)
     target_link_libraries(SpatialObjects PRIVATE optimized OpenMP::OpenMP_CXX)
 endif()
 
+IF(USE_SERIALIZER)
+	target_link_libraries(SpatialObjects PUBLIC Serialization)
+ENDIF(USE_SERIALIZER)
+
 # link directories
 target_include_directories(SpatialObjects PUBLIC
 	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
