@@ -101,8 +101,8 @@ void	TGraph::init()
     insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCH1903plus2SwissLV95eh),
             TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV95eh2CH1903plus));
 
-	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCH1903plus2SwissLV95ortho),
-            TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV95ortho2CH1903plus));
+	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCH1903plus2SwissLV95lhn95),
+            TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV95lhn952CH1903plus));
 
     insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV95eh2SwissLV03eh),
             TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kSwissLV03eh2SwissLV95eh));
@@ -120,14 +120,14 @@ void	TGraph::init()
     insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kRGF932CC46eh),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCC46eh2RGF93));
 
-	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kRGF932CC46raf),
+	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kRGF932CC46ign69),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCC46raf2RGF93));
 
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kRGF932Lambert93eh),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kLambert93eh2RGF93));
 
-	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kRGF932Lambert93raf),
-			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kLambert93raf2RGF93));
+	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kRGF932Lambert93ign69),
+			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kLambert93ign692RGF93));
 
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kXYHe2CCS),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCCS2XYHe));

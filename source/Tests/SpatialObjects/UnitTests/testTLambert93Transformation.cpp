@@ -83,7 +83,7 @@ namespace tut
 		set_test_name("Transforming a TSpatialPosition from Lambert 93 (altitude NGF-IGN69) into RGF93v2b (geodetic)");
 		TPositionVector pv(1082722.205, 7001994.409, (352.697), TCoordSysFactory::k2DPlusH);
 
-		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf));
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_ign69));
 		ensure("Setting the coordinates of TSpatialPosition", position.setCoordinates(pv));
 
 		ensure("Transform returns true", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93)));
@@ -107,7 +107,7 @@ namespace tut
 		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93));
 		ensure("Setting the coordinates of TSpatialPosition", position.setCoordinates(pv));
 
-		ensure("Transform returns true", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_raf)));
+		ensure("Transform returns true", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_ign69)));
 
 		// Comparison with coordinates computed using IGN Circé software
 		ensure_equals("Lambert 93 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1082722.205), static_cast<TReal>(0.001));

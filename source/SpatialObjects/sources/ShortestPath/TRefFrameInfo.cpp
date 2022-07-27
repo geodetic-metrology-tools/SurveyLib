@@ -80,8 +80,8 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("kSwissLV03_eh","Swiss LV03 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV03_lhn95,
 			TDetails("kSwissLV03_lhn95", "Swiss LV03 (LHN95 (orthometric) height)", TCoordSysFactory::k2DPlusH)));
-		tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV95_ortho,
-			TDetails("kSwissLV95_ortho", "Swiss LV95 (LHN95 (orthometric) height)", TCoordSysFactory::k2DPlusH)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV95_lhn95,
+			TDetails("kSwissLV95_lhn95", "Swiss LV95 (LHN95 (orthometric) height)", TCoordSysFactory::k2DPlusH)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV03_ln02,
 			TDetails("kSwissLV03_ln02", "Swiss LV03 (LN02 (leveled) height)", TCoordSysFactory::k2DPlusH)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kSwissLV95_ln02,
@@ -89,12 +89,12 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
 #endif
         tmp->insert(std::make_pair(TRefSystemFactory::kFrenchRGF93_CC46_eh,
             TDetails("kFrenchRGF93_CC46_eh","French RGF93 CC46 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
-		tmp->insert(std::make_pair(TRefSystemFactory::kFrenchRGF93_CC46_raf,
-            TDetails("kFrenchRGF93_CC46_raf","French RGF93 CC46 (NGF-IGN69)", TCoordSysFactory::k2DPlusH)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kFrenchRGF93_CC46_ign69,
+            TDetails("kFrenchRGF93_CC46_ign69","French RGF93 CC46 (NGF-IGN69)", TCoordSysFactory::k2DPlusH)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kLambert93_eh,
 			TDetails("kLambert93_eh","French Lambert93 (ellipsoidal height)", TCoordSysFactory::k2DPlusH)));
-		tmp->insert(std::make_pair(TRefSystemFactory::kLambert93_raf,
-			TDetails("kLambert93_raf","French Lambert93 (NGF-IGN69)", TCoordSysFactory::k2DPlusH)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kLambert93_ign69,
+			TDetails("kLambert93_ign69","French Lambert93 (NGF-IGN69)", TCoordSysFactory::k2DPlusH)));
 		//RGF93 CHTRF95
 		tmp->insert(std::make_pair(TRefSystemFactory::kRGF93,
             TDetails("kRGF93","RGF93 v2b", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));

@@ -97,16 +97,16 @@ public:
 #ifdef USE_SWISSTOPO
             kSwissLV95_eh        = 109,
             kSwissLV03_eh        = 110,
-			kSwissLV95_ortho	 = 111,
+			kSwissLV95_lhn95	 = 111,
 			kSwissLV03_ln02	 = 112,
 			kSwissLV95_ln02		 = 113,
 			kSwissLV03_lhn95	 = 114,
 #endif
 			//Franch system
 			kFrenchRGF93_CC46_eh = 205,
-			kFrenchRGF93_CC46_raf = 206,
+			kFrenchRGF93_CC46_ign69 = 206,
 			kLambert93_eh		 = 207,
-			kLambert93_raf		 = 208,			
+			kLambert93_ign69		 = 208,			
 			kRGF93               = 209,
 
 			kCHTRF95             = 210,
@@ -148,12 +148,12 @@ public:
 			kCGRFSphere2CCS, kCGRFMercator2CGRF, kITRF972CGRF, kCGRF2ITRF97,
 			kETRF932CH1903plus, kCH1903plus2ETRF93,
 #ifdef USE_SWISSTOPO
-			kCH1903plus2SwissLV95eh, kSwissLV95eh2CH1903plus, kCH1903plus2SwissLV95ortho, kSwissLV95ortho2CH1903plus, 
+			kCH1903plus2SwissLV95eh, kSwissLV95eh2CH1903plus, kCH1903plus2SwissLV95lhn95, kSwissLV95lhn952CH1903plus, 
 			kSwissLV95eh2SwissLV03eh, kSwissLV03eh2SwissLV95eh,kSwissLV95eh2SwissLV03ln02, kSwissLV03ln022SwissLV95eh,
 			kSwissLV95eh2SwissLV03lhn95, kSwissLV03lhn952SwissLV95eh, kCH1903plus2SwissLV95ln02, kSwissLV95ln022CH1903plus,
 #endif
-			kCC46eh2RGF93, kRGF932CC46eh, kCC46raf2RGF93, kRGF932CC46raf, 
-			kRGF932Lambert93eh, kLambert93eh2RGF93, kRGF932Lambert93raf, kLambert93raf2RGF93,
+			kCC46eh2RGF93, kRGF932CC46eh, kCC46raf2RGF93, kRGF932CC46ign69, 
+			kRGF932Lambert93eh, kLambert93eh2RGF93, kRGF932Lambert93ign69, kLambert93ign692RGF93,
 			
 			//new
 			kCCS2CGRF2, kWGS2CGRF2, kITRF972CGRF2,

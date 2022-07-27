@@ -541,7 +541,7 @@ std::string TDataParameters::getRFName() const
 		return "ETRF93";
 	case TRefSystemFactory::ERefFrame::kFrenchRGF93_CC46_eh:
 		return "RGF93_CC46_eh";
-	case TRefSystemFactory::ERefFrame::kFrenchRGF93_CC46_raf:
+	case TRefSystemFactory::ERefFrame::kFrenchRGF93_CC46_ign69:
 		return "RGF93_CC46_ign69";
 	case TRefSystemFactory::ERefFrame::kITRF97:
 		return "ITRF97";
@@ -557,7 +557,7 @@ std::string TDataParameters::getRFName() const
 		return "LA_00Machine";
 	case TRefSystemFactory::ERefFrame::kLambert93_eh:
 		return "Lambert93_eh";
-	case TRefSystemFactory::ERefFrame::kLambert93_raf:
+	case TRefSystemFactory::ERefFrame::kLambert93_ign69:
 		return "Lambert93_ign69";
 	case TRefSystemFactory::ERefFrame::kLAp0:
 		return "LA_P0";
@@ -596,8 +596,8 @@ std::string TDataParameters::getRFName() const
 		return "LV03_ln02";
 	case TRefSystemFactory::ERefFrame::kSwissLV95_eh:
 		return "LV95_eh";
-	case TRefSystemFactory::ERefFrame::kSwissLV95_ortho:
-		return "LV95_ortho";
+	case TRefSystemFactory::ERefFrame::kSwissLV95_lhn95:
+		return "LV95_lhn95";
 	case TRefSystemFactory::ERefFrame::kSwissLV03_lhn95:
 		return "LV03_lhn95";
 	case TRefSystemFactory::ERefFrame::kSwissLV95_ln02:
