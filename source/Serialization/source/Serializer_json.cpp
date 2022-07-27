@@ -7,6 +7,7 @@
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
+#include "rapidjson/prettywriter.h"
 #include "rapidjson/writer.h"
 
 struct JSonObject
@@ -68,7 +69,7 @@ jsonSerializerObject::~jsonSerializerObject()
 std::string jsonSerializerObject::getStringRepresentation()
 {
 	rapidjson::StringBuffer buffer;
-	rapidjson::Writer writer(buffer);
+	rapidjson::PrettyWriter writer(buffer);
 	_pimpl->doc.Accept(writer);
 	return buffer.GetString();
 }
