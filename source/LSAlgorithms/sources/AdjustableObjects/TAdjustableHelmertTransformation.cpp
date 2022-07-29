@@ -566,3 +566,39 @@ void TAdjustableHelmertTransformation::reInitialise(){
 	fEstPrecisionRotation[1].setRadiansValue(0.0);
 	fEstPrecisionRotation[2].setRadiansValue(0.0);
 }
+
+
+#ifdef USE_SERIALIZER
+void TAdjustableHelmertTransformation::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	obj.addProperty("fCovarianceRotation", fCovarianceRotation);
+	obj.addProperty("fCovarianceScl", fCovarianceScl);
+	obj.addProperty("fCovarianceTranslation", fCovarianceTranslation);
+	obj.addProperty("fCovarianceTrRot", fCovarianceTrRot);
+	obj.addProperty("fEstParameter", fEstParameter);                                  
+
+	obj.addProperty("fEstPrecisionRotation", fEstPrecisionRotation);
+	obj.addProperty("fEstPrecisionScale", fEstPrecisionScale);
+	obj.addProperty("fEstPrecisionTranslation", fEstPrecisionTranslation);
+	obj.addProperty("fixedRotationsK", fixedRotations[0]);
+	obj.addProperty("fixedRotationsO", fixedRotations[1]);
+	obj.addProperty("fixedRotationsP", fixedRotations[2]);
+	obj.addProperty("fixedScale", fixedScale[0]);
+
+	obj.addProperty("fixedTranslationsX", fixedTranslations[0]);
+	obj.addProperty("fixedTranslationsY", fixedTranslations[1]);
+	obj.addProperty("fixedTranslationsZ", fixedTranslations[2]);
+	obj.addProperty("fProvParameter", fProvParameter);                                 
+	obj.addProperty("fRotStandDev", fRotStandDev);
+	obj.addProperty("fScaleStandDev", fScaleStandDev);
+	obj.addProperty("fTransStandDev", fTransStandDev);
+
+	obj.addProperty("line", line);
+	obj.addProperty("name", name);
+	obj.addProperty("uidx_rot", uidx_rot);
+	obj.addProperty("uidx_scale", uidx_scale);
+	obj.addProperty("uidx_trans", uidx_trans);
+}
+#endif // USE_SERIALIZER
+
+

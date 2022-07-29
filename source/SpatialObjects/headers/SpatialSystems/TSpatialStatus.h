@@ -1,6 +1,6 @@
 // TSpatialStatus.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 // General class for status of spatial objects. The three components are considered to be
@@ -20,6 +20,9 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #pragma once
 #endif // _MSC_VER >= 1000
 
+#ifdef USE_SERIALIZER
+#	include <Serializer.hpp>
+#endif // USE_SERIALIZER
 
 /////////////////////////////////////////////////////////////////
 
@@ -29,9 +32,14 @@ class  TVReferenceFrame;
 
 /*!\ingroup SpatialObjectsAndSystems
 	@{*/
-
+#ifdef USE_SERIALIZER
 //! Class storing the statuses of objects related to a 3D position
-class  TSpatialStatus //: public TObject  
+class TSpatialStatus : public Serializable //: public TObject
+#else
+//! Class storing the statuses of objects related to a 3D position
+class TSpatialStatus //: public TObject
+#endif // USE_SERIALIZER
+
 {
 public:
 	//friend class TAReferenceFrame;
@@ -76,7 +84,10 @@ public:
 		virtual void			setObjectStatus(ESpatialStatus s) {fSpatialStatus = s; return;}
 
 	//@}
-
+#ifdef USE_SERIALIZER
+		// Inherited via Serializable
+		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif
 	
 
 private:

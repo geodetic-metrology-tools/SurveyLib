@@ -498,3 +498,29 @@ TLength TAdjustablePoint::getEstimatedEuclideanDistance(const TAdjustablePoint* 
 		                  pow2(getEstValue(1) - ptOther->getEstValue(1)) +
 		                  pow2(getEstValue(2) - ptOther->getEstValue(2))) );
 }
+
+#ifdef USE_SERIALIZER
+void TAdjustablePoint::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	obj.addProperty("fName", fName);
+	obj.addProperty("fProvisionalValue", fProvisionalValue);
+	obj.addProperty("fEstimatedValue", fEstimatedValue);
+	obj.addProperty("fCorrection", fCorrection);
+	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
+
+	obj.addProperty("uidx", uidx);
+
+	obj.addProperty("fSpatialStatus", fSpatialStatus);
+	obj.addProperty("fCovariance", fCovariance);
+	obj.addProperty("fStandardDeviations", fStandardDeviations);
+	obj.addProperty("fixedState", fixedState);
+	obj.addProperty("line", line);
+
+	obj.addProperty("fXValueSet", fXValueSet);
+	obj.addProperty("fYValueSet", fYValueSet);
+	obj.addProperty("fHfixed", fHfixed);
+
+	obj.addProperty("fReferential", fReferential);
+	obj.addProperty("eolcomment", eolcomment);
+}
+#endif //USE_SERIALIZER

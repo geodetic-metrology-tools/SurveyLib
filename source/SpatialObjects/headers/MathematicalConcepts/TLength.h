@@ -1,6 +1,6 @@
 // TLength.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -24,12 +24,18 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include	<assert.h>
 #include "Quad.h"
 
+#ifdef USE_SERIALIZER
+#include <Serializer.hpp>
+#endif // USE_SERIALIZER
 
 //!Class Definition
 /// \ingroup MathematicalConcepts
-class	TLength
+#ifdef USE_SERIALIZER
+class TLength : public Serializable
+#else
+class TLength
+#endif // USE_SERIALIZER
 {
-
 public:
 
 	/*!\name Constants*/
@@ -56,7 +62,11 @@ public:
 
 	/*!\name Public Methods*/
 	//@{
-	
+#ifdef USE_SERIALIZER
+	// Inherited via Serializable
+	virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif // USE_SERIALIZER
+
 	/*!set a value in metres
 	\param TReal, value of Tlength in metres 
 	*/
@@ -123,6 +133,7 @@ public:
 
    //!cast operator return the value as a TReal and expressed in Meters
    operator TReal() const { return fValue; }
+
 
 private:
 
@@ -197,5 +208,12 @@ inline TReal	TLength::getMMetresValue() const
 	// return the converted length value
 	return fValue * 1000;
 }
+
+#ifdef USE_SERIALIZER
+inline void TLength::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	obj.addProperty("fValue", fValue);
+}
+#endif // USE_SERIALIZER
 
 #endif // SU_LENGTH

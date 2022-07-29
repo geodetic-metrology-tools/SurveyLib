@@ -198,3 +198,13 @@ void	TACoordinateSystem::setC(TACoordSysMatrix* mx, const int& i, const int& j, 
 mx->setC(i, j, value);
 return;
 }
+
+
+
+#ifdef USE_SERIALIZER
+void TACoordinateSystem::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	TVCoordinateSystem::serialize(obj);
+	obj.addProperty("fCoordSysId", fCoordSysId);
+}
+#endif // USE_SERIALIZER

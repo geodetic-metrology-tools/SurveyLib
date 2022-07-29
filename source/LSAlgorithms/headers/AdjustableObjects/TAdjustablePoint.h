@@ -12,11 +12,19 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TFreeVector.h"
 #include "TSpatialStatus.h"
 
+#ifdef USE_SERIALIZER
+	#include <Serializer.hpp>
+#endif // USE_SERIALIZER
+
 /*! 
 	\ingroup AdjustableObjects
 	\brief Adds adjustable information to a point represented by a TPositionVector class.
 */
+#ifdef USE_SERIALIZER
+class TAdjustablePoint : public Serializable, public TVAdjustableObject
+#else
 class TAdjustablePoint : public TVAdjustableObject
+#endif // USE_SERIALIZER
 {
 public:
 
@@ -93,11 +101,15 @@ public:
 		const std::vector<int> getRelativeUnknIndices() const;
 
 
+#ifdef USE_SERIALIZER
+		// Inherited via Serializable
+		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
 		/*! 
 			\brief See \ref TVAdjustableObject::getLastUidx
 
 			\throws Throws a logic_error if no component of the point is variable, i.e. a fixed point.
 		*/
+#endif
 		virtual int getLastUidx() const;
 
 		/// Returns name of the point */
