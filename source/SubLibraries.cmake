@@ -6,9 +6,11 @@ SET(SURVEYLIB_LIBRARIES
 	ProjectFramework
 	SpatialObjects
 	SpatialObjDLL
-	Serialization
 	Tools
 )
+IF(USE_SERIALIZER)
+	LIST(APPEND SURVEYLIB_LIBRARIES Serialization)
+ENDIF(USE_SERIALIZER)
 
 SET(SPATIAL_LIBRARIES
 	AffineTransformations
