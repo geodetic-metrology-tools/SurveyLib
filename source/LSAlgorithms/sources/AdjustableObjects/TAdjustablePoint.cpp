@@ -93,7 +93,7 @@ TLength	TAdjustablePoint::getErrorEllMajorAxis() const
 	{
 		case TSpatialStatus::ESpatialStatus::kVxy:
 		{
-			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in m²
+			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			gdAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sx2 + sy2 + sqrtq(powq((sy2 - sx2), 2) + (LITERAL(4.0) * vxy * vxy)));
@@ -101,7 +101,7 @@ TLength	TAdjustablePoint::getErrorEllMajorAxis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVxz:
 		{
-			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in m²
+			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			gdAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sx2 + sz2 + sqrtq(powq((sz2 - sx2), 2) + (LITERAL(4.0) * vxz * vxz)));
@@ -109,7 +109,7 @@ TLength	TAdjustablePoint::getErrorEllMajorAxis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVyz:
 		{
-			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in m²
+			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in mÂ²
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			gdAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sz2 + sy2 + sqrtq(powq((sy2 - sz2), 2) + (LITERAL(4.0) * vyz * vyz)));
@@ -129,7 +129,7 @@ TLength TAdjustablePoint::getErrorEllMinorAxis() const
 	{
 		case TSpatialStatus::ESpatialStatus::kVxy:
 		{
-			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in m²
+			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			ptAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sx2 + sy2 - sqrtq(powq((sy2 - sx2), 2) + (LITERAL(4.0) * vxy * vxy)));
@@ -137,7 +137,7 @@ TLength TAdjustablePoint::getErrorEllMinorAxis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVxz:
 		{
-			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in m²
+			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			ptAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sx2 + sz2 - sqrtq(powq((sz2 - sx2), 2) + (LITERAL(4.0) * vxz * vxz)));
@@ -145,7 +145,7 @@ TLength TAdjustablePoint::getErrorEllMinorAxis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVyz:
 		{
-			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in m²
+			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in mÂ²
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			ptAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sz2 + sy2 - sqrtq(powq((sy2 - sz2), 2) + (LITERAL(4.0) * vyz * vyz)));
@@ -165,7 +165,7 @@ TAngle TAdjustablePoint::getErrorEllGis() const
 	{
 		case TSpatialStatus::ESpatialStatus::kVxy:
 		{
-			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in m²
+			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			gis = ((LITERAL(0.5)) * TAngle::aTan2(2 * vxy, (sy2 - sx2)));
@@ -173,7 +173,7 @@ TAngle TAdjustablePoint::getErrorEllGis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVxz:
 		{
-			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in m²
+			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			gis = ((LITERAL(0.5)) * TAngle::aTan2(2 * vxz, (sz2 - sx2)));
@@ -181,7 +181,7 @@ TAngle TAdjustablePoint::getErrorEllGis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVyz:
 		{
-			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in m²
+			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in mÂ²
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			gis = ((LITERAL(0.5)) * TAngle::aTan2(2 * vyz, (sz2 - sy2)));
@@ -485,3 +485,42 @@ TLength TAdjustablePoint::getEstimatedEuclideanDistance(const TAdjustablePoint* 
 		                  pow2(getEstValue(1) - ptOther->getEstValue(1)) +
 		                  pow2(getEstValue(2) - ptOther->getEstValue(2))) );
 }
+
+#ifdef USE_SERIALIZER
+void TAdjustablePoint::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	obj.addProperty("fName", fName);
+
+	// obj.addProperty("fProvisionalValue", fProvisionalValue);
+	// obj.addProperty("fEstimatedValue", fEstimatedValue);
+
+	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
+	obj.addProperty("fEstimatedPrecision[0]", fEstimatedPrecision[0]);
+	obj.addProperty("fEstimatedPrecision[1]", fEstimatedPrecision[1]);
+	obj.addProperty("fEstimatedPrecision[2]", fEstimatedPrecision[2]);
+
+	obj.addProperty("fCorrection", fCorrection);
+	obj.addProperty("fCorrection[0]", fCorrection[0]);
+	obj.addProperty("fCorrection[1]", fCorrection[1]);
+	obj.addProperty("fCorrection[2]", fCorrection[2]);
+
+	obj.addProperty("fStandardDeviations", fStandardDeviations);
+	obj.addProperty("fStandardDeviations[0]", fStandardDeviations[0]);
+	obj.addProperty("fStandardDeviations[1]", fStandardDeviations[1]);
+	obj.addProperty("fStandardDeviations[2]", fStandardDeviations[2]);
+
+	obj.addProperty("fixedState", fixedState);
+	obj.addProperty("fixedState[0]", fixedState[0]);
+	obj.addProperty("fixedState[1]", fixedState[1]);
+	obj.addProperty("fixedState[2]", fixedState[2]);
+
+	obj.addProperty("uidx", uidx);
+	obj.addProperty("uidx[0]", uidx[0]);
+	obj.addProperty("uidx[1]", uidx[1]);
+	obj.addProperty("uidx[2]", uidx[2]);
+
+	obj.addProperty("fHfixed", fHfixed);
+	obj.addProperty("fHfixed", fXValueSet);
+	obj.addProperty("fHfixed", fYValueSet);
+}
+#endif //USE_SERIALIZER
