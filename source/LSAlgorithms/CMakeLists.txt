@@ -1,5 +1,4 @@
 include_directories(${CMAKE_SOURCE_DIR}
-					${BOOST_ROOT}
 					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/AdjustableObjects
 					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcElements
 					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcParams
@@ -14,6 +13,10 @@ include_directories(${CMAKE_SOURCE_DIR}
 					${SURVEYLIB_ROOT}/source/Tools/headers/
 					${SURVEYLIB_ROOT}/source/Logs
 )
+include_directories(SYSTEM PUBLIC
+	${BOOST_ROOT}
+)
+
 
 set(ALGO_HEADERS
 	headers/AdjustableObjects/TAdjustablePoint.h
