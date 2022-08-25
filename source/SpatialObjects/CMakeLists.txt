@@ -7,8 +7,6 @@ include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransf
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
 					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
 					${SURVEYLIB_ROOT}/source/Logs
-					# Eigen
-					${EIGEN_INCLUDE_PATH}
 )
 
 add_definitions(-DCIRCE_EXEC_DIR="${CIRCE_EXEC_DIR}")
@@ -294,7 +292,7 @@ ENDIF(USE_SWISSTOPO)
 # Create a static library from sources:
 add_library(SpatialObjects STATIC ${SpatialObject_SOURCES} ${SpatialObject_HEADERS})
 IF(USE_SWISSTOPO)
-	target_include_directories(SpatialObjects PUBLIC ${REFRAME2016_LIBRARY_DIR})
+	target_include_directories(SpatialObjects SYSTEM PUBLIC ${REFRAME2016_LIBRARY_DIR})
 	target_link_directories(SpatialObjects PUBLIC ${REFRAME2016_LIBRARY_DIR})
 	# Anything that depends on SpatialObjects will have the flag set
 	target_compile_definitions(SpatialObjects PUBLIC -DUSE_SWISSTOPO)
@@ -316,6 +314,8 @@ target_include_directories(SpatialObjects PUBLIC
 	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
 	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
 	${SURVEYLIB_ROOT}/source/Logs
+)
+target_include_directories(SpatialObjects SYSTEM PUBLIC
 	# Eigen
 	${EIGEN_INCLUDE_PATH}
 )
