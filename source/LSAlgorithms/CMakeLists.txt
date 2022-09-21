@@ -68,8 +68,10 @@ set(ALGO_SOURCES
 ADD_LIBRARY(LSAlgorithms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
 
 # Specify the libraries to link against
-target_link_libraries(LSAlgorithms Tools Logs SpatialObjects)
-
+target_link_libraries(LSAlgorithms PRIVATE Tools Logs SpatialObjects)
+IF(USE_SERIALIZER)
+	target_link_libraries(LSAlgorithms PUBLIC Serialization)
+ENDIF(USE_SERIALIZER)
 
 # Define VS folders:
 file(GLOB ADJUSTABLEOBJECT_H				headers/AdjustableObjects/*.*)

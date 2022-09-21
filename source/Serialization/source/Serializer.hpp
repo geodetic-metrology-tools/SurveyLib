@@ -77,11 +77,10 @@ public:
 	 */
 	SerializationHelper getSerializationHelper() { return SerializationHelper(*this); }
 	/**
-	* Get string representation of the serialized contents.
-	*/
+	 * Get string representation of the serialized contents.
+	 */
 	virtual std::string getStringRepresentation() = 0;
 
-// clang-format on
 protected:
 	// Virtual functions
 	// structure related
@@ -100,14 +99,25 @@ protected:
 	//	Add some new property, can be primitive, Serializable, map/container of maps, pair, container
 
 	// clang-format off
+
 	// Primitive - !Serializable && !pair && !pointer && ((container && is_string) || !container))
 	template<typename T>
 	typename std::enable_if<!is_Serializable<T>::value 
 		&& !is_pair_t<T>::value 
 		&& !is_any_pointer<T>::value
-		&& ((is_iterable_container<T>::value 
-			&& is_string<T>::value) 
-			|| !is_iterable_container<T>::value)>::type
+		&& !std::is_array_v<std::remove_reference_t<T>>
+		&& ((is_iterable_container<T>::value && is_string<T>::value) 
+			|| !is_iterable_container<T>::value)
+	>::type
+		addProperty(const T &value, const std::string &name = std::string())
+	{
+		startPrimitive(name);
+		addValue(value);
+		endPrimitive();
+	}
+	// String pointers - is_any_pointer && is_string
+	template<typename T>
+	typename std::enable_if<!is_Serializable<T>::value && is_any_pointer<T>::value && is_string<T>::value>::type
 		addProperty(const T &value, const std::string &name = std::string())
 	{
 		startPrimitive(name);
@@ -116,15 +126,15 @@ protected:
 	}
 	// Primitive pointer
 	template<typename T>
-	typename std::enable_if<is_any_pointer<T>::value>::type
-		// clang-format on
+	typename std::enable_if<is_any_pointer<T>::value && !is_string<T>::value>::type
 		addProperty(const T &value, const std::string &name = std::string())
 	{
 		addProperty(*value, name);
 	}
 	// Serializable class
 	template<typename T>
-	typename std::enable_if<is_Serializable<T>::value>::type addProperty(const T &o, const std::string &name = std::string())
+	typename std::enable_if<is_Serializable<T>::value>::type
+		addProperty(const T &o, const std::string &name = std::string())
 	{
 		startObject(name);
 		SerializerObject::SerializationHelper serHelper = getSerializationHelper();
@@ -133,9 +143,7 @@ protected:
 	}
 	//// Container
 	template<typename T>
-	typename std::enable_if<!is_string<T>::value 
-		&& is_iterable_container<T>::value>::type
-		// clang-format on
+	typename std::enable_if<(!is_string<T>::value && is_iterable_container<T>::value) || std::is_array_v<std::remove_reference_t<T>>>::type
 		addProperty(const T &value, const std::string &name = std::string())
 	{
 		startArray(name);
@@ -144,7 +152,8 @@ protected:
 	}
 	// Pair
 	template<typename T>
-	typename std::enable_if<is_pair_t<T>::value>::type addProperty(const T &value, const std::string &name = std::string())
+	typename std::enable_if<is_pair_t<T>::value>::type
+		addProperty(const T &value, const std::string &name = std::string())
 	{
 		startObject(name);
 		addValue(value);
@@ -176,27 +185,37 @@ protected:
 	template<typename T>
 	typename std::enable_if<is_iterable_container<T>::value 
 		&& (is_iterable_container<typename T::value_type>::value 
-			|| is_Serializable<typename T::value_type>::value)>::type
-		// clang-format on
+			|| is_Serializable<typename T::value_type>::value)
+	>::type
 		addValue(const T &container)
 	{
 		for (const auto &t : container)
 			addProperty(t);
 	}
+
 	// If container of primitives
 	template<typename T>
-	typename std::enable_if<is_iterable_container<T>::value 
+	typename std::enable_if_t<
+		is_iterable_container<T>::value 
 		&& !is_iterable_container<typename T::value_type>::value 
-		&& !is_Serializable<typename T::value_type>::value>::type
-		// clang-format on
+		&& !is_Serializable<typename T::value_type>::value
+	>
+		addValue(const T &container)
+	{
+		for (const auto &t : container)
+			addValue(t);
+	}
+	// For some reason these two cases (this and upper) cannot be joined with || operator
+	template<typename T>
+	std::enable_if_t<std::is_array_v<std::remove_reference_t<T>>> 
 		addValue(const T &container)
 	{
 		for (const auto &t : container)
 			addValue(t);
 	}
 };
-// clang-format off
 
+// clang-format on
 
 class Serializable
 {
