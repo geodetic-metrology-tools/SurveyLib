@@ -10,6 +10,7 @@
 #include <sstream>
 #include "Logger.hpp"
 #include "TLSInputMatrices.h"
+#include <Eigen/Dense>
 
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -20,6 +21,7 @@ TLSInputMatrices::TLSInputMatrices()
 	
 	firstDesignMatrix = nullptr;
 	secondDesignMatrix = nullptr;
+	secondDesignInvMatrix = nullptr;
 	weightMatrix = nullptr;
 	weightInvMatrix = nullptr;
 	weightUnkMatrix = nullptr;
@@ -60,6 +62,7 @@ void TLSInputMatrices::initMatrices(int unknowns, int equations, int observation
 
 	firstDesignMatrix = new TSparseMatrix(equations, unknowns);
 	secondDesignMatrix = new TSparseMatrix(equations, observations /*+ cnstrObs*/);
+	secondDesignInvMatrix = new TSparseMatrix(equations, observations /*+ cnstrObs*/);
 	weightMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
 	weightInvMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
 	weightUnkMatrix = new TSparseMatrix(unknowns, unknowns);
@@ -83,6 +86,10 @@ void TLSInputMatrices::clearMatrices()
 	if (secondDesignMatrix != nullptr) {
 		delete secondDesignMatrix;
 		secondDesignMatrix = nullptr;
+	}
+	if (secondDesignInvMatrix != nullptr) {
+		delete secondDesignInvMatrix;
+		secondDesignInvMatrix = nullptr;
 	}
 	if (weightMatrix != nullptr) {
 		delete weightMatrix;
@@ -135,6 +142,33 @@ bool TLSInputMatrices::setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex colu
 	return true;
 }
 
+bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex first_index, Eigen::MatrixXd block)
+{
+	try
+	{
+		// set the blocks of the second design matrix. immediately also set the inverse blocks
+		Eigen::MatrixXd block_inverse = block.lu().solve(Eigen::MatrixXd::Identity(block.rows(), block.rows()));
+		int dim = block.rows();
+		if (dim != block.cols())
+			return false;
+		// write the block into the second design matrix
+		for (int row = 0; row < dim; row++)
+		{
+			for (int col = 0; col < dim; col++)
+			{
+				secondDesignMatrix->insert(first_index + row, first_index + col) = block(row, col);
+				secondDesignInvMatrix->insert(first_index + row, first_index + col) = block_inverse(row, col);
+			}
+		}
+	}
+	catch (...)
+	{
+		// block has to be square
+		return false;
+	}
+
+	return true;
+}
 
 bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {
@@ -150,8 +184,10 @@ bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try {
-	if (0 <= row && row < fNbObs && 0 <= column && column < fNbObs)
+	if (0 <= row && row < fNbObs && 0 <= column && column < fNbObs){
 		weightMatrix->insert(row,column) = coeff;
+	}
+	
 	} catch(...) {
 		return false;
 	}
@@ -216,6 +252,11 @@ const TSparseMatrix* TLSInputMatrices::getFirstDgnMtrx() const noexcept
 const TSparseMatrix* TLSInputMatrices::getSecondDgnMtrx() const noexcept
 {//returns a reference to the first dgn matrix
 	return secondDesignMatrix;
+}
+
+const TSparseMatrix* TLSInputMatrices::getSecondDgnInvMtrx() const noexcept
+{//returns a reference to the inverse of the second dgn matrix
+	return secondDesignInvMatrix;
 }
 
 const TSparseMatrix* TLSInputMatrices::getWeightMtrx() const noexcept
@@ -361,3 +402,4 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 /////////////////////////////////////////////////////////////////////////////////
 //END
 /////////////////////////////////////////////////////////////////////////////////
+

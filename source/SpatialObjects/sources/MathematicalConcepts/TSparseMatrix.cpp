@@ -1,5 +1,6 @@
 #include <Eigen/LU>
 #include <Eigen/SparseQR>
+#include <Eigen/Dense>
 
 #include "TSparseMatrix.h"
 #include <iostream>
@@ -17,7 +18,6 @@ namespace TSparseUtils {
 */
 bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCholeskyFirst, bool bTryFullPivotSecond)
 {
-	invMat.setZero();
 
 	auto nRows = sparseMat.rows();
 	auto nCols = sparseMat.cols();
@@ -29,6 +29,7 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 	}
 
 	// Setting the identity matrix
+
 	TSparseMatrix IdMat(nRows, nRows);
 	IdMat.setIdentity();
 
@@ -39,10 +40,22 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 		Eigen::SimplicialLDLT<TSparseMatrix> cholMat(sparseMat);
 		if (cholMat.info() == Eigen::Success)
 		{
-			// Uses Cholesky method
-			invMat = cholMat.solve(IdMat);
+			TDenseMatrix idMat_dense(nRows, nRows);
+			idMat_dense.setIdentity();
+			TVector aux(nRows, 1);
+			TDenseMatrix inverse(nRows, nRows);
+			inverse = TDenseMatrix::Zero(nRows, nRows);
+#pragma omp parallel for
+			for (int i = 0; i < nRows; i++)
+			{
+				inverse.col(i) = cholMat.solve(idMat_dense.col(i));
+			}
+			invMat = inverse.sparseView();
+
 			logDebug() << "Cholesky method is used to invert the matrix!";
 			return true;
+
+
 		}
 		else
 			logDebug() << "Cholesky method failed to invert the matrix!";

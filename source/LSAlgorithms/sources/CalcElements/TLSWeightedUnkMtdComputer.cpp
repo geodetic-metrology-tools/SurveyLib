@@ -51,7 +51,9 @@ bool TLSWeightedUnkMtdComputer::computeResultsMatrices(TLSInputMatrices* im, TLS
 
 	const TSparseMatrix & A = *im->getFirstDgnMtrx();
 	const TSparseMatrix & B = *im->getSecondDgnMtrx();
+	const TSparseMatrix & invB = *im->getSecondDgnInvMtrx();
 	const TSparseMatrix & InvPv = *im->getWeightInvMtrx();
+	const TSparseMatrix & Pv = *im->getWeightMtrx();
 	const TSparseMatrix & Px = *im->getWeightUnkMtrx(); 
 	const TVector & W = im->getMisclosureVctr(); 
 
@@ -60,8 +62,7 @@ bool TLSWeightedUnkMtdComputer::computeResultsMatrices(TLSInputMatrices* im, TLS
 
 	// Calculates invN1 = inv(B * inv(Pv) * Bt)
 	TSparseMatrix invN1(nbEq, nbEq);
-	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1))
-		return false;
+	invN1 = invB.transpose() * Pv * invB;
 
 	TSparseMatrix N2(nbUnk, nbUnk);
 	N2 = A.transpose() * invN1 * A + Px;
@@ -92,6 +93,7 @@ bool TLSWeightedUnkMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrice
 
 	const TSparseMatrix & A = *inputMtr->getFirstDgnMtrx();
 	const TSparseMatrix & B = *inputMtr->getSecondDgnMtrx();
+	const TSparseMatrix & invB = *inputMtr->getSecondDgnInvMtrx();
 	const TSparseMatrix & Pv = *inputMtr->getWeightMtrx();
 	const TSparseMatrix & InvPv = *inputMtr->getWeightInvMtrx();
 	const TVector & W = inputMtr->getMisclosureVctr();
@@ -100,8 +102,7 @@ bool TLSWeightedUnkMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrice
 	const TSparseMatrix & N2 = *rm->getNormalMatrixByConst(); // NB: Normal matrix will NOT be recalculated here (just taken from previous results!)
 
 	TSparseMatrix invN1(nbEq, nbEq);
-	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1))
-		return false;
+	invN1 = invB.transpose() * Pv * invB;
 
 	// Residues V on observations
 	TVector V(nbObs);

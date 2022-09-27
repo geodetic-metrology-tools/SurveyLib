@@ -8,6 +8,7 @@
 #include <Eigen/LU>
 
 
+
 TLSCombinedMtdComputer::TLSCombinedMtdComputer()
 	:count(1)
 {//default constructor
@@ -47,21 +48,21 @@ bool TLSCombinedMtdComputer::computeResults(TLSInputMatrices* im, TLSResultsMatr
 bool TLSCombinedMtdComputer::computeResultsMatrices(TLSInputMatrices* im, TLSResultsMatrices* rm)
 {
 	//test if we do not have a 'nullpointer' in a case that the matrices are not initialize
-	if (im->getFirstDgnMtrx() == nullptr || im->getSecondDgnMtrx() == nullptr || im->getWeightInvMtrx() == nullptr)
+	if (im->getFirstDgnMtrx() == nullptr || im->getSecondDgnInvMtrx() == nullptr || im->getWeightInvMtrx() == nullptr)
 		throw std::runtime_error("Any of the design matrices is not initialized!");
 	
 	const TSparseMatrix& A = *im->getFirstDgnMtrx();	
-	const TSparseMatrix& B = *im->getSecondDgnMtrx();
+	const TSparseMatrix& invB = *im->getSecondDgnInvMtrx();
 	const TSparseMatrix& InvPv = *im->getWeightInvMtrx();
+	const TSparseMatrix& Pv = *im->getWeightMtrx();
 	const TVector & W = im->getMisclosureVctr(); // W : vector of misclosures
 
 	int nbUnk = im->getNbrUnknowns();
 	int nbEq = im->getNbrEquations();
 
-	//calculate intermediate matrix invN1 = inv ( B * inv(P) * Bt )
+	// calculate intermediate matrix invN1 = inv ( B * inv(P) * Bt )
 	TSparseMatrix invN1(nbEq, nbEq);
-	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1, true))
-		return false;
+	invN1 = invB.transpose()*Pv*invB;
 
 	//Normal matrix N2 = At * inv(N1) * A
 	TSparseMatrix N2(nbUnk, nbUnk);
@@ -93,12 +94,13 @@ bool TLSCombinedMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* 
 	int nbEq = inputMtr->getNbrEquations();
 	TReal sigmaZero2Aposteriori = LITERAL(0.0);
 
-	if (inputMtr->getFirstDgnMtrx() == nullptr || inputMtr->getSecondDgnMtrx() == nullptr || inputMtr->getWeightMtrx() == nullptr || inputMtr->getWeightInvMtrx() == nullptr ||
+	if (inputMtr->getFirstDgnMtrx() == nullptr || inputMtr->getSecondDgnMtrx() == nullptr || inputMtr->getSecondDgnInvMtrx() == nullptr || inputMtr->getWeightMtrx() == nullptr || inputMtr->getWeightInvMtrx() == nullptr ||
 		rm->getSolutionVectByConst() == nullptr || rm->getResidualsVectByConst() == nullptr || rm->getResCovarMtrxByConst() == nullptr)
 		throw std::runtime_error("Any of the design matrices is not initialized!");
 
 	const TSparseMatrix &A = *inputMtr->getFirstDgnMtrx();
 	const TSparseMatrix &B = *inputMtr->getSecondDgnMtrx();
+	const TSparseMatrix &invB = *inputMtr->getSecondDgnInvMtrx();
 	const TSparseMatrix &Pv = *inputMtr->getWeightMtrx();
 	const TSparseMatrix &InvPv = *inputMtr->getWeightInvMtrx();
 	const TVector & W = inputMtr->getMisclosureVctr();
@@ -108,16 +110,12 @@ bool TLSCombinedMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* 
 
 	// Calculate invN1 = inv( B * inv(Pv) * Bt ),  matrix dimensions (nEq,nEq)
 	TSparseMatrix invN1(nbEq, nbEq);
-	if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1))
-		return false;
+	invN1 = invB.transpose()*Pv*invB;
 
-	//Calculate S = Inv(P) * Bt * inv(N1)
-	TSparseMatrix S(nbObs, nbEq);
-	S = -InvPv * B.transpose() * invN1;
 
 	//--------------- Residuals ---------------//
 	TVector V(nbObs);
-	V = S * (A * solution + W);  // vector dimension = nbObs
+	V = -invB * (A * solution + W);  // vector dimension = nbObs
 
 	//--------------- Sigma 0 a posteriri ---------------//
 	sigmaZero2Aposteriori = V.transpose() * Pv * V;
@@ -137,11 +135,11 @@ bool TLSCombinedMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices* 
 		return false;
 
 	// Variance-covariance matrix of the observation residues ( dimension nObs * nObs )
-	// GKA (26/09/2019) : Qvv is changed from Qvv = S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose() to the actual solution: see "a synthesis of recent advances in the method of least squares" from Krakiwsky
-	// according to literature: Qvv = InvPv * B.transpose() * invN1 * B * InvPv - InvPv * B.transpose() * invN1 * A * Qxx * A.transpose() * invN1 * B * InvPv;
 
 	TSparseMatrix Qvv(nbObs, nbObs);
-	Qvv = - S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose();
+	TSparseMatrix invBA = invB*A;
+	TDenseMatrix QAinvBT = Qxx *invBA.transpose();
+	Qvv = InvPv -  invBA*QAinvBT;
 	
 	// Copies the matrices into the members of the TResultsMatrices object
 	rm->setResCovarMtrx(Qvv);
