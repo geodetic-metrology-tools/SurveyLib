@@ -70,6 +70,8 @@ public:
 		ERR_inputData,
 		//! Error during the LS calculation
 		ERR_LSCalculation,
+		//! Problem detected by consistency checker
+		ERR_consistencyCheck,
 		//! Error with the results
 		ERR_results,
 

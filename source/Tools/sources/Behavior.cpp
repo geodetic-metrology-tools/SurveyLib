@@ -23,6 +23,7 @@ std::wstring Behavior::ErrorMessage[ERR_endOfTheWorld] =
 	L"Misc. Warning",	  						// ERR_miscWarning
 	L"Error in the Input Data (LS process)",	// ERR_inputData
 	L"Error in the Least Square Process",		// ERR_LSCalculation
+	L"Ambiguous configuration detected",		// ERR_consistencyCheck
 	L"Problem with results",					// ERR_results
 	
 	L"The end of the world will come soon."
@@ -106,6 +107,7 @@ Behavior::Type Behavior::getType() const
 		case Behavior::ERR_unknownExcptInTransformation:
 		case Behavior::ERR_inputData:
 		case Behavior::ERR_LSCalculation:
+		case Behavior::ERR_consistencyCheck:
 		case Behavior::ERR_results:
 		case Behavior::ERR_unknownReferenceFrame:
 			return Type::Error;
