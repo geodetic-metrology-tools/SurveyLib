@@ -34,7 +34,6 @@ TLSInputMatrices::TLSInputMatrices()
 	fNbEqn = 0;
 	fNbObs = 0;
 	fNbCnstr = 0;
-	fNbCnstrObs = 0;
 }
 
 
@@ -49,30 +48,27 @@ TLSInputMatrices::~TLSInputMatrices()
 //SET FUNCTIONS
 /////////////////////////////////////////////////////////////////////////////////
 
-void TLSInputMatrices::initMatrices(int unknowns, int equations, int observations, int nbCnstrObs, int nbCnstrUnk)
+void TLSInputMatrices::initMatrices(int unknowns, int equations, int observations, int nbCnstrUnk)
 {//sets the dimensions of the matrices
 
 	fNbUnk = unknowns;
 	fNbObs = observations; // number of observations + constraint observations
 	fNbEqn = equations;
-	fNbCnstrObs = nbCnstrObs;
 
 	clearMatrices();
 	fMisclosureVector = new TVector(fNbEqn);
 
 	firstDesignMatrix = new TSparseMatrix(equations, unknowns);
-	secondDesignMatrix = new TSparseMatrix(equations, observations /*+ cnstrObs*/);
-	secondDesignInvMatrix = new TSparseMatrix(equations, observations /*+ cnstrObs*/);
-	weightMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
-	weightInvMatrix = new TSparseMatrix(observations /*+ cnstrObs*/, observations /*+ cnstrObs*/);
+	secondDesignMatrix = new TSparseMatrix(equations, observations);
+	secondDesignInvMatrix = new TSparseMatrix(equations, observations);
+	weightMatrix = new TSparseMatrix(observations, observations);
+	weightInvMatrix = new TSparseMatrix(observations, observations);
 	weightUnkMatrix = new TSparseMatrix(unknowns, unknowns);
 
-	if (nbCnstrUnk != 0)
-	{
-		fNbCnstr = nbCnstrUnk;
-		fCnstrMisclosureVector = new TVector(nbCnstrUnk);
-		fCnstrFirstDesignMtrx = new	TSparseMatrix(nbCnstrUnk, unknowns);
-	}
+	fNbCnstr = nbCnstrUnk;
+	fCnstrMisclosureVector = new TVector(nbCnstrUnk);
+	fCnstrFirstDesignMtrx = new TSparseMatrix(nbCnstrUnk, unknowns);
+
 }
 
 void TLSInputMatrices::clearMatrices()
@@ -306,13 +302,6 @@ int TLSInputMatrices::getNbrObservations() const
 	return fNbObs;
 }
 
-//zero or 1
-int TLSInputMatrices::getNbrConstraintObs() const
-{
-	return fNbCnstrObs;
-}
-
-//zero or 1
 int TLSInputMatrices::getNbrConstraints() const
 {
 	return fNbCnstr;
