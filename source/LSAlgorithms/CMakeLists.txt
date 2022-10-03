@@ -27,10 +27,6 @@ set(ALGO_HEADERS
 	headers/CalcElements/TALSComputer.h
 	headers/CalcElements/TLSCalcWorkingUnknown.h
 	headers/CalcElements/TLSInputMatrices.h
-	headers/CalcElements/TLSParametricMtdComputer.h
-	headers/CalcElements/TLSWeightedUnkMtdComputer.h
-	headers/CalcElements/TLSCombinedMtdComputer.h
-	headers/CalcElements/TLSCnstMtdComputer.h
 	headers/CalcElements/TLSUniversalMtdComputer.h
 	headers/CalcElements/TLSResultsMatrices.h
 	headers/CalcElements/UEOIndices.h
@@ -53,10 +49,6 @@ set(ALGO_SOURCES
 	sources/CalcElements/TALSCalcParameter.cpp
 	sources/CalcElements/TALSComputer.cpp
 	sources/CalcElements/TLSInputMatrices.cpp
-	sources/CalcElements/TLSParametricMtdComputer.cpp
-	sources/CalcElements/TLSWeightedUnkMtdComputer.cpp
-	sources/CalcElements/TLSCombinedMtdComputer.cpp
-	sources/CalcElements/TLSCnstMtdComputer.cpp
 	sources/CalcElements/TLSUniversalMtdComputer.cpp
 	sources/CalcElements/TLSResultsMatrices.cpp
 	sources/CalcElements/QuantileFunctions.cpp

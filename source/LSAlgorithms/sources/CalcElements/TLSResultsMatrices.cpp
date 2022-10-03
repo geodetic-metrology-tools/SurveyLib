@@ -12,40 +12,16 @@
 //CONSTRUCTOR / DESTRUCTOR
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
-{
-	// constructor dimensioning the matrices
-	fSolutionVctr = new TVector(ueoi.UIndex);   // dX solution vector (corrections to unknowns approximate values)
-	fResidualsVctr = new TVector(ueoi.OIndex);  // V residues vector (corrections to raw observations)
-	fResCovarianceMtrx = new TSparseMatrix(ueoi.OIndex, ueoi.OIndex);  // Qvv variance-covariance matrix of the observation residues V
-	fUnkCovarianceMtrx = new TSparseMatrix(ueoi.UIndex, ueoi.UIndex);  // Qxx variance-covariance matrix of the unjnowns
-	fNormalMatrix = new TSparseMatrix(ueoi.UIndex, ueoi.UIndex);  // N normal matrix of the adjustment
-
-	fSigmaZero2 = NO_VALf;
-}
-
-
-TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi, int numConstraints)
 {
 	// constructor dimensioning the matrices
 	fSolutionVctr = new TVector(ueoi.UIndex);
 	fResidualsVctr = new TVector(ueoi.OIndex);
 	fResCovarianceMtrx = new TSparseMatrix(ueoi.OIndex, ueoi.OIndex);
-	fUnkCovarianceMtrx = new TSparseMatrix(ueoi.UIndex + numConstraints, ueoi.UIndex + numConstraints);
-	fNormalMatrix = new TSparseMatrix(ueoi.UIndex, ueoi.UIndex);
-
-	fSigmaZero2 = NO_VALf;
-}
-
-
-TLSResultsMatrices::TLSResultsMatrices(int numUnknowns,int numObs)
-{
-	// constructor creating the results matrices with the input dimensions
-	fSolutionVctr = new TVector (numUnknowns);
-	fResidualsVctr = new TVector (numObs);
-	fResCovarianceMtrx = new TSparseMatrix(numObs,numObs);
-	fUnkCovarianceMtrx = new TSparseMatrix(numUnknowns,numUnknowns);
-	fNormalMatrix = new TSparseMatrix(numUnknowns, numUnknowns);
+	fUnkCovarianceMtrx = new TSparseMatrix(ueoi.UIndex, ueoi.UIndex);
+	fNormalMatrix = new TSparseMatrix(ueoi.UIndex + ueoi.CIndex, ueoi.UIndex + ueoi.CIndex);
+	fInvN1Matrix = new TSparseMatrix(ueoi.EIndex, ueoi.EIndex);
 
 	fSigmaZero2 = NO_VALf;
 }
@@ -68,6 +44,9 @@ TLSResultsMatrices::~TLSResultsMatrices()
 
 	if (fNormalMatrix != 0)
 		delete fNormalMatrix;
+
+	if (fInvN1Matrix != 0)
+		delete fInvN1Matrix;
 }
 
 
