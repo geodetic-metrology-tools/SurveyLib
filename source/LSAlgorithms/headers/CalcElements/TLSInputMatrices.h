@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2022. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -38,7 +38,7 @@ public:
 			\param[in] nbConstraints the free survey network's number of observation constraints
 			\param[in] constraints the free survey network's number of constraints
 		*/
-		void initMatrices(int unknowns, int equations, int observations, int nbCnstrObs, int nbCnstrUnk = 0);
+		void initMatrices(int unknowns, int equations, int observations, int nbCnstrUnk = 0);
 	
 
 		/*!	\brief Set the value of an element of the first design matrix in the adjustment (A-matrix)
@@ -155,7 +155,6 @@ private:
 	MatrixIndex		fNbUnk;      /*!< u : number of unknowns */
 	MatrixIndex		fNbObs;      /*!< o : number of observations */
 	MatrixIndex		fNbEqn;      /*!< e : number of equations */
-	int				fNbCnstrObs; /*!< number of constraint observations */
 	MatrixIndex		fNbCnstr;    /*!< c : number of constraints on parameters */
 
 	TVector*		fMisclosureVector;  /*!< vector (o x 1) for misclosure errors */

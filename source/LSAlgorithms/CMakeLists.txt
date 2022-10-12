@@ -31,6 +31,7 @@ set(ALGO_HEADERS
 	headers/CalcElements/TLSWeightedUnkMtdComputer.h
 	headers/CalcElements/TLSCombinedMtdComputer.h
 	headers/CalcElements/TLSCnstMtdComputer.h
+	headers/CalcElements/TLSUniversalMtdComputer.h
 	headers/CalcElements/TLSResultsMatrices.h
 	headers/CalcElements/UEOIndices.h
 	headers/CalcElements/QuantileFunctions.h
@@ -56,6 +57,7 @@ set(ALGO_SOURCES
 	sources/CalcElements/TLSWeightedUnkMtdComputer.cpp
 	sources/CalcElements/TLSCombinedMtdComputer.cpp
 	sources/CalcElements/TLSCnstMtdComputer.cpp
+	sources/CalcElements/TLSUniversalMtdComputer.cpp
 	sources/CalcElements/TLSResultsMatrices.cpp
 	sources/CalcElements/QuantileFunctions.cpp
 	sources/CalcParams/TLSCalcFreeVectorParam.cpp

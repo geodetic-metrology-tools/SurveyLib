@@ -82,7 +82,7 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 	LuMat.compute(sparseMat);
 	if (LuMat.info() != Eigen::Success) 
 	{
-		logDebug() << "Decomposition with the SparseQR method failed to invert the matrix!!";
+		logDebug() << "Decomposition with the SparseLU method failed to invert the matrix!!";
 		return false;
 	}
 	invMat = LuMat.solve(IdMat);
