@@ -62,6 +62,15 @@ std::vector<std::string> const tokenizefileString(const std::string& str){
 		end++;
 	} while (str[end - 1] != 0);
 
+	// Remove the last token of a line if it starts with a comment (%) chararcter.
+	if (result.size() != 0)
+	{
+		if (result.back().at(0) == '%')
+		{
+			result.pop_back();
+		}
+	}
+	
 	return result;
 }
 
