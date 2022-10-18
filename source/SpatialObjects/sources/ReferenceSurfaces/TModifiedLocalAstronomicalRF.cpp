@@ -258,8 +258,7 @@ TPositionVector TModifiedLocalAstronomicalRF::getCoordinates(const TSpatialPosit
 	if (coordsys == TCoordSysFactory::kGeodetic || coordsys == TCoordSysFactory::kGeodeticSphere)
 		return fGeodeticSys->getCoordinates(sp, coordsys);
 
-	TPositionVector pv(TCoordSysFactory::k3DCartesian);
-	return pv;
+	return TPositionVector(TCoordSysFactory::k3DCartesian);
 }
 
 void	TModifiedLocalAstronomicalRF::initialiseMLA(TSpatialPosition origin)

@@ -8,7 +8,7 @@
     Patterns:
     A concrete STATE of a Spatial Position
    
-    Copyright 2000 CERN EST/SU. All rights reserved.
+    Copyright 2000-2022 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 
@@ -127,6 +127,16 @@ TARefFrameTransformation* TModifiedLocalGeodeticRF::getRFTransfo2CGRF() {
 		fTrafoCGRF = new TLG2GCTransformation(this);
 
 	return fTrafoCGRF;
+}
+
+TPositionVector TModifiedLocalGeodeticRF::getCoordinates(const TSpatialPosition *sp, TCoordSysFactory::ECoordSys coordsys) const
+{
+	if (coordsys == TCoordSysFactory::k3DCartesian)
+		return getPositionVector(sp);
+	if (coordsys == TCoordSysFactory::kGeodetic || coordsys == TCoordSysFactory::kGeodeticSphere)
+		return fGeodeticSys->getCoordinates(sp, coordsys);
+
+	return TPositionVector(TCoordSysFactory::k3DCartesian);
 }
 
 //////////////////////////////////////////////////////////////////////
