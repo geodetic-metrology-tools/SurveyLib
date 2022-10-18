@@ -95,4 +95,24 @@ void testobject::test<4>()
 	ensure_not(isSpace(L'*'));
 	ensure_not(isSpace(L'5'));
 }
+
+template<>
+template<>
+void testobject::test<5>()
+{
+	set_test_name("StringManager: Test % comment behaviour");
+
+	ensure_equals(tokenizefileString("*FAUT     .01     .10").size(), 4);
+	ensure_equals(tokenizefileString("*FAUT     .01     .10   %comment").size(), 4);
+	ensure_equals(tokenizefileString("*FAUT     .01     .10   % comment").size(), 4);
+	ensure_equals(tokenizefileString("*FAUT     .01     .10   %multi word comment").size(), 4);
+	ensure_equals(tokenizefileString("*FAUT     .01     .10   % multi word comment").size(), 4);
+	ensure_equals(tokenizefileString("*HIST").size(), 2);
+	ensure_equals(tokenizefileString("*HIST  % comment").size(), 2);
+	ensure_equals(tokenizefileString("% comment").size(), 0);
+	ensure_equals(tokenizefileString("").size(), 0);
+	ensure_equals(tokenizefileString("    ").size(), 0);
+	ensure_equals(tokenizefileString("\t\t\t").size(), 0);
+}
+
 } // namespace tut
