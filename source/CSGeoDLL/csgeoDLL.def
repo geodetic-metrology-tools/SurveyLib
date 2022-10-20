@@ -1,0 +1,5 @@
+LIBRARY CSGeoDLL
+
+EXPORTS
+
+transformPoint @1

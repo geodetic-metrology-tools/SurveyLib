@@ -15,7 +15,7 @@ namespace tut
 
 namespace tut
 {
-    tut::factory tf("Test of SurveyLibDLL");
+    tut::factory tf2("Test of SurveyLibDLL");
 }
 
 namespace tut
