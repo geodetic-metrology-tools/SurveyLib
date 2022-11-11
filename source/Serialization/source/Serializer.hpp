@@ -105,8 +105,10 @@ protected:
 	typename std::enable_if<!is_Serializable<T>::value 
 		&& !is_pair_t<T>::value 
 		&& !is_any_pointer<T>::value
+		&& !std::is_array_v<std::remove_reference_t<T>>
 		&& ((is_iterable_container<T>::value && is_string<T>::value) 
-			|| !is_iterable_container<T>::value)>::type
+			|| !is_iterable_container<T>::value)
+	>::type
 		addProperty(const T &value, const std::string &name = std::string())
 	{
 		startPrimitive(name);
@@ -141,7 +143,7 @@ protected:
 	}
 	//// Container
 	template<typename T>
-	typename std::enable_if<!is_string<T>::value && is_iterable_container<T>::value>::type
+	typename std::enable_if<(!is_string<T>::value && is_iterable_container<T>::value) || std::is_array_v<std::remove_reference_t<T>>>::type
 		addProperty(const T &value, const std::string &name = std::string())
 	{
 		startArray(name);
@@ -183,17 +185,29 @@ protected:
 	template<typename T>
 	typename std::enable_if<is_iterable_container<T>::value 
 		&& (is_iterable_container<typename T::value_type>::value 
-			|| is_Serializable<typename T::value_type>::value)>::type
+			|| is_Serializable<typename T::value_type>::value)
+	>::type
 		addValue(const T &container)
 	{
 		for (const auto &t : container)
 			addProperty(t);
 	}
+
 	// If container of primitives
 	template<typename T>
-	typename std::enable_if<is_iterable_container<T>::value 
+	typename std::enable_if_t<
+		is_iterable_container<T>::value 
 		&& !is_iterable_container<typename T::value_type>::value 
-		&& !is_Serializable<typename T::value_type>::value>::type
+		&& !is_Serializable<typename T::value_type>::value
+	>
+		addValue(const T &container)
+	{
+		for (const auto &t : container)
+			addValue(t);
+	}
+	// For some reason these two cases (this and upper) cannot be joined with || operator
+	template<typename T>
+	std::enable_if_t<std::is_array_v<std::remove_reference_t<T>>> 
 		addValue(const T &container)
 	{
 		for (const auto &t : container)

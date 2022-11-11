@@ -203,4 +203,23 @@ void testobject::test<5>()
 	ensure_equals(R"""({"Nan_is_not_valid_json":null})""", ser.getStringRepresentation());
 }
 
+template<>
+template<>
+void testobject::test<6>()
+{
+	set_test_name("Serializer_json: C-style array test");
+
+	int intArray[] = {1, 2, 3, 4, 5};
+	double doubleArray[] = {1.1, 2.22, 3.333};
+	bool boolArray[] = {false, true, true};
+	char charArray[] = "Hello";
+
+	serobj.addProperty("intArray", intArray);
+	serobj.addProperty("doubleArray", doubleArray);
+	serobj.addProperty("boolArray", boolArray);
+	serobj.addProperty("charArray", charArray); // note different specialization chosen here in `addValue`
+
+	ensure_equals(R"""({"intArray":[1,2,3,4,5],"doubleArray":[1.1,2.22,3.333],"boolArray":[false,true,true],"charArray":"Hello"})""", ser.getStringRepresentation());
+}
+
 } // namespace tut

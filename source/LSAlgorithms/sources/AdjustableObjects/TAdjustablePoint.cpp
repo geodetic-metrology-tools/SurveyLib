@@ -491,8 +491,8 @@ void TAdjustablePoint::serialize(SerializerObject::SerializationHelper &obj) con
 {
 	obj.addProperty("fName", fName);
 
-	// obj.addProperty("fProvisionalValue", fProvisionalValue);
-	// obj.addProperty("fEstimatedValue", fEstimatedValue);
+	//obj.addProperty("fProvisionalValue", fProvisionalValue);
+	//obj.addProperty("fEstimatedValue", fEstimatedValue);
 
 	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
 	obj.addProperty("fEstimatedPrecision[0]", fEstimatedPrecision[0]);
