@@ -1,5 +1,6 @@
 include:
   - project: 'apc/common/gitlab-ci-utils'
+    ref: refactor
     file: 'ci/scripts/gitlab-ci-susoft.yml'
 
 ##################

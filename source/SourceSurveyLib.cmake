@@ -1,10 +1,10 @@
 IF(CMAKE_PROJECT_NAME STREQUAL "SurveyLib")
-	SET(SURVEYLIB_ROOT "${CMAKE_SOURCE_DIR}/..")
+	SET(SURVEYLIB_ROOT "${CMAKE_SOURCE_DIR}")
 	message("-- Building Surveylib in tree.")
 ENDIF()
 
 # Inlcude sublibraries
-INCLUDE(${SURVEYLIB_ROOT}/source/SubLibraries.cmake)
+INCLUDE(SubLibraries.cmake)
 
 # Compiler options
 IF(MSVC)
@@ -24,7 +24,7 @@ ELSE()
 	# out of tree build, needs seperate bin directories
 	FOREACH(sublib ${SURVEYLIB_LIBRARIES})
 		SET(add_bindir "${CMAKE_CURRENT_BINARY_DIR}/svl${sublib}")
-		SET(add_srcdir "${SURVEYLIB_ROOT}/source/${sublib}")
+		SET(add_srcdir "${sublib}")
 		ADD_SUBDIRECTORY("${add_srcdir}" "${add_bindir}")
 		LINK_DIRECTORIES ("${add_bindir}")
 	ENDFOREACH(sublib) 

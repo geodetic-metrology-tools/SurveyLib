@@ -1,0 +1,4 @@
+[submodule "deps/SUSoftCMakeCommon"]
+	path = deps/SUSoftCMakeCommon
+	url = https://gitlab.cern.ch/apc/susofts/shared/SUSoftCMakeCommon
+	branch = refactor
