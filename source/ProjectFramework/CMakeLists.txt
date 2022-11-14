@@ -62,22 +62,22 @@ set(ProjectFramework_HEADERS
 )
 
 # Define VS folders:
-file(GLOB CONVERTERS_H 			headers/Converters/*.*)
-file(GLOB CONVERTERS_CPP			sources/Converters/*.*)
-file(GLOB FILTERS_H 					headers/FiltersAndFormats/*.*)
+file(GLOB CONVERTERS_H					headers/Converters/*.*)
+file(GLOB CONVERTERS_CPP				sources/Converters/*.*)
+file(GLOB FILTERS_H					headers/FiltersAndFormats/*.*)
 file(GLOB FILTERS_CPP					sources/FiltersAndFormats/*.*)
-file(GLOB PROJECTDATA_H 					headers/ProjectData/*.*)
+file(GLOB PROJECTDATA_H					headers/ProjectData/*.*)
 file(GLOB PROJECTDATA_CPP				sources/ProjectData/*.*)
-file(GLOB STREAMFORMATTERS_H 					headers/StreamFormatters/*.*)
+file(GLOB STREAMFORMATTERS_H				headers/StreamFormatters/*.*)
 file(GLOB STREAMFORMATTERS_CPP				sources/StreamFormatters/*.*)
-source_group("Converters\\Headers"   		FILES ${CONVERTERS_H})
-source_group("Converters\\Sources"   		FILES ${CONVERTERS_CPP})
-source_group("FiltersAndFormats\\Headers"   		FILES ${FILTERS_H})
-source_group("FiltersAndFormats\\Sources"   		FILES ${FILTERS_CPP})
-source_group("ProjectData\\Headers"   		FILES ${PROJECTDATA_H})
-source_group("ProjectData\\Sources"   		FILES ${PROJECTDATA_CPP})
-source_group("StreamFormatters\\Headers"   		FILES ${STREAMFORMATTERS_H})
-source_group("StreamFormatters\\Sources"   		FILES ${STREAMFORMATTERS_CPP})
+source_group("Converters\\Headers"			FILES	${CONVERTERS_H})
+source_group("Converters\\Sources"			FILES	${CONVERTERS_CPP})
+source_group("FiltersAndFormats\\Headers"		FILES	${FILTERS_H})
+source_group("FiltersAndFormats\\Sources"		FILES	${FILTERS_CPP})
+source_group("ProjectData\\Headers"				FILES	${PROJECTDATA_H})
+source_group("ProjectData\\Sources"			FILES	${PROJECTDATA_CPP})
+source_group("StreamFormatters\\Headers"	FILES	${STREAMFORMATTERS_H})
+source_group("StreamFormatters\\Sources"		FILES	${STREAMFORMATTERS_CPP})
 
 # Create a static library from sources:
 add_library(ProjectFramework STATIC
@@ -86,18 +86,16 @@ add_library(ProjectFramework STATIC
 )
 target_include_directories(ProjectFramework PUBLIC
 	# SurveyLib
-	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/Converters
-	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/FiltersAndFormats
-	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/ProjectData
-	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/StreamFormatters
-	${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcParams
-	${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcElements
-	${SURVEYLIB_ROOT}/source/Tools/headers
+	headers/Converters
+	headers/FiltersAndFormats
+	headers/ProjectData
+	headers/StreamFormatters
 )
 target_link_libraries(ProjectFramework
 	# SurveyLib
 	Tools
 	SpatialObjects
+	LSAlgorithms
 )
 
 # needed for linux compilation

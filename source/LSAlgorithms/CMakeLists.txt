@@ -1,20 +1,3 @@
-include_directories(${CMAKE_SOURCE_DIR}
-					${BOOST_ROOT}
-					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/AdjustableObjects
-					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcElements
-					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcParams
-					${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcAlternatives
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
-					${SURVEYLIB_ROOT}/source/Tools/headers/
-					${SURVEYLIB_ROOT}/source/Logs
-)
-
 set(ALGO_HEADERS
 	headers/AdjustableObjects/TAdjustablePoint.h
 	headers/AdjustableObjects/TVAdjustableObject.h
@@ -71,6 +54,14 @@ set(ALGO_SOURCES
 
 #Create a static library from the object files
 ADD_LIBRARY(LSAlgorithms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
+target_include_directories(LSAlgorithms PUBLIC 
+	${BOOST_ROOT}
+	headers/AdjustableObjects
+	headers/CalcElements
+	headers/CalcParams
+	headers/CalcAlternatives
+)
+
 
 # Specify the libraries to link against
 target_link_libraries(LSAlgorithms Tools Logs SpatialObjects)

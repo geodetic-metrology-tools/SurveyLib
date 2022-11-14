@@ -1,6 +1,6 @@
 configure_file (
-  SurveryLibVersion.in
-  SurveryLibVersion.h
+	${CMAKE_CURRENT_SOURCE_DIR}/SurveryLibVersion.in
+	${CMAKE_CURRENT_SOURCE_DIR}/SurveryLibVersion.h
 )
 
 INCLUDE(SourceSurveyLib.cmake)

@@ -1,16 +1,3 @@
-# set include directories needed by this library
-include_directories(${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
-					${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
-					${SURVEYLIB_ROOT}/source/Logs
-					# Eigen
-					${EIGEN_INCLUDE_PATH}
-)
-
 add_definitions(-DCIRCE_EXEC_DIR="${CIRCE_EXEC_DIR}")
 
 # Create a variable containing all .cpp files:
@@ -303,21 +290,21 @@ ENDIF(USE_SWISSTOPO)
 
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
-    target_link_libraries(SpatialObjects PRIVATE optimized OpenMP::OpenMP_CXX)
+    target_link_libraries(SpatialObjects PRIVATE optimized OpenMP::OpenMP_CXX Logs)
 endif()
 
 # link directories
 target_include_directories(SpatialObjects PUBLIC
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
-	${SURVEYLIB_ROOT}/source/Logs
 	# Eigen
 	${EIGEN_INCLUDE_PATH}
+	# SpatialObjects
+	headers/AffineTransformations
+	headers/MathematicalConcepts
+	headers/ReferenceSurfaces
+	headers/RefFrameTransformations
+	headers/ShortestPath
+	headers/SpatialObj
+	headers/SpatialSystems
 )
 
 # needed for linux compilation

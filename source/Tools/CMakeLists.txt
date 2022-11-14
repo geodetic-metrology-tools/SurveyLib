@@ -1,26 +1,21 @@
-# set include directories needed by this library
-include_directories(
-	${CMAKE_CURRENT_LIST_DIR}/headers
-	${SURVEYLIB_ROOT}/source/Logs
-)
-
 # Create a variable containing all .cpp files:
 set(Tools_SOURCES 
-	${CMAKE_CURRENT_LIST_DIR}/sources/Behavior.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/StringManager.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/FileUtils.cpp
+	sources/Behavior.cpp
+	sources/StringManager.cpp
+	sources/FileUtils.cpp
 )
 
 # Create a variable containing all .h files:
 set(Tools_HEADERS 
-	${CMAKE_CURRENT_LIST_DIR}/headers/TStatusObject.h
-	${CMAKE_CURRENT_LIST_DIR}/headers/Behavior.h
-	${CMAKE_CURRENT_LIST_DIR}/headers/StringManager.h
-	${CMAKE_CURRENT_LIST_DIR}/headers/FileUtils.h
+	headers/TStatusObject.h
+	headers/Behavior.h
+	headers/StringManager.h
+	headers/FileUtils.h
 )
 
 # Create a static library from sources:
 add_library(Tools STATIC ${Tools_SOURCES} ${Tools_HEADERS})
+target_include_directories(Tools PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/headers)
 
 # Link static libraries to the current one
 target_link_libraries(Tools Logs)

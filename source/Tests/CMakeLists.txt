@@ -49,20 +49,6 @@ add_executable(UnitTests
 target_include_directories(UnitTests PRIVATE
 	# TUT
 	${TUT_INCLUDE_PATH}
-	# SurveyLib
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/MathematicalConcepts
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialSystems
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ShortestPath
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
-	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
-	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/Converters
-	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/StreamFormatters
-	${SURVEYLIB_ROOT}/source/SpatialObjDLL/headers
-	${SURVEYLIB_ROOT}/source/Logs
-	${SURVEYLIB_ROOT}/source/Plugins
-	${SURVEYLIB_ROOT}/source/Tools/headers
 )
 target_link_libraries (UnitTests
 	SpatialObjects
