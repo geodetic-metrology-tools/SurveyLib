@@ -32,9 +32,13 @@ class TPositionVector;
 
 /*! \ingroup MathematicalConcepts
 	@{*/
-
+#ifdef USE_SERIALIZER
+//! Virtual class for Coordonate System
+class TVCoordinateSystem : public Serializable //: public TObject 
+#else
 //! Virtual class for Coordonate System
 class TVCoordinateSystem //: public TObject
+#endif // USE_SERIALIZER
 
 {
 public:
@@ -87,7 +91,22 @@ public:
 	//! get the coordinate system identifier
 	virtual TCoordSysFactory::ECoordSys getCoordSysId() const = 0;
 	//@}
+
+#ifdef USE_SERIALIZER
+	// Inherited via Serializable
+	virtual void serialize(SerializerObject::SerializationHelper &obj) const = 0;
+#endif
+
 };
+
+
+#ifdef USE_SERIALIZER
+inline void TVCoordinateSystem::serialize(SerializerObject::SerializationHelper &obj) const
+{
+
+}
+#endif // USE_SERIALIZER
+
 
 /*@}*/
 #endif // SU_V_COORDINATE_SYSTEM

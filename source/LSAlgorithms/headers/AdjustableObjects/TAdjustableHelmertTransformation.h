@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -11,12 +11,22 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <bitset>
 #include "TLength.h"
 
+
+#ifdef USE_SERIALIZER
+#	include <Serializer.hpp>
+#endif // USE_SERIALIZER
+
 /*! 
 	\ingroup AdjustableObjects
 	\brief Adds adjustable information to a TransformParameters class. 
 	Impementation detail: first translations, then rotations and scale as last for the unknown indices assignment.
 */
-class TAdjustableHelmertTransformation : public TVAdjustableObject { 
+#ifdef USE_SERIALIZER
+class TAdjustableHelmertTransformation : public Serializable, public TVAdjustableObject
+#else
+class TAdjustableHelmertTransformation : public TVAdjustableObject
+#endif // USE_SERIALIZER
+{
 	public:
 
 
@@ -360,7 +370,11 @@ class TAdjustableHelmertTransformation : public TVAdjustableObject {
 		/// Returns the called provisional rotation i (X [0], Y [1], Z [3])
 		const TAngle& getProvRotation(int axis) const;
 
-		
+#ifdef USE_SERIALIZER
+		// Inherited via Serializable
+		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif
+
 	private:
 
 		//Number of the line in the input file where the tranformation was introduced
@@ -398,5 +412,4 @@ class TAdjustableHelmertTransformation : public TVAdjustableObject {
 		TReal fCovarianceTrRot[9];  /*!<Covariance of the translation and rotation:  order = {txrx, txry, txrz, tyrx, tyry, tyrz, tzrx, tzry, tzrz}  */
 		TReal fCovarianceScl[6];  /*!<Covariance of the translation/ rotation and scale: order = {ltx, lty, ltz, lrx, lry, lrz}   */
 };
-
 #endif //TADJUSTABLE_HELMERT_TRANSFORMATION

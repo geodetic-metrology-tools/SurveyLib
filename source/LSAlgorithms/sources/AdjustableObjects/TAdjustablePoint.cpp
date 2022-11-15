@@ -490,37 +490,24 @@ TLength TAdjustablePoint::getEstimatedEuclideanDistance(const TAdjustablePoint* 
 void TAdjustablePoint::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	obj.addProperty("fName", fName);
-
-	//obj.addProperty("fProvisionalValue", fProvisionalValue);
-	//obj.addProperty("fEstimatedValue", fEstimatedValue);
-
-	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
-	obj.addProperty("fEstimatedPrecision[0]", fEstimatedPrecision[0]);
-	obj.addProperty("fEstimatedPrecision[1]", fEstimatedPrecision[1]);
-	obj.addProperty("fEstimatedPrecision[2]", fEstimatedPrecision[2]);
-
+	obj.addProperty("fProvisionalValue", fProvisionalValue);
+	obj.addProperty("fEstimatedValue", fEstimatedValue);
 	obj.addProperty("fCorrection", fCorrection);
-	obj.addProperty("fCorrection[0]", fCorrection[0]);
-	obj.addProperty("fCorrection[1]", fCorrection[1]);
-	obj.addProperty("fCorrection[2]", fCorrection[2]);
-
-	obj.addProperty("fStandardDeviations", fStandardDeviations);
-	obj.addProperty("fStandardDeviations[0]", fStandardDeviations[0]);
-	obj.addProperty("fStandardDeviations[1]", fStandardDeviations[1]);
-	obj.addProperty("fStandardDeviations[2]", fStandardDeviations[2]);
-
-	obj.addProperty("fixedState", fixedState);
-	obj.addProperty("fixedState[0]", fixedState[0]);
-	obj.addProperty("fixedState[1]", fixedState[1]);
-	obj.addProperty("fixedState[2]", fixedState[2]);
+	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
 
 	obj.addProperty("uidx", uidx);
-	obj.addProperty("uidx[0]", uidx[0]);
-	obj.addProperty("uidx[1]", uidx[1]);
-	obj.addProperty("uidx[2]", uidx[2]);
 
+	obj.addProperty("fSpatialStatus", fSpatialStatus);
+	obj.addProperty("fCovariance", fCovariance);
+	obj.addProperty("fStandardDeviations", fStandardDeviations);
+	obj.addProperty("fixedState", fixedState);
+	obj.addProperty("line", line);
+
+	obj.addProperty("fXValueSet", fXValueSet);
+	obj.addProperty("fYValueSet", fYValueSet);
 	obj.addProperty("fHfixed", fHfixed);
-	obj.addProperty("fHfixed", fXValueSet);
-	obj.addProperty("fHfixed", fYValueSet);
+
+	obj.addProperty("fReferential", fReferential);
+	obj.addProperty("eolcomment", eolcomment);
 }
 #endif //USE_SERIALIZER

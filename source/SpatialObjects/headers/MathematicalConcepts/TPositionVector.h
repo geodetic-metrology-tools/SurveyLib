@@ -26,11 +26,20 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TLength.h"
 ////////////////////////////////////////////////////////////////
 
+
+#ifdef USE_SERIALIZER
+#	include <Serializer.hpp>
+#endif // USE_SERIALIZER
+
+
 /*! \ingroup MathematicalConcepts
 	@{*/
-
-//! 3D Vector used as a position vector
-class  TPositionVector : public TACoordSysVector//: public TObject  
+#ifdef USE_SERIALIZER
+	class TPositionVector : public Serializable, public TACoordSysVector
+#else
+	//! 3D Vector used as a position vector
+	class TPositionVector : public TACoordSysVector //: public TObject
+#endif // USE_SERIALIZER
 
 {
 public:
@@ -114,7 +123,16 @@ public:
 		//!set the Phi coordinate of a vector in a geodetic Coordinate System return true if X is defined
 		bool setPhiEllipsoid(const TAngle&);
 	//@}
-	
+
+#ifdef USE_SERIALIZER
+		// Inherited via Serializable
+		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+		/*!
+			\brief See \ref TVAdjustableObject::getLastUidx
+
+			\throws Throws a logic_error if no component of the point is variable, i.e. a fixed point.
+		*/
+#endif	
 	
 private:
 

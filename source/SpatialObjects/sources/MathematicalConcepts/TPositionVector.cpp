@@ -224,3 +224,11 @@ bool TPositionVector::setPhiEllipsoid(const TAngle& phi)
 {//!set the Phi coordinate of a vector in a geodetic Coordinate System return true if X is defined
 return getCoordSysPtr()->setPhiEllipsoid(this, phi);
 }
+
+
+#ifdef USE_SERIALIZER
+void TPositionVector::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	TACoordSysVector::serialize(obj);
+}
+#endif // USE_SERIALIZER

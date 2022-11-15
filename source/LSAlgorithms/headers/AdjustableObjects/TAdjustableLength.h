@@ -10,13 +10,22 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TLength.h"
 #include "TVAdjustableObject.h"
 
+#ifdef USE_SERIALIZER
+#	include <Serializer.hpp>
+#endif // USE_SERIALIZER
+
 /*! 
 	\ingroup AdjustableObjects
 	\brief Class providing adjustable related information for a TLength class.
 */
-class TAdjustableLength: public TVAdjustableObject{
+#ifdef USE_SERIALIZER
+class TAdjustableLength : public Serializable, public TVAdjustableObject
+#else
+class TAdjustableLength : public TVAdjustableObject
+#endif // USE_SERIALIZER
+{
 public:
-
+		TAdjustableLength();
 	/*!@name Constructors */
 	//@{
 		/*!
@@ -119,6 +128,11 @@ public:
 	//@}
 
         bool operator==(const TAdjustableLength &other) const;
+
+#ifdef USE_SERIALIZER
+		// Inherited via Serializable
+		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif
 
 private:
 	TLength					fProvisionalValue; /*!< length provisional value. */

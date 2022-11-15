@@ -239,3 +239,11 @@ TLength TFreeVector::getHorDist() const
 
 	return length;
 }
+
+
+#ifdef USE_SERIALIZER
+void TFreeVector::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	TACoordSysVector::serialize(obj);
+}
+#endif // USE_SERIALIZER
