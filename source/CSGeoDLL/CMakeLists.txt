@@ -48,6 +48,10 @@ if(USE_SWISSTOPO AND MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /AI"${REFRAME2016_LIBRARY_DIR}")
 endif()
 
+if(USE_SWISSTOPO)
+	copyReframeDLL(${PROJECT_NAME})
+endif()
+
 # Define IDE folders:
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "SurveyLib")
 #####
