@@ -3,7 +3,7 @@ set(TEST_NAME "CSGeoDLLTests")
 set(CSGEODLL_UNIT_TEST "${CMAKE_SOURCE_DIR}/CSGeoDLLTests")
 set(CSGEODLL_UNIT_TEST_SOURCES "${CSGEODLL_UNIT_TEST}/sources")
 
-set(CSGEO_DLL "${CMAKE_SOURCE_DIR}/${DLL_NAME}")
+set(CSGEO_DLL "${CMAKE_SOURCE_DIR}/${CSGEO_DLL_NAME}")
 set(CSGEO_DLL_HEADER "${CSGEO_DLL}/headers")
 
 # Create a variable containing all .cpp files:
@@ -15,7 +15,7 @@ add_executable(${TEST_NAME} ${testDLL_SOURCES})
 
 # Specify the libraries to link against
 target_link_libraries (${TEST_NAME} 
-	${DLL_NAME}
+	${CSGEO_DLL_NAME}
 )
 
 target_include_directories(${TEST_NAME} PRIVATE
@@ -44,8 +44,8 @@ endforeach()
 if (WIN32)
 ## Copy the needed DLLs to the runtime directory
 
-set (debug_files_str "${CSGEO_ROOT}/build/${DLL_NAME}/Debug/${DLL_NAME}.dll")
-set (release_files_str "${CSGEO_ROOT}/build/${DLL_NAME}/Release/${DLL_NAME}.dll")
+set (debug_files_str "${CSGEO_ROOT}/build/${CSGEO_DLL_NAME}/Debug/${CSGEO_DLL_NAME}.dll")
+set (release_files_str "${CSGEO_ROOT}/build/${CSGEO_DLL_NAME}/Release/${CSGEO_DLL_NAME}.dll")
 add_custom_command(TARGET ${TEST_NAME} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
 	$<$<CONFIG:debug>:"${debug_files_str}">$<$<CONFIG:release>:"${release_files_str}">
