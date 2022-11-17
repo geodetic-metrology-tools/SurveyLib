@@ -1,3 +1,8 @@
+/*
+© Copyright CERN 2000-2022. All rigths reserved. This software is released under a CERN proprietary software licence.
+Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
+*/
+
 #ifndef CSGEODLL_PLAIN_TRANSFORM_H_d7ce960c186c42ecb9f59ecaff70b1bb
 #define CSGEODLL_PLAIN_TRANSFORM_H_d7ce960c186c42ecb9f59ecaff70b1bb
 
@@ -13,7 +18,7 @@ struct TPlainLocalSystemOrigin;
  * NOTE: The coordinates will be interpreted according to the
  *       parameters passed in TPlainDataParameters:
  *   - k3DCartesian - expects x, y and z coordinates in METRES!
- *   - kGeodetic - expects lambda (longitude), phi (latitude) and h (ellipsoidal or orthometric) coordinates in GONS or DECIMAL DEGREE and METRES respectively
+ *   - kGeodetic - expects lambda (longitude), phi (latitude) and h (ellipsoidal or normal or orthometric) coordinates in RADIANS, GONS or DECIMAL DEGREES and METRES respectively
  *   - k2DPlusH - expects x, y and h coordinates in METRES
  *   - Same rule applies for the output.
  * NOTE: Input coordinates are being overwritten!
