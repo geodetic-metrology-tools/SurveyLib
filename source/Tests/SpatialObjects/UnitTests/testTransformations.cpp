@@ -29,7 +29,7 @@ namespace tut
 	void object::test<1>()
 	{
 		//Test modified after the implementation of standard transformation model between ITRF and ETRF (feb. 2022)
-        set_test_name("Converting Zimmerwald cartesian ETRF93 at epoch 1993.0 -> ITRF 97 at epoch 1998.5 and ITRF 97 at epoch 1998.5 ->  ETRF93 at epoch 1993.0");
+        set_test_name("Converting Zimmerwald cartesian ETRF93 at epoch 1993.0 -> ITRF 97 at epoch 1998.5 and ITRF 97 at epoch 1998.5 ->  ETRF93 at epoch 1993.0. Predefined ITRF97 and ETRF93");
 		TPositionVector pv(4331297.348, 567555.639, 4633133.728, TCoordSysFactory::k3DCartesian);
 		//Position given by Swisstopo (valid since 2018)
 		
@@ -42,16 +42,102 @@ namespace tut
 		ensure_equals("ITRF 97 at epoch 1998.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.767), static_cast<TReal>(0.001));
 		ensure_equals("ITRF 97 at epoch 1998.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.864), static_cast<TReal>(0.001));
 
-        // Inverse transformation - take the ETRF result and convert back
+        // Inverse transformation - take the ITRF result and convert back
         position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
 		ensure_equals("ETRF 93 at epoch 1993.0 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.348), static_cast<TReal>(0.001));
 		ensure_equals("ETRF 93 at epoch 1993.0 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.639), static_cast<TReal>(0.001));
 		ensure_equals("ETRF 93 at epoch 1993.0 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.728), static_cast<TReal>(0.001));
 	}
 
-    template<>
+	template<>
 	template<>
 	void object::test<2>()
+	{
+		set_test_name("Converting Zimmerwald cartesian ETRF93 at epoch 1993.0 -> ITRF 97 at epoch 1998.5 and ITRF 97 at epoch 1998.5 ->  ETRF93 at epoch 1993.0. Predefined ITRF97");
+		TPositionVector pv(4331297.348, 567555.639, 4633133.728, TCoordSysFactory::k3DCartesian);
+		// Position given by Swisstopo (valid since 2018)
+
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRFin, nullptr, 1993.0, "ETRF 93"));
+		ensure("Setting the coordinates of TSpatialPosition", position.setCoordinates(pv));
+
+		position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRF97));
+
+		ensure_equals("ITRF 97 at epoch 1998.5 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.185), static_cast<TReal>(0.001));
+		ensure_equals("ITRF 97 at epoch 1998.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.767), static_cast<TReal>(0.001));
+		ensure_equals("ITRF 97 at epoch 1998.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.864), static_cast<TReal>(0.001));
+
+		// Inverse transformation - take the ITRF result and convert back
+		position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRFout, nullptr, 1993.0, "ETRF 93"));
+		ensure_equals("ETRF 93 at epoch 1993.0 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.348), static_cast<TReal>(0.001));
+		ensure_equals("ETRF 93 at epoch 1993.0 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.639), static_cast<TReal>(0.001));
+		ensure_equals("ETRF 93 at epoch 1993.0 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.728), static_cast<TReal>(0.001));
+	}
+
+	template<>
+	template<>
+	void object::test<3>()
+	{
+		set_test_name("Converting Zimmerwald cartesian ETRF93 at epoch 1993.0 -> ITRF 97 at epoch 1998.5 and ITRF 97 at epoch 1998.5 ->  ETRF93 at epoch 1993.0. Predifined ETRF93");
+		TPositionVector pv(4331297.348, 567555.639, 4633133.728, TCoordSysFactory::k3DCartesian);
+		// Position given by Swisstopo (valid since 2018)
+
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
+		ensure("Setting the coordinates of TSpatialPosition", position.setCoordinates(pv));
+
+		position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFout, nullptr, 1998.5, "ITRF 97"));
+
+		ensure_equals("ITRF 97 at epoch 1998.5 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.185), static_cast<TReal>(0.001));
+		ensure_equals("ITRF 97 at epoch 1998.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.767), static_cast<TReal>(0.001));
+		ensure_equals("ITRF 97 at epoch 1998.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.864), static_cast<TReal>(0.001));
+
+		// Inverse transformation - take the ITRF result and convert back
+		TPositionVector pvT(position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(),
+			position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(),
+			position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), TCoordSysFactory::k3DCartesian);
+		TSpatialPosition positionT(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFin, nullptr, 1998.5, "ITRF 97"));
+		ensure("Setting the coordinates of TSpatialPosition", positionT.setCoordinates(pvT));
+
+		positionT.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
+		ensure_equals("ETRF 93 at epoch 1993.0 X", positionT.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.348), static_cast<TReal>(0.001));
+		ensure_equals("ETRF 93 at epoch 1993.0 Y", positionT.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.639), static_cast<TReal>(0.001));
+		ensure_equals("ETRF 93 at epoch 1993.0 Z", positionT.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.728), static_cast<TReal>(0.001));
+	}
+
+	template<>
+	template<>
+	void object::test<4>()
+	{
+		set_test_name("Converting Zimmerwald cartesian ETRF93 at epoch 1993.0 -> ITRF 97 at epoch 1998.5 and ITRF 97 at epoch 1998.5 ->  ETRF93 at epoch 1993.0");
+		TPositionVector pv(4331297.348, 567555.639, 4633133.728, TCoordSysFactory::k3DCartesian);
+		// Position given by Swisstopo (valid since 2018)
+
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRFin, nullptr, 1993.0, "ETRF 93"));
+		ensure("Setting the coordinates of TSpatialPosition", position.setCoordinates(pv));
+
+		position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFout, nullptr, 1998.5, "ITRF 97"));
+
+		ensure_equals("ITRF 97 at epoch 1998.5 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.185), static_cast<TReal>(0.001));
+		ensure_equals("ITRF 97 at epoch 1998.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.767), static_cast<TReal>(0.001));
+		ensure_equals("ITRF 97 at epoch 1998.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.864), static_cast<TReal>(0.001));
+
+		// Inverse transformation - take the ITRF result and convert back
+		TPositionVector pvT(position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(),
+							position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(),
+							position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), TCoordSysFactory::k3DCartesian);
+		TSpatialPosition positionT(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFin, nullptr, 1998.5, "ITRF 97"));
+		ensure("Setting the coordinates of TSpatialPosition", positionT.setCoordinates(pvT));
+
+		positionT.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRFout, nullptr, 1993.0, "ETRF 93"));
+		ensure_equals("ETRF 93 at epoch 1993.0 X", positionT.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4331297.348), static_cast<TReal>(0.001));
+		ensure_equals("ETRF 93 at epoch 1993.0 Y", positionT.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(567555.639), static_cast<TReal>(0.001));
+		ensure_equals("ETRF 93 at epoch 1993.0 Z", positionT.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4633133.728), static_cast<TReal>(0.001));
+	}
+
+
+
+    template<>
+	template<>
+	void object::test<5>()
 	{
         /* Reference data taken from:
            "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
@@ -75,7 +161,7 @@ namespace tut
 
     template<>
 	template<>
-	void object::test<3>()
+	void object::test<6>()
 	{
         /* Reference data taken from:
            "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
@@ -103,7 +189,7 @@ namespace tut
 
     template<>
 	template<>
-	void object::test<4>()
+	void object::test<7>()
 	{
         /* Reference data taken from:
            "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
@@ -129,7 +215,7 @@ namespace tut
 
     template<>
 	template<>
-	void object::test<5>()
+	void object::test<8>()
 	{
         /* Reference data taken from:
            "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
@@ -175,7 +261,7 @@ namespace tut
 
     template<>
 	template<>
-	void object::test<6>()
+	void object::test<9>()
 	{
         /* Reference data taken from:
            "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
@@ -203,7 +289,7 @@ namespace tut
 
     template<>
 	template<>
-	void object::test<7>()
+	void object::test<10>()
 	{
         /* Reference data taken from:
            "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
@@ -227,7 +313,7 @@ namespace tut
 
     template<>
 	template<>
-	void object::test<8>()
+	void object::test<11>()
 	{
         /* Reference data taken from:
            "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
@@ -249,7 +335,7 @@ namespace tut
 
     template<>
 	template<>
-	void object::test<9>()
+	void object::test<12>()
 	{
         /* Reference data taken from:
            "Formulas and constants for the calculation of the Swiss conformal cylindrical projection..."
@@ -280,7 +366,7 @@ namespace tut
 
     template<>
 	template<>
-	void object::test<10>()
+	void object::test<13>()
 	{
         set_test_name("Transforming Bellegard from RGF93 into RGF93 CC46");
         TPositionVector pv(4407040.76287, 449723.28541, 4573892.46194, TCoordSysFactory::k3DCartesian);
@@ -297,7 +383,7 @@ namespace tut
 
 	template<>
 	template<>
-	void object::test<11>()
+	void object::test<14>()
 	{
 		set_test_name("Bug fix - did not convert back from RGF93_5 to CCS");
 		TPositionVector pv(1934404.452, 5230706.747, 531.563, TCoordSysFactory::k2DPlusH);

@@ -304,7 +304,7 @@ TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSyste
 		refFrame == TRefSystemFactory::kETRFin ||
 		refFrame == TRefSystemFactory::kETRFout)
 	{
-		TRefSystemFactory::getRefSystemFactory()->TRefSystemFactory::updateTerrestrialRefFrame(epoch, solution, refFrame);
+		TRefSystemFactory::getRefSystemFactory()->updateTerrestrialRefFrame(epoch, solution, refFrame);
 	}
 
 	if (isdefinedlocal && lso == NULL) 

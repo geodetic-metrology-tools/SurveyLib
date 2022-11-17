@@ -9,7 +9,7 @@ namespace tut
 struct test_TTrfTransformation
 {
 };
-typedef test_group<test_TTrfTransformation> factory;
+typedef test_group<test_TTrfTransformation, 500> factory;
 typedef factory::object object;
 } // namespace tut
 
@@ -113,7 +113,7 @@ void object::test<4>()
 
 template<>
 template<>
-void object::test<5>()
+void object::test<101>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -138,7 +138,7 @@ void object::test<5>()
 
 template<>
 template<>
-void object::test<6>()
+void object::test<102>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -163,7 +163,7 @@ void object::test<6>()
 
 template<>
 template<>
-void object::test<7>()
+void object::test<103>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -188,7 +188,7 @@ void object::test<7>()
 
 template<>
 template<>
-void object::test<8>()
+void object::test<104>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -213,7 +213,7 @@ void object::test<8>()
 
 template<>
 template<>
-void object::test<9>()
+void object::test<105>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -239,7 +239,7 @@ void object::test<9>()
 
 template<>
 template<>
-void object::test<10>()
+void object::test<106>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -264,7 +264,7 @@ void object::test<10>()
 
 template<>
 template<>
-void object::test<11>()
+void object::test<107>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -289,7 +289,7 @@ void object::test<11>()
 
 template<>
 template<>
-void object::test<12>()
+void object::test<108>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -314,7 +314,7 @@ void object::test<12>()
 
 template<>
 template<>
-void object::test<13>()
+void object::test<109>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -339,7 +339,7 @@ void object::test<13>()
 
 template<>
 template<>
-void object::test<14>()
+void object::test<110>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -364,7 +364,7 @@ void object::test<14>()
 
 template<>
 template<>
-void object::test<15>()
+void object::test<111>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -390,7 +390,7 @@ void object::test<15>()
 
 template<>
 template<>
-void object::test<16>()
+void object::test<112>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -415,7 +415,7 @@ void object::test<16>()
 
 template<>
 template<>
-void object::test<17>()
+void object::test<113>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -440,7 +440,59 @@ void object::test<17>()
 
 template<>
 template<>
-void object::test<18>()
+void object::test<114>()
+{
+	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
+	// Online tool developed by the EPN Central Bureau
+
+	// Coordinates of point 225 in ITRF97 at epoch 1998.5: 4395209.5308 467745.8897 4583513.3232
+	// Velocity in ITRF97 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+
+	set_test_name("Transforming a TSpatialPosition from ITRF 97 at epoch 1998.5 into ITRF 2020 at epoch 2022.5");
+
+	TPositionVector pv(4395209.5308, 467745.8895, 4583513.3232, TCoordSysFactory::k3DCartesian);
+
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFin, nullptr, 1998.5, "ITRF 97"));
+	ensure("Setting the coordinates of TSpatialPosition", position.setCoordinates(pv));
+	ensure("Transform returns true", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFout, nullptr, 2022.5, "ITRF 2020")));
+
+	ensure_equals("ITRF 2020 at 2022.5 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4395209.1922),
+		static_cast<TReal>(0.001));
+	ensure_equals("ITRF 2020 at 2022.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(467746.3237),
+		static_cast<TReal>(0.001));
+	ensure_equals("ITRF 2020 at 2022.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4583513.6029),
+		static_cast<TReal>(0.001));
+}
+
+template<>
+template<>
+void object::test<115>()
+{
+	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
+	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
+	// Same as test<101> but with predifined ITRF97
+
+	// Coordinates of point 225 in ITRF97 at epoch 1998.5: 4395209.5308 467745.8897 4583513.3232
+
+	set_test_name("Transforming a TSpatialPosition from ITRF 97 at epoch 1998.5 into ITRF 2014 at epoch 2022.5");
+
+	TPositionVector pv(4395209.5308, 467745.8897, 4583513.3232, TCoordSysFactory::k3DCartesian);
+
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRF97));
+	ensure("Setting the coordinates of TSpatialPosition", position.setCoordinates(pv));
+	ensure("Transform returns true", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFout, nullptr, 2022.5, "ITRF 2014")));
+
+	ensure_equals("ITRF 2014 at 2022.5 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4395209.1889),
+		static_cast<TReal>(0.001));
+	ensure_equals("ITRF 2014 at 2022.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(467746.3218),
+		static_cast<TReal>(0.001));
+	ensure_equals("ITRF 2014 at 2022.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4583513.6039),
+		static_cast<TReal>(0.001));
+}
+
+template<>
+template<>
+void object::test<201>()
 {
 	// Comparison with http://ahgeodev.fr/tfo_plates_i14_sdk.htm
 	// Online tool developed by Alain Harmel (head of Geodesy and Levelling service at IGN)
@@ -465,7 +517,7 @@ void object::test<18>()
 
 template<>
 template<>
-void object::test<19>()
+void object::test<202>()
 {
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau 
@@ -491,7 +543,7 @@ void object::test<19>()
 
 template<>
 template<>
-void object::test<20>()
+void object::test<203>()
 {
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
@@ -517,7 +569,7 @@ void object::test<20>()
 
 template<>
 template<>
-void object::test<21>()
+void object::test<204>()
 {
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
@@ -543,7 +595,7 @@ void object::test<21>()
 
 template<>
 template<>
-void object::test<22>()
+void object::test<205>()
 {
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
@@ -569,7 +621,7 @@ void object::test<22>()
 
 template<>
 template<>
-void object::test<23>()
+void object::test<206>()
 {
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
@@ -595,7 +647,7 @@ void object::test<23>()
 
 template<>
 template<>
-void object::test<24>()
+void object::test<207>()
 {
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
@@ -621,7 +673,7 @@ void object::test<24>()
 
 template<>
 template<>
-void object::test<25>()
+void object::test<208>()
 {
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
@@ -647,7 +699,7 @@ void object::test<25>()
 
 template<>
 template<>
-void object::test<26>()
+void object::test<209>()
 {
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
@@ -674,7 +726,7 @@ void object::test<26>()
 
 template<>
 template<>
-void object::test<27>()
+void object::test<210>()
 {
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
@@ -700,7 +752,7 @@ void object::test<27>()
 
 template<>
 template<>
-void object::test<28>()
+void object::test<211>()
 {
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
@@ -727,7 +779,7 @@ void object::test<28>()
 
 template<>
 template<>
-void object::test<29>()
+void object::test<301>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -735,7 +787,7 @@ void object::test<29>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ETRF 89 at epoch 2022.5");
 
@@ -755,7 +807,7 @@ void object::test<29>()
 
 template<>
 template<>
-void object::test<30>()
+void object::test<302>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -763,7 +815,7 @@ void object::test<30>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ETRF 90 at epoch 2022.5");
 
@@ -782,7 +834,7 @@ void object::test<30>()
 
 template<>
 template<>
-void object::test<31>()
+void object::test<303>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -790,7 +842,7 @@ void object::test<31>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ETRF 91 at epoch 2022.5");
 
@@ -809,7 +861,7 @@ void object::test<31>()
 
 template<>
 template<>
-void object::test<32>()
+void object::test<304>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -817,7 +869,7 @@ void object::test<32>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ETRF 92 at epoch 2022.5");
 
@@ -836,7 +888,7 @@ void object::test<32>()
 
 template<>
 template<>
-void object::test<33>()
+void object::test<305>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -844,7 +896,7 @@ void object::test<33>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ETRF 93 at epoch 2022.5");
 
@@ -863,7 +915,7 @@ void object::test<33>()
 
 template<>
 template<>
-void object::test<34>()
+void object::test<306>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -871,7 +923,7 @@ void object::test<34>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ETRF 94 at epoch 2022.5");
 
@@ -890,7 +942,7 @@ void object::test<34>()
 
 template<>
 template<>
-void object::test<35>()
+void object::test<307>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -898,7 +950,7 @@ void object::test<35>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ETRF 96 at epoch 2022.5");
 
@@ -917,7 +969,7 @@ void object::test<35>()
 
 template<>
 template<>
-void object::test<36>()
+void object::test<308>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -925,7 +977,7 @@ void object::test<36>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ETRF 97 at epoch 2022.5");
 
@@ -944,7 +996,7 @@ void object::test<36>()
 
 template<>
 template<>
-void object::test<37>()
+void object::test<309>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -952,7 +1004,7 @@ void object::test<37>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ETRF 2000 at epoch 2022.5");
 
@@ -972,7 +1024,7 @@ void object::test<37>()
 
 template<>
 template<>
-void object::test<38>()
+void object::test<310>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -980,7 +1032,7 @@ void object::test<38>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ETRF 2005 at epoch 2022.5");
 
@@ -1000,7 +1052,7 @@ void object::test<38>()
 
 template<>
 template<>
-void object::test<39>()
+void object::test<311>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1008,7 +1060,7 @@ void object::test<39>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ETRF 2014 at epoch 2022.5");
 
@@ -1028,7 +1080,7 @@ void object::test<39>()
 
 template<>
 template<>
-void object::test<40>()
+void object::test<312>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1036,7 +1088,7 @@ void object::test<40>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 88 at epoch 2022.5");
 
@@ -1056,7 +1108,7 @@ void object::test<40>()
 
 template<>
 template<>
-void object::test<41>()
+void object::test<313>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1064,7 +1116,7 @@ void object::test<41>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 89 at epoch 2022.5");
 
@@ -1083,7 +1135,7 @@ void object::test<41>()
 
 template<>
 template<>
-void object::test<42>()
+void object::test<314>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1091,7 +1143,7 @@ void object::test<42>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 90 at epoch 2022.5");
 
@@ -1110,7 +1162,7 @@ void object::test<42>()
 
 template<>
 template<>
-void object::test<43>()
+void object::test<315>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1118,7 +1170,7 @@ void object::test<43>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 91 at epoch 2022.5");
 
@@ -1137,7 +1189,7 @@ void object::test<43>()
 
 template<>
 template<>
-void object::test<44>()
+void object::test<316>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1145,7 +1197,7 @@ void object::test<44>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 92 at epoch 2022.5");
 
@@ -1164,7 +1216,7 @@ void object::test<44>()
 
 template<>
 template<>
-void object::test<45>()
+void object::test<317>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1172,7 +1224,7 @@ void object::test<45>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 93 at epoch 2022.5");
 
@@ -1191,7 +1243,7 @@ void object::test<45>()
 
 template<>
 template<>
-void object::test<46>()
+void object::test<318>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1199,7 +1251,7 @@ void object::test<46>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 94 at epoch 2022.5");
 
@@ -1218,7 +1270,7 @@ void object::test<46>()
 
 template<>
 template<>
-void object::test<47>()
+void object::test<319>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1226,7 +1278,7 @@ void object::test<47>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 97 at epoch 2022.5");
 
@@ -1246,7 +1298,7 @@ void object::test<47>()
 
 template<>
 template<>
-void object::test<48>()
+void object::test<320>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1254,7 +1306,7 @@ void object::test<48>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 2000 at epoch 2022.5");
 
@@ -1274,7 +1326,7 @@ void object::test<48>()
 
 template<>
 template<>
-void object::test<49>()
+void object::test<321>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1282,7 +1334,7 @@ void object::test<49>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 2005 at epoch 2022.5");
 
@@ -1302,7 +1354,7 @@ void object::test<49>()
 
 template<>
 template<>
-void object::test<50>()
+void object::test<322>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1310,7 +1362,7 @@ void object::test<50>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 2008 at epoch 2022.5");
 
@@ -1330,7 +1382,7 @@ void object::test<50>()
 
 template<>
 template<>
-void object::test<51>()
+void object::test<323>()
 {
 	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
 	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
@@ -1338,7 +1390,7 @@ void object::test<51>()
 
 	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
 	// Online tool developed by the EPN Central Bureau
-	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.01296 0.01828 0.00837
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
 
 	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 2014 at epoch 2022.5");
 
@@ -1355,5 +1407,34 @@ void object::test<51>()
 	ensure_equals("ITRF 2014 at 2022.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4585421.9916),
 		static_cast<TReal>(0.001));
 }
+
+template<>
+template<>
+void object::test<324>()
+{
+	// CERN coordinates from ftp://rgpdata.ign.fr/pub/products/ITRF_coord/RGP19_E00.CRD
+	// NUM  STATION NAME           X (M)          Y (M)          Z (M)     FLAG   FM           TO           RMV MIN_VAR_EP        SE       SN       SU
+	// 209 CERN 19762M0011    4393400.8207    466460.6301   4585421.5734    I    11:009:00000                  2014.76647      0.0001   0.0001   0.0003
+
+	// Comparison with http://epncb.oma.be/_productsservices/coord_trans/index.php
+	// Online tool developed by the EPN Central Bureau
+	// Velocity in ETRF 2000 from http://ahgeodev.fr/tfo_plates_i14_sdk.htm : -0.00028 -0.00023 -0.00053
+
+	set_test_name("Transforming a TSpatialPosition from ETRF 2000 at epoch 2009 into ITRF 2020 at epoch 2022.5");
+
+	TPositionVector pv(4393400.8207, 466460.6301, 4585421.5734, TCoordSysFactory::k3DCartesian);
+
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRFin, nullptr, 2009.0, "ETRF 2000"));
+	ensure("Setting the coordinates of TSpatialPosition", position.setCoordinates(pv));
+	ensure("Transform returns true", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFout, nullptr, 2022.5, "ITRF 2020")));
+
+	ensure_equals("ITRF 2020 at 2022.5 X", position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(), static_cast<TReal>(4393400.3239),
+		static_cast<TReal>(0.001));
+	ensure_equals("ITRF 2020 at 2022.5 Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(466461.1992),
+		static_cast<TReal>(0.001));
+	ensure_equals("ITRF 2020 at 2022.5 Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(4585421.9906),
+		static_cast<TReal>(0.001));
+}
+
 
 } // namespace tut
