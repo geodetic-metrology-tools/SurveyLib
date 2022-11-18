@@ -32,14 +32,9 @@ public:
 	/*!@name Setting methods*/
 	//@{
 		/*! \brief Sets the dimensions of the matrices
-			\param[in] nbUnknowns the survey network's number of unknowns
-			\param[in] nbEquations the survey network's number of equations
-			\param[in] nbObservations the survey network's number of observations
-			\param[in] nbConstraints the free survey network's number of observation constraints
-			\param[in] constraints the free survey network's number of constraints
+			\param[in] ueoindices struct with number of unknowns, equations, observations and constraints
 		*/
-		void initMatrices(int unknowns, int equations, int observations, int nbCnstrUnk = 0);
-	
+		void initMatrices(UEOIndices ueoindices);
 
 		/*!	\brief Set the value of an element of the first design matrix in the adjustment (A-matrix)
 			\param[in] row of the desired element
@@ -53,13 +48,8 @@ public:
 			\param[in] column of the desired element
 			\param[in] coefficient: value of the desired element
 		*/
-		bool setSecondDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 
-		/*!	\brief Set the value of a misclosure vector (W or "Fermetures" vector)
-			\param[in] row of the desired element
-			\param[in] coeff: value of the desired misclosure
-		*/
-		bool setSecondDgnMtrxBlock(MatrixIndex first_index, Eigen::MatrixXd block);
+		bool setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block);
 
 		/*!	\brief Set a block in the second design matrix. Each block corresponds to one mathematical observation equation. Also sets the inverse block.
 		*/
@@ -112,9 +102,6 @@ public:
 		/*!	\brief Returns the number of equations */
 		int	getNbrEquations()const;
 
-		/*!	\brief Returns the number of observations constraints */
-		int	getNbrConstraintObs()const;
-
 		/*!	\brief Returns the number of parameters constraints */
 		int	getNbrConstraints()const;
 		
@@ -124,8 +111,11 @@ public:
 		/*!	\brief Returns a const reference (pointer) to the second design matrix allocated here*/
 		const TSparseMatrix* getSecondDgnMtrx() const noexcept;
 
-		/*!	\brief Returns a const reference (pointer) to the inverse second design matrix allocated here*/
-		const TSparseMatrix* getSecondDgnInvMtrx() const noexcept;
+		/*!	\brief Returns the private member seconDesignMatrixIsBlockDiag which indicates that B is block diagonal*/
+		bool getSecondDgnBlockDiagStatus() const;
+
+		/*!	\brief Returns a const reference (pointer) to the inverse second design matrix allocated here, if B is block diagonal*/
+		const TSparseMatrix* getSecondDgnBlockDiagInvMtrx() const noexcept;
 
 		/*!	\brief Returns a const reference (pointer) to the weight matrix allocated here*/
 		const TSparseMatrix* getWeightMtrx() const noexcept;
@@ -152,10 +142,7 @@ public:
 
 private:
 
-	MatrixIndex		fNbUnk;      /*!< u : number of unknowns */
-	MatrixIndex		fNbObs;      /*!< o : number of observations */
-	MatrixIndex		fNbEqn;      /*!< e : number of equations */
-	MatrixIndex		fNbCnstr;    /*!< c : number of constraints on parameters */
+	UEOIndices		fUEOIndices; /*!< number of unknowns, equations, observations and constraints */
 
 	TVector*		fMisclosureVector;  /*!< vector (o x 1) for misclosure errors */
 
@@ -164,7 +151,8 @@ private:
 
 	TSparseMatrix*	firstDesignMatrix;  /*!< matrix A (e x u) */
 	TSparseMatrix*	secondDesignMatrix; /*!< matrix B (e x o) */
-	TSparseMatrix*	secondDesignInvMatrix; /*!< matrix B^-1 (e x o) */
+	bool			seconDesignMatrixIsBlockDiag = true; /*!< flag indicating whether B is block diagonal */
+	TSparseMatrix*	secondDesignBlockDiagInvMatrix; /*!< matrix B^-1 (e x o) */
 	TSparseMatrix*	weightMatrix;       /*!< matrix P (o x o) for observations weights */
 	TSparseMatrix*	weightInvMatrix;    /*!< matrix invP (o x o) for observations weights */
 	TSparseMatrix*	weightUnkMatrix;    /*!< matrix Pxx (u x u) for unknowns weights */

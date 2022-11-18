@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2022. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -22,26 +22,12 @@ public:
 	/*!@name Constructors / Destructor*/
 	//@{
 
-	/*! \brief Constructor (NOT USED)
-		\param[in] number of unkwnons (enabling the dimensioning of the matrices (set to zero)
-		\param[in] number of observations (enabling the dimensioning of the matrices (set to zero)
-	*/
-	TLSResultsMatrices(int numUnknowns, int numObs);
-
-
 	/*! \brief Constructor
 		\param[in] ueoi an object holding the number of unknowns, equations and observations,
 	thus enabling the dimensioning of the matrices (set to zero)
 	*/
 	TLSResultsMatrices(UEOIndices ueoi);
 
-	/*!	\brief Constructor (NOT USED)
-		\param[in] ueoi an object holding the number of unknowns, equations and observations,
-		thus enabling the dimensioning of the matrices (set to zero)
-		\param[in] numConstraints indicates the number of constraints added for a free network
-		calculation
-	*/
-	TLSResultsMatrices(UEOIndices ueoi, int numConstraints);
 
 	//!Destructor
 	virtual ~TLSResultsMatrices();
@@ -82,6 +68,9 @@ public:
 	/*! \brief Returns a pointer to the unknowns covariance matrix	(matrix content can be changed)*/
 	TSparseMatrix* getUnkCovarMtrx() const noexcept { return fUnkCovarianceMtrx; }
 
+	/*! \brief Returns a pointer to the inverse of N1 (matrix content cannot be changed when receiving this pointer) */
+	const TSparseMatrix* getInvN1MatrixByConst() const noexcept {return fInvN1Matrix; }
+
 	/*! \brief Returns a pointer to the normal matrix (matrix content cannot be changed when receiving this pointer) */
 	const TSparseMatrix* getNormalMatrixByConst() const noexcept {return fNormalMatrix; }
 
@@ -108,6 +97,9 @@ public:
 	/*! \brief Sets (by matrix copy, i.e. operator =) the unknowns covariance matrix */
 	void setUnkCovarMtrx(TSparseMatrix& matrix) { *fUnkCovarianceMtrx = matrix; }
 	
+	/*!	\brief Sets (by matrix copy, i.e. operator =) the normal matrix, which is used to calculate the covariance matrices */
+	void setInvN1Matrix(TSparseMatrix& matrix) { *fInvN1Matrix = matrix; }
+
 	/*!	\brief Sets (by matrix copy, i.e. operator =) the normal matrix, which is used to calculate the covariance matrices */
 	void setNormalMatrix(TSparseMatrix& matrix) { *fNormalMatrix = matrix; }
 
@@ -137,7 +129,8 @@ private:
 	TVector*		fResidualsVctr; /*!< vector (o x 1) containing the calculated residues on observations */
 	TSparseMatrix*	fResCovarianceMtrx; /*!< Qvv matrix (o x o) containing the variances and covariances for residuals */
 	TSparseMatrix*	fUnkCovarianceMtrx; /*!< Qxx matrix (u x u) containing the variances and covariances for unknowns */
-	TSparseMatrix*	fNormalMatrix;  /*!< N matrix (u x u) is the normal matrix */
+	TSparseMatrix*	fInvN1Matrix;  /*!< invN1 matrix (eq x eq) is the inverse of the matrix N1 = B*Pv^-1*BT */
+	TSparseMatrix*	fNormalMatrix;  /*!< N matrix (u+nConstr x u+nConstr) is the normal matrix (extended with the constraints if there are some) */
 
 	TReal fSigmaZero2; /*!< calculated "average variance" on residues */
 	TReal fSigmaZero2LowLimit;

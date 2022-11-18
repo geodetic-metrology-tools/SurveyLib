@@ -6,7 +6,7 @@ set(CSGEO_DLL_NAME ${PROJECT_NAME} PARENT_SCOPE)
 set(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # set include directories needed by this library
-set(CSGEO_DLL "${CMAKE_SOURCE_DIR}/CSGeoDLL")
+set(CSGEO_DLL "${SURVEYLIB_ROOT}/source/CSGeoDLL")
 set(CSGEO_DLL_SOURCES "${CSGEO_DLL}/sources")
 set(CSGEO_DLL_HEADERS "${CSGEO_DLL}/headers")
 
