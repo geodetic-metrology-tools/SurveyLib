@@ -7,6 +7,7 @@ SET(SURVEYLIB_LIBRARIES
 	SpatialObjects
 	SpatialObjDLL
 	Tools
+	CSGeoDLL
 )
 
 SET(SPATIAL_LIBRARIES

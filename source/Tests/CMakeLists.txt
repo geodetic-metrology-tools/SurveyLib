@@ -38,6 +38,12 @@ set(ToolsTests_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/Tools/testStringManager.cpp
 )
 
+set( CSGeoDLLTests_SOURCES
+	${CMAKE_CURRENT_LIST_DIR}/CSGeoDLLTests/sources/testDLL.cpp
+	${CMAKE_CURRENT_LIST_DIR}/CSGeoDLLTests/sources/testPlainTransform.cpp
+	${CMAKE_CURRENT_LIST_DIR}/CSGeoDLLTests/sources/testTOptionsCheck.cpp	
+)
+
 add_executable(UnitTests
 	${SurveyMain_Tests}
 	${SpatialObjects_SOURCES}
@@ -45,6 +51,7 @@ add_executable(UnitTests
 	${ProjectFrameworkTests_SOURCES}
 	${PluginsTests_SOURCES}
 	${ToolsTests_SOURCES}
+	${CSGeoDLLTests_SOURCES}
 )
 target_include_directories(UnitTests PRIVATE
 	# TUT
@@ -63,6 +70,7 @@ target_include_directories(UnitTests PRIVATE
 	${SURVEYLIB_ROOT}/source/Logs
 	${SURVEYLIB_ROOT}/source/Plugins
 	${SURVEYLIB_ROOT}/source/Tools/headers
+	${SURVEYLIB_ROOT}/source/CSGeoDLL/headers
 )
 target_link_libraries (UnitTests
 	SpatialObjects
@@ -71,6 +79,7 @@ target_link_libraries (UnitTests
 	Plugins
 	Logs
 	Tools
+	CSGeoDLL
 )
 
 add_test(
@@ -84,6 +93,7 @@ source_group("SurveyLibDLL" FILES ${SurveyLibDLLTests_SOURCES})
 source_group("ProjectFramework" FILES ${ProjectFrameworkTests_SOURCES})
 source_group("Plugins" FILES ${PluginsTests_SOURCES})
 source_group("Tools" FILES ${ToolsTests_SOURCES})
+source_group("CSGeoDLL" FILES ${CSGeoDLLTests_SOURCES})
 
 if(USE_SWISSTOPO)
 	copyReframeDLL(UnitTests)

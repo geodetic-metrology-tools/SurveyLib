@@ -10,7 +10,7 @@ include:
 linux_build_and_test:
     extends: .linux_build_and_test
 
-# Build and upload the libSpatialObjDLL.so
+# Build and upload the libSpatialObjDLL.so and the libCSGeoDLL.so
 linux_release:
     extends: .linux_release
     needs: ["linux_build_and_test"]
@@ -18,11 +18,16 @@ linux_release:
         - echo "Building shared object library | -j$(nproc)"
         - $CMAKEBIN --build . -j $(nproc) --config Release --target SpatialObjDLL
         - cp staging/libSpatialObjDLL.so ..
+        - $CMAKEBIN --build . -j $(nproc) --config Release --target CSGeoDLL
+        - cp staging/libCSGeoDLL.so ..       
     artifacts:
         name: sharedlibrary
         paths:
             - libSpatialObjDLL.so
-
+            - libCSGeoDLL.so
+            - source/CSGeoDLL/headers/TPlainDataParameters.h
+            - source/CSGeoDLL/headers/PlainTransform.h
+            
 ##################
 # WINDOWS BUILDS #
 ##################
@@ -31,7 +36,7 @@ linux_release:
 windows64_build_and_test:
     extends: .windows64_build_and_test
 
-# Build and upload the SpatialObjDLL.dll
+# Build and upload the SpatialObjDLL.dll and the CSGeoDLL.dll
 windows64_release:
     extends: .windows64_release
     needs: ["windows64_build_and_test"]
@@ -39,10 +44,23 @@ windows64_release:
         - echo "Building shared object library"
         - cmake --build . -j %NUMBER_OF_PROCESSORS% --config Release --target SpatialObjDLL
         - cp staging/SpatialObjDLL.dll ..
+        - cmake --build . -j %NUMBER_OF_PROCESSORS% --config Release --target CSGeoDLL
+        - cp staging/CSGeoDLL.dll ..
+        - cp staging/ReframeLibWrapper.dll ..
+        - cp staging/ReframeLibWrapper.lib ..
+        - cp staging/swisstopo.data.dll ..
+        - cp staging/swisstopo.reframelib.dll ..
     artifacts:
         name: win64dll
         paths:
             - SpatialObjDLL.dll
+            - CSGeoDLL.dll
+            - ReframeLibWrapper.dll
+            - ReframeLibWrapper.lib
+            - swisstopo.data.dll
+            - swisstopo.reframelib.dll
+            - source/CSGeoDLL/headers/TPlainDataParameters.h
+            - source/CSGeoDLL/headers/PlainTransform.h
 
 # Build all targets and run the tests
 windows32_build_and_test:
@@ -54,7 +72,7 @@ windows32_build_and_test:
         CMAKEGENERATOR: "Visual Studio 16 2019"
         CMAKEARCHITECTURE: "-A Win32"
 
-# Build and upload the SpatialObjDLL.dll
+# Build and upload the SpatialObjDLL.dll and the CSGeoDLL.dll
 windows32_release:
     extends: windows64_release
     needs: ["windows32_build_and_test"]
