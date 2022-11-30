@@ -163,22 +163,22 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 
 		if (fFrom->getSolution().find("ITRF") != std::string::npos)
 		{
-			if (fFrom->getSolution() != "ITRF 2014")
+			if (fFrom->getSolution() != lastITRFsolution)
 				solInput = findITRFSolution(fFrom);
 		}
 		else
 		{
-			if (fFrom->getSolution() != "ETRF 2008")
+			if (fFrom->getSolution() != missingETRFsolution)
 				solInput = findETRFSolution(fFrom);
 		}
 		if (fTo->getSolution().find("ITRF") != std::string::npos)
 		{
-			if (fTo->getSolution() != "ITRF 2014")
+			if (fTo->getSolution() != lastITRFsolution)
 				solOutput = findITRFSolution(fTo);
 		}
 		else
 		{
-			if (fTo->getSolution() != "ETRF 2008")
+			if (fTo->getSolution() != missingETRFsolution)
 				solOutput = findETRFSolution(fTo);
 		}
 
@@ -190,7 +190,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 
 			// No matter the reference frame, coordinates of pv are a sufficient approximation
 			TFreeVector velITRF_yy = itrf2014velocity(pv);
-			if (fFrom->getSolution() != "ITRF 2014")
+			if (fFrom->getSolution() != lastITRFvelSolution)
 			{ // Transformation of velocity vector from ITRF2014 to input reference frame
 				velITRF_yy = itrf2014velocityToOtherITRF(fcoeff_toPastITRF, pv, velITRF_yy, fFrom);
 			}
@@ -218,7 +218,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 			// Velocity and rates
 			TFreeVector velITRF_yy = itrf2014velocity(pv);
 
-			if (fFrom->getSolution() != "ITRF 2014")
+			if (fFrom->getSolution() != lastITRFvelSolution)
 			{ // Transformation of velocity vector from ITRF2014 to input reference frame
 				velITRF_yy = itrf2014velocityToOtherITRF(fcoeff_toPastITRF, pv, velITRF_yy, fFrom);
 			}
@@ -262,7 +262,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 
 			// Transfo to ITRFFyy @ output epoch
 			TFreeVector velITRF_yy = itrf2014velocity(pv);
-			if (fTo->getSolution() != "ITRF 2014")
+			if (fTo->getSolution() != lastITRFvelSolution)
 			{ // Transformation of velocity vector from ITRF2014 to input reference frame
 				velITRF_yy = itrf2014velocityToOtherITRF(fcoeff_toPastITRF, pv, velITRF_yy, fTo);
 			}
@@ -290,7 +290,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 
 				// Velocity and rates (ITRF)
 				TFreeVector velITRF_yy = itrf2014velocity(pv);
-				if (fTo->getSolution() != "ITRF 2014")
+				if (fTo->getSolution() != lastITRFvelSolution)
 				{ // Transformation of velocity vector from ITRF2014 to output reference frame
 					velITRF_yy = itrf2014velocityToOtherITRF(fcoeff_toPastITRF, pv, velITRF_yy, fTo);
 				}
@@ -307,7 +307,7 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 				fTo->setSolution(fTo->getSolution().replace(0, 4, "ITRF"));
 
 				TFreeVector velITRF_yy = itrf2014velocity(pv);
-				if (fTo->getSolution() != "ITRF 2014")
+				if (fTo->getSolution() != lastITRFvelSolution)
 				{ // Transformation of velocity vector from ITRF2014 to output reference frame
 					velITRF_yy = itrf2014velocityToOtherITRF(fcoeff_toPastITRF, pv, velITRF_yy, fTo);
 				}
@@ -333,30 +333,32 @@ bool  TTrf2TrfTransformation::transform(TPositionVector& pv) const
 int TTrf2TrfTransformation::findITRFSolution(TTerrestrialReferenceFrame* refFrame) const
 {
 	int i = -1;
-	if (refFrame->getSolution() == "ITRF 2008")
+	if (refFrame->getSolution() == "ITRF 2014")
 		i = 0;
-	else if (refFrame->getSolution() == "ITRF 2005")
+	else if (refFrame->getSolution() == "ITRF 2008")
 		i = 1;
-	else if (refFrame->getSolution() == "ITRF 2000")
+	else if (refFrame->getSolution() == "ITRF 2005")
 		i = 2;
-	else if (refFrame->getSolution() == "ITRF 97")
+	else if (refFrame->getSolution() == "ITRF 2000")
 		i = 3;
-	else if (refFrame->getSolution() == "ITRF 96")
+	else if (refFrame->getSolution() == "ITRF 97")
 		i = 4;
-	else if (refFrame->getSolution() == "ITRF 94")
+	else if (refFrame->getSolution() == "ITRF 96")
 		i = 5;
-	else if (refFrame->getSolution() == "ITRF 93")
+	else if (refFrame->getSolution() == "ITRF 94")
 		i = 6;
-	else if (refFrame->getSolution() == "ITRF 92")
+	else if (refFrame->getSolution() == "ITRF 93")
 		i = 7;
-	else if (refFrame->getSolution() == "ITRF 91")
+	else if (refFrame->getSolution() == "ITRF 92")
 		i = 8;
-	else if (refFrame->getSolution() == "ITRF 90")
+	else if (refFrame->getSolution() == "ITRF 91")
 		i = 9;
-	else if (refFrame->getSolution() == "ITRF 89")
+	else if (refFrame->getSolution() == "ITRF 90")
 		i = 10;
-	else if (refFrame->getSolution() == "ITRF 88")
+	else if (refFrame->getSolution() == "ITRF 89")
 		i = 11;
+	else if (refFrame->getSolution() == "ITRF 88")
+		i = 12;
 
 	return i;
 }
@@ -507,13 +509,13 @@ bool TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector
 	TReal startEpoch = NO_VALf;
 
 
-	if (itrfIn->getSolution() != "ITRF 2014")
+	if (itrfIn->getSolution() != lastITRFsolution)
 		solInput = findITRFSolution(itrfIn);
 
-	if (itrfOut->getSolution() != "ITRF 2014")
+	if (itrfOut->getSolution() != lastITRFsolution)
 		solOutput = findITRFSolution(itrfOut);
 
-	if (itrfIn->getSolution() != "ITRF 2014" && itrfOut->getSolution() != "ITRF 2014")
+	if (itrfIn->getSolution() != lastITRFsolution && itrfOut->getSolution() != lastITRFsolution)
 	{
 		//Get transformation parameters in the matrix
 		//Translation, rotations and scale factor and rates
@@ -534,7 +536,7 @@ bool TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector
 		startEpoch = itrfIn->getEpoch();
 
 	}
-	else if (itrfIn->getSolution() == "ITRF 2014")
+	else if (itrfIn->getSolution() == lastITRFsolution)
 	{
 		tX_m.setMetresValue(coeff_toPastITRF(solOutput, 0) * MM2M);
 		tY_m.setMetresValue(coeff_toPastITRF(solOutput, 1) * MM2M);
@@ -553,7 +555,7 @@ bool TTrf2TrfTransformation::itrf2itrf(TMatrix coeff_toPastITRF, TPositionVector
 		startEpoch = itrfIn->getEpoch();
 
 	}
-	else if (itrfOut->getSolution() == "ITRF 2014") 
+	else if (itrfOut->getSolution() == lastITRFsolution) 
 	{
 		tX_m.setMetresValue(-coeff_toPastITRF(solInput, 0) * MM2M);
 		tY_m.setMetresValue(-coeff_toPastITRF(solInput, 1) * MM2M);
@@ -601,13 +603,13 @@ THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPas
 	TScaleFactor d(0), dv_yr(0); //scale factor rate
 	TAngle rXv_rad_yr(0), rYv_rad_yr(0), rZv_rad_yr(0); //rotation rate radians/year
 
-	if (itrfIn->getSolution() != "ITRF 2014")
+	if (itrfIn->getSolution() != lastITRFsolution)
 		solInput = findITRFSolution(itrfIn);
 
-	if (itrfOut->getSolution() != "ITRF 2014")
+	if (itrfOut->getSolution() != lastITRFsolution)
 		solOutput = findITRFSolution(itrfOut);
 
-	if (itrfIn->getSolution() != "ITRF 2014" && itrfOut->getSolution() != "ITRF 2014")
+	if (itrfIn->getSolution() != lastITRFsolution && itrfOut->getSolution() != lastITRFsolution)
 	{
 		tXv_m_yr.setMetresValue((coeff_toPastITRF(solOutput, 8) - coeff_toPastITRF(solInput, 8)) * MM2M);
 		tYv_m_yr.setMetresValue((coeff_toPastITRF(solOutput, 9) - coeff_toPastITRF(solInput, 9)) * MM2M);
@@ -617,7 +619,7 @@ THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPas
 		rYv_rad_yr.setRadiansValue((coeff_toPastITRF(solOutput, 13) - coeff_toPastITRF(solInput, 13)) * pow(10, -3) / 3600 * DEG2RAD);
 		rZv_rad_yr.setRadiansValue((coeff_toPastITRF(solOutput, 14) - coeff_toPastITRF(solInput, 14)) * pow(10, -3) / 3600 * DEG2RAD);
 	}
-	else if (itrfIn->getSolution() == "ITRF 2014") 
+	else if (itrfIn->getSolution() == lastITRFsolution) 
 	{
 		tXv_m_yr.setMetresValue(coeff_toPastITRF(solOutput, 8) * MM2M);
 		tYv_m_yr.setMetresValue(coeff_toPastITRF(solOutput, 9) * MM2M);
@@ -627,7 +629,7 @@ THelmertTransformation TTrf2TrfTransformation::itrf2itrfRate(TMatrix coeff_toPas
 		rYv_rad_yr.setRadiansValue(coeff_toPastITRF(solOutput, 13) * pow(10, -3) / 3600 * DEG2RAD);
 		rZv_rad_yr.setRadiansValue(coeff_toPastITRF(solOutput, 14) * pow(10, -3) / 3600 * DEG2RAD);
 	}
-	else if (itrfOut->getSolution() == "ITRF 2014")
+	else if (itrfOut->getSolution() == lastITRFsolution)
 	{
 		tXv_m_yr.setMetresValue(-coeff_toPastITRF(solInput, 8) * MM2M);
 		tYv_m_yr.setMetresValue(-coeff_toPastITRF(solInput, 9) * MM2M);
