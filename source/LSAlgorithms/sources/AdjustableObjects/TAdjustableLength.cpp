@@ -3,8 +3,6 @@
 #include "TConstants.h"
 
 
-TAdjustableLength::TAdjustableLength(){};
-
 TAdjustableLength::TAdjustableLength(const TLength& angleValue, bool isFixed, const std::string& name) :
    fName(name),
    ifFixed(isFixed),

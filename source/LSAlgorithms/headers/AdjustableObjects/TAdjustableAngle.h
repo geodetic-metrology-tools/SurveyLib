@@ -18,11 +18,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\ingroup AdjustableObjects
 	\brief Class providing adjustable related information for a TAngle class.
 */
-#ifdef USE_SERIALIZER
-class TAdjustableAngle : public Serializable, public TVAdjustableObject
-#else
 class TAdjustableAngle : public TVAdjustableObject
-#endif // USE_SERIALIZER
 {
 public:
 

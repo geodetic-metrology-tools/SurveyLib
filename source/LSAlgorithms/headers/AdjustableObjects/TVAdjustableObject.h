@@ -102,13 +102,10 @@ class TVAdjustableObject : public TStatusObject
 
 };
 
-
 #ifdef USE_SERIALIZER
 inline void TVAdjustableObject::serialize(SerializerObject::SerializationHelper &obj) const
 {
 }
 #endif // USE_SERIALIZER
-
-
 
 #endif //TVADJUSTABLE_OBJECT

@@ -18,14 +18,10 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\ingroup AdjustableObjects
 	\brief Class providing adjustable related information for a TLength class.
 */
-#ifdef USE_SERIALIZER
-class TAdjustableLength : public Serializable, public TVAdjustableObject
-#else
+
 class TAdjustableLength : public TVAdjustableObject
-#endif // USE_SERIALIZER
 {
 public:
-		TAdjustableLength();
 	/*!@name Constructors */
 	//@{
 		/*!
