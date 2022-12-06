@@ -127,12 +127,12 @@ public:
 	/*!@name Other methods*/
 	//@{
 	/*!	\brief Saves all the matrices elements in a file 	*/
-	void saveMatricesToFile(int nbIter) const;
 
 #if USE_SERIALIZER
 	// Inherited via Serializable
 	virtual void serialize(ObjectSerializer &obj) const override;
 #endif // USE_SERIALIZER
+	void saveMatricesToFile(int nbIter, std::string path) const;
 	//@}
 
 

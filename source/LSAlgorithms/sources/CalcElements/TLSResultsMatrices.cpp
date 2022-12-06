@@ -44,18 +44,19 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //DEBUG METHOD 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void TLSResultsMatrices::saveMatricesToFile(int nbIter) const
+void TLSResultsMatrices::saveMatricesToFile(int nbIter, std::string path) const
 {//saves the content of the matrices to a text file
 
 	// TODO: fix
 	std::ostringstream oss;
 
-	oss << "C:\\temp\\resultsMatrices" << nbIter << ".txt";
+	//oss << "C:\\temp\\resultsMatrices" << nbIter << ".txt";
+	oss << path;
 	std::string fileName = oss.str();
 
 	std::ofstream of(fileName.c_str(), std::ios::out);
 	if (!of){
-		std::cout << "Impossible d'ouvrir le fichier C:\\temp\\resultsMatrices.txt" << '\n';
+		std::cout << "Impossible d'ouvrir le fichier " << path << '\n';
 		std::exit (1);
 	}
 
