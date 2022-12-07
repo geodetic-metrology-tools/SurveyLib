@@ -9,6 +9,12 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "CustomTypeTraits.hpp"
 
 class Serializable;
+// forward declaration for peka::tree external library
+namespace peka
+{
+template<class T, class tree_node_allocator>
+class tree;
+}; // namespace peka
 
 /**
  * Abstract class featuring Serialization of data structures.
@@ -205,6 +211,7 @@ protected:
 		for (const auto &t : container)
 			addValue(t);
 	}
+	// if C-style array
 	// For some reason these two cases (this and upper) cannot be joined with || operator
 	template<typename T>
 	std::enable_if_t<std::is_array_v<std::remove_reference_t<T>>> 
@@ -212,6 +219,17 @@ protected:
 	{
 		for (const auto &t : container)
 			addValue(t);
+	}
+	// if (eternal lib) tree
+	template<typename T, class tree_node_allocator>
+	void addValue(const peka::tree<T, tree_node_allocator> &tree)
+	{
+		auto pos = tree.begin();
+		while (pos != tree.end())
+		{
+			addProperty(pos.node->data);
+			pos++;
+		}
 	}
 };
 
