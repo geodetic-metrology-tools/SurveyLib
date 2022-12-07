@@ -18,7 +18,11 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\ingroup LocalTransformations
 	\brief Structure which stores parameters of an helmert transformation.
 */
+#ifdef USE_SERIALIZER
 struct TransformParameters : public Serializable
+#else
+struct TransformParameters
+#endif // USE_SERIALIZER
 {
 	TAngle omega; //!< Rotation about the X axis
 	TAngle phi;  //!< Rotation about the Y axis
@@ -32,8 +36,10 @@ struct TransformParameters : public Serializable
 
 	TransformParameters() : omega(TAngle(0.0)), phi(TAngle(0.0)), kappa(TAngle(0.0)), tX(TLength(0.0)), tY(TLength(0.0)), tZ(TLength(0.0)), scale(TReal(1.0)) {};
 
+#ifdef USE_SERIALIZER
 	// Inherited via Serializable
 	virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif
 
 	/// Overlading  comparition operator for TransformParameters
 	bool operator==(const TransformParameters& p) {
@@ -102,7 +108,8 @@ struct TransformParameters : public Serializable
 	}
 };
 
-
+#ifdef USE_SERIALIZER
+// Inherited via Serializable
 inline void TransformParameters::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	obj.addProperty("kappa", kappa);
@@ -115,5 +122,6 @@ inline void TransformParameters::serialize(SerializerObject::SerializationHelper
 	obj.addProperty("tY", tY);
 	obj.addProperty("tZ", tZ);
 };
+#endif
 
 #endif

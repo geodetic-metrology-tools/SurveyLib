@@ -9,6 +9,12 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "CustomTypeTraits.hpp"
 
 class Serializable;
+// forward declaration for peka::tree external library
+namespace peka
+{
+template<class T, class tree_node_allocator>
+class tree;
+}; // namespace peka
 
 /**
  * Abstract class featuring Serialization of data structures.
@@ -102,13 +108,13 @@ protected:
 
 	// Primitive - !Serializable && !pair && !pointer && ((container && is_string) || !container))
 	template<typename T>
-	typename std::enable_if<!is_Serializable<T>::value 
-		&& !is_pair_t<T>::value 
+	typename std::enable_if_t<!is_Serializable<T>::value 
+		&& !is_pair<T>::value 
 		&& !is_any_pointer<T>::value
-		&& !std::is_array_v<std::remove_reference_t<T>>
+		&& !std::is_array_v<T>
 		&& ((is_iterable_container<T>::value && is_string<T>::value) 
 			|| !is_iterable_container<T>::value)
-	>::type
+	>
 		addProperty(const T &value, const std::string &name = std::string())
 	{
 		startPrimitive(name);
@@ -117,7 +123,7 @@ protected:
 	}
 	// String pointers - is_any_pointer && is_string
 	template<typename T>
-	typename std::enable_if<!is_Serializable<T>::value && is_any_pointer<T>::value && is_string<T>::value>::type
+	typename std::enable_if_t<!is_Serializable<T>::value && is_any_pointer<T>::value && is_string<T>::value>
 		addProperty(const T &value, const std::string &name = std::string())
 	{
 		startPrimitive(name);
@@ -126,14 +132,14 @@ protected:
 	}
 	// Primitive pointer
 	template<typename T>
-	typename std::enable_if<is_any_pointer<T>::value && !is_string<T>::value>::type
+	typename std::enable_if_t<is_any_pointer<T>::value && !is_string<T>::value>
 		addProperty(const T &value, const std::string &name = std::string())
 	{
 		addProperty(*value, name);
 	}
 	// Serializable class
 	template<typename T>
-	typename std::enable_if<is_Serializable<T>::value>::type
+	typename std::enable_if_t<is_Serializable<T>::value>
 		addProperty(const T &o, const std::string &name = std::string())
 	{
 		startObject(name);
@@ -143,7 +149,7 @@ protected:
 	}
 	//// Container
 	template<typename T>
-	typename std::enable_if<(!is_string<T>::value && is_iterable_container<T>::value) || std::is_array_v<std::remove_reference_t<T>>>::type
+	typename std::enable_if_t<(!is_string<T>::value && is_iterable_container<T>::value) || std::is_array_v<T>>
 		addProperty(const T &value, const std::string &name = std::string())
 	{
 		startArray(name);
@@ -152,7 +158,7 @@ protected:
 	}
 	// Pair
 	template<typename T>
-	typename std::enable_if<is_pair_t<T>::value>::type
+	typename std::enable_if_t<is_pair<T>::value>
 		addProperty(const T &value, const std::string &name = std::string())
 	{
 		startObject(name);
@@ -181,12 +187,14 @@ protected:
 	{
 		addProperty(p.second, p.first);
 	}
+
 	// If container of containers or Serializables
 	template<typename T>
-	typename std::enable_if<is_iterable_container<T>::value 
+	typename std::enable_if_t<
+		is_iterable_container<T>::value 
 		&& (is_iterable_container<typename T::value_type>::value 
 			|| is_Serializable<typename T::value_type>::value)
-	>::type
+	>
 		addValue(const T &container)
 	{
 		for (const auto &t : container)
@@ -205,13 +213,27 @@ protected:
 		for (const auto &t : container)
 			addValue(t);
 	}
+
+	// if C-style array
 	// For some reason these two cases (this and upper) cannot be joined with || operator
 	template<typename T>
-	std::enable_if_t<std::is_array_v<std::remove_reference_t<T>>> 
+	std::enable_if_t<std::is_array_v<T>> 
 		addValue(const T &container)
 	{
 		for (const auto &t : container)
 			addValue(t);
+	}
+
+	// if (external lib) tree
+	template<typename T, class tree_node_allocator>
+	void addValue(const peka::tree<T, tree_node_allocator> &tree)
+	{
+		auto pos = tree.begin();
+		while (pos != tree.end())
+		{
+			addProperty(pos.node->data);
+			pos++;
+		}
 	}
 };
 
