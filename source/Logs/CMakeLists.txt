@@ -25,3 +25,9 @@ endif()
 file(GLOB LOGS_LOGS ${CMAKE_CURRENT_SOURCE_DIR}/*)
 source_group("Logs" FILES ${LOGS_LOGS})
 set_target_properties(Logs PROPERTIES FOLDER "SurveyLib")
+
+
+install(TARGETS Logs
+  RUNTIME
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/logs"
+)

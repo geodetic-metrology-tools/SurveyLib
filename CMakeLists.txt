@@ -27,6 +27,14 @@ set(ENABLE_CONSOLE ON)
 
 include(Init.cmake)
 
+message(HERE)
+message(${EIGEN_INCLUDE_PATH})
+message(${EIGEN_INCLUDE_PATH})
+message(${EIGEN_INCLUDE_PATH})
+message(${BOOST_ROOT})
+message(${BOOST_ROOT})
+message(${BOOST_ROOT})
+
 # Set version number and provide a header file with corresponding defines
 set (SurveyLib_VERSION_MAJOR 4)
 set (SurveyLib_VERSION_MINOR 03)
@@ -53,6 +61,8 @@ endif()
 
 
 add_subdirectory(source)
+add_library(SurveyLib INTERFACE)
+target_link_libraries(SurveyLib ${SURVEYLIB_LIBRARIES})
 
 ############################
 # MSVC:
