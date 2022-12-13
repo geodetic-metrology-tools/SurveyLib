@@ -1,16 +1,25 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
 #ifndef T_STATUS_OBJECT_H
 #define T_STATUS_OBJECT_H
 
+#ifdef USE_SERIALIZER
+#	include <Serializer.hpp>
+#endif // USE_SERIALIZER
+
 //! Class that gives the object the activation status property and an interface to manage it.
 /**
  * By default the activation status is true.
  */
-class TStatusObject {
+#ifdef USE_SERIALIZER
+class TStatusObject : public Serializable
+#else
+class TStatusObject
+#endif // USE_SERIALIZER
+{
 
 public:
 
@@ -28,6 +37,15 @@ public:
 
     //! Set the activation status of the object to *active*
     virtual void setActive(const bool &active) { active_ = active; }
+
+#ifdef USE_SERIALIZER
+	// Inherited via Serializable
+	virtual void serialize(SerializerObject::SerializationHelper &obj) const override
+	// inline void serialize(SerializerObject::SerializationHelper &obj) const
+	{
+		obj.addProperty("active_", active_);
+	}
+#endif
 
 private:
 
