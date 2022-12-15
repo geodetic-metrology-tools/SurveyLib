@@ -67,8 +67,10 @@ TAStreamFormatter *TStreamFormatterFactory::getFormatter(TADataSet* ds, TAStream
 	int obsWidth = std::max(obsPrecision + 6, 7);
 	int obsWidthRes= std::max(obsWidth-5, 7);
 
+	int obsIdWidth = ds->getObsIdWidth();
+
 	TPointFormat pointFormat (nameWidth, coordWidth, ds->getCoordPrecision(),coordWidthRes,ds->getCoordPrecision(),0, TSpatialStatus::kCala);
-	TObservationFormat obsFormat (nameWidth, obsWidth, ds->getLengthPrecision(), ds->getAnglePrecision(), obsWidthRes, ds->getLengthPrecision(), ds->getAnglePrecision(), 0);
+	TObservationFormat obsFormat(nameWidth, obsWidth, ds->getLengthPrecision(), ds->getAnglePrecision(), obsWidthRes, ds->getLengthPrecision(), ds->getAnglePrecision(), 0, obsIdWidth);
 
 	TAStreamFormatter *formatter = 0;
 

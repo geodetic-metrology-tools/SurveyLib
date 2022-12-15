@@ -1,6 +1,6 @@
 // TObservationFormat.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2023. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -69,9 +69,10 @@ public:
 		\param length Residual Precision
 		\param angle Residual precision
 		\param show Sign (bool)
+		\param observation id width
 	*/
 	TObservationFormat(int nameWidth, int obsWidth, ELengthPrecision lengthPrecision, EAnglePrecision anglePrecision,
-			int obsResidualWidth, ELengthPrecision lengthResidualPrecision, EAnglePrecision angleResidualprecision, bool showSign);
+			int obsResidualWidth, ELengthPrecision lengthResidualPrecision, EAnglePrecision angleResidualprecision, bool showSign, int obsIdWidth);
 
 	/*!Copy constructor*/
 	TObservationFormat(const  TObservationFormat&);
@@ -111,6 +112,9 @@ public:
 
 	/*!\@return a true boolean if the number's positive sign is to be shown*/
 	virtual bool				getShowSign() const;
+
+	/*!\return the width reserved for the observation id fields*/
+	virtual int					getObsIdWidth() const;
 	//@}
 
 
@@ -124,6 +128,7 @@ private:
 	ELengthPrecision	fLengthResidualPrecision;	/*!<length residual precision*/
 	EAnglePrecision		fAngleResidualPrecision;	/*!<angle residual precision*/
 	bool				fShowSign;					/*!<show sign (bool)*/
+	int					fObsIdWidth;				/*!<observation Id width*/
 
 	//ClassDef(TObservationFormat, 1)
 };
@@ -142,5 +147,6 @@ inline int TObservationFormat::getObsResidualWidth() const{ return fObsResidualW
 
 inline bool TObservationFormat::getShowSign() const{ return fShowSign; }
 
+inline int TObservationFormat::getObsIdWidth() const{ return fObsIdWidth; }
 
 #endif // SU_TObservationFormat

@@ -43,6 +43,7 @@ TObservationFormat::TObservationFormat(){
 	fLengthResidualPrecision = k10Micrometres;
 	fAngleResidualPrecision = k100Microgons;
 	fShowSign = false;
+	fObsIdWidth = 0;
 
 }
 //////////////
@@ -51,12 +52,12 @@ TObservationFormat::TObservationFormat(){
 TObservationFormat::TObservationFormat(int nameWidth, 
 									   int obsWidth, ELengthPrecision lengthPrecision, EAnglePrecision anglePrecision,
 									   int obsResWidth, ELengthPrecision lengthResPrec, EAnglePrecision angleResPrec, 
-									   bool showSign):
+									   bool showSign, int ObsIdWidth):
 fNameWidth(nameWidth), fObsWidth(obsWidth), 
 fLengthPrecision(lengthPrecision),fAnglePrecision(anglePrecision), 
 fObsResidualWidth(obsResWidth), 
 fLengthResidualPrecision(lengthResPrec), fAngleResidualPrecision(angleResPrec), 
-fShowSign(showSign)
+fShowSign(showSign), fObsIdWidth(ObsIdWidth)
 {	
 
 }
@@ -101,6 +102,7 @@ TObservationFormat&  TObservationFormat::operator=(const TObservationFormat& sou
 		fLengthResidualPrecision = source.getLengthResidualPrecision();
 		fAngleResidualPrecision = source.getAngleResidualPrecision();
 		fShowSign = source.getShowSign();
+		fObsIdWidth = source.getObsIdWidth();
 	}
 	return *this;
 }

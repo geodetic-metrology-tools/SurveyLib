@@ -115,6 +115,9 @@ public:
 		///set the point name's width
 		void	setPointNameWidth(const int);
 
+		/// set the point name's width
+		void	setObsIdWidth(const int);
+
         bool	setLocalSystemOrigin(const TLocalSystemOrigin &);
 		bool	setLocalSystemOrigin(std::shared_ptr <TLocalSystemOrigin>);
 		void	setOriginFile(const std::string &);
@@ -153,6 +156,9 @@ public:
 		/// get the point name's width 
 		int										getPointNameWidth() const;
 
+		/// get the observation id width
+		int										getObsIdWidth() const;
+
 		TLocalSystemOrigin* getLocalSystemOrigin() const;
 		const std::string& getOriginFile() const;
 
@@ -182,6 +188,7 @@ private:
 	TPointFormat::ECoordPrecision				fCoordPrecision;
 
 	int											fPointNameWidth;
+	int											fObsIdWidth;
 	TReal										fCoordEpoch;
 	std::string									fSolution;
 

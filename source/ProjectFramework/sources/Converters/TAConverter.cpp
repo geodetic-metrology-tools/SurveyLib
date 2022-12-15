@@ -86,6 +86,7 @@ TAConverter::TAConverter(TAStreamFormatter& stream)
 	fCoordResWidth= fStream->getPointFormat()->getCoordErrorWidth();
 	fCoordPrecision= fStream->getPointFormat()->getCoordPrecision();
 	fCoordErrorPrecision = fStream->getPointFormat()->getCoordErrorPrecision();
+	fObsIdWidth = fStream->getObsFormat()->getObsIdWidth();
 }
 
 TAConverter::TAConverter(TAStreamFormatter* stream)
@@ -103,6 +104,7 @@ TAConverter::TAConverter(TAStreamFormatter* stream)
 	fCoordResWidth= fStream->getPointFormat()->getCoordErrorWidth();
 	fCoordPrecision= fStream->getPointFormat()->getCoordPrecision();
 	fCoordErrorPrecision = fStream->getPointFormat()->getCoordErrorPrecision();
+	fObsIdWidth = fStream->getObsFormat()->getObsIdWidth();
 }
 
 
@@ -127,6 +129,7 @@ TAConverter& 	TAConverter::operator=(const TAConverter& source)
 	fCoordResWidth= source.fCoordResWidth;
 	fCoordPrecision= source.fCoordPrecision;
 	fCoordErrorPrecision= source.fCoordErrorPrecision;
+	fObsIdWidth = source.fObsIdWidth;
 
 	return *this;
 }
@@ -148,6 +151,8 @@ void	TAConverter::setStream(TAStreamFormatter* stream)
 	fCoordResWidth= fStream->getPointFormat()->getCoordErrorWidth();
 	fCoordPrecision= fStream->getPointFormat()->getCoordPrecision();
 	fCoordErrorPrecision = fStream->getPointFormat()->getCoordErrorPrecision();
+	fObsIdWidth = fStream->getObsFormat()->getObsIdWidth();
+
 	return;
 }
 

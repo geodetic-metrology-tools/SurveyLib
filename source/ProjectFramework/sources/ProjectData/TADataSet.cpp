@@ -243,6 +243,13 @@ void  TADataSet::setPointNameWidth(const int width )
 	return; 
 }
 
+//! set observation id width
+void TADataSet::setObsIdWidth(const int width)
+{
+	fDataParams.setObsIdWidth(width);
+	return;
+}
+
 
 //! set the origin of the local system used
 bool TADataSet::setLocalSystemOrigin(std::shared_ptr <TLocalSystemOrigin> lso)
@@ -316,6 +323,10 @@ int  TADataSet::getPointNameWidth() const
 	return fDataParams.getPointNameWidth();
 }
 
+int TADataSet::getObsIdWidth() const
+{ //! get the coord precision
+	return fDataParams.getObsIdWidth();
+}
 
 TLocalSystemOrigin* TADataSet::getLocalSystemOrigin() const
 {
