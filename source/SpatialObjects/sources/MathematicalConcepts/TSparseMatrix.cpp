@@ -148,6 +148,9 @@ bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX
 	
 	// If both are not working, use Sparse QR
 	Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> QrMat;
+	// pivotThreshold important for solving the system accurately
+	// https://eigen.tuxfamily.org/dox/classEigen_1_1SparseQR.html
+	QrMat.setPivotThreshold(1e-12);
 	QrMat.compute(matA);
 	if (QrMat.info() != Eigen::Success) 
 	{
