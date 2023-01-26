@@ -34,7 +34,7 @@ class TScalar;
 /*! \ingroup MathematicalConcepts
 	@{*/
 #ifdef USE_SERIALIZER
-class TFreeVector : public Serializable, public TACoordSysVector
+class TFreeVector : public TACoordSysVector
 #else
 //! 3D Vector used as a free vector
 class TFreeVector : public TACoordSysVector //: public TObject

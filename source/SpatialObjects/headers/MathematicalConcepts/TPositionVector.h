@@ -35,7 +35,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 /*! \ingroup MathematicalConcepts
 	@{*/
 #ifdef USE_SERIALIZER
-	class TPositionVector : public Serializable, public TACoordSysVector
+	class TPositionVector : public TACoordSysVector
 #else
 	//! 3D Vector used as a position vector
 	class TPositionVector : public TACoordSysVector //: public TObject

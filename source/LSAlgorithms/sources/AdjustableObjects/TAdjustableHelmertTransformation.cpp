@@ -555,6 +555,7 @@ void TAdjustableHelmertTransformation::reInitialise(){
 #ifdef USE_SERIALIZER
 void TAdjustableHelmertTransformation::serialize(SerializerObject::SerializationHelper &obj) const
 {
+	TVAdjustableObject::serialize(obj);
 	obj.addProperty("fCovarianceRotation", fCovarianceRotation);
 	obj.addProperty("fCovarianceScl", fCovarianceScl);
 	obj.addProperty("fCovarianceTranslation", fCovarianceTranslation);

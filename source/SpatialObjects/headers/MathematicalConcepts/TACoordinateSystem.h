@@ -24,7 +24,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	@{*/
 #ifdef USE_SERIALIZER
 //! Abstract class for Coordonate System
-class TACoordinateSystem : public Serializable, public TVCoordinateSystem //: public TObject
+class TACoordinateSystem : public TVCoordinateSystem //: public TObject
 #else
 //! Abstract class for Coordonate System
 class TACoordinateSystem : public TVCoordinateSystem //: public TObject

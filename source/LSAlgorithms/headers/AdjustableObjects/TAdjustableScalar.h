@@ -18,11 +18,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\brief Adds adjustable information to a Scalar object.
 */
 
-#ifdef USE_SERIALIZER
-class TAdjustableScalar : public Serializable, public TVAdjustableObject
-#else
 class TAdjustableScalar : public TVAdjustableObject
-#endif // USE_SERIALIZER
 {
 public:
 

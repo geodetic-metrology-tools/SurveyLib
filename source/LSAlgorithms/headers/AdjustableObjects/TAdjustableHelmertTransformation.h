@@ -11,21 +11,12 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <bitset>
 #include "TLength.h"
 
-
-#ifdef USE_SERIALIZER
-#	include <Serializer.hpp>
-#endif // USE_SERIALIZER
-
 /*! 
 	\ingroup AdjustableObjects
 	\brief Adds adjustable information to a TransformParameters class. 
 	Impementation detail: first translations, then rotations and scale as last for the unknown indices assignment.
 */
-#ifdef USE_SERIALIZER
-class TAdjustableHelmertTransformation : public Serializable, public TVAdjustableObject
-#else
 class TAdjustableHelmertTransformation : public TVAdjustableObject
-#endif // USE_SERIALIZER
 {
 	public:
 
