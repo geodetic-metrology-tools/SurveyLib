@@ -41,7 +41,6 @@ public:
 #ifdef USE_SERIALIZER
 	// Inherited via Serializable
 	virtual void serialize(SerializerObject::SerializationHelper &obj) const override
-	// inline void serialize(SerializerObject::SerializationHelper &obj) const
 	{
 		obj.addProperty("active_", active_);
 	}

@@ -101,7 +101,7 @@ public:
 
 
 #ifdef USE_SERIALIZER
-inline void TVCoordinateSystem::serialize(SerializerObject::SerializationHelper &obj) const
+inline void TVCoordinateSystem::serialize(SerializerObject::SerializationHelper &) const
 {
 
 }
