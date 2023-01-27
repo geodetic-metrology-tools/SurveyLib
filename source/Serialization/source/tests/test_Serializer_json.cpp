@@ -34,29 +34,29 @@ void testobject::test<1>()
 {
 	set_test_name("Serializer_json: Primitives and containers serialization test");
 
-	serobj.addProperty("t1_header", std::string("I am the header!"));
-	serobj.addProperty("t2_vec", std::vector<int>{1, 2, 3, 4});
-	serobj.addProperty("t3_int", 1);
-	serobj.addProperty("t4_str", "cstyle");
+	serobj.addProperty("header", std::string("I am the header!"));
+	serobj.addProperty("vec_int", std::vector<int>{1, 2, 3, 4});
+	serobj.addProperty("int", 1);
+	serobj.addProperty("str", "cstyle");
 	const char *t5_str = "char pointer";
-	serobj.addProperty("t5_str", t5_str);
-	serobj.addProperty("t6_strstd", std::string("std"));
-	serobj.addProperty("t7_list", std::list<double>{1, 2, 3});
-	serobj.addProperty("t8_map", std::map<std::string, int>{{"foo", 42}, {"bar", 3}});
-	serobj.addProperty("t9_mapvec", std::map<std::string, std::vector<int>>{{"foo", {42, 1, 2}}, {"bar", {3, 5}}});
-	serobj.addProperty("t10_pair", std::pair<std::string, std::string>{"pairkey", "pairvalue"});
-	serobj.addProperty("t11_vecpair", std::vector<std::pair<std::string, bool>>{{"pair1", true}, {"pair2", false}});
-	serobj.addProperty("t12_pairvecpair", std::pair<std::string, std::vector<std::pair<std::string, bool>>>{"pairTop", {{"pairsub1", true}, {"pairsub2", false}}});
-	serobj.addProperty("t13_listvecpair", std::list<std::vector<std::pair<std::string, bool>>>{{{"pair1", true}}, {{"pair2", false}}, {{"pair31", true}, {"pair32", false}}});
-	serobj.addProperty("t14_pairvecmaplistpair",
+	serobj.addProperty("str_char_pointer", t5_str);
+	serobj.addProperty("strstd", std::string("std"));
+	serobj.addProperty("list", std::list<double>{1, 2, 3});
+	serobj.addProperty("map_string_int", std::map<std::string, int>{{"foo", 42}, {"bar", 3}});
+	serobj.addProperty("map_int_string", std::map<int, std::string>{{42, "foo"}, {3, "bar"}});
+	serobj.addProperty("map_vec_int", std::map<std::string, std::vector<int>>{{"foo", {42, 1, 2}}, {"bar", {3, 5}}});
+	serobj.addProperty("pair", std::pair<std::string, std::string>{"pairkey", "pairvalue"});
+	serobj.addProperty("vec_pair_string_bool", std::vector<std::pair<std::string, bool>>{{"pair1", true}, {"pair2", false}});
+	serobj.addProperty("pair_vec_pair_string_bool", std::pair<std::string, std::vector<std::pair<std::string, bool>>>{"pairTop", {{"pairsub1", true}, {"pairsub2", false}}});
+	serobj.addProperty("list_vec_pair_string_bool", std::list<std::vector<std::pair<std::string, bool>>>{{{"pair1", true}}, {{"pair2", false}}, {{"pair31", true}, {"pair32", false}}});
+	serobj.addProperty("pair_vec_map_string_list_pair_string_int",
 		std::pair<std::string, std::vector<std::map<std::string, std::list<std::pair<std::string, int>>>>>{"toppair",
 			{
 				{{"map1key1", {{"pair1", 1}, {"pair2", 2}, {"pair3", 3}}}, {"map2key2", {{"pair1", 1}}}},
 				{{"map2key1", {{"pair1", 1}, {"pair2", 2}, {"pair3", 3}, {"pair4", 4}, {"pair5", 5}}}},
 				{{"map3key1", {{"pair1", 1}}}, {"map3key2", {{"pair1", 1}}}, {"map3key3", {{"pair1", 1}}}, {"map3key4", {{"pair1", 1}}}},
 			}});
-
-	ensure_equals(R"""({"t1_header":"I am the header!","t2_vec":[1,2,3,4],"t3_int":1,"t4_str":"cstyle","t5_str":"char pointer","t6_strstd":"std","t7_list":[1.0,2.0,3.0],"t8_map":[{"bar":3},{"foo":42}],"t9_mapvec":[{"bar":[3,5]},{"foo":[42,1,2]}],"t10_pair":{"pairkey":"pairvalue"},"t11_vecpair":[{"pair1":true},{"pair2":false}],"t12_pairvecpair":{"pairTop":[{"pairsub1":true},{"pairsub2":false}]},"t13_listvecpair":[[{"pair1":true}],[{"pair2":false}],[{"pair31":true},{"pair32":false}]],"t14_pairvecmaplistpair":{"toppair":[[{"map1key1":[{"pair1":1},{"pair2":2},{"pair3":3}]},{"map2key2":[{"pair1":1}]}],[{"map2key1":[{"pair1":1},{"pair2":2},{"pair3":3},{"pair4":4},{"pair5":5}]}],[{"map3key1":[{"pair1":1}]},{"map3key2":[{"pair1":1}]},{"map3key3":[{"pair1":1}]},{"map3key4":[{"pair1":1}]}]]}})""",
+	ensure_equals(R"""({"header":"I am the header!","vec_int":[1,2,3,4],"int":1,"str":"cstyle","str_char_pointer":"char pointer","strstd":"std","list":[1.0,2.0,3.0],"map_string_int":[{"bar":3},{"foo":42}],"map_int_string":[{"3":"bar"},{"42":"foo"}],"map_vec_int":[{"bar":[3,5]},{"foo":[42,1,2]}],"pair":{"pairkey":"pairvalue"},"vec_pair_string_bool":[{"pair1":true},{"pair2":false}],"pair_vec_pair_string_bool":{"pairTop":[{"pairsub1":true},{"pairsub2":false}]},"list_vec_pair_string_bool":[[{"pair1":true}],[{"pair2":false}],[{"pair31":true},{"pair32":false}]],"pair_vec_map_string_list_pair_string_int":{"toppair":[[{"map1key1":[{"pair1":1},{"pair2":2},{"pair3":3}]},{"map2key2":[{"pair1":1}]}],[{"map2key1":[{"pair1":1},{"pair2":2},{"pair3":3},{"pair4":4},{"pair5":5}]}],[{"map3key1":[{"pair1":1}]},{"map3key2":[{"pair1":1}]},{"map3key3":[{"pair1":1}]},{"map3key4":[{"pair1":1}]}]]}})""",
 		ser.getStringRepresentation());
 }
 
@@ -177,17 +177,19 @@ template<>
 template<>
 void testobject::test<4>()
 {
-	set_test_name("Serializer_json: Primitive pointer");
+	set_test_name("Serializer_json: Pointers");
 
 	double *pointer_double = new double(6);
 	std::unique_ptr<double> unique_double = std::make_unique<double>(6);
 	std::shared_ptr<double> shared_double = std::make_shared<double>(6);
+	std::vector<std::shared_ptr<bool>> vector_shared_bool{std::make_shared<bool>(false), std::make_shared<bool>(false), std::make_shared<bool>(true)};
 
 	serobj.addProperty("pointer_double", pointer_double);
 	serobj.addProperty("unique_double", unique_double);
 	serobj.addProperty("shared_double", shared_double);
+	serobj.addProperty("vector_shared_bool", vector_shared_bool);
 
-	ensure_equals(R"""({"pointer_double":6.0,"unique_double":6.0,"shared_double":6.0})""", ser.getStringRepresentation());
+	ensure_equals(R"""({"pointer_double":6.0,"unique_double":6.0,"shared_double":6.0,"vector_shared_bool":[false,false,true]})""", ser.getStringRepresentation());
 
 	// cleanup - not ideal since ensure may fail
 	delete pointer_double;

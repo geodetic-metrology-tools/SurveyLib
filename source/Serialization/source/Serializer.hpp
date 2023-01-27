@@ -121,6 +121,15 @@ protected:
 		addValue(value);
 		endPrimitive();
 	}
+	// Primitive - std::to_string<E> needs to be valid
+	template<typename T, typename E>
+	auto addProperty(const T &value, const E &name) -> decltype(std::to_string(name), void())
+	{
+		startPrimitive(std::to_string(name));
+		addValue(value);
+		endPrimitive();
+	}
+
 	// String pointers - is_any_pointer && is_string
 	template<typename T>
 	typename std::enable_if_t<!is_Serializable<T>::value && is_any_pointer<T>::value && is_string<T>::value>
@@ -130,12 +139,13 @@ protected:
 		addValue(value);
 		endPrimitive();
 	}
-	// Primitive pointer
+	// Other pointers
 	template<typename T>
 	typename std::enable_if_t<is_any_pointer<T>::value && !is_string<T>::value>
 		addProperty(const T &value, const std::string &name = std::string())
 	{
-		addProperty(*value, name);
+		if(value)
+			addProperty(*value, name);
 	}
 	// Serializable class
 	template<typename T>
@@ -201,17 +211,32 @@ protected:
 			addProperty(t);
 	}
 
+	// if container of pointers
+	template<typename T>
+	typename std::enable_if_t<
+		is_iterable_container<T>::value 
+		&& is_any_pointer<typename T::value_type>::value 
+	>
+		addValue(const T &container)
+	{
+		for (const auto &t : container)
+			addProperty(t);
+			return;
+	}
+
 	// If container of primitives
 	template<typename T>
 	typename std::enable_if_t<
 		is_iterable_container<T>::value 
 		&& !is_iterable_container<typename T::value_type>::value 
 		&& !is_Serializable<typename T::value_type>::value
+		&& !is_any_pointer<typename T::value_type>::value
 	>
 		addValue(const T &container)
 	{
 		for (const auto &t : container)
 			addValue(t);
+			return;
 	}
 
 	// if C-style array
