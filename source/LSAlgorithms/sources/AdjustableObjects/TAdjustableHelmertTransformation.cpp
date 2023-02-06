@@ -59,6 +59,22 @@ int TAdjustableHelmertTransformation::getScaleUnknIndex() const{
 	throw std::logic_error("Trying to get unknown index from fixed scale.");
 }
 
+const std::vector<int> TAdjustableHelmertTransformation::getRelativeUnknIndices() const
+{
+	std::vector<int> activeIndices;
+	for (int i = 0; i < 3; i++)
+		if (!fixedTranslations[i])
+			activeIndices.push_back(i);
+
+	for (int i = 0; i < 3; i++)
+		if (!fixedRotations[i])
+			activeIndices.push_back(i + 3);
+
+	if (!fixedScale[0])
+		activeIndices.push_back(6);
+
+	return activeIndices;
+}
 
 int TAdjustableHelmertTransformation::getFirstUidx() const {
 	for (int i = 0; i < 3; i++)

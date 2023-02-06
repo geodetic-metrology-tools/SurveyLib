@@ -93,7 +93,7 @@ TLength	TAdjustablePoint::getErrorEllMajorAxis() const
 	{
 		case TSpatialStatus::ESpatialStatus::kVxy:
 		{
-			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in m²
+			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			gdAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sx2 + sy2 + sqrtq(powq((sy2 - sx2), 2) + (LITERAL(4.0) * vxy * vxy)));
@@ -101,7 +101,7 @@ TLength	TAdjustablePoint::getErrorEllMajorAxis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVxz:
 		{
-			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in m²
+			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			gdAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sx2 + sz2 + sqrtq(powq((sz2 - sx2), 2) + (LITERAL(4.0) * vxz * vxz)));
@@ -109,7 +109,7 @@ TLength	TAdjustablePoint::getErrorEllMajorAxis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVyz:
 		{
-			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in m²
+			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in mÂ²
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			gdAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sz2 + sy2 + sqrtq(powq((sy2 - sz2), 2) + (LITERAL(4.0) * vyz * vyz)));
@@ -129,7 +129,7 @@ TLength TAdjustablePoint::getErrorEllMinorAxis() const
 	{
 		case TSpatialStatus::ESpatialStatus::kVxy:
 		{
-			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in m²
+			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			ptAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sx2 + sy2 - sqrtq(powq((sy2 - sx2), 2) + (LITERAL(4.0) * vxy * vxy)));
@@ -137,7 +137,7 @@ TLength TAdjustablePoint::getErrorEllMinorAxis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVxz:
 		{
-			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in m²
+			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			ptAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sx2 + sz2 - sqrtq(powq((sz2 - sx2), 2) + (LITERAL(4.0) * vxz * vxz)));
@@ -145,7 +145,7 @@ TLength TAdjustablePoint::getErrorEllMinorAxis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVyz:
 		{
-			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in m²
+			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in mÂ²
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			ptAxe = (LITERAL(1.0) / sqrtq(LITERAL(2.0))) * sqrtq(sz2 + sy2 - sqrtq(powq((sy2 - sz2), 2) + (LITERAL(4.0) * vyz * vyz)));
@@ -165,7 +165,7 @@ TAngle TAdjustablePoint::getErrorEllGis() const
 	{
 		case TSpatialStatus::ESpatialStatus::kVxy:
 		{
-			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in m²
+			TReal vxy = getXYCovar()* M2MM * M2MM;  //because vxy is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			gis = ((LITERAL(0.5)) * TAngle::aTan2(2 * vxy, (sy2 - sx2)));
@@ -173,7 +173,7 @@ TAngle TAdjustablePoint::getErrorEllGis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVxz:
 		{
-			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in m²
+			TReal vxz = getXYCovar()* M2MM * M2MM;  //because vxz is store in mÂ²
 			TReal sx2 = powq(getXEstPrecision().getMMetresValue(), 2);
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			gis = ((LITERAL(0.5)) * TAngle::aTan2(2 * vxz, (sz2 - sx2)));
@@ -181,7 +181,7 @@ TAngle TAdjustablePoint::getErrorEllGis() const
 		}
 		case TSpatialStatus::ESpatialStatus::kVyz:
 		{
-			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in m²
+			TReal vyz = getXYCovar()* M2MM * M2MM;  //because vyz is store in mÂ²
 			TReal sz2 = powq(getZEstPrecision().getMMetresValue(), 2);
 			TReal sy2 = powq(getYEstPrecision().getMMetresValue(), 2);
 			gis = ((LITERAL(0.5)) * TAngle::aTan2(2 * vyz, (sz2 - sy2)));
@@ -401,6 +401,19 @@ int TAdjustablePoint::getCoordinateUnknIndex(int d) const {
 		return uidx[d];
 	else
 		throw std::logic_error("Trying to get unknown index from fixed coordinate.");
+}
+
+const std::vector<int> TAdjustablePoint::getRelativeUnknIndices() const
+{
+	std::vector<int> activeIndices;
+	for (int i = 0; i < 3; i++)
+	{
+		if (!fixedState[i])
+		{
+			activeIndices.push_back(i);
+		}
+	}
+	return activeIndices;
 }
 ///////////////////////////////////////////////////////////////////////////
 // PRIVATE METHODS
