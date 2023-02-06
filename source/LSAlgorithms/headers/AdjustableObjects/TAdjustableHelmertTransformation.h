@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2023. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -9,6 +9,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TVAdjustableObject.h"
 #include "TTransformParameters.h"
 #include <bitset>
+#include <vector>
 #include "TLength.h"
 
 /*! 
@@ -127,6 +128,10 @@ class TAdjustableHelmertTransformation : public TVAdjustableObject {
 				\throws Throws a logic_error if the scale is fixed.
 			*/ 
 			int getScaleUnknIndex() const;
+
+			// returns vector of relative indices of active parameters
+			const std::vector<int> getRelativeUnknIndices() const;
+
 
 			/*!
 				\brief Checks if a component of the translation is fixed.
