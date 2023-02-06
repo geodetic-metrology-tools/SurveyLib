@@ -83,6 +83,15 @@ class TVAdjustableObject : public TStatusObject
 
 		/// Returns the name (which serves as an ID in most cases) of the adjustable object. This can be a name of: point, line, plane, scalar, angle or HelmertTransformation.
 		virtual const std::string& getName() const = 0;
+
+#ifdef USE_SERIALIZER
+		// Inherited via Serializable
+		virtual void serialize(SerializerObject::SerializationHelper &obj) const override
+		{
+			TStatusObject::serialize(obj);
+		}
+#endif
+
 };
 
 #endif //TVADJUSTABLE_OBJECT

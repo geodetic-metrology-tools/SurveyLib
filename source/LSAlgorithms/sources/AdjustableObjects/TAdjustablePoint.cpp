@@ -490,25 +490,33 @@ TLength TAdjustablePoint::getEstimatedEuclideanDistance(const TAdjustablePoint* 
 void TAdjustablePoint::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	TVAdjustableObject::serialize(obj);
+	obj.addProperty("eolcomment", eolcomment);
+	obj.addProperty("fCorrection", fCorrection);
+	obj.addProperty("fCovariance", fCovariance);
+	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
+	obj.addProperty("fEstimatedValue", fEstimatedValue);
+	obj.addProperty("fHfixed", fHfixed);
+	obj.addProperty("fixedState", fixedState);
 	obj.addProperty("fName", fName);
 	obj.addProperty("fProvisionalValue", fProvisionalValue);
-	obj.addProperty("fEstimatedValue", fEstimatedValue);
-	obj.addProperty("fCorrection", fCorrection);
-	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
-
-	obj.addProperty("uidx", uidx);
-
+	obj.addProperty("fReferential", fReferential);
 	obj.addProperty("fSpatialStatus", fSpatialStatus);
-	obj.addProperty("fCovariance", fCovariance);
 	obj.addProperty("fStandardDeviations", fStandardDeviations);
-	obj.addProperty("fixedState", fixedState);
-	obj.addProperty("line", line);
-
 	obj.addProperty("fXValueSet", fXValueSet);
 	obj.addProperty("fYValueSet", fYValueSet);
-	obj.addProperty("fHfixed", fHfixed);
-
-	obj.addProperty("fReferential", fReferential);
-	obj.addProperty("eolcomment", eolcomment);
+	obj.addProperty("hdrcomment", hdrcomment);
+	obj.addProperty("line", line);
+	obj.addProperty("uidx", uidx);
 }
+
+/*
+void TAdjustablePoint::ErrorEllipsoid::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	obj.addProperty("vx", vx);
+	obj.addProperty("vy", vy);
+	obj.addProperty("vz", vz);
+	obj.addProperty("lx", lx);
+	obj.addProperty("ly", ly);
+	obj.addProperty("lz", lz);
+}*/
 #endif //USE_SERIALIZER

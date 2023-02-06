@@ -69,7 +69,8 @@ jsonSerializerObject::~jsonSerializerObject()
 std::string jsonSerializerObject::getStringRepresentation()
 {
 	rapidjson::StringBuffer buffer;
-	rapidjson::Writer writer(buffer);
+	//rapidjson::Writer writer(buffer);
+	rapidjson::PrettyWriter writer(buffer);
 	_pimpl->doc.Accept(writer);
 	return buffer.GetString();
 }
