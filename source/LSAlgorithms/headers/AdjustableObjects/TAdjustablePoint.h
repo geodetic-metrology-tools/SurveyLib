@@ -12,6 +12,11 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TFreeVector.h"
 #include "TSpatialStatus.h"
 
+#ifdef USE_SERIALIZER
+#	include <Serializer.hpp>
+#endif // USE_SERIALIZER
+
+
 /*! 
 	\ingroup AdjustableObjects
 	\brief Adds adjustable information to a point represented by a TPositionVector class.
@@ -115,13 +120,28 @@ public:
 		TAngle				getErrorEllGis() const;
 
 		/// Returns the three axes of the error ellipsoid
-		struct ErrorEllipsoid {
+#ifdef USE_SERIALIZER
+		struct ErrorEllipsoid : public Serializable
+#else
+		struct ErrorEllipsoid
+#endif // USE_SERIALIZER
+		{
 			TReal vx[3]; // Direction (unit)vector of the x-semiaxis
 			TReal vy[3]; // Direction (unit)vector of the y-semiaxis
 			TReal vz[3]; // Direction (unit)vector of the z-semiaxis
 			TReal lx; // Length of the x-semiaxis
 			TReal ly; // Length of the y-semiaxis
 			TReal lz; // Length of the z-semiaxis
+
+			ErrorEllipsoid(TReal vx[3], TReal vy[3], TReal vz[3], TReal lx, TReal ly, TReal lz) :
+					vx{vx[0], vx[1], vx[2]}, vy{vy[0], vy[1], vy[2]}, vz{vz[0], vz[1], vz[2]}, lx(lx), ly(ly), lz(lz)
+			{
+			}
+
+#ifdef USE_SERIALIZER
+			// Inherited via Serializable
+			virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif
 		};
 		ErrorEllipsoid getErrorEllipsoid() const;
 

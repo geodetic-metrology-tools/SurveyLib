@@ -46,7 +46,18 @@ public:
 
 	//!@name Constants
 	//@{
-	enum  ESpatialStatus {kPosNull, kUnknown,  kCala, kVx, kVy, kVz, kVxy, kVxz, kVyz, kVxyz};
+	enum  ESpatialStatus {
+		kPosNull,
+		kUnknown,
+		kCala,
+		kVx,
+		kVy,
+		kVz,
+		kVxy,
+		kVxz,
+		kVyz,
+		kVxyz
+	};
 	//@}
 
 
