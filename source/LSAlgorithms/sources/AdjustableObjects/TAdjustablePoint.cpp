@@ -226,15 +226,16 @@ TAdjustablePoint::ErrorEllipsoid TAdjustablePoint::getErrorEllipsoid() const {
 	   (on page 36)
 	*/
 
-	ErrorEllipsoid ell = {
-		// Indexing is (row, column): Each column corresponds to one eigenvector
-		{evecs(0,0).real(), evecs(1,0).real(), evecs(2,0).real()},
-		{evecs(0,1).real(), evecs(1,1).real(), evecs(2,1).real()},
-		{evecs(0,2).real(), evecs(1,2).real(), evecs(2,2).real()},
+	// Indexing is (row, column): Each column corresponds to one eigenvector
+	TReal vx[3] = {evecs(0, 0).real(), evecs(1, 0).real(), evecs(2, 0).real()};
+	TReal vy[3] = {evecs(0, 1).real(), evecs(1, 1).real(), evecs(2, 1).real()};
+	TReal vz[3] = {evecs(0, 2).real(), evecs(1, 2).real(), evecs(2, 2).real()};
+	ErrorEllipsoid ell (
+		vx, vy, vz,
 		sqrtq(evals(0).real()),
 		sqrtq(evals(1).real()),
-		sqrtq(evals(2).real()),
-	};
+		sqrtq(evals(2).real())
+	);
 
 	return ell;
 }
@@ -509,7 +510,6 @@ void TAdjustablePoint::serialize(SerializerObject::SerializationHelper &obj) con
 	obj.addProperty("uidx", uidx);
 }
 
-/*
 void TAdjustablePoint::ErrorEllipsoid::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	obj.addProperty("vx", vx);
@@ -518,5 +518,5 @@ void TAdjustablePoint::ErrorEllipsoid::serialize(SerializerObject::Serialization
 	obj.addProperty("lx", lx);
 	obj.addProperty("ly", ly);
 	obj.addProperty("lz", lz);
-}*/
+}
 #endif //USE_SERIALIZER
