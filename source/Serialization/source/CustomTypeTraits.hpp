@@ -48,6 +48,14 @@ struct is_iterable_container<T, void_t<
 	decltype(std::end(std::declval<T>()))
 >> : std::true_type {};
 
+// is sparse
+template<class T, class = void>
+struct is_sparse : std::false_type {};
+template<typename T>
+struct is_sparse<T, void_t<
+	decltype(std::declval<T>().toDense())
+>> : std::true_type {};
+
 // is string (and char variants)
 template<class T, class = void>
 struct is_string : std::false_type{};

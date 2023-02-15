@@ -16,6 +16,16 @@ template<class T, class tree_node_allocator>
 class tree;
 }; // namespace peka
 
+// forward declaration for Eigen::matrix external library
+namespace Eigen
+{
+template<typename Scalar, int Rows, int Cols, int Options, int MaxRows, int MaxCols>
+class Matrix;
+
+template<typename Scalar, int Options, typename Index>
+class SparseMatrix;
+} // namespace Eigen
+
 /**
  * Abstract class featuring Serialization of data structures.
  *
@@ -112,6 +122,7 @@ protected:
 		&& !is_pair<T>::value 
 		&& !is_any_pointer<T>::value
 		&& !std::is_array_v<T>
+		&& !is_sparse<T>::value
 		&& ((is_iterable_container<T>::value && is_string<T>::value) 
 			|| !is_iterable_container<T>::value)
 	>
@@ -159,7 +170,7 @@ protected:
 	}
 	//// Container
 	template<typename T>
-	typename std::enable_if_t<(!is_string<T>::value && is_iterable_container<T>::value) || std::is_array_v<T>>
+	typename std::enable_if_t<(!is_string<T>::value && is_iterable_container<T>::value) || std::is_array_v<T> || is_sparse<T>::value>
 		addProperty(const T &value, const std::string &name = std::string())
 	{
 		startArray(name);
@@ -259,6 +270,21 @@ protected:
 			addProperty(pos.node->data);
 			pos++;
 		}
+	}
+
+	// if (external lib) Eigen (Dense)
+	template<typename Scalar, int Rows, int Cols, int Options, int MaxRows, int MaxCols>
+	void addValue(const Eigen::Matrix<Scalar, Rows, Cols, Options, MaxRows, MaxCols> &matrix)
+	{
+		for (auto row : matrix.rowwise())
+			addProperty(row);
+	}
+
+	// if (external lib) Eigen (Sparse)
+	template<typename Scalar, int Options, typename Index>
+	void addValue(const Eigen::SparseMatrix<Scalar, Options, Index> &matrix)
+	{
+		addValue(matrix.toDense());
 	}
 };
 
