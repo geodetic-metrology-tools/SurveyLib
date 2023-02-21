@@ -60,6 +60,7 @@ bool TAdjustableLength::operator==(const TAdjustableLength &other) const {
 #ifdef USE_SERIALIZER
 void TAdjustableLength::serialize(SerializerObject::SerializationHelper &obj) const
 {
+	TVAdjustableObject::serialize(obj);
 	obj.addProperty("fName", fName);
 	obj.addProperty("fProvisionalValue", fProvisionalValue);
 	obj.addProperty("fEstimatedValue", fEstimatedValue);

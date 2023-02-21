@@ -46,6 +46,7 @@ void TAdjustableAngle::reInitialise(){
 #ifdef USE_SERIALIZER
 void TAdjustableAngle::serialize(SerializerObject::SerializationHelper &obj) const
 {
+	TVAdjustableObject::serialize(obj);
 	obj.addProperty("fName", fName);
 	obj.addProperty("fProvisionalValue", fProvisionalValue);
 	obj.addProperty("fEstimatedValue", fEstimatedValue);
