@@ -576,11 +576,20 @@ void TAdjustableHelmertTransformation::serialize(SerializerObject::Serialization
 	obj.addProperty("fCovarianceScl", fCovarianceScl);
 	obj.addProperty("fCovarianceTranslation", fCovarianceTranslation);
 	obj.addProperty("fCovarianceTrRot", fCovarianceTrRot);
-	obj.addProperty("fEstParameter", fEstParameter);                                  
-
-	obj.addProperty("fEstPrecisionRotation", fEstPrecisionRotation);
+	obj.addProperty("fEstParameter",
+		std::vector<double>{
+			fEstParameter.tX.getMetresValue(),
+			fEstParameter.tY.getMetresValue(),
+			fEstParameter.tZ.getMetresValue(),
+			fEstParameter.kappa.getRadiansValue(),
+			fEstParameter.omega.getRadiansValue(),
+			fEstParameter.phi.getRadiansValue(),
+			fEstParameter.scale,
+	});                                  
+	obj.addProperty("fEstPrecisionRotation", fEstPrecisionRotation->getRadiansValue());
 	obj.addProperty("fEstPrecisionScale", fEstPrecisionScale);
-	obj.addProperty("fEstPrecisionTranslation", fEstPrecisionTranslation);
+	obj.addProperty("fEstPrecisionTranslation", fEstPrecisionTranslation->getMetresValue());
+	// TODO?
 	obj.addProperty("fixedRotationsK", fixedRotations[0]);
 	obj.addProperty("fixedRotationsO", fixedRotations[1]);
 	obj.addProperty("fixedRotationsP", fixedRotations[2]);
@@ -589,7 +598,16 @@ void TAdjustableHelmertTransformation::serialize(SerializerObject::Serialization
 	obj.addProperty("fixedTranslationsX", fixedTranslations[0]);
 	obj.addProperty("fixedTranslationsY", fixedTranslations[1]);
 	obj.addProperty("fixedTranslationsZ", fixedTranslations[2]);
-	obj.addProperty("fProvParameter", fProvParameter);                                 
+	obj.addProperty("fProvParameter",
+		std::vector<double>{
+			fProvParameter.tX.getMetresValue(),
+			fProvParameter.tY.getMetresValue(),
+			fProvParameter.tZ.getMetresValue(),
+			fProvParameter.kappa.getRadiansValue(),
+			fProvParameter.omega.getRadiansValue(),
+			fProvParameter.phi.getRadiansValue(),
+			fProvParameter.scale,
+		});    
 	obj.addProperty("fRotStandDev", fRotStandDev);
 	obj.addProperty("fScaleStandDev", fScaleStandDev);
 	obj.addProperty("fTransStandDev", fTransStandDev);

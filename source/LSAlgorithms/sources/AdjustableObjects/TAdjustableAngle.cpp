@@ -48,10 +48,10 @@ void TAdjustableAngle::serialize(SerializerObject::SerializationHelper &obj) con
 {
 	TVAdjustableObject::serialize(obj);
 	obj.addProperty("fName", fName);
-	obj.addProperty("fProvisionalValue", fProvisionalValue);
-	obj.addProperty("fEstimatedValue", fEstimatedValue);
-	obj.addProperty("fCorrection", fCorrection);
-	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
+	obj.addProperty("fProvisionalValue", fProvisionalValue.getRadiansValue());
+	obj.addProperty("fEstimatedValue", fEstimatedValue.getRadiansValue());
+	obj.addProperty("fCorrection", fCorrection.getRadiansValue());
+	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision.getRadiansValue());
 
 	obj.addProperty("ifFixed", ifFixed);
 	obj.addProperty("uidx", uidx);

@@ -272,12 +272,19 @@ protected:
 		}
 	}
 
-	// if (external lib) Eigen (Dense)
+	// if (external lib) Eigen (Dense) // Can be matrices or vectors
 	template<typename Scalar, int Rows, int Cols, int Options, int MaxRows, int MaxCols>
 	void addValue(const Eigen::Matrix<Scalar, Rows, Cols, Options, MaxRows, MaxCols> &matrix)
 	{
-		for (auto row : matrix.rowwise())
-			addProperty(row);
+		// Column Vector
+		if(matrix.cols() == 1)
+			addValue(*(matrix.colwise().begin()));
+		// Matrix
+		else
+		{
+			for (auto row : matrix.rowwise())
+				addProperty(row);
+		}
 	}
 
 	// if (external lib) Eigen (Sparse)

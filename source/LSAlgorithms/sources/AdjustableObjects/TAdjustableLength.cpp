@@ -62,10 +62,10 @@ void TAdjustableLength::serialize(SerializerObject::SerializationHelper &obj) co
 {
 	TVAdjustableObject::serialize(obj);
 	obj.addProperty("fName", fName);
-	obj.addProperty("fProvisionalValue", fProvisionalValue);
-	obj.addProperty("fEstimatedValue", fEstimatedValue);
-	obj.addProperty("fCorrection", fCorrection);
-	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
+	obj.addProperty("fProvisionalValue", fProvisionalValue.getMetresValue());
+	obj.addProperty("fEstimatedValue", fEstimatedValue.getMetresValue());
+	obj.addProperty("fCorrection", fCorrection.getMetresValue());
+	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision.getMetresValue());
 
 	obj.addProperty("ifFixed", ifFixed);
 	obj.addProperty("uidx", uidx);
