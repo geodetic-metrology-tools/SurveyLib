@@ -136,6 +136,9 @@ public:
 		/// set the point name's width
 		void	setPointNameWidth(const int);
 
+		/// set the observation id width
+		void	setObsIdWidth(const int);
+
 		/// set the origin of the local system used
 		bool	setLocalSystemOrigin(std::shared_ptr <TLocalSystemOrigin>);
 
@@ -171,6 +174,9 @@ public:
 
 		/// get the point name's width 
 		int										getPointNameWidth() const;
+
+		/// get the observation id width
+		int										getObsIdWidth() const;
 
 		/// get a pointer to the origin of the local system used
         TLocalSystemOrigin* getLocalSystemOrigin() const;

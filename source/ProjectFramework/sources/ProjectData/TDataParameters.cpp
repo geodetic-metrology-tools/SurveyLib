@@ -48,6 +48,7 @@ TDataParameters::TDataParameters()
 	fCoordEpoch = NO_VALf;
 	fSolution = "noSolution";
 	fPointNameWidth=7;
+	fObsIdWidth = 0;
 }
 
 TDataParameters::TDataParameters(const TDataParameters& original )
@@ -65,6 +66,7 @@ TDataParameters::TDataParameters(const TDataParameters& original )
 , fCoordEpoch(original.fCoordEpoch)
 , fSolution(original.fSolution)
 , fPointNameWidth(original.fPointNameWidth)
+, fObsIdWidth(original.fObsIdWidth)
 {
 }
 
@@ -100,6 +102,7 @@ void TDataParameters::swap(TDataParameters & other) noexcept
 	std::swap(fCoordEpoch, other.fCoordEpoch);
 	std::swap(fSolution, other.fSolution);
     std::swap(fPointNameWidth,other.fPointNameWidth);
+	std::swap(fObsIdWidth, other.fObsIdWidth);
 }
 
 bool  TDataParameters::operator==(const TDataParameters& rhs )
@@ -113,7 +116,8 @@ bool  TDataParameters::operator==(const TDataParameters& rhs )
 		fAnglePrecision == rhs.getAnglePrecision() &&
 		fLengthPrecision == rhs.getLengthPrecision() &&
 		fCoordPrecision == rhs.getCoordPrecision() &&
-		fPointNameWidth == rhs.fPointNameWidth;
+		fPointNameWidth == rhs.fPointNameWidth &&
+		fObsIdWidth == rhs.fObsIdWidth;
 }
 
 
@@ -385,6 +389,13 @@ void  TDataParameters::setPointNameWidth(const int width )
 	return; 
 }
 
+//! set point observation id width
+void TDataParameters::setObsIdWidth(const int width)
+{
+	fObsIdWidth = width;
+	return;
+}
+
 bool TDataParameters::setLocalSystemOrigin(const TLocalSystemOrigin & LSO)
 {
     if(TRefFrameInfo::isLocalRefFrame(fRefFrameEnum)
@@ -476,6 +487,11 @@ TPointFormat::ECoordPrecision  TDataParameters::getCoordPrecision() const
 int  TDataParameters::getPointNameWidth() const
 {//! get the point name width 
 	return fPointNameWidth;
+}
+
+int TDataParameters::getObsIdWidth() const
+{ //! get the observation id width
+	return fObsIdWidth;
 }
 
 
