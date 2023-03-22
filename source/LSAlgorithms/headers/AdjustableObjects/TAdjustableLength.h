@@ -103,10 +103,11 @@ public:
 	*/
 	virtual void setFirstUidx(int idx);
 
-	/*!
-		See \ref TVAdjustableObject::setCorrection. Radians value expected.
-	*/
-	virtual void setCorrection(int idx, TReal value);
+		/*! 
+			See \ref TVAdjustableObject::setCorrection. Radians value expected.
+		*/
+		virtual void setCorrection(int idx, TReal value);
+		virtual void setEstVal(int idx, TReal value);
 
 	/*! Sets the estimated precision after calculation in radians.*/
 	void setEstimatedPrecision(int idx, TReal ep);

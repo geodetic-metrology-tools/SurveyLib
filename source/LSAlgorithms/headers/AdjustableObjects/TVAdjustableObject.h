@@ -79,6 +79,7 @@ class TVAdjustableObject : public TStatusObject
 
 		/// Sets/updates the value (oldValue+correction), a parameter of this object that is accesed by the unknown index specified by \ref setFirstUidx.
 		virtual void setCorrection(int idx, TReal correction) = 0;
+		//virtual void setEstVal(int idx, TReal value);
 
 
 		/// Returns the name (which serves as an ID in most cases) of the adjustable object. This can be a name of: point, line, plane, scalar, angle or HelmertTransformation.

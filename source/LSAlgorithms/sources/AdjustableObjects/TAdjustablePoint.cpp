@@ -261,6 +261,28 @@ void TAdjustablePoint::setCorrection(int idx, TReal value)
 
 	throw std::logic_error("Invalid unknown index in parameter access. Point " + getName());
 }
+void TAdjustablePoint::setEstVal(int idx, TReal value)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        if (uidx[i] == idx)
+        {
+            if (i == 0)
+            {
+                fEstimatedValue[i] = (TLength(value));
+            }
+            else if (i == 1)
+            {
+                fEstimatedValue[i] = (TLength(value));
+            }
+            else
+            {
+                fEstimatedValue[2] = (TLength(value));
+            }
+        }
+    }
+}
+
 
 /*!
 	See \ref TVAdjustableObject::setFirstUidx

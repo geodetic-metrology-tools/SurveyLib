@@ -30,8 +30,15 @@ void TAdjustableScalar::setCorrection(int idx, TReal value)
 	throw std::logic_error("Invalid unknown index in parameter access. Scalar " + getName());
 }
 
-void TAdjustableScalar::setEstimatedPrecision(int idx, TReal ep)
-{
+void TAdjustableScalar::setEstVal(int idx, TReal value) {
+	if (uidx == idx){
+		fEstimatedValue = value;
+		return;
+	}
+	throw std::logic_error("Invalid unknown index in parameter access.");
+}
+
+void	TAdjustableScalar::setEstimatedPrecision(int idx, TReal ep) {
 	if (uidx == idx)
 		fEstimatedPrecision = ep;
 	else

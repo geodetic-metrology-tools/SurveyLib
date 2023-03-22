@@ -134,9 +134,32 @@ void TAdjustableHelmertTransformation::setCorrection(int idx, TReal value)
 
 	throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
 }
-
-void TAdjustableHelmertTransformation::setParam(const TAngle &rx, const TAngle &ry, const TAngle &rz)
+void TAdjustableHelmertTransformation::setEstVal(int idx, TReal value)
 {
+	for (int i = 0; i < 3; i++)
+		if (uidx_trans[i] == idx)
+		{
+			setTranslationEst(i, TLength(value));
+			return;
+		}
+
+	for (int i = 0; i < 3; i++)
+		if (uidx_rot[i] == idx)
+		{
+			setRotationEst(i, TAngle(value, TAngle::kRadians));
+			return;
+		}
+
+	if (uidx_scale == idx)
+	{
+		setScaleEst(value);
+		return;
+	}
+
+	throw std::logic_error("Invalid unknown index in parameter access.");
+}
+
+void TAdjustableHelmertTransformation::setParam(const TAngle& rx, const TAngle& ry, const TAngle& rz){
 	fEstParameter.omega = fProvParameter.omega = rx;
 	fEstParameter.phi = fProvParameter.phi = ry;
 	fEstParameter.kappa = fProvParameter.kappa = rz;
@@ -191,9 +214,38 @@ void TAdjustableHelmertTransformation::setScaleCorrection(TReal value)
 {
 	fEstParameter.scale = fEstParameter.scale + value;
 }
-
-const TAngle TAdjustableHelmertTransformation::getEstimatedPrecisionRot(int d) const
+void TAdjustableHelmertTransformation::setTranslationEst(int idx, TLength value)
 {
+	if (idx == 0)
+		fEstParameter.tX = value;
+	else if (idx == 1)
+		fEstParameter.tY = value;
+	else if (idx == 2)
+		fEstParameter.tZ = value;
+	else
+		throw std::logic_error("Invalid unknown index in parameter access.");
+	return;
+}
+
+void TAdjustableHelmertTransformation::setRotationEst(int idx, const TAngle &value)
+{
+	if (idx == 0)
+		fEstParameter.omega = value;
+	else if (idx == 1)
+		fEstParameter.phi = value;
+	else if (idx == 2)
+		fEstParameter.kappa = value;
+	else
+		throw std::logic_error("Invalid unknown index in parameter access.");
+	return;
+}
+
+void TAdjustableHelmertTransformation::setScaleEst(TReal value)
+{
+	fEstParameter.scale = value;
+}
+
+const TAngle& TAdjustableHelmertTransformation::getEstimatedPrecisionRot(int d)const{
 	ensureCovarIsSet();
 	return TAngle(sqrt(fCovarianceMatrix(3 + d, 3 + d)));
 }

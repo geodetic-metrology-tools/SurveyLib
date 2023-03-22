@@ -32,8 +32,16 @@ void TAdjustableLength::setCorrection(int idx, TReal value)
 		throw std::logic_error("Invalid unknown index in parameter access. Length " + getName());
 }
 
-void TAdjustableLength::setEstimatedPrecision(int idx, TReal ep)
-{
+void TAdjustableLength::setEstVal(int idx, TReal value) {
+	if (uidx == idx){
+      fEstimatedValue.setMetresValue(value);
+	}
+	else
+		throw std::logic_error("Invalid unknown index in parameter access.");
+}
+
+
+void TAdjustableLength::setEstimatedPrecision(int idx, TReal ep) {
 	if (uidx == idx)
 		fEstimatedPrecision.setMetresValue(ep);
 	else

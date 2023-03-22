@@ -29,6 +29,14 @@ void TAdjustableAngle::setCorrection(int idx, TReal value) {
 	else
 		throw std::logic_error("Invalid unknown index in parameter access. Angle " + getName());
 }
+void TAdjustableAngle::setEstVal(int idx, TReal value) {
+	if (uidx == idx){
+		fEstimatedValue.setRadiansValue(value);
+	}
+	else
+		throw std::logic_error("Invalid unknown index in parameter access.");
+}
+
 
 void TAdjustableAngle::setEstimatedPrecision(int idx, TReal ep) {
 	if (uidx == idx)

@@ -188,11 +188,13 @@ public:
 	*/
 	virtual void setFirstUidx(int idx);
 
-	/*!
-		See \ref TVAdjustableObject::setParameter
-		\note Either in radians if setting rotation or scalar value if setting translation.
-	*/
-	virtual void setCorrection(int idx, TReal value);
+		
+			/*! 
+				See \ref TVAdjustableObject::setParameter
+				\note Either in radians if setting rotation or scalar value if setting translation. 
+			*/
+			virtual void setCorrection(int idx, TReal value);
+			virtual void setEstVal(int idx, TReal value);
 
 	/*!
 		\brief Sets the covariance after calculation
@@ -227,21 +229,29 @@ public:
 
 		rx, ry, tz -- rotations about the x, y and z axes respectively
 
-		scl -- scale factor
-	*/
-	void setParam(const TLength tx, const TLength ty, const TLength tz, const TAngle &rx, const TAngle &ry, const TAngle &rz, const TReal scl);
+			scl -- scale factor
+		*/
+		void setParam(const TLength tx, const TLength ty, const TLength tz, const TAngle& rx, const TAngle& ry, const TAngle& rz, const TReal scl);
+		
+		/// Sets the translation correction
+		void setTranslationCorrection (int idx, TLength value);
+		/// Sets the rotation correction
+		void setRotationCorrection (int idx, const TAngle& value);
+		/// Sets the scale correction
+		void setScaleCorrection (TReal value);
+		// setting only the estimated values:
+		/// Sets the translation value
+		void setTranslationEst (int idx, TLength value);
+		/// Sets the rotation value
+		void setRotationEst (int idx, const TAngle& value);
+		/// Sets the scale value
+		void setScaleEst (TReal value);
 
-	/// Sets the translation correction
-	void setTranslationCorrection(int idx, TLength value);
-	/// Sets the rotation correction
-	void setRotationCorrection(int idx, const TAngle &value);
-	/// Sets the scale correction
-	void setScaleCorrection(TReal value);
-
-	/// Returns Estimated parameters of the Helmert transformation
-	const TransformParameters &getEstParam() const { return fEstParameter; }
-	/// Returns Provisional parameters of the Helmert transformation
-	const TransformParameters &getProvParam() const { return fProvParameter; }
+		
+		/// Returns Estimated parameters of the Helmert transformation
+		const TransformParameters& getEstParam() const {return fEstParameter;}
+		/// Returns Provisional parameters of the Helmert transformation
+		const TransformParameters& getProvParam() const {return fProvParameter;}
 
 	/// Returns the called estimated scale
 	inline TReal getEstScale() const { return fEstParameter.scale; }
