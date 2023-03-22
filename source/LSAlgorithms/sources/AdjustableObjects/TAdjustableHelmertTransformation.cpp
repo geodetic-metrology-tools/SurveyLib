@@ -245,7 +245,7 @@ void TAdjustableHelmertTransformation::setScaleEst(TReal value)
 	fEstParameter.scale = value;
 }
 
-const Eigen::VectorXd TAdjustableHelmertTransformation::getEstParam()
+const Eigen::VectorXd TAdjustableHelmertTransformation::getEstParamVector()
 {
 	Eigen::VectorXd parameters(7);
 	parameters.setZero();

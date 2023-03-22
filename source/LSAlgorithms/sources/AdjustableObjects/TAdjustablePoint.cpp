@@ -222,16 +222,21 @@ TAdjustablePoint::ErrorEllipsoid TAdjustablePoint::getErrorEllipsoid() const
 	return ell;
 }
 
-void TAdjustablePoint::setCorrection(int idx, TReal value)
+const Eigen::VectorXd TAdjustablePoint::getEstParamVector()
 {
-	for (int i = 0; i < 3; i++)
-	{
-		if (uidx[i] == idx)
-		{
-			if (i == 0)
-			{
-				fCorrection[i] = (TLength(value));
-				fEstimatedValue.setX(fEstimatedValue.getX() + TLength(value));
+	Eigen::VectorXd vector(3);
+	vector.setZero();
+	vector << fEstimatedValue.getX(), fEstimatedValue.getY(), fEstimatedValue.getZ();
+	return vector;
+}
+
+
+void TAdjustablePoint::setCorrection(int idx, TReal value) {
+	for (int i = 0; i < 3; i++){
+		if (uidx[i] == idx) {
+			if (i == 0 ){
+            fCorrection[i]=(TLength(value));
+            fEstimatedValue.setX(fEstimatedValue.getX() + TLength(value));
 				fXValueSet = true;
 			}
 			else if (i == 1)

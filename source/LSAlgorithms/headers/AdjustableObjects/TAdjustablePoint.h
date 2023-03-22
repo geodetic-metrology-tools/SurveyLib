@@ -12,7 +12,9 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TSpatialStatus.h"
 #include "TVAdjustableObject.h"
 
-/*!
+#include <Eigen/Dense>
+
+/*! 
 	\ingroup AdjustableObjects
 	\brief Adds adjustable information to a point represented by a TPositionVector class.
 */
@@ -173,6 +175,7 @@ public:
 		else
 			return fEstimatedValue.getZ();
 	}
+    const Eigen::VectorXd getEstParamVector();
 	// If these methods are needed, must be rewritten, because Estimated value and Provisional value can be in different reference systems (2DH and 3DCartesian)/
 
 	/// Returns the estimated DX of TAdjustablePoint

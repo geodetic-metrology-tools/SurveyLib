@@ -9,6 +9,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <stdexcept>
 #include <TAngle.h>
 #include "TVAdjustableObject.h"
+#include <Eigen/Dense>
 
 /*! 
 	\ingroup AdjustableObjects
@@ -43,6 +44,7 @@ public:
 
 		/// Returns a constant reference on the estimated value of the angle. 
 		inline const TAngle&	getEstimatedValue() const { return fEstimatedValue;}
+		const Eigen::VectorXd getEstParamVector();
 			
 		/// Returns a constant reference on the estimated precision of the angle. 
 		inline const TAngle&	getEstimatedPrecision() const { return fEstimatedPrecision;}

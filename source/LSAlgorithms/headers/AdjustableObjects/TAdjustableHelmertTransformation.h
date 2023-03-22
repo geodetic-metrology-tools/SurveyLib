@@ -252,7 +252,7 @@ public:
 		
 		/// Returns Estimated parameters of the Helmert transformation
 		const TransformParameters& getEstParam() const {return fEstParameter;}
-		const Eigen::VectorXd getEstParam();
+		const Eigen::VectorXd getEstParamVector();
 		/// Returns Provisional parameters of the Helmert transformation
 		const TransformParameters& getProvParam() const {return fProvParameter;}
 

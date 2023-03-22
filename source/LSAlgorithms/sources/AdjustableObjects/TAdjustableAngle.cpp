@@ -15,6 +15,15 @@ TAdjustableAngle TAdjustableAngle::createUninitialized(const std::string& name){
 	return TAdjustableAngle(TAngle(NO_VALf), true, name);
 }
 
+const Eigen::VectorXd TAdjustableAngle::getEstParamVector()
+{
+	Eigen::VectorXd vector(1);
+	vector.setZero();
+	vector << fEstimatedValue.getRadiansValue();
+	return vector;
+
+}
+
 void TAdjustableAngle::setFirstUidx(int idx) {
 	if (isFixed())
 		throw std::logic_error("Trying to assign unknown index to a fixed angle. Angle " + getName());
