@@ -14,7 +14,9 @@ Any permission to use it shall be granted in writing. Request shall be addressed
 #include "TTransformParameters.h"
 #include "TVAdjustableObject.h"
 
-/*!
+#include <Eigen/Dense>
+
+/*! 
 	\ingroup AdjustableObjects
 	\brief Adds adjustable information to a TransformParameters class.
 	Implementation detail: first translations, then rotations and scale as last for the unknown indices assignment.
@@ -250,6 +252,7 @@ public:
 		
 		/// Returns Estimated parameters of the Helmert transformation
 		const TransformParameters& getEstParam() const {return fEstParameter;}
+		const Eigen::VectorXd getEstParam();
 		/// Returns Provisional parameters of the Helmert transformation
 		const TransformParameters& getProvParam() const {return fProvParameter;}
 

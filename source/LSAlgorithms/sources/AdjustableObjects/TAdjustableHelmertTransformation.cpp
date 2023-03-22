@@ -245,6 +245,15 @@ void TAdjustableHelmertTransformation::setScaleEst(TReal value)
 	fEstParameter.scale = value;
 }
 
+const Eigen::VectorXd TAdjustableHelmertTransformation::getEstParam()
+{
+	Eigen::VectorXd parameters(7);
+	parameters.setZero();
+	parameters << fEstParameter.tX, fEstParameter.tY, fEstParameter.tZ, fEstParameter.omega, fEstParameter.phi, fEstParameter.kappa, fEstParameter.scale;
+
+	return parameters;
+}
+
 const TAngle& TAdjustableHelmertTransformation::getEstimatedPrecisionRot(int d)const{
 	ensureCovarIsSet();
 	return TAngle(sqrt(fCovarianceMatrix(3 + d, 3 + d)));
