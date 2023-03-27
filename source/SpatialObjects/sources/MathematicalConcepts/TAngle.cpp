@@ -506,7 +506,7 @@ TReal TAngle::getDeciDegsValue() const
 }
 
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 void TAngle::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	obj.addProperty("fValue", fValue);

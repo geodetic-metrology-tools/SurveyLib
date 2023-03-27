@@ -5,8 +5,6 @@
 
 #include <tut/tut.hpp>
 
-#include <math.h>
-
 #include "Serializer_json.hpp"
 
 namespace tut
@@ -48,7 +46,8 @@ void testobject::test<1>()
 	serobj.addProperty("pair", std::pair<std::string, std::string>{"pairkey", "pairvalue"});
 	serobj.addProperty("vec_pair_string_bool", std::vector<std::pair<std::string, bool>>{{"pair1", true}, {"pair2", false}});
 	serobj.addProperty("pair_vec_pair_string_bool", std::pair<std::string, std::vector<std::pair<std::string, bool>>>{"pairTop", {{"pairsub1", true}, {"pairsub2", false}}});
-	serobj.addProperty("list_vec_pair_string_bool", std::list<std::vector<std::pair<std::string, bool>>>{{{"pair1", true}}, {{"pair2", false}}, {{"pair31", true}, {"pair32", false}}});
+	serobj.addProperty(
+		"list_vec_pair_string_bool", std::list<std::vector<std::pair<std::string, bool>>>{{{"pair1", true}}, {{"pair2", false}}, {{"pair31", true}, {"pair32", false}}});
 	serobj.addProperty("pair_vec_map_string_list_pair_string_int",
 		std::pair<std::string, std::vector<std::map<std::string, std::list<std::pair<std::string, int>>>>>{"toppair",
 			{

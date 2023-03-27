@@ -500,7 +500,7 @@ TLength TAdjustablePoint::getEstimatedEuclideanDistance(const TAdjustablePoint* 
 		                  pow2(getEstValue(2) - ptOther->getEstValue(2))) );
 }
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 void TAdjustablePoint::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	TVAdjustableObject::serialize(obj);

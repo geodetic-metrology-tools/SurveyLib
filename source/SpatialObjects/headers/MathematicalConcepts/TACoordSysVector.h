@@ -23,13 +23,13 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 class TVCoordinateSystem;
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 #	include <Serializer.hpp>
 #endif // USE_SERIALIZER
 
 /*! \ingroup MathematicalConcepts
 	@{*/
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 class TACoordSysVector : public Serializable
 #else
 //! Abstract class use for explain TPositionVector and TFreeVector
@@ -94,7 +94,7 @@ public:
 		virtual T3DMatrix transposed() const;
 	//@}
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 		// Inherited via Serializable
 		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
 #endif	

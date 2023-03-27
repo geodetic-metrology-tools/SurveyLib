@@ -6,7 +6,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef T_STATUS_OBJECT_H
 #define T_STATUS_OBJECT_H
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 #	include <Serializer.hpp>
 #endif // USE_SERIALIZER
 
@@ -14,7 +14,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 /**
  * By default the activation status is true.
  */
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 class TStatusObject : public Serializable
 #else
 class TStatusObject
@@ -38,7 +38,7 @@ public:
     //! Set the activation status of the object to *active*
     virtual void setActive(const bool &active) { active_ = active; }
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 	// Inherited via Serializable
 	virtual void serialize(SerializerObject::SerializationHelper &obj) const override
 	{

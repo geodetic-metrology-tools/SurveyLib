@@ -2,6 +2,7 @@
 #include  "TSpatialStatus.h"
 
 
+
 //////////////////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR
 //////////////////////////////////////////////////////////////////////
@@ -69,7 +70,7 @@ int TSpatialStatus::getVariableDimension() const
 }
 
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 void TSpatialStatus::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	obj.addProperty("fSpatialStatus", fSpatialStatus);

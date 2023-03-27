@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2022. All rigths reserved. This software is released under a CERN proprietary software licence.
+© Copyright CERN 2023. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -27,47 +27,46 @@ class SparseMatrix;
 } // namespace Eigen
 
 /**
- * Abstract class featuring Serialization of data structures.
+ * Abstract class featuring Serialization.
  *
  * To use this class, you should override all the virtual methods.
  *
  * The  principle of operation of this class can be explained with two concepts:
- * - using std::enable_if and (custom) type traits to allow proper object type resolution during the compile time
- * - using double dispatch thanks to inner @SerializerObject::SerializationHelper class that dispatches the calls to the
+ * - Using std::enable_if and (custom) type traits to allow proper object type resolution during the compile time.
+ * - Using double dispatch thanks to inner @SerializerObject::SerializationHelper class that dispatches the calls to the
  *		relevant @SerializerObject::addProperty methods, some of which are virtual. This enables to use dynamic (inheritance)
  *		and static (templates) polymorphism at the same time. Then @addProperty methods may dispatch it back to @addProperty
- *		methods or to @addValue methods
+ *		methods or to @addValue methods.
  *
- * @addProperty methods are used to resolve the types properly and allow to create nested objects. These and @addValue methods
+ * @addProperty methods are used to resolve the types properly and allow creating nested objects. These and @addValue methods
  *		are heavily templated in order to resolve all possible types correctly. This makes the API extremly easy to use by only calling
  *		@SerializerObject::SerializationHelper::addProperty method and entire complicated logic is hidden inside of @SerializerObject.
  * @addValue methods are used to pass the value to be serialized or to dispatch it back to @addProperty if it cannot be resolved yet
  * @startObject @endObject @startArray @endArray @startPrimitive @endPrimitive are used to create proper serialized structure
- *		that should be adapted to different serialization standards
+ *		that should be adapted to different serialization standards.
  *
- * For type traits and helpers please refer to `CustomTypeTraits.hpp`
+ * For type traits and helpers please refer to `CustomTypeTraits.hpp`.
  */
 class SerializerObject
 {
 public:
 	/**
-	 * Helper class that is used to benefit from both dynamic and static polymorphism, it allows to call virtual @addProperty methods
+	 * Helper class that is utilizing both dynamic and static polymorphism, it allows to call virtual @addProperty methods
 	 * of @SerializerObject with a templated argument using @SerializerObject::SerializationHelper::addProperty.
 	 */
 	class SerializationHelper
 	{
 	public:
 		/**
-		 * Constructor, calls @SerializerObject::startObject
+		 * Empty constructor
 		 *
-		 * @param name of the object, if empty - a new object without name is assumed that is most likely an element of some container
-		 * @param ser SerializerObject used for serialization
+		 * @param @ser holds the SerializerObject used for serialization.
 		 */
 		SerializationHelper(SerializerObject &ser) : ser(ser) {}
 		/**
-		 * Calls @SerializerObject::endObject
+		 * Empty destructor.
 		 */
-		~SerializationHelper() {}
+		~SerializationHelper() = default;
 
 		/**
 		 * Calls @addProperty methods of @SerializerObject with a templated argument
@@ -87,9 +86,10 @@ public:
 
 public:
 	/**
-	 * Creates a new @SerializerObject::SerializationHelper object
+	 * Creates a new @SerializerObject::SerializationHelper object that should be shared by all the classes writing to the same instance.
 	 *
-	 * @param objectName of the new object/structure, if empty - a new object without name is assumed that is most likely an element of some container
+	 * Even though the @SerializationHelper object is new each time on @SerializerObject::getSerializationHelper call, it takes the current
+	 * @SerializerObject as a constructor argument so the write always goes to the same serialized object.
 	 */
 	SerializationHelper getSerializationHelper() { return SerializationHelper(*this); }
 	/**
@@ -116,7 +116,7 @@ protected:
 
 	// clang-format off
 
-	// Primitive - !Serializable && !pair && !pointer && ((container && is_string) || !container))
+	// Primitive - !Serializable && !pair && !pointer && !c-style-array && !sparce-matrix && ((container && is_string) || !container))
 	template<typename T>
 	typename std::enable_if_t<!is_Serializable<T>::value 
 		&& !is_pair<T>::value 
@@ -190,7 +190,7 @@ protected:
 	/* ************** */
 	/*    ADD_VALUE   */
 	/* ************** */
-	// Helpers to dispatch the types based on the sub-element (pair or container)
+	// Helpers to dispatch the types based on the current and nestey-types (if present, pair or containers)
 
 	// primitive value related
 	virtual void addValue(int value) = 0;
@@ -247,11 +247,9 @@ protected:
 	{
 		for (const auto &t : container)
 			addValue(t);
-			return;
 	}
 
 	// if C-style array
-	// For some reason these two cases (this and upper) cannot be joined with || operator
 	template<typename T>
 	std::enable_if_t<std::is_array_v<T>> 
 		addValue(const T &container)

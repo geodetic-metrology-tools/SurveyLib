@@ -44,7 +44,7 @@ Patterns:
 #include <float.h>
 #include <assert.h>
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 	#include <Serializer.hpp>
 #endif // USE_SERIALIZER
 
@@ -63,7 +63,7 @@ typedef	TReal	Seconds;		// the seconds of an angle
 	@{*/
 
 //!  The TAngle class represents a mathematical angle value.
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 	class TAngle : public Serializable
 #else
 	class TAngle
@@ -93,7 +93,7 @@ public:
     explicit  TAngle(TReal, EUnits = kRadians);
 	//@}
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 	// Inherited via Serializable
 	virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
 #endif // USE_SERIALIZER

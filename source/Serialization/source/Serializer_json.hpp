@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2022. All rigths reserved. This software is released under a CERN proprietary software licence.
+© Copyright CERN 2023. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -11,7 +11,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "Serializer.hpp"
 
 /**
- * The main quirk of this Serializer is that due it is building the tree bottom-up (from the leaves) and when last element
+ * The main quirk of this Serializer is that it is building the tree bottom-up (from the leaves) and when last element
  * on the stack is meant to be finished (@endObject) then it is finally added to the document.
  * Adding is invalidating the previous @rapidjson::Value but thanks to that there is no overhead (it is a move operation).
  */

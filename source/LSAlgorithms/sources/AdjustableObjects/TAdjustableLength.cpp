@@ -57,7 +57,7 @@ bool TAdjustableLength::operator==(const TAdjustableLength &other) const {
 }
 
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 void TAdjustableLength::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	TVAdjustableObject::serialize(obj);

@@ -568,7 +568,7 @@ void TAdjustableHelmertTransformation::reInitialise(){
 }
 
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 void TAdjustableHelmertTransformation::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	TVAdjustableObject::serialize(obj);

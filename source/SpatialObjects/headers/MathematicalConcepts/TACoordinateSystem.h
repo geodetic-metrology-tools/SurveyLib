@@ -22,14 +22,8 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 /*! \ingroup MathematicalConcepts 
 	@{*/
-#ifdef USE_SERIALIZER
-//! Abstract class for Coordonate System
+//! Abstract class for Coordinate System
 class TACoordinateSystem : public TVCoordinateSystem //: public TObject
-#else
-//! Abstract class for Coordonate System
-class TACoordinateSystem : public TVCoordinateSystem //: public TObject
-#endif // USE_SERIALIZER
-
 {
 public:
 	virtual ~TACoordinateSystem() override = default;
@@ -120,7 +114,7 @@ public:
 		virtual TCoordSysFactory::ECoordSys getCoordSysId() const;
 	//@}
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 		// Inherited via Serializable
 		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
 #endif	

@@ -12,11 +12,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TFreeVector.h"
 #include "TSpatialStatus.h"
 
-#ifdef USE_SERIALIZER
-#	include <Serializer.hpp>
-#endif // USE_SERIALIZER
-
-
 /*! 
 	\ingroup AdjustableObjects
 	\brief Adds adjustable information to a point represented by a TPositionVector class.
@@ -98,7 +93,7 @@ public:
 		const std::vector<int> getRelativeUnknIndices() const;
 
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 		// Inherited via Serializable
 		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
 #endif
@@ -120,7 +115,7 @@ public:
 		TAngle				getErrorEllGis() const;
 
 		/// Returns the three axes of the error ellipsoid
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 		struct ErrorEllipsoid : public Serializable
 #else
 		struct ErrorEllipsoid
@@ -138,7 +133,7 @@ public:
 			{
 			}
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 			// Inherited via Serializable
 			virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
 #endif

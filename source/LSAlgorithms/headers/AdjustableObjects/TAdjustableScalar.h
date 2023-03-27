@@ -9,15 +9,10 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <stdexcept>
 #include "TVAdjustableObject.h"
 
-#ifdef USE_SERIALIZER
-#	include <Serializer.hpp>
-#endif // USE_SERIALIZER
-
 /*! 
 	\ingroup AdjustableObjects
 	\brief Adds adjustable information to a Scalar object.
 */
-
 class TAdjustableScalar : public TVAdjustableObject
 {
 public:
@@ -126,7 +121,7 @@ public:
 		*/
 		void reInitialise();
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 		// Inherited via Serializable
 		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
 #endif

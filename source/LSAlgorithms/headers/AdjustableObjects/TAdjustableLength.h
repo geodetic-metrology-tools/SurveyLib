@@ -10,15 +10,10 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TLength.h"
 #include "TVAdjustableObject.h"
 
-#ifdef USE_SERIALIZER
-#	include <Serializer.hpp>
-#endif // USE_SERIALIZER
-
 /*! 
 	\ingroup AdjustableObjects
 	\brief Class providing adjustable related information for a TLength class.
 */
-
 class TAdjustableLength : public TVAdjustableObject
 {
 public:
@@ -125,7 +120,7 @@ public:
 
         bool operator==(const TAdjustableLength &other) const;
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 		// Inherited via Serializable
 		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
 #endif

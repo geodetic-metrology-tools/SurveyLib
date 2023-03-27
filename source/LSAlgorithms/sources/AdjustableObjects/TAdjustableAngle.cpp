@@ -43,7 +43,7 @@ void TAdjustableAngle::reInitialise(){
 }
 
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 void TAdjustableAngle::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	TVAdjustableObject::serialize(obj);

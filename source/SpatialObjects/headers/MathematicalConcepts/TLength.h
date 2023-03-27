@@ -24,13 +24,13 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include	<assert.h>
 #include "Quad.h"
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 #include <Serializer.hpp>
 #endif // USE_SERIALIZER
 
 //!Class Definition
 /// \ingroup MathematicalConcepts
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 class TLength : public Serializable
 #else
 class TLength
@@ -62,7 +62,7 @@ public:
 
 	/*!\name Public Methods*/
 	//@{
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 	// Inherited via Serializable
 	virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
 #endif // USE_SERIALIZER
@@ -209,7 +209,7 @@ inline TReal	TLength::getMMetresValue() const
 	return fValue * 1000;
 }
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 inline void TLength::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	obj.addProperty("fValue", fValue);

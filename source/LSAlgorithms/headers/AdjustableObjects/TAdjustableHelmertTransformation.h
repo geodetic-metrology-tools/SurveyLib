@@ -366,7 +366,7 @@ class TAdjustableHelmertTransformation : public TVAdjustableObject
 		/// Returns the called provisional rotation i (X [0], Y [1], Z [3])
 		const TAngle& getProvRotation(int axis) const;
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 		// Inherited via Serializable
 		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
 #endif

@@ -143,7 +143,7 @@ bool TACoordSysVector::isInitialise() const
 }
 
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 void TACoordSysVector::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	obj.addProperty("fVector", fVector);

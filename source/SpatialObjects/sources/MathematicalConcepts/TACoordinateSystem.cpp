@@ -200,8 +200,7 @@ return;
 }
 
 
-
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 void TACoordinateSystem::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	TVCoordinateSystem::serialize(obj);

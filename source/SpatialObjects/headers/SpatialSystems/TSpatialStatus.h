@@ -20,7 +20,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #pragma once
 #endif // _MSC_VER >= 1000
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 #	include <Serializer.hpp>
 #endif // USE_SERIALIZER
 
@@ -32,7 +32,7 @@ class  TVReferenceFrame;
 
 /*!\ingroup SpatialObjectsAndSystems
 	@{*/
-#ifdef USE_SERIALIZER
+#if	USE_SERIALIZER
 //! Class storing the statuses of objects related to a 3D position
 class TSpatialStatus : public Serializable //: public TObject
 #else
@@ -95,7 +95,7 @@ public:
 		virtual void			setObjectStatus(ESpatialStatus s) {fSpatialStatus = s; return;}
 
 	//@}
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 		// Inherited via Serializable
 		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
 #endif

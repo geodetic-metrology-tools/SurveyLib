@@ -44,7 +44,7 @@ void TAdjustableScalar::reInitialise(){
 
 
 
-#ifdef USE_SERIALIZER
+#if USE_SERIALIZER
 void TAdjustableScalar::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	TVAdjustableObject::serialize(obj);
