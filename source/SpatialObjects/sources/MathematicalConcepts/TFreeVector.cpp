@@ -32,6 +32,15 @@ TFreeVector::TFreeVector(const TReal& x, const TReal& y, const TReal&z, TCoordSy
 
 }
 
+TFreeVector::TFreeVector(const TPositionVector& p)
+{
+	setX(0, p.getX());
+	setX(1, p.getY());
+	setX(2, p.getZ());
+	setCoordSys(p.getCoordSys());
+}
+
+
 TFreeVector::TFreeVector(const TFreeVector& original)
 {	// copy constructor
 	setX(0, original.getX(0));
