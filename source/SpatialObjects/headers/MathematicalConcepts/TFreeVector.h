@@ -1,6 +1,6 @@
 // TFreeVector.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /** 3D Vector used as a free vector only affected by rotations and scaling*/
@@ -24,9 +24,9 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 class TDouble;
 class TScalar;
+class TPositionVector;
 
 #include "TACoordSysVector.h"
-
 //
 //
 ////////////////////////////////////////////////////////////////
@@ -44,13 +44,16 @@ public:
 	/*!\name Constructors and Destructors */
 	//@{
 		//!Default Constructor 
-		TFreeVector(TCoordSysFactory::ECoordSys en);
+		TFreeVector(TCoordSysFactory::ECoordSys);
 
 		//!Default Constructor 
 		TFreeVector();
 	
 		//!Constructor taking 3 TReal
 		TFreeVector(const TReal&, const TReal&, const TReal&, TCoordSysFactory::ECoordSys);
+
+		//! Constructor taking a Position Vector
+		TFreeVector(const TPositionVector&);
 
 		//!Copy Constructor 
 		TFreeVector( const TFreeVector&);

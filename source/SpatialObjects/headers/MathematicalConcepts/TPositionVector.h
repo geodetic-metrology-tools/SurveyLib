@@ -46,6 +46,9 @@ public:
 		//!Constructor taking 3 TReal
 		TPositionVector(const TReal&, const TReal&, const TReal&,TCoordSysFactory::ECoordSys);
 
+		//! Constructor taking a FreeVector
+		TPositionVector(const TFreeVector&);
+
 		//!Copy Constructor 
 		TPositionVector( const TPositionVector&);
 

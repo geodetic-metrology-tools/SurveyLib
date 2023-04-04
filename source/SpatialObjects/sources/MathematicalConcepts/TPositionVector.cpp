@@ -18,7 +18,13 @@ TPositionVector::TPositionVector(const TReal& x, const TReal& y, const TReal& z,
 	setCoordSys(en);
 }
 
-
+TPositionVector::TPositionVector(const TFreeVector &p)
+{
+	setX(0, p.getX());
+	setX(1, p.getY());
+	setX(2, p.getZ());
+	setCoordSys(p.getCoordSys());
+}
 
 TPositionVector::TPositionVector(  const TPositionVector& original )
 {	// copy constructor
