@@ -17,7 +17,8 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\brief Adds adjustable information to a TransformParameters class. 
 	Impementation detail: first translations, then rotations and scale as last for the unknown indices assignment.
 */
-class TAdjustableHelmertTransformation : public TVAdjustableObject { 
+class TAdjustableHelmertTransformation : public TVAdjustableObject
+{
 	public:
 
 
@@ -365,7 +366,11 @@ class TAdjustableHelmertTransformation : public TVAdjustableObject {
 		/// Returns the called provisional rotation i (X [0], Y [1], Z [3])
 		const TAngle& getProvRotation(int axis) const;
 
-		
+#if USE_SERIALIZER
+		// Inherited via Serializable
+		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif
+
 	private:
 
 		//Number of the line in the input file where the tranformation was introduced

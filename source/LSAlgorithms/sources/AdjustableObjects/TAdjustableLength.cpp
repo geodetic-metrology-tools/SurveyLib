@@ -2,6 +2,7 @@
 #include "TAdjustableLength.h"
 #include "TConstants.h"
 
+
 TAdjustableLength::TAdjustableLength(const TLength& angleValue, bool isFixed, const std::string& name) :
    fName(name),
    ifFixed(isFixed),
@@ -54,3 +55,19 @@ bool TAdjustableLength::operator==(const TAdjustableLength &other) const {
         uidx == other.uidx &&
         fName == other.fName;
 }
+
+
+#if USE_SERIALIZER
+void TAdjustableLength::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	TVAdjustableObject::serialize(obj);
+	obj.addProperty("fName", fName);
+	obj.addProperty("fProvisionalValue", fProvisionalValue.getMetresValue());
+	obj.addProperty("fEstimatedValue", fEstimatedValue.getMetresValue());
+	obj.addProperty("fCorrection", fCorrection.getMetresValue());
+	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision.getMetresValue());
+
+	obj.addProperty("ifFixed", ifFixed);
+	obj.addProperty("uidx", uidx);
+}
+#endif // USE_SERIALIZER

@@ -28,10 +28,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 /*! \ingroup MathematicalConcepts
 	@{*/
-
-//! 3D Vector used as a position vector
-class  TPositionVector : public TACoordSysVector//: public TObject  
-
+	class TPositionVector : public TACoordSysVector
 {
 public:
 
@@ -117,7 +114,6 @@ public:
 		//!set the Phi coordinate of a vector in a geodetic Coordinate System return true if X is defined
 		bool setPhiEllipsoid(const TAngle&);
 	//@}
-	
 	
 private:
 

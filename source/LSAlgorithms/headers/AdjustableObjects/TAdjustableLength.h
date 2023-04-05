@@ -14,9 +14,9 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\ingroup AdjustableObjects
 	\brief Class providing adjustable related information for a TLength class.
 */
-class TAdjustableLength: public TVAdjustableObject{
+class TAdjustableLength : public TVAdjustableObject
+{
 public:
-
 	/*!@name Constructors */
 	//@{
 		/*!
@@ -119,6 +119,11 @@ public:
 	//@}
 
         bool operator==(const TAdjustableLength &other) const;
+
+#if USE_SERIALIZER
+		// Inherited via Serializable
+		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif
 
 private:
 	TLength					fProvisionalValue; /*!< length provisional value. */

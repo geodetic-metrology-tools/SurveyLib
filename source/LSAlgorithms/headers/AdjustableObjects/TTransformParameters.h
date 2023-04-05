@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -9,11 +9,21 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <TAngle.h>
 #include "TLength.h"
 
+#if USE_SERIALIZER
+#	include <Serializer.hpp>
+#endif // USE_SERIALIZER
+
+
 /*!
 	\ingroup LocalTransformations
 	\brief Structure which stores parameters of an helmert transformation.
 */
-struct TransformParameters{
+#if USE_SERIALIZER
+struct TransformParameters : public Serializable
+#else
+struct TransformParameters
+#endif // USE_SERIALIZER
+{
 	TAngle omega; //!< Rotation about the X axis
 	TAngle phi;  //!< Rotation about the Y axis
 	TAngle kappa; //!< Rotation about the Z axis 
@@ -25,6 +35,11 @@ struct TransformParameters{
 	TReal scale; //!< The unitless scale factor
 
 	TransformParameters() : omega(TAngle(0.0)), phi(TAngle(0.0)), kappa(TAngle(0.0)), tX(TLength(0.0)), tY(TLength(0.0)), tZ(TLength(0.0)), scale(TReal(1.0)) {};
+
+#if USE_SERIALIZER
+	// Inherited via Serializable
+	virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif
 
 	/// Overlading  comparition operator for TransformParameters
 	bool operator==(const TransformParameters& p) {
@@ -92,5 +107,21 @@ struct TransformParameters{
 		scale = TReal(1.0);
 	}
 };
+
+#if USE_SERIALIZER
+// Inherited via Serializable
+inline void TransformParameters::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	obj.addProperty("kappa", kappa.getRadiansValue());
+	obj.addProperty("omega", omega.getRadiansValue());
+	obj.addProperty("phi", phi.getRadiansValue());
+
+	obj.addProperty("scale", scale);
+
+	obj.addProperty("tX", tX.getMetresValue());
+	obj.addProperty("tY", tY.getMetresValue());
+	obj.addProperty("tZ", tZ.getMetresValue());
+};
+#endif
 
 #endif

@@ -566,3 +566,85 @@ void TAdjustableHelmertTransformation::reInitialise(){
 	fEstPrecisionRotation[1].setRadiansValue(0.0);
 	fEstPrecisionRotation[2].setRadiansValue(0.0);
 }
+
+
+#if USE_SERIALIZER
+void TAdjustableHelmertTransformation::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	TVAdjustableObject::serialize(obj);
+	obj.addProperty("fCovarianceRotation", fCovarianceRotation);
+	obj.addProperty("fCovarianceScl", fCovarianceScl);
+	obj.addProperty("fCovarianceTranslation", fCovarianceTranslation);
+	obj.addProperty("fCovarianceTrRot", fCovarianceTrRot);
+	obj.addProperty("fEstParameter",
+		std::vector<double>{
+			fEstParameter.tX.getMetresValue(),
+			fEstParameter.tY.getMetresValue(),
+			fEstParameter.tZ.getMetresValue(),
+			fEstParameter.kappa.getRadiansValue(),
+			fEstParameter.omega.getRadiansValue(),
+			fEstParameter.phi.getRadiansValue(),
+			fEstParameter.scale,
+	});
+	
+	obj.addProperty("fEstPrecision",
+		std::vector<double>{
+			fEstPrecisionTranslation[0].getMetresValue(),
+			fEstPrecisionTranslation[1].getMetresValue(),
+			fEstPrecisionTranslation[2].getMetresValue(),
+			fEstPrecisionRotation[0].getRadiansValue(),
+			fEstPrecisionRotation[1].getRadiansValue(),
+			fEstPrecisionRotation[2].getRadiansValue(),
+			fEstPrecisionScale,
+		});
+
+	obj.addProperty("fixedTranfParam",
+		std::vector<bool>{
+			(bool)fixedTranslations[0],
+			(bool)fixedTranslations[1],
+			(bool)fixedTranslations[2],
+			(bool)fixedRotations[0],
+			(bool)fixedRotations[1],
+			(bool)fixedRotations[2],
+			(bool)fixedScale[0],
+	});
+
+	obj.addProperty("fProvParameter",
+		std::vector<double>{
+			fProvParameter.tX.getMetresValue(),
+			fProvParameter.tY.getMetresValue(),
+			fProvParameter.tZ.getMetresValue(),
+			fProvParameter.kappa.getRadiansValue(),
+			fProvParameter.omega.getRadiansValue(),
+			fProvParameter.phi.getRadiansValue(),
+			fProvParameter.scale,
+		});
+
+	obj.addProperty("fTranfParamStandDev",
+		std::vector<double>{
+			fTransStandDev[0].getMetresValue(),
+			fTransStandDev[1].getMetresValue(),
+			fTransStandDev[2].getMetresValue(),
+			fRotStandDev[0].getRadiansValue(),
+			fRotStandDev[1].getRadiansValue(),
+			fRotStandDev[2].getRadiansValue(),
+			fScaleStandDev,
+		});
+
+	obj.addProperty("line", line);
+	obj.addProperty("name", name);
+
+	obj.addProperty("uidx",
+		std::vector<int>{
+			uidx_trans[0],
+			uidx_trans[1],
+			uidx_trans[2],
+			uidx_rot[0],
+			uidx_rot[1],
+			uidx_rot[2],
+			uidx_scale,
+		});
+}
+#endif // USE_SERIALIZER
+
+

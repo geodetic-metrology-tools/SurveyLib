@@ -504,3 +504,11 @@ TReal TAngle::getDeciDegsValue() const
 	}
 	return (gValue * RAD2DEG);
 }
+
+
+#if USE_SERIALIZER
+void TAngle::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	obj.addProperty("fValue", fValue);
+}
+#endif // USE_SERIALIZER

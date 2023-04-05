@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -14,7 +14,8 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\ingroup AdjustableObjects
 	\brief Class providing adjustable related information for a TAngle class.
 */
-class TAdjustableAngle: public TVAdjustableObject{
+class TAdjustableAngle : public TVAdjustableObject
+{
 public:
 
 	/*!@name Constructors */
@@ -117,6 +118,10 @@ public:
 		void reInitialise();
 
 	//@}
+#if USE_SERIALIZER
+		// Inherited via Serializable
+		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif
 
 private:
 	TAngle					fProvisionalValue; /*!< Angle provisional value. */

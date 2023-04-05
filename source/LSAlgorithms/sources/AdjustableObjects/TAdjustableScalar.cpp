@@ -41,3 +41,20 @@ void TAdjustableScalar::reInitialise(){
 	fCorrection = 0.0;
 	fEstimatedPrecision = 0.0;
 }
+
+
+
+#if USE_SERIALIZER
+void TAdjustableScalar::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	TVAdjustableObject::serialize(obj);
+	obj.addProperty("fName", fName);
+	obj.addProperty("fProvisionalValue", fProvisionalValue);
+	obj.addProperty("fEstimatedValue", fEstimatedValue);
+	obj.addProperty("fCorrection", fCorrection);
+	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
+
+	obj.addProperty("ifFixed", isScalarFixed);
+	obj.addProperty("uidx", uidx);
+}
+#endif // USE_SERIALIZER

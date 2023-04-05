@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -13,8 +13,10 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\ingroup AdjustableObjects
 	\brief Adds adjustable information to a Scalar object.
 */
-class TAdjustableScalar : public TVAdjustableObject {
+class TAdjustableScalar : public TVAdjustableObject
+{
 public:
+
 	/*!@name Constructor */
 	//@{
 		/*!
@@ -119,7 +121,10 @@ public:
 		*/
 		void reInitialise();
 
-
+#if USE_SERIALIZER
+		// Inherited via Serializable
+		virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif
 	//@}
 
 private:

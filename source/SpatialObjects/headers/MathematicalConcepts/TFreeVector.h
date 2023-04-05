@@ -33,12 +33,9 @@ class TPositionVector;
 
 /*! \ingroup MathematicalConcepts
 	@{*/
-
-//! 3D Vector used as a free vector
-class  TFreeVector : public TACoordSysVector   
+class TFreeVector : public TACoordSysVector
 {
 public:
-	
 	
 
 	/*!\name Constructors and Destructors */
@@ -115,7 +112,6 @@ public:
 
 		TReal dot(const TFreeVector& b) const;
 	//@}
-
 
 private:
 

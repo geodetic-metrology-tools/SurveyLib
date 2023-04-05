@@ -41,3 +41,19 @@ void TAdjustableAngle::reInitialise(){
 	fEstimatedPrecision.setRadiansValue(0.0);
 	fCorrection.setRadiansValue(0.0);
 }
+
+
+#if USE_SERIALIZER
+void TAdjustableAngle::serialize(SerializerObject::SerializationHelper &obj) const
+{
+	TVAdjustableObject::serialize(obj);
+	obj.addProperty("fName", fName);
+	obj.addProperty("fProvisionalValue", fProvisionalValue.getRadiansValue());
+	obj.addProperty("fEstimatedValue", fEstimatedValue.getRadiansValue());
+	obj.addProperty("fCorrection", fCorrection.getRadiansValue());
+	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision.getRadiansValue());
+
+	obj.addProperty("ifFixed", ifFixed);
+	obj.addProperty("uidx", uidx);
+}
+#endif // USE_SERIALIZER
