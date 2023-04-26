@@ -82,7 +82,7 @@ TReal TAdjustablePoint::getStandDev(int d)const{
 	assert3D(d);
 	if(!isnotanumber( fStandardDeviations[d]))
 		return fStandardDeviations[d];
-	throw std::runtime_error("Standard deviation of the point not assigned");
+	throw std::runtime_error("Standard deviation of the point not assigned. Point " + getName());
 }
 
 TLength	TAdjustablePoint::getErrorEllMajorAxis() const
@@ -271,7 +271,7 @@ void TAdjustablePoint::setCorrection(int idx, TReal value) {
 		}
 	}
 
-	throw std::logic_error("Invalid unknown index in parameter access.");
+	throw std::logic_error("Invalid unknown index in parameter access. Point " + getName());
 }
 
 	/*! Sets the estimated precision after calculation */
@@ -290,7 +290,7 @@ void	TAdjustablePoint::setEstimatedPrecision(int idx, TReal value){
 			return;
 		}
 	}
-	throw std::logic_error("Invalid unknown index in parameter access.");
+	throw std::logic_error("Invalid unknown index in parameter access. Point " + getName());
 }
 
 /*! Sets the XY covariance after calculation */
@@ -299,7 +299,7 @@ void	TAdjustablePoint::setXYEstimatedCovariance(TReal value){
 		if (!(fixedState[0]) && !(fixedState[1]))
 			fCovariance.setX(TLength(value));
 		else
-			throw std::logic_error("Point must be variable in both X and Y.");	
+			throw std::logic_error("Point must be variable in both X and Y. Point " + getName());	
 }
 
 /*! Sets the YZ covariance after calculation  */
@@ -307,7 +307,7 @@ void	TAdjustablePoint::setYZEstimatedCovariance(TReal value){
 		if (!(fixedState[1]) && !(fixedState[2]))
 			fCovariance.setY(TLength(value));
 		else
-			throw std::logic_error("Point must be variable in both Y and Z.");
+			throw std::logic_error("Point must be variable in both Y and Z. Point " + getName());
 }
 
 /*! Sets the XZ covariance after calculation 	
@@ -318,7 +318,7 @@ void	TAdjustablePoint::setXZEstimatedCovariance(TReal value){
 		if (!(fixedState[0]) && !(fixedState[2]))
 			fCovariance.setZ(TLength(value));
 		else
-			throw std::logic_error("Point must be variable in both X and Z.");
+			throw std::logic_error("Point must be variable in both X and Z. Point " + getName());
 }
 
 /*! 
@@ -328,7 +328,7 @@ void	TAdjustablePoint::setXZEstimatedCovariance(TReal value){
 */
 void TAdjustablePoint::setFirstUidx(int idx) {
 	if (isFixed())
-		throw std::logic_error("Trying to assign unknown index to a fixed point.");
+		throw std::logic_error("Trying to assign unknown index to a fixed point. Point " + getName());
 
 	for (int i = 0; i < 3; i++)
 		if (!fixedState[i])
@@ -386,14 +386,14 @@ int TAdjustablePoint::getFirstUidx() const {
 	for (int i = 0; i < 3; i++)
 		if (!fixedState[i])
 			return uidx[i];
-	throw std::logic_error("Trying to get unknown index from fixed coordinate.");
+	throw std::logic_error("Trying to get unknown index from fixed coordinate. Point " + getName());
 }
 
 int TAdjustablePoint::getLastUidx() const {
 		for (int i = 2; i >= 0; i--)
 			if (!fixedState[i])
 				return uidx[i];
-		throw std::logic_error("Trying to get unknown index from fixed coordinate.");
+		throw std::logic_error("Trying to get unknown index from fixed coordinate. Point " + getName());
 }
 
 int TAdjustablePoint::getCoordinateUnknIndex(int d) const {
@@ -401,7 +401,7 @@ int TAdjustablePoint::getCoordinateUnknIndex(int d) const {
 	if (!fixedState[d])
 		return uidx[d];
 	else
-		throw std::logic_error("Trying to get unknown index from fixed coordinate.");
+		throw std::logic_error("Trying to get unknown index from fixed coordinate. Point " + getName());
 }
 
 const std::vector<int> TAdjustablePoint::getRelativeUnknIndices() const
@@ -477,7 +477,7 @@ void TAdjustablePoint::transformEstimatedValue(){
 
 TReal TAdjustablePoint::getHEstValue() const{
 	if(fReferential == TRefSystemFactory::ERefFrame::kLocalRefFrame)
-		throw std::runtime_error("Point is defined in local system, no geoid assigned.");
+		throw std::runtime_error("Point is defined in local system, no geoid assigned. Point " + getName());
 
 	TPositionVector pvEst = fEstimatedValue;
 	if(fReferential == TRefSystemFactory::ERefFrame::kCERNXYHsSphereSPS)

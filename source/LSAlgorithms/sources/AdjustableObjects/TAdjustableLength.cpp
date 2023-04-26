@@ -20,7 +20,7 @@ TAdjustableLength TAdjustableLength::createUninitialized(const std::string& name
 
 void TAdjustableLength::setFirstUidx(int idx) {
 	if (isFixed())
-		throw std::logic_error("Trying to assign unknown index to a fixed angle.");
+		throw std::logic_error("Trying to assign unknown index to a fixed length. Length " + getName());
 	uidx = idx;
 }
 
@@ -30,14 +30,14 @@ void TAdjustableLength::setCorrection(int idx, TReal value) {
       fEstimatedValue.setMetresValue(fEstimatedValue.getMetresValue() + value);
 	}
 	else
-		throw std::logic_error("Invalid unknown index in parameter access.");
+		throw std::logic_error("Invalid unknown index in parameter access. Length " + getName());
 }
 
 void TAdjustableLength::setEstimatedPrecision(int idx, TReal ep) {
 	if (uidx == idx)
       fEstimatedPrecision.setMetresValue(ep);
 	else
-		throw std::logic_error("Invalid unknown index in parameter access.");
+		throw std::logic_error("Invalid unknown index in parameter access. Length " + getName());
 }
 
 void TAdjustableLength::reInitialise(){

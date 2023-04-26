@@ -17,7 +17,7 @@ TAdjustableAngle TAdjustableAngle::createUninitialized(const std::string& name){
 
 void TAdjustableAngle::setFirstUidx(int idx) {
 	if (isFixed())
-		throw std::logic_error("Trying to assign unknown index to a fixed angle.");
+		throw std::logic_error("Trying to assign unknown index to a fixed angle. Angle " + getName());
 	uidx = idx;
 }
 
@@ -27,14 +27,14 @@ void TAdjustableAngle::setCorrection(int idx, TReal value) {
 		fEstimatedValue.setRadiansValue(fEstimatedValue.getRadiansValue() + value);
 	}
 	else
-		throw std::logic_error("Invalid unknown index in parameter access.");
+		throw std::logic_error("Invalid unknown index in parameter access. Angle " + getName());
 }
 
 void TAdjustableAngle::setEstimatedPrecision(int idx, TReal ep) {
 	if (uidx == idx)
 		fEstimatedPrecision.setRadiansValue(ep);
 	else
-		throw std::logic_error("Invalid unknown index in parameter access.");
+		throw std::logic_error("Invalid unknown index in parameter access. Angle " + getName());
 }
 
 void TAdjustableAngle::reInitialise(){
