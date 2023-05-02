@@ -18,12 +18,16 @@ TLSUniversalMtdComputer::~TLSUniversalMtdComputer()
 
 bool TLSUniversalMtdComputer::computeResults(TLSInputMatrices *im, TLSResultsMatrices *rm)
 {
+	bool result = true;
 	if (rm->getSolutionVectByConst()->size() != 0)
 	{
-		return computeResultsMatrices(im, rm);
+		result = computeResultsMatrices(im, rm);
 	}
-
-	return false;
+	else
+	{
+		logWarning() << "Number of unknowns = 0.";
+	}
+	return result;
 }
 
 bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSResultsMatrices *rm)
