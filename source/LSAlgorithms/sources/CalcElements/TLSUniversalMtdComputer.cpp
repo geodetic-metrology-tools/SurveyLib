@@ -18,7 +18,7 @@ TLSUniversalMtdComputer::~TLSUniversalMtdComputer()
 
 bool TLSUniversalMtdComputer::computeResults(TLSInputMatrices *im, TLSResultsMatrices *rm)
 {
-	bool result;
+	bool result = true;
 	if (rm->getSolutionVectByConst()->size() != 0)
 	{
 		result = computeResultsMatrices(im, rm);
@@ -26,7 +26,6 @@ bool TLSUniversalMtdComputer::computeResults(TLSInputMatrices *im, TLSResultsMat
 	else
 	{
 		logWarning() << "Number of unknowns = 0.";
-		result = true;
 	}
 	return result;
 }
