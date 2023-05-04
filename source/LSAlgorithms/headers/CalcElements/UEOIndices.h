@@ -10,14 +10,14 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <Serializer.hpp>
 #endif // USE_SERIALIZER
 
-// Definition of the structure holding the 4 indices : 
-// unknown index, equation index, observation index and constraint index
+// Definition of the structure holding the 5 indices : 
+// unknown index, equation index, observation index, constarint index, (unknown parameter) weights index
 
 //matrix index type
 typedef int MatrixIndex;
 
 
-//structure for unknowns, equations, observations and constraints indicies
+//structure for unknowns, equations, observations, constraints, weights indicies
 #if USE_SERIALIZER
 struct UEOIndices : public Serializable
 #else
@@ -25,13 +25,14 @@ struct UEOIndices
 #endif // USE_SERIALIZER
 {
 	UEOIndices() = default;
-	UEOIndices(MatrixIndex UIndex, MatrixIndex EIndex, MatrixIndex OIndex, MatrixIndex CIndex) : UIndex(UIndex), EIndex(EIndex), OIndex(OIndex), CIndex(CIndex)
+	UEOIndices(MatrixIndex UIndex, MatrixIndex EIndex, MatrixIndex OIndex, MatrixIndex CIndex, MatrixIndex WIndex) : UIndex(UIndex), EIndex(EIndex), OIndex(OIndex), CIndex(CIndex), WIndex(WIndex)
 	{}
 
 	MatrixIndex UIndex;
 	MatrixIndex EIndex;
 	MatrixIndex OIndex;
 	MatrixIndex CIndex;
+	MatrixIndex WIndex;
 
 #if USE_SERIALIZER
 	// Inherited via Serializable

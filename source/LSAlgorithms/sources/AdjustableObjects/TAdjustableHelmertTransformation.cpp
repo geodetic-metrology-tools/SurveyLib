@@ -1,6 +1,8 @@
 #include "TAdjustableHelmertTransformation.h"
 
 #include <stdexcept>
+#include <Eigen/Dense>
+
 
 TAdjustableHelmertTransformation::TAdjustableHelmertTransformation()
 {
@@ -133,8 +135,36 @@ TReal TAdjustableHelmertTransformation::getScaleStandDev() const
 	return fScaleStandDev;
 }
 
-bool TAdjustableHelmertTransformation::hasRotationStandDev(int d) const
+void TAdjustableHelmertTransformation::setApriCovar(TDenseMatrix apriCovar)
 {
+	if (!((apriCovar.cols() == getNumUnkn()) && (apriCovar.rows() == getNumUnkn())))
+	{
+		throw std::logic_error("A-priori covariance matrix of frame " + getName() + " must have the same dimension as the degree of freedom of that frame.");
+	}
+	else
+	{
+		// test for symmetry and positive definiteness
+		if (apriCovar.isApprox(apriCovar.transpose()))
+		{
+			if (apriCovar.fullPivLu().isInvertible())
+			{
+				fApriCovar = apriCovar;
+				hasAprioriCovariance = true;
+			}
+			else
+			{
+				throw std::logic_error("A-priori covariance matrix of frame " + getName() + " is not positive definite.");
+			}
+		}
+		else
+		{
+			throw std::logic_error("A-priori covariance matrix of frame " + getName() + " is not symmetric.");
+		}
+	}
+}
+
+
+bool TAdjustableHelmertTransformation::hasRotationStandDev(int d) const{
 	assert3D(d);
 	return (!isnotanumber(fRotStandDev[d]));
 }

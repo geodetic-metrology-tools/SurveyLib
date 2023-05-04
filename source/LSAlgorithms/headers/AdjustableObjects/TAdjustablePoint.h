@@ -78,15 +78,25 @@ public:
 	/// Sets a constant reference on the provisional value of the position vector
 	void setProvisionalValue(const TPositionVector &pointProv) { fProvisionalValue = pointProv; };
 
-	/// Sets the covariance matrix
-	void setCovarianceMatrix(const Eigen::Matrix3d &covar)
-	{
-		bool hasNan = (covar.array().isNaN()).any();
-		if (hasNan)
-			throw std::logic_error("Attempting to set invalid covariance matrix for point " + getName());
-		fCovarianceMatrix = covar;
-		fCovarianceMatrixIsSet = true;
-	};
+		/// Sets the covariance matrix
+    void setCovarianceMatrix(const TDenseMatrix& covar) 
+    {
+        bool hasNan = (covar.array().isNaN()).any();
+        if (hasNan)
+            throw std::logic_error("Attempting to set invalid covariance matrix for point " + getName());
+        fCovarianceMatrix = covar;
+        fCovarianceMatrixIsSet = true;
+    };
+
+		void setApriCovar(TDenseMatrix apriCovar);
+		TDenseMatrix getApriCovar() { return fApriCovar; };
+		// 
+		void setFirstWeightIndex(int firstIndex) { fFirstWeightIndex = firstIndex; };
+		int getFirstWeightIndex() { return fFirstWeightIndex; };
+		// indicating if a apriori covariance matrix is associated
+		bool hasAprioriCovariance{false};
+
+
 
 	/*!
 		\brief Calculates and \returns the number of unknowns that are added to the adjustment by this point.
@@ -348,6 +358,10 @@ protected:
 			throw std::logic_error("Covariance of point" + getName() + " is not set.");
 		}
 	};
+
+	TDenseMatrix fApriCovar;
+	// like the equation index for observations, this are the equation indices for the "observation" of the parameter deviation that gets penalized with the parameter weight
+	int fFirstWeightIndex{-1};
 
 	/*!Private constructor for creating uninitialized object	*/
 	TAdjustablePoint(const std::string &name);

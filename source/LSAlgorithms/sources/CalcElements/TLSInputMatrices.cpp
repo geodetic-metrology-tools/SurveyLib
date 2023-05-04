@@ -21,24 +21,66 @@ void TLSInputMatrices::initMatrices(UEOIndices ueoi)
 
 	fUEOIndices = ueoi;
 
-	firstDesignMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.EIndex, fUEOIndices.UIndex);
-	secondDesignMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.EIndex, fUEOIndices.OIndex);
-	secondDesignBlockDiagInvMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.OIndex, fUEOIndices.EIndex);
-	fCnstrFirstDesignMtrx = std::make_unique<TSparseMatrix>(fUEOIndices.CIndex, fUEOIndices.UIndex);
-	weightMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.OIndex, fUEOIndices.OIndex);
-	weightInvMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.OIndex, fUEOIndices.OIndex);
-	weightUnkMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.UIndex, fUEOIndices.UIndex);
+	fGlobalMisclosureVector = std::make_unique<TVector>(fUEOIndices.EIndex + fUEOIndices.WIndex);
 
-	fMisclosureVector = std::make_unique<TVector>(fUEOIndices.EIndex);
+	globalFirstDesignMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.EIndex + fUEOIndices.WIndex, fUEOIndices.UIndex);
+	globalSecondDesignMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.EIndex + fUEOIndices.WIndex, fUEOIndices.OIndex + fUEOIndices.WIndex);
+	globalSecondDesignBlockDiagInvMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.EIndex + fUEOIndices.WIndex, fUEOIndices.OIndex + fUEOIndices.WIndex);
+	globalWeightMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.OIndex + fUEOIndices.WIndex, fUEOIndices.OIndex + fUEOIndices.WIndex);
+	globalWeightInvMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.OIndex + fUEOIndices.WIndex, fUEOIndices.OIndex + fUEOIndices.WIndex);
+
 	fCnstrMisclosureVector = std::make_unique<TVector>(fUEOIndices.CIndex);
+	fCnstrFirstDesignMtrx = std::make_unique<TSparseMatrix>(fUEOIndices.CIndex, fUEOIndices.UIndex);
 
 }
+
+
 
 bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try {
 	if (0 <= row && row < fUEOIndices.EIndex && 0 <= column && column < fUEOIndices.UIndex)
-		firstDesignMatrix->coeffRef(row,column) = coeff;
+		globalFirstDesignMatrix->coeffRef(row,column) = coeff;
+	} catch(...) {
+		return false;
+	}
+	return true;
+}
+bool TLSInputMatrices::setWeightUnkMtrxBlock(MatrixIndex startRow, TDenseMatrix block)
+{
+	if (block.cols() != block.rows())
+	{
+		throw std::runtime_error("Cannot insert block in weight first design matrix - Block is too big.");
+	}
+	if ((fUEOIndices.WIndex < startRow + block.rows())||(fUEOIndices.WIndex < startRow + block.cols()))
+	{
+		throw std::runtime_error("Cannot insert block in weight first design matrix - Block is too big.");
+	}
+
+	// set its inverse
+	if (!block.fullPivHouseholderQr().isInvertible())
+	{
+		throw std::runtime_error("Block of weight matrix has to be invertible");
+	}
+	TDenseMatrix blockInverse = block.fullPivHouseholderQr().inverse();
+	for (int row = 0; row < block.rows(); row++)
+	{
+		for (int col = 0; col < block.cols(); col++)
+		{
+			setWeightUnkMtrxElement(startRow + row, startRow + col, block(row, col));
+			setWeightUnkInvMtrxElement(startRow + row, startRow + col, blockInverse(row, col));
+		}
+	}
+
+
+
+	return true;
+}
+bool TLSInputMatrices::setWeightsFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
+{
+	try {
+		if (0 <= row && row < fUEOIndices.WIndex && 0 <= column && column < fUEOIndices.UIndex)
+			globalFirstDesignMatrix->coeffRef(row + fUEOIndices.EIndex, column) = coeff;
 	} catch(...) {
 		return false;
 	}
@@ -49,7 +91,7 @@ bool TLSInputMatrices::addFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 {
 	try {
 	if (0 <= row && row < fUEOIndices.EIndex && 0 <= column && column < fUEOIndices.UIndex)
-		firstDesignMatrix->coeffRef(row,column) += coeff;
+		globalFirstDesignMatrix->coeffRef(row,column) += coeff;
 	} catch(...) {
 		return false;
 	}
@@ -65,7 +107,7 @@ bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex
 		{
 			for (int col = 0; col < block.cols(); col++)
 			{
-				secondDesignMatrix->insert(firstIndex + row, secondIndex + col) = block(row, col);
+				globalSecondDesignMatrix->insert(firstIndex + row, secondIndex + col) = block(row, col);
 			}
 		}
 		// check if the block is square and if it is located on the diagonal, and if all previous blocks were also block-diag
@@ -78,7 +120,7 @@ bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex
 			{
 				for (int col = 0; col < dim; col++)
 				{
-					secondDesignBlockDiagInvMatrix->insert(firstIndex + row, secondIndex + col) = block_inverse(row, col);
+					globalSecondDesignBlockDiagInvMatrix->insert(firstIndex + row, secondIndex + col) = block_inverse(row, col);
 				}
 			}
 		}
@@ -101,25 +143,10 @@ bool TLSInputMatrices::setSecondDgnMtrxToMinusIdentity()
 	// set the second design matrix and its inverse to minus identity
 	try
 	{
-		secondDesignMatrix->setIdentity();
-		*secondDesignMatrix *= -1.0;
-		secondDesignBlockDiagInvMatrix->setIdentity();
-		*secondDesignBlockDiagInvMatrix *= -1.0;
-		secondDesignMatrixIsBlockDiag = true;
-	}
-	catch (...)
-	{
-		return false;
-	}
-	return true;
-}
-
-bool TLSInputMatrices::resetSecondDgnMtrx(UEOIndices ueoi)
-{
-	try
-	{
-		secondDesignMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.EIndex, fUEOIndices.OIndex);
-		secondDesignBlockDiagInvMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.OIndex, fUEOIndices.EIndex);
+		globalSecondDesignMatrix->setIdentity();
+		*globalSecondDesignMatrix *= -1.0;
+		globalSecondDesignBlockDiagInvMatrix->setIdentity();
+		*globalSecondDesignBlockDiagInvMatrix *= -1.0;
 		secondDesignMatrixIsBlockDiag = true;
 	}
 	catch (...)
@@ -160,18 +187,29 @@ bool TLSInputMatrices::resetCnstrMisclosureVector(UEOIndices ueoi)
 bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {
 	try {
-		(*fMisclosureVector)(row) = coeff;
+		(*fGlobalMisclosureVector)(row) = coeff;
 	} catch(...) {
 		return false;
 	}
 	return true;
 }
 
+bool TLSInputMatrices::setWeightMisclosureVectorElement(MatrixIndex row, TReal coeff)
+{
+	try {
+		(*fGlobalMisclosureVector)(row + fUEOIndices.EIndex) = coeff;
+	} catch(...) {
+		return false;
+	}
+	return true;
+
+}
+
 bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try {
 	if (0 <= row && row < fUEOIndices.OIndex && 0 <= column && column < fUEOIndices.OIndex){
-		weightMatrix->insert(row,column) = coeff;
+		globalWeightMatrix->insert(row,column) = coeff;
 	}
 	
 	} catch(...) {
@@ -184,7 +222,7 @@ bool TLSInputMatrices::setWeightInvMtrxElement(MatrixIndex row, MatrixIndex colu
 {
 	try {
 	if (0 <= row && row < fUEOIndices.OIndex && 0 <= column && column < fUEOIndices.OIndex)
-		weightInvMatrix->insert(row,column) = coeff;
+		globalWeightInvMatrix->insert(row,column) = coeff;
 	} catch(...) {
 		return false;
 	}
@@ -194,12 +232,25 @@ bool TLSInputMatrices::setWeightInvMtrxElement(MatrixIndex row, MatrixIndex colu
 bool TLSInputMatrices::setWeightUnkMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try {
-	if (0 <= row && row < fUEOIndices.UIndex && 0 <= column && column < fUEOIndices.UIndex)
-		weightUnkMatrix->insert(row,column) = coeff;
+		if (0 <= row && row < fUEOIndices.WIndex && 0 <= column && column < fUEOIndices.WIndex)
+			globalWeightMatrix->insert(row + fUEOIndices.OIndex, column + fUEOIndices.OIndex) = coeff;
 	} catch(...) {
 		return false;
 	}
 	return true;
+}
+
+bool TLSInputMatrices::setWeightUnkInvMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
+{
+	try {
+		if (0 <= row && row < fUEOIndices.WIndex && 0 <= column && column < fUEOIndices.WIndex)
+			globalWeightInvMatrix->insert(row + fUEOIndices.OIndex, column + fUEOIndices.OIndex) = coeff;
+	} catch(...) {
+		return false;
+	}
+	return true;
+
+	return false;
 }
 
 bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
@@ -242,43 +293,69 @@ bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, TReal co
 ////////////////////////////////////////////////////////////////////////////////
 //ACCESS METHOD FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
-const TSparseMatrix* TLSInputMatrices::getFirstDgnMtrx() const noexcept
+
+const TSparseMatrix TLSInputMatrices::getSecondDgnMtrx() const noexcept
 {//returns a reference to the first dgn matrix
-	return firstDesignMatrix.get();
+	return globalSecondDesignMatrix.get()->topLeftCorner(fUEOIndices.EIndex, fUEOIndices.OIndex);
 }
 
-const TSparseMatrix* TLSInputMatrices::getSecondDgnMtrx() const noexcept
-{//returns a reference to the first dgn matrix
-	return secondDesignMatrix.get();
+const TSparseMatrix *TLSInputMatrices::getGlobalSecondDgnMtrx() const noexcept
+{
+	return globalSecondDesignMatrix.get();
 }
 
 bool TLSInputMatrices::getSecondDgnBlockDiagStatus() const
-{// returns the private member secondDesignMatrixIsBlockDiag which indicates that B is block diagonal
+{// returns the private member seconDesignMatrixIsBlockDiag which indicates that B is block diagonal
 	return secondDesignMatrixIsBlockDiag;
 }
-const TSparseMatrix* TLSInputMatrices::getSecondDgnBlockDiagInvMtrx() const noexcept
-{//returns a reference to the inverse of the second dgn matrix
-	return secondDesignBlockDiagInvMatrix.get();
-}
+//const TSparseMatrix* TLSInputMatrices::getSecondDgnBlockDiagInvMtrx() const noexcept
+//{//returns a reference to the inverse of the second dgn matrix
+//	return globalSecondDesignBlockDiagInvMatrix;
+//}
 
-const TSparseMatrix* TLSInputMatrices::getWeightMtrx() const noexcept
+const TSparseMatrix *TLSInputMatrices::getGlobalSecondDgnBlockDiagInvMtrx() const noexcept
 {
-	return weightMatrix.get();
+	return globalSecondDesignBlockDiagInvMatrix.get();
 }
 
-const TSparseMatrix* TLSInputMatrices::getWeightInvMtrx() const noexcept
+const TSparseMatrix *TLSInputMatrices::getGlobalWeightMtrx() const noexcept
 {
-	return weightInvMatrix.get();
+	return globalWeightMatrix.get();
 }
 
-const TSparseMatrix* TLSInputMatrices::getWeightUnkMtrx() const noexcept
+const TSparseMatrix *TLSInputMatrices::getGlobalWeightInvMtrx() const noexcept
 {
-	return weightUnkMatrix.get();
+	return globalWeightInvMatrix.get();
 }
 
-const TVector& TLSInputMatrices::getMisclosureVctr() const noexcept
-{// returns a reference to the misclosure vector
-	return *fMisclosureVector.get();
+const TSparseMatrix TLSInputMatrices::getObsWeightMtrx() const noexcept
+{
+	return (globalWeightMatrix->topLeftCorner(fUEOIndices.OIndex, fUEOIndices.OIndex));
+}
+
+const TSparseMatrix TLSInputMatrices::getObsWeightInvMtrx() const noexcept
+{
+	return (globalWeightInvMatrix->topLeftCorner(fUEOIndices.OIndex, fUEOIndices.OIndex));
+}
+
+const TSparseMatrix TLSInputMatrices::getWeightUnkMtrx() const noexcept
+{
+	return (globalWeightMatrix->bottomRightCorner(fUEOIndices.WIndex, fUEOIndices.WIndex));
+}
+
+const TVector TLSInputMatrices::getObsMisclosureVctr() const noexcept
+{// returns a copy of the misclosure vector
+	return (fGlobalMisclosureVector->topRows(fUEOIndices.EIndex));
+}
+const TVector TLSInputMatrices::getWeightMisclosureVctr() const noexcept
+{// returns a copy of the misclosure vector
+	return (fGlobalMisclosureVector->bottomRows(fUEOIndices.WIndex));
+}
+
+
+const TVector &TLSInputMatrices::getGlobalMisclosureVctr() const noexcept
+{
+	return *fGlobalMisclosureVector;
 }
 
 
@@ -303,6 +380,11 @@ int TLSInputMatrices::getNbrEquations() const
 	return fUEOIndices.EIndex;
 }
 
+int TLSInputMatrices::getNbrWeights() const
+{
+	return fUEOIndices.WIndex;
+}
+
 int TLSInputMatrices::getNbrObservations() const
 {
 	return fUEOIndices.OIndex;
@@ -311,6 +393,21 @@ int TLSInputMatrices::getNbrObservations() const
 int TLSInputMatrices::getNbrConstraints() const
 {
 	return fUEOIndices.CIndex;
+}
+
+const TSparseMatrix *TLSInputMatrices::getGlobalFirstDgnMtrx() const noexcept
+{
+	return globalFirstDesignMatrix.get();
+}
+
+const TSparseMatrix TLSInputMatrices::getObsFirstDgnMtrx() const noexcept
+{
+	return globalFirstDesignMatrix->topRows(fUEOIndices.EIndex);
+}
+
+const TSparseMatrix TLSInputMatrices::getWeightsFirstDgnMtrx() const noexcept
+{
+	return globalFirstDesignMatrix->bottomRows(fUEOIndices.WIndex);
 }
 
 
@@ -340,7 +437,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of << "* FIRST DESIGN MATRIX *" << std::endl;
 	of << "***********************" << std::endl << std::endl;
 	
-	of << *firstDesignMatrix;
+	of << getObsFirstDgnMtrx();
 	of << std::endl << std::endl;
 
 
@@ -348,7 +445,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of << "* MISCLOSURE VECTOR *" << std::endl;
 	of << "*********************" << std::endl << std::endl;
 
-	of << *fMisclosureVector;
+	of << *fGlobalMisclosureVector;
 	of << std::endl << std::endl;
 
 
@@ -378,7 +475,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of << "* WEIGHT MATRIX *" << std::endl;
 	of << "*****************" << std::endl << std::endl;
 	
-	of << *weightMatrix;
+	of << *globalWeightMatrix;
 	of << std::endl << std::endl;
 
 
@@ -387,7 +484,7 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of << "* SECOND DESIGN MATRIX *" << std::endl;
 	of << "************************" << std::endl << std::endl;
 
-	of << *secondDesignMatrix;
+	of << getSecondDgnMtrx();
 	of << std::endl << std::endl;
 
 	of.close();

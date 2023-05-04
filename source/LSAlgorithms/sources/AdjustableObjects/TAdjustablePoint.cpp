@@ -230,16 +230,40 @@ TAdjustablePoint::ErrorEllipsoid TAdjustablePoint::getErrorEllipsoid() const
 	return ell;
 }
 
-void TAdjustablePoint::setCorrection(int idx, TReal value)
+void TAdjustablePoint::setApriCovar(TDenseMatrix apriCovar)
 {
-	for (int i = 0; i < 3; i++)
+	if (!((apriCovar.cols() == getNumUnkn()) && (apriCovar.rows() == getNumUnkn())))
 	{
-		if (uidx[i] == idx)
+		throw std::logic_error("A-priori covariance matrix of point " + getName() + " must have the same dimension as the degree of freedom of that point.");
+	}
+	else
+	{
+		// test for symmetry and positive definiteness
+		if (apriCovar.isApprox(apriCovar.transpose()))
 		{
-			if (i == 0)
+			if (apriCovar.fullPivLu().isInvertible())
 			{
-				fCorrection[i] = (TLength(value));
-				fEstimatedValue.setX(fEstimatedValue.getX() + TLength(value));
+				fApriCovar = apriCovar;
+				hasAprioriCovariance = true;
+			}
+			else
+			{
+				throw std::logic_error("A-priori covariance matrix of point " + getName() + " is not positive definite.");
+			}
+		}
+		else
+		{
+			throw std::logic_error("A-priori covariance matrix of point " + getName() + " is not symmetric.");
+		}
+	}
+}
+
+void TAdjustablePoint::setCorrection(int idx, TReal value) {
+	for (int i = 0; i < 3; i++){
+		if (uidx[i] == idx) {
+			if (i == 0 ){
+            fCorrection[i]=(TLength(value));
+            fEstimatedValue.setX(fEstimatedValue.getX() + TLength(value));
 				fXValueSet = true;
 			}
 			else if (i == 1)
