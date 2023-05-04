@@ -112,9 +112,9 @@ struct TransformParameters
 // Inherited via Serializable
 inline void TransformParameters::serialize(SerializerObject::SerializationHelper &obj) const
 {
-	obj.addProperty("kappa", kappa.getRadiansValue());
 	obj.addProperty("omega", omega.getRadiansValue());
 	obj.addProperty("phi", phi.getRadiansValue());
+	obj.addProperty("kappa", kappa.getRadiansValue());
 
 	obj.addProperty("scale", scale);
 

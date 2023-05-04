@@ -581,9 +581,9 @@ void TAdjustableHelmertTransformation::serialize(SerializerObject::Serialization
 			fEstParameter.tX.getMetresValue(),
 			fEstParameter.tY.getMetresValue(),
 			fEstParameter.tZ.getMetresValue(),
-			fEstParameter.kappa.getRadiansValue(),
 			fEstParameter.omega.getRadiansValue(),
 			fEstParameter.phi.getRadiansValue(),
+			fEstParameter.kappa.getRadiansValue(),
 			fEstParameter.scale,
 	});
 	
@@ -614,9 +614,9 @@ void TAdjustableHelmertTransformation::serialize(SerializerObject::Serialization
 			fProvParameter.tX.getMetresValue(),
 			fProvParameter.tY.getMetresValue(),
 			fProvParameter.tZ.getMetresValue(),
-			fProvParameter.kappa.getRadiansValue(),
 			fProvParameter.omega.getRadiansValue(),
 			fProvParameter.phi.getRadiansValue(),
+			fProvParameter.kappa.getRadiansValue(),
 			fProvParameter.scale,
 		});
 
