@@ -1,6 +1,7 @@
 #include "TLSUniversalMtdComputer.h"
 
 #include <vector>
+#include <iostream>
 
 #include <Logger.hpp>
 
@@ -33,43 +34,44 @@ bool TLSUniversalMtdComputer::computeResults(TLSInputMatrices *im, TLSResultsMat
 bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSResultsMatrices *rm)
 {
 	// test if we do not have a 'nullpointer' in a case that the matrices are not initialized
-	if (!(im->getFirstDgnMtrx()) || !(im->getCnstrFirstDgnMtrx()) || !(rm->getSolutionVectByConst()))
+	if (!(im->getGlobalFirstDgnMtrx()) || !(im->getCnstrFirstDgnMtrx()) || !(rm->getSolutionVectByConst()))
 	{
 		logCritical() << "Some of the design matrices are not initialized!";
 		return false;
 	}
 
-	const TSparseMatrix &A = *im->getFirstDgnMtrx();
-	const TVector &W = im->getMisclosureVctr(); // W : Misclosures vector ("fermetures")
+	const TSparseMatrix& A = *im->getGlobalFirstDgnMtrx();
+	const TVector W = im->getGlobalMisclosureVctr(); // W : Misclosures vector ("fermetures")
 	const TSparseMatrix &A2 = *im->getCnstrFirstDgnMtrx(); // A2 : First design matrix part related to constraints only
 	const TVector &W2 = im->getCnstrMisclosureVctr(); // W2 : Misclosures vector part related to constraints only
 
 	int nbUnk = im->getNbrUnknowns();
 	int nbEq = im->getNbrEquations();
 	int nbCnstr = im->getNbrConstraints();
+	int nbWeights = im->getNbrWeights();
 
 	// set invN1
-	TSparseMatrix invN1(nbEq, nbEq);
+	TSparseMatrix invN1(nbEq + nbWeights, nbEq + nbWeights);
 	if (im->getSecondDgnBlockDiagStatus())
 	{
-		if (!(im->getWeightMtrx()) || !(im->getSecondDgnBlockDiagInvMtrx()))
+		if (!(im->getGlobalWeightMtrx()) || !(im->getGlobalSecondDgnBlockDiagInvMtrx()))
 		{
 			throw std::runtime_error("Some of the design matrices are not initialized!");
 		}
-		const TSparseMatrix &Pv = *im->getWeightMtrx();
-		const TSparseMatrix &invB = *im->getSecondDgnBlockDiagInvMtrx();
-		invN1 = invB.transpose() * Pv * invB;
+		const TSparseMatrix &P= *im->getGlobalWeightMtrx();
+		const TSparseMatrix &invB= *im->getGlobalSecondDgnBlockDiagInvMtrx();
+		invN1 = invB.transpose() * P* invB;
 	}
 	else
 	{ // if B is not block diagonal, invN1 needs to be computed via an explicit inversion
 	  // B*invPv*BT is symmetric and positive definite so LDLT can be used
-		if (!(im->getWeightInvMtrx()) || !(im->getSecondDgnMtrx()))
+		if (!(im->getGlobalWeightInvMtrx()) || !(im->getGlobalSecondDgnMtrx()))
 		{
 			throw std::runtime_error("Some of the design matrices are not initialized!");
 		}
-		const TSparseMatrix &B = *im->getSecondDgnMtrx();
-		const TSparseMatrix &InvPv = *im->getWeightInvMtrx();
-		if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1, true))
+		const TSparseMatrix &B= *im->getGlobalSecondDgnMtrx();
+		const TSparseMatrix &InvP= *im->getGlobalWeightInvMtrx();
+		if (!TSparseUtils::inverse(B* InvP* B.transpose(), invN1, true))
 		{
 			logCritical() << "Matrix B*inv(Pv)*transpose(B) could not be inverted!";
 			return false;
@@ -78,11 +80,21 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 		rm->setInvN1Matrix(invN1);
 	}
 
+//	 std::cout << "A=" << std::endl << (*im->getGlobalFirstDgnMtrx()).toDense() << std::endl;
+//	 std::cout << "B=" << std::endl << (*im->getGlobalSecondDgnMtrx()).toDense() << std::endl;
+//	 std::cout << "Binv=" << std::endl << (*im->getGlobalSecondDgnBlockDiagInvMtrx()).toDense() << std::endl;
+//	 std::cout << "P=" << std::endl << (*im->getGlobalWeightMtrx()).toDense() << std::endl;
+//	 std::cout << "Pinv=" << std::endl << (*im->getGlobalWeightInvMtrx()).toDense() << std::endl;
+//	 std::cout << "Misclosure=" << std::endl << im->getGlobalMisclosureVctr() << std::endl;
+
+
 	// Calculate Normal matrix N2 = At * inv( B * inv(P) * Bt ) * A , matrix dimensions (u,u)
 	// and re-sets this new matrix to the main TLSResultsMatrices object.
 	TSparseMatrix N2(nbUnk, nbUnk);
 	N2 = A.transpose() * invN1 * A;
 
+	// std::cout << A.toDense() << std::endl;
+	// std::cout << (*im->getGlobalWeightMtrx()).toDense() << std::endl;
 	// construct NBig = (N2, A2t
 	//                   A2, 0  )
 	TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
@@ -124,6 +136,7 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	TVector solution(nbUnk);
 	// we do not need the Lagrange multipliers
 	solution = solutionExt.head(nbUnk);
+	// std::cout << "solution= " << solution << std::endl;
 
 	// Copies the matrices into the members of the TResultsMatrices object
 	rm->setNormalMatrix(NBig);
@@ -141,25 +154,26 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	int nbObs = im->getNbrObservations();
 	int nbEq = im->getNbrEquations();
 	int nbCnstr = im->getNbrConstraints();
+	int nbWeights= im->getNbrWeights();
 	TReal sigmaZero2Aposteriori = LITERAL(0.0);
 
-	if (!(im->getFirstDgnMtrx()) || !(im->getSecondDgnMtrx()) || !(im->getWeightInvMtrx()) || !(rm->getSolutionVectByConst()) || !(rm->getResidualsVectByConst())
+	if (!(im->getGlobalFirstDgnMtrx()) || !(im->getGlobalSecondDgnMtrx()) || !(im->getGlobalWeightInvMtrx()) || !(rm->getSolutionVectByConst()) || !(rm->getResidualsVectByConst())
 		|| !(rm->getResCovarMtrxByConst()))
 		throw std::runtime_error("Some of the design matrices are not initialized!");
 
-	const TSparseMatrix &A = *im->getFirstDgnMtrx();
-	const TSparseMatrix &B = *im->getSecondDgnMtrx();
-	const TSparseMatrix &InvPv = *im->getWeightInvMtrx();
+	const TSparseMatrix& A = *im->getGlobalFirstDgnMtrx();
+	const TSparseMatrix& B = *im->getGlobalSecondDgnMtrx();
+	const TSparseMatrix& InvP = *im->getGlobalWeightInvMtrx();
 
-	TSparseMatrix S(nbObs, nbEq);
+	TSparseMatrix S(nbObs + nbWeights, nbEq + nbWeights);
 	if (im->getSecondDgnBlockDiagStatus())
 	{
-		if (!(im->getSecondDgnBlockDiagInvMtrx()))
+		if (!(im->getGlobalSecondDgnBlockDiagInvMtrx()))
 		{
 			throw std::runtime_error("The matrix invB is not initialized!");
 		}
 		// if B is block-diagonal, the S formula simplifies to -invB
-		S = -(*im->getSecondDgnBlockDiagInvMtrx());
+		S = -(*im->getGlobalSecondDgnBlockDiagInvMtrx());
 	}
 	else
 	{
@@ -168,10 +182,11 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 			throw std::runtime_error("The matrix invN1 is not initialized!");
 		}
 		const TSparseMatrix &invN1 = *rm->getInvN1MatrixByConst(); // NB: invN1 will NOT be recalculated here (just taken from previous results!)
-		S = -InvPv * B.transpose() * invN1;
+		S = -InvP * B.transpose() * invN1;
 	}
-	const TSparseMatrix &Pv = *im->getWeightMtrx();
-	const TVector &W = im->getMisclosureVctr();
+	const TSparseMatrix &P = *im->getGlobalWeightMtrx();
+	const TVector W = im->getGlobalMisclosureVctr();
+	const TSparseMatrix &A2 = *im->getCnstrFirstDgnMtrx();
 	const TVector &solution = *rm->getSolutionVectByConst(); // NB: Solution vector will NOT be recalculated here (just taken from previous results!)
 	const TSparseMatrix &NBig = *rm->getNormalMatrixByConst(); // NB: Normal matrix will NOT be recalculated here (just taken from previous results!)
 
@@ -179,13 +194,19 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	// Calculate intermediate matrix
 	// S = - inv(P) * Bt *inv( B * inv(P) * Bt )
 	// Residuals vector V
-	TVector V(nbObs);
+	TVector V(nbObs+nbWeights);
 	V = S * (A * solution + W);
+	TVector Vobs(nbObs);
+	Vobs = V.topRows(nbObs);
+	TVector Vweights(nbWeights);
+	Vweights = V.topRows(nbWeights);
 
 	//--------------- Sigma 0 a posteriri ---------------//
-	sigmaZero2Aposteriori = V.transpose() * Pv * V;
-	if (nbEq + nbCnstr != nbUnk)
-		sigmaZero2Aposteriori /= (nbEq - nbUnk + nbCnstr); // NB Redundancy: Takes into account the number of constraints!
+	sigmaZero2Aposteriori = Vobs.transpose() * im->getObsWeightMtrx() * Vobs;
+	if (nbEq + nbCnstr + nbWeights != nbUnk)
+	{
+		sigmaZero2Aposteriori /= (nbEq - nbUnk + nbCnstr + nbWeights); // NB Redundancy: Takes into account the number of constraints!
+	}
 	else
 		fError += "Number of equations + constraints equals number of unknowns, causes zero division!";
 	rm->setSigmaZero2(sigmaZero2Aposteriori);
@@ -204,29 +225,32 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 		return false;
 	}
 	Qxx = Qxx_big.topLeftCorner(nbUnk, nbUnk);
+	// std::cout << "Qxx=" << Qxx << std::endl;
 	//--------------- Residual covariance matrix: ---------------//
-	TSparseMatrix Qvv(nbObs, nbObs);
+	TSparseMatrix Qvv(nbObs + nbWeights, nbObs + nbWeights);
 	if (im->getSecondDgnBlockDiagStatus())
 	{ // formula with simplifications if B is invertible Qvv = inv(P) - invB*A*Qxx*At*invBT
-		TDenseMatrix QxxATinvBT(nbUnk, nbObs);
-		TSparseMatrix invBA(nbObs, nbUnk);
-		if (!(im->getSecondDgnBlockDiagInvMtrx()))
+		TDenseMatrix QxxATinvBT(nbUnk, nbObs + nbWeights);
+		TSparseMatrix invBA(nbObs + nbWeights, nbUnk);
+		if (!(im->getGlobalSecondDgnBlockDiagInvMtrx()))
 		{
 			throw std::runtime_error("The matrix invB is not initialized!");
 		}
-		const TSparseMatrix &invB = *im->getSecondDgnBlockDiagInvMtrx();
+		const TSparseMatrix &invB = *im->getGlobalSecondDgnBlockDiagInvMtrx();
 		invBA = invB * A;
 		QxxATinvBT = Qxx * invBA.transpose();
-		Qvv = InvPv - invBA * QxxATinvBT;
+		Qvv = InvP - invBA * QxxATinvBT;
 	}
 	else
 	{
 		// general formula
-		Qvv = -S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose();
+		Qvv = -S * B * InvP - S * A * Qxx * A.transpose() * S.transpose();
 	}
 	// Copies the matrices into the members of the TResultsMatrices object
+	TSparseMatrix QvvObs(nbObs, nbObs);
+	QvvObs = Qvv.topLeftCorner(nbObs, nbObs);
 	rm->setUnkCovarMtrx(Qxx);
-	rm->setResCovarMtrx(Qvv);
-	rm->setResidualsVect(V);
+	rm->setResCovarMtrx(QvvObs);
+	rm->setResidualsVect(Vobs);
 	return true;
 }

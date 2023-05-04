@@ -8,7 +8,6 @@ Any permission to use it shall be granted in writing. Request shall be addressed
 
 #include <bitset>
 #include <vector>
-
 #include "TLength.h"
 #include "TSparseMatrix.h"
 #include "TTransformParameters.h"
@@ -189,6 +188,14 @@ public:
 
 	/// Returns the estimated precision of the dth rotation
 	const TAngle getEstimatedPrecisionRot(int d) const;
+			// a priori covaraince related data
+			void setApriCovar(TDenseMatrix apriCovar);
+			TDenseMatrix getApriCovar() { return fApriCovar; };
+			//
+			void setFirstWeightIndex(int firstIndex) { fFirstWeightIndex = firstIndex; };
+			int getFirstWeightIndex() { return fFirstWeightIndex; };
+
+
 
 	/// Returns the estimated precision of the dth translation
 	const TLength getEstimatedPrecisionTransl(int d) const;
@@ -266,41 +273,119 @@ public:
 	/// Sets the scale parameters
 	void setParam(const TReal scl);
 
-	/*!
-		\brief Sets the parameters of the transformation
+//			/*!
+//				\brief Sets a standard deviation of a translation's component.
+//
+//				\param[in] d Allowed values are 0(X), 1(Y) and 2(Z) of the translation's component.
+//				\param[in] stDev Standard deviation.
+//			*/ 
+//			void setTranslationStandDev(int d, TLength stDev);
+//
+//			/*!
+//				\brief Sets a standard deviation of a rotation component.
+//
+//				\param[in] d Allowed values are 0(X), 1(Y) and 2(Z) of the rotation's component.
+//				\param[in] stDev Standard deviation.
+//			*/ 
+//			void setRotationStandDev(int d, TAngle stDev);
+//
+//
+//		    /*!
+//				\brief Sets a standard deviation of a scale.
+//
+//				\param[in] stDev Standard deviation.
+//			*/ 
+//			void setScaleStandDev(TReal stDev);
+//
+//			/*! 
+//				\brief Sets the XY covariance after calculation 	
+//				\param[in] value Value to be set.
+//			*/
+//			void	setXYTranslationCovariance(TReal value);
+//
+//			/*! 
+//				\brief Sets the YZ covariance after calculation 	
+//				\param[in] value Value to be set.
+//			*/
+//			void	setYZTranslationCovariance(TReal value);
+//
+//		   /*! 
+//				\brief Sets the XZ covariance after calculation 	
+//				\param[in] value Value to be set.
+//			*/
+//			void	setXZTranslationCovariance(TReal value);
+//
+//
+//			/*! 
+//				\brief Sets the XY covariance after calculation 	
+//				\param[in] value Value to be set in radians [RAD].
+//			*/
+//			void	setXYRotationCovariance(TReal value);
+//
+//			/*! 
+//				\brief Sets the YZ covariance after calculation 	
+//				\param[in] value Value to be set in radians [RAD].
+//			*/
+//			void	setYZRotationCovariance(TReal value);
+//
+//		   /*! 
+//				\brief Sets the XZ covariance after calculation.	
+//				\param[in] value Value to be set in radians [RAD].
+//			*/
+//			void	setXZRotationCovariance(TReal value);
+//
+//			/// Sets the estimated scale covaraiance after calculation in order:{ltx, lty, ltz, lrx, lry, lrz}
+//			void setScaleCovariance(int idx, TReal value);
+//			/// Sets the estimated rotation/translation after calculation in order:{txrx, txry, txrz, tyrx, tyry, tyrz, tzrx, tzry, tzrz}
+//			void setTrRotCovariance(int idx, TReal value);
+//
+//			/// Sets the estimated precision after calculation 
+//			void setEstimatedPrecision(int idx, TReal value);
+//
+//			/*! 
+//				\brief Re-initialise the object
+//				Sets the estimated values to be the provisional values and for the precisions, correections and covariances zeros. Used for SIMULATION.
+//			*/
+//			void reInitialise();
+		//@}
 
-		tx, ty,tz -- translation about the x, y and z axes respectively
+		/*! 
+			\brief Sets the parameters of the transformation
 
-		rx, ry, tz -- rotations about the x, y and z axes respectively
+			tx, ty,tz -- translation about the x, y and z axes respectively
 
-		scl -- scale factor
-	*/
-	void setParam(const TLength tx, const TLength ty, const TLength tz, const TAngle &rx, const TAngle &ry, const TAngle &rz, const TReal scl);
+			rx, ry, tz -- rotations about the x, y and z axes respectively
 
-	/// Sets the translation correction
-	void setTranslationCorrection(int idx, TLength value);
-	/// Sets the rotation correction
-	void setRotationCorrection(int idx, const TAngle &value);
-	/// Sets the scale correction
-	void setScaleCorrection(TReal value);
+			scl -- scale factor
+		*/
+		void setParam(const TLength tx, const TLength ty, const TLength tz, const TAngle& rx, const TAngle& ry, const TAngle& rz, const TReal scl);
+		
+		/// Sets the translation correction
+		void setTranslationCorrection (int idx, TLength value);
+		/// Sets the rotation correction
+		void setRotationCorrection (int idx, const TAngle& value);
+		/// Sets the scale correction
+		void setScaleCorrection (TReal value);
+		
+		/// Returns Estimated parameters of the Helmert transformation
+		const TransformParameters& getEstParam() const {return fEstParameter;}
+		/// Returns Provisional parameters of the Helmert transformation
+		const TransformParameters& getProvParam() const {return fProvParameter;}
 
-	/// Returns Estimated parameters of the Helmert transformation
-	const TransformParameters &getEstParam() const { return fEstParameter; }
-	/// Returns Provisional parameters of the Helmert transformation
-	const TransformParameters &getProvParam() const { return fProvParameter; }
-
-	/// Returns the called estimated scale
-	inline TReal getEstScale() const { return fEstParameter.scale; }
-	/// Returns the called provisional scale
-	inline TReal getProvScale() const { return fProvParameter.scale; }
-	/// Returns the called estimated translation i (X [0], Y [1], Z [3])
-	TLength getEstTranslation(int axis) const;
-	/// Returns the called provisional translation i (X [0], Y [1], Z [3])
-	TLength getProvTranslation(int axis) const;
-	/// Returns the called estimated rotation i (X [0], Y [1], Z [3])
-	const TAngle &getEstRotation(int axis) const;
-	/// Returns the called provisional rotation i (X [0], Y [1], Z [3])
-	const TAngle &getProvRotation(int axis) const;
+		/// Returns the called estimated scale
+		inline TReal getEstScale () const {return fEstParameter.scale;}
+		/// Returns the called provisional scale
+		inline TReal getProvScale () const {return fProvParameter.scale;}
+		/// Returns the called estimated translation i (X [0], Y [1], Z [3])
+		TLength getEstTranslation(int axis) const;
+		/// Returns the called provisional translation i (X [0], Y [1], Z [3])
+		TLength getProvTranslation(int axis) const;
+		/// Returns the called estimated rotation i (X [0], Y [1], Z [3])
+		const TAngle& getEstRotation(int axis) const;
+		/// Returns the called provisional rotation i (X [0], Y [1], Z [3])
+		const TAngle& getProvRotation(int axis) const;
+		// indicating if a apriori covariance matrix is associated
+		bool hasAprioriCovariance{false};
 
 #if USE_SERIALIZER
 	// Inherited via Serializable
@@ -331,6 +416,10 @@ private:
 	int uidx_rot[3]; // Unknown indices of rotation
 	int uidx_trans[3]; // Unknown indices of translation
 	int uidx_scale; // Unknown indices of scale
+		TDenseMatrix fApriCovar;
+		// like the equation index for observations, this are the equation indices for the "observation" of the parameter deviation that gets penalized with the parameter weight
+		int fFirstWeightIndex{-1};
+
 
 	void setDefaults();
 	void setDefaultsParams();

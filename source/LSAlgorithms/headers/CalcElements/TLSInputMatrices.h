@@ -50,10 +50,15 @@ public:
 			\param[in] coefficient: value of the desired element
 		*/
 		bool addFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+		bool setWeightsFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff);
 
 		/*!	\brief Set a block in the second design matrix. Each block corresponds to one mathematical observation equation. Also sets the inverse block.
 		*/
 		bool setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block);
+		bool setSecondWeightDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block)
+		{
+			return setSecondDgnMtrxBlock(firstIndex + fUEOIndices.EIndex, secondIndex + fUEOIndices.OIndex, block);
+		};
 
 		/*!	\brief Set the second design matrix to minus Identity for parametric case
 		*/
@@ -74,6 +79,7 @@ public:
 		/*!	\brief Set a misclosure vector element.
 		*/
 		bool setMisclosureVectorElement(MatrixIndex row, TReal coeff);
+		bool setWeightMisclosureVectorElement(MatrixIndex row, TReal coeff);
 
 		/*!	\brief Set the value of an element of the observations weight matrix in the adjustment (P-matrix)
 			\param[in] row of the desired element
@@ -94,6 +100,9 @@ public:
 			\param[in] coefficient: value of the desired element
 		*/
 		bool setWeightUnkMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+		bool setWeightUnkInvMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+		bool setWeightUnkMtrxBlock(MatrixIndex startRow, TDenseMatrix block);
+
 
 		/*!	\brief Set the value of an element of the constraints first design matrix (A2-submatrix)
 			\param[in] row of the desired element
@@ -130,32 +139,57 @@ public:
 		/*!	\brief Returns the number of equations */
 		int	getNbrEquations()const;
 
+		/*!	\brief Returns the number of number of weighted parameters */
+		int	getNbrWeights()const;
+
 		/*!	\brief Returns the number of parameters constraints */
 		int	getNbrConstraints()const;
 		
-		/*!	\brief Returns a const reference (pointer) to the first design matrix allocated here*/
-		const TSparseMatrix* getFirstDgnMtrx() const noexcept;
+		/*!	\brief Returns a const reference (pointer) to the global first design matrix allocated here*/
+		const TSparseMatrix* getGlobalFirstDgnMtrx() const noexcept;
+		/*!	\brief Returns a const reference (pointer) to the global first design matrix allocated here*/
+		const TSparseMatrix getObsFirstDgnMtrx() const noexcept;
+		const TSparseMatrix getWeightsFirstDgnMtrx() const noexcept;
 
-		/*!	\brief Returns a const reference (pointer) to the second design matrix allocated here*/
-		const TSparseMatrix* getSecondDgnMtrx() const noexcept;
+
+
+		/*!	\brief Returns a copy of the second design matrix allocated here*/
+		const TSparseMatrix getSecondDgnMtrx() const noexcept;
+
+		/*!	\brief Returns a reference of the second design matrix allocated here*/
+		const TSparseMatrix* getGlobalSecondDgnMtrx() const noexcept;
 
 		/*!	\brief Returns the private member secondDesignMatrixIsBlockDiag which indicates that B is block diagonal*/
 		bool getSecondDgnBlockDiagStatus() const;
 
-		/*!	\brief Returns a const reference (pointer) to the inverse second design matrix allocated here, if B is block diagonal*/
-		const TSparseMatrix* getSecondDgnBlockDiagInvMtrx() const noexcept;
+		/*!	\brief Returns a copy of the inverse second design matrix allocated here, if B is block diagonal*/
+		const TSparseMatrix getSecondDgnBlockDiagInvMtrx() const noexcept;
 
-		/*!	\brief Returns a const reference (pointer) to the weight matrix allocated here*/
-		const TSparseMatrix* getWeightMtrx() const noexcept;
+		/*!	\brief Returns a reference of the inverse second design matrix allocated here, if B is block diagonal*/
+		const TSparseMatrix* getGlobalSecondDgnBlockDiagInvMtrx() const noexcept;
 
-		/*!	\brief Returns a const reference (pointer) to the inverted weight matrix allocated here*/
-		const TSparseMatrix* getWeightInvMtrx() const noexcept;
+		/*!	\brief Returns a const reference (pointer) to the global weight matrix allocated here*/
+		const TSparseMatrix* getGlobalWeightMtrx() const noexcept;
+		/*!	\brief Returns a const reference (pointer) to the global weight inv matrix allocated here*/
+		const TSparseMatrix* getGlobalWeightInvMtrx() const noexcept;
 
-		/*!	\brief Returns a const reference (pointer) to the parameters-weight matrix allocated here*/
-		const TSparseMatrix* getWeightUnkMtrx() const noexcept;
+		/*!	\brief Returns a copy to the weight matrix allocated here*/
+		const TSparseMatrix getObsWeightMtrx() const noexcept;
 
-		/*!	\brief Returns a const reference (pointer) to the misclosure vector allocated here*/
-		const TVector&	getMisclosureVctr() const noexcept;
+		/*!	\brief Returns a copy to the inverted weight matrix allocated here*/
+		const TSparseMatrix getObsWeightInvMtrx() const noexcept;
+
+		/*!	\brief Returns a copy to the parameters-weight matrix allocated here*/
+		const TSparseMatrix getWeightUnkMtrx() const noexcept;
+
+		/*!	\brief Returns a copy of the misclosure vector allocated here*/
+		const TVector getObsMisclosureVctr() const noexcept;
+		/*!	\brief Returns a copy of the misclosure vector allocated here*/
+		const TVector getWeightMisclosureVctr() const noexcept;
+
+
+		/*!	\brief Returns a const reference (pointer) to the global misclosure vector allocated here*/
+		const TVector&	getGlobalMisclosureVctr() const noexcept;
 
 		/*!	\brief Returns a const reference (pointer) to the constraints first design submatrix allocated here*/
 		const TSparseMatrix* getCnstrFirstDgnMtrx() const noexcept;
@@ -171,17 +205,20 @@ public:
 private:
 
 	UEOIndices fUEOIndices; /*!< number of unknowns, equations, observations and constraints */
-	std::unique_ptr<TSparseMatrix> fCnstrFirstDesignMtrx; /*!< matrix A2 (c x u) for constraints first design submatrix*/
-	std::unique_ptr<TSparseMatrix> firstDesignMatrix; /*!< matrix A (e x u) */
-	std::unique_ptr<TSparseMatrix> secondDesignMatrix; /*!< matrix B (e x o) */
-	bool secondDesignMatrixIsBlockDiag = true; /*!< flag indicating whether B is block diagonal */
-	std::unique_ptr<TSparseMatrix> secondDesignBlockDiagInvMatrix; /*!< matrix B^-1 (e x o) */
-	std::unique_ptr<TSparseMatrix> weightMatrix; /*!< matrix P (o x o) for observations weights */
-	std::unique_ptr<TSparseMatrix> weightInvMatrix; /*!< matrix invP (o x o) for observations weights */
-	std::unique_ptr<TSparseMatrix> weightUnkMatrix; /*!< matrix Pxx (u x u) for unknowns weights */
+	std::unique_ptr<TVector>		fGlobalMisclosureVector;  /*!< vector (o+w x 1) for misclosure errors (observations and weights) */
 
-	std::unique_ptr<TVector> fMisclosureVector; /*!< vector (o x 1) for misclosure errors */
-	std::unique_ptr<TVector> fCnstrMisclosureVector; /*!< vector W2 (c x 1) for constraints misclosure subvector */
+	std::unique_ptr<TSparseMatrix>	fCnstrFirstDesignMtrx;  /*!< matrix A2 (c x u) for constraints first design submatrix*/
+	std::unique_ptr<TVector>		fCnstrMisclosureVector; /*!< vector W2 (c x 1) for constraints misclosure subvector */
+
+	std::unique_ptr<TSparseMatrix>	globalFirstDesignMatrix;  /*!< matrix A (e+w x u) */
+	std::unique_ptr<TSparseMatrix>	globalSecondDesignMatrix; /*!< matrix B (e+w x o+w) */
+	bool			secondDesignMatrixIsBlockDiag = true; /*!< flag indicating whether B is block diagonal */
+	std::unique_ptr<TSparseMatrix>	globalSecondDesignBlockDiagInvMatrix; /*!< matrix B^-1 (e+w x o+w) */
+	std::unique_ptr<TSparseMatrix>	globalWeightMatrix;       /*!< matrix P (o+w x o+w) for observation + parameter weights */
+	std::unique_ptr<TSparseMatrix>	globalWeightInvMatrix;    /*!< matrix invP (o+w x o+w) for observation +parameter weights */
+	std::unique_ptr<TSparseMatrix>	fWeightUnkMatrix;    /*!< matrix containing weights for unknown parameter weights (WIndex x WIndex) */
+	std::unique_ptr<TSparseMatrix>	fWeightUnkFirstDesignMatrix;    /*!< first design matrix for unknown parameter weights handling (WIndex x UIndex) */
+
 };
 
 

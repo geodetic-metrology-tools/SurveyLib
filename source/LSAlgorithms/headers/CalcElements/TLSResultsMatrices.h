@@ -142,7 +142,7 @@ private:
 	std::unique_ptr<TVector>		fResidualsVctr; /*!< vector (o x 1) containing the calculated residues on observations */
 	std::unique_ptr<TSparseMatrix>	fResCovarianceMtrx; /*!< Qvv matrix (o x o) containing the variances and covariances for residuals */
 	std::unique_ptr<TSparseMatrix>	fUnkCovarianceMtrx; /*!< Qxx matrix (u x u) containing the variances and covariances for unknowns */
-	std::unique_ptr<TSparseMatrix>	fInvN1Matrix;  /*!< invN1 matrix (eq x eq) is the inverse of the matrix N1 = B*Pv^-1*BT */
+	std::unique_ptr<TSparseMatrix>	fInvN1Matrix;  /*!< invN1 matrix (eq + n_weights x eq+n_weights) is the inverse of the matrix N1 = B*P^-1*BT */
 	std::unique_ptr<TSparseMatrix>	fNormalMatrix;  /*!< N matrix (u+nConstr x u+nConstr) is the normal matrix (extended with the constraints if there are some) */
 
 	TReal fSigmaZero2; /*!< calculated "average variance" on residues */
