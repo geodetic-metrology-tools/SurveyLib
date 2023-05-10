@@ -119,6 +119,17 @@ bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 	return true;
 }
 
+bool TLSInputMatrices::addFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
+{
+	try {
+	if (0 <= row && row < fUEOIndices.EIndex && 0 <= column && column < fUEOIndices.UIndex)
+		firstDesignMatrix->coeffRef(row,column) += coeff;
+	} catch(...) {
+		return false;
+	}
+	return true;
+}
+
 
 bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block)
 {

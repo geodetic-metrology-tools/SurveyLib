@@ -43,6 +43,13 @@ public:
 		*/
 		bool setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 
+		/*!	\brief Add the value of an element to an entry of the first design matrix in the adjustment (A-matrix)
+			\param[in] row of the desired element
+			\param[in] column of the desired element
+			\param[in] coefficient: value of the desired element
+		*/
+		bool addFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+
 		/*!	\brief Set the value of an element of the second design matrix in the adjustment (B-matrix)
 			\param[in] row of the desired element
 			\param[in] column of the desired element
