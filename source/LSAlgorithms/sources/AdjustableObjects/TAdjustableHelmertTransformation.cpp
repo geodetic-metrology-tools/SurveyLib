@@ -1,8 +1,9 @@
 #include "TAdjustableHelmertTransformation.h"
+
 #include <stdexcept>
 
-TAdjustableHelmertTransformation::TAdjustableHelmertTransformation() {
-	
+TAdjustableHelmertTransformation::TAdjustableHelmertTransformation()
+{
 	fixedTranslations = std::bitset<3>();
 	fixedRotations = std::bitset<3>();
 	fixedScale = std::bitset<1>();
@@ -12,49 +13,51 @@ TAdjustableHelmertTransformation::TAdjustableHelmertTransformation() {
 	setDefaultsParams();
 }
 
-TAdjustableHelmertTransformation::TAdjustableHelmertTransformation(const std::bitset<3>& fixedTranslations, const std::bitset<3>& fixedRotations, const std::bitset<1>& fixedScale, const std::string& name) :
-	fixedTranslations(fixedTranslations),
-	fixedRotations(fixedRotations),
-	fixedScale(fixedScale),
-	name(name)
-{	
+TAdjustableHelmertTransformation::TAdjustableHelmertTransformation(const std::bitset<3> &fixedTranslations,
+	const std::bitset<3> &fixedRotations,
+	const std::bitset<1> &fixedScale,
+	const std::string &name) :
+	fixedTranslations(fixedTranslations), fixedRotations(fixedRotations), fixedScale(fixedScale), name(name)
+{
 	setDefaults();
 	setDefaultsParams();
 }
 
-TAdjustableHelmertTransformation::TAdjustableHelmertTransformation(const TransformParameters& transfParam, const std::bitset<3>& fixedTranslations, const std::bitset<3>& fixedRotations, const std::bitset<1>& fixedScale, const std::string& name) :
-	fixedTranslations(fixedTranslations),
-	fixedRotations(fixedRotations),
-	fixedScale(fixedScale),
-	name(name),
-	fProvParameter(transfParam),
-	fEstParameter(transfParam)
-{	
+TAdjustableHelmertTransformation::TAdjustableHelmertTransformation(const TransformParameters &transfParam,
+	const std::bitset<3> &fixedTranslations,
+	const std::bitset<3> &fixedRotations,
+	const std::bitset<1> &fixedScale,
+	const std::string &name) :
+	fixedTranslations(fixedTranslations), fixedRotations(fixedRotations), fixedScale(fixedScale), name(name), fProvParameter(transfParam), fEstParameter(transfParam)
+{
 	setDefaults();
 }
 
-int TAdjustableHelmertTransformation::getNumUnkn() const {
-	return (int)!fixedRotations[0] + (int)!fixedRotations[1] + (int)!fixedRotations[2] +
-	(int)!fixedTranslations[0] + (int)!fixedTranslations[1] + (int)!fixedTranslations[2] +
-	(int)!fixedScale[0];
+int TAdjustableHelmertTransformation::getNumUnkn() const
+{
+	return (int)!fixedRotations[0] + (int)!fixedRotations[1] + (int)!fixedRotations[2] + (int)!fixedTranslations[0] + (int)!fixedTranslations[1]
+		+ (int)!fixedTranslations[2] + (int)!fixedScale[0];
 }
 
-int TAdjustableHelmertTransformation::getTranslationUnknIndex(int d) const{ 
+int TAdjustableHelmertTransformation::getTranslationUnknIndex(int d) const
+{
 	assert3D(d);
 	if (!fixedTranslations[d])
 		return uidx_trans[d];
 	throw std::logic_error("Trying to get unknown index from fixed translation. Transformation " + getName());
 }
 
-int TAdjustableHelmertTransformation::getRotationUnknIndex(int d) const{ 
+int TAdjustableHelmertTransformation::getRotationUnknIndex(int d) const
+{
 	assert3D(d);
-	if(!fixedRotations[d])
+	if (!fixedRotations[d])
 		return uidx_rot[d];
 	throw std::logic_error("Trying to get unknown index from fixed rotation. Transformation " + getName());
 }
 
-int TAdjustableHelmertTransformation::getScaleUnknIndex() const{
-	if(!fixedScale[0])
+int TAdjustableHelmertTransformation::getScaleUnknIndex() const
+{
+	if (!fixedScale[0])
 		return uidx_scale;
 	throw std::logic_error("Trying to get unknown index from fixed scale. Transformation " + getName());
 }
@@ -76,7 +79,8 @@ const std::vector<int> TAdjustableHelmertTransformation::getRelativeUnknIndices(
 	return activeIndices;
 }
 
-int TAdjustableHelmertTransformation::getFirstUidx() const {
+int TAdjustableHelmertTransformation::getFirstUidx() const
+{
 	for (int i = 0; i < 3; i++)
 		if (!fixedTranslations[i])
 			return uidx_trans[i];
@@ -89,10 +93,10 @@ int TAdjustableHelmertTransformation::getFirstUidx() const {
 		return uidx_scale;
 
 	throw std::logic_error("Trying to get unknown index from fixed transformation. Transformation " + getName());
-
 }
 
-int TAdjustableHelmertTransformation::getLastUidx() const {
+int TAdjustableHelmertTransformation::getLastUidx() const
+{
 	if (!fixedScale[0])
 		return uidx_scale;
 
@@ -106,60 +110,70 @@ int TAdjustableHelmertTransformation::getLastUidx() const {
 	throw std::logic_error("Trying to get unknown index from fixed transformation. Transformation " + getName());
 }
 
-const TLength& TAdjustableHelmertTransformation::getTranslationStandDev(int d) const{
+const TLength &TAdjustableHelmertTransformation::getTranslationStandDev(int d) const
+{
 	assert3D(d);
 	if (!isnotanumber(fTransStandDev[d]))
 		return fTransStandDev[d];
 	throw std::runtime_error("Standard deviations of the translation's component not assigned. Transformation " + getName());
 }
 
-const TAngle& TAdjustableHelmertTransformation::getRotationStandDev(int d) const{
+const TAngle &TAdjustableHelmertTransformation::getRotationStandDev(int d) const
+{
 	assert3D(d);
 	if (!isnotanumber(fRotStandDev[d]))
 		return fRotStandDev[d];
 	throw std::runtime_error("Standard deviations of the rotation's component not assigned. Transformation " + getName());
 }
 
-TReal TAdjustableHelmertTransformation::getScaleStandDev()const{
-	if(!isnotanumber(fScaleStandDev))
-      throw std::runtime_error("Standard deviations of the scale not assigned. Transformation " + getName());
+TReal TAdjustableHelmertTransformation::getScaleStandDev() const
+{
+	if (!isnotanumber(fScaleStandDev))
+		throw std::runtime_error("Standard deviations of the scale not assigned. Transformation " + getName());
 	return fScaleStandDev;
 }
 
-bool TAdjustableHelmertTransformation::hasRotationStandDev(int d) const{
+bool TAdjustableHelmertTransformation::hasRotationStandDev(int d) const
+{
 	assert3D(d);
 	return (!isnotanumber(fRotStandDev[d]));
 }
 
-bool TAdjustableHelmertTransformation::hasTranslStandDev(int d)const{
+bool TAdjustableHelmertTransformation::hasTranslStandDev(int d) const
+{
 	assert3D(d);
-	return (!isnotanumber(fTransStandDev[d]) );
+	return (!isnotanumber(fTransStandDev[d]));
 }
 
-bool TAdjustableHelmertTransformation::hasScaleStandDev() const{
-   return (!isnotanumber(fScaleStandDev));
+bool TAdjustableHelmertTransformation::hasScaleStandDev() const
+{
+	return (!isnotanumber(fScaleStandDev));
 }
 
-bool TAdjustableHelmertTransformation::hasStandDev(){
-	return (!isnotanumber(fTransStandDev[0]) || !isnotanumber(fTransStandDev[1]) || !isnotanumber(fTransStandDev[2]) || !isnotanumber(fRotStandDev[0]) || !isnotanumber(fRotStandDev[1])
-		|| !isnotanumber(fRotStandDev[2]) || !isnotanumber(fScaleStandDev));
-
+bool TAdjustableHelmertTransformation::hasStandDev()
+{
+	return (!isnotanumber(fTransStandDev[0]) || !isnotanumber(fTransStandDev[1]) || !isnotanumber(fTransStandDev[2]) || !isnotanumber(fRotStandDev[0])
+		|| !isnotanumber(fRotStandDev[1]) || !isnotanumber(fRotStandDev[2]) || !isnotanumber(fScaleStandDev));
 }
 
-void TAdjustableHelmertTransformation::setCorrection(int idx, TReal value) {
+void TAdjustableHelmertTransformation::setCorrection(int idx, TReal value)
+{
 	for (int i = 0; i < 3; i++)
-		if (uidx_trans[i] == idx) {
-			setTranslationCorrection (i, TLength(value));
+		if (uidx_trans[i] == idx)
+		{
+			setTranslationCorrection(i, TLength(value));
 			return;
 		}
 
 	for (int i = 0; i < 3; i++)
-		if (uidx_rot[i] == idx) {
-			setRotationCorrection(i,TAngle(value, TAngle::kRadians));
+		if (uidx_rot[i] == idx)
+		{
+			setRotationCorrection(i, TAngle(value, TAngle::kRadians));
 			return;
 		}
 
-	if(uidx_scale == idx){
+	if (uidx_scale == idx)
+	{
 		setScaleCorrection(value);
 		return;
 	}
@@ -167,41 +181,47 @@ void TAdjustableHelmertTransformation::setCorrection(int idx, TReal value) {
 	throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
 }
 
-void TAdjustableHelmertTransformation::setParam(const TAngle& rx, const TAngle& ry, const TAngle& rz){
+void TAdjustableHelmertTransformation::setParam(const TAngle &rx, const TAngle &ry, const TAngle &rz)
+{
 	fEstParameter.omega = fProvParameter.omega = rx;
 	fEstParameter.phi = fProvParameter.phi = ry;
 	fEstParameter.kappa = fProvParameter.kappa = rz;
 }
 
-void TAdjustableHelmertTransformation::setParam(const TLength tx, const TLength ty, const TLength tz){
+void TAdjustableHelmertTransformation::setParam(const TLength tx, const TLength ty, const TLength tz)
+{
 	fEstParameter.tX = fProvParameter.tX = tx;
 	fEstParameter.tY = fProvParameter.tY = ty;
 	fEstParameter.tZ = fProvParameter.tZ = tz;
 }
 
-void TAdjustableHelmertTransformation::setParam(const TReal scl){
+void TAdjustableHelmertTransformation::setParam(const TReal scl)
+{
 	fEstParameter.scale = fProvParameter.scale = scl;
 }
 
-void TAdjustableHelmertTransformation::setParam(const TLength tx, const TLength ty, const TLength tz, const TAngle& rx, const TAngle& ry, const TAngle& rz, const TReal scl){ 
+void TAdjustableHelmertTransformation::setParam(const TLength tx, const TLength ty, const TLength tz, const TAngle &rx, const TAngle &ry, const TAngle &rz, const TReal scl)
+{
 	setParam(rx, ry, rz);
 	setParam(tx, ty, tz);
 	setParam(scl);
 }
 
-void TAdjustableHelmertTransformation::setTranslationCorrection (int idx, TLength value){
+void TAdjustableHelmertTransformation::setTranslationCorrection(int idx, TLength value)
+{
 	if (idx == 0)
 		fEstParameter.tX = fEstParameter.tX + value;
 	else if (idx == 1)
 		fEstParameter.tY = fEstParameter.tY + value;
 	else if (idx == 2)
 		fEstParameter.tZ = fEstParameter.tZ + value;
-	else		
+	else
 		throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
 	return;
 }
 
-void TAdjustableHelmertTransformation::setRotationCorrection (int idx, const TAngle& value){
+void TAdjustableHelmertTransformation::setRotationCorrection(int idx, const TAngle &value)
+{
 	if (idx == 0)
 		fEstParameter.omega = fEstParameter.omega + value;
 	else if (idx == 1)
@@ -211,104 +231,56 @@ void TAdjustableHelmertTransformation::setRotationCorrection (int idx, const TAn
 	else
 		throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
 	return;
-
 }
 
-void TAdjustableHelmertTransformation::setScaleCorrection (TReal value){
+void TAdjustableHelmertTransformation::setScaleCorrection(TReal value)
+{
 	fEstParameter.scale = fEstParameter.scale + value;
 }
 
-
-const TAngle& TAdjustableHelmertTransformation::getEstimatedPrecisionRot(int d)const{
-	if(fEstPrecisionRotation[d].getGonsValue()==NO_VALf)
+const TAngle &TAdjustableHelmertTransformation::getEstimatedPrecisionRot(int d) const
+{
+	if (fEstPrecisionRotation[d].getGonsValue() == NO_VALf)
 		throw std::logic_error("No rotation precision assigned. Transformation " + getName());
 	return fEstPrecisionRotation[d];
-
 }
 
-const TLength& TAdjustableHelmertTransformation::getEstimatedPrecisionTransl(int d)const{
+const TLength &TAdjustableHelmertTransformation::getEstimatedPrecisionTransl(int d) const
+{
 	if (isnotanumber(fEstPrecisionTranslation[d]))
 		throw std::logic_error("No translation precision assigned. Transformation " + getName());
 	return fEstPrecisionTranslation[d];
-
 }
 
-TReal TAdjustableHelmertTransformation::getEstimatedPrecisionScale() const{
-	if(isnotanumber(fEstPrecisionScale))
+TReal TAdjustableHelmertTransformation::getEstimatedPrecisionScale() const
+{
+	if (isnotanumber(fEstPrecisionScale))
 		throw std::logic_error("No scale precision assigned. Transformation " + getName());
 	return fEstPrecisionScale;
 }
 
-
-const TReal&	TAdjustableHelmertTransformation::getXYCovarTransl() const{
-	if(fCovarianceTranslation[0]==NO_VALf)
-		throw std::logic_error("No XY covariance assigned. Transformation " + getName());
-	return fCovarianceTranslation[0];
+TDenseMatrix TAdjustableHelmertTransformation::getCovar() const
+{
+	return fCovar;
 }
 
-const TReal&	TAdjustableHelmertTransformation::getYZCovarTransl() const{
-	if(fCovarianceTranslation[1]==NO_VALf)
-		throw std::logic_error("No YZ covariance assigned. Transformation " + getName());
-	return fCovarianceTranslation[1];
-}
-
-
-const TReal&	TAdjustableHelmertTransformation::getXZCovarTransl() const{
-	if(fCovarianceTranslation[2]==NO_VALf)
-		throw std::logic_error("No XZ covariance assigned. Transformation " + getName());
-	return fCovarianceTranslation[2];
-}
-
-bool TAdjustableHelmertTransformation::isTranslationFixed(int d) const { 
+bool TAdjustableHelmertTransformation::isTranslationFixed(int d) const
+{
 	assert3D(d);
 	return (fixedTranslations[d]);
 }
 
-bool TAdjustableHelmertTransformation::isRotationFixed(int d) const { 
+bool TAdjustableHelmertTransformation::isRotationFixed(int d) const
+{
 	assert3D(d);
-	return (fixedRotations[d]); 
+	return (fixedRotations[d]);
 }
 
-const TReal& TAdjustableHelmertTransformation::getXYCovarRot() const{
-		if(fCovarianceRotation[0]==NO_VALf)
-		throw std::logic_error("No XY covariance assigned. Transformation " + getName());
-	return fCovarianceRotation[0];
-}
-
-const TReal& TAdjustableHelmertTransformation::getYZCovarRot() const{
-		if(fCovarianceRotation[1]==NO_VALf)
-		throw std::logic_error("No YZ covariance assigned. Transformation " + getName());
-	return fCovarianceRotation[1];
-}
-
-const TReal& TAdjustableHelmertTransformation::getXZCovarRot() const{
-		if(fCovarianceRotation[2]==NO_VALf)
-		throw std::logic_error("No XZ covariance assigned. Transformation " + getName());
-	return fCovarianceRotation[2];
-}
-
-
-/// Returns scale covariance  {ltx, lty, ltz, lrx, lry, lrz}
-const TReal& TAdjustableHelmertTransformation::getScaleCovar(int i) const
+void TAdjustableHelmertTransformation::setFirstUidx(int idx)
 {
-	if (fCovarianceScl[i] == NO_VALf)
-		throw std::logic_error("No scale covariance assigned. Transformation " + getName());
-	return fCovarianceScl[i];
-}
-
-/// Returns covariance between translation and rotation  {txrx, txry, txrz, tyrx, tyry, tyrz, tzrx, tzry, tzrz}
-const TReal& TAdjustableHelmertTransformation::getTrRotCovar(int i) const
-{
-	if (fCovarianceTrRot[i] == NO_VALf)
-		throw std::logic_error("No translation/rotation covariance assigned. Transformation " + getName());
-	return fCovarianceTrRot[i];
-}
-
-
-void TAdjustableHelmertTransformation::setFirstUidx(int idx) {
 	if (isFixed())
 		throw std::logic_error("Trying to assign unknown index to fixed transformation. Transformation " + getName());
-	
+
 	for (int i = 0; i < 3; i++)
 		if (!fixedTranslations[i])
 			uidx_trans[i] = idx++;
@@ -317,178 +289,103 @@ void TAdjustableHelmertTransformation::setFirstUidx(int idx) {
 		if (!fixedRotations[i])
 			uidx_rot[i] = idx++;
 
-	if(!fixedScale[0])
+	if (!fixedScale[0])
 		uidx_scale = idx++;
 }
 
-void TAdjustableHelmertTransformation::setTranslationStandDev(int d, TLength stDev){
+void TAdjustableHelmertTransformation::setTranslationStandDev(int d, TLength stDev)
+{
 	assert3D(d);
 	fTransStandDev[d].setMetresValue(stDev);
 }
 
-void TAdjustableHelmertTransformation::setRotationStandDev(int d, TAngle stDev){
+void TAdjustableHelmertTransformation::setRotationStandDev(int d, TAngle stDev)
+{
 	assert3D(d);
 	fRotStandDev[d] = stDev;
 }
 
-void TAdjustableHelmertTransformation::setScaleStandDev(TReal stDev){
+void TAdjustableHelmertTransformation::setScaleStandDev(TReal stDev)
+{
 	fScaleStandDev = stDev;
 }
 
-
-void TAdjustableHelmertTransformation::setDefaults(){
-
-		fRotStandDev[0] = fRotStandDev[1] = fRotStandDev[2] = TAngle();
-		fTransStandDev[0] = fTransStandDev[1] = fTransStandDev[2] = TLength(); 
-		fScaleStandDev = NO_VALf;
-
-		uidx_rot[0] = -1;
-		uidx_rot[1] = -1;
-		uidx_rot[2] = -1;
-
-		uidx_trans[0] = -1;
-		uidx_trans[1] = -1;
-		uidx_trans[2] = -1;
-
-		uidx_scale = -1;
-}
-
-void TAdjustableHelmertTransformation::setDefaultsParams(){
-		fProvParameter.omega.setRadiansValue(0.0);
-		fProvParameter.phi.setRadiansValue(0.0);
-		fProvParameter.kappa.setRadiansValue(0.0);
-		fProvParameter.tX = TLength(0.0);
-		fProvParameter.tY = TLength(0.0);
-		fProvParameter.tZ = TLength(0.0);
-		fProvParameter.scale = 1;
-
-		fEstParameter.omega.setRadiansValue(0.0);
-		fEstParameter.phi.setRadiansValue(0.0);
-		fEstParameter.kappa.setRadiansValue(0.0);
-		fEstParameter.tX = TLength(0.0);
-		fEstParameter.tY = TLength(0.0);
-		fEstParameter.tZ = TLength(0.0);
-		fEstParameter.scale = 1;
-}
-
-
-void	TAdjustableHelmertTransformation::setXYTranslationCovariance(TReal value){
-	if (!fixedTranslations[0] && !fixedTranslations[1])
-		fCovarianceTranslation[0] = value;
-	else
-		throw std::logic_error("TAdjustableHelmertTransformation::setXYTranslationCovariance, translation must be variable in both X and Y. Transformation " + getName());
-}
-
-void	TAdjustableHelmertTransformation::setYZTranslationCovariance(TReal value){
-	if (!fixedTranslations[1] && !fixedTranslations[2])
-		fCovarianceTranslation[1] = value;
-	else
-		throw std::logic_error("LGCAdjustablePlane::setYZTranslationCovariance, translation must be variable in both Y and Z. Transformation " + getName());
-
-}
-
-void	TAdjustableHelmertTransformation::setXZTranslationCovariance(TReal value){
-	if (!fixedTranslations[0] && !fixedTranslations[2])
-		fCovarianceTranslation[2] = value;
-	else
-		throw std::logic_error("LGCAdjustablePlane::setXZTranslationCovariance, translation must be variable in both X and Z. Transformation " + getName());
-}
-
-
-void	TAdjustableHelmertTransformation::setXYRotationCovariance(TReal value){
-	if (!fixedRotations[0] && !fixedRotations[1])
-		fCovarianceRotation[0] = value;
-	else
-		throw std::logic_error("TAdjustableHelmertTransformation::setXYRotationCovariance, rotation must be variable in both X and Y. Transformation " + getName());
-
-}
-
-void	TAdjustableHelmertTransformation::setYZRotationCovariance(TReal value){
-	if (!fixedRotations[1] && !fixedRotations[2])
-		fCovarianceRotation[1] = value;
-	else
-		throw std::logic_error("LGCAdjustablePlane::setYZRotationCovariance, rotation must be variable in both Y and Z. Transformation " + getName());
-
-}
-
-void	TAdjustableHelmertTransformation::setXZRotationCovariance(TReal value){
-	if (!fixedRotations[0] && !fixedRotations[2])
-		fCovarianceRotation[2] = value;
-	else
-		throw std::logic_error("TAdjustableHelmertTransformation::setXZRotationCovariance, rotation must be variable in both X and Z. Transformation " + getName());
-}
-
-
-/// Sets the estimated scale covaraiance after calculation {ltx, lty, ltz, lrx, lry, lrz}
-void TAdjustableHelmertTransformation::setScaleCovariance(int idx, TReal value)
+void TAdjustableHelmertTransformation::setDefaults()
 {
-	if (idx < 3)
-	{
-		if (!fixedTranslations[idx] && !fixedScale[0])
-			fCovarianceScl[idx] = value;
-		else
-			throw std::logic_error("TAdjustableHelmertTransformation::setScaleCovariance, translation and scale must be variable. Transformation " + getName());
-	}
-	else
-	{
-		if (!fixedRotations[idx-3] && !fixedScale[0])
-			fCovarianceScl[idx] = value;
-		else
-			throw std::logic_error("TAdjustableHelmertTransformation::setScaleCovariance, rotation and scale must be variable. Transformation " + getName());
-	}
+	fRotStandDev[0] = fRotStandDev[1] = fRotStandDev[2] = TAngle();
+	fTransStandDev[0] = fTransStandDev[1] = fTransStandDev[2] = TLength();
+	fScaleStandDev = NO_VALf;
+
+	uidx_rot[0] = -1;
+	uidx_rot[1] = -1;
+	uidx_rot[2] = -1;
+
+	uidx_trans[0] = -1;
+	uidx_trans[1] = -1;
+	uidx_trans[2] = -1;
+
+	uidx_scale = -1;
 }
-/// Sets the estimated rotation/translation after calculation {txrx, txry, txrz, tyrx, tyry, tyrz, tzrx, tzry, tzrz}
-void TAdjustableHelmertTransformation::setTrRotCovariance(int idx, TReal value)
+
+void TAdjustableHelmertTransformation::setDefaultsParams()
 {
-	if (idx < 3) //tx
-	{
-		if (!fixedRotations[idx] && !fixedTranslations[0])
-			fCovarianceTrRot[idx] = value;
-		else
-			throw std::logic_error("TAdjustableHelmertTransformation::setTrRotCovariance, translation in X and rotation must be variable. Transformation " + getName());
-	}
-	else if ((idx > 2) && (idx < 6)) //ty
-	{
-		if (!fixedRotations[idx - 3] && !fixedTranslations[1])
-			fCovarianceTrRot[idx] = value;
-		else
-			throw std::logic_error("TAdjustableHelmertTransformation::setTrRotCovariance, rotation in Y and rotation must be variable. Transformation " + getName());
-	}
-	else //tz
-	{
-		if (!fixedRotations[idx - 6] && !fixedTranslations[2])
-			fCovarianceTrRot[idx] = value;
-		else
-			throw std::logic_error("TAdjustableHelmertTransformation::setTrRotCovariance, rotation in Z and rotation must be variable. Transformation " + getName());
-	}
-	
+	fProvParameter.omega.setRadiansValue(0.0);
+	fProvParameter.phi.setRadiansValue(0.0);
+	fProvParameter.kappa.setRadiansValue(0.0);
+	fProvParameter.tX = TLength(0.0);
+	fProvParameter.tY = TLength(0.0);
+	fProvParameter.tZ = TLength(0.0);
+	fProvParameter.scale = 1;
+
+	fEstParameter.omega.setRadiansValue(0.0);
+	fEstParameter.phi.setRadiansValue(0.0);
+	fEstParameter.kappa.setRadiansValue(0.0);
+	fEstParameter.tX = TLength(0.0);
+	fEstParameter.tY = TLength(0.0);
+	fEstParameter.tZ = TLength(0.0);
+	fEstParameter.scale = 1;
 }
 
-
-
-void	TAdjustableHelmertTransformation::setEstimatedPrecision(int idx, TReal value){
-	if (uidx_scale == idx){
+void TAdjustableHelmertTransformation::setEstimatedPrecision(int idx, TReal value)
+{
+	if (uidx_scale == idx)
+	{
 		fEstPrecisionScale = value;
 		return;
 	}
 
-	for (int i = 0; i < 3; i++){
-		if (uidx_rot[i] == idx) {
-			if (i == 0 ){
-				fEstPrecisionRotation[0].setRadiansValue(value);}
-			else if(i == 1){
-				fEstPrecisionRotation[1].setRadiansValue(value);}
-			else{
-				fEstPrecisionRotation[2].setRadiansValue(value);}
+	for (int i = 0; i < 3; i++)
+	{
+		if (uidx_rot[i] == idx)
+		{
+			if (i == 0)
+			{
+				fEstPrecisionRotation[0].setRadiansValue(value);
+			}
+			else if (i == 1)
+			{
+				fEstPrecisionRotation[1].setRadiansValue(value);
+			}
+			else
+			{
+				fEstPrecisionRotation[2].setRadiansValue(value);
+			}
 			return;
 		}
-		if (uidx_trans[i] == idx) {
-			if (i == 0 ){
-				fEstPrecisionTranslation[0].setMetresValue(value);}
-			else if(i == 1){
-				fEstPrecisionTranslation[1].setMetresValue(value);}
-			else{
-				fEstPrecisionTranslation[2].setMetresValue(value);}
+		if (uidx_trans[i] == idx)
+		{
+			if (i == 0)
+			{
+				fEstPrecisionTranslation[0].setMetresValue(value);
+			}
+			else if (i == 1)
+			{
+				fEstPrecisionTranslation[1].setMetresValue(value);
+			}
+			else
+			{
+				fEstPrecisionTranslation[2].setMetresValue(value);
+			}
 			return;
 		}
 	}
@@ -496,65 +393,59 @@ void	TAdjustableHelmertTransformation::setEstimatedPrecision(int idx, TReal valu
 	throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
 }
 
-
-TLength TAdjustableHelmertTransformation::getEstTranslation(int axis) const{
+TLength TAdjustableHelmertTransformation::getEstTranslation(int axis) const
+{
 	assert3D(axis);
-	if(axis == 0)
+	if (axis == 0)
 		return fEstParameter.tX;
-	else if(axis == 1)
+	else if (axis == 1)
 		return fEstParameter.tY;
 	else
 		return fEstParameter.tZ;
 }
 
-
-TLength TAdjustableHelmertTransformation::getProvTranslation(int axis) const{
+TLength TAdjustableHelmertTransformation::getProvTranslation(int axis) const
+{
 	assert3D(axis);
-	if(axis == 0)
+	if (axis == 0)
 		return fProvParameter.tX;
-	else if(axis == 1)
+	else if (axis == 1)
 		return fProvParameter.tY;
 	else
 		return fProvParameter.tZ;
 }
 
-const TAngle& TAdjustableHelmertTransformation::getEstRotation(int axis) const{
+const TAngle &TAdjustableHelmertTransformation::getEstRotation(int axis) const
+{
 	TAngle ang(NO_VALf, TAngle::kRadians);
 	assert3D(axis);
 
-		if(axis == 0)
-			return fEstParameter.omega;
-		else if(axis == 1)
-			return fEstParameter.phi;
-		else
-			return fEstParameter.kappa;
+	if (axis == 0)
+		return fEstParameter.omega;
+	else if (axis == 1)
+		return fEstParameter.phi;
+	else
+		return fEstParameter.kappa;
 }
 
-
-const TAngle& TAdjustableHelmertTransformation::getProvRotation(int axis) const{
+const TAngle &TAdjustableHelmertTransformation::getProvRotation(int axis) const
+{
 	TAngle ang(NO_VALf, TAngle::kRadians);
 	assert3D(axis);
 
-		if(axis == 0)
-			return fProvParameter.omega;
-		else if(axis == 1)
-			return fProvParameter.phi;
-		else
-			return fProvParameter.kappa;
+	if (axis == 0)
+		return fProvParameter.omega;
+	else if (axis == 1)
+		return fProvParameter.phi;
+	else
+		return fProvParameter.kappa;
 }
 
-void TAdjustableHelmertTransformation::reInitialise(){
+void TAdjustableHelmertTransformation::reInitialise()
+{
 	setParam(fProvParameter.tX, fProvParameter.tY, fProvParameter.tZ);
 	setParam(fProvParameter.omega, fProvParameter.phi, fProvParameter.kappa);
 	setParam(fProvParameter.scale);
-
-	fCovarianceTranslation[0] = NO_VALf;
-	fCovarianceTranslation[1] = NO_VALf;
-	fCovarianceTranslation[2] = NO_VALf;
-
-	fCovarianceRotation[0] = NO_VALf;
-	fCovarianceRotation[1] = NO_VALf;
-	fCovarianceRotation[2] = NO_VALf;
 
 	fEstPrecisionScale = NO_VALf;
 
@@ -567,15 +458,12 @@ void TAdjustableHelmertTransformation::reInitialise(){
 	fEstPrecisionRotation[2].setRadiansValue(0.0);
 }
 
-
 #if USE_SERIALIZER
 void TAdjustableHelmertTransformation::serialize(SerializerObject::SerializationHelper &obj) const
 {
 	TVAdjustableObject::serialize(obj);
-	obj.addProperty("fCovarianceRotation", fCovarianceRotation);
-	obj.addProperty("fCovarianceScl", fCovarianceScl);
-	obj.addProperty("fCovarianceTranslation", fCovarianceTranslation);
-	obj.addProperty("fCovarianceTrRot", fCovarianceTrRot);
+
+	obj.addProperty("fCovar", fCovar);
 	obj.addProperty("fEstParameter",
 		std::vector<double>{
 			fEstParameter.tX.getMetresValue(),
@@ -585,8 +473,8 @@ void TAdjustableHelmertTransformation::serialize(SerializerObject::Serialization
 			fEstParameter.phi.getRadiansValue(),
 			fEstParameter.kappa.getRadiansValue(),
 			fEstParameter.scale,
-	});
-	
+		});
+
 	obj.addProperty("fEstPrecision",
 		std::vector<double>{
 			fEstPrecisionTranslation[0].getMetresValue(),
@@ -607,7 +495,7 @@ void TAdjustableHelmertTransformation::serialize(SerializerObject::Serialization
 			(bool)fixedRotations[1],
 			(bool)fixedRotations[2],
 			(bool)fixedScale[0],
-	});
+		});
 
 	obj.addProperty("fProvParameter",
 		std::vector<double>{
@@ -646,5 +534,3 @@ void TAdjustableHelmertTransformation::serialize(SerializerObject::Serialization
 		});
 }
 #endif // USE_SERIALIZER
-
-
