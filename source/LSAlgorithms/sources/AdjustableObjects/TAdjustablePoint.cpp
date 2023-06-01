@@ -506,7 +506,9 @@ void TAdjustablePoint::serialize(SerializerObject::SerializationHelper &obj) con
 	TVAdjustableObject::serialize(obj);
 	obj.addProperty("eolcomment", eolcomment);
 	obj.addProperty("fCorrection", fCorrection);
-	obj.addProperty("fCovariance", fCovariance);
+	//obj.addProperty("fCovariance", fCovariance);   // This member still exists but it is selected not to be shown in the JSON file.
+	obj.addProperty("fCovarianceMatrix", fCovarianceMatrix);
+	
 	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
 	obj.addProperty("fEstimatedValue", fEstimatedValue);
 	obj.addProperty("fHfixed", fHfixed);

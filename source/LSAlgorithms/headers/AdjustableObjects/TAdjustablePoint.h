@@ -11,6 +11,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TPositionVector.h"
 #include "TFreeVector.h"
 #include "TSpatialStatus.h"
+#include <TSparseMatrix.h>
 
 /*! 
 	\ingroup AdjustableObjects
@@ -64,6 +65,15 @@ public:
 
 		/// Returns a constant reference on the estimated value of the point
 		inline const TPositionVector&	getEstimatedValue() const {	return fEstimatedValue;}
+
+		/// Returns a constant reference of the covariance matrix
+		inline const TDenseMatrix &getCovarianceMatrix() const { return fCovarianceMatrix; } 
+
+		/// Sets a constant reference on the provisional value of the position vector
+		void setProvisionalValue(const TPositionVector &pointProv) { fProvisionalValue = pointProv; };
+
+		/// Sets the covariance matrix
+		void setCovarianceMatrix(const TDenseMatrix &covar) { fCovarianceMatrix = covar; };
 
 		/*!
 			\brief Calculates and \returns the number of unknowns that are added to the adjustment by this point.
@@ -281,7 +291,8 @@ protected:
 	TLength				fCorrection[3]; /*!< point's correction after calculation  */
 	TPositionVector		fEstimatedValue; /*!< point's estimated value after calculation */
 	TLength				fEstimatedPrecision[3]; /*!< point's estimated precision after calculation */
-	TFreeVector				fCovariance; /*!< point's covariance */	
+	TFreeVector				fCovariance; /*!< point's covariance */
+	TDenseMatrix fCovarianceMatrix = Eigen::MatrixXd::Zero(3, 3); 
 
 	TRefSystemFactory::ERefFrame fReferential; /*!< Reference frame of the point */
 
