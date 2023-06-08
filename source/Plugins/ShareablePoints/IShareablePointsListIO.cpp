@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <fstream>
 #include <locale>
+#include <memory>
 #include <sstream>
 
 #include "SPIOException.hpp"

@@ -81,7 +81,13 @@ Note that the `devtoolset` trick is only necessary on the CC7 (Cern CentOS 7) as
 
 We use CMake to generate projects, thus it is possible to generate projects for MSVC, Eclipse, or simple Unix makefiles. See the [CMake Generators documentation](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html) page.
 
-To generate the project, you need first to create a subdirectory named `build/`, and then run CMake inside:
+First of all, ensure that you have all the submodules initialized with:
+
+```bash 
+$ git submodule update --init
+```
+
+To generate the project, you need to create a subdirectory named `build/`, and then run CMake inside:
 
 ```bash
 $ mkdir build && cd build/
