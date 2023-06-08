@@ -1,5 +1,6 @@
 include:
   - project: 'apc/common/gitlab-ci-utils'
+    ref: scc_submodule
     file: 'ci/scripts/gitlab-ci-susoft.yml'
 
 ##################
@@ -19,7 +20,7 @@ linux_release:
         - $CMAKEBIN --build . -j $(nproc) --config Release --target SpatialObjDLL
         - cp staging/libSpatialObjDLL.so ..
         - $CMAKEBIN --build . -j $(nproc) --config Release --target CSGeoDLL
-        - cp staging/libCSGeoDLL.so ..       
+        - cp staging/libCSGeoDLL.so ..  
     artifacts:
         name: sharedlibrary
         paths:
