@@ -329,9 +329,9 @@ private:
 	void setDefaultsParams();
 
 	// Estimated precisions of transformation parameters
-	TAngle fEstPrecisionRotation[3]; /*!<Estimated precision of the rotation. */
-	TLength fEstPrecisionTranslation[3]; /*!<Estimated precision of the translation. */
-	TReal fEstPrecisionScale; /*!<Estimated precision of the scale factor. */
+	TAngle fEstPrecisionRotation[3] = {TAngle(0.0), TAngle(0.0), TAngle(0.0)}; /*!<Estimated precision of the rotation. */
+	TLength fEstPrecisionTranslation[3] = {TLength(0.0), TLength(0.0), TLength(0.0)}; /*!<Estimated precision of the translation. */
+	TReal fEstPrecisionScale = 0; /*!<Estimated precision of the scale factor. */
 
 	TDenseMatrix fCovar; /*!<Full covariance matrix */
 };
