@@ -20,7 +20,7 @@ namespace TSparseUtils {
 
 	bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCholeskyFirst = false, bool bTryFullPivotSecond = true);
 	
-	bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool bTryCholeskyFirst = true, bool bTryFullPivotSecond = true);
+	bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool bTryCholeskyFirst = true, bool bTryFullPivotSecond = true, bool useStrictThreshold = false);
 	
 	// optimized multiplication routine that returns the main diagonal of A*B*A'
 	TVector& multABATasDiag(TVector& res, const TSparseMatrix& A, const TSparseMatrix& B);
