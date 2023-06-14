@@ -10,6 +10,7 @@ include:
 # Build all targets and run the tests
 linux_build_and_test:
     extends: .linux_build_and_test
+    image: gitlab-registry.cern.ch/apc/common/docker-image-susoft-cpp:alma9-base-qt5
 
 # Build and upload the libSpatialObjDLL.so and the libCSGeoDLL.so
 linux_release:
