@@ -54,7 +54,7 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	int nbUnk = im->getNbrUnknowns();
 	int nbEq = im->getNbrEquations();
 	int nbCnstr = im->getNbrConstraints();
-	int nbMasked = im->maskedIndices.size();
+	int nbMasked = im->maskData.EIndices.size();
 	int nbEqReduced = nbEq - nbMasked;
 
 

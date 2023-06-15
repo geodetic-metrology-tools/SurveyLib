@@ -437,7 +437,7 @@ std::vector<int> TLSInputMatrices::getActiveIndices()
 	std::vector<int> ind;
 	for (int j = 0; j < fUEOIndices.EIndex; j++)
 	{
-		if (maskedIndices.find(j) != maskedIndices.end())
+		if (maskData.EIndices.find(j) != maskData.EIndices.end())
 		{
 			// index is masked
 		}
