@@ -1,6 +1,7 @@
 #include "TLSUniversalMtdComputer.h"
 
 #include <vector>
+#include <iostream>
 
 #include <Logger.hpp>
 
@@ -44,12 +45,21 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	const TSparseMatrix &A2 = *im->getCnstrFirstDgnMtrx(); // A2 : First design matrix part related to constraints only
 	const TVector &W2 = im->getCnstrMisclosureVctr(); // W2 : Misclosures vector part related to constraints only
 
+
+	//masked input data
+	TSparseMatrix AMasked = im->maskRows(&A);
+	TVector WMasked = im->getLeftFactor() * W;
+
+
 	int nbUnk = im->getNbrUnknowns();
 	int nbEq = im->getNbrEquations();
 	int nbCnstr = im->getNbrConstraints();
+	int nbMasked = im->maskedIndices.size();
+	int nbEqReduced = nbEq - nbMasked;
+
 
 	// set invN1
-	TSparseMatrix invN1(nbEq, nbEq);
+	TSparseMatrix invN1(nbEqReduced, nbEqReduced);
 	if (im->getSecondDgnBlockDiagStatus())
 	{
 		if (!(im->getWeightMtrx()) || !(im->getSecondDgnBlockDiagInvMtrx()))
@@ -57,8 +67,10 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 			throw std::runtime_error("Some of the design matrices are not initialized!");
 		}
 		const TSparseMatrix &Pv = *im->getWeightMtrx();
+		TSparseMatrix PvMasked = im->maskColsAndRows(&Pv);
 		const TSparseMatrix &invB = *im->getSecondDgnBlockDiagInvMtrx();
-		invN1 = invB.transpose() * Pv * invB;
+		TSparseMatrix invBMasked= im->maskColsAndRows(&invB);
+		invN1 = invBMasked.transpose() * PvMasked * invBMasked;
 	}
 	else
 	{ // if B is not block diagonal, invN1 needs to be computed via an explicit inversion
@@ -69,7 +81,9 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 		}
 		const TSparseMatrix &B = *im->getSecondDgnMtrx();
 		const TSparseMatrix &InvPv = *im->getWeightInvMtrx();
-		if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1, true))
+		TSparseMatrix BMasked= im->maskColsAndRows(&B);
+		TSparseMatrix InvPvMasked = im->maskColsAndRows(&InvPv);
+		if (!TSparseUtils::inverse(BMasked * InvPvMasked * BMasked.transpose(), invN1, true))
 		{
 			logCritical() << "Matrix B*inv(Pv)*transpose(B) could not be inverted!";
 			return false;
@@ -81,7 +95,7 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	// Calculate Normal matrix N2 = At * inv( B * inv(P) * Bt ) * A , matrix dimensions (u,u)
 	// and re-sets this new matrix to the main TLSResultsMatrices object.
 	TSparseMatrix N2(nbUnk, nbUnk);
-	N2 = A.transpose() * invN1 * A;
+	N2 = AMasked.transpose() * invN1 * AMasked;
 
 	// construct NBig = (N2, A2t
 	//                   A2, 0  )
@@ -109,7 +123,7 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 
 	// Extended vector: appends W2 (constraints misclosures) to the calculated At*inv(N1)*W  vector
 	TVector VBig(nbUnk + nbCnstr);
-	VBig << A.transpose() * invN1 * W, W2;
+	VBig << AMasked.transpose() * invN1 * WMasked, W2;
 
 	// Calculates solution NBig * X = -VBig and keeps only the part corresponding to adjusted parameters
 	TVector solutionExt(nbUnk + nbCnstr);
@@ -132,7 +146,7 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	return true;
 }
 
-bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices *im, TLSResultsMatrices *rm)
+bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, TLSResultsMatrices *rm)
 {
 	if (!fError.empty())
 		return false;
@@ -183,13 +197,19 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	V = S * (A * solution + W);
 
 	//--------------- Sigma 0 a posteriri ---------------//
-	sigmaZero2Aposteriori = V.transpose() * Pv * V;
-	if (nbEq + nbCnstr != nbUnk)
-		sigmaZero2Aposteriori /= (nbEq - nbUnk + nbCnstr); // NB Redundancy: Takes into account the number of constraints!
+
+	int nbEqReduced = nbEq - im->maskedIndices.size();
+	int nbObsReduced = nbObs - im->maskedIndices.size();
+	TSparseMatrix PvMasked = im->maskColsAndRows(&Pv);
+	TVector VMasked(nbObsReduced);
+	VMasked = im->getLeftFactor() * V;
+	sigmaZero2Aposteriori = VMasked.transpose() * PvMasked * VMasked;
+	if (nbEqReduced + nbCnstr != nbUnk)
+		sigmaZero2Aposteriori /= (nbEqReduced - nbUnk + nbCnstr); // NB Redundancy: Takes into account the number of constraints!
 	else
 		fError += "Number of equations + constraints equals number of unknowns, causes zero division!";
 	rm->setSigmaZero2(sigmaZero2Aposteriori);
-	struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk, nbCnstr);
+	struct limits fisherLim = calcSigmaZeroLimits(nbObsReduced, nbUnk, nbCnstr);
 	rm->setSigmaZeroLimits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
 
 	// ----------Covariance Matrices-----------//
