@@ -9,6 +9,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TSparseMatrix.h"
 #include <UEOIndices.h>
 #include "Quad.h"
+#include <set>
 
 
 /*!
@@ -145,6 +146,19 @@ public:
 		const TVector&	getCnstrMisclosureVctr() const noexcept;
 	//@}
 
+	// can be used to mask rows of the A matrix during adjustment
+	std::set<int> maskedIndices;
+
+	// mult from right to mask columns
+	const TSparseMatrix getRightFactor();
+	// mult from left to mask rows
+	const TSparseMatrix getLeftFactor();
+	// cannot reuse the pointers for masked matrices
+	const TSparseMatrix maskRows(const TSparseMatrix *mat);
+	const TSparseMatrix maskCols(const TSparseMatrix *mat);
+	const TSparseMatrix maskColsAndRows(const TSparseMatrix *mat);
+
+	std::vector<int> getActiveIndices();
 
 	/// Debug method
 	void saveMatricesToFile(int nbIter) const;
