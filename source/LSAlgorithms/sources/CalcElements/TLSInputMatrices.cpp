@@ -319,6 +319,77 @@ int TLSInputMatrices::getNbrConstraints() const
 }
 
 
+const TSparseMatrix TLSInputMatrices::getRightFactor() 
+{
+	std::vector<int> actInd = getActiveIndices();
+	int nActive = actInd.size();
+	TSparseMatrix rightFactor(fUEOIndices.EIndex, nActive);
+	std::vector<TTriplet> coeffs;
+	coeffs.reserve(nActive);
+
+	for (int colIdx = 0; colIdx < nActive; colIdx++)
+	{
+		coeffs.push_back(TTriplet(actInd.at(colIdx), colIdx, 1));
+	}
+	rightFactor.setFromTriplets(coeffs.begin(), coeffs.end());
+	return rightFactor;
+}
+
+const TSparseMatrix TLSInputMatrices::getLeftFactor() 
+{
+	std::vector<int> actInd = getActiveIndices();
+	int nActive = actInd.size();
+	TSparseMatrix leftFactor(nActive, fUEOIndices.EIndex);
+	std::vector<TTriplet> coeffs;
+	coeffs.reserve(nActive);
+
+	for (int rowIdx = 0; rowIdx < nActive; rowIdx++)
+	{
+		coeffs.push_back(TTriplet(rowIdx, actInd.at(rowIdx), 1));
+	}
+	leftFactor.setFromTriplets(coeffs.begin(), coeffs.end());
+
+	return leftFactor;
+}
+
+const TSparseMatrix TLSInputMatrices::maskRows(const TSparseMatrix *mat)
+{
+	return getLeftFactor() * (*mat);
+
+}
+
+const TSparseMatrix TLSInputMatrices::maskCols(const TSparseMatrix *mat)
+{
+	return (*mat) * getRightFactor();
+}
+
+const TSparseMatrix TLSInputMatrices::maskColsAndRows(const TSparseMatrix *mat)
+{
+	return getLeftFactor() * (*mat) * getRightFactor();
+
+}
+
+
+
+std::vector<int> TLSInputMatrices::getActiveIndices()
+{
+	std::vector<int> ind;
+	for (int j = 0; j < fUEOIndices.EIndex; j++)
+	{
+		if (maskedIndices.find(j) != maskedIndices.end())
+		{
+			// index is masked
+		}
+		else
+		{
+			// its active
+			ind.push_back(j);
+		}
+	}
+
+	return ind;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //DEBUG METHOD : saves the content of the matrices to a text file
 ///////////////////////////////////////////////////////////////////////////////
