@@ -145,7 +145,12 @@ public:
 	//@}
 
 	// can be used to mask rows of the A matrix during adjustment
-	std::set<int> maskedIndices;
+		struct
+		{
+			std::set<int> EIndices;
+			std::set<int> OIndices;
+		}
+		maskData;
 
 	// mult from right to mask columns
 	const TSparseMatrix getRightFactor();
