@@ -94,6 +94,11 @@ $ mkdir build && cd build/
 $ cmake -G "Visual Studio 16 2019" -A x64 ../source # Use another generator here if you wish
 ```
 
+In order to use a custom ext_libs.txt file defining the dependencies, please use:
+```bash
+$ cmake -G "Visual Studio 16 2019" -A x64 -DEXT_LIBS_TXT_PATH="C:/susoft/SUSoftCMakeCommon/ext_libs.txt" ../source # Use another file defining the dependencies
+```
+
 ### Build ###
 
 Once generated, you can open your project in the `build/` subfolder. If you use MSVC, you can open the file `build/SurveyLib.sln`.

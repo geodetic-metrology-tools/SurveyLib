@@ -9,6 +9,30 @@ SET(SURVEYLIB_LIBRARIES
 	Tools
 	CSGeoDLL
 )
+
+# External libs
+# Silently check if the external libraries are available in the specified paths
+# Show the version if yes
+# Boost
+FIND_PACKAGE(Boost 1.49.0 QUIET)
+if(${Boost_FOUND})
+	message("-- Found Boost at ${BOOST_ROOT} (found version: ${Boost_VERSION_STRING})")
+endif(${Boost_FOUND})
+
+# Eigen 
+IF(EXISTS ${EIGEN_INCLUDE_PATH}/Eigen/src/Core/util/Macros.h)
+	file(READ ${EIGEN_INCLUDE_PATH}/Eigen/src/Core/util/Macros.h ver)
+	
+	string(REGEX MATCH "EIGEN_WORLD_VERSION ([0-9]*)" _ ${ver})
+	set(ver_major ${CMAKE_MATCH_1})
+	string(REGEX MATCH "EIGEN_MAJOR_VERSION ([0-9]*)" _ ${ver})
+	set(ver_minor ${CMAKE_MATCH_1})
+	string(REGEX MATCH "EIGEN_MINOR_VERSION ([0-9]*)" _ ${ver})
+	set(ver_patch ${CMAKE_MATCH_1})
+	
+	message("-- Found Eigen at ${EIGEN_INCLUDE_PATH} (found version: ${ver_major}.${ver_minor}.${ver_patch})")
+ENDIF(EXISTS ${EIGEN_INCLUDE_PATH}/Eigen/src/Core/util/Macros.h)
+
 IF(USE_SERIALIZER)
 	LIST(APPEND SURVEYLIB_LIBRARIES Serialization)
 ENDIF(USE_SERIALIZER)
