@@ -174,15 +174,17 @@ public:
 		maskData;
 
 	// mult from right to mask columns
-	const TSparseMatrix getRightFactor();
+	const TSparseMatrix getObsMask();
 	// mult from left to mask rows
-	const TSparseMatrix getLeftFactor();
+	const TSparseMatrix getEqnMask();
 	// cannot reuse the pointers for masked matrices
-	const TSparseMatrix maskRows(const TSparseMatrix *mat);
-	const TSparseMatrix maskCols(const TSparseMatrix *mat);
-	const TSparseMatrix maskColsAndRows(const TSparseMatrix *mat);
+	const TSparseMatrix maskEqnRows(const TSparseMatrix *mat);
+	const TSparseMatrix maskObsCols(const TSparseMatrix *mat);
+	// used for weight matrix
+	const TSparseMatrix maskObsColsAndRows(const TSparseMatrix *mat);
 
-	std::vector<int> getActiveIndices();
+	std::vector<int> getActiveEqnIndices();
+	std::vector<int> getActiveObsIndices();
 
 	/// Debug method
 	void saveMatricesToFile(int nbIter) const;
