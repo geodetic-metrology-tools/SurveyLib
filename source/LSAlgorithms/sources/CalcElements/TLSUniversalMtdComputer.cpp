@@ -47,8 +47,8 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 
 
 	//masked input data
-	TSparseMatrix AMasked = im->maskRows(&A);
-	TVector WMasked = im->getLeftFactor() * W;
+	TSparseMatrix AMasked = im->maskEqnRows(&A);
+	TVector WMasked = im->getEqnMask() * W;
 
 
 	int nbUnk = im->getNbrUnknowns();
@@ -67,9 +67,10 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 			throw std::runtime_error("Some of the design matrices are not initialized!");
 		}
 		const TSparseMatrix &Pv = *im->getWeightMtrx();
-		TSparseMatrix PvMasked = im->maskColsAndRows(&Pv);
+		TSparseMatrix PvMasked = im->maskObsColsAndRows(&Pv);
 		const TSparseMatrix &invB = *im->getSecondDgnBlockDiagInvMtrx();
-		TSparseMatrix invBMasked= im->maskColsAndRows(&invB);
+		//TSparseMatrix invBMasked = im->maskColsAndRows(&invB);
+		TSparseMatrix invBMasked = (im->getObsMask()).transpose() * ( invB )*( im->getEqnMask()).transpose();
 		invN1 = invBMasked.transpose() * PvMasked * invBMasked;
 	}
 	else
@@ -81,8 +82,8 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 		}
 		const TSparseMatrix &B = *im->getSecondDgnMtrx();
 		const TSparseMatrix &InvPv = *im->getWeightInvMtrx();
-		TSparseMatrix BMasked= im->maskColsAndRows(&B);
-		TSparseMatrix InvPvMasked = im->maskColsAndRows(&InvPv);
+		TSparseMatrix BMasked = im->getEqnMask() * B * im->getObsMask();
+		TSparseMatrix InvPvMasked = im->maskObsColsAndRows(&InvPv);
 		if (!TSparseUtils::inverse(BMasked * InvPvMasked * BMasked.transpose(), invN1, true))
 		{
 			logCritical() << "Matrix B*inv(Pv)*transpose(B) could not be inverted!";
@@ -198,10 +199,10 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, T
 	V = S * (A * solution + W);
 
 	//--------------- Sigma 0 a posteriri ---------------//
-	int nbObsReduced = nbObs - im->maskData.EIndices.size();
-	TSparseMatrix PvMasked = im->maskColsAndRows(&Pv);
+	int nbObsReduced = nbObs - im->maskData.OIndices.size();
+	TSparseMatrix PvMasked = im->maskObsColsAndRows(&Pv);
 	TVector VMasked(nbObsReduced);
-	VMasked = im->getLeftFactor() * V;
+	VMasked = im->getEqnMask() * V;
 	sigmaZero2Aposteriori = VMasked.transpose() * PvMasked * VMasked;
 	if (nbObsReduced + nbCnstr != nbUnk)
 		sigmaZero2Aposteriori /= (nbObsReduced - nbUnk + nbCnstr); // NB Redundancy: Takes into account the number of constraints!
