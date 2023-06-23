@@ -5,51 +5,90 @@ include:
 ##################
 # LINUX BUILDS   #
 ##################
-
+.orderLinuxArtifact: &orderLinuxArtifact
+    - cp staging/*.so ..
+    - mkdir ../headers
+    - mkdir ../headers/utils
+    - cp ../source/CSGeoDLL/headers/*.h ../headers/
+    - cp ../source/CSGeoDLL/headers/utils/TGlobalDefs.h ../headers/utils/TGlobalDefs.h
+    - cp ../source/SpatialObjects/headers/MathematicalConcepts/Quad.h ../headers/Quad.h
+    - cp ../source/SpatialObjects/headers/MathematicalConcepts/TConstants.h ../headers/TConstants.h
+    
+.buildSO: &buildSO
+    - echo "Building shared object library | -j$(nproc)"
+    - $CMAKEBIN --build . -j $(nproc) --config Release --target SpatialObjDLL
+    - $CMAKEBIN --build . -j $(nproc) --config Release --target CSGeoDLL   
 # Build all targets and run the tests
 linux_build_and_test:
     extends: .linux_build_and_test
+    script:
+        - !reference [.linux_build_and_test, script]
+        - *buildSO
+        - *orderLinuxArtifact
+        # Test the library can be called from a Python script
+        - echo "Test CSGeo shared object call using Python"
+        - cd ../source/Tests/CSGeoDLLTests/pythonScripts
+        - python3 -m unittest testCSGeoLibrary.py
+
+    artifacts:
+        name: sharedlibrary
+        paths:
+            - libSpatialObjDLL.so
+            - libCSGeoDLL.so
+            - headers/TPlainDataParameters.h
+            - headers/PlainTransform.h
+            - headers/TOptionsCheck.h
+            - headers/utils/TGlobalDefs.h
+            - headers/Quad.h
+            - headers/TConstants.h
+        expire_in: 1 day
 
 # Build and upload the libSpatialObjDLL.so and the libCSGeoDLL.so
 linux_release:
     extends: .linux_release
     needs: ["linux_build_and_test"]
     script:
-        - echo "Building shared object library | -j$(nproc)"
-        - $CMAKEBIN --build . -j $(nproc) --config Release --target SpatialObjDLL
-        - cp staging/libSpatialObjDLL.so ..
-        - $CMAKEBIN --build . -j $(nproc) --config Release --target CSGeoDLL
-        - cp staging/libCSGeoDLL.so ..  
+        - *buildSO
+        - *orderLinuxArtifact
+
     artifacts:
         name: sharedlibrary
         paths:
             - libSpatialObjDLL.so
             - libCSGeoDLL.so
-            - source/CSGeoDLL/headers/TPlainDataParameters.h
-            - source/CSGeoDLL/headers/PlainTransform.h
+            - headers/TPlainDataParameters.h
+            - headers/PlainTransform.h
+            - headers/TOptionsCheck.h
+            - headers/utils/TGlobalDefs.h
+            - headers/Quad.h
+            - headers/TConstants.h
+           
             
 ##################
 # WINDOWS BUILDS #
 ##################
-
+.orderWinArtifact: &orderWinArtifact
+    - cp staging/*.dll ..
+    - cp staging/ReframeLibWrapper.lib ..
+    - mkdir "../headers"
+    - mkdir "../headers/utils"
+    - cp ../source/CSGeoDLL/headers/*.h ../headers/
+    - cp ../source/CSGeoDLL/headers/utils/TGlobalDefs.h ../headers/utils/TGlobalDefs.h
+    - cp ../source/SpatialObjects/headers/MathematicalConcepts/Quad.h ../headers/Quad.h
+    - cp ../source/SpatialObjects/headers/MathematicalConcepts/TConstants.h ../headers/TConstants.h
+  
+.buildDLL: &buildDLL
+    - echo "Building Dynamic Link Library"
+    - cmake --build . -j %NUMBER_OF_PROCESSORS% --config Release --target SpatialObjDLL
+    - cmake --build . -j %NUMBER_OF_PROCESSORS% --config Release --target CSGeoDLL
 # Build all targets and run the tests
 windows64_build_and_test:
     extends: .windows64_build_and_test
-
-# Build and upload the SpatialObjDLL.dll and the CSGeoDLL.dll
-windows64_release:
-    extends: .windows64_release
-    needs: ["windows64_build_and_test"]
     script:
-        - echo "Building shared object library"
-        - cmake --build . -j %NUMBER_OF_PROCESSORS% --config Release --target SpatialObjDLL
-        - cp staging/SpatialObjDLL.dll ..
-        - cmake --build . -j %NUMBER_OF_PROCESSORS% --config Release --target CSGeoDLL
-        - cp staging/CSGeoDLL.dll ..
-        - cp staging/ReframeLibWrapper.dll ..
-        - cp staging/ReframeLibWrapper.lib ..
-        - cp staging/swisstopo.data.dll ..
-        - cp staging/swisstopo.reframelib.dll ..
+        - !reference [.windows64_build_and_test, script]
+        - *buildDLL
+        - *orderWinArtifact
+        
     artifacts:
         name: win64dll
         paths:
@@ -59,18 +98,84 @@ windows64_release:
             - ReframeLibWrapper.lib
             - swisstopo.data.dll
             - swisstopo.reframelib.dll
-            - source/CSGeoDLL/headers/TPlainDataParameters.h
-            - source/CSGeoDLL/headers/PlainTransform.h
+            - headers/TPlainDataParameters.h
+            - headers/PlainTransform.h
+            - headers/TOptionsCheck.h
+            - headers/utils/TGlobalDefs.h
+            - headers/Quad.h
+            - headers/TConstants.h
+        expire_in: 1 day
+
+pythonTest64:
+    before_script: []
+    needs: ["windows64_build_and_test"]
+    stage: test
+    tags:
+        - windows
+        - x64
+        - python
+    script:
+    # Test the library can be called from a Python script
+    - echo "Test CSGeoDLL call using Python"
+    - cd ./source/Tests/CSGeoDLLTests/pythonScripts
+    - py -3.12-64 -m unittest testCSGeoLibrary.py
+       
+
+# Build and upload the SpatialObjDLL.dll and the CSGeoDLL.dll
+windows64_release:
+    extends: .windows64_release
+    needs: ["windows64_build_and_test"]
+    script:
+        - *buildDLL
+        - *orderWinArtifact
+
+    artifacts:
+        name: win64dll
+        paths:
+            - SpatialObjDLL.dll
+            - CSGeoDLL.dll
+            - ReframeLibWrapper.dll
+            - ReframeLibWrapper.lib
+            - swisstopo.data.dll
+            - swisstopo.reframelib.dll
+            - headers/TPlainDataParameters.h
+            - headers/PlainTransform.h
+            - headers/TOptionsCheck.h
+            - headers/utils/TGlobalDefs.h
+            - headers/Quad.h
+            - headers/TConstants.h
 
 # Build all targets and run the tests
 windows32_build_and_test:
     extends: windows64_build_and_test
+    script:
+        - !reference [.windows64_build_and_test, script]
+        - *buildDLL
+        - *orderWinArtifact
+
     tags:
         - windows
         - x32
     variables:
         CMAKEGENERATOR: "Visual Studio 16 2019"
         CMAKEARCHITECTURE: "-A Win32"
+    artifacts:
+        name: win32dll
+        expire_in: 1 day
+
+pythonTest32:
+    before_script: []
+    needs: ["windows32_build_and_test"]
+    stage: test
+    tags:
+        - windows
+        - python
+    script:
+    # Test the library can be called from a Python script
+    - echo "Test CSGeoDLL call using Python"
+    - cd ./source/Tests/CSGeoDLLTests/pythonScripts
+    - py -3.12-32 -m unittest testCSGeoLibrary.py
+     
 
 # Build and upload the SpatialObjDLL.dll and the CSGeoDLL.dll
 windows32_release:
