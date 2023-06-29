@@ -3,7 +3,7 @@
 /* Factory for reference surfaces, reference frames et reference frame transformations. 
   
    
-    Copyright 2002 CERN EST/SU. All rights reserved.
+    Copyright 2002-2023 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 
@@ -148,7 +148,7 @@ void TRefSystemFactory::init()
 
 
 	// Definition of the reference frame list
-	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf97("ITRF97"), wgs("WGS84"), roma("ROMA40");
+	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf97("ITRF97"), wgs("WGS84 (G2139)"), roma("ROMA40");
 	std::string ccs("CCS"), etrf93("ETRF93");
 	std::string cgrf2("new_CGRF");
 	std::string itrfIn("ITRFin");
@@ -287,10 +287,12 @@ void TRefSystemFactory::init()
 	fRefFrameList.push_back(pLV03_lhn95);
 
 #endif
-		// WGS84
-	TGeodeticRefFrame* pWGS = new TGeodeticRefFrame(wgs, pWGSEll);
-	pWGS->setRefFrameId(kWGS84);
-	fRefFrameList.push_back(pWGS);
+		// WGS84 (G2139)
+	epoch = 2016;
+	solution = "ITRF 2014";
+	TTerrestrialReferenceFrame *pWGS84_G2139 = new TTerrestrialReferenceFrame(wgs, pWGSEll, epoch, solution);
+	pWGS84_G2139->setRefFrameId(kWGS84_G2139);
+	fRefFrameList.push_back(pWGS84_G2139);
 
 		// ROMA40
 	TGeodeticRefFrame* pROMA = new TGeodeticRefFrame(roma, pInternationalEll);
@@ -835,44 +837,6 @@ void TRefSystemFactory::init()
 		fTransformList.push_back(pCCS2LAp0);
 	}
 	
-	// Helmert Transformation between ROMA40 and WGS84
-	{
-		TAngle om1, p1, k1;
-		om1.setDMSValue(0, 0, -LITERAL(1.822));
-		p1.setDMSValue(0, 0, LITERAL(3.235));
-		k1.setDMSValue(0, 0, -LITERAL(0.762));
-		TRotation r1(TRotationMatrix::kRzyx, om1.getRadiansValue(), p1.getRadiansValue(), k1.getRadiansValue());
-		TLength tx(-LITERAL(54.62)), ty(-LITERAL(24.26)), tz(LITERAL(17.75));
-		TTranslation transl1(tx, ty, tz);
-		TScaleFactor enl1(LITERAL(1.0) - LITERAL(0.00002801));
-		THelmertRefFrameTransform* pROMA2WGS = new THelmertRefFrameTransform(pROMA, pWGS, enl1, r1, transl1);
-		pROMA2WGS->setTransformId(kROMA2WGS);
-		fTransformList.push_back(pROMA2WGS);
-		//Inverse
-		TARefFrameTransformation* pWGS2ROMA = pROMA2WGS->inverse(); //utilise new
-		pWGS2ROMA->setTransformId(kWGS2ROMA);
-		fTransformList.push_back(pWGS2ROMA);
-	}
-	
-	// Helmert Transformation between WGS84 and CGRF
-	{
-		TAngle om2, p2, k2;
-		om2.setGonsValue(-LITERAL(0.0003314103458));
-		p2.setGonsValue(LITERAL(0.0022563667184));
-		k2.setGonsValue(LITERAL(0.0008629680740));
-		TRotation r2(TRotationMatrix::kRzyx, om2.getRadiansValue(), p2.getRadiansValue(), k2.getRadiansValue());
-		TLength Tx(LITERAL(114.1736041)), Ty(LITERAL(114.1154332)), Tz(-LITERAL(178.5526666));
-		TTranslation transl2(Tx, Ty, Tz);
-		TScaleFactor enl2(LITERAL(0.999998644222261));
-		THelmertRefFrameTransform* pWGS2CGRF = new THelmertRefFrameTransform(pWGS, pCGRF, enl2, r2, transl2);
-		pWGS2CGRF->setTransformId(kWGS2CGRF);
-		fTransformList.push_back(pWGS2CGRF);
-		//Inverse
-		TARefFrameTransformation* pCGRF2WGS = pWGS2CGRF->inverse(); //utilise new
-		pCGRF2WGS->setTransformId(kCGRF2WGS);
-		fTransformList.push_back(pCGRF2WGS);
-	}
-	
 		// Helmert Transformation between ITRF97 (ep1998.5) and CGRF
 	{
 		TAngle om3, p3, k3;
@@ -1010,6 +974,15 @@ void TRefSystemFactory::init()
 		TTrf2TrfTransformation *pCHTRF952ITRF97 = new TTrf2TrfTransformation(pCHTRF95, pITRF97, itrf2020_toPastITRF, itrfyy_toETRFyy);
 		pCHTRF952ITRF97->setTransformId(kCHTRF952ITRF97);
 		fTransformList.push_back(pCHTRF952ITRF97);
+
+		// Transformation between ITRF97 (ep1998.5) and WGS84 (G2139)
+		TTrf2TrfTransformation *pITRF972WGS84 = new TTrf2TrfTransformation(pITRF97, pWGS84_G2139, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		pITRF972WGS84->setTransformId(kITRF972WGS84);
+		fTransformList.push_back(pITRF972WGS84);
+		// Inverse
+		TTrf2TrfTransformation *pWGS842ITRF97 = new TTrf2TrfTransformation(pWGS84_G2139, pITRF97, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		pWGS842ITRF97->setTransformId(kWGS842ITRF97);
+		fTransformList.push_back(pWGS842ITRF97);
 
 	}
     

@@ -86,12 +86,6 @@ void	TGraph::init()
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kLAp02CCS),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCCS2LAp0));
 
-	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kROMA2WGS),
-			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kWGS2ROMA));
-
-	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kWGS2CGRF),
-			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCGRF2WGS));
-
 	insert( TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972CGRF),
 			TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCGRF2ITRF97));
 
@@ -182,6 +176,9 @@ void	TGraph::init()
 
 	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972CHTRF95),
 		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kCHTRF952ITRF97));
+
+	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972WGS84),
+		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kWGS842ITRF97));
 
 	insert(TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kITRF972ETRFout),
 		   TRefSystemFactory::getRefSystemFactory()->getTransformation(TRefSystemFactory::kETRFin2ITRF97));
