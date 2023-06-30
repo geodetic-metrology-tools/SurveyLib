@@ -184,8 +184,7 @@ bool  TDataParameters::setRefFrame(TRefSystemFactory::ERefFrame rf)
 				
 		//set unit to [m] for non geodetic reference frame
 		if(	fRefFrameEnum != TRefSystemFactory::kCGRF && fRefFrameEnum != TRefSystemFactory::kWGS84_G2139 && 
-			fRefFrameEnum != TRefSystemFactory::kROMA40 && fRefFrameEnum != TRefSystemFactory::kITRF97 &&
-			fRefFrameEnum != TRefSystemFactory::kETRF93 &&
+			fRefFrameEnum != TRefSystemFactory::kETRF93 && fRefFrameEnum != TRefSystemFactory::kITRF97 &&
 			fRefFrameEnum != TRefSystemFactory::kITRFin && fRefFrameEnum != TRefSystemFactory::kITRFout &&
 			fRefFrameEnum != TRefSystemFactory::kETRFin && fRefFrameEnum != TRefSystemFactory::kETRFout
 			&& fRefFrameEnum != TRefSystemFactory::kCGRFSphere
@@ -230,7 +229,7 @@ bool  TDataParameters::setUnits( const TDataParameters::ECoordUnit& units )
 	fCoordUnit= units;
 
 	if(	fRefFrameEnum == TRefSystemFactory::kCGRF || fRefFrameEnum == TRefSystemFactory::kWGS84_G2139 || 
-		fRefFrameEnum == TRefSystemFactory::kROMA40 || fRefFrameEnum == TRefSystemFactory::kITRF97 ||
+		fRefFrameEnum == TRefSystemFactory::kITRF97 ||
 		fRefFrameEnum == TRefSystemFactory::kETRF93 || fRefFrameEnum == TRefSystemFactory::kCH1903plus ||
 		fRefFrameEnum == TRefSystemFactory::kITRFin || fRefFrameEnum == TRefSystemFactory::kITRFout ||
 		fRefFrameEnum == TRefSystemFactory::kETRFin || fRefFrameEnum == TRefSystemFactory::kETRFout )
@@ -603,8 +602,6 @@ std::string TDataParameters::getRFName() const
 		return "MLG_Sphere";
 	case TRefSystemFactory::ERefFrame::kRGF93:
 		return "RGF93";
-	case TRefSystemFactory::ERefFrame::kROMA40:
-		return "ROMA40";
 #ifdef USE_SWISSTOPO
 	case TRefSystemFactory::ERefFrame::kSwissLV03_eh:
 		return "LV03_eh";

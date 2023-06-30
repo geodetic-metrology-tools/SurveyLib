@@ -72,7 +72,6 @@ public:
 			kCGRF                =  3, 
 			kITRF97              =  4, 
 			kWGS84_G2139         =  5, 
-			kROMA40              =  6,
 			kETRF93              =  7,
 			kCH1903plus          =  8, /*!< Swiss coordinate system */
 			kCGRF_new            =  9,

@@ -28,9 +28,9 @@ namespace tut
         set_test_name("Iterating over the all registered ERefFrame values");
 
 #ifdef _WIN32
-		size_t nbtrans = 53;
+		size_t nbtrans = 52;
 #else
-		size_t nbtrans = 47;
+		size_t nbtrans = 46;
 #endif
 		TRefFrameInfo::RefFrameSet set = TRefFrameInfo::getRefFrameSet();
 		ensure_equals(set.count(TRefSystemFactory::kITRF97),1);
@@ -51,7 +51,7 @@ namespace tut
         set_test_name("Get the textual description of a given ERefFrame");
 
 		ensure_equals(TRefFrameInfo::getName(TRefSystemFactory::kCCS), "CCS - CERN XYZ");
-		ensure_equals(TRefFrameInfo::getName(TRefSystemFactory::kWGS84), "WGS84");
+		ensure_equals(TRefFrameInfo::getName(TRefSystemFactory::kWGS84_G2139), "WGS84 (G2139)");
 		// ...
 	}
 

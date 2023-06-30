@@ -57,10 +57,10 @@ public:
 	/**@name Constants */
 	//@{
 		/*enum  EEuclideanRF { kLocal, kCCS };
-		enum  EGeodeticRF { kCGRF, kWGS84_G2139, kROMA40, kITRF97Ep98_5 };
+		enum  EGeodeticRF { kCGRF, kWGS84_G2139, kITRF97Ep98_5 };
 		enum  EProjection { kSPS, kLEP, kCERNSite, kCERNProjection };*/
 		enum  ERefFrame { kCCS,
-							kCGRF, kWGS84_G2139, kROMA40, kITRF97Ep98_5,
+							kCGRF, kWGS84_G2139, kITRF97Ep98_5,
 							kSPS, kLEP, kCERNSite, kCERNProjection };
 	//@}
 
@@ -129,9 +129,6 @@ private:
 	// Get a pointer to a Reference Frame with the WGS84 System parameters
 	TVReferenceFrame*  getWGS84();
 
-	// Get a pointer to a Reference Frame with the ROMA40 System parameters
-	TVReferenceFrame*  getROMA40();
-
 	// Get a pointer to a Reference Frame with the ITRF97 Epoch 98.5 System parameters
 	TVReferenceFrame*  getITRF97Ep98_5();
 
@@ -152,7 +149,6 @@ private:
 	static  TProjectionXYHeRefFrame*  fCERNProjection;
 	static  TGeodeticRefFrame*  fCGRF;
 	static  TGeodeticRefFrame*  fWGS84_G2139;
-	static  TGeodeticRefFrame*  fROMA40;
 	static  TGeodeticRefFrame*  fITRF97Ep98_5;
 
 	//ClassDef(TReferenceFrameServer, 1)

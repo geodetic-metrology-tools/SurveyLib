@@ -148,7 +148,7 @@ void TRefSystemFactory::init()
 
 
 	// Definition of the reference frame list
-	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf97("ITRF97"), wgs("WGS84 (G2139)"), roma("ROMA40");
+	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf97("ITRF97"), wgs("WGS84 (G2139)");
 	std::string ccs("CCS"), etrf93("ETRF93");
 	std::string cgrf2("new_CGRF");
 	std::string itrfIn("ITRFin");
@@ -293,11 +293,6 @@ void TRefSystemFactory::init()
 	TTerrestrialReferenceFrame *pWGS84_G2139 = new TTerrestrialReferenceFrame(wgs, pWGSEll, epoch, solution);
 	pWGS84_G2139->setRefFrameId(kWGS84_G2139);
 	fRefFrameList.push_back(pWGS84_G2139);
-
-		// ROMA40
-	TGeodeticRefFrame* pROMA = new TGeodeticRefFrame(roma, pInternationalEll);
-	pROMA->setRefFrameId(kROMA40);
-	fRefFrameList.push_back(pROMA);
 
 		// Local Geodesique at CERN: origin = principal point of the system = P0 
 	TSpatialPosition origin(pCGRF);
