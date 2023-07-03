@@ -18,7 +18,7 @@ namespace FrenchRAF20
 double interpolRAF20(const double &latitude_rgf93_deg, const double &longitude_rgf93_deg);
 
 /// Bilinear interpolation
-double bilinearInterpolation(float q11, float q12, float q21, float q22, float x1, float x2, float y1, float y2, float x, float y);
+double bilinearInterpolation(double q11, double q12, double q21, double q22, double x1, double x2, double y1, double y2, double x, double y);
 
 /// Convert NGF-IGN69 altitude into GRS80 ellipsoidal height using RAF20 altimetric conversion grid
 void circeTransfoRafToH(const double &latitude_rgf93_rad, const double &longitude_rgf93_rad, double &h);

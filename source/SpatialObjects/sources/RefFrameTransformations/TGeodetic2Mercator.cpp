@@ -189,40 +189,40 @@ bool TGeodetic2Mercator::transformFromGeodetic(TPositionVector &pv) const
 	
 }
 
-double TGeodetic2Mercator::latTolatIso(double e, double phi_rad) const
+double TGeodetic2Mercator::latTolatIso(double first_e, double phi_rad) const
 {
 	// ALG0001 
-	double latIso_rad = log(tan(PI_4 + phi_rad / 2.0) * pow((1.0 - e * sin(phi_rad)) / (1.0 + e * sin(phi_rad)), e / 2.0));
+	double latIso_rad = log(tan(PI_4 + phi_rad / 2.0) * pow((1.0 - first_e * sin(phi_rad)) / (1.0 + first_e * sin(phi_rad)), first_e / 2.0));
 	return latIso_rad;
 }
 
-double TGeodetic2Mercator::latIsoTolat(double e, double latIso_rad) const
+double TGeodetic2Mercator::latIsoTolat(double first_e, double latIso_rad) const
 {
 	// ALG0002
 	double phi_rad_i1 = 2.0 * atan(exp(latIso_rad)) - PI_2;
 
-	double phi_rad_i = 2.0 * atan(pow((1.0 + e * sin(phi_rad_i1)) / (1.0 - e * sin(phi_rad_i1)), e / 2.0) * exp(latIso_rad)) - PI_2;
+	double phi_rad_i = 2.0 * atan(pow((1.0 + first_e * sin(phi_rad_i1)) / (1.0 - first_e * sin(phi_rad_i1)), first_e / 2.0) * exp(latIso_rad)) - PI_2;
 
 	while (abs(phi_rad_i - phi_rad_i1) > 1.0 * pow(10, -11))
 	{
 		phi_rad_i1 = phi_rad_i;
-		phi_rad_i = 2.0 * atan(pow((1.0 + e * sin(phi_rad_i1)) / (1.0 - e * sin(phi_rad_i1)), e / 2.0) * exp(latIso_rad)) - PI_2;
+		phi_rad_i = 2.0 * atan(pow((1.0 + first_e * sin(phi_rad_i1)) / (1.0 - first_e * sin(phi_rad_i1)), first_e / 2.0) * exp(latIso_rad)) - PI_2;
 	}
 
 	return phi_rad_i;
 }
 
-double TGeodetic2Mercator::devMeridianArc(double e, double phi_rad) const
+double TGeodetic2Mercator::devMeridianArc(double first_e, double phi_rad) const
 {
 	// Test values
 	//e = 0.08199188998;
 
 	// ALG0025
-	const double c1 = 1.0 - 1.0 / 4.0 * pow(e, 2) - 3.0 / 64.0 * pow(e, 4) - 5.0 / 256.0 * pow(e, 6) - 175.0 / 16384.0 * pow(e, 8);
-	const double c2 = -3.0 / 8.0 * pow(e, 2) - 3.0 / 32.0 * pow(e, 4) - 45.0 / 1024.0 * pow(e, 6) - 105.0 / 4096.0 * pow(e, 8);
-	const double c3 = 15.0 / 256.0 * pow(e, 4) + 45.0 / 1024.0 * pow(e, 6) + 525.0 / 16384.0 * pow(e, 8);
-	const double c4 = - 35.0 / 3072.0 * pow(e, 6) - 175.0 / 12288.0 * pow(e, 8);
-	const double c5 = 315.0 / 131072.0 * pow(e, 8);
+	const double c1 = 1.0 - 1.0 / 4.0 * pow(first_e, 2) - 3.0 / 64.0 * pow(first_e, 4) - 5.0 / 256.0 * pow(first_e, 6) - 175.0 / 16384.0 * pow(first_e, 8);
+	const double c2 = -3.0 / 8.0 * pow(first_e, 2) - 3.0 / 32.0 * pow(first_e, 4) - 45.0 / 1024.0 * pow(first_e, 6) - 105.0 / 4096.0 * pow(first_e, 8);
+	const double c3 = 15.0 / 256.0 * pow(first_e, 4) + 45.0 / 1024.0 * pow(first_e, 6) + 525.0 / 16384.0 * pow(first_e, 8);
+	const double c4 = - 35.0 / 3072.0 * pow(first_e, 6) - 175.0 / 12288.0 * pow(first_e, 8);
+	const double c5 = 315.0 / 131072.0 * pow(first_e, 8);
 
 	// Test values
 	//phi_rad = 0.78539816340;

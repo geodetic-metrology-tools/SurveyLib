@@ -8,7 +8,7 @@
 	Patterns:
 
 
-	Copyright 2021 CERN BE/GM. All rights reserved.
+	Copyright 2021-2023 CERN BE/GM. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 
@@ -41,8 +41,7 @@ TTrf2TrfTransformation::TTrf2TrfTransformation()
 
 
 TTrf2TrfTransformation::TTrf2TrfTransformation(TTerrestrialReferenceFrame* from,
-											   TTerrestrialReferenceFrame* to,
-											   THelmertTransformation* transform)
+											   TTerrestrialReferenceFrame* to)
 : fFrom(from), fTo(to), fTransform(0)
 {	// constructor taking pointers to the source and destination reference frames
 }
@@ -656,7 +655,7 @@ bool TTrf2TrfTransformation::itrf2etrf(TMatrix coeffITRFyy_toETRFyy, TPositionVe
 {
 	// inverse is false if we want to transformfrom itrf to etrf and true if we want to transform from etrf to itrf
 	bool result = false;
-	int solInput = 0, solEtrf = 0;
+	int solEtrf = 0;
 	TLength tX_m(0), tY_m(0), tZ_m(0), tXv_m_yr(0), tYv_m_yr(0), tZv_m_yr(0); //translation (meters and meters per year)
 	TScaleFactor d(0), dv_yr(0); //scale factor
 	TAngle rX_rad(0), rY_rad(0), rZ_rad(0), rXv_rad_yr(0), rYv_rad_yr(0), rZv_rad_yr(0); //rotation (radians and radians/year)
@@ -727,7 +726,7 @@ bool TTrf2TrfTransformation::itrf2etrf(TMatrix coeffITRFyy_toETRFyy, TPositionVe
 
 THelmertTransformation TTrf2TrfTransformation::itrf2etrfRate(TMatrix coeffITRFyy_toETRFyy, TTerrestrialReferenceFrame* etrf, bool inverse) const {
 
-	int solInput = 0, solOutput = 0;
+	int solOutput = 0;
 	TLength  tXv_m_yr(0), tYv_m_yr(0), tZv_m_yr(0); //translation rate (meters per year)
 	TScaleFactor d(0), dv_yr(0); //scale factor rate
 	TAngle rX_rad(0), rY_rad(0), rZ_rad(0), rXv_rad_yr(0), rYv_rad_yr(0), rZv_rad_yr(0); //rotation rate (radians/year)

@@ -133,7 +133,7 @@ void TRefSystemFactory::init()
 	pWGSEll->setEllId(kWGSEll);
 	fRefEllList.push_back(pWGSEll);
 
-		// ROMA
+		// Hayford
 	TReferenceEllipsoid* pInternationalEll = new TReferenceEllipsoid(internationalEll);
 	pInternationalEll->setAAndESquared(LITERAL(6378388.0), LITERAL(0.006722670022));
 	pInternationalEll->setEllId(kInternationalEll);

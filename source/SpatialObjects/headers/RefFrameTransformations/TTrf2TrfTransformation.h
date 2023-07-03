@@ -33,7 +33,7 @@ public:
 	TTrf2TrfTransformation();
 
 	/// Constructor taking pointers to the source and destination reference frames
-	TTrf2TrfTransformation(TTerrestrialReferenceFrame* from, TTerrestrialReferenceFrame* to, THelmertTransformation*);
+	TTrf2TrfTransformation(TTerrestrialReferenceFrame* from, TTerrestrialReferenceFrame* to);
 
 	/// Constructor taking parameters of a THelmertTransformation
 	TTrf2TrfTransformation(TTerrestrialReferenceFrame* from, TTerrestrialReferenceFrame* to, const TScaleFactor&, const TRotation&, const TTranslation&);
