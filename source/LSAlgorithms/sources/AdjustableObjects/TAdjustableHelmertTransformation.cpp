@@ -39,6 +39,14 @@ int TAdjustableHelmertTransformation::getNumUnkn() const
 		+ (int)!fixedTranslations[2] + (int)!fixedScale[0];
 }
 
+bool TAdjustableHelmertTransformation::isFixedVar(int d) const
+{
+	assert7D(d);
+	std::vector<int> freeIdx = getRelativeUnknIndices();
+	bool isFree = std::find(freeIdx.begin(), freeIdx.end(), d) != freeIdx.end();
+	return !isFree;
+}
+
 int TAdjustableHelmertTransformation::getTranslationUnknIndex(int d) const
 {
 	assert3D(d);
@@ -159,6 +167,37 @@ void TAdjustableHelmertTransformation::setParam(const TLength tx, const TLength 
 	setParam(rx, ry, rz);
 	setParam(tx, ty, tz);
 	setParam(scl);
+}
+void TAdjustableHelmertTransformation::setTranslation(int idx, TLength value)
+{
+	if (idx == 0)
+		fEstParameter.tX = value;
+	else if (idx == 1)
+		fEstParameter.tY = value;
+	else if (idx == 2)
+		fEstParameter.tZ = value;
+	else
+		throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
+	return;
+
+}
+
+void TAdjustableHelmertTransformation::setRotation(int idx, const TAngle &value)
+{
+	if (idx == 0)
+		fEstParameter.omega = value;
+	else if (idx == 1)
+		fEstParameter.phi = value;
+	else if (idx == 2)
+		fEstParameter.kappa = value;
+	else
+		throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
+	return;
+}
+
+void TAdjustableHelmertTransformation::setScale(TReal value)
+{
+	fEstParameter.scale = value;
 }
 
 void TAdjustableHelmertTransformation::setTranslationCorrection(int idx, TLength value)

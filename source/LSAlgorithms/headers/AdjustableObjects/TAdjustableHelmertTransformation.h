@@ -157,6 +157,10 @@ public:
 	*/
 	inline bool isScaleFixed() const { return fixedScale[0]; }
 
+	// checking if index d of object is fixed
+	bool isFixedVar(int d) const; 
+
+
 	/*!
 
 		\brief Returns the standard deviations of the translation.
@@ -231,12 +235,21 @@ public:
 	*/
 	void setParam(const TLength tx, const TLength ty, const TLength tz, const TAngle &rx, const TAngle &ry, const TAngle &rz, const TReal scl);
 
+	/// Sets the translation 
+	void setTranslation(int idx, TLength value);
+	/// Sets the rotation
+	void setRotation(int idx, const TAngle &value);
+	/// Sets the scale
+	void setScale(TReal value);
+
+	// replace the next methods by set ( idx, getEst(idx)+val)
 	/// Sets the translation correction
 	void setTranslationCorrection(int idx, TLength value);
 	/// Sets the rotation correction
 	void setRotationCorrection(int idx, const TAngle &value);
 	/// Sets the scale correction
 	void setScaleCorrection(TReal value);
+
 
 	/// Returns Estimated parameters of the Helmert transformation
 	const TransformParameters &getEstParam() const { return fEstParameter; }
