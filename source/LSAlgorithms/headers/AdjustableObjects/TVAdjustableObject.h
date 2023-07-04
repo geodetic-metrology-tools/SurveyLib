@@ -16,6 +16,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 #define assert3D(x) assert((x) >= 0 && (x) < 3)
 #define assert4D(x) assert((x) >= 0 && (x) < 4)
+#define assert7D(x) assert((x) >= 0 && (x) < 7)
 
 /*! 
 	\ingroup AdjustableObjects
@@ -29,7 +30,7 @@ class TVAdjustableObject : public TStatusObject
 		~TVAdjustableObject() {}
 
 		/// Tells if this object is totally fixed, i.e. introduces no unknowns.
-		virtual bool isFixed() const = 0;	
+		virtual bool isFixed() const = 0;
 
 		/// Some adjustables can be forward declared, they are uninitialized in this case until they are overwritten by the definition.
 		virtual bool isInitialized() const = 0;
