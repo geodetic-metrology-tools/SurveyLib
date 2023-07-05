@@ -266,9 +266,10 @@ public:
 
 		Sets correction for the current estimatedValue and updates it, if point has fixed H value transformation is made.
 
-		\throws Throws a logic_error if the adjusted point does not contain required index.
-	*/
-	virtual void setCorrection(int idx, TReal value);
+			\throws Throws a logic_error if the adjusted point does not contain required index.
+		*/
+      virtual void setCorrection(int idx, TReal value);
+      void setEstVal(int idx, TReal value);
 
 	/*!
 		\brief See \ref TVAdjustableObject::setFirstUidx
