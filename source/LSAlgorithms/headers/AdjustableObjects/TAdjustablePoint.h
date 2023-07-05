@@ -250,6 +250,7 @@ public:
 			\throws Throws a logic_error if the adjusted point does not contain required index.
 		*/
       virtual void setCorrection(int idx, TReal value);
+      void setEstVal(int idx, TReal value);
 
 		/// Sets the estimated precision after calculation
       virtual void setEstimatedPrecision(int idx, TReal value);

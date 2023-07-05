@@ -274,6 +274,19 @@ void TAdjustablePoint::setCorrection(int idx, TReal value) {
 	throw std::logic_error("Invalid unknown index in parameter access. Point " + getName());
 }
 
+void TAdjustablePoint::setEstVal(int idx, TReal value)
+{
+	switch (idx)
+	{
+	case 0:
+		fEstimatedValue.setX(TLength(value));
+	case 1:
+		fEstimatedValue.setY(TLength(value));
+	case 2:
+		fEstimatedValue.setZ(TLength(value));
+	}
+}
+
 	/*! Sets the estimated precision after calculation */
 void	TAdjustablePoint::setEstimatedPrecision(int idx, TReal value){
 	for (int i = 0; i < 3; i++){
