@@ -74,18 +74,29 @@ The SurveyLib can be built on Windows or Linux. To do so, you need at least:
 
 For Windows, you can follow the steps in the aforementioned [Getting started with C++](https://readthedocs.web.cern.ch/pages/viewpage.action?pageId=22153013) documentation.
 
-For Linux, you have an example of the needed steps in the [Dockerfile](https://gitlab.cern.ch/apc/susofts/shared/sus_ci_cppworker/blob/master/Dockerfile) of the [sus_ci_cppworker](https://gitlab.cern.ch/apc/susofts/shared/sus_ci_worker) project (the Docker image used to automatically run the tests on GitLab-CI).
+For Linux, you have an example of the needed steps in the dockerfiles of the [sus_ci_cppworker](https://gitlab.cern.ch/apc/common/docker-image-susoft-cpp) project (the Docker image used to automatically run the tests on GitLab-CI).
 Note that the `devtoolset` trick is only necessary on the CC7 (Cern CentOS 7) as it doesn't provide a C++14 compiler by default.
 
 ### Generate project ###
 
 We use CMake to generate projects, thus it is possible to generate projects for MSVC, Eclipse, or simple Unix makefiles. See the [CMake Generators documentation](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html) page.
 
-To generate the project, you need first to create a subdirectory named `build/`, and then run CMake inside:
+First of all, ensure that you have all the submodules initialized with:
+
+```bash 
+$ git submodule update --init
+```
+
+To generate the project, you need to create a subdirectory named `build/`, and then run CMake inside:
 
 ```bash
 $ mkdir build && cd build/
-$ cmake -G "Visual Studio 15 2017 Win64" ../source # Use another generator here if you wish
+$ cmake -G "Visual Studio 16 2019" -A x64 ../source # Use another generator here if you wish
+```
+
+In order to use a custom ext_libs.txt file defining the dependencies, please use:
+```bash
+$ cmake -G "Visual Studio 16 2019" -A x64 -DEXT_LIBS_TXT_PATH="C:/susoft/SUSoftCMakeCommon/ext_libs.txt" ../source # Use another file defining the dependencies
 ```
 
 ### Build ###
@@ -94,9 +105,17 @@ Once generated, you can open your project in the `build/` subfolder. If you use 
 
 you can see that CMake has generated several targets, among others:
 - `ALL_BUILD` builds all except the doxygen documentation
+- `RUN_TESTS` runs all tests provided they were build before
 - `ZERO_CHECK` reruns CMake and automatically updates your project
-- `doc` builds the Doxygen documentation
+- `CSGeoDLL` builds CSGeoDLL
+- `Logs` builds Logs static library
+- `LSAlgorithms` builds LSAlgorithms static library
+- `Plugins` builds Plugins static library used by SurveyPad and its plugins
+- `ProjectFramework` builds ProjectFramework static library used by CSGeoDLL
 - `SpatialObjDLL` builds the SurveyLib dynamic library
+- `SpatialObjects` builds SpatialObjects static library used by CSGeoDLL
+- `Tools` builds Tools static library
+- `doc` builds the Doxygen documentation
 - `UnitTests` builds the tests, the only runnable project (by default the startup project in MSVC)
 
 ### Tests ###

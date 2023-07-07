@@ -1,0 +1,3 @@
+[submodule "lib/SUSoftCMakeCommon"]
+	path = lib/SUSoftCMakeCommon
+	url = https://gitlab.cern.ch/apc/susofts/shared/SUSoftCMakeCommon
