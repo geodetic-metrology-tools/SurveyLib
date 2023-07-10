@@ -10,13 +10,20 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <UEOIndices.h>
 #include "Quad.h"
 
+#if USE_SERIALIZER
+#	include <Serializer.hpp>
+#endif // USE_SERIALIZER
 
 /*!
 	\ingroup CalcElements
 	\brief Class for result matrices of a least squares calculation.
 */
-class TLSResultsMatrices{
-
+#if USE_SERIALIZER
+class TLSResultsMatrices : public Serializable
+#else
+class TLSResultsMatrices
+#endif // USE_SERIALIZER
+{
 public:
 
 	/*!@name Constructors / Destructor*/
@@ -120,6 +127,11 @@ public:
 	//@{
 	/*!	\brief Saves all the matrices elements in a file 	*/
 	void saveMatricesToFile(int nbIter) const;
+
+#if USE_SERIALIZER
+	// Inherited via Serializable
+	virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+#endif // USE_SERIALIZER
 	//@}
 
 
