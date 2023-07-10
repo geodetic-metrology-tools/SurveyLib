@@ -9,6 +9,7 @@ set(Tools_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/sources/Behavior.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/StringManager.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/FileUtils.cpp
+	${CMAKE_CURRENT_LIST_DIR}/sources/Path.cpp
 )
 
 # Create a variable containing all .h files:
@@ -17,6 +18,7 @@ set(Tools_HEADERS
 	${CMAKE_CURRENT_LIST_DIR}/headers/Behavior.h
 	${CMAKE_CURRENT_LIST_DIR}/headers/StringManager.h
 	${CMAKE_CURRENT_LIST_DIR}/headers/FileUtils.h
+	${CMAKE_CURRENT_LIST_DIR}/headers/Path.h
 )
 
 # Create a static library from sources:
