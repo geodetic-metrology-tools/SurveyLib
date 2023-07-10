@@ -35,10 +35,8 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("kCGRF","CERN GRF", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
         tmp->insert(std::make_pair(TRefSystemFactory::kITRF97, 
             TDetails("kITRF97","ITRF97 ep98.5", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
-        tmp->insert(std::make_pair(TRefSystemFactory::kWGS84, 
-            TDetails("kWGS84","WGS84", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
-        tmp->insert(std::make_pair(TRefSystemFactory::kROMA40, 
-            TDetails("kROMA40","ROMA40", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
+        tmp->insert(std::make_pair(TRefSystemFactory::kWGS84_G2139, 
+            TDetails("kWGS84_G2139","WGS84 (G2139)", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kETRF93,
             TDetails("kETRF93","ETRF93", TCoordSysFactory::k3DCartesian, TCoordSysFactory::kGeodetic)));
         tmp->insert(std::make_pair(TRefSystemFactory::kCH1903plus,

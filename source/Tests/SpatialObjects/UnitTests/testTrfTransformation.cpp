@@ -1436,5 +1436,30 @@ void object::test<324>()
 		static_cast<TReal>(0.001));
 }
 
+template<>
+template<>
+void object::test<400>()
+{
+	set_test_name("WGS84 (G2139) is aligned with ITRF2014@2016.0");
+
+	TPositionVector pv(1, 2, 3, TCoordSysFactory::k3DCartesian);
+
+	TSpatialPosition position_ITRF(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCCS));
+	ensure("Setting the coordinates of TSpatialPosition", position_ITRF.setCoordinates(pv));
+	ensure("Transform returns true", position_ITRF.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFout, nullptr, 2016.0, "ITRF 2014")));
+	TSpatialPosition position_WGS84(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCCS));
+	ensure("Setting the coordinates of TSpatialPosition", position_WGS84.setCoordinates(pv));
+	ensure("Transform returns true", position_WGS84.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139)));
+
+	ensure_equals("Comparison X", position_ITRF.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(),
+								  position_WGS84.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue(),
+								  static_cast<TReal>(0.00001));
+	ensure_equals("Comparison Y", position_ITRF.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(),
+								  position_WGS84.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(),
+								  static_cast<TReal>(0.00001));
+	ensure_equals("Comparison Z", position_ITRF.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(),
+								  position_WGS84.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(),
+								  static_cast<TReal>(0.001));
+}
 
 } // namespace tut

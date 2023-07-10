@@ -184,6 +184,7 @@ namespace tut
 
 		int result = transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL);
 
+		ensure_equals("Result code", result, 0);
 		ensure_distance("X", x, x_ctrl, 1e-13); // (1e-13 gons ~ 1e-8 m at the surface of the Earth)
 		ensure_distance("Y", y, y_ctrl, 1e-13); // (1e-13 gons ~ 1e-8 m at the surface of the Earth)
 		ensure_distance("Z", z, z_ctrl, 1e-8);

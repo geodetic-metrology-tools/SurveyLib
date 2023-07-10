@@ -1,6 +1,6 @@
 //  TReferenceFrameServer.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2023. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /** A class that instantiates and provides access to all available
@@ -57,10 +57,10 @@ public:
 	/**@name Constants */
 	//@{
 		/*enum  EEuclideanRF { kLocal, kCCS };
-		enum  EGeodeticRF { kCGRF, kWGS84, kROMA40, kITRF97Ep98_5 };
+		enum  EGeodeticRF { kCGRF, kWGS84_G2139, kITRF97Ep98_5 };
 		enum  EProjection { kSPS, kLEP, kCERNSite, kCERNProjection };*/
 		enum  ERefFrame { kCCS,
-							kCGRF, kWGS84, kROMA40, kITRF97Ep98_5,
+							kCGRF, kWGS84_G2139, kITRF97Ep98_5,
 							kSPS, kLEP, kCERNSite, kCERNProjection };
 	//@}
 
@@ -129,9 +129,6 @@ private:
 	// Get a pointer to a Reference Frame with the WGS84 System parameters
 	TVReferenceFrame*  getWGS84();
 
-	// Get a pointer to a Reference Frame with the ROMA40 System parameters
-	TVReferenceFrame*  getROMA40();
-
 	// Get a pointer to a Reference Frame with the ITRF97 Epoch 98.5 System parameters
 	TVReferenceFrame*  getITRF97Ep98_5();
 
@@ -151,8 +148,7 @@ private:
 	static  TProjectionXYHgRefFrame*  fCERNSite;
 	static  TProjectionXYHeRefFrame*  fCERNProjection;
 	static  TGeodeticRefFrame*  fCGRF;
-	static  TGeodeticRefFrame*  fWGS84;
-	static  TGeodeticRefFrame*  fROMA40;
+	static  TGeodeticRefFrame*  fWGS84_G2139;
 	static  TGeodeticRefFrame*  fITRF97Ep98_5;
 
 	//ClassDef(TReferenceFrameServer, 1)

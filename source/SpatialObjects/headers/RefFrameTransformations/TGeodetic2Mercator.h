@@ -43,13 +43,13 @@ private:
 	bool transformToGeodetic(TPositionVector &pv) const;
 
 	/// Convert latitude to isometric latitude
-	double latTolatIso(double e, double phi_rad) const;
+	double latTolatIso(double first_e, double phi_rad) const;
 
 	/// Convert isometric latitude to latitude
-	double latIsoTolat(double e, double latIso_rad) const;
+	double latIsoTolat(double first_e, double latIso_rad) const;
 
 	/// compute development of the meridional arc
-	double devMeridianArc(double e, double phi_rad) const;
+	double devMeridianArc(double first_e, double phi_rad) const;
 
 	/// compute nb factorial (nb!)
 	double factorial(int nb) const;

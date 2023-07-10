@@ -1,6 +1,6 @@
 //  TRefSystemFactory.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+© Copyright CERN 2000-2023. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*! A singleton class listing reference surface, reference frame and reference frame transformation.
@@ -71,8 +71,7 @@ public:
 			kLGp0                =  2, 
 			kCGRF                =  3, 
 			kITRF97              =  4, 
-			kWGS84               =  5, 
-			kROMA40              =  6,
+			kWGS84_G2139         =  5, 
 			kETRF93              =  7,
 			kCH1903plus          =  8, /*!< Swiss coordinate system */
 			kCGRF_new            =  9,
@@ -137,12 +136,12 @@ public:
 		/*! Enumerator for transformations between Ref.Frames implemented in the factory */
 		enum  ERefFrameTransform {
 			kCCS2CGRF, kLAp02LGp0, kLGp02CGRF, kLAp02CCS,
-			kROMA2WGS, kWGS2CGRF, kXYHe2CCS, kX0Y0He2XYHe,
+			kXYHe2CCS, kX0Y0He2XYHe,
 			kXYHg2XYHe, kXYHg2XYHe00Topo, kXYHg2XYHe00Machine,
 			kXYHg2XYHe85, kXYHg2XYHe85Machine, kXYHsSphereSPS2CCS,
 			kCCS2CGRFSphere, kCGRF2CGRFMercator,
 			kCGRF2CCS, kLGp02LAp0, kCGRF2LGp0, kCCS2LAp0,
-			kWGS2ROMA, kCGRF2WGS, kCCS2XYHe, kXYHe2X0Y0He,
+			kCCS2XYHe, kXYHe2X0Y0He,
 			kXYHe2XYHg, kXYHe00Topo2XYHg, kXYHe00Machine2XYHg,
 			kXYHe852XYHg, kXYHe85Machine2XYHg, kCCS2XYHsSphereSPS,
 			kCGRFSphere2CCS, kCGRFMercator2CGRF, kITRF972CGRF, kCGRF2ITRF97,
@@ -156,8 +155,8 @@ public:
 			kRGF932Lambert93eh, kLambert93eh2RGF93, kRGF932Lambert93ign69, kLambert93ign692RGF93,
 			
 			//new
-			kCCS2CGRF2, kWGS2CGRF2, kITRF972CGRF2,
-			kCGRF22CCS, kCGRF22WGS, kCGRF22ITRF97,
+			kCCS2CGRF2, kITRF972CGRF2,
+			kCGRF22CCS, kCGRF22ITRF97,
 
 			//Transformation between ITRF and ETRF
 			kITRFin2ETRFout, kITRFin2ITRFout, kETRFin2ETRFout, kETRFin2ITRFout,
@@ -165,7 +164,8 @@ public:
 			kITRF972ETRFout, kETRFin2ITRF97,
 			kITRFin2ITRF97, kITRF972ITRFout,
 			kITRF972RGF93, kRGF932ITRF97,
-			kITRF972CHTRF95, kCHTRF952ITRF97
+			kITRF972CHTRF95, kCHTRF952ITRF97,
+			kITRF972WGS84, kWGS842ITRF97
 
 		};
 	//@}

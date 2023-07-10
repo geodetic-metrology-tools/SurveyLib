@@ -1,6 +1,6 @@
 // TAReferenceFrame.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+© Copyright CERN 2000-2023. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*!  
@@ -98,7 +98,7 @@ public:
 		virtual bool						isInGraph() const {return true; };
 
 		//! return the epoch of the coordinates if there is one (ITRF and ETRF)
-		virtual TReal						getEpoch() const { TReal epoch; return epoch; }
+		virtual TReal						getEpoch() const { return TReal(); }
 
 		//! rteturn the solution of the reference frame if there is one (ITRF and ETRF)
 		virtual std::string					getSolution() const { std::string solution; return solution; }

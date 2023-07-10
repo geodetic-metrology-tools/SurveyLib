@@ -51,8 +51,8 @@ double FrenchRAF20::interpolRAF20(const double &latitude_rgf93_deg, const double
 	https://geodesie.ign.fr/contenu/fichiers/documentation/grilles/notices/Grilles-MNT-TXT_Formats.pdf 
 	*/
 
-	const int nbLong = floor((maxLong_deg - minLong_deg) / stepLong_deg + 1); // 420
-	const int nbLat = floor((maxLat_deg - minLat_deg) / stepLat_deg + 1); // 381
+	const int nbLong = int(floor((maxLong_deg - minLong_deg) / stepLong_deg + 1)); // 420
+	const int nbLat = int(floor((maxLat_deg - minLat_deg) / stepLat_deg + 1)); // 381
 	const int longPerLine = 10;
 	const int linePerLat = nbLong / longPerLine + 1; //43
 
@@ -16443,10 +16443,6 @@ static const std::array<std::array<TReal, 20>, 16383> raf20grid = {{
 {46.4850,99,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE,NAN_VALUE}
 }};
 
-	double gridValue = 0.0;
-	std::vector<double> vGridValue;
-	int lineNumber = 0;
-
 	// Stop the computation if the point is outside the computation area
 	if (latitude_rgf93_deg < minLat_deg || latitude_rgf93_deg > maxLat_deg || longitude_rgf93_deg < minLong_deg || longitude_rgf93_deg > maxLong_deg)
 	{
@@ -16466,17 +16462,17 @@ static const std::array<std::array<TReal, 20>, 16383> raf20grid = {{
 		*/
 		//Find line to get latitude and position of longitude
 		double deltaLat = maxLat_deg - latitude_rgf93_deg;
-		int blockLatStart = floor(deltaLat / stepLat_deg) * linePerLat;
+		int blockLatStart = int(floor(deltaLat / stepLat_deg) * linePerLat);
 		double latSup_deg = maxLat_deg - floor(deltaLat / stepLat_deg) * stepLat_deg;
 		double latInf_deg = maxLat_deg - (floor(deltaLat / stepLat_deg) + 1) * stepLat_deg;
 
 		double deltaLong = longitude_rgf93_deg - minLong_deg;
-		int lineToAdd = floor(deltaLong / stepLong_deg / longPerLine);
+		int lineToAdd = int(floor(deltaLong / stepLong_deg / longPerLine));
 		double longSup_deg = minLong_deg + (floor(deltaLong / stepLong_deg) + 1) * stepLong_deg;
 		double longInf_deg = minLong_deg + floor(deltaLong / stepLong_deg) * stepLong_deg;
 
 		int lineToStop = blockLatStart + lineToAdd;
-		int longIndexInf = floor(deltaLong / stepLong_deg - longPerLine * lineToAdd) * 2;
+		int longIndexInf = int(floor(deltaLong / stepLong_deg - longPerLine * lineToAdd) * 2);
 		int longIndexSup = 20;
 
 		double nUL = 0.0, nUR=0.0, nLL=0.0, nLR = 0.0;
@@ -16512,9 +16508,9 @@ static const std::array<std::array<TReal, 20>, 16383> raf20grid = {{
 		return n;	
 }
 
-double FrenchRAF20::bilinearInterpolation(float q11, float q12, float q21, float q22, float x1, float x2, float y1, float y2, float x, float y)
+double FrenchRAF20::bilinearInterpolation(double q11, double q12, double q21, double q22, double x1, double x2, double y1, double y2, double x, double y)
 {
-	float x2x1, y2y1, x2x, y2y, yy1, xx1;
+	double x2x1, y2y1, x2x, y2y, yy1, xx1;
 	x2x1 = x2 - x1;
 	y2y1 = y2 - y1;
 	x2x = x2 - x;

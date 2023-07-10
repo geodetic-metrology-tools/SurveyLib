@@ -270,7 +270,8 @@ namespace tut
 
 			int result = transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL);
 
-			if (outFile.is_open ()) {
+			if (outFile.is_open () && result == EStatusCode::kOk)
+			{
 				outFile<<pointName<<  "\t" << x << "\t" << y << "\t" << z <<std::endl;
 			}
 		}
@@ -320,7 +321,8 @@ namespace tut
 
 			int result = transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL);
 
-			if (outFile.is_open ()) {
+			if (outFile.is_open ()&& result == EStatusCode::kOk)
+			{
 				outFile<<pointName<<  "\t" << x << "\t" << y << "\t" << z <<std::endl;
 			}
 		}
@@ -372,7 +374,8 @@ namespace tut
 
 			int result = transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL);
 
-			if (outFile.is_open ()) {
+			if (outFile.is_open() && result == EStatusCode::kOk)
+			{
 				outFile<<pointName<<  "\t" << x << "\t" << y << "\t" << z <<std::endl;
 			}
 		}
@@ -425,7 +428,8 @@ namespace tut
 			int result = transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL);
 
 
-			if (outFile.is_open ()) {
+			if (outFile.is_open() && result == EStatusCode::kOk)
+			{
 				outFile<<pointName<<  "\t" << x << "\t" << y << "\t" << z <<std::endl;
 			}
 		}
