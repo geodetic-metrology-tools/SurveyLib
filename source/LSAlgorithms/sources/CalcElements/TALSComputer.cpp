@@ -27,8 +27,8 @@ limits TALSComputer::calcSigmaZeroLimits(const int nbObs, const int nbUnk)
 	
 	if(d>0)
 	{
-        double chiUp = deviates_chi_sq(0.975, d);
-        double chiLow = deviates_chi_sq(1-0.975, d);
+        double chiUp = deviates_chi_sq_0975(d);
+        double chiLow = deviates_chi_sq_0025(d);
 
 		if (fError == "")
 		{

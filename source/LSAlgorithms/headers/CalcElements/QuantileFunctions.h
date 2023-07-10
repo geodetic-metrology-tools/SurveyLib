@@ -1,14 +1,25 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2023. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
-#ifndef QUANTILEFUNCTIONS_D422D74B_C822_4fb7_AB8F_CBAC3EC93DE5
-#define QUANTILEFUNCTIONS_D422D74B_C822_4fb7_AB8F_CBAC3EC93DE5
+#ifndef QUANTILEFUNCTIONS
+#define QUANTILEFUNCTIONS
 
-double deviates_chi_sq(double p, double df);
-double deviates_students_t_lower_tail(double p, double df);
-double deviates_students_t_upper_tail(double p, double df);
+// chi-square quantiles for p=0.025
+double deviates_chi_sq_0025(double df);
+// chi-square quantiles for p=0.975
+double deviates_chi_sq_0975(double df);
+// student-t quantiles for p=0.025
+double deviates_students_t_lower_tail_0025(double df);
+// student-t quantiles for p=0.975
+double deviates_students_t_upper_tail_0025(double df);
 double deviates_normal_upper_tail(double p);
+// quantile function for normal distribution using inverse error function (only using std library)
+double normalQuantile(double p);
+
+// auxiliary functions
+//inverse error function via newtons method
+double erfInvNewton(double alpha);
 
 #endif
