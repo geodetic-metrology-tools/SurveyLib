@@ -7,7 +7,7 @@
 #include <sstream>
 #include "TConstants.h"
 #include "TLSResultsMatrices.h"
-#include "Path.h"
+#include "ProjectPath.h"
 
 #if USE_SERIALIZER
 #	include <Serializer_json.hpp>
@@ -138,7 +138,7 @@ void TLSResultsMatrices::serialize(SerializerObject::SerializationHelper &obj) c
 	objMatrix.addProperty("fUnkCovarianceMtrx", fUnkCovarianceMtrx);
 
 	// Save the object to an external JSON file
-	const std::string covarOutputFileLocation = Path::getPath().getExtensionlessInputPath() + "_ucovar.json";
+	const std::string covarOutputFileLocation = ProjectPath::getPath().getExtensionlessInputPath() + "_ucovar.json";
 	std::ofstream fout(covarOutputFileLocation);
 	fout << ser.getStringRepresentation();
 
