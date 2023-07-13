@@ -13,10 +13,6 @@ include_directories(${CMAKE_SOURCE_DIR}
 					${SURVEYLIB_ROOT}/source/Tools/headers/
 					${SURVEYLIB_ROOT}/source/Logs
 )
-include_directories(SYSTEM PUBLIC
-	${BOOST_ROOT}
-)
-
 
 set(ALGO_HEADERS
 	headers/AdjustableObjects/TAdjustablePoint.h
@@ -34,6 +30,7 @@ set(ALGO_HEADERS
 	headers/CalcElements/TLSResultsMatrices.h
 	headers/CalcElements/UEOIndices.h
 	headers/CalcElements/QuantileFunctions.h
+	headers/CalcElements/QuantileLookupTables.h
 	headers/CalcParams/TLSCalcFreeVectorParam.h
 	headers/CalcParams/TLSCalcLengthParam.h
 	headers/CalcParams/TLSCalcOrientationParam.h

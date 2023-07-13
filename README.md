@@ -70,7 +70,6 @@ The SurveyLib can be built on Windows or Linux. To do so, you need at least:
 - CMake 3.6+
 - Eigen
 - TUT
-- Boost
 
 For Windows, you can follow the steps in the aforementioned [Getting started with C++](https://readthedocs.web.cern.ch/pages/viewpage.action?pageId=22153013) documentation.
 

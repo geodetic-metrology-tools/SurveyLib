@@ -13,11 +13,6 @@ SET(SURVEYLIB_LIBRARIES
 # External libs
 # Silently check if the external libraries are available in the specified paths
 # Show the version if yes
-# Boost
-FIND_PACKAGE(Boost 1.49.0 QUIET)
-if(${Boost_FOUND})
-	message("-- Found Boost at ${BOOST_ROOT} (found version: ${Boost_VERSION_STRING})")
-endif(${Boost_FOUND})
 
 # Eigen 
 IF(EXISTS ${EIGEN_INCLUDE_PATH}/Eigen/src/Core/util/Macros.h)

@@ -1,6 +1,5 @@
 # To create a solution with this CMake file, you need to first define the following variables in a CMake style file.
 #
-# - `BOOST_ROOT`: The path to Boost folder
 # - `EIGEN_INCLUDE_PATH`: The path to Eigen folder
 # - `REFRAME2016_LIBRARY_DIR`: The path to Reframe 2016 folder 
 # - `TUT_INCLUDE_PATH`: The path to Tut folder
