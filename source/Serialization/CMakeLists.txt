@@ -36,4 +36,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 	# TODO - REMOVE AFTER CMAKE UPDATE
 	${RAPIDJSON_INCLUDE_DIR}
 )
+
+# needed for linux compilation
+set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 set_target_properties(${PROJECT_NAME} ${PROJECT_NAME}_Test PROPERTIES FOLDER "SurveyLib/Serializer")

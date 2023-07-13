@@ -88,4 +88,7 @@ source_group("CalcParams\\Sources"			FILES ${CALCPARAMS_CPP})
 source_group("CalcAlternatives\\Headers"	FILES ${CALCALT_H})
 source_group("CalcAlternatives\\Sources"	FILES ${CALCALT_CPP})
 
+# needed for linux compilation
+set_target_properties(LSAlgorithms PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 set_target_properties(LSAlgorithms PROPERTIES FOLDER "SurveyLib")

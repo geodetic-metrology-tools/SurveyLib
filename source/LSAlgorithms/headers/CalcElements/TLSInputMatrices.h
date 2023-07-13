@@ -7,7 +7,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #define SU_TLSINPUTMATRICES
 
 #include "TSparseMatrix.h"
-#include <UEOIndices.h>
+#include "UEOIndices.h"
 #include "Quad.h"
 
 
@@ -53,12 +53,17 @@ public:
 		/*!	\brief Set a block in the second design matrix. Each block corresponds to one mathematical observation equation. Also sets the inverse block.
 		*/
 
+		/*!	\brief Set a block in the second design matrix. Each block corresponds to one mathematical observation equation. Also sets the inverse block.
+		*/
 		bool setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block);
 
 		/*!	\brief Set the second design matrix to minus Identity for parametric case
 		*/
-
 		bool setSecondDgnMtrxToMinusIdentity();
+
+		/*! \brief Reset the second design matrix. It must be filled at each iteration.
+		*/
+		bool resetSecondDgnMtrx(UEOIndices ueoi);
 
 		/*!	\brief Set a misclosure vector element.
 		*/
@@ -66,7 +71,6 @@ public:
 
 		/*!	\brief Set the value of an element of the observations weight matrix in the adjustment (P-matrix)
 			\param[in] row of the desired element
-			\param[in] column of the desired element
 			\param[in] coefficient: value of the desired element
 		*/
 		bool setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);

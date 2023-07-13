@@ -52,7 +52,9 @@ public:
 
 		/// Create an unitialized point. 
 		static TAdjustablePoint createUninitialized(const std::string& name);
-		
+
+		/// Default constructor
+		TAdjustablePoint();
 	//@}
 			
 	/*!@name Access methods*/

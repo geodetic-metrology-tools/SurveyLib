@@ -20,6 +20,19 @@ fSpatialStatus(TSpatialStatus::kUnknown)
 	setDefaults(true, true, true);
 }
 
+TAdjustablePoint::TAdjustablePoint():
+	fName(""),
+	fProvisionalValue(NO_VALf, NO_VALf, NO_VALf, TCoordSysFactory::k3DCartesian),
+	fEstimatedValue(fProvisionalValue),
+	fCovariance(LITERAL(0.0), LITERAL(0.0), LITERAL(0.0), TCoordSysFactory::k3DCartesian),
+	fHfixed(false),
+	fReferential(TRefSystemFactory::ERefFrame::kNotInGraph),
+	fSpatialStatus(TSpatialStatus::kUnknown)
+{
+	setDefaults(true, true, true);
+}
+
+
 TAdjustablePoint::TAdjustablePoint(const TPositionVector& pos, bool isXfixed, bool isYfixed, bool isZHfixed, const std::string& name, TRefSystemFactory::ERefFrame referential) :
 fName(name),
 fProvisionalValue(pos),

@@ -191,6 +191,32 @@ bool TLSInputMatrices::setSecondDgnMtrxToMinusIdentity()
 	return true;
 }
 
+bool TLSInputMatrices::resetSecondDgnMtrx(UEOIndices ueoi)
+{
+	try
+	{
+		if (secondDesignMatrix != nullptr)
+		{
+			delete secondDesignMatrix;
+			secondDesignMatrix = nullptr;
+		}
+		if (secondDesignBlockDiagInvMatrix != nullptr)
+		{
+			delete secondDesignBlockDiagInvMatrix;
+			secondDesignBlockDiagInvMatrix = nullptr;
+		}
+
+		secondDesignMatrix = new TSparseMatrix(ueoi.EIndex, ueoi.OIndex);
+		secondDesignBlockDiagInvMatrix = new TSparseMatrix(ueoi.EIndex, ueoi.OIndex);
+		seconDesignMatrixIsBlockDiag = true;
+	}
+	catch (...)
+	{
+		return false;
+	}
+	return true;
+}
+
 bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {
 	try {
