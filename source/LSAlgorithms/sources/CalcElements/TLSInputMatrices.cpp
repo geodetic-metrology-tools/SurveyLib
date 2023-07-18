@@ -322,8 +322,62 @@ int TLSInputMatrices::getNbrConstraints() const
 	return fUEOIndices.CIndex;
 }
 
+const std::vector<int> TLSInputMatrices::getActiveIndices(int dim, std::set<int> mask) const
+{
+	std::vector<int> ind;
+	for (int j = 0; j < dim; j++)
+	{
+		if (mask.find(j) == mask.end())
+		{
+		// its active
+		ind.push_back(j);
+		}
+	}
 
-const TSparseMatrix TLSInputMatrices::getObsMask() 
+	return ind;
+}
+const TSparseMatrix TLSInputMatrices::getMaskMatrix(int dim, std::set<int> mask) const
+{
+	std::vector<int> actInd = getActiveIndices(dim, mask);
+	int nActive = actInd.size();
+	TSparseMatrix maskMatrix(dim, nActive);
+	std::vector<TTriplet> coeffs;
+	coeffs.reserve(nActive);
+
+	for (int colIdx = 0; colIdx < nActive; colIdx++)
+	{
+		coeffs.push_back(TTriplet(actInd.at(colIdx), colIdx, 1));
+	}
+	maskMatrix.setFromTriplets(coeffs.begin(), coeffs.end());
+	return maskMatrix;
+}
+
+
+const TSparseMatrix TLSInputMatrices::maskRows(const TSparseMatrix *mat, std::set<int> mask) const
+{
+	// find row dimension of matrix
+	int rowDim = mat->rows();
+	TSparseMatrix maskMatrix = getMaskMatrix(rowDim, mask);
+	return maskMatrix.transpose() * *mat;
+}
+const TVector TLSInputMatrices::maskRows(const TVector vect, std::set<int> mask) const
+{
+	// find row dimension of matrix
+	int rowDim = vect.rows();
+	TSparseMatrix maskMatrix = getMaskMatrix(rowDim, mask);
+	return maskMatrix.transpose() * vect;
+}
+
+const TSparseMatrix TLSInputMatrices::maskColumns(const TSparseMatrix *mat, std::set<int> mask) const
+{
+	// find column dimension of matrix
+	int colDim = mat->cols();
+	TSparseMatrix maskMatrix = getMaskMatrix(colDim, mask);
+	return *mat * maskMatrix;
+}
+
+
+const TSparseMatrix TLSInputMatrices::getObsMask()
 {
 	std::vector<int> actInd = getActiveObsIndices();
 	int nActive = actInd.size();
@@ -389,7 +443,6 @@ std::vector<int> TLSInputMatrices::getActiveEqnIndices()
 			ind.push_back(j);
 		}
 	}
-
 	return ind;
 }
 std::vector<int> TLSInputMatrices::getActiveObsIndices()
@@ -407,7 +460,24 @@ std::vector<int> TLSInputMatrices::getActiveObsIndices()
 			ind.push_back(j);
 		}
 	}
+	return ind;
+}
 
+std::vector<int> TLSInputMatrices::getActiveUnkIndices()
+{
+	std::vector<int> ind;
+	for (int j = 0; j < fUEOIndices.UIndex; j++)
+	{
+		if (maskData.UIndices.find(j) != maskData.UIndices.end())
+		{
+			// index is masked
+		}
+		else
+		{
+			// its active
+			ind.push_back(j);
+		}
+	}
 	return ind;
 }
 

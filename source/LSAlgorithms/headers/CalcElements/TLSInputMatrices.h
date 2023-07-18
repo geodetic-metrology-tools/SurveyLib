@@ -144,14 +144,20 @@ public:
 		const TVector&	getCnstrMisclosureVctr() const noexcept;
 	//@}
 
-	// can be used to mask rows of the A matrix during adjustment
+	// can be used to mask rows of the A matrix during adjustment, these are the masked indices.
 		struct
 		{
 			std::set<int> EIndices;
 			std::set<int> OIndices;
+			std::set<int> UIndices;
 		}
 		maskData;
 
+
+	// mask rows of matrix
+	const TSparseMatrix maskRows(const TSparseMatrix *mat, std::set<int> mask) const;
+	const TVector maskRows(const TVector vect, std::set<int> mask) const;
+	const TSparseMatrix maskColumns(const TSparseMatrix *mat, std::set<int> mask) const;
 	// mult from right to mask columns
 	const TSparseMatrix getObsMask();
 	// mult from left to mask rows
@@ -164,11 +170,17 @@ public:
 
 	std::vector<int> getActiveEqnIndices();
 	std::vector<int> getActiveObsIndices();
+	std::vector<int> getActiveUnkIndices();
 
 	/// Debug method
 	void saveMatricesToFile(int nbIter) const;
 
 private:
+
+	// get the active indices= not masked and < dim
+	const std::vector<int> getActiveIndices(int dim, std::set<int> mask) const;
+	// get matrix with columns made from unit vectors corresponding to active indices, can be used to mask rows (mult from left with transpose) or columns (mult from right)
+	const TSparseMatrix getMaskMatrix(int dim, std::set<int> mask) const;
 
 	UEOIndices		fUEOIndices; /*!< number of unknowns, equations, observations and constraints */
 
