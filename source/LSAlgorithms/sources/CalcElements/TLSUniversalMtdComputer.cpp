@@ -47,11 +47,11 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 
 
 	//masked input data
-	TSparseMatrix AMasked = im->maskEqnRows(&A);
-	TSparseMatrix AMasked2 = im->maskRows(&A, im->maskData.EIndices);
+	//TSparseMatrix AMasked = im->maskEqnRows(&A);
+	TSparseMatrix AMasked = im->maskRows(&A, im->maskData.EIndices);
 	//std::cout << (AMasked - AMasked2).toDense().norm() << std::endl;
-	TVector WMasked = im->getEqnMask() * W;
-	TVector WMasked2 = im->maskRows(W, im->maskData.EIndices);
+	//TVector WMasked = im->getEqnMask() * W;
+	TVector WMasked = im->maskRows(W, im->maskData.EIndices);
 
 
 	int nbUnk = im->getNbrUnknowns();
@@ -70,15 +70,15 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 			throw std::runtime_error("Some of the design matrices are not initialized!");
 		}
 		const TSparseMatrix &Pv = *im->getWeightMtrx();
-		TSparseMatrix PvMasked = im->maskObsColsAndRows(&Pv);
+		//TSparseMatrix PvMasked = im->maskObsColsAndRows(&Pv);
 		TSparseMatrix PvRowMasked = im->maskRows(&Pv, im->maskData.OIndices);
-		TSparseMatrix PvMasked2 = im->maskColumns(&PvRowMasked, im->maskData.OIndices);
+		TSparseMatrix PvMasked = im->maskColumns(&PvRowMasked, im->maskData.OIndices);
 		//std::cout << (PvMasked - PvMasked2).toDense().norm() << std::endl;
 		const TSparseMatrix &invB = *im->getSecondDgnBlockDiagInvMtrx();
 		//TSparseMatrix invBMasked = im->maskColsAndRows(&invB);
-		TSparseMatrix invBMasked = (im->getObsMask()).transpose() * ( invB )*( im->getEqnMask()).transpose();
+		//TSparseMatrix invBMasked = (im->getObsMask()).transpose() * ( invB )*( im->getEqnMask()).transpose();
 		TSparseMatrix invBRowMasked = im->maskRows(&invB, im->maskData.EIndices);
-		TSparseMatrix invBMasked2 = im->maskColumns(&invBRowMasked, im->maskData.OIndices);
+		TSparseMatrix invBMasked = im->maskColumns(&invBRowMasked, im->maskData.OIndices);
 		//std::cout << (invBMasked - invBMasked2).toDense().norm() << std::endl;
 		invN1 = invBMasked.transpose() * PvMasked * invBMasked;
 	}
@@ -210,11 +210,14 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, T
 	//--------------- Sigma 0 a posteriri ---------------//
 	int nbObsReduced = nbObs - im->maskData.OIndices.size();
 	int nbUnkReduced = nbUnk- im->maskData.UIndices.size();
-	TSparseMatrix PvMasked = im->maskObsColsAndRows(&Pv);
+	//TSparseMatrix PvMasked = im->maskObsColsAndRows(&Pv);
+	TSparseMatrix PvRowMasked = im->maskRows(&Pv, im->maskData.OIndices);
+	TSparseMatrix PvMasked = im->maskColumns(&PvRowMasked, im->maskData.OIndices);
 	TVector VMasked(nbObsReduced);
-	VMasked = im->getEqnMask() * V;
+	//VMasked = im->getEqnMask() * V;
+	VMasked = im->maskRows(V, im->maskData.OIndices);
 	sigmaZero2Aposteriori = VMasked.transpose() * PvMasked * VMasked;
-	if (nbObsReduced + nbCnstr != nbUnkReduced		)
+	if (nbObsReduced + nbCnstr != nbUnkReduced)
 		sigmaZero2Aposteriori /= (nbObsReduced - nbUnkReduced + nbCnstr); // NB Redundancy: Takes into account the number of constraints!
 	else
 		fError += "Number of equations equals number of unknowns, causes zero division!";

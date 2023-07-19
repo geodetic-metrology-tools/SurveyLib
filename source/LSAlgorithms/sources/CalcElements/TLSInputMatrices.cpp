@@ -108,6 +108,7 @@ void TLSInputMatrices::clearMatrices()
 	// reset the masked indices
 	maskData.EIndices.clear();
 	maskData.OIndices.clear();
+	maskData.UIndices.clear();
 	
 }
 
