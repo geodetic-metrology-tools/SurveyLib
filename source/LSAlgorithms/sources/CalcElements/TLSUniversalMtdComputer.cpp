@@ -71,12 +71,14 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 		}
 		const TSparseMatrix &Pv = *im->getWeightMtrx();
 		TSparseMatrix PvMasked = im->maskObsColsAndRows(&Pv);
-		TSparseMatrix PvMasked2 = im->maskColumns(&im->maskRows(&Pv, im->maskData.OIndices), im->maskData.OIndices);
+		TSparseMatrix PvRowMasked = im->maskRows(&Pv, im->maskData.OIndices);
+		TSparseMatrix PvMasked2 = im->maskColumns(&PvRowMasked, im->maskData.OIndices);
 		//std::cout << (PvMasked - PvMasked2).toDense().norm() << std::endl;
 		const TSparseMatrix &invB = *im->getSecondDgnBlockDiagInvMtrx();
 		//TSparseMatrix invBMasked = im->maskColsAndRows(&invB);
 		TSparseMatrix invBMasked = (im->getObsMask()).transpose() * ( invB )*( im->getEqnMask()).transpose();
-		TSparseMatrix invBMasked2 = im->maskColumns(&im->maskRows( &invB, im->maskData.EIndices), im->maskData.OIndices);
+		TSparseMatrix invBRowMasked = im->maskRows(&invB, im->maskData.EIndices);
+		TSparseMatrix invBMasked2 = im->maskColumns(&invBRowMasked, im->maskData.OIndices);
 		//std::cout << (invBMasked - invBMasked2).toDense().norm() << std::endl;
 		invN1 = invBMasked.transpose() * PvMasked * invBMasked;
 	}
