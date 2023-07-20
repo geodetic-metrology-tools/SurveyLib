@@ -305,7 +305,7 @@ public:
 
 private:
 	// Number of the line in the input file where the transformation was introduced
-	int line;
+	int line = -1; // Initial value (-1) for the ROOT frame
 
 	// Name of the transformation
 	std::string name;
