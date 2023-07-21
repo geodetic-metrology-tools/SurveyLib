@@ -354,6 +354,28 @@ const TSparseMatrix TLSInputMatrices::getMaskMatrix(int dim, std::set<int> mask)
 }
 
 
+const TSparseMatrix TLSInputMatrices::mask(std::set<int> rowMask, const TSparseMatrix *mat) const
+{
+	// find row dimension of matrix
+	int rowDim = mat->rows();
+	TSparseMatrix maskMatrix = getMaskMatrix(rowDim, rowMask);
+	return maskMatrix.transpose() * *mat;
+}
+
+const TSparseMatrix TLSInputMatrices::mask(const TSparseMatrix *mat,std::set<int> colMask) const
+{
+	// find col dimension of matrix
+	int colDim = mat->cols();
+	TSparseMatrix maskMatrix = getMaskMatrix(colDim, colMask);
+	return *mat * maskMatrix;
+}
+
+const TSparseMatrix TLSInputMatrices::mask(std::set<int> rowMask, const TSparseMatrix *mat,std::set<int> colMask) const
+{
+	TSparseMatrix rowsMasked = this->mask(rowMask, mat);
+	return this->mask(&rowsMasked, colMask);
+}
+
 const TSparseMatrix TLSInputMatrices::maskRows(const TSparseMatrix *mat, std::set<int> mask) const
 {
 	// find row dimension of matrix

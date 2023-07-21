@@ -45,10 +45,16 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	const TSparseMatrix &A2 = *im->getCnstrFirstDgnMtrx(); // A2 : First design matrix part related to constraints only
 	const TVector &W2 = im->getCnstrMisclosureVctr(); // W2 : Misclosures vector part related to constraints only
 
+	std::set<int> maskedUidx = im->maskData.UIndices;
+	std::set<int> maskedEidx = im->maskData.EIndices;
+	std::set<int> maskedOidx = im->maskData.OIndices;
 
+
+	TSparseMatrix AMasked = im->mask(maskedEidx, &A, maskedUidx);
 	//masked input data
 	//TSparseMatrix AMasked = im->maskEqnRows(&A);
-	TSparseMatrix AMasked = im->maskRows(&A, im->maskData.EIndices);
+	//TSparseMatrix AMaskedRows = im->maskRows(&A, im->maskData.EIndices);
+	//TSparseMatrix AMasked = im->maskColumns	(&AMaskedRows, 
 	//std::cout << (AMasked - AMasked2).toDense().norm() << std::endl;
 	//TVector WMasked = im->getEqnMask() * W;
 	TVector WMasked = im->maskRows(W, im->maskData.EIndices);
@@ -57,8 +63,10 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	int nbUnk = im->getNbrUnknowns();
 	int nbEq = im->getNbrEquations();
 	int nbCnstr = im->getNbrConstraints();
-	int nbMasked = im->maskData.EIndices.size();
-	int nbEqReduced = nbEq - nbMasked;
+	int nbMaskedEq = im->maskData.EIndices.size();
+	int nbEqReduced = nbEq - nbMaskedEq;
+	int nbMaskedUnk = im->maskData.UIndices.size();
+	int nbUnkReduced = nbUnk - nbMaskedUnk;
 
 
 	// set invN1
@@ -70,15 +78,16 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 			throw std::runtime_error("Some of the design matrices are not initialized!");
 		}
 		const TSparseMatrix &Pv = *im->getWeightMtrx();
+		TSparseMatrix PvMasked = im->mask(maskedOidx, &Pv, maskedOidx);
 		//TSparseMatrix PvMasked = im->maskObsColsAndRows(&Pv);
-		TSparseMatrix PvRowMasked = im->maskRows(&Pv, im->maskData.OIndices);
-		TSparseMatrix PvMasked = im->maskColumns(&PvRowMasked, im->maskData.OIndices);
+		//TSparseMatrix PvRowMasked = im->maskRows(&Pv, im->maskData.OIndices);
+		//TSparseMatrix PvMasked = im->maskColumns(&PvRowMasked, im->maskData.OIndices);
 		//std::cout << (PvMasked - PvMasked2).toDense().norm() << std::endl;
 		const TSparseMatrix &invB = *im->getSecondDgnBlockDiagInvMtrx();
 		//TSparseMatrix invBMasked = im->maskColsAndRows(&invB);
 		//TSparseMatrix invBMasked = (im->getObsMask()).transpose() * ( invB )*( im->getEqnMask()).transpose();
-		TSparseMatrix invBRowMasked = im->maskRows(&invB, im->maskData.EIndices);
-		TSparseMatrix invBMasked = im->maskColumns(&invBRowMasked, im->maskData.OIndices);
+		//TSparseMatrix invBRowMasked = im->maskRows(&invB, im->maskData.EIndices);
+		TSparseMatrix invBMasked = im->mask(maskedOidx, &invB, maskedEidx);
 		//std::cout << (invBMasked - invBMasked2).toDense().norm() << std::endl;
 		invN1 = invBMasked.transpose() * PvMasked * invBMasked;
 	}
@@ -91,8 +100,8 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 		}
 		const TSparseMatrix &B = *im->getSecondDgnMtrx();
 		const TSparseMatrix &InvPv = *im->getWeightInvMtrx();
-		TSparseMatrix BMasked = im->getEqnMask() * B * im->getObsMask();
-		TSparseMatrix InvPvMasked = im->maskObsColsAndRows(&InvPv);
+		TSparseMatrix BMasked = im->mask(maskedEidx, &B, maskedOidx);
+		TSparseMatrix InvPvMasked = im->mask(maskedOidx, &InvPv, maskedOidx);
 		if (!TSparseUtils::inverse(BMasked * InvPvMasked * BMasked.transpose(), invN1, true))
 		{
 			logCritical() << "Matrix B*inv(Pv)*transpose(B) could not be inverted!";
@@ -104,12 +113,14 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 
 	// Calculate Normal matrix N2 = At * inv( B * inv(P) * Bt ) * A , matrix dimensions (u,u)
 	// and re-sets this new matrix to the main TLSResultsMatrices object.
-	TSparseMatrix N2(nbUnk, nbUnk);
+	//TSparseMatrix N2(nbUnk, nbUnk);
+	TSparseMatrix N2(nbUnkReduced, nbUnkReduced);
 	N2 = AMasked.transpose() * invN1 * AMasked;
 
 	// construct NBig = (N2, A2t
 	//                   A2, 0  )
-	TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
+	//TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
+	TSparseMatrix NBig(nbUnkReduced + nbCnstr, nbUnkReduced + nbCnstr);
 	std::vector<TTriplet> coeffs;
 	coeffs.reserve(N2.nonZeros() + 2 * A2.nonZeros());
 
@@ -132,11 +143,11 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	NBig.setFromTriplets(coeffs.begin(), coeffs.end());
 
 	// Extended vector: appends W2 (constraints misclosures) to the calculated At*inv(N1)*W  vector
-	TVector VBig(nbUnk + nbCnstr);
+	TVector VBig(nbUnkReduced + nbCnstr);
 	VBig << AMasked.transpose() * invN1 * WMasked, W2;
 
 	// Calculates solution NBig * X = -VBig and keeps only the part corresponding to adjusted parameters
-	TVector solutionExt(nbUnk + nbCnstr);
+	TVector solutionExt(nbUnkReduced + nbCnstr);
 
 	// use Cholesky decomposition if nbCnstr=0, otherwise SparseLU as positive definiteness of NBig may be violated
 	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt, (nbCnstr == 0), (nbCnstr == 0), useStrictThreshold))
@@ -145,9 +156,12 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 		return false;
 	}
 
-	TVector solution(nbUnk);
+	TVector solutionReduced(nbUnkReduced);
 	// we do not need the Lagrange multipliers
-	solution = solutionExt.head(nbUnk);
+	solutionReduced = solutionExt.head(nbUnkReduced);
+	TVector solution(nbUnk);
+	solution.setZero();
+	solution(im->getActiveUnkIndices()) = solutionReduced;
 
 	// Copies the matrices into the members of the TResultsMatrices object
 	rm->setNormalMatrix(NBig);
@@ -165,6 +179,12 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, T
 	int nbObs = im->getNbrObservations();
 	int nbEq = im->getNbrEquations();
 	int nbCnstr = im->getNbrConstraints();
+
+	std::set<int> maskedUidx = im->maskData.UIndices;
+	std::set<int> maskedEidx = im->maskData.EIndices;
+	std::set<int> maskedOidx = im->maskData.OIndices;
+
+
 	TReal sigmaZero2Aposteriori = LITERAL(0.0);
 
 	if (!(im->getFirstDgnMtrx()) || !(im->getSecondDgnMtrx()) || !(im->getWeightInvMtrx()) || !(rm->getSolutionVectByConst()) || !(rm->getResidualsVectByConst())
@@ -211,8 +231,8 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, T
 	int nbObsReduced = nbObs - im->maskData.OIndices.size();
 	int nbUnkReduced = nbUnk- im->maskData.UIndices.size();
 	//TSparseMatrix PvMasked = im->maskObsColsAndRows(&Pv);
-	TSparseMatrix PvRowMasked = im->maskRows(&Pv, im->maskData.OIndices);
-	TSparseMatrix PvMasked = im->maskColumns(&PvRowMasked, im->maskData.OIndices);
+	//TSparseMatrix PvRowMasked = im->maskRows(&Pv, im->maskData.OIndices);
+	TSparseMatrix PvMasked = im->mask(maskedOidx, &Pv, maskedOidx);
 	TVector VMasked(nbObsReduced);
 	//VMasked = im->getEqnMask() * V;
 	VMasked = im->maskRows(V, im->maskData.OIndices);

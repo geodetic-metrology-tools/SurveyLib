@@ -154,7 +154,13 @@ public:
 		maskData;
 
 
-	// mask rows of matrix
+	// mask matrices
+	// masking rows
+	const TSparseMatrix mask(std::set<int> rowMask,const TSparseMatrix *mat) const;
+	// masking cols
+	const TSparseMatrix mask(const TSparseMatrix *mat, std::set<int> colMask) const;
+	// masking rows and cols
+	const TSparseMatrix mask(std::set<int> rowMask,const TSparseMatrix *mat, std::set<int> colMask) const;
 	const TSparseMatrix maskRows(const TSparseMatrix *mat, std::set<int> mask) const;
 	const TVector maskRows(const TVector vect, std::set<int> mask) const;
 	const TSparseMatrix maskColumns(const TSparseMatrix *mat, std::set<int> mask) const;
