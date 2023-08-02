@@ -65,12 +65,36 @@ jsonSerializerObject::~jsonSerializerObject()
 {
 }
 
+/*
+ * Converts the string to UTF-8 format and escapes quote and backslash characters.
+ */
+std::string latin_to_utf8(const std::string &str)
+{
+	std::string utf8;
+	utf8.reserve(str.size() * 2);
+	for (std::string::const_iterator it = str.cbegin(); it != str.cend(); ++it)
+	{
+		uint8_t ch = *it;
+		if (ch == '\\' || ch == '\'')
+			utf8.push_back('\\');
+
+		if (ch < 0x80)
+			utf8.push_back(ch);
+		else
+		{
+			utf8.push_back(0xc0 | ch >> 6);
+			utf8.push_back(0x80 | (ch & 0x3f));
+		}
+	}
+	return utf8;
+}
+
 std::string jsonSerializerObject::getStringRepresentation()
 {
 	rapidjson::StringBuffer buffer;
 	rapidjson::Writer writer(buffer);
 	_pimpl->doc.Accept(writer);
-	return buffer.GetString();
+	return latin_to_utf8(buffer.GetString());
 }
 
 void jsonSerializerObject::startObject(const std::string &name)

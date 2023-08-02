@@ -93,7 +93,7 @@ public:
 	 */
 	SerializationHelper getSerializationHelper() { return SerializationHelper(*this); }
 	/**
-	 * Get string representation of the serialized contents.
+	 * Get string representation of the serialized contents. The returned JSON should be in UTF-8 format.
 	 */
 	virtual std::string getStringRepresentation() = 0;
 
