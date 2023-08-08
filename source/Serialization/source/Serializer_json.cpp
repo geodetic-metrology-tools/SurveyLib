@@ -61,9 +61,7 @@ jsonSerializerObject::jsonSerializerObject() : _pimpl(std::make_unique<_jsonSeri
 	_pimpl->doc.SetObject();
 }
 
-jsonSerializerObject::~jsonSerializerObject()
-{
-}
+jsonSerializerObject::~jsonSerializerObject() = default;
 
 /*
  * Converts the string to UTF-8 format and escapes quote and backslash characters.
@@ -75,11 +73,19 @@ std::string latin_to_utf8(const std::string &str)
 	for (std::string::const_iterator it = str.cbegin(); it != str.cend(); ++it)
 	{
 		uint8_t ch = *it;
-		if (ch == '\\' || ch == '\'')
+		// Escape backslash twice (once by StringBuffer::getString, and second time here)
+		 if (ch == '\\')
 			utf8.push_back('\\');
 
+		// Change to utf-8
 		if (ch < 0x80)
-			utf8.push_back(ch);
+		{
+			// Remove unacceptable for LGC Report quote sign and replace it with the `Right single quotation mark`
+			if (ch == '\'')
+				utf8 += u8"\u2019";
+			else
+				utf8.push_back(ch);
+		}
 		else
 		{
 			utf8.push_back(0xc0 | ch >> 6);
