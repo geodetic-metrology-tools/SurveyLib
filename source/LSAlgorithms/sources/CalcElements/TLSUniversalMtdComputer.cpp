@@ -172,7 +172,6 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	}
 	const TSparseMatrix &Pv = *im->getWeightMtrx();
 	const TVector &W = im->getMisclosureVctr();
-	const TSparseMatrix &A2 = *im->getCnstrFirstDgnMtrx();
 	const TVector &solution = *rm->getSolutionVectByConst(); // NB: Solution vector will NOT be recalculated here (just taken from previous results!)
 	const TSparseMatrix &NBig = *rm->getNormalMatrixByConst(); // NB: Normal matrix will NOT be recalculated here (just taken from previous results!)
 
@@ -185,10 +184,10 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 
 	//--------------- Sigma 0 a posteriri ---------------//
 	sigmaZero2Aposteriori = V.transpose() * Pv * V;
-	if (nbObs + nbCnstr != nbUnk)
-		sigmaZero2Aposteriori /= (nbObs - nbUnk + nbCnstr); // NB Redundancy: Takes into account the number of constraints!
+	if (nbEq + nbCnstr != nbUnk)
+		sigmaZero2Aposteriori /= (nbEq - nbUnk + nbCnstr); // NB Redundancy: Takes into account the number of constraints!
 	else
-		fError += "Number of equations equals number of unknowns, causes zero division!";
+		fError += "Number of equations + constraints equals number of unknowns, causes zero division!";
 	rm->setSigmaZero2(sigmaZero2Aposteriori);
 	struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk);
 	rm->setSigmaZero2Limits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);

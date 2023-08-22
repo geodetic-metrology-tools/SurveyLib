@@ -55,7 +55,7 @@ public:
 
 		bool setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block);
 
-		/*!	\brief Set a the second design matrix to minus Identity for parametric case
+		/*!	\brief Set the second design matrix to minus Identity for parametric case
 		*/
 
 		bool setSecondDgnMtrxToMinusIdentity();

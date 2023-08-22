@@ -20,9 +20,10 @@ TACoordSysVector::TACoordSysVector(const TVector & vec, TCoordSysFactory::ECoord
    {
 	   throw std::runtime_error("Vector needs to be initialized with a 3-dimensional vector");
    }
-   setX(0, vec(0));
-   setX(1, vec(1));
-   setX(2, vec(2));
+   for (int i = 0; i < 3; i++)
+   {
+	   fVector[i] = vec[i];
+   }
    setCoordSys(en);
 }
 
