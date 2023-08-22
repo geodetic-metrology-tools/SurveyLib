@@ -50,15 +50,17 @@ public:
 		*/
 		bool addFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 
-		/*!	\brief Set the value of an element of the second design matrix in the adjustment (B-matrix)
-			\param[in] row of the desired element
-			\param[in] column of the desired element
-			\param[in] coefficient: value of the desired element
+		/*!	\brief Set a block in the second design matrix. Each block corresponds to one mathematical observation equation. Also sets the inverse block.
 		*/
 
 		bool setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block);
 
-		/*!	\brief Set a block in the second design matrix. Each block corresponds to one mathematical observation equation. Also sets the inverse block.
+		/*!	\brief Set a the second design matrix to minus Identity for parametric case
+		*/
+
+		bool setSecondDgnMtrxToMinusIdentity();
+
+		/*!	\brief Set a misclosure vector element.
 		*/
 		bool setMisclosureVectorElement(MatrixIndex row, TReal coeff);
 

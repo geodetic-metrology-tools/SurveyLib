@@ -20,6 +20,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TLength.h"
 #include "TDouble.h"
 #include  "TCoordSysFactory.h"
+#include <TSparseMatrix.h>
 
 class TVCoordinateSystem;
 
@@ -42,6 +43,9 @@ public:
 	friend class TACoordinateSystem;
 
 	TACoordSysVector();
+	//!Constructor using a TVector, per default Cartesian
+	TACoordSysVector(const TVector &, TCoordSysFactory::ECoordSys = TCoordSysFactory::k3DCartesian);
+
 	virtual ~TACoordSysVector() { }
 	
 	
@@ -92,6 +96,10 @@ public:
 
 		//!transpose a FreeVector or a PositionVector in a T3DMatrix
 		virtual T3DMatrix transposed() const;
+
+
+		// return a TVector 
+		TVector toRealVector() const;
 	//@}
 
 #if USE_SERIALIZER

@@ -10,6 +10,11 @@ TPositionVector::TPositionVector(TCoordSysFactory::ECoordSys en) :TACoordSysVect
 	setCoordSys(en); 
 }
 
+TPositionVector::TPositionVector(const TVector &vec, TCoordSysFactory::ECoordSys en) : TACoordSysVector(vec, en)
+{
+}
+
+
 TPositionVector::TPositionVector(const TReal& x, const TReal& y, const TReal& z,TCoordSysFactory::ECoordSys en)
 {
 	setX(0, x);

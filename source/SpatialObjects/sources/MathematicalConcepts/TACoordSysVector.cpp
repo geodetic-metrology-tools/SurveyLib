@@ -14,6 +14,18 @@ TACoordSysVector::TACoordSysVector()
 	fCoordSys = 0;
 }
 
+TACoordSysVector::TACoordSysVector(const TVector & vec, TCoordSysFactory::ECoordSys en)
+{
+   if (vec.rows() != 3)
+   {
+	   throw std::runtime_error("Vector needs to be initialized with a 3-dimensional vector");
+   }
+   setX(0, vec(0));
+   setX(1, vec(1));
+   setX(2, vec(2));
+   setCoordSys(en);
+}
+
 TReal TACoordSysVector::operator[](int i) const
 {//! Allows to retrieve one of the coordinates of the vector
 	if (i >= 0 && i <= 3)
@@ -114,6 +126,15 @@ T3DMatrix TACoordSysVector::transposed() const
 	}
 	return result;
 }
+
+TVector TACoordSysVector::toRealVector() const
+{
+	TVector vector(3);
+	vector.setZero();
+	vector << getX(), getY(), getZ();
+	return vector;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // Member Protected Functions

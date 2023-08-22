@@ -173,6 +173,24 @@ bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex
 	return true;
 }
 
+bool TLSInputMatrices::setSecondDgnMtrxToMinusIdentity()
+{
+	// set the second design matrix and its inverse to minus identity
+	try
+	{
+		secondDesignMatrix->setIdentity();
+		*secondDesignMatrix *= -1.0;
+		secondDesignBlockDiagInvMatrix->setIdentity();
+		*secondDesignBlockDiagInvMatrix *= -1.0;
+		seconDesignMatrixIsBlockDiag = true;
+	}
+	catch (...)
+	{
+		return false;
+	}
+	return true;
+}
+
 bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {
 	try {

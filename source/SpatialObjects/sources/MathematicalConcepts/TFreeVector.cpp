@@ -15,7 +15,10 @@
 TFreeVector::TFreeVector() :TACoordSysVector()
 {	// default constructor	
    setCoordSys(TCoordSysFactory::ECoordSys::k3DCartesian);
+}
 
+TFreeVector::TFreeVector(const TVector &vec, TCoordSysFactory::ECoordSys en) : TACoordSysVector(vec, en)
+{
 }
 
 TFreeVector::TFreeVector(TCoordSysFactory::ECoordSys en) :TACoordSysVector()

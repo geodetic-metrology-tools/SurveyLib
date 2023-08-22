@@ -40,6 +40,9 @@ public:
 		//!Constructor taking 3 TLength
 		//TPositionVector(const TLength&, const TLength&, const TLength&);
 
+		//!Constructor using a TVector, per default Cartesian
+		TPositionVector(const TVector&, TCoordSysFactory::ECoordSys = TCoordSysFactory::k3DCartesian);
+
 		//!Constructor taking 3 TReal
 		TPositionVector(const TReal&, const TReal&, const TReal&,TCoordSysFactory::ECoordSys);
 
