@@ -45,6 +45,9 @@ public:
 
 		//!Default Constructor 
 		TFreeVector();
+
+		//!Constructor using a TVector, per default Cartesian
+		TFreeVector(const TVector&, TCoordSysFactory::ECoordSys = TCoordSysFactory::k3DCartesian);
 	
 		//!Constructor taking 3 TReal
 		TFreeVector(const TReal&, const TReal&, const TReal&, TCoordSysFactory::ECoordSys);
@@ -111,6 +114,7 @@ public:
 		TFreeVector cross(const TFreeVector& b);
 
 		TReal dot(const TFreeVector& b) const;
+
 	//@}
 
 private:
