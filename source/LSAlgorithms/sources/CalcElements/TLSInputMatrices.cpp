@@ -208,8 +208,22 @@ bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex 
 	if (0 <= row && row < fUEOIndices.CIndex && 0 <= column && column < fUEOIndices.UIndex)
 		fCnstrFirstDesignMtrx->insert(row,column) = coeff;
 	} catch(...) {
-		logFatal() << "Setting constraints for LIBR calculations in the first design matrix A:\n"
+		logFatal() << "Setting constraints for LIBR calculations in the constraint first design matrix A:\n"
 			<< "Could not insert the element (" << row << "," << column << ") with the value: " << coeff << std::endl;
+		return false;
+	}
+	return true;
+}
+
+
+bool TLSInputMatrices::addCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient)
+{
+	try {
+	if (0 <= row && row < fUEOIndices.CIndex && 0 <= column && column < fUEOIndices.UIndex)
+		fCnstrFirstDesignMtrx->coeffRef(row,column) += coefficient;
+	} catch(...) {
+		logFatal() << "Setting constraints for LIBR calculations in the constraint first design matrix A:\n"
+				   << "At index (" << row << "," << column << ") : could not add the value: "  << std::endl;
 		return false;
 	}
 	return true;

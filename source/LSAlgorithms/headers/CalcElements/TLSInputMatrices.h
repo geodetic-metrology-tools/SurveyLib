@@ -102,11 +102,20 @@ public:
 		*/
 		bool setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 
+		/*!	\brief Add the value of an element to an entry of the constraints first design matrix in the adjustment (A2-matrix)
+			\param[in] row of the desired element
+			\param[in] column of the desired element
+			\param[in] coefficient: value of the desired element
+		*/
+		bool addCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
+
 		/*!	\brief Set the value of an element of the constraints misclosure vector (W2-submatrix)
 			\param[in] row of the desired element
 			\param[in] coeff: value of the desired element
 		*/
 		bool setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff);
+
+
 	//@}
 
 
