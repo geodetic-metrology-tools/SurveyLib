@@ -62,7 +62,8 @@ TAngle::TAngle(const TReal value, EUnits unit)
       case EUnits::kGons:        setGonsValue(value); break;
       case EUnits::kCCs:         setGonsValue(value*CC2GON); break;
       case EUnits::k100MicroGons:setGonsValue(value*CC2GON); break;
-      case EUnits::kDeciDegs:    setDeciDegsValue(value); break;
+	  case EUnits::kDeciDegs:    setDeciDegsValue(value); break;
+	  case EUnits::kMicroRadians:setMicroRadiansValue(value); break;
    }
 }
 
@@ -94,6 +95,17 @@ void	TAngle::setRadiansValue(const TReal value)
 	
 	//normalise the radians value
 	normaliseAngle();			
+}
+
+
+
+void	TAngle::setMicroRadiansValue(const TReal value)
+{ // set the angle value to the given radians value
+
+	fValue = value / pow(10, 6);
+
+	// normalise the radians value
+	normaliseAngle();
 }
 
 
@@ -452,6 +464,11 @@ TAngle::ENumberSign TAngle::sign(TReal	number) const
 TReal	TAngle::getRadiansValue() const
 {	// get the radians angular value for the angle
    return fValue;
+}
+
+TReal TAngle::getMicroRadiansValue() const
+{ // get the radians angular value for the angle
+	return fValue * pow(10, 6);
 }
 
 TReal	TAngle::getGonsValue() const

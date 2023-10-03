@@ -81,7 +81,8 @@ public:
         k100MicroGons = 2,
         kDMS = 3,
         kCCs = 4,
-		kDeciDegs = 5
+        kDeciDegs = 5,
+        kMicroRadians = 6
     }; 
 	//@}
 	
@@ -115,7 +116,9 @@ public:
 	/*!@name Setting methods */
 	//@{
 	/*! Sets the angle value in radians */
-    void setRadiansValue(TReal);
+	void setRadiansValue(TReal);
+	/*! Sets the angle value in microradians */
+	void setMicroRadiansValue(TReal);
 	/*! Sets the angle value in gons */
     void setGonsValue(TReal);
 	/*! Sets the angle value in degre, minutes, seconds */
@@ -128,6 +131,8 @@ public:
 	//@{
 	/*! Gets the angle value in rads */
    TReal getRadiansValue() const;
+	/*! Gets the angle value in microradians */
+   TReal getMicroRadiansValue() const;
 	/*! Gets the angle value in gons */
    TReal getGonsValue() const;
 	/*! Gets the angle value in CC (100 microgons) */
