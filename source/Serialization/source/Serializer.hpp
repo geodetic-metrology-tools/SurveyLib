@@ -206,7 +206,7 @@ protected:
 	template<typename K, typename V>
 	void addValue(const std::pair<K, V> &p)
 	{
-		addProperty(p.second, p.first);
+		addProperty(p.second);
 	}
 
 	// If container of containers or Serializables
