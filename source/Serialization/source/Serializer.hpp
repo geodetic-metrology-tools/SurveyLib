@@ -8,7 +8,9 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 #include "CustomTypeTraits.hpp"
 
+// Forward declarations
 class Serializable;
+
 // forward declaration for peka::tree external library
 namespace peka
 {
@@ -26,14 +28,15 @@ template<typename Scalar, int Options, typename Index>
 class SparseMatrix;
 } // namespace Eigen
 
+
 /**
  * Abstract class featuring Serialization.
  *
  * To use this class, you should override all the virtual methods.
  *
- * The  principle of operation of this class can be explained with two concepts:
+ * The principle of operation of this class is based on two concepts:
  * - Using std::enable_if and (custom) type traits to allow proper object type resolution during the compile time.
- * - Using double dispatch thanks to inner @SerializerObject::SerializationHelper class that dispatches the calls to the
+ * - Using double dispatch thanks to the inner @SerializerObject::SerializationHelper class that dispatches the calls to the
  *		relevant @SerializerObject::addProperty methods, some of which are virtual. This enables to use dynamic (inheritance)
  *		and static (templates) polymorphism at the same time. Then @addProperty methods may dispatch it back to @addProperty
  *		methods or to @addValue methods.
@@ -43,7 +46,7 @@ class SparseMatrix;
  *		@SerializerObject::SerializationHelper::addProperty method and entire complicated logic is hidden inside of @SerializerObject.
  * @addValue methods are used to pass the value to be serialized or to dispatch it back to @addProperty if it cannot be resolved yet
  * @startObject @endObject @startArray @endArray @startPrimitive @endPrimitive are used to create proper serialized structure
- *		that should be adapted to different serialization standards.
+ *		that should be adapted to different data standards.
  *
  * For type traits and helpers please refer to `CustomTypeTraits.hpp`.
  */
@@ -58,14 +61,9 @@ public:
 	{
 	public:
 		/**
-		 * Empty constructor
-		 *
 		 * @param @ser holds the SerializerObject used for serialization.
 		 */
 		SerializationHelper(SerializerObject &ser) : ser(ser) {}
-		/**
-		 * Empty destructor.
-		 */
 		~SerializationHelper() = default;
 
 		/**
@@ -86,7 +84,7 @@ public:
 
 public:
 	/**
-	 * Creates a new @SerializerObject::SerializationHelper object that should be shared by all the classes writing to the same instance.
+	 * Creates a new @SerializerObject::SerializationHelper object that should be shared by all the classes writing to the same data object.
 	 *
 	 * Even though the @SerializationHelper object is new each time on @SerializerObject::getSerializationHelper call, it takes the current
 	 * @SerializerObject as a constructor argument so the write always goes to the same serialized object.
@@ -116,15 +114,14 @@ protected:
 
 	// clang-format off
 
-	// Primitive - !Serializable && !pair && !pointer && !c-style-array && !sparce-matrix && ((container && is_string) || !container))
+	// Primitive
 	template<typename T>
 	typename std::enable_if_t<!is_Serializable<T>::value 
 		&& !is_pair<T>::value 
 		&& !is_any_pointer<T>::value
 		&& !std::is_array_v<T>
 		&& !is_sparse<T>::value
-		&& ((is_iterable_container<T>::value && is_string<T>::value) 
-			|| !is_iterable_container<T>::value)
+		&& ((is_iterable_container<T>::value && is_string<T>::value) || !is_iterable_container<T>::value)
 	>
 		addProperty(const T &value, const std::string &name = std::string())
 	{
@@ -141,7 +138,7 @@ protected:
 		endPrimitive();
 	}
 
-	// String pointers - is_any_pointer && is_string
+	// String pointer
 	template<typename T>
 	typename std::enable_if_t<!is_Serializable<T>::value && is_any_pointer<T>::value && is_string<T>::value>
 		addProperty(const T &value, const std::string &name = std::string())
@@ -150,7 +147,7 @@ protected:
 		addValue(value);
 		endPrimitive();
 	}
-	// Other pointers
+	// Other pointer
 	template<typename T>
 	typename std::enable_if_t<is_any_pointer<T>::value && !is_string<T>::value>
 		addProperty(const T &value, const std::string &name = std::string())
@@ -190,7 +187,7 @@ protected:
 	/* ************** */
 	/*    ADD_VALUE   */
 	/* ************** */
-	// Helpers to dispatch the types based on the current and nestey-types (if present, pair or containers)
+	// Helpers to dispatch the types based on the current and nested-types (if present, pair or containers)
 
 	// primitive value related
 	virtual void addValue(int value) = 0;
@@ -209,30 +206,18 @@ protected:
 		addProperty(p.second, p.first);
 	}
 
-	// If container of containers or Serializables
+	// If container of: containers or Serializables or pointers
 	template<typename T>
 	typename std::enable_if_t<
 		is_iterable_container<T>::value 
 		&& (is_iterable_container<typename T::value_type>::value 
-			|| is_Serializable<typename T::value_type>::value)
+			|| is_Serializable<typename T::value_type>::value
+			|| is_any_pointer<typename T::value_type>::value)
 	>
 		addValue(const T &container)
 	{
 		for (const auto &t : container)
 			addProperty(t);
-	}
-
-	// if container of pointers
-	template<typename T>
-	typename std::enable_if_t<
-		is_iterable_container<T>::value 
-		&& is_any_pointer<typename T::value_type>::value 
-	>
-		addValue(const T &container)
-	{
-		for (const auto &t : container)
-			addProperty(t);
-			return;
 	}
 
 	// If container of primitives
@@ -258,6 +243,7 @@ protected:
 			addValue(t);
 	}
 
+	// External types support
 	// if (external lib) tree
 	template<typename T, class tree_node_allocator>
 	void addValue(const peka::tree<T, tree_node_allocator> &tree)
