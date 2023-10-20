@@ -28,28 +28,28 @@ class LogMessage;
 class SULIB_SHARED_EXPORT FileLogHandler : public ILogHandler
 {
 public:
-	/**
-	 * Add the date to the filename.
-	 *
-	 * the date is added like this:
-	 * - given original filename: "path/to/file.log"
-	 * - new file name: "path/to/file_yyyy-mm-dd.log"
-	 *
-	 * @param filename the path we want to change the file name
-	 * @return the new filename
-	 */
-	static std::string addDate(const std::string &filename);
-	/**
-	 * Remove all the files corresponding to the given file name older than nbdays.
-	 *
-	 * Remove all the files assuming they have been generated with FileLogHandler::addDate().
-	 * - assuming filename is: "path/to/file.log"
-	 * - will remove all files in the format "path/to/file_yyyy-mm-dd.log" if the date is older enough.
-	 *
-	 * @param filename the base filename.
-	 * @param nbdays the number of days from which the files should be deleted
-	 */
-	static void removeOldLogs(const std::string &filename, int nbdays = 15);
+//	/**
+//	 * Add the date to the filename.
+//	 *
+//	 * the date is added like this:
+//	 * - given original filename: "path/to/file.log"
+//	 * - new file name: "path/to/file_yyyy-mm-dd.log"
+//	 *
+//	 * @param filename the path we want to change the file name
+//	 * @return the new filename
+//	 */
+//	static std::string addDate(const std::string &filename);
+//	/**
+//	 * Remove all the files corresponding to the given file name older than nbdays.
+//	 *
+//	 * Remove all the files assuming they have been generated with FileLogHandler::addDate().
+//	 * - assuming filename is: "path/to/file.log"
+//	 * - will remove all files in the format "path/to/file_yyyy-mm-dd.log" if the date is older enough.
+//	 *
+//	 * @param filename the base filename.
+//	 * @param nbdays the number of days from which the files should be deleted
+//	 */
+//	static void removeOldLogs(const std::string &filename, int nbdays = 15);
 
 	/** @param file the path to the log file where to write the logs */
 	FileLogHandler(std::string file = "") noexcept : ILogHandler(), _filePath(std::move(file)) {}

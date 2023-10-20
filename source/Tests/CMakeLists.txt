@@ -29,7 +29,7 @@ set(ProjectFrameworkTests_SOURCES
 )
 
 set(PluginsTests_SOURCES
-	${CMAKE_CURRENT_LIST_DIR}/Plugins/testLogs.cpp
+#	${CMAKE_CURRENT_LIST_DIR}/Plugins/testLogs.cpp
 	${CMAKE_CURRENT_LIST_DIR}/Plugins/testShareablePoints.cpp
 )
 
