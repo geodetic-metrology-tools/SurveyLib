@@ -217,6 +217,42 @@ bool TLSInputMatrices::resetSecondDgnMtrx(UEOIndices ueoi)
 	return true;
 }
 
+bool TLSInputMatrices::resetCnstrFirstDgnMtrx(UEOIndices ueoi)
+{
+	try
+	{
+		if (fCnstrFirstDesignMtrx != nullptr)
+		{
+			delete fCnstrFirstDesignMtrx;
+			fCnstrFirstDesignMtrx = nullptr;
+		}
+		fCnstrFirstDesignMtrx = new TSparseMatrix(ueoi.CIndex, ueoi.UIndex);
+	}
+	catch (...)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool TLSInputMatrices::resetCnstrMisclosureVector(UEOIndices ueoi)
+{
+	try
+	{
+		if (fCnstrMisclosureVector != nullptr)
+		{
+			delete fCnstrMisclosureVector;
+			fCnstrMisclosureVector = nullptr;
+		}
+		fCnstrMisclosureVector = new TVector(ueoi.CIndex);
+		}
+		catch (...)
+		{
+			return false;
+		}
+		return true;
+	}
+
 bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {
 	try {

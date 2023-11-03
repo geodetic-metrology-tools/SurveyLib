@@ -65,6 +65,15 @@ public:
 		*/
 		bool resetSecondDgnMtrx(UEOIndices ueoi);
 
+		/*! \brief Reset the constraint design matrix. It must be filled at each iteration.
+		 */
+		bool resetCnstrFirstDgnMtrx(UEOIndices ueoi);
+
+		/*! \brief Reset the constraint vector. It must be filled at each iteration.
+		 */
+		bool resetCnstrMisclosureVector(UEOIndices ueoi);
+
+
 		/*!	\brief Set a misclosure vector element.
 		*/
 		bool setMisclosureVectorElement(MatrixIndex row, TReal coeff);
