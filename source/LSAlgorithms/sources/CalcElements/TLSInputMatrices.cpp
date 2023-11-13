@@ -107,7 +107,6 @@ void TLSInputMatrices::clearMatrices()
 	
 }
 
-
 bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try {
@@ -129,7 +128,6 @@ bool TLSInputMatrices::addFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 	}
 	return true;
 }
-
 
 bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block)
 {
@@ -228,8 +226,9 @@ bool TLSInputMatrices::resetCnstrFirstDgnMtrx(UEOIndices ueoi)
 		}
 		fCnstrFirstDesignMtrx = new TSparseMatrix(ueoi.CIndex, ueoi.UIndex);
 	}
-	catch (...)
+	catch (const std::overflow_error &err)
 	{
+		logFatal() << "Failed to reset the constraint for the first design matrix, error message: " << err.what() << std::endl;
 		return false;
 	}
 	return true;
@@ -245,13 +244,14 @@ bool TLSInputMatrices::resetCnstrMisclosureVector(UEOIndices ueoi)
 			fCnstrMisclosureVector = nullptr;
 		}
 		fCnstrMisclosureVector = new TVector(ueoi.CIndex);
-		}
-		catch (...)
-		{
-			return false;
-		}
-		return true;
 	}
+	catch (const std::overflow_error &err)
+	{
+		logFatal() << "Failed to reset the constraint misclosure vector, error message: " << err.what() << std::endl;
+		return false;
+	}
+	return true;
+}
 
 bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {
@@ -262,7 +262,6 @@ bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 	}
 	return true;
 }
-
 
 bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
@@ -312,7 +311,6 @@ bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex 
 	return true;
 }
 
-
 bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {
 	try {
@@ -322,7 +320,6 @@ bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, TReal co
 	}
 	return true;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //ACCESS METHOD FUNCTIONS
