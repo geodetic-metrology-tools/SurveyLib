@@ -71,7 +71,7 @@ int TSpatialStatus::getVariableDimension() const
 
 
 #if USE_SERIALIZER
-void TSpatialStatus::serialize(SerializerObject::SerializationHelper &obj) const
+void TSpatialStatus::serialize(ObjectSerializer &obj) const
 {
 	obj.addProperty("fSpatialStatus", fSpatialStatus);
 }

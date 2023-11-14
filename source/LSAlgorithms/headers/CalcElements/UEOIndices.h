@@ -35,7 +35,7 @@ struct UEOIndices
 
 #if USE_SERIALIZER
 	// Inherited via Serializable
-	virtual void serialize(SerializerObject::SerializationHelper &obj) const
+	virtual void serialize(ObjectSerializer &obj) const
 	{
 		obj.addProperty("UIndex", UIndex);
 		obj.addProperty("EIndex", EIndex);

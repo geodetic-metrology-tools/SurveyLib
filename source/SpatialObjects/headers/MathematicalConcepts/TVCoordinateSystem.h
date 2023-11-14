@@ -94,14 +94,14 @@ public:
 
 #if USE_SERIALIZER
 	// Inherited via Serializable
-	virtual void serialize(SerializerObject::SerializationHelper &obj) const = 0;
+	virtual void serialize(ObjectSerializer &obj) const = 0;
 #endif
 
 };
 
 
 #if USE_SERIALIZER
-inline void TVCoordinateSystem::serialize(SerializerObject::SerializationHelper &) const
+inline void TVCoordinateSystem::serialize(ObjectSerializer &) const
 {
 
 }

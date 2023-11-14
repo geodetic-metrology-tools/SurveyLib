@@ -38,7 +38,7 @@ struct TransformParameters
 
 #if USE_SERIALIZER
 	// Inherited via Serializable
-	virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+	virtual void serialize(ObjectSerializer &obj) const override;
 #endif
 
 	/// Overlading  comparition operator for TransformParameters
@@ -110,7 +110,7 @@ struct TransformParameters
 
 #if USE_SERIALIZER
 // Inherited via Serializable
-inline void TransformParameters::serialize(SerializerObject::SerializationHelper &obj) const
+inline void TransformParameters::serialize(ObjectSerializer &obj) const
 {
 	obj.addProperty("omega", omega.getRadiansValue());
 	obj.addProperty("phi", phi.getRadiansValue());

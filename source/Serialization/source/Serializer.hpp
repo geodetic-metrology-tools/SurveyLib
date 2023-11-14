@@ -28,68 +28,38 @@ template<typename Scalar, int Options, typename Index>
 class SparseMatrix;
 } // namespace Eigen
 
-
 /**
  * Abstract class featuring Serialization.
  *
  * To use this class, you should override all the virtual methods.
  *
- * The principle of operation of this class is based on two concepts:
+ * The principle of operation of this class is based on:
  * - Using std::enable_if and (custom) type traits to allow proper object type resolution during the compile time.
- * - Using double dispatch thanks to the inner @SerializerObject::SerializationHelper class that dispatches the calls to the
- *		relevant @SerializerObject::addProperty methods, some of which are virtual. This enables to use dynamic (inheritance)
- *		and static (templates) polymorphism at the same time. Then @addProperty methods may dispatch it back to @addProperty
- *		methods or to @addValue methods.
+ * - Using double dispatch thanks to the ObjectSerializer() class that dispatches the calls to the relevant ObjectSerializer::addPropertyImpl
+ *		methods. These calls may resolve back to Serializable::serialize methods if the class is something else than the primitive type.
+ * - Using this approach we can use dynamic polymorphism to inherit from ObjectSerializer class, and static polymorphism, i.e. templates, to
+ *      resolve all types properly.
  *
- * @addProperty methods are used to resolve the types properly and allow creating nested objects. These and @addValue methods
+ * addProperty() methods are used to resolve the types properly and allow creating nested objects. These and addValue() methods
  *		are heavily templated in order to resolve all possible types correctly. This makes the API extremly easy to use by only calling
- *		@SerializerObject::SerializationHelper::addProperty method and entire complicated logic is hidden inside of @SerializerObject.
- * @addValue methods are used to pass the value to be serialized or to dispatch it back to @addProperty if it cannot be resolved yet
- * @startObject @endObject @startArray @endArray @startPrimitive @endPrimitive are used to create proper serialized structure
+ *		ObjectSerializer::addProperty() method and entire complicated logic is hidden inside of ObjectSerializer.
+ * addValue() methods are used to pass the value to be serialized or to dispatch it back to addProperty() if it cannot be resolved yet.
+ * startObject() endObject() startArray() endArray() startPrimitive() endPrimitive() are used to create proper serialized structure
  *		that should be adapted to different data standards.
  *
  * For type traits and helpers please refer to `CustomTypeTraits.hpp`.
+ *
+ * @see Serializable
  */
-class SerializerObject
+class ObjectSerializer
 {
 public:
-	/**
-	 * Helper class that is utilizing both dynamic and static polymorphism, it allows to call virtual @addProperty methods
-	 * of @SerializerObject with a templated argument using @SerializerObject::SerializationHelper::addProperty.
-	 */
-	class SerializationHelper
+	template<typename T>
+	void addProperty(const std::string &name, const T &value)
 	{
-	public:
-		/**
-		 * @param @ser holds the SerializerObject used for serialization.
-		 */
-		SerializationHelper(SerializerObject &ser) : ser(ser) {}
-		~SerializationHelper() = default;
+		_addProperty(value, name);
+	}
 
-		/**
-		 * Calls @addProperty methods of @SerializerObject with a templated argument
-		 *
-		 * @param name of the object
-		 * @param ser SerializerObject used for serialization
-		 */
-		template<typename T>
-		void addProperty(const std::string &name, const T &value)
-		{
-			ser.addProperty(value, name);
-		}
-
-	protected:
-		SerializerObject &ser;
-	};
-
-public:
-	/**
-	 * Creates a new @SerializerObject::SerializationHelper object that should be shared by all the classes writing to the same data object.
-	 *
-	 * Even though the @SerializationHelper object is new each time on @SerializerObject::getSerializationHelper call, it takes the current
-	 * @SerializerObject as a constructor argument so the write always goes to the same serialized object.
-	 */
-	SerializationHelper getSerializationHelper() { return SerializationHelper(*this); }
 	/**
 	 * Get string representation of the serialized contents. The returned JSON should be in UTF-8 format.
 	 */
@@ -107,23 +77,28 @@ protected:
 	virtual void startPrimitive(const std::string &name) = 0;
 	virtual void endPrimitive() = 0;
 
+	// clang-format off
+
+private:
 	/* *************** */
 	/*   ADD_PROPERTY  */
 	/* *************** */
 	//	Add some new property, can be primitive, Serializable, map/container of maps, pair, container
 
-	// clang-format off
-
-	// Primitive
+	// Primitive or string pointer
 	template<typename T>
-	typename std::enable_if_t<!is_Serializable<T>::value 
+	typename std::enable_if_t<(!is_Serializable<T>::value 
 		&& !is_pair<T>::value 
 		&& !is_any_pointer<T>::value
 		&& !std::is_array_v<T>
 		&& !is_sparse<T>::value
-		&& ((is_iterable_container<T>::value && is_string<T>::value) || !is_iterable_container<T>::value)
+		&& ((is_iterable_container<T>::value && is_string<T>::value) || !is_iterable_container<T>::value))
+		||
+		(!is_Serializable<T>::value
+		&& is_any_pointer<T>::value
+		&& is_string<T>::value)
 	>
-		addProperty(const T &value, const std::string &name = std::string())
+		_addProperty(const T &value, const std::string &name = std::string())
 	{
 		startPrimitive(name);
 		addValue(value);
@@ -131,44 +106,35 @@ protected:
 	}
 	// Primitive - std::to_string<E> needs to be valid
 	template<typename T, typename E>
-	auto addProperty(const T &value, const E &name) -> decltype(std::to_string(name), void())
+	typename std::enable_if_t<has_std_to_string<E>::value>
+		_addProperty(const T &value, const E &name)
 	{
 		startPrimitive(std::to_string(name));
 		addValue(value);
 		endPrimitive();
 	}
 
-	// String pointer
-	template<typename T>
-	typename std::enable_if_t<!is_Serializable<T>::value && is_any_pointer<T>::value && is_string<T>::value>
-		addProperty(const T &value, const std::string &name = std::string())
-	{
-		startPrimitive(name);
-		addValue(value);
-		endPrimitive();
-	}
 	// Other pointer
 	template<typename T>
 	typename std::enable_if_t<is_any_pointer<T>::value && !is_string<T>::value>
-		addProperty(const T &value, const std::string &name = std::string())
+		_addProperty(const T &value, const std::string &name = std::string())
 	{
 		if(value)
-			addProperty(*value, name);
+			_addProperty(*value, name);
 	}
 	// Serializable class
 	template<typename T>
 	typename std::enable_if_t<is_Serializable<T>::value>
-		addProperty(const T &o, const std::string &name = std::string())
+		_addProperty(const T &o, const std::string &name = std::string())
 	{
 		startObject(name);
-		SerializerObject::SerializationHelper serHelper = getSerializationHelper();
-		to_ptr(o)->serialize(serHelper);
+		to_ptr(o)->serialize(*this);
 		endObject();
 	}
 	//// Container
 	template<typename T>
 	typename std::enable_if_t<(!is_string<T>::value && is_iterable_container<T>::value) || std::is_array_v<T> || is_sparse<T>::value>
-		addProperty(const T &value, const std::string &name = std::string())
+		_addProperty(const T &value, const std::string &name = std::string())
 	{
 		startArray(name);
 		addValue(value);
@@ -177,7 +143,7 @@ protected:
 	// Pair
 	template<typename T>
 	typename std::enable_if_t<is_pair<T>::value>
-		addProperty(const T &value, const std::string &name = std::string())
+		_addProperty(const T &value, const std::string &name = std::string())
 	{
 		startObject(name);
 		addValue(value);
@@ -203,7 +169,7 @@ protected:
 	template<typename K, typename V>
 	void addValue(const std::pair<K, V> &p)
 	{
-		addProperty(p.second, p.first);
+		_addProperty(p.second, p.first);
 	}
 
 	// If container of: containers or Serializables or pointers
@@ -217,7 +183,7 @@ protected:
 		addValue(const T &container)
 	{
 		for (const auto &t : container)
-			addProperty(t);
+			_addProperty(t);
 	}
 
 	// If container of primitives
@@ -251,7 +217,7 @@ protected:
 		auto pos = tree.begin();
 		while (pos != tree.end())
 		{
-			addProperty(pos.node->data);
+			_addProperty(pos.node->data);
 			pos++;
 		}
 	}
@@ -267,7 +233,7 @@ protected:
 		else
 		{
 			for (auto row : matrix.rowwise())
-				addProperty(row);
+				_addProperty(row);
 		}
 	}
 
@@ -281,10 +247,15 @@ protected:
 
 // clang-format on
 
+/**
+* The class to be inherited from if serialization is to be supported.
+*
+* @see ObjectSerializer
+*/
 class Serializable
 {
 public:
-	virtual void serialize(SerializerObject::SerializationHelper &obj) const = 0;
+	virtual void serialize(ObjectSerializer &obj) const = 0;
 };
 
 #endif

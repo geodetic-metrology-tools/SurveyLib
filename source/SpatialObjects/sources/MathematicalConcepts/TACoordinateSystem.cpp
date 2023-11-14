@@ -201,7 +201,7 @@ return;
 
 
 #if USE_SERIALIZER
-void TACoordinateSystem::serialize(SerializerObject::SerializationHelper &obj) const
+void TACoordinateSystem::serialize(ObjectSerializer &obj) const
 {
 	TVCoordinateSystem::serialize(obj);
 	obj.addProperty("fCoordSysId", fCoordSysId);

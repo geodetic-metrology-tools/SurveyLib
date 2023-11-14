@@ -12,14 +12,14 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 /**
  * The main quirk of this Serializer is that it is building the tree bottom-up (from the leaves) and when the last element
- * on the stack is meant to be finished (@endObject) then it is finally added to the document.
- * Adding is invalidating the previous @rapidjson::Value but thanks to that there is no overhead (it is a move operation).
+ * on the stack is meant to be finished (endObject()) then it is finally added to the document.
+ * Adding is invalidating the previous rapidjson::Value but thanks to that there is no overhead (it is a move operation).
  */
-class jsonSerializerObject : public SerializerObject
+class JSONObjectSerializer : public ObjectSerializer
 {
 public:
-	jsonSerializerObject();
-	~jsonSerializerObject();
+	JSONObjectSerializer();
+	virtual ~JSONObjectSerializer();
 
 	virtual std::string getStringRepresentation() override;
 
@@ -44,8 +44,8 @@ protected:
 
 private:
 	/** pimpl */
-	class _jsonSerializerObject_pimpl;
-	std::unique_ptr<_jsonSerializerObject_pimpl> _pimpl;
+	class _JSONObjectSerializer_pimpl;
+	std::unique_ptr<_JSONObjectSerializer_pimpl> _pimpl;
 };
 
 #endif

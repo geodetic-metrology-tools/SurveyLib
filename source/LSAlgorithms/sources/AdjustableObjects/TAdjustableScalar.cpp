@@ -45,7 +45,7 @@ void TAdjustableScalar::reInitialise(){
 
 
 #if USE_SERIALIZER
-void TAdjustableScalar::serialize(SerializerObject::SerializationHelper &obj) const
+void TAdjustableScalar::serialize(ObjectSerializer &obj) const
 {
 	TVAdjustableObject::serialize(obj);
 	obj.addProperty("fName", fName);
