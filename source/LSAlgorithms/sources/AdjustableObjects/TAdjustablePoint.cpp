@@ -501,7 +501,7 @@ TLength TAdjustablePoint::getEstimatedEuclideanDistance(const TAdjustablePoint* 
 }
 
 #if USE_SERIALIZER
-void TAdjustablePoint::serialize(SerializerObject::SerializationHelper &obj) const
+void TAdjustablePoint::serialize(ObjectSerializer &obj) const
 {
 	TVAdjustableObject::serialize(obj);
 	obj.addProperty("eolcomment", eolcomment);
@@ -524,7 +524,7 @@ void TAdjustablePoint::serialize(SerializerObject::SerializationHelper &obj) con
 	obj.addProperty("uidx", uidx);
 }
 
-void TAdjustablePoint::ErrorEllipsoid::serialize(SerializerObject::SerializationHelper &obj) const
+void TAdjustablePoint::ErrorEllipsoid::serialize(ObjectSerializer &obj) const
 {
 	obj.addProperty("vx", vx);
 	obj.addProperty("vy", vy);

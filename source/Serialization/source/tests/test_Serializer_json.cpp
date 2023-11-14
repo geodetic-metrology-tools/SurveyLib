@@ -11,12 +11,11 @@ namespace tut
 {
 struct json_shared_data
 {
-	jsonSerializerObject ser;
-	SerializerObject::SerializationHelper serobj = ser.getSerializationHelper();
+	JSONObjectSerializer ser;
 };
 
 typedef test_group<json_shared_data> tg;
-tg jsonSerializerObject_test_group("Test Serializer_json class.");
+tg JSONObjectSerializer_test_group("Test Serializer_json class.");
 typedef tg::object testobject;
 } // namespace tut
 
@@ -32,23 +31,23 @@ void testobject::test<1>()
 {
 	set_test_name("Serializer_json: Primitives and containers serialization test");
 
-	serobj.addProperty("header", std::string("I am the header!"));
-	serobj.addProperty("vec_int", std::vector<int>{1, 2, 3, 4});
-	serobj.addProperty("int", 1);
-	serobj.addProperty("str", "cstyle");
+	ser.addProperty("header", std::string("I am the header!"));
+	ser.addProperty("vec_int", std::vector<int>{1, 2, 3, 4});
+	ser.addProperty("int", 1);
+	ser.addProperty("str", "cstyle");
 	const char *t5_str = "char pointer";
-	serobj.addProperty("str_char_pointer", t5_str);
-	serobj.addProperty("strstd", std::string("std"));
-	serobj.addProperty("list", std::list<double>{1, 2, 3});
-	serobj.addProperty("map_string_int", std::map<std::string, int>{{"foo", 42}, {"bar", 3}});
-	serobj.addProperty("map_int_string", std::map<int, std::string>{{42, "foo"}, {3, "bar"}});
-	serobj.addProperty("map_vec_int", std::map<std::string, std::vector<int>>{{"foo", {42, 1, 2}}, {"bar", {3, 5}}});
-	serobj.addProperty("pair", std::pair<std::string, std::string>{"pairkey", "pairvalue"});
-	serobj.addProperty("vec_pair_string_bool", std::vector<std::pair<std::string, bool>>{{"pair1", true}, {"pair2", false}});
-	serobj.addProperty("pair_vec_pair_string_bool", std::pair<std::string, std::vector<std::pair<std::string, bool>>>{"pairTop", {{"pairsub1", true}, {"pairsub2", false}}});
-	serobj.addProperty(
+	ser.addProperty("str_char_pointer", t5_str);
+	ser.addProperty("strstd", std::string("std"));
+	ser.addProperty("list", std::list<double>{1, 2, 3});
+	ser.addProperty("map_string_int", std::map<std::string, int>{{"foo", 42}, {"bar", 3}});
+	ser.addProperty("map_int_string", std::map<int, std::string>{{42, "foo"}, {3, "bar"}});
+	ser.addProperty("map_vec_int", std::map<std::string, std::vector<int>>{{"foo", {42, 1, 2}}, {"bar", {3, 5}}});
+	ser.addProperty("pair", std::pair<std::string, std::string>{"pairkey", "pairvalue"});
+	ser.addProperty("vec_pair_string_bool", std::vector<std::pair<std::string, bool>>{{"pair1", true}, {"pair2", false}});
+	ser.addProperty("pair_vec_pair_string_bool", std::pair<std::string, std::vector<std::pair<std::string, bool>>>{"pairTop", {{"pairsub1", true}, {"pairsub2", false}}});
+	ser.addProperty(
 		"list_vec_pair_string_bool", std::list<std::vector<std::pair<std::string, bool>>>{{{"pair1", true}}, {{"pair2", false}}, {{"pair31", true}, {"pair32", false}}});
-	serobj.addProperty("pair_vec_map_string_list_pair_string_int",
+	ser.addProperty("pair_vec_map_string_list_pair_string_int",
 		std::pair<std::string, std::vector<std::map<std::string, std::list<std::pair<std::string, int>>>>>{"toppair",
 			{
 				{{"map1key1", {{"pair1", 1}, {"pair2", 2}, {"pair3", 3}}}, {"map2key2", {{"pair1", 1}}}},
@@ -70,7 +69,7 @@ void testobject::test<2>()
 	public:
 		PrecisionData(int prec) : precision(prec) {}
 
-		virtual void serialize(SerializerObject::SerializationHelper &obj) const override { obj.addProperty("precision", precision); }
+		virtual void serialize(ObjectSerializer &obj) const override { obj.addProperty("precision", precision); }
 
 	private:
 		int precision;
@@ -79,7 +78,7 @@ void testobject::test<2>()
 	class GridData : public Serializable
 	{
 	public:
-		virtual void serialize(SerializerObject::SerializationHelper &obj) const override
+		virtual void serialize(ObjectSerializer &obj) const override
 		{
 			obj.addProperty("grid", grid);
 			obj.addProperty("grid_height", grid_height);
@@ -93,7 +92,7 @@ void testobject::test<2>()
 	class Data : public Serializable
 	{
 	public:
-		virtual void serialize(SerializerObject::SerializationHelper &obj) const override
+		virtual void serialize(ObjectSerializer &obj) const override
 		{
 			obj.addProperty("input_name", input_name);
 			obj.addProperty("output_name", output_name);
@@ -114,7 +113,7 @@ void testobject::test<2>()
 		GridData gridData;
 	};
 
-	serobj.addProperty("Data", Data());
+	ser.addProperty("Data", Data());
 	ensure_equals(R"""({"Data":{"input_name":"input.lgc","output_name":"output.lgc","origin":"MLA","measures":[1,2,3,4],"precision_scale":{"precision":5},"precision_digit":{"precision":3},"gridData":{"grid":[10,20,30,40,50],"grid_height":[1.2,1.25,1.22,1.3,1.5]}}})""",
 		ser.getStringRepresentation());
 }
@@ -132,7 +131,7 @@ void testobject::test<3>()
 		{
 		}
 
-		virtual void serialize(SerializerObject::SerializationHelper &obj) const override
+		virtual void serialize(ObjectSerializer &obj) const override
 		{
 			obj.addProperty("precision", precision);
 			obj.addProperty("x", x);
@@ -149,26 +148,28 @@ void testobject::test<3>()
 		std::vector<double> coefficients;
 	};
 
+	Point testPoint (1, 2, 3, "point1", {1, 2});
 	std::vector<std::pair<std::string, Point>> points{
-		{"p1", {1, 2, 3, "point1", {1, 2}}},
+		{"p1", testPoint},
 		{"p2", {2, 3, 4, "point2", {1, 2, 3}}},
 		{"p3", {3, 4, 5, "point3", {}}},
 		{"p4", {4, 5, 6, "point4", {1, 2, 3, 4, 5, 6}}},
 	};
 	std::vector<std::pair<std::string, Point *>> points_pointer{
-		{"p1", &points[0].second},
+		{"p1", &testPoint},
 		{"p2", &points[1].second},
 		{"p3", &points[2].second},
 		{"p4", &points[3].second},
 	};
 
-	jsonSerializerObject ser2;
-	SerializerObject::SerializationHelper serobj2 = ser2.getSerializationHelper();
-	serobj.addProperty("reference_vs_pointer", points);
-	serobj2.addProperty("reference_vs_pointer", points_pointer);
+	ser.addProperty("value_vs_pointer", points);
+	ser.addProperty("value_vs_reference", testPoint);
+	JSONObjectSerializer ser2;
+	ser2.addProperty("value_vs_pointer", points_pointer);
+	ser2.addProperty("value_vs_reference", static_cast<Point &>(testPoint));
 
 	ensure_equals(ser.getStringRepresentation(), ser2.getStringRepresentation());
-	ensure_equals(R"""({"reference_vs_pointer":[{"p1":{"precision":1,"x":2,"y":3,"name":"point1","coefficients":[1.0,2.0]}},{"p2":{"precision":2,"x":3,"y":4,"name":"point2","coefficients":[1.0,2.0,3.0]}},{"p3":{"precision":3,"x":4,"y":5,"name":"point3","coefficients":[]}},{"p4":{"precision":4,"x":5,"y":6,"name":"point4","coefficients":[1.0,2.0,3.0,4.0,5.0,6.0]}}]})""",
+	ensure_equals(R"""({"value_vs_pointer":[{"p1":{"precision":1,"x":2,"y":3,"name":"point1","coefficients":[1.0,2.0]}},{"p2":{"precision":2,"x":3,"y":4,"name":"point2","coefficients":[1.0,2.0,3.0]}},{"p3":{"precision":3,"x":4,"y":5,"name":"point3","coefficients":[]}},{"p4":{"precision":4,"x":5,"y":6,"name":"point4","coefficients":[1.0,2.0,3.0,4.0,5.0,6.0]}}],"value_vs_reference":{"precision":1,"x":2,"y":3,"name":"point1","coefficients":[1.0,2.0]}})""",
 		ser.getStringRepresentation());
 }
 
@@ -183,10 +184,10 @@ void testobject::test<4>()
 	std::shared_ptr<double> shared_double = std::make_shared<double>(6);
 	std::vector<std::shared_ptr<bool>> vector_shared_bool{std::make_shared<bool>(false), std::make_shared<bool>(false), std::make_shared<bool>(true)};
 
-	serobj.addProperty("pointer_double", pointer_double);
-	serobj.addProperty("unique_double", unique_double);
-	serobj.addProperty("shared_double", shared_double);
-	serobj.addProperty("vector_shared_bool", vector_shared_bool);
+	ser.addProperty("pointer_double", pointer_double);
+	ser.addProperty("unique_double", unique_double);
+	ser.addProperty("shared_double", shared_double);
+	ser.addProperty("vector_shared_bool", vector_shared_bool);
 
 	ensure_equals(R"""({"pointer_double":6.0,"unique_double":6.0,"shared_double":6.0,"vector_shared_bool":[false,false,true]})""", ser.getStringRepresentation());
 
@@ -200,7 +201,7 @@ void testobject::test<5>()
 {
 	set_test_name("Serializer_json: Nan test");
 
-	serobj.addProperty("Nan_is_not_valid_json", std::numeric_limits<double>::quiet_NaN());
+	ser.addProperty("Nan_is_not_valid_json", std::numeric_limits<double>::quiet_NaN());
 	ensure_equals(R"""({"Nan_is_not_valid_json":null})""", ser.getStringRepresentation());
 }
 
@@ -215,10 +216,10 @@ void testobject::test<6>()
 	bool boolArray[] = {false, true, true};
 	char charArray[] = "Hello";
 
-	serobj.addProperty("intArray", intArray);
-	serobj.addProperty("doubleArray", doubleArray);
-	serobj.addProperty("boolArray", boolArray);
-	serobj.addProperty("charArray", charArray); // note different specialization chosen here in `addValue`
+	ser.addProperty("intArray", intArray);
+	ser.addProperty("doubleArray", doubleArray);
+	ser.addProperty("boolArray", boolArray);
+	ser.addProperty("charArray", charArray); // note different specialization chosen here in `addValue`
 
 	ensure_equals(R"""({"intArray":[1,2,3,4,5],"doubleArray":[1.1,2.22,3.333],"boolArray":[false,true,true],"charArray":"Hello"})""", ser.getStringRepresentation());
 }

@@ -3,8 +3,8 @@ include(FetchContent)
 FetchContent_Declare(
 	rapidjson
 	GIT_REPOSITORY "https://github.com/Tencent/rapidjson.git"
-	GIT_TAG v1.1.0
-	GIT_SHALLOW	ON
+	GIT_TAG 973dc9c06dcd3d035ebd039cfb9ea457721ec213 # Commit on May 10, 2023
+	GIT_SHALLOW	OFF
 )
 
 if(NOT rapidjson_POPULATED)

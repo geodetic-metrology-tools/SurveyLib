@@ -64,7 +64,7 @@ public:
 	//@{
 #if USE_SERIALIZER
 	// Inherited via Serializable
-	virtual void serialize(SerializerObject::SerializationHelper &obj) const override;
+	virtual void serialize(ObjectSerializer &obj) const override;
 #endif // USE_SERIALIZER
 
 	/*!set a value in metres
@@ -210,7 +210,7 @@ inline TReal	TLength::getMMetresValue() const
 }
 
 #if USE_SERIALIZER
-inline void TLength::serialize(SerializerObject::SerializationHelper &obj) const
+inline void TLength::serialize(ObjectSerializer &obj) const
 {
 	obj.addProperty("fValue", fValue);
 }

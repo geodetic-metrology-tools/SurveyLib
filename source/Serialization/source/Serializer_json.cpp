@@ -17,7 +17,7 @@ struct JSonObject
 	rapidjson::Value value;
 };
 
-class jsonSerializerObject::_jsonSerializerObject_pimpl
+class JSONObjectSerializer::_JSONObjectSerializer_pimpl
 {
 public:
 	rapidjson::Value &getLastValue() { return stack.back().value; }
@@ -56,12 +56,12 @@ typename std::enable_if<std::is_floating_point<T>::value>::type addToValue(rapid
 	}
 }
 
-jsonSerializerObject::jsonSerializerObject() : _pimpl(std::make_unique<_jsonSerializerObject_pimpl>())
+JSONObjectSerializer::JSONObjectSerializer() : _pimpl(std::make_unique<_JSONObjectSerializer_pimpl>())
 {
 	_pimpl->doc.SetObject();
 }
 
-jsonSerializerObject::~jsonSerializerObject() = default;
+JSONObjectSerializer::~JSONObjectSerializer() = default;
 
 /*
  * Converts the string to UTF-8 format and escapes quote and backslash characters.
@@ -95,26 +95,26 @@ std::string latin_to_utf8(const std::string &str)
 	return utf8;
 }
 
-std::string jsonSerializerObject::getStringRepresentation()
+std::string JSONObjectSerializer::getStringRepresentation()
 {
 	rapidjson::StringBuffer buffer;
 	rapidjson::Writer writer(buffer);
 	_pimpl->doc.Accept(writer);
+
 	return latin_to_utf8(buffer.GetString());
 }
 
-void jsonSerializerObject::startObject(const std::string &name)
+void JSONObjectSerializer::startObject(const std::string &name)
 {
 	_pimpl->stack.push_back(JSonObject(name, rapidjson::kObjectType));
 }
 
-void jsonSerializerObject::startObject()
+void JSONObjectSerializer::startObject()
 {
-	const std::string noname = "";
-	startObject(noname);
+	startObject(std::string());
 }
 
-void jsonSerializerObject::endObject()
+void JSONObjectSerializer::endObject()
 {
 	if (_pimpl->stack.empty())
 		return;
@@ -145,67 +145,67 @@ void jsonSerializerObject::endObject()
 	_pimpl->stack.pop_back();
 }
 
-void jsonSerializerObject::startArray(const std::string &name)
+void JSONObjectSerializer::startArray(const std::string &name)
 {
 	_pimpl->stack.push_back(JSonObject(name, rapidjson::kArrayType));
 }
 
-void jsonSerializerObject::startArray()
+void JSONObjectSerializer::startArray()
 {
 	_pimpl->stack.push_back(JSonObject("", rapidjson::kArrayType));
 }
 
-void jsonSerializerObject::endArray()
+void JSONObjectSerializer::endArray()
 {
 	endObject();
 }
 
-void jsonSerializerObject::startPrimitive(const std::string &name)
+void JSONObjectSerializer::startPrimitive(const std::string &name)
 {
 	startObject(name);
 }
 
-void jsonSerializerObject::endPrimitive()
+void JSONObjectSerializer::endPrimitive()
 {
 	endObject();
 }
 
-void jsonSerializerObject::addValue(int value)
+void JSONObjectSerializer::addValue(int value)
 {
 	addToValue(_pimpl->getLastValue(), value, _pimpl->doc.GetAllocator());
 }
 
-void jsonSerializerObject::addValue(double value)
+void JSONObjectSerializer::addValue(double value)
 {
 	addToValue(_pimpl->getLastValue(), value, _pimpl->doc.GetAllocator());
 }
 
-void jsonSerializerObject::addValue(float value)
+void JSONObjectSerializer::addValue(float value)
 {
 	addToValue(_pimpl->getLastValue(), value, _pimpl->doc.GetAllocator());
 }
 
-void jsonSerializerObject::addValue(char value)
+void JSONObjectSerializer::addValue(char value)
 {
 	addToValue(_pimpl->getLastValue(), value, _pimpl->doc.GetAllocator());
 }
 
-void jsonSerializerObject::addValue(wchar_t value)
+void JSONObjectSerializer::addValue(wchar_t value)
 {
 	addToValue(_pimpl->getLastValue(), value, _pimpl->doc.GetAllocator());
 }
 
-void jsonSerializerObject::addValue(bool value)
+void JSONObjectSerializer::addValue(bool value)
 {
 	addToValue(_pimpl->getLastValue(), value, _pimpl->doc.GetAllocator());
 }
 
-void jsonSerializerObject::addValue(const std::string &value)
+void JSONObjectSerializer::addValue(const std::string &value)
 {
 	_pimpl->getLastValue().SetString(value, _pimpl->doc.GetAllocator());
 }
 
-void jsonSerializerObject::addValue(char const *value)
+void JSONObjectSerializer::addValue(char const *value)
 {
 	_pimpl->getLastValue().SetString(value, _pimpl->doc.GetAllocator());
 }

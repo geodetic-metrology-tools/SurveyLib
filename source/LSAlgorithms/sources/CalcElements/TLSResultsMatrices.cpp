@@ -129,18 +129,17 @@ void TLSResultsMatrices::saveMatricesToFile(int nbIter) const
 }
 
 #if USE_SERIALIZER
-void TLSResultsMatrices::serialize(SerializerObject::SerializationHelper &obj) const
+void TLSResultsMatrices::serialize(ObjectSerializer &obj) const
 {
 	// Save covariance specifically into some other file, and keep the path in the main object
 	// Create a JSON COVAR object
-	jsonSerializerObject ser;
-	SerializerObject::SerializationHelper objMatrix = ser.getSerializationHelper();
-	objMatrix.addProperty("fUnkCovarianceMtrx", fUnkCovarianceMtrx);
+	JSONObjectSerializer serMatrix;
+	serMatrix.addProperty("fUnkCovarianceMtrx", fUnkCovarianceMtrx);
 
 	// Save the object to an external JSON file
 	const std::string covarOutputFileLocation = ProjectPath::getPath().getExtensionlessInputPath() + "_ucovar.json";
 	std::ofstream fout(covarOutputFileLocation);
-	fout << ser.getStringRepresentation();
+	fout << serMatrix.getStringRepresentation();
 
 	// Save path in the main JSON object
 	obj.addProperty("fUnkCovarianceMtrx", covarOutputFileLocation);

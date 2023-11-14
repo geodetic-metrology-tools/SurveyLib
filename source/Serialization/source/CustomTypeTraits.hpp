@@ -66,6 +66,13 @@ struct is_string<T, typename std::enable_if_t<
 	std::is_same_v<char *, typename std::decay<T>::type>
 >> : std::true_type {};
 
+// has std::to_string
+template <typename T, typename = void>
+struct has_std_to_string : std::false_type {};
+
+template <typename T>
+struct has_std_to_string<T, std::void_t<decltype(std::to_string(std::declval<T>()))>> : std::true_type {};
+
 //// Pointers
 template <typename T>
 struct is_unique_ptr : std::false_type{};
