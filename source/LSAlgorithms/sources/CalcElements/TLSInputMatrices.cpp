@@ -396,6 +396,22 @@ const TSparseMatrix TLSInputMatrices::getObsMask()
 	return rightFactor;
 }
 
+const TSparseMatrix TLSInputMatrices::getParMask()
+{
+	std::vector<int> actInd = getActiveParIndices();
+	int nActive = actInd.size();
+	TSparseMatrix rightFactor(fUEOIndices.UIndex, nActive);
+	std::vector<TTriplet> coeffs;
+	coeffs.reserve(nActive);
+
+	for (int colIdx = 0; colIdx < nActive; colIdx++)
+	{
+		coeffs.push_back(TTriplet(actInd.at(colIdx), colIdx, 1));
+	}
+	rightFactor.setFromTriplets(coeffs.begin(), coeffs.end());
+	return rightFactor;
+}
+
 const TSparseMatrix TLSInputMatrices::getEqnMask() 
 {
 	std::vector<int> actInd = getActiveEqnIndices();
@@ -424,6 +440,11 @@ const TSparseMatrix TLSInputMatrices::maskObsCols(const TSparseMatrix *mat)
 	return (*mat) * getObsMask();
 }
 
+const TSparseMatrix TLSInputMatrices::maskParCols(const TSparseMatrix *mat)
+{
+	return (*mat) * getParMask();
+}
+
 const TSparseMatrix TLSInputMatrices::maskObsColsAndRows(const TSparseMatrix *mat)
 {
 	return getObsMask().transpose() * (*mat) * getObsMask();
@@ -436,7 +457,7 @@ std::vector<int> TLSInputMatrices::getActiveEqnIndices()
 	std::vector<int> ind;
 	for (int j = 0; j < fUEOIndices.EIndex; j++)
 	{
-		if (maskData.EIndices.find(j) != maskData.EIndices.end())
+		if (fMaskData.EIndices.find(j) != fMaskData.EIndices.end())
 		{
 			// index is masked
 		}
@@ -454,7 +475,7 @@ std::vector<int> TLSInputMatrices::getActiveObsIndices()
 	std::vector<int> ind;
 	for (int j = 0; j < fUEOIndices.OIndex; j++)
 	{
-		if (maskData.OIndices.find(j) != maskData.OIndices.end())
+		if (fMaskData.OIndices.find(j) != fMaskData.OIndices.end())
 		{
 			// index is masked
 		}
@@ -466,6 +487,26 @@ std::vector<int> TLSInputMatrices::getActiveObsIndices()
 	}
 
 	return ind;
+}
+
+std::vector<int> TLSInputMatrices::getActiveParIndices()
+{
+	std::vector<int> ind;
+	for (int j = 0; j < fUEOIndices.UIndex; j++)
+	{
+		if (fMaskData.PIndices.find(j) != fMaskData.PIndices.end())
+		{
+			// index is masked
+		}
+		else
+		{
+			// its active
+			ind.push_back(j);
+		}
+	}
+
+	return ind;
+
 }
 
 
