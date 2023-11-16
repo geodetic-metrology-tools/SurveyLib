@@ -122,6 +122,9 @@ public:
 		fSigmaZero2UpLimit = upLimit;
 	}
 	//@}
+	// for creating the full covar matrix from the reduced one that only contains information on active indices
+	TSparseMatrix blowUpParCovarianceMatrix(TSparseMatrix reducedCovar, std::vector<int> activeIndices);
+	TSparseMatrix blowUpObsCovarianceMatrix(TSparseMatrix reducedCovar, std::vector<int> activeIndices);
 
 	/*!@name Other methods*/
 	//@{
@@ -147,6 +150,7 @@ private:
 	TReal fSigmaZero2; /*!< calculated "average variance" on residues */
 	TReal fSigmaZero2LowLimit;
 	TReal fSigmaZero2UpLimit;
+	UEOIndices fUeoi;
 
 };
 

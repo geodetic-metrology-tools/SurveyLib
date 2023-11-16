@@ -12,6 +12,14 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <set>
 
 
+struct maskData
+{
+	// mask data stored as sets - so it is ordered
+	std::set<int> PIndices;
+	std::set<int> EIndices;
+	std::set<int> OIndices;
+};
+
 /*!
 	\ingroup CalcElements
 
@@ -147,25 +155,24 @@ public:
 	//@}
 
 	// can be used to mask rows of the A matrix during adjustment
-		struct
-		{
-			std::set<int> EIndices;
-			std::set<int> OIndices;
-		}
-		maskData;
-
+		maskData fMaskData;
+		
 	// mult from right to mask columns
 	const TSparseMatrix getObsMask();
+	// mult from right to mask parameters
+	const TSparseMatrix getParMask();
 	// mult from left to mask rows
 	const TSparseMatrix getEqnMask();
 	// cannot reuse the pointers for masked matrices
 	const TSparseMatrix maskEqnRows(const TSparseMatrix *mat);
 	const TSparseMatrix maskObsCols(const TSparseMatrix *mat);
+	const TSparseMatrix maskParCols(const TSparseMatrix *mat);
 	// used for weight matrix
 	const TSparseMatrix maskObsColsAndRows(const TSparseMatrix *mat);
 
 	std::vector<int> getActiveEqnIndices();
 	std::vector<int> getActiveObsIndices();
+	std::vector<int> getActiveParIndices();
 
 	/// Debug method
 	void saveMatricesToFile(int nbIter) const;
