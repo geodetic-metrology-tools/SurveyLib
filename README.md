@@ -41,6 +41,12 @@ You can download the last version of the dynamic library of the surveyLib here:
 - Windows (64 bits): [SpatialObjDLL.dll](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/jobs/artifacts/master/raw/SpatialObjDLL.dll?job=windows64_release)
 - Windows (32 bits): [SpatialObjDLL.dll](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/jobs/artifacts/master/raw/SpatialObjDLL.dll?job=windows32_release)
 
+You can download the last version of the dynamic library of CSGeo here:
+- Linux (64 bits): [libCSGeoDLL.so](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/jobs/artifacts/master/raw/libCSGeoDLL.so?job=linux_release)
+- Windows (64 bits): [CSGeoDLL.dll](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/jobs/artifacts/master/raw/CSGeoDLL.dll?job=windows64_release)
+- Windows (32 bits): [CSGeoDLL.dll](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/jobs/artifacts/master/raw/CSGeoDLL.dll?job=windows32_release)
+
+
 Documentation
 -------------
 
