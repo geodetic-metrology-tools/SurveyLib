@@ -40,7 +40,8 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 		return false;
 	}
 
-	const TSparseMatrix &A = im->maskParCols(&im->maskEqnRows(im->getFirstDgnMtrx()));
+	auto tempMatrix = im->maskEqnRows(im->getFirstDgnMtrx());
+	const TSparseMatrix &A = im->maskParCols(&tempMatrix);
 	const TVector &W = im->getEqnMask() * im->getMisclosureVctr(); // W : Misclosures vector ("fermetures")
 	const TSparseMatrix &A2 = im->maskParCols(im->getCnstrFirstDgnMtrx()); // A2 : First design matrix part related to constraints only
 	const TVector &W2 = im->getCnstrMisclosureVctr(); // W2 : Misclosures vector part related to constraints only
@@ -173,7 +174,8 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, T
 	const TVector &W2 = im->getCnstrMisclosureVctr(); // W2 : Misclosures vector part related to constraints only
 
 
-	const TSparseMatrix &A = im->maskParCols(&im->maskEqnRows(im->getFirstDgnMtrx()));
+	auto tempMatrix = im->maskEqnRows(im->getFirstDgnMtrx());
+	const TSparseMatrix &A = im->maskParCols(&tempMatrix);
 	const TSparseMatrix &B = im->maskObsColsAndRows(im->getSecondDgnMtrx());
 	const TSparseMatrix &InvPv = im->maskObsColsAndRows(im->getWeightInvMtrx());
 
