@@ -20,6 +20,9 @@ set(LOGS_SOURCES
 
 #Create a static library from the object files
 add_library(Logs STATIC ${LOGS_HEADERS} ${LOGS_SOURCES})
+if(NOT MSVC)
+  target_compile_options(Logs PUBLIC -D_GLIBCXX_USE_CXX11_ABI=0)
+endif()
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	target_link_libraries(Logs stdc++fs)
 endif()

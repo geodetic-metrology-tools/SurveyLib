@@ -27,5 +27,8 @@ ELSE()
 		SET(add_srcdir "${SURVEYLIB_ROOT}/source/${sublib}")
 		ADD_SUBDIRECTORY("${add_srcdir}" "${add_bindir}")
 		LINK_DIRECTORIES ("${add_bindir}")
+		# Add the C++11 ABI flag 
+		SET_TARGET_PROPERTIES(${sublib} PROPERTIES
+	        COMPILE_FLAGS "-D_GLIBCXX_USE_CXX11_ABI=0")
 	ENDFOREACH(sublib) 
 ENDIF()
