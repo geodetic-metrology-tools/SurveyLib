@@ -33,7 +33,8 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 	TSparseMatrix IdMat(nRows, nRows);
 	IdMat.setIdentity();
 
-	// By default, tries Cholesky method first
+	// By default, tries Cholesky method first (it's the fastest method)
+	// Cholesky is valid only for selfadjoint (symmetric) and positive definite matrices.
 	if (bTryCholeskyFirst)
 	{
 		// LDL^T Cholesky factorizations without square root of sparse matrices that are selfadjoint and positive definite
@@ -61,7 +62,7 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 			logDebug() << "Cholesky method failed to invert the matrix!";
 	}
 
-	// Cholesky method does not work, try FullPiv
+	// Cholesky method does not work (if the matrix is not symmetric), try FullPiv
 	// LU decomposition of any matrix, with complete pivoting : the matrix A is decomposed as
 	// A = P ^ { -1 } L U Q^{ -1 },  where L is unit -lower-triangular, U is upper-triangular, and P and Q are permutation matrices.
 	if (bTryFullPivotSecond)
