@@ -52,9 +52,6 @@ public:
 
 		/*!	\brief Set a block in the second design matrix. Each block corresponds to one mathematical observation equation. Also sets the inverse block.
 		*/
-
-		/*!	\brief Set a block in the second design matrix. Each block corresponds to one mathematical observation equation. Also sets the inverse block.
-		*/
 		bool setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block);
 
 		/*!	\brief Set the second design matrix to minus Identity for parametric case
@@ -64,6 +61,14 @@ public:
 		/*! \brief Reset the second design matrix. It must be filled at each iteration.
 		*/
 		bool resetSecondDgnMtrx(UEOIndices ueoi);
+
+		/*! \brief Reset the constraint design matrix. It must be filled at each iteration.
+		 */
+		bool resetCnstrFirstDgnMtrx(UEOIndices ueoi);
+
+		/*! \brief Reset the constraint vector. It must be filled at each iteration.
+		 */
+		bool resetCnstrMisclosureVector(UEOIndices ueoi);
 
 		/*!	\brief Set a misclosure vector element.
 		*/
@@ -156,12 +161,9 @@ public:
 private:
 
 	UEOIndices		fUEOIndices; /*!< number of unknowns, equations, observations and constraints */
-
 	TVector*		fMisclosureVector;  /*!< vector (o x 1) for misclosure errors */
-
 	TSparseMatrix*	fCnstrFirstDesignMtrx;  /*!< matrix A2 (c x u) for constraints first design submatrix*/
 	TVector*		fCnstrMisclosureVector; /*!< vector W2 (c x 1) for constraints misclosure subvector */
-
 	TSparseMatrix*	firstDesignMatrix;  /*!< matrix A (e x u) */
 	TSparseMatrix*	secondDesignMatrix; /*!< matrix B (e x o) */
 	bool			seconDesignMatrixIsBlockDiag = true; /*!< flag indicating whether B is block diagonal */
