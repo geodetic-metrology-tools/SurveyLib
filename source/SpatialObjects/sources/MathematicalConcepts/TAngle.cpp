@@ -478,7 +478,7 @@ TReal	TAngle::getGonsValue() const
    getRadiansValue() donne les angles entre -pi et pi
    getGonsValue() donne les angles entre 0 et 2pi*/
    TReal gValue = fValue;
-   while(gValue < 0)
+   while(signbit(gValue))
    {
       gValue += 2 * M_PI;
    }
@@ -486,9 +486,9 @@ TReal	TAngle::getGonsValue() const
    {
       gValue -= 2 * M_PI;
    }
-   if(gValue < 0)
+   if(gValue <= 0)
    {
-      gValue = 0;
+      gValue = 0.0;
    }
    return (gValue * RAD2GON);
 }
@@ -507,7 +507,7 @@ TReal TAngle::getDeciDegsValue() const
 { // get the decimal degrees angular value for the angle
 	// return the converted angular value
 	TReal gValue = fValue;
-	while (gValue < 0)
+	while (signbit(gValue))
 	{
 		gValue += 2 * M_PI;
 	}
@@ -515,9 +515,9 @@ TReal TAngle::getDeciDegsValue() const
 	{
 		gValue -= 2 * M_PI;
 	}
-	if (gValue < 0)
+	if (gValue <= 0)
 	{
-		gValue = 0;
+		gValue = 0.0;
 	}
 	return (gValue * RAD2DEG);
 }
