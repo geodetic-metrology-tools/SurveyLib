@@ -43,6 +43,7 @@ Patterns:
 
 #	include <assert.h>
 #	include <float.h>
+#	include <TSparseMatrix.h>
 
 #	if USE_SERIALIZER
 #		include <Serializer.hpp>
@@ -195,10 +196,15 @@ public:
 	static TAngle aCos(const TReal);
 	/*! Calculates the arcsine of a TReal as a TAngle */
 	static TAngle aSin(const TReal);
+	/*! Calculates the derivative of arcsine */
+	static TReal dASin(const TReal);
 	/*! Calculates the arctan of a TReal as a TAngle */
 	static TAngle aTan(const TReal);
-	/*! Calculates the arctan(x/y) as a TAngle */
+	/*! Calculates the atan2(x,y) as a TAngle */
 	static TAngle aTan2(const TReal, const TReal);
+	/*! Calculates the derivative of atan2(x,y)*/
+	static TDenseMatrix dATan2(const TReal, const TReal);
+
 	//@}
 
 private:

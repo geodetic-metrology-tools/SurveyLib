@@ -384,10 +384,17 @@ TAngle TAngle::aCos(const TReal x)
 TAngle TAngle::aSin(const TReal x)
 { // determines the arcsine of a TReal as a TAngle
 	if (-LITERAL(1.0) > x || x > LITERAL(1.0))
-		throw std::logic_error("incorrect value");
+		throw std::logic_error("arcsin(x) undefined for |x|>1");
 
 	TAngle angle(asinq(x));
 	return angle;
+}
+
+TReal TAngle::dASin(const TReal x)
+{
+	if (-LITERAL(1.0) > x || x > LITERAL(1.0))
+		throw std::logic_error("arcsin(x) undefined for |x|>1");
+	return 1.0 / sqrt(1 - x * x);
 }
 
 TAngle TAngle::aTan(const TReal x)
@@ -400,6 +407,22 @@ TAngle TAngle::aTan2(const TReal x, const TReal y)
 { // determines the arctan(x/y) as a TAngle
 	TAngle angle(atan2q(x, y));
 	return angle;
+}
+
+TDenseMatrix TAngle::dATan2(const TReal x, const TReal y)
+{
+	Eigen::Matrix<double, 1, 2> derivative;
+	derivative.setZero();
+	double denominator = x * x + y * y;
+	if (notZero(denominator))
+	{
+		derivative(0, 0) = -y / denominator;
+		derivative(0, 1) = x / denominator;
+	}
+	else
+		throw std::logic_error("Derivative of atan2(x,y) not defined for origin.");
+
+	return derivative;
 }
 
 //////////////////////////////////////////////////////////////////////
