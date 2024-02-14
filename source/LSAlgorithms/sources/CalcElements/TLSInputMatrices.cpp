@@ -16,6 +16,10 @@
 /////////////////////////////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////
+#ifdef _DEBUG
+int TLSInputMatrices::numberInMemory = 0;
+#endif // _DEBUG
+
 TLSInputMatrices::TLSInputMatrices()
 {//Constructor
 	
@@ -30,12 +34,19 @@ TLSInputMatrices::TLSInputMatrices()
 	fMisclosureVector = nullptr;
 	fCnstrMisclosureVector = nullptr;
 
+	#ifdef _DEBUG
+	numberInMemory++;
+	#endif // _DEBUG
 }
 
 
 TLSInputMatrices::~TLSInputMatrices()
 {//Destructor
 	clearMatrices();
+
+	#ifdef _DEBUG
+	numberInMemory--;
+	#endif // _DEBUG
 }
 
 

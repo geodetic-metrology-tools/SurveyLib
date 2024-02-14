@@ -27,6 +27,9 @@ public:
 		//!Destructor
 		~TLSInputMatrices();
 	//@}
+		#ifdef _DEBUG
+		static int numberInMemory;
+		#endif // _DEBUG
 
 
 	/*!@name Setting methods*/
