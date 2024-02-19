@@ -188,16 +188,16 @@ public:
 	bool hasScaleStandDev() const;
 
 	/// Returns the estimated precision of the dth rotation
-	const TAngle &getEstimatedPrecisionRot(int d) const;
+	const TAngle getEstimatedPrecisionRot(int d) const;
 
 	/// Returns the estimated precision of the dth translation
-	const TLength &getEstimatedPrecisionTransl(int d) const;
+	const TLength getEstimatedPrecisionTransl(int d) const;
 
 	/// Returns the estimated precision of the scale factor
 	TReal getEstimatedPrecisionScale() const;
 
 	/// Returns the covariance matrix
-	TDenseMatrix getCovar() const;
+	Eigen::Matrix<double, 7, 7> getCovar() const;
 
 	//@}
 
@@ -243,10 +243,14 @@ public:
 	/*!
 		\brief Sets the covariance after calculation
 	*/
-	void setCovar(TDenseMatrix covar) { fCovar = covar; };
-
-	/// Sets the estimated precision after calculation
-	void setEstimatedPrecision(int idx, TReal value);
+	void setCovar(Eigen::Matrix<double, 7, 7> covar)
+	{
+		bool hasNan = (covar.array().isNaN()).any();
+		if (hasNan)
+			throw std::logic_error("Attempting to set invalid covariance matrix for frame " + getName());
+		fCovarianceMatrix = covar;
+		fCovarianceMatrixIsSet = true;
+	};
 
 	/*!
 		\brief Re-initialise the object
@@ -321,6 +325,9 @@ private:
 	TAngle fRotStandDev[3]; // Standard deviations of rotations
 	TReal fScaleStandDev; // Standard deviations of a scale
 
+	Eigen::Matrix<double, 7, 7> fCovarianceMatrix = Eigen::Matrix<double, 7, 7>::Zero(); /*!<Full covariance matrix */
+	bool fCovarianceMatrixIsSet{false};
+
 	int uidx_rot[3]; // Unknown indices of rotation
 	int uidx_trans[3]; // Unknown indices of translation
 	int uidx_scale; // Unknown indices of scale
@@ -328,12 +335,18 @@ private:
 	void setDefaults();
 	void setDefaultsParams();
 
-	// Estimated precisions of transformation parameters
-	TAngle fEstPrecisionRotation[3] = {TAngle(0.0), TAngle(0.0), TAngle(0.0)}; /*!<Estimated precision of the rotation. */
-	TLength fEstPrecisionTranslation[3] = {TLength(0.0), TLength(0.0), TLength(0.0)}; /*!<Estimated precision of the translation. */
-	TReal fEstPrecisionScale = 0; /*!<Estimated precision of the scale factor. */
+	/*!
+		\brief ensuring the covariance has been set
+	*/
+	void ensureCovarIsSet() const
+		{
+			if (!fCovarianceMatrixIsSet)
+			{
+				throw std::logic_error("Covariance of frame " + getName() + " is not set.");
+			}
+		};
 
-	TDenseMatrix fCovar; /*!<Full covariance matrix */
+
 };
 
 #endif // TADJUSTABLE_HELMERT_TRANSFORMATION

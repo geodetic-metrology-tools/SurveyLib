@@ -12,7 +12,6 @@ TAdjustablePoint::TAdjustablePoint(const std::string& name) :
 fName(name),
 fProvisionalValue(NO_VALf,  NO_VALf,  NO_VALf,TCoordSysFactory::k3DCartesian),
 fEstimatedValue(fProvisionalValue),
-fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
 fHfixed(false),
 fReferential(TRefSystemFactory::ERefFrame::kNotInGraph),
 fSpatialStatus(TSpatialStatus::kUnknown)
@@ -24,7 +23,6 @@ TAdjustablePoint::TAdjustablePoint():
 	fName(""),
 	fProvisionalValue(NO_VALf, NO_VALf, NO_VALf, TCoordSysFactory::k3DCartesian),
 	fEstimatedValue(fProvisionalValue),
-	fCovariance(LITERAL(0.0), LITERAL(0.0), LITERAL(0.0), TCoordSysFactory::k3DCartesian),
 	fHfixed(false),
 	fReferential(TRefSystemFactory::ERefFrame::kNotInGraph),
 	fSpatialStatus(TSpatialStatus::kUnknown)
@@ -37,7 +35,6 @@ TAdjustablePoint::TAdjustablePoint(const TPositionVector& pos, bool isXfixed, bo
 fName(name),
 fProvisionalValue(pos),
 fEstimatedValue(fProvisionalValue),
-fCovariance(LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),TCoordSysFactory::k3DCartesian),
 fReferential(referential),
 fHfixed(false),
 fSpatialStatus(TSpatialStatus::kUnknown)
@@ -66,7 +63,8 @@ fEstimatedValue(pos.fEstimatedValue),
 fReferential(pos.fReferential),
 fHfixed(pos.fHfixed),
 fSpatialStatus(pos.fSpatialStatus),
-fCovariance(pos.fCovariance),
+fCovarianceMatrix(pos.fCovarianceMatrix),
+fCovarianceMatrixIsSet(pos.fCovarianceMatrixIsSet),
 fXValueSet(pos.fXValueSet),
 fYValueSet(pos.fYValueSet),
 eolcomment(pos.eolcomment),
@@ -76,7 +74,6 @@ line(pos.line)
 	for (int i = 0; i < 3; i++)
 	{
 		fCorrection[i] = pos.fCorrection[i];
-		fEstimatedPrecision[i] = pos.fEstimatedPrecision[i];
 		fStandardDeviations[i] = pos.fStandardDeviations[i];
 		fixedState[i] = pos.fixedState[i];
 		uidx[i] = pos.uidx[i];
@@ -214,13 +211,8 @@ TAngle TAdjustablePoint::getErrorEllGis() const
 
 
 TAdjustablePoint::ErrorEllipsoid TAdjustablePoint::getErrorEllipsoid() const {
-	Eigen::Matrix3d m;
-
-	m << pow2(getXEstPrecision()), getXYCovar(), getXZCovar(), 
-		getXYCovar(), pow2(getYEstPrecision()), getYZCovar(),
-		getXZCovar(), getYZCovar(), pow2(getZEstPrecision());
-
-	Eigen::EigenSolver<Eigen::Matrix3d> ev(m);
+	ensureCovarIsSet();
+	Eigen::EigenSolver<Eigen::Matrix3d> ev(fCovarianceMatrix);
 	
 	const auto& evals(ev.eigenvalues());
 	const auto& evecs(ev.eigenvectors());
@@ -287,53 +279,6 @@ void TAdjustablePoint::setCorrection(int idx, TReal value) {
 	throw std::logic_error("Invalid unknown index in parameter access. Point " + getName());
 }
 
-	/*! Sets the estimated precision after calculation */
-void	TAdjustablePoint::setEstimatedPrecision(int idx, TReal value){
-	for (int i = 0; i < 3; i++){
-		if (uidx[i] == idx) {
-			if (i == 0 ){
-            fEstimatedPrecision[i]=TLength(value);
-			}
-			else if(i == 1){
-            fEstimatedPrecision[i]=TLength(value);
-			}
-			else{
-            fEstimatedPrecision[2]=TLength(value);
-			}
-			return;
-		}
-	}
-	throw std::logic_error("Invalid unknown index in parameter access. Point " + getName());
-}
-
-/*! Sets the XY covariance after calculation */
-void	TAdjustablePoint::setXYEstimatedCovariance(TReal value){
-
-		if (!(fixedState[0]) && !(fixedState[1]))
-			fCovariance.setX(TLength(value));
-		else
-			throw std::logic_error("Point must be variable in both X and Y. Point " + getName());	
-}
-
-/*! Sets the YZ covariance after calculation  */
-void	TAdjustablePoint::setYZEstimatedCovariance(TReal value){
-		if (!(fixedState[1]) && !(fixedState[2]))
-			fCovariance.setY(TLength(value));
-		else
-			throw std::logic_error("Point must be variable in both Y and Z. Point " + getName());
-}
-
-/*! Sets the XZ covariance after calculation 	
-	\param[in] value Value to be set.
-*/
-void	TAdjustablePoint::setXZEstimatedCovariance(TReal value){
-
-		if (!(fixedState[0]) && !(fixedState[2]))
-			fCovariance.setZ(TLength(value));
-		else
-			throw std::logic_error("Point must be variable in both X and Z. Point " + getName());
-}
-
 /*! 
     See \ref TVAdjustableObject::setFirstUidx
 
@@ -380,9 +325,7 @@ void TAdjustablePoint::reInitialise(){
 			TXYH2CCS::XYHg1985Machine2CCS(fEstimatedValue);
 	}
 
-	fEstimatedPrecision[0] = fEstimatedPrecision[1] = fEstimatedPrecision[2] = TLength(0.0);
-
-	fCovariance = zeroVec;
+	fCovarianceMatrix.setZero();
 }
 
 int TAdjustablePoint::getNumUnkn() const
@@ -453,9 +396,8 @@ void TAdjustablePoint::setDefaults(bool lx, bool ly, bool lz) {
 	fCorrection[1] = TLength(0.0);
 	fCorrection[2] = TLength(0.0);
 
-	fEstimatedPrecision[0] = TLength(0.0);
-	fEstimatedPrecision[1] = TLength(0.0);
-	fEstimatedPrecision[2] = TLength(0.0);
+	fCovarianceMatrix.setZero();
+	fCovarianceMatrixIsSet = false;
 
 	if (lx && ly && lz)
 		fSpatialStatus = TSpatialStatus::kCala;
@@ -519,9 +461,8 @@ void TAdjustablePoint::serialize(ObjectSerializer &obj) const
 	TVAdjustableObject::serialize(obj);
 	obj.addProperty("eolcomment", eolcomment);
 	obj.addProperty("fCorrection", fCorrection);
-	// obj.addProperty("fCovariance", fCovariance);   // This member still exists but it is selected not to be shown in the JSON file.
 	obj.addProperty("fCovarianceMatrix", fCovarianceMatrix);
-	obj.addProperty("fEstimatedPrecision", fEstimatedPrecision);
+	obj.addProperty("fCovarianceMatrixIsSet", fCovarianceMatrixIsSet);
 	obj.addProperty("fEstimatedValue", fEstimatedValue);
 	obj.addProperty("fHfixed", fHfixed);
 	obj.addProperty("fixedState", fixedState);

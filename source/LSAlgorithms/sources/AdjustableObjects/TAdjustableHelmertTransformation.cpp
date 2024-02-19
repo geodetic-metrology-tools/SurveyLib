@@ -238,30 +238,28 @@ void TAdjustableHelmertTransformation::setScaleCorrection(TReal value)
 	fEstParameter.scale = fEstParameter.scale + value;
 }
 
-const TAngle &TAdjustableHelmertTransformation::getEstimatedPrecisionRot(int d) const
+const TAngle TAdjustableHelmertTransformation::getEstimatedPrecisionRot(int d) const
 {
-	if (fEstPrecisionRotation[d].getGonsValue() == NO_VALf)
-		throw std::logic_error("No rotation precision assigned. Transformation " + getName());
-	return fEstPrecisionRotation[d];
+	ensureCovarIsSet();
+	return TAngle(sqrt(fCovarianceMatrix(3 + d, 3 + d)));
 }
 
-const TLength &TAdjustableHelmertTransformation::getEstimatedPrecisionTransl(int d) const
+const TLength TAdjustableHelmertTransformation::getEstimatedPrecisionTransl(int d) const
 {
-	if (isnotanumber(fEstPrecisionTranslation[d]))
-		throw std::logic_error("No translation precision assigned. Transformation " + getName());
-	return fEstPrecisionTranslation[d];
+	ensureCovarIsSet();
+	return TLength(sqrt(fCovarianceMatrix(d, d)));
 }
 
 TReal TAdjustableHelmertTransformation::getEstimatedPrecisionScale() const
 {
-	if (isnotanumber(fEstPrecisionScale))
-		throw std::logic_error("No scale precision assigned. Transformation " + getName());
-	return fEstPrecisionScale;
+	ensureCovarIsSet();
+	return sqrt(fCovarianceMatrix(6, 6));
 }
 
-TDenseMatrix TAdjustableHelmertTransformation::getCovar() const
+Eigen::Matrix<double, 7, 7> TAdjustableHelmertTransformation::getCovar() const
 {
-	return fCovar;
+	ensureCovarIsSet();
+	return fCovarianceMatrix;
 }
 
 bool TAdjustableHelmertTransformation::isTranslationFixed(int d) const
@@ -315,6 +313,8 @@ void TAdjustableHelmertTransformation::setDefaults()
 	fRotStandDev[0] = fRotStandDev[1] = fRotStandDev[2] = TAngle();
 	fTransStandDev[0] = fTransStandDev[1] = fTransStandDev[2] = TLength();
 	fScaleStandDev = NO_VALf;
+	fCovarianceMatrix.setZero();
+	fCovarianceMatrixIsSet = false;
 
 	uidx_rot[0] = -1;
 	uidx_rot[1] = -1;
@@ -344,53 +344,6 @@ void TAdjustableHelmertTransformation::setDefaultsParams()
 	fEstParameter.tY = TLength(0.0);
 	fEstParameter.tZ = TLength(0.0);
 	fEstParameter.scale = 1;
-}
-
-void TAdjustableHelmertTransformation::setEstimatedPrecision(int idx, TReal value)
-{
-	if (uidx_scale == idx)
-	{
-		fEstPrecisionScale = value;
-		return;
-	}
-
-	for (int i = 0; i < 3; i++)
-	{
-		if (uidx_rot[i] == idx)
-		{
-			if (i == 0)
-			{
-				fEstPrecisionRotation[0].setRadiansValue(value);
-			}
-			else if (i == 1)
-			{
-				fEstPrecisionRotation[1].setRadiansValue(value);
-			}
-			else
-			{
-				fEstPrecisionRotation[2].setRadiansValue(value);
-			}
-			return;
-		}
-		if (uidx_trans[i] == idx)
-		{
-			if (i == 0)
-			{
-				fEstPrecisionTranslation[0].setMetresValue(value);
-			}
-			else if (i == 1)
-			{
-				fEstPrecisionTranslation[1].setMetresValue(value);
-			}
-			else
-			{
-				fEstPrecisionTranslation[2].setMetresValue(value);
-			}
-			return;
-		}
-	}
-
-	throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
 }
 
 TLength TAdjustableHelmertTransformation::getEstTranslation(int axis) const
@@ -447,15 +400,8 @@ void TAdjustableHelmertTransformation::reInitialise()
 	setParam(fProvParameter.omega, fProvParameter.phi, fProvParameter.kappa);
 	setParam(fProvParameter.scale);
 
-	fEstPrecisionScale = NO_VALf;
-
-	fEstPrecisionTranslation[0].setMetresValue(0.0);
-	fEstPrecisionTranslation[1].setMetresValue(0.0);
-	fEstPrecisionTranslation[2].setMetresValue(0.0);
-
-	fEstPrecisionRotation[0].setRadiansValue(0.0);
-	fEstPrecisionRotation[1].setRadiansValue(0.0);
-	fEstPrecisionRotation[2].setRadiansValue(0.0);
+	fCovarianceMatrix.setZero();
+	fCovarianceMatrixIsSet = false;
 }
 
 #if USE_SERIALIZER
@@ -463,7 +409,8 @@ void TAdjustableHelmertTransformation::serialize(ObjectSerializer &obj) const
 {
 	TVAdjustableObject::serialize(obj);
 
-	obj.addProperty("fCovar", fCovar);
+	obj.addProperty("fCovarianceMatrix", fCovarianceMatrix);
+	obj.addProperty("fCovarianceMatrixIsSet", fCovarianceMatrixIsSet);
 	obj.addProperty("fEstParameter",
 		std::vector<double>{
 			fEstParameter.tX.getMetresValue(),
@@ -473,17 +420,6 @@ void TAdjustableHelmertTransformation::serialize(ObjectSerializer &obj) const
 			fEstParameter.phi.getRadiansValue(),
 			fEstParameter.kappa.getRadiansValue(),
 			fEstParameter.scale,
-		});
-
-	obj.addProperty("fEstPrecision",
-		std::vector<double>{
-			fEstPrecisionTranslation[0].getMetresValue(),
-			fEstPrecisionTranslation[1].getMetresValue(),
-			fEstPrecisionTranslation[2].getMetresValue(),
-			fEstPrecisionRotation[0].getRadiansValue(),
-			fEstPrecisionRotation[1].getRadiansValue(),
-			fEstPrecisionRotation[2].getRadiansValue(),
-			fEstPrecisionScale,
 		});
 
 	obj.addProperty("fixedTranfParam",

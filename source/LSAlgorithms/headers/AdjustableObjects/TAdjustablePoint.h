@@ -68,14 +68,25 @@ public:
 		/// Returns a constant reference on the estimated value of the point
 		inline const TPositionVector&	getEstimatedValue() const {	return fEstimatedValue;}
 
-		/// Returns a constant reference of the covariance matrix
-		inline const TDenseMatrix &getCovarianceMatrix() const { return fCovarianceMatrix; }
+		/// Returns a constant reference of the covariance matrix, not set-able
+		inline const Eigen::Matrix3d &getCovarianceMatrix() const
+		{
+			ensureCovarIsSet();
+			return fCovarianceMatrix;
+		}
 
 		/// Sets a constant reference on the provisional value of the position vector
 		void setProvisionalValue(const TPositionVector &pointProv) { fProvisionalValue = pointProv; };
 
 		/// Sets the covariance matrix
-		void setCovarianceMatrix(const TDenseMatrix &covar) { fCovarianceMatrix = covar; };
+		void setCovarianceMatrix(const Eigen::Matrix3d &covar)
+		{
+			bool hasNan = (covar.array().isNaN()).any();
+			if (hasNan)
+				throw std::logic_error("Attempting to set invalid covariance matrix for point " + getName());
+			fCovarianceMatrix = covar;
+			fCovarianceMatrixIsSet = true;
+		};
 
 		/*!
 			\brief Calculates and \returns the number of unknowns that are added to the adjustment by this point.
@@ -179,23 +190,46 @@ public:
 
 
 		/// Returns the estimated XY covariance in [m2]
-      inline TReal getXYCovar() const { return fCovariance.getX().getMetresValue(); }
+	  inline TReal getXYCovar() const
+	  {
+			ensureCovarIsSet();
+			return fCovarianceMatrix(0, 1);
+	  }
 
-		/// Returns the estimated YZ covariance in [m2]
-      inline TReal getYZCovar() const { return fCovariance.getY().getMetresValue(); }
+	  /// Returns the estimated YZ covariance in [m2]
+	  inline TReal getYZCovar() const
+	  {
+			ensureCovarIsSet();
+			return fCovarianceMatrix(1, 2);
+	  }
 
-		/// Returns the estimated XZ covariance in [m2]
-      inline TReal getXZCovar() const { return fCovariance.getZ().getMetresValue(); }
+	  /// Returns the estimated XZ covariance in [m2]
+	  inline TReal getXZCovar() const
+	  {
+			ensureCovarIsSet();
+			return fCovarianceMatrix(0, 2);
+	  }
 
+	  /// Returns the estimated X estimated precision
+	  inline TLength getXEstPrecision() const
+	  {
+			ensureCovarIsSet();
+			return TLength(sqrt(fCovarianceMatrix(0, 0)));
+	  }
 
-		/// Returns the estimated X estimated precision
-      inline TLength getXEstPrecision() const { return fEstimatedPrecision[0]; }
+	  /// Returns the estimated Y estimated precision
+	  inline TLength getYEstPrecision() const
+	  {
+			ensureCovarIsSet();
+			return TLength(sqrt(fCovarianceMatrix(1, 1)));
+	  }
 
-		/// Returns the estimated Y estimated precision
-      inline TLength getYEstPrecision() const { return fEstimatedPrecision[1]; }
-
-		/// Returns the estimated Z estimated precision
-      inline TLength getZEstPrecision() const { return fEstimatedPrecision[2]; }
+	  /// Returns the estimated Z estimated precision
+	  inline TLength getZEstPrecision() const
+	  {
+			ensureCovarIsSet();
+			return TLength(sqrt(fCovarianceMatrix(2, 2)));
+	  }
 
 		/*!
 			\brief Returns The boolean result of the query.
@@ -253,18 +287,6 @@ public:
 		*/
       virtual void setCorrection(int idx, TReal value);
 
-		/// Sets the estimated precision after calculation
-      virtual void setEstimatedPrecision(int idx, TReal value);
-
-		/// Sets the XY covariance after calculation
-		void	setXYEstimatedCovariance(TReal value);
-
-		/// Sets the YZ covariance after calculation 
-		void	setYZEstimatedCovariance(TReal value);
-
-	   /// Sets the XZ covariance after calculation 
-		void	setXZEstimatedCovariance(TReal value);
-
 		/*! 
 		    \brief See \ref TVAdjustableObject::setFirstUidx
 
@@ -292,9 +314,8 @@ protected:
 	TPositionVector		fProvisionalValue; /*!< point's provisional value */
 	TLength				fCorrection[3]; /*!< point's correction after calculation  */
 	TPositionVector		fEstimatedValue; /*!< point's estimated value after calculation */
-	TLength				fEstimatedPrecision[3]; /*!< point's estimated precision after calculation */
-	TFreeVector				fCovariance; /*!< point's covariance */	
-	TDenseMatrix		fCovarianceMatrix = TDenseMatrix::Zero(3, 3); /*!< point's covariance matrix*/
+	Eigen::Matrix3d fCovarianceMatrix = Eigen::Matrix3d::Zero();
+	bool fCovarianceMatrixIsSet{false};
 
 	TRefSystemFactory::ERefFrame fReferential; /*!< Reference frame of the point */
 
@@ -317,6 +338,18 @@ protected:
 
 	//This method set an original H0 value to fEstimatedValue, transform it into XYZ coordinates
 	void transformEstimatedValue();
+	/*!
+		\brief ensuring the covariance has been set
+	*/
+	void ensureCovarIsSet() const
+	{
+		if (!fCovarianceMatrixIsSet)
+		{
+			throw std::logic_error("Covariance of point" + getName() + " is not set.");
+		}
+	};
+
+
 
 	/*!Private constructor for creating uninitialized object	*/
 	TAdjustablePoint(const std::string& name);
