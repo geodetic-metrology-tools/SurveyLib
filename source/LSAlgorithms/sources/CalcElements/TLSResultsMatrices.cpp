@@ -21,37 +21,14 @@
 TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 {
 	// constructor dimensioning the matrices
-	fSolutionVctr = new TVector(ueoi.UIndex);
-	fResidualsVctr = new TVector(ueoi.OIndex);
-	fResCovarianceMtrx = new TSparseMatrix(ueoi.OIndex, ueoi.OIndex);
-	fUnkCovarianceMtrx = new TSparseMatrix(ueoi.UIndex, ueoi.UIndex);
-	fNormalMatrix = new TSparseMatrix(ueoi.UIndex + ueoi.CIndex, ueoi.UIndex + ueoi.CIndex);
-	fInvN1Matrix = new TSparseMatrix(ueoi.EIndex, ueoi.EIndex);
+	fSolutionVctr = std::make_unique<TVector>(ueoi.UIndex);
+	fResidualsVctr = std::make_unique<TVector>(ueoi.OIndex);
+	fResCovarianceMtrx = std::make_unique<TSparseMatrix>(ueoi.OIndex, ueoi.OIndex);
+	fUnkCovarianceMtrx = std::make_unique<TSparseMatrix>(ueoi.UIndex, ueoi.UIndex);
+	fNormalMatrix = std::make_unique<TSparseMatrix>(ueoi.UIndex + ueoi.CIndex, ueoi.UIndex + ueoi.CIndex);
+	fInvN1Matrix = std::make_unique<TSparseMatrix>(ueoi.EIndex, ueoi.EIndex);
 
 	fSigmaZero2 = NO_VALf;
-}
-
-
-TLSResultsMatrices::~TLSResultsMatrices()
-{
-	// destructor
-	if(fSolutionVctr != 0)
-		delete fSolutionVctr;
-
-	if(fResidualsVctr != 0)
-		delete fResidualsVctr;
-
-	if(fResCovarianceMtrx != 0)
-		delete fResCovarianceMtrx;
-
-	if(fUnkCovarianceMtrx != 0)
-		delete fUnkCovarianceMtrx;
-
-	if (fNormalMatrix != 0)
-		delete fNormalMatrix;
-
-	if (fInvN1Matrix != 0)
-		delete fInvN1Matrix;
 }
 
 

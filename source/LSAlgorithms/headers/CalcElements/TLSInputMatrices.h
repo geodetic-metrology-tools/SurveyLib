@@ -9,6 +9,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TSparseMatrix.h"
 #include "UEOIndices.h"
 #include "Quad.h"
+#include <memory>
 
 
 /*!
@@ -22,10 +23,10 @@ public:
 
 	/*!@name Constructors / Destructor*/
 	//@{
-		//!Constructor
-		TLSInputMatrices();
-		//!Destructor
-		~TLSInputMatrices();
+	//! Constructor
+	TLSInputMatrices() = default;
+	//! Destructor
+	~TLSInputMatrices() = default;
 	//@}
 
 
@@ -129,7 +130,7 @@ public:
 		/*!	\brief Returns a const reference (pointer) to the second design matrix allocated here*/
 		const TSparseMatrix* getSecondDgnMtrx() const noexcept;
 
-		/*!	\brief Returns the private member seconDesignMatrixIsBlockDiag which indicates that B is block diagonal*/
+		/*!	\brief Returns the private member secondDesignMatrixIsBlockDiag which indicates that B is block diagonal*/
 		bool getSecondDgnBlockDiagStatus() const;
 
 		/*!	\brief Returns a const reference (pointer) to the inverse second design matrix allocated here, if B is block diagonal*/
@@ -160,19 +161,18 @@ public:
 
 private:
 
-	UEOIndices		fUEOIndices; /*!< number of unknowns, equations, observations and constraints */
-	TVector*		fMisclosureVector;  /*!< vector (o x 1) for misclosure errors */
-	TSparseMatrix*	fCnstrFirstDesignMtrx;  /*!< matrix A2 (c x u) for constraints first design submatrix*/
-	TVector*		fCnstrMisclosureVector; /*!< vector W2 (c x 1) for constraints misclosure subvector */
-	TSparseMatrix*	firstDesignMatrix;  /*!< matrix A (e x u) */
-	TSparseMatrix*	secondDesignMatrix; /*!< matrix B (e x o) */
-	bool			seconDesignMatrixIsBlockDiag = true; /*!< flag indicating whether B is block diagonal */
-	TSparseMatrix*	secondDesignBlockDiagInvMatrix; /*!< matrix B^-1 (e x o) */
-	TSparseMatrix*	weightMatrix;       /*!< matrix P (o x o) for observations weights */
-	TSparseMatrix*	weightInvMatrix;    /*!< matrix invP (o x o) for observations weights */
-	TSparseMatrix*	weightUnkMatrix;    /*!< matrix Pxx (u x u) for unknowns weights */
+	UEOIndices fUEOIndices; /*!< number of unknowns, equations, observations and constraints */
+	std::unique_ptr<TSparseMatrix> fCnstrFirstDesignMtrx; /*!< matrix A2 (c x u) for constraints first design submatrix*/
+	std::unique_ptr<TSparseMatrix> firstDesignMatrix; /*!< matrix A (e x u) */
+	std::unique_ptr<TSparseMatrix> secondDesignMatrix; /*!< matrix B (e x o) */
+	bool secondDesignMatrixIsBlockDiag = true; /*!< flag indicating whether B is block diagonal */
+	std::unique_ptr<TSparseMatrix> secondDesignBlockDiagInvMatrix; /*!< matrix B^-1 (e x o) */
+	std::unique_ptr<TSparseMatrix> weightMatrix; /*!< matrix P (o x o) for observations weights */
+	std::unique_ptr<TSparseMatrix> weightInvMatrix; /*!< matrix invP (o x o) for observations weights */
+	std::unique_ptr<TSparseMatrix> weightUnkMatrix; /*!< matrix Pxx (u x u) for unknowns weights */
 
-	void clearMatrices();
+	std::unique_ptr<TVector> fMisclosureVector; /*!< vector (o x 1) for misclosure errors */
+	std::unique_ptr<TVector> fCnstrMisclosureVector; /*!< vector W2 (c x 1) for constraints misclosure subvector */
 };
 
 

@@ -12,34 +12,6 @@
 #include "TLSInputMatrices.h"
 #include <Eigen/Dense>
 
-
-/////////////////////////////////////////////////////////////////////////////////
-//CONSTRUCTOR / DESTRUCTOR
-/////////////////////////////////////////////////////////////////////////////////
-TLSInputMatrices::TLSInputMatrices()
-{//Constructor
-	
-	firstDesignMatrix = nullptr;
-	secondDesignMatrix = nullptr;
-	secondDesignBlockDiagInvMatrix = nullptr;
-	weightMatrix = nullptr;
-	weightInvMatrix = nullptr;
-	weightUnkMatrix = nullptr;
-	fCnstrFirstDesignMtrx = nullptr;
-	
-	fMisclosureVector = nullptr;
-	fCnstrMisclosureVector = nullptr;
-
-}
-
-
-TLSInputMatrices::~TLSInputMatrices()
-{//Destructor
-	clearMatrices();
-}
-
-
-
 /////////////////////////////////////////////////////////////////////////////////
 //SET FUNCTIONS
 /////////////////////////////////////////////////////////////////////////////////
@@ -49,62 +21,17 @@ void TLSInputMatrices::initMatrices(UEOIndices ueoi)
 
 	fUEOIndices = ueoi;
 
-	clearMatrices();
-	fMisclosureVector = new TVector(fUEOIndices.EIndex);
+	firstDesignMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.EIndex, fUEOIndices.UIndex);
+	secondDesignMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.EIndex, fUEOIndices.OIndex);
+	secondDesignBlockDiagInvMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.OIndex, fUEOIndices.EIndex);
+	fCnstrFirstDesignMtrx = std::make_unique<TSparseMatrix>(fUEOIndices.CIndex, fUEOIndices.UIndex);
+	weightMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.OIndex, fUEOIndices.OIndex);
+	weightInvMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.OIndex, fUEOIndices.OIndex);
+	weightUnkMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.UIndex, fUEOIndices.UIndex);
 
-	firstDesignMatrix = new TSparseMatrix(fUEOIndices.EIndex, fUEOIndices.UIndex);
-	secondDesignMatrix = new TSparseMatrix(fUEOIndices.EIndex, fUEOIndices.OIndex);
-	secondDesignBlockDiagInvMatrix = new TSparseMatrix(fUEOIndices.EIndex, fUEOIndices.OIndex);
-	weightMatrix = new TSparseMatrix(fUEOIndices.OIndex, fUEOIndices.OIndex);
-	weightInvMatrix = new TSparseMatrix(fUEOIndices.OIndex, fUEOIndices.OIndex);
-	weightUnkMatrix = new TSparseMatrix(fUEOIndices.UIndex, fUEOIndices.UIndex);
+	fMisclosureVector = std::make_unique<TVector>(fUEOIndices.EIndex);
+	fCnstrMisclosureVector = std::make_unique<TVector>(fUEOIndices.CIndex);
 
-	fCnstrMisclosureVector = new TVector(fUEOIndices.CIndex);
-	fCnstrFirstDesignMtrx = new TSparseMatrix(fUEOIndices.CIndex, fUEOIndices.UIndex);
-
-}
-
-void TLSInputMatrices::clearMatrices()
-{
-	// TODO: gets deleted externally, change to internal deletion
-	
-	if (firstDesignMatrix != nullptr) {
-		delete firstDesignMatrix;
-		firstDesignMatrix = nullptr;
-	}
-	if (secondDesignMatrix != nullptr) {
-		delete secondDesignMatrix;
-		secondDesignMatrix = nullptr;
-	}
-	if (secondDesignBlockDiagInvMatrix != nullptr) {
-		delete secondDesignBlockDiagInvMatrix;
-		secondDesignBlockDiagInvMatrix = nullptr;
-	}
-	if (weightMatrix != nullptr) {
-		delete weightMatrix;
-		weightMatrix = nullptr;
-	}
-	if (weightInvMatrix != nullptr) {
-		delete weightInvMatrix;
-		weightInvMatrix = nullptr;
-	}
-	if (weightUnkMatrix != nullptr) {
-		delete weightUnkMatrix;
-		weightUnkMatrix = nullptr;
-	}
-	if (fMisclosureVector != nullptr) {
-		delete fMisclosureVector;
-		fMisclosureVector = nullptr;
-	}
-	if (fCnstrFirstDesignMtrx != nullptr) {
-		delete fCnstrFirstDesignMtrx;
-		fCnstrFirstDesignMtrx = nullptr;
-	}
-	if (fCnstrMisclosureVector != nullptr) {
-		delete fCnstrMisclosureVector;
-		fCnstrMisclosureVector = nullptr;
-	}
-	
 }
 
 bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
@@ -142,7 +69,7 @@ bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex
 			}
 		}
 		// check if the block is square and if it is located on the diagonal, and if all previous blocks were also block-diag
-		if ((block.cols() == block.rows() && firstIndex == secondIndex && seconDesignMatrixIsBlockDiag))
+		if ((block.cols() == block.rows() && firstIndex == secondIndex && secondDesignMatrixIsBlockDiag))
 		{
 			// compute the inverse of the block and write it at the corresponding place of the inverse
 			int dim = block.cols();
@@ -157,9 +84,7 @@ bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex
 		}
 		else
 		{
-			seconDesignMatrixIsBlockDiag = false;
-			delete secondDesignBlockDiagInvMatrix;
-			secondDesignBlockDiagInvMatrix = nullptr;
+			secondDesignMatrixIsBlockDiag = false;
 		}
 	}
 	catch (...)
@@ -180,7 +105,7 @@ bool TLSInputMatrices::setSecondDgnMtrxToMinusIdentity()
 		*secondDesignMatrix *= -1.0;
 		secondDesignBlockDiagInvMatrix->setIdentity();
 		*secondDesignBlockDiagInvMatrix *= -1.0;
-		seconDesignMatrixIsBlockDiag = true;
+		secondDesignMatrixIsBlockDiag = true;
 	}
 	catch (...)
 	{
@@ -193,20 +118,9 @@ bool TLSInputMatrices::resetSecondDgnMtrx(UEOIndices ueoi)
 {
 	try
 	{
-		if (secondDesignMatrix != nullptr)
-		{
-			delete secondDesignMatrix;
-			secondDesignMatrix = nullptr;
-		}
-		if (secondDesignBlockDiagInvMatrix != nullptr)
-		{
-			delete secondDesignBlockDiagInvMatrix;
-			secondDesignBlockDiagInvMatrix = nullptr;
-		}
-
-		secondDesignMatrix = new TSparseMatrix(ueoi.EIndex, ueoi.OIndex);
-		secondDesignBlockDiagInvMatrix = new TSparseMatrix(ueoi.EIndex, ueoi.OIndex);
-		seconDesignMatrixIsBlockDiag = true;
+		secondDesignMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.EIndex, fUEOIndices.OIndex);
+		secondDesignBlockDiagInvMatrix = std::make_unique<TSparseMatrix>(fUEOIndices.OIndex, fUEOIndices.EIndex);
+		secondDesignMatrixIsBlockDiag = true;
 	}
 	catch (...)
 	{
@@ -219,12 +133,7 @@ bool TLSInputMatrices::resetCnstrFirstDgnMtrx(UEOIndices ueoi)
 {
 	try
 	{
-		if (fCnstrFirstDesignMtrx != nullptr)
-		{
-			delete fCnstrFirstDesignMtrx;
-			fCnstrFirstDesignMtrx = nullptr;
-		}
-		fCnstrFirstDesignMtrx = new TSparseMatrix(ueoi.CIndex, ueoi.UIndex);
+		fCnstrFirstDesignMtrx = std::make_unique<TSparseMatrix>(fUEOIndices.CIndex, fUEOIndices.UIndex);
 	}
 	catch (const std::overflow_error &err)
 	{
@@ -238,12 +147,7 @@ bool TLSInputMatrices::resetCnstrMisclosureVector(UEOIndices ueoi)
 {
 	try
 	{
-		if (fCnstrMisclosureVector != nullptr)
-		{
-			delete fCnstrMisclosureVector;
-			fCnstrMisclosureVector = nullptr;
-		}
-		fCnstrMisclosureVector = new TVector(ueoi.CIndex);
+		fCnstrMisclosureVector = std::make_unique<TVector>(fUEOIndices.CIndex);
 	}
 	catch (const std::overflow_error &err)
 	{
@@ -326,53 +230,53 @@ bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, TReal co
 ////////////////////////////////////////////////////////////////////////////////
 const TSparseMatrix* TLSInputMatrices::getFirstDgnMtrx() const noexcept
 {//returns a reference to the first dgn matrix
-	return firstDesignMatrix;
+	return firstDesignMatrix.get();
 }
 
 const TSparseMatrix* TLSInputMatrices::getSecondDgnMtrx() const noexcept
 {//returns a reference to the first dgn matrix
-	return secondDesignMatrix;
+	return secondDesignMatrix.get();
 }
 
 bool TLSInputMatrices::getSecondDgnBlockDiagStatus() const
-{// returns the private member seconDesignMatrixIsBlockDiag which indicates that B is block diagonal
-	return seconDesignMatrixIsBlockDiag;
+{// returns the private member secondDesignMatrixIsBlockDiag which indicates that B is block diagonal
+	return secondDesignMatrixIsBlockDiag;
 }
 const TSparseMatrix* TLSInputMatrices::getSecondDgnBlockDiagInvMtrx() const noexcept
 {//returns a reference to the inverse of the second dgn matrix
-	return secondDesignBlockDiagInvMatrix;
+	return secondDesignBlockDiagInvMatrix.get();
 }
 
 const TSparseMatrix* TLSInputMatrices::getWeightMtrx() const noexcept
 {
-	return weightMatrix;
+	return weightMatrix.get();
 }
 
 const TSparseMatrix* TLSInputMatrices::getWeightInvMtrx() const noexcept
 {
-	return weightInvMatrix;
+	return weightInvMatrix.get();
 }
 
 const TSparseMatrix* TLSInputMatrices::getWeightUnkMtrx() const noexcept
 {
-	return weightUnkMatrix;
+	return weightUnkMatrix.get();
 }
 
 const TVector& TLSInputMatrices::getMisclosureVctr() const noexcept
 {// returns a reference to the misclosure vector
-	return *fMisclosureVector;
+	return *fMisclosureVector.get();
 }
 
 
 const TSparseMatrix* TLSInputMatrices::getCnstrFirstDgnMtrx() const noexcept
 {//returns a reference to the constraint first dgn matrix
-	return fCnstrFirstDesignMtrx;
+	return fCnstrFirstDesignMtrx.get();
 }
 
 
 const TVector& TLSInputMatrices::getCnstrMisclosureVctr() const noexcept
 {// returns a reference to the constraint misclosure vector
-	return *fCnstrMisclosureVector;
+	return *fCnstrMisclosureVector.get();
 }
 
 int TLSInputMatrices::getNbrUnknowns() const
