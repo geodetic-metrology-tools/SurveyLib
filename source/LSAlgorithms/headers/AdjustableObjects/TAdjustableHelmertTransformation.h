@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2023. All rights reserved. This software is released under a CERN proprietary software license.
+© Copyright CERN 2000-2024. All rights reserved. This software is released under a CERN proprietary software license.
 Any permission to use it shall be granted in writing. Request shall be addressed to CERN through mail-KT@cern.ch
 */
 
@@ -339,14 +339,12 @@ private:
 		\brief ensuring the covariance has been set
 	*/
 	void ensureCovarIsSet() const
+	{
+		if (!fCovarianceMatrixIsSet)
 		{
-			if (!fCovarianceMatrixIsSet)
-			{
-				throw std::logic_error("Covariance of frame " + getName() + " is not set.");
-			}
-		};
-
-
+			throw std::logic_error("Covariance of frame " + getName() + " is not set.");
+		}
+	};
 };
 
 #endif // TADJUSTABLE_HELMERT_TRANSFORMATION
