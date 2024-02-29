@@ -13,6 +13,76 @@ SpatialObjFns::SpatialObjFns()
 {
 
 }
+
+int SpatialObjFns::getXiGon(double x, double y, double *xi_gon, const char* geoid)
+{
+	// get the CCS spatial position corresponding to the double values
+	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+	TPositionVector vector(x, y, 0.0, TCoordSysFactory::k3DCartesian);
+	spos.setCoordinates(vector);
+
+	TRefSystemFactory::EGeoid pGeoid;
+	std::string cg00("CG2000_Machine"), cg85("CG1985_Machine"), cgs("Sphere");
+	if (geoid == cg00)
+		pGeoid = TRefSystemFactory::kCG2000Machine;
+	else if (geoid == cg85)
+		pGeoid = TRefSystemFactory::kCG1985Machine;
+	else if (geoid == cgs)
+		pGeoid = TRefSystemFactory::kCGSphere;
+	else
+		return 0;
+
+	// get the xi value
+	*xi_gon = TRefSystemFactory::getRefSystemFactory()->getGeoid(pGeoid)->getXi(spos).getGonsValue();
+	return 1;
+}
+
+int SpatialObjFns::getEtaGon(double x, double y, double *eta_gon, const char* geoid)
+{
+	// get the CCS spatial position corresponding to the double values
+	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+	TPositionVector vector(x, y, 0.0, TCoordSysFactory::k3DCartesian);
+	spos.setCoordinates(vector);
+
+	TRefSystemFactory::EGeoid pGeoid;
+	std::string cg00("CG2000_Machine"), cg85("CG1985_Machine"), cgs("Sphere");
+	if (geoid == cg00)
+		pGeoid = TRefSystemFactory::kCG2000Machine;
+	else if (geoid == cg85)
+		pGeoid = TRefSystemFactory::kCG1985Machine;
+	else if (geoid == cgs)
+		pGeoid = TRefSystemFactory::kCGSphere;
+	else
+		return 0;
+
+	// get the eta value
+	*eta_gon = TRefSystemFactory::getRefSystemFactory()->getGeoid(pGeoid)->getEta(spos).getGonsValue();
+	return 1;
+}
+
+int SpatialObjFns::getDAlphaGon(double x, double y, double *dAlpha_gon, const char* geoid)
+{
+	// get the CCS spatial position corresponding to the double values
+	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+	TPositionVector vector(x, y, 0.0, TCoordSysFactory::k3DCartesian);
+	spos.setCoordinates(vector);
+
+	TRefSystemFactory::EGeoid pGeoid;
+	std::string cg00("CG2000_Machine"), cg85("CG1985_Machine"), cgs("Sphere");
+	if (geoid == cg00)
+		pGeoid = TRefSystemFactory::kCG2000Machine;
+	else if (geoid == cg85)
+		pGeoid = TRefSystemFactory::kCG1985Machine;
+	else if (geoid == cgs)
+		pGeoid = TRefSystemFactory::kCGSphere;
+	else
+		return 0;
+
+	// get the dAlpha value
+	*dAlpha_gon = TRefSystemFactory::getRefSystemFactory()->getGeoid(pGeoid)->getDAlpha(spos).getGonsValue();
+	return 1;
+}
+
 // N value for CG2000 at 0-level
 int SpatialObjFns::getCG2000N0( double  x, double  y, double* N)
 {

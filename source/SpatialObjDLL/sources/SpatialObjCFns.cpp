@@ -59,3 +59,21 @@ int DLLAPI descenteVert(double_t x, double_t y, double_t h, double_t deltaH, dou
 {
 	return SpatialObjFns::descenteVert(x,y,h,deltaH,xt,yt,ht);
 }
+
+// Xi (North-South DoV) value (in gons) at Machine level, geoid may be "CG2000_Machine", "CG1985_Machine" and "Sphere"
+int DLLAPI getXiGon(double_t x, double_t y, double_t *xi_gon, const char* geoid)
+{
+	return SpatialObjFns::getXiGon(x, y, xi_gon, geoid);
+}
+
+// Eta (East-West DoV) value (in gons) at Machine level, geoid may be "CG2000_Machine", "CG1985_Machine" and "Sphere"
+int DLLAPI getEtaGon(double_t x, double_t y, double_t *eta_gon, const char* geoid)
+{
+	return SpatialObjFns::getEtaGon(x, y, eta_gon, geoid);
+}
+
+// DAlpha (Laplace correction) value (in gons) at Machine level, geoid may be "CG2000_Machine", "CG1985_Machine" and "Sphere"
+int DLLAPI getDAlpha(double_t x, double_t y, double_t *dAlpha_gon, const char* geoid)
+{
+	return SpatialObjFns::getDAlphaGon(x, y, dAlpha_gon, geoid);
+}

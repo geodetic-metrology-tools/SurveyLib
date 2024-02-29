@@ -15,7 +15,7 @@ namespace tut
 
 namespace tut
 {
-    tut::factory tf_surveyLibDLL("Test of SurveyLibDLL");
+    tut::factory tf_surveyLibDLL("Test of SpatialObjDLL");
 }
 
 namespace tut
@@ -25,7 +25,7 @@ namespace tut
     template<>
     void object::test<1>()
     {
-        set_test_name("SurveyLib DLL test");
+        set_test_name("SpatialObj DLL test");
 
 		double x = 2180.15185;
 		double y = 2701.74391;
@@ -40,7 +40,7 @@ namespace tut
     template<>
     void object::test<2>()
     {
-        set_test_name("SurveyLib DLL test");
+        set_test_name("SpatialObj DLL test");
 
 		double x = 0.0;
 		double y = 0.0;
@@ -54,6 +54,52 @@ namespace tut
 		tut::ensure_distance(y, -510.2229651021653, 1e-6); // y = -2701.5209778501535
 		tut::ensure_distance(z, -0.3143969823113366, 1e-6); // z = -2360.1941469823109
     }
+
+	template<>
+	template<>
+	void object::test<3>()
+	{
+		set_test_name("SpatialObj DLL test");
+
+		double x = -3500;
+		double y = 2097.7926500;
+		double xi = 0;
+		double eta = 0;
+		double n = 0;
+		std::string geoid = "CG2000_Machine";
+
+		getXiGon(x, y, &xi, geoid.c_str());
+		getEtaGon(x, y, &eta, geoid.c_str());
+		getCG2000NMachine(x, y, &n);
+		std::cout << std::fixed << std::setprecision(10) << "xi CG2000 = " << xi << "gon\n";
+		std::cout << std::fixed << std::setprecision(10) << "eta CG2000 = " << eta << "gon\n";
+		std::cout << std::fixed << std::setprecision(10) << "N CG2000 = " << n << "m\n";
+
+		geoid = "CG1985_Machine";
+
+				getXiGon(x, y, &xi, geoid.c_str());
+		getEtaGon(x, y, &eta, geoid.c_str());
+		getCG1985NMachine(x, y, &n);
+		std::cout << std::fixed << std::setprecision(10) << "xi CG1985 = " << xi << "gon\n";
+		std::cout << std::fixed << std::setprecision(10) << "eta CG1985 = " << eta << "gon\n";
+		std::cout << std::fixed << std::setprecision(10) << "N CG1985 = " << n << "m\n";
+
+
+		geoid = "Sphere";
+		getXiGon(x, y, &xi, geoid.c_str());
+		getEtaGon(x, y, &eta, geoid.c_str());
+		getCGSphereN(x, y, &n);
+		std::cout << std::fixed << std::setprecision(10) << "xi Sphere = " << xi << "gon\n";
+		std::cout << std::fixed << std::setprecision(10) << "eta Sphere = " << eta << "gon\n";
+		std::cout << std::fixed << std::setprecision(10) << "N Sphere = " << n << "m\n";
+
+
+
+		//tut::ensure_distance(xi, 3.199512306355874e-4, 1e-6);
+	}
+
+
+
 
 }
 
