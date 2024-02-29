@@ -93,8 +93,8 @@ TCernParabolicGeoid::TCernParabolicGeoid( const std::string& name, const TReal a
 {		
 		// set the derived parameters of the paraboloid
 		TReal thc, azp;
-		TReal azxs = -LITERAL(1.12878) * GON2RAD;
-		TReal gsc = LITERAL(38.90742) * GON2RAD;
+		TReal azxs = -LITERAL(1.12878) * GON2RAD; // Azimut du X Suisse adopté pour ce modèle
+		TReal gsc = LITERAL(38.90742) * GON2RAD; // Gisement entre X Suisse et Y CERN
 
 	/*	//modif du 25/07/03 pour representer le niv5 utiliser dans LGC
 		if(fThs* TAngle::radsToGonsFactor() == LITERAL(48.219))
@@ -199,7 +199,9 @@ TAngle	TCernParabolicGeoid::getXi( const TSpatialPosition& sp ) const
 	xp = dx*costhc-dy*sinthc;
 	yp = dx*sinthc+dy*costhc;
 
-// Calculate the vertical deflection in N-S direction  
+// Calculate the vertical deflection in N-S direction
+	// The scale factor (100000) accounts for the fact that the xp- and yp-coordinates are in kilometres
+	// whereas the zp - coordinates are in centimetres.
 	fXiValue.setRadiansValue((fA*sinazp*xp -fB*cosazp*yp)/100000 ); //* LITERAL(6.366);
 	return fXiValue;
 
@@ -233,7 +235,9 @@ TAngle	TCernParabolicGeoid::getEta( const TSpatialPosition& sp ) const
 	xp = dx*costhc-dy*sinthc;
 	yp = dx*sinthc+dy*costhc;
 
-// Calculate the vertical deflection in E-O direction 
+// Calculate the vertical deflection in E-O direction
+	// The scale factor (100000) accounts for the fact that the xp- and yp-coordinates are in kilometres
+	// whereas the zp - coordinates are in centimetres.
 	fEtaValue.setRadiansValue((-fA*cosazp*xp -fB*sinazp*yp)/100000 ); // * LITERAL(6.366);
 	return fEtaValue;
 
