@@ -119,16 +119,8 @@ TAngle TCernGridGeoid::getEta ( const TSpatialPosition& spatialPosition) const
 	eta.setGonsValue(std::numeric_limits<TReal>::quiet_NaN());
 	if (isInGrid(spos))
 	{
-		// round to LITERAL(0.01) cc 
-		TReal interpolated = splineInterpolation(fEtaMatrix, spos) * 100;
-		int temp = (int)interpolated;
-		if ((interpolated - temp) >= LITERAL(0.5))
-			temp += 1;
-
-		TReal newTemp = temp;
-		newTemp = newTemp / 100;
-
-		eta.setGonsValue(newTemp * LITERAL(0.0001));
+		TReal interpolated = splineInterpolation(fEtaMatrix, spos);
+		eta.setGonsValue(interpolated * CC2GON);
 	}
 	if (isnan(eta.getGonsValue()))
 	{
@@ -155,25 +147,17 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 		spos.transform(fCalcRFPtr);
 	}
 
-	TAngle xsi;
+	TAngle xi;
 
 
 	// the spatial position must be in the LEP grid
-	xsi.setGonsValue(std::numeric_limits<TReal>::quiet_NaN());
+	xi.setGonsValue(std::numeric_limits<TReal>::quiet_NaN());
 	if (isInGrid(spos))
 	{
-		// round to LITERAL(0.01) cc 
-		TReal interpolated = splineInterpolation(fXiMatrix, spos) * 100;
-		int temp = (int)interpolated;
-		if ((interpolated - temp) >= LITERAL(0.5))
-			temp += 1;
-
-		TReal newTemp = temp;
-		newTemp = newTemp / 100;
-
-		xsi.setGonsValue(newTemp * LITERAL(0.0001));
+		TReal interpolated = splineInterpolation(fXiMatrix, spos);
+		xi.setGonsValue(interpolated * CC2GON);
 	}
-	if (isnan(xsi.getGonsValue()))
+	if (isnan(xi.getGonsValue()))
 	{
 		std::stringstream ss;
 		ss << "TNotInLepGridException: getEta function problem with coordinate ";
@@ -182,7 +166,7 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 			<< spos.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
 		throw TNotInLepGridException(ss.str());
 	}
-	return xsi;
+	return xi;
 }
 
 
