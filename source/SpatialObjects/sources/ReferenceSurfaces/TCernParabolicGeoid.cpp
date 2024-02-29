@@ -128,6 +128,8 @@ TAngle	TCernParabolicGeoid::getXi( const TSpatialPosition& sp ) const
 	computeLocalParaboloidCoordinates(sp, xp, yp);
 
 	// Calculate the vertical deflection in N-S direction  
+	// The scale factor (100000) accounts for the fact that the xp- and yp-coordinates are in kilometres
+	// whereas the zp - coordinates are in centimetres.	
 	TAngle fXiValue;
 	fXiValue.setRadiansValue((fA*sinazp*xp -fB*cosazp*yp)/100000 ); //* LITERAL(6.366);
 	return fXiValue;
@@ -140,6 +142,8 @@ TAngle	TCernParabolicGeoid::getEta( const TSpatialPosition& sp ) const
 	computeLocalParaboloidCoordinates(sp, xp, yp);
 	
 	// Calculate the vertical deflection in E-W direction 
+	// The scale factor (100000) accounts for the fact that the xp- and yp-coordinates are in kilometres
+	// whereas the zp - coordinates are in centimetres.
 	TAngle fEtaValue;
 	fEtaValue.setRadiansValue((-fA*cosazp*xp -fB*sinazp*yp)/100000 ); // * LITERAL(6.366);
 	return fEtaValue;
