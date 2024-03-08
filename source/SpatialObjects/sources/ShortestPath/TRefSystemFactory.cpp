@@ -364,12 +364,13 @@ void TRefSystemFactory::init()
 
 	///////////////////////////////////////////////////////////////////////////////	
 	// Definition of the geoid list
-	std::string cg00, cg00topo, cg00Machine, cg85, cg85Machine, cgSphere;
+	std::string cg00, cg00topo, cg00Machine, cg85, cg85Machine, cg85MachineGrid, cgSphere;
 	cg00 = "CG2000 h=0";
 	cg00topo = "CG2000 h=surface";
 	cg00Machine = "CG2000 h=Machine";
 	cg85 = "CG1985 h=0";
 	cg85Machine = "CG1985 h=Machine";
+	cg85MachineGrid = "CG1985 h=Machine (gridded)";
 	cgSphere = "Sphere";
 
 	TPositionVector dl(-5000, 0, 0, TCoordSysFactory::k3DCartesian),
@@ -573,12 +574,12 @@ void TRefSystemFactory::init()
 
 
 		// CG2000 h=Machine
-	static const size_t rowsLEP = 18, colsLEP = 14;
-	TMatrix *NMatrixLEP = new TMatrix(rowsLEP, colsLEP);
-	TMatrix *EtaMatrixLEP = new TMatrix(rowsLEP, colsLEP);
-	TMatrix *XsiMatrixLEP = new TMatrix(rowsLEP, colsLEP);
+	static const size_t rowsRS2K = 18, colsRS2K = 14;
+	TMatrix *NMatrixRS2K = new TMatrix(rowsRS2K, colsRS2K);
+	TMatrix *EtaMatrixRS2K = new TMatrix(rowsRS2K, colsRS2K);
+	TMatrix *XsiMatrixRS2K = new TMatrix(rowsRS2K, colsRS2K);
 
-	static const std::array<std::array<TReal, cols>, rows> nLEP = {{
+	static const std::array<std::array<TReal, cols>, rows> nRS2K = {{
 		{LITERAL(0.19361),LITERAL(0.15055),LITERAL(0.10151),LITERAL(0.05838),LITERAL(0.02779),LITERAL(0.00893),LITERAL(0.00078),-LITERAL(0.00076),-LITERAL(0.00127),LITERAL(0.00145),LITERAL(0.01059),LITERAL(0.02590),LITERAL(0.04668),LITERAL(0.07147)},
 		{LITERAL(0.20247),LITERAL(0.15771),LITERAL(0.10596),LITERAL(0.06133),LITERAL(0.03034),LITERAL(0.01144),LITERAL(0.00264),LITERAL(0.00087),-LITERAL(0.00011),LITERAL(0.00245),LITERAL(0.01110),LITERAL(0.02399),LITERAL(0.04227),LITERAL(0.06493)},
 		{LITERAL(0.20942),LITERAL(0.16300),LITERAL(0.10923),LITERAL(0.06412),LITERAL(0.03316),LITERAL(0.01402),LITERAL(0.00389),LITERAL(0.00099),LITERAL(0.00025),LITERAL(0.00305),LITERAL(0.01163),LITERAL(0.02349),LITERAL(0.03923),LITERAL(0.05997)},
@@ -599,7 +600,7 @@ void TRefSystemFactory::init()
 		{LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(0.14005),LITERAL(0.09769),LITERAL(0.06313),LITERAL(0.03466),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan())}
 	}};
 
-	static const std::array<std::array<TReal, cols>, rows> etaLEP = {{
+	static const std::array<std::array<TReal, cols>, rows> etaRS2K = {{
 		{LITERAL(15.74),LITERAL(23.34),LITERAL(23.94),LITERAL(18.84),LITERAL(11.74),LITERAL(6.74),LITERAL(0.74),-LITERAL(0.76),LITERAL(0.14),-LITERAL(3.16),-LITERAL(6.36),-LITERAL(8.46),-LITERAL(10.16),-LITERAL(11.46)},
 		{LITERAL(16.74),LITERAL(25.24),LITERAL(25.94),LITERAL(19.24),LITERAL(11.94),LITERAL(6.24),LITERAL(1.64),-LITERAL(0.06),LITERAL(0.44),-LITERAL(3.86),-LITERAL(5.86),-LITERAL(7.76),-LITERAL(9.66),-LITERAL(10.36)},
 		{LITERAL(18.04),LITERAL(27.24),LITERAL(26.64),LITERAL(19.04),LITERAL(11.84),LITERAL(6.94),LITERAL(2.54),LITERAL(0.44),LITERAL(0.64),-LITERAL(3.46),-LITERAL(5.56),-LITERAL(7.06),-LITERAL(9.06),-LITERAL(10.96)},
@@ -620,7 +621,7 @@ void TRefSystemFactory::init()
 		{LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan()),LITERAL(trnan())}
 	}};
 
-	static const std::array<std::array<TReal, cols>, rows> xsiLEP = {{
+	static const std::array<std::array<TReal, cols>, rows> xsiRS2K = {{
 		{-LITERAL(18.40),-LITERAL(22.10),-LITERAL(20.10),-LITERAL(15.20),-LITERAL(9.90),-LITERAL(6.30),-LITERAL(2.10),-LITERAL(1.80),-LITERAL(1.20),LITERAL(1.80),LITERAL(4.40),LITERAL(8.00),LITERAL(10.70),LITERAL(12.90)},
 		{-LITERAL(17.40),-LITERAL(21.80),-LITERAL(20.30),-LITERAL(15.20),-LITERAL(9.90),-LITERAL(6.50),-LITERAL(2.00),-LITERAL(0.50),-LITERAL(1.10),LITERAL(1.80),LITERAL(3.10),LITERAL(5.50),LITERAL(9.60),LITERAL(12.40)},
 		{-LITERAL(16.70),-LITERAL(22.30),-LITERAL(20.60),-LITERAL(15.00),-LITERAL(10.10),-LITERAL(6.40),-LITERAL(2.80),LITERAL(0.30),-LITERAL(0.40),LITERAL(2.40),LITERAL(3.70),LITERAL(4.80),LITERAL(8.40),LITERAL(10.10)},
@@ -642,29 +643,29 @@ void TRefSystemFactory::init()
 	}};
 
 
-	for (i = 0; i < (int)nLEP.size(); i++)
+	for (i = 0; i < (int)nRS2K.size(); i++)
 	{
-		for (j = 0; j < (int)nLEP[i].size(); j++)
-			(*NMatrixLEP)((int)i, (int)j) = nLEP[i][j];
+		for (j = 0; j < (int)nRS2K[i].size(); j++)
+			(*NMatrixRS2K)((int)i, (int)j) = nRS2K[i][j];
 	}
 
 
-	for (i = 0; i < (int)etaLEP.size(); i++)
+	for (i = 0; i < (int)etaRS2K.size(); i++)
 	{
-		for (j = 0; j < (int)etaLEP[i].size(); j++)
-			(*EtaMatrixLEP)((int)i, (int)j) = etaLEP[i][j];
+		for (j = 0; j < (int)etaRS2K[i].size(); j++)
+			(*EtaMatrixRS2K)((int)i, (int)j) = etaRS2K[i][j];
 	}
 
-	for (i = 0; i < (int)xsiLEP.size(); i++)
+	for (i = 0; i < (int)xsiRS2K.size(); i++)
 	{
-		for (j = 0; j < (int)xsiLEP[i].size(); j++)
-			(*XsiMatrixLEP)((int)i, (int)j) = xsiLEP[i][j];
+		for (j = 0; j < (int)xsiRS2K[i].size(); j++)
+			(*XsiMatrixRS2K)((int)i, (int)j) = xsiRS2K[i][j];
 	}
 
 
 
 	TCernGridGeoid* pCG2000Machine = new TCernGridGeoid(cg00Machine,
-		NMatrixLEP, EtaMatrixLEP, XsiMatrixLEP, dl, ur, pCGRF, pGRS80, pCCS);
+		NMatrixRS2K, EtaMatrixRS2K, XsiMatrixRS2K, dl, ur, pCGRF, pGRS80, pCCS);
 	pCG2000Machine->setGeoidId(kCG2000Machine);
 	fGeoidList.push_back(pCG2000Machine);
 
@@ -690,6 +691,98 @@ void TRefSystemFactory::init()
 	TCernParabolicGeoid* pCG1985Machine = new TCernParabolicGeoid(cg85Machine,aLEP,bLEP,thLEP, pCGRF, pGRS80, pCCS);
 	pCG1985Machine->setGeoidId(kCG1985Machine);
 	fGeoidList.push_back(pCG1985Machine);
+
+		// CG1985 h=Machine as a grid
+	static const size_t rowsLEP = 18, colsLEP = 14;
+	TMatrix *NMatrixLEP = new TMatrix(rowsLEP, colsLEP);
+	TMatrix *EtaMatrixLEP = new TMatrix(rowsLEP, colsLEP);
+	TMatrix *XsiMatrixLEP = new TMatrix(rowsLEP, colsLEP);
+
+	static const std::array<std::array<TReal, cols>, rows> nLEP = {{
+		{0.1615, 0.1198, 0.0841, 0.0544, 0.0307, 0.0129, 0.0012, -0.0046, -0.0044, 0.0019, 0.0141, 0.0322, 0.0564, 0.0866},
+		{0.1722, 0.1294, 0.0927, 0.062, 0.0372, 0.0184, 0.0056, -0.0012, -0.002, 0.0032, 0.0143, 0.0315, 0.0546, 0.0837},
+		{0.1819, 0.1382, 0.1004, 0.0686, 0.0428, 0.023, 0.0091, 0.0013, -0.0005, 0.0036, 0.0137, 0.0298, 0.0519, 0.08},
+		{0.1908, 0.146, 0.1072, 0.0743, 0.0475, 0.0266, 0.0118, 0.0029, -0.0, 0.0031, 0.0122, 0.0272, 0.0483, 0.0753},
+		{0.1987, 0.1529, 0.113, 0.0792, 0.0513, 0.0294, 0.0135, 0.0036, -0.0004, 0.0017, 0.0097, 0.0238, 0.0438, 0.0698},
+		{0.2057, 0.1589, 0.118, 0.0831, 0.0542, 0.0312, 0.0143, 0.0033, -0.0016, -0.0006, 0.0064, 0.0194, 0.0384, 0.0633},
+		{0.2119, 0.164, 0.122, 0.0861, 0.0561, 0.0322, 0.0142, 0.0022, -0.0038, -0.0038, 0.0021, 0.0141, 0.032, 0.056},
+		{0.2171, 0.1681, 0.1252, 0.0882, 0.0572, 0.0322, 0.0132, 0.0001, -0.0069, -0.008, -0.003, 0.0079, 0.0248, 0.0477},
+		{0.2214, 0.1714, 0.1274, 0.0894, 0.0574, 0.0313, 0.0113, -0.0028, -0.0109, -0.013, -0.0091, 0.0008, 0.0166, 0.0385},
+		{0.2248, 0.1738, 0.1287, 0.0897, 0.0566, 0.0295, 0.0084, -0.0067, -0.0158, -0.0189, -0.0161, -0.0072, 0.0076, 0.0284},
+		{0.2273, 0.1752, 0.1292, 0.0891, 0.055, 0.0268, 0.0047, -0.0114, -0.0216, -0.0258, -0.024, -0.0162, -0.0024, 0.0174},
+		{0.2289, 0.1758, 0.1287, 0.0875, 0.0524, 0.0232, 0.0001, -0.0171, -0.0283, -0.0335, -0.0328, -0.026, -0.0132, 0.0055},
+		{0.2296, 0.1754, 0.1273, 0.0851, 0.0489, 0.0187, -0.0055, -0.0237, -0.0359, -0.0422, -0.0425, -0.0367, -0.025, -0.0073},
+		{0.2294, 0.1742, 0.125, 0.0818, 0.0445, 0.0133, -0.0119, -0.0312, -0.0445, -0.0518, -0.0531, -0.0484, -0.0377, -0.021},
+		{0.2282, 0.172, 0.1218, 0.0775, 0.0393, 0.007, -0.0193, -0.0396, -0.0539, -0.0622, -0.0646, -0.0609, -0.0513, -0.0357},
+		{LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan())},
+		{LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan())},
+		{LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan())}
+		}};
+
+
+	static const std::array<std::array<TReal, colsLEP>, rowsLEP> xiLEP = {{
+		{-21.77, -19.09, -16.41, -13.73, -11.06, -8.38, -5.7, -3.02, -0.34, 2.34, 5.02, 7.7, 10.38, 13.06},
+		{-21.66, -18.98, -16.3, -13.63, -10.95, -8.27, -5.59, -2.91, -0.23, 2.45, 5.13, 7.81, 10.49, 13.17},
+		{-21.55, -18.87, -16.2, -13.52, -10.84, -8.16, -5.48, -2.8, -0.12, 2.56, 5.24, 7.92, 10.6, 13.28},
+		{-21.45, -18.77, -16.09, -13.41, -10.73, -8.05, -5.37, -2.69, -0.01, 2.67, 5.35, 8.03, 10.71, 13.39},
+		{-21.34, -18.66, -15.98, -13.3, -10.62, -7.94, -5.26, -2.58, 0.1, 2.78, 5.46, 8.14, 10.82, 13.5},
+		{-21.23, -18.55, -15.87, -13.19, -10.51, -7.83, -5.15, -2.47, 0.21, 2.89, 5.57, 8.25, 10.92, 13.6},
+		{-21.12, -18.44, -15.76, -13.08, -10.4, -7.72, -5.04, -2.36, 0.32, 3.0, 5.68, 8.35, 11.03, 13.71},
+		{-21.01, -18.33, -15.65, -12.97, -10.29, -7.61, -4.93, -2.25, 0.43, 3.11, 5.78, 8.46, 11.14, 13.82},
+		{-20.9, -18.22, -15.54, -12.86, -10.18, -7.5, -4.82, -2.14, 0.54, 3.21, 5.89, 8.57, 11.25, 13.93},
+		{-20.79, -18.11, -15.43, -12.75, -10.07, -7.39, -4.71, -2.04, 0.64, 3.32, 6.0, 8.68, 11.36, 14.04},
+		{-20.68, -18.0, -15.32, -12.64, -9.96, -7.28, -4.61, -1.93, 0.75, 3.43, 6.11, 8.79, 11.47, 14.15},
+		{-20.57, -17.89, -15.21, -12.53, -9.85, -7.18, -4.5, -1.82, 0.86, 3.54, 6.22, 8.9, 11.58, 14.26},
+		{-20.46, -17.78, -15.1, -12.42, -9.75, -7.07, -4.39, -1.71, 0.97, 3.65, 6.33, 9.01, 11.69, 14.37},
+		{-20.35, -17.67, -15.0, -12.32, -9.64, -6.96, -4.28, -1.6, 1.08, 3.76, 6.44, 9.12, 11.8, 14.48},
+		{-20.24, -17.57, -14.89, -12.21, -9.53, -6.85, -4.17, -1.49, 1.19, 3.87, 6.55, 9.23, 11.91, 14.59},
+		{LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan())},
+		{LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan())},
+		{LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan())}
+		}};
+
+	static const std::array<std::array<TReal, colsLEP>, rowsLEP> etaLEP = {{
+		{19.62, 16.83, 14.04, 11.25, 8.46, 5.67, 2.88, 0.09, -2.7, -5.49, -8.28, -11.07, -13.86, -16.65},
+		{20.5, 17.7, 14.91, 12.12, 9.33, 6.54, 3.75, 0.96, -1.83, -4.62, -7.41, -10.2, -12.99, -15.78},
+		{21.37, 18.58, 15.79, 13.0, 10.2, 7.41, 4.62, 1.83, -0.96, -3.75, -6.54, -9.33, -12.12, -14.91},
+		{22.24, 19.45, 16.66, 13.87, 11.08, 8.29, 5.5, 2.71, -0.09, -2.88, -5.67, -8.46, -11.25, -14.04},
+		{23.11, 20.32, 17.53, 14.74, 11.95, 9.16, 6.37, 3.58, 0.79, -2.0, -4.79, -7.59, -10.38, -13.17},
+		{23.98, 21.19, 18.4, 15.61, 12.82, 10.03, 7.24, 4.45, 1.66, -1.13, -3.92, -6.71, -9.5, -12.29},
+		{24.85, 22.06, 19.27, 16.48, 13.69, 10.9, 8.11, 5.32, 2.53, -0.26, -3.05, -5.84, -8.63, -11.42},
+		{25.72, 22.93, 20.14, 17.35, 14.56, 11.77, 8.98, 6.19, 3.4, 0.61, -2.18, -4.97, -7.76, -10.55},
+		{26.59, 23.8, 21.01, 18.22, 15.43, 12.64, 9.85, 7.06, 4.27, 1.48, -1.31, -4.1, -6.89, -9.68},
+		{27.46, 24.67, 21.88, 19.09, 16.3, 13.51, 10.72, 7.93, 5.14, 2.35, -0.44, -3.23, -6.02, -8.81},
+		{28.33, 25.54, 22.75, 19.96, 17.17, 14.38, 11.59, 8.8, 6.01, 3.22, 0.43, -2.36, -5.15, -7.94},
+		{29.2, 26.41, 23.62, 20.83, 18.04, 15.25, 12.46, 9.67, 6.88, 4.09, 1.3, -1.49, -4.28, -7.07},
+		{30.07, 27.28, 24.49, 21.7, 18.91, 16.12, 13.33, 10.54, 7.75, 4.96, 2.17, -0.62, -3.41, -6.2},
+		{30.95, 28.15, 25.36, 22.57, 19.78, 16.99, 14.2, 11.41, 8.62, 5.83, 3.04, 0.25, -2.54, -5.33},
+		{31.82, 29.03, 26.24, 23.45, 20.65, 17.86, 15.07, 12.28, 9.49, 6.7, 3.91, 1.12, -1.67, -4.46},
+		{LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan())},
+		{LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan())},
+		{LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan()), LITERAL(trnan())}
+		}};
+	
+		for (i = 0; i < (int)nLEP.size(); i++)
+	{
+		for (j = 0; j < (int)nLEP[i].size(); j++)
+			(*NMatrixLEP)((int)i, (int)j) = nLEP[i][j];
+	}
+	
+	for (i = 0; i < (int)etaLEP.size(); i++)
+	{
+		for (j = 0; j < (int)etaLEP[i].size(); j++)
+			(*EtaMatrixLEP)((int)i, (int)j) = etaLEP[i][j];
+	}
+
+	for (i = 0; i < (int)xiLEP.size(); i++)
+	{
+		for (j = 0; j < (int)xiLEP[i].size(); j++)
+			(*XsiMatrixLEP)((int)i, (int)j) = xiLEP[i][j];
+	}
+
+	TCernGridGeoid *pCG1985MachineGrid = new TCernGridGeoid(cg85MachineGrid, NMatrixLEP, EtaMatrixLEP, XsiMatrixLEP, dl, ur, pCGRF, pGRS80, pCCS);
+	pCG1985MachineGrid->setGeoidId(kCG1985MachineGrid);
+	fGeoidList.push_back(pCG1985MachineGrid);
 
 	/////////////////////////////////////////////////////////////////////
 	// Definition of the CERN projection list (included in ref frame list)
@@ -1202,6 +1295,9 @@ void TRefSystemFactory::init()
 	delete NMatrixTopo;
 	delete EtaMatrixTopo;
 	delete XsiMatrixTopo;
+	delete NMatrixRS2K;
+	delete EtaMatrixRS2K;
+	delete XsiMatrixRS2K;
 	delete NMatrixLEP;
 	delete EtaMatrixLEP;
 	delete XsiMatrixLEP;

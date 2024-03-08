@@ -20,6 +20,7 @@ public:
 	
 	static int getCG1985N0(double x, double y, double* N);
 	static int getCG1985NMachine(double x, double y, double* N);
+	static int getCG1985NMachineGrid(double x, double y, double* N);
 
 	static int getCGSphereN(double x, double y, double* N);
 

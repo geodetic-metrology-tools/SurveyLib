@@ -23,6 +23,7 @@ extern "C" {  // only need to export C interface if
 	
 	SU_DECLSPEC int DLLAPI getCG1985N0(double x, double y, double* N);
 	SU_DECLSPEC int DLLAPI getCG1985NMachine(double x, double y, double* N);
+	SU_DECLSPEC int DLLAPI getCG1985NMachineGrid(double x, double y, double* N);
 
 	SU_DECLSPEC int DLLAPI getCGSphereN(double x, double y, double* N);
 

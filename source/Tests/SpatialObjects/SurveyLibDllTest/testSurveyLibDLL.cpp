@@ -61,12 +61,14 @@ namespace tut
 	{
 		set_test_name("SpatialObj DLL test");
 
-		double x = -3500;
-		double y = 2097.7926500;
+		double x = 5800;
+		double y = 9000;
 		double xi = 0;
 		double eta = 0;
 		double n = 0;
 		std::string geoid = "CG2000_Machine";
+
+		std::cout << "\n Point (" << x << "," << y << ")\n";
 
 		getXiGon(x, y, &xi, geoid.c_str());
 		getEtaGon(x, y, &eta, geoid.c_str());
@@ -77,13 +79,20 @@ namespace tut
 
 		geoid = "CG1985_Machine";
 
-				getXiGon(x, y, &xi, geoid.c_str());
+		getXiGon(x, y, &xi, geoid.c_str());
 		getEtaGon(x, y, &eta, geoid.c_str());
 		getCG1985NMachine(x, y, &n);
 		std::cout << std::fixed << std::setprecision(10) << "xi CG1985 = " << xi << "gon\n";
 		std::cout << std::fixed << std::setprecision(10) << "eta CG1985 = " << eta << "gon\n";
 		std::cout << std::fixed << std::setprecision(10) << "N CG1985 = " << n << "m\n";
 
+		geoid = "CG1985_MachineGrid";
+		getXiGon(x, y, &xi, geoid.c_str());
+		getEtaGon(x, y, &eta, geoid.c_str());
+		getCG1985NMachineGrid(x, y, &n);
+		std::cout << std::fixed << std::setprecision(10) << "xi CG1985 Grid = " << xi << "gon\n";
+		std::cout << std::fixed << std::setprecision(10) << "eta CG1985 Grid = " << eta << "gon\n";
+		std::cout << std::fixed << std::setprecision(10) << "N CG1985 Grid = " << n << "m\n";
 
 		geoid = "Sphere";
 		getXiGon(x, y, &xi, geoid.c_str());

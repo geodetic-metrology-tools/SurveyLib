@@ -62,8 +62,9 @@ public:
 		/*! Enumerator for ellipsoids implemented in the factory */
 		enum  ERefEll {kGRS80, kWGSEll, kInternationalEll, kSphere, kNoEllipsoid, kBessel1841};
 		/*! Enumerator for geoids implemented in the factory */
-		enum  EGeoid {kCG2000, kCG2000Machine, kCG2000topo, kCG1985, 
-			          kCG1985Machine, kNoGeoid, kCGSphere};
+		enum  EGeoid {kCG2000, kCG2000Machine, kCG2000topo,
+					  kCG1985, kCG1985Machine, kCG1985MachineGrid,
+					  kNoGeoid, kCGSphere};
 		/*! Enumerator for Reference Frames implemented in the factory */
 		enum  ERefFrame {
 			kCCS                 =  0, 

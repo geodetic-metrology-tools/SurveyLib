@@ -41,6 +41,12 @@ int DLLAPI getCG1985NMachine( double_t  x, double_t  y, double_t* N)
 	return SpatialObjFns::getCG1985NMachine(x,y,N);
 }
 
+// N value for CG1985 at LEP-level (using grid)
+int DLLAPI getCG1985NMachineGrid(double_t x, double_t y, double_t *N)
+{
+	return SpatialObjFns::getCG1985NMachineGrid(x, y, N);
+}
+
 int DLLAPI transformToMLA(double_t x0, double_t y0, double_t z0,
 					double_t* x, double_t* y, double_t* z, char* geoid)
 {
