@@ -220,6 +220,27 @@ TVector& multABATasDiag(TVector& res, const TSparseMatrix& A, const TSparseMatri
 	return res;
 }
 
+double &checkedCoeffRef(TSparseMatrix &mat, int row, int col)
+{
+	bool isOutOfBound = !(row >= 0 && row < mat.rows() && col >= 0 && col < mat.cols());
+	if (isOutOfBound)
+	{
+		throw std::runtime_error("Attempting to get reference of matrix entry at index (" + std::to_string(row) + " , " + std::to_string(col) + ") of ("
+			+ std::to_string(mat.rows()) + " , " + std::to_string(mat.cols()) + ") dimensional matrix.");
+	}
+	return mat.coeffRef(row, col);
+}
+
+double &checkedCoeffRef(TVector &vec, int row)
+{
+	bool isOutOfBound = !(row >= 0 && row < vec.rows());
+	if (isOutOfBound)
+	{
+		throw std::runtime_error("Attempting to get reference of vector entry at index " + std::to_string(row) + " of " + std::to_string(vec.rows()) + " dimensional vector.");
+	}
+	return vec.coeffRef(row);
+}
+
 
 } // namespace
 
