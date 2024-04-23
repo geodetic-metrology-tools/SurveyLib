@@ -36,10 +36,13 @@ void TLSInputMatrices::initMatrices(UEOIndices ueoi)
 
 bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
-	if (0 <= row && row < fUEOIndices.EIndex && 0 <= column && column < fUEOIndices.UIndex)
-		firstDesignMatrix->coeffRef(row,column) = coeff;
-	} catch(...) {
+	try
+	{
+		TSparseUtils::checkedCoeffRef(*firstDesignMatrix, row, column) = coeff;
+	}
+	catch (const std::exception &e)
+	{
+		logFatal() << "Error occurred while setting first design matrix: " << e.what();
 		return false;
 	}
 	return true;
@@ -47,10 +50,13 @@ bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 
 bool TLSInputMatrices::addFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
-	if (0 <= row && row < fUEOIndices.EIndex && 0 <= column && column < fUEOIndices.UIndex)
-		firstDesignMatrix->coeffRef(row,column) += coeff;
-	} catch(...) {
+	try
+	{
+		TSparseUtils::checkedCoeffRef(*firstDesignMatrix, row, column) += coeff;
+	}
+	catch (const std::exception &e)
+	{
+		logFatal() << "Error occurred while setting first design matrix: " << e.what();
 		return false;
 	}
 	return true;
@@ -65,7 +71,7 @@ bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex
 		{
 			for (int col = 0; col < block.cols(); col++)
 			{
-				secondDesignMatrix->insert(firstIndex + row, secondIndex + col) = block(row, col);
+				TSparseUtils::checkedCoeffRef(*secondDesignMatrix, firstIndex + row, secondIndex + col) = block(row, col);
 			}
 		}
 		// check if the block is square and if it is located on the diagonal, and if all previous blocks were also block-diag
@@ -78,7 +84,7 @@ bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex
 			{
 				for (int col = 0; col < dim; col++)
 				{
-					secondDesignBlockDiagInvMatrix->insert(firstIndex + row, secondIndex + col) = block_inverse(row, col);
+					TSparseUtils::checkedCoeffRef(*secondDesignBlockDiagInvMatrix, firstIndex + row, secondIndex + col) = block_inverse(row, col);
 				}
 			}
 		}
@@ -87,9 +93,10 @@ bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex
 			secondDesignMatrixIsBlockDiag = false;
 		}
 	}
-	catch (...)
+	catch (const std::exception &e)
 	{
 		// Setting of second design matrix block failed
+		logFatal() << "Error occurred while setting second design matrix: " << e.what();
 		return false;
 	}
 
@@ -159,9 +166,13 @@ bool TLSInputMatrices::resetCnstrMisclosureVector(UEOIndices ueoi)
 
 bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {
-	try {
-		(*fMisclosureVector)(row) = coeff;
-	} catch(...) {
+	try
+	{
+		TSparseUtils::checkedCoeffRef(*fMisclosureVector, row) = coeff;
+	}
+	catch (const std::exception &e)
+	{
+		logFatal() << "Error occurred while setting misclosure vector: " << e.what();
 		return false;
 	}
 	return true;
@@ -169,12 +180,13 @@ bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 
 bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
-	if (0 <= row && row < fUEOIndices.OIndex && 0 <= column && column < fUEOIndices.OIndex){
-		weightMatrix->insert(row,column) = coeff;
+	try
+	{
+		TSparseUtils::checkedCoeffRef(*weightMatrix, row, column) = coeff;
 	}
-	
-	} catch(...) {
+	catch (const std::exception &e)
+	{
+		logFatal() << "Error occurred while setting weight matrix: " << e.what();
 		return false;
 	}
 	return true;
@@ -182,10 +194,13 @@ bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column,
 
 bool TLSInputMatrices::setWeightInvMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
-	if (0 <= row && row < fUEOIndices.OIndex && 0 <= column && column < fUEOIndices.OIndex)
-		weightInvMatrix->insert(row,column) = coeff;
-	} catch(...) {
+	try
+	{
+		TSparseUtils::checkedCoeffRef(*weightInvMatrix, row, column) = coeff;
+	}
+	catch (const std::exception &e)
+	{
+		logFatal() << "Error occurred while setting weight inverse matrix: " << e.what();
 		return false;
 	}
 	return true;
@@ -193,10 +208,13 @@ bool TLSInputMatrices::setWeightInvMtrxElement(MatrixIndex row, MatrixIndex colu
 
 bool TLSInputMatrices::setWeightUnkMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
-	if (0 <= row && row < fUEOIndices.UIndex && 0 <= column && column < fUEOIndices.UIndex)
-		weightUnkMatrix->insert(row,column) = coeff;
-	} catch(...) {
+	try
+	{
+		TSparseUtils::checkedCoeffRef(*weightUnkMatrix, row, column) = coeff;
+	}
+	catch (const std::exception &e)
+	{
+		logFatal() << "Error occurred while setting unknown weight matrix: " << e.what();
 		return false;
 	}
 	return true;
@@ -204,12 +222,13 @@ bool TLSInputMatrices::setWeightUnkMtrxElement(MatrixIndex row, MatrixIndex colu
 
 bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
-	if (0 <= row && row < fUEOIndices.CIndex && 0 <= column && column < fUEOIndices.UIndex)
-		fCnstrFirstDesignMtrx->insert(row,column) = coeff;
-	} catch(...) {
-		logFatal() << "Setting constraints for LIBR calculations in the constraint first design matrix A:\n"
-			<< "Could not insert the element (" << row << "," << column << ") with the value: " << coeff << std::endl;
+	try
+	{
+		TSparseUtils::checkedCoeffRef(*fCnstrFirstDesignMtrx, row, column) = coeff;
+	}
+	catch (const std::exception &e)
+	{
+		logFatal() << "Error occurred while setting constraint first design matrix: " << e.what();
 		return false;
 	}
 	return true;
@@ -218,12 +237,13 @@ bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex 
 
 bool TLSInputMatrices::addCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient)
 {
-	try {
-	if (0 <= row && row < fUEOIndices.CIndex && 0 <= column && column < fUEOIndices.UIndex)
-		fCnstrFirstDesignMtrx->coeffRef(row,column) += coefficient;
-	} catch(...) {
-		logFatal() << "Setting constraints for LIBR calculations in the constraint first design matrix A:\n"
-				   << "At index (" << row << "," << column << ") : could not add the value: "  << std::endl;
+	try
+	{
+		TSparseUtils::checkedCoeffRef(*fCnstrFirstDesignMtrx, row, column) += coefficient;
+	}
+	catch (const std::exception &e)
+	{
+		logFatal() << "Error occurred while setting constraint first design matrix: " << e.what();
 		return false;
 	}
 	return true;
@@ -231,9 +251,13 @@ bool TLSInputMatrices::addCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex 
 
 bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, TReal coeff)
 {
-	try {
-		(*fCnstrMisclosureVector)(row) = coeff;
-	} catch(...) {
+	try
+	{
+		TSparseUtils::checkedCoeffRef(*fCnstrMisclosureVector, row) = coeff;
+	}
+	catch (const std::exception &e)
+	{
+		logFatal() << "Error occurred while setting constraint misclosure: " << e.what();
 		return false;
 	}
 	return true;

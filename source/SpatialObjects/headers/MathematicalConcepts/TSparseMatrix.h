@@ -24,6 +24,8 @@ namespace TSparseUtils {
 	
 	// optimized multiplication routine that returns the main diagonal of A*B*A'
 	TVector& multABATasDiag(TVector& res, const TSparseMatrix& A, const TSparseMatrix& B);
+	double &checkedCoeffRef(TSparseMatrix &mat, int row, int col);
+	double &checkedCoeffRef(TVector &mat, int row);
 
 }
 
