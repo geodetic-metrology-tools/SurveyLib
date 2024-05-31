@@ -254,7 +254,7 @@ const Eigen::VectorXd TAdjustableHelmertTransformation::getEstParamVector()
 	return parameters;
 }
 
-const TAngle& TAdjustableHelmertTransformation::getEstimatedPrecisionRot(int d)const{
+const TAngle TAdjustableHelmertTransformation::getEstimatedPrecisionRot(int d)const{
 	ensureCovarIsSet();
 	return TAngle(sqrt(fCovarianceMatrix(3 + d, 3 + d)));
 }
