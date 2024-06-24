@@ -205,8 +205,8 @@ bool TLSInputMatrices::setWeightMisclosureVectorElement(MatrixIndex row, TReal c
 
 bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
-	if (0 <= row && row < fUEOIndices.OIndex && 0 <= column && column < fUEOIndices.OIndex){
+	try
+	{
 		TSparseUtils::checkedCoeffRef(*globalWeightMatrix, row, column) = coeff;
 	}
 	catch (const std::exception &e)
@@ -219,10 +219,12 @@ bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column,
 
 bool TLSInputMatrices::setWeightInvMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
-		if (0 <= row && row < fUEOIndices.OIndex && 0 <= column && column < fUEOIndices.OIndex)
-			TSparseUtils::checkedCoeffRef(*globalWeightInvMatrix, row, column) = coeff;
-	} catch(...) {
+	try
+	{
+		TSparseUtils::checkedCoeffRef(*globalWeightInvMatrix, row, column) = coeff;
+	}
+	catch (...)
+	{
 		return false;
 	}
 	return true;
@@ -230,9 +232,12 @@ bool TLSInputMatrices::setWeightInvMtrxElement(MatrixIndex row, MatrixIndex colu
 
 bool TLSInputMatrices::setWeightUnkMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
+	try
+	{
 		TSparseUtils::checkedCoeffRef(*globalWeightMatrix, row + fUEOIndices.OIndex, column + fUEOIndices.OIndex) = coeff;
-	} catch(...) {
+	}
+	catch (...)
+	{
 		return false;
 	}
 	return true;
@@ -240,9 +245,12 @@ bool TLSInputMatrices::setWeightUnkMtrxElement(MatrixIndex row, MatrixIndex colu
 
 bool TLSInputMatrices::setWeightUnkInvMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
-	try {
+	try
+	{
 		TSparseUtils::checkedCoeffRef(*globalWeightInvMatrix, row + fUEOIndices.OIndex, column + fUEOIndices.OIndex) = coeff;
-	} catch(...) {
+	}
+	catch (...)
+	{
 		return false;
 	}
 	return true;
