@@ -53,15 +53,11 @@ public:
 	
 	/*! Access to eventual error */
 	std::string		getError() const { return fError; }
-
-	void activateStrictThreshold() { useStrictThreshold = true; };
 protected:
 	///Constructor
 	TALSComputer();
 
 	std::string			fError;		/*!< errors during calculation */
-	bool useStrictThreshold = false;
-	
 };
 
 #endif

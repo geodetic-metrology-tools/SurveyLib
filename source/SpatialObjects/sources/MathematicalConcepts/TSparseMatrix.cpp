@@ -107,7 +107,7 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 		\param[out] vectX The resulting solution vector.
 */
 
-bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool bTryCholeskyFirst, bool bTryFullPivotSecond, bool useStrictThreshold)
+bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool bTryCholeskyFirst, bool bTryFullPivotSecond)
 {
 	vectX.setZero();
 
@@ -149,13 +149,9 @@ bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX
 	
 	// If both are not working, use Sparse QR
 	Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> QrMat;
-	// pivotThreshold important for solving the system accurately
+	// pivotThreshold important for solving the system accurately in case constraints are present
 	// https://eigen.tuxfamily.org/dox/classEigen_1_1SparseQR.html
-	// necessary for Slave feature, otherwise let Eigen choose
-	if (useStrictThreshold)
-	{
-		QrMat.setPivotThreshold(1e-12);
-	}
+	QrMat.setPivotThreshold(1e-12);
 	QrMat.compute(matA);
 	if (QrMat.info() != Eigen::Success) 
 	{
