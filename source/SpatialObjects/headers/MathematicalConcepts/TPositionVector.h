@@ -63,16 +63,17 @@ public:
 		bool operator==( const TPositionVector& ) const;
 		
 		//!add a PositionVector  and FreeVector, return a PositionVector
-		TPositionVector operator+(const TFreeVector& );
-		TPositionVector operator-(const TFreeVector& );
-		
+		TPositionVector operator+(const TFreeVector& ) const;
+		//!subtract a FreeVector, return a PositionVector
+		TPositionVector operator-(const TFreeVector &) const;
+
 		//!add a PositionVector  and FreeVector, replace this
 		TPositionVector& operator+=(const TFreeVector& );
 		//!substract a FreeVector from aPositionVector and replace this
 		TPositionVector& operator-=(const TFreeVector& );
 
 		//!substract two TPositionVector objects and return a FreeVector
-		TFreeVector operator-(const TPositionVector& );
+		TFreeVector operator-(const TPositionVector&) const;
 		
 		//!Multiply a TPositionVector object by a TDouble
 		TPositionVector operator*(const TDouble&);

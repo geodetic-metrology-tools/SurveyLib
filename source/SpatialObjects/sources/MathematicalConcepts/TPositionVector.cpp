@@ -73,9 +73,10 @@ TPositionVector TPositionVector::operator+(const TFreeVector& second)
 	return resultat;
 }
 
-TPositionVector TPositionVector::operator-(const TFreeVector& second)
-{//!add a PositionVector  and FreeVector, return a PositionVector
-	TPositionVector resultat (getCoordSys());
+
+TPositionVector TPositionVector::operator-(const TFreeVector &second) const
+{ //! subtract a FreeVector, return a PositionVector
+	TPositionVector resultat(getCoordSys());
 	bool fContinue = second.isInitialise() && this->isInitialise();
 	if (fContinue && testCoordSysCart(second.getCoordSys()) == true)
 	{
@@ -86,7 +87,6 @@ TPositionVector TPositionVector::operator-(const TFreeVector& second)
 
 	return resultat;
 }
-
 
 TPositionVector& TPositionVector::operator+=(const TFreeVector& second)
 {//!add a PositionVector and FreeVector, replace this
@@ -100,7 +100,7 @@ TPositionVector& TPositionVector::operator-=(const TFreeVector& second) {
 }
 
 
-TFreeVector TPositionVector::operator-( const TPositionVector& second)
+TFreeVector TPositionVector::operator-( const TPositionVector& second) const
 {//!substract two TPositionVector objects and return a FreeVector
 	TFreeVector resultat(getCoordSys());
 	bool fContinue = second.isInitialise() && this->isInitialise();
