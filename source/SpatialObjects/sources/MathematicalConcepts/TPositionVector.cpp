@@ -59,7 +59,7 @@ bool TPositionVector::operator==( const TPositionVector& right) const
 }
 
 
-TPositionVector TPositionVector::operator+(const TFreeVector& second)
+TPositionVector TPositionVector::operator+(const TFreeVector& second) const
 {//!add a PositionVector  and FreeVector, return a PositionVector
 	TPositionVector resultat (getCoordSys());
 	bool fContinue = second.isInitialise() && this->isInitialise();

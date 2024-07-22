@@ -110,5 +110,36 @@ void object::test<5>()
 	ensure_equals("Result Y", result2.getY(), posY2 - posY1);
 	ensure_equals("Result Z", result2.getZ(), posZ2 - posZ1);
 }
+template<>
+template<>
+void object::test<6>()
+{
+	set_test_name("Add a FreeVector to a PositionVector");
+	TReal posX = 10, posY = 20, posZ = 30;
+	TPositionVector position(posX, posY, posZ, TCoordSysFactory::k3DCartesian);
+	TReal deltaX = 1, deltaY = 2, deltaZ = 3;
+	TFreeVector delta(deltaX, deltaY, deltaZ, TCoordSysFactory::k3DCartesian);
 
+	TFreeVector result = position + delta;
+
+	ensure_equals("Result X", result.getX(), posX + deltaX);
+	ensure_equals("Result Y", result.getY(), posY + deltaY);
+	ensure_equals("Result Z", result.getZ(), posZ + deltaZ);
+}
+template<>
+template<>
+void object::test<7>()
+{
+	set_test_name("Add a FreeVector to a const PositionVector");
+	TReal posX = 10, posY = 20, posZ = 30;
+	const TPositionVector position(posX, posY, posZ, TCoordSysFactory::k3DCartesian);
+	TReal deltaX = 1, deltaY = 2, deltaZ = 3;
+	TFreeVector delta(deltaX, deltaY, deltaZ, TCoordSysFactory::k3DCartesian);
+
+	TFreeVector result = position + delta;
+
+	ensure_equals("Result X", result.getX(), posX + deltaX);
+	ensure_equals("Result Y", result.getY(), posY + deltaY);
+	ensure_equals("Result Z", result.getZ(), posZ + deltaZ);
+}
 } // namespace tut
