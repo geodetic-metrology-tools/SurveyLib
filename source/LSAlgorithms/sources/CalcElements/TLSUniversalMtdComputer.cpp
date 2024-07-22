@@ -230,4 +230,3 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	rm->setResidualsVect(V);
 	return true;
 }
-
