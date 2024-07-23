@@ -7,62 +7,62 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #define SU_VLS_COMPUTER
 
 #if _MSC_VER >= 1000
-#pragma once
-#pragma warning(disable:4786)
+#	pragma once
+#	pragma warning(disable : 4786)
 #endif // _MSC_VER >= 1000
-
 
 /////////////////////////////////////////////////////
 // Forward declarations
 /////////////////////////////////////////////////////
-#include <math.h>
 #include <string>
 #include <vector>
+
 #include <Eigen/LU>
 
-#include "TSparseMatrix.h"
 #include <UEOIndices.h>
-#include "TLSResultsMatrices.h"
+#include <math.h>
+
 #include "TLSInputMatrices.h"
+#include "TLSResultsMatrices.h"
+#include "TSparseMatrix.h"
 
-
-struct limits{double s0PostUpLimit; double s0PostLoLimit;};
+struct limits
+{
+	double s0PostUpLimit;
+	double s0PostLoLimit;
+};
 
 /*!
 	\ingroup CalcElements
 
 	\brief Abstract Base Class. Defines the methods common to all least squares computers.
 */
-class TALSComputer{
-
+class TALSComputer
+{
 public:
-	//!Destructor
+	//! Destructor
 	virtual ~TALSComputer();
 
-	//!Verify the number of unknowns and run the calculation
-	virtual bool computeResults(TLSInputMatrices*, TLSResultsMatrices*) = 0;
+	//! Verify the number of unknowns and run the calculation
+	virtual bool computeResults(TLSInputMatrices *, TLSResultsMatrices *) = 0;
 
-	//!Computes the results matrices
-	virtual bool computeResultsMatrices(TLSInputMatrices*, TLSResultsMatrices*) = 0;
+	//! Computes the results matrices
+	virtual bool computeResultsMatrices(TLSInputMatrices *, TLSResultsMatrices *) = 0;
 
-	//!Computes the residual vector and the varaiance covariance matrices
-	virtual bool calcResidusAndVarCovMatrix(const TLSInputMatrices* inputMtr, TLSResultsMatrices* rm) = 0;
+	//! Computes the residual vector and the varaiance covariance matrices
+	virtual bool calcResidusAndVarCovMatrix(const TLSInputMatrices *inputMtr, TLSResultsMatrices *rm) = 0;
 
-	//!Calculate the hypothesis testing limits for the sigma zero a posteriori
-	struct limits	calcSigmaZeroLimits(const int nbObs, const int nbUnk);
-	
+	//! Calculate the hypothesis testing limits for the sigma zero a posteriori, default value for number of constraints is zero
+	struct limits calcSigmaZeroLimits(const int nbObs, const int nbUnk, const int nbCnstr = 0);
+
 	/*! Access to eventual error */
-	std::string		getError() const { return fError; }
+	std::string getError() const { return fError; }
 
-	void activateStrictThreshold() { useStrictThreshold = true; };
 protected:
-	///Constructor
+	/// Constructor
 	TALSComputer();
 
-	std::string			fError;		/*!< errors during calculation */
-	bool useStrictThreshold = false;
-	
+	std::string fError; /*!< errors during calculation */
 };
 
 #endif
-

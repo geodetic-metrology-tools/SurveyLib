@@ -1,15 +1,17 @@
-#include <Eigen/LU>
-#include <Eigen/SparseQR>
-#include <Eigen/Dense>
-
 #include "TSparseMatrix.h"
+
 #include <iostream>
 #include <sstream>
 #include <vector>
+
+#include <Eigen/Dense>
+#include <Eigen/LU>
+#include <Eigen/SparseQR>
+
 #include <Logger.hpp>
 
-namespace TSparseUtils {
-
+namespace TSparseUtils
+{
 
 /*!
 		\brief Main method for inverting sparse matrices
@@ -18,7 +20,6 @@ namespace TSparseUtils {
 */
 bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCholeskyFirst, bool bTryFullPivotSecond)
 {
-
 	auto nRows = sparseMat.rows();
 	auto nCols = sparseMat.cols();
 
@@ -55,8 +56,6 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 
 			logDebug() << "Cholesky method is used to invert the matrix!";
 			return true;
-
-
 		}
 		else
 			logDebug() << "Cholesky method failed to invert the matrix!";
@@ -73,21 +72,21 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 			invMat = luMat.inverse().sparseView();
 			logDebug() << "FullPivLU method is used to invert the matrix!";
 			return true;
-	}
-	else
-		logDebug() << "FullPivLU method failed to invert the matrix!";
+		}
+		else
+			logDebug() << "FullPivLU method failed to invert the matrix!";
 	}
 
 	// If both are not working, use Sparse LU
 	Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> LuMat;
 	LuMat.compute(sparseMat);
-	if (LuMat.info() != Eigen::Success) 
+	if (LuMat.info() != Eigen::Success)
 	{
 		logDebug() << "Decomposition with the SparseLU method failed to invert the matrix!!";
 		return false;
 	}
 	invMat = LuMat.solve(IdMat);
-	if (LuMat.info() == Eigen::Success) 
+	if (LuMat.info() == Eigen::Success)
 	{
 		logDebug() << "SparseLU method method is used to invert the matrix!";
 		return true;
@@ -97,7 +96,6 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 		logDebug() << "SparseLU method failed to invert the matrix!!";
 		return false;
 	}
-	
 }
 
 /*!
@@ -107,11 +105,11 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 		\param[out] vectX The resulting solution vector.
 */
 
-bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool bTryCholeskyFirst, bool bTryFullPivotSecond, bool useStrictThreshold)
+bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool bTryCholeskyFirst, bool bTryFullPivotSecond)
 {
 	vectX.setZero();
 
-	 // A must be a square matrix in our case, and the number of B vector elements must be the same!
+	// A must be a square matrix in our case, and the number of B vector elements must be the same!
 	if (matA.rows() != matA.cols() || vectB.rows() != matA.rows())
 	{
 		logDebug() << "The given matrix A is not a square matrix, or the number of vector B elements does not correspond to A dimensions!";
@@ -119,7 +117,7 @@ bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX
 	}
 
 	// By default, tries Cholesky method first
-	if (bTryCholeskyFirst) 
+	if (bTryCholeskyFirst)
 	{
 		Eigen::SimplicialLDLT<TSparseMatrix> cholMat(matA);
 		if (cholMat.info() == Eigen::Success)
@@ -146,24 +144,20 @@ bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX
 		else
 			logDebug() << "FullPivLU method failed for solving the equations system!";
 	}
-	
+
 	// If both are not working, use Sparse QR
 	Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> QrMat;
-	// pivotThreshold important for solving the system accurately
+	// pivotThreshold important for solving the system accurately in case constraints are present
 	// https://eigen.tuxfamily.org/dox/classEigen_1_1SparseQR.html
-	// necessary for Slave feature, otherwise let Eigen choose
-	if (useStrictThreshold)
-	{
-		QrMat.setPivotThreshold(1e-12);
-	}
+	QrMat.setPivotThreshold(1e-12);
 	QrMat.compute(matA);
-	if (QrMat.info() != Eigen::Success) 
+	if (QrMat.info() != Eigen::Success)
 	{
 		logDebug() << "Decomposition with the SparseQR method failed!";
 		return false;
 	}
 	vectX = QrMat.solve(vectB);
-	if (QrMat.info() != Eigen::Success) 
+	if (QrMat.info() != Eigen::Success)
 	{
 		logDebug() << "SparseQR method failed for solving the equations system!";
 		return false;
@@ -175,8 +169,7 @@ bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX
 	}
 }
 
-
-inline double ABij(const TSparseMatrix& A, const TSparseMatrix& B, int i, int j)
+inline double ABij(const TSparseMatrix &A, const TSparseMatrix &B, int i, int j)
 {
 	const Eigen::Index u(A.cols());
 	double sum(0.0);
@@ -184,7 +177,7 @@ inline double ABij(const TSparseMatrix& A, const TSparseMatrix& B, int i, int j)
 #pragma omp parallel for reduction(+ : sum)
 	for (Eigen::Index r = 0; r < u; r++)
 	{
-		sum += A.coeff(i, r)*B.coeff(r, j);
+		sum += A.coeff(i, r) * B.coeff(r, j);
 	}
 
 	return sum;
@@ -197,7 +190,7 @@ inline double ABij(const TSparseMatrix& A, const TSparseMatrix& B, int i, int j)
 		\param[out] res The resulting diagonal vector.
 */
 
-TVector& multABATasDiag(TVector& res, const TSparseMatrix& A, const TSparseMatrix& B)
+TVector &multABATasDiag(TVector &res, const TSparseMatrix &A, const TSparseMatrix &B)
 {
 	const auto obs(A.rows());
 	const auto ukn(A.cols());
@@ -205,14 +198,14 @@ TVector& multABATasDiag(TVector& res, const TSparseMatrix& A, const TSparseMatri
 	res.resize(obs);
 	res.setZero();
 
-	//TSparseMatrix AB(A*B);
+	// TSparseMatrix AB(A*B);
 #pragma omp parallel for
 	for (Eigen::Index n = 0; n < obs; n++)
 	{
 		for (Eigen::Index u = 0; u < ukn; u++)
 		{
 			// for unknowns (u= num unknowns)
-			//double abij = AB.coeff(n,u) ;
+			// double abij = AB.coeff(n,u) ;
 			double abij = ABij(A, B, (int)n, (int)u);
 			res(n) += abij * A.coeff(n, u);
 		}
@@ -241,7 +234,4 @@ double &checkedCoeffRef(TVector &vec, int row)
 	return vec.coeffRef(row);
 }
 
-
-} // namespace
-
-
+} // namespace TSparseUtils
