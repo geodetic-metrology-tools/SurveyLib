@@ -19,7 +19,7 @@ double deviates_normal_upper_tail(double p);
 double normalQuantile(double p);
 
 // auxiliary functions
-//inverse error function via newtons method
+// inverse error function via newtons method
 double erfInvNewton(double alpha);
 
 #endif
