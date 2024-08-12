@@ -148,7 +148,7 @@ bool TAngle::setDMSValue(const Degrees degs, const Minutes mins, const Seconds s
 	{ // one element is negative
 		angleSign = kNegative;
 	}
-	else if (degs == 0 && mins == 0 && (-DBL_EPSILON < secs && secs < DBL_EPSILON))
+	else if (degs == 0 && mins == 0 && (-std::numeric_limits<double>::epsilon() < secs && secs < std::numeric_limits<double>::epsilon()))
 	{ // all elements are zero
 
 		angleSign = kZero;

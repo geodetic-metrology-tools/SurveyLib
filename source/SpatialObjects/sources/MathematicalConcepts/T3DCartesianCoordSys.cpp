@@ -73,27 +73,27 @@ bool T3DCartesianCoordSys::setAllRotations(TRotationMatrix* mx, TRotationMatrix:
 	TReal xcos, xsin, ycos, ysin, zcos, zsin;
 
 	xcos = om.cosine();
-	if (fabsq(xcos) <= 2*DBL_EPSILON)
+	if (fabsq(xcos) <= 2*std::numeric_limits<double>::epsilon())
 	{xcos = 0;}
 
 	xsin = om.sine();
-	if (fabsq(xsin) <= 2*DBL_EPSILON)
+	if (fabsq(xsin) <= 2*std::numeric_limits<double>::epsilon())
 	{xsin = 0;}
 
 	ycos = p.cosine();
-	if (fabsq(ycos) <= 2*DBL_EPSILON)
+	if (fabsq(ycos) <= 2*std::numeric_limits<double>::epsilon())
 	{ycos = 0;}
 
 	ysin = p.sine();
-	if (fabsq(ysin) <= 2*DBL_EPSILON)
+	if (fabsq(ysin) <= 2*std::numeric_limits<double>::epsilon())
 	{ysin = 0;}
 
 	zcos = k.cosine();
-	if (fabsq(zcos) <= 2*DBL_EPSILON)
+	if (fabsq(zcos) <= 2*std::numeric_limits<double>::epsilon())
 	{zcos = 0;}
 
 	zsin = k.sine();
-	if (fabsq(zsin) <= 2*DBL_EPSILON)
+	if (fabsq(zsin) <= 2*std::numeric_limits<double>::epsilon())
 	{zsin = 0;}
 
 	

@@ -1,6 +1,5 @@
 #include "QuantileFunctions.h"
 
-#include <cmath>
 #include <stdexcept>
 
 #include <Quad.h>

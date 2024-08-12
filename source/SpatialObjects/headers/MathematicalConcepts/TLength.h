@@ -20,7 +20,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <iostream>
 
 #include <assert.h>
-#include <float.h>
 #include <math.h>
 
 #include "Quad.h"

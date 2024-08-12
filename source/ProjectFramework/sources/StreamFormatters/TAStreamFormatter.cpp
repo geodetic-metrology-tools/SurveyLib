@@ -18,11 +18,7 @@
 //
 // Other forward declarations
 
-#if _MSC_VER
-#include <float.h>
-#else
 #include <cmath>
-#endif
 
 #include	"TADataSet.h"
 #include	"TFileParameters.h"
