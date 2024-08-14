@@ -79,8 +79,8 @@ linux_release:
   
 .buildDLL: &buildDLL
     - echo "Building Dynamic Link Library"
-    - cmake --build . -j %NUMBER_OF_PROCESSORS% --config Release --target SpatialObjDLL
-    - cmake --build . -j %NUMBER_OF_PROCESSORS% --config Release --target CSGeoDLL
+    - cmake --build . -j $env:NUMBER_OF_PROCESSORS --config Release --target SpatialObjDLL
+    - cmake --build . -j $env:NUMBER_OF_PROCESSORS --config Release --target CSGeoDLL
 # Build all targets and run the tests
 windows64_build_and_test:
     extends: .windows64_build_and_test
