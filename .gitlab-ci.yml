@@ -184,9 +184,10 @@ windows32_release:
     extends: windows64_release
     needs: ["windows32_build_and_test"]
     tags:
-        - !reference [.default_windows_before_scripts, script]
         - windows
         - x32
+    script:
+        - !reference [.default_windows_before_scripts, script]
     variables:
         CMAKEGENERATOR: "Visual Studio 16 2019"
         CMAKEARCHITECTURE: "-A Win32"
