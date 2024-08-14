@@ -11,7 +11,7 @@ struct toolsSimpleTimer
 };
 
 typedef test_group<toolsSimpleTimer> tst;
-tst tools_stringmanager_group("Test Tools - SimpleTimer package.");
+tst tools_simpleTimer_group("Test Tools - SimpleTimer package.");
 typedef tst::object testobject;
 } // namespace tut
 

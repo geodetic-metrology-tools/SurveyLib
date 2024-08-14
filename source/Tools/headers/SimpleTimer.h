@@ -56,7 +56,7 @@ public:
 	std::vector<T> m_steps;
 private:
 	void printStop(size_t duration) {std::cout << "Elapsed Time: " << duration << std::endl;}
-	std::chrono::steady_clock::time_point m_startPoint;
+	std::chrono::high_resolution_clock::time_point m_startPoint;
 };
 
 template<>
