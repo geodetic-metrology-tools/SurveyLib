@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////
-//TMLA2XYHsTransformation.h
+// TMLA2XYHsTransformation.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2024. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*
@@ -13,25 +13,20 @@ Patterns:
 */
 //////////////////////////////////////////////////////////////////////
 
-
-
 #ifndef SU_MLA_2_XYHS_TRANSFORMATION
 #define SU_MLA_2_XYHS_TRANSFORMATION
 
-
 #if _MSC_VER >= 1000
-#pragma once
+#	pragma once
 #endif // _MSC_VER >= 1000
-
 
 ////////////////////////////////////////////////////////////////
 // Forward declarations
 //
-// #include  <cmath>
-#include  "TARefFrameTransformation.h"
-#include  "TAModifiedLocalAstronomicalRF.h"
-#include  "TXYHeProjection.h"
-#include  "TAReferenceFrame.h"
+#include "TAModifiedLocalAstronomicalRF.h"
+#include "TARefFrameTransformation.h"
+#include "TAReferenceFrame.h"
+#include "TXYHeProjection.h"
 
 // typedefs
 //
@@ -42,86 +37,96 @@ Patterns:
 
 @{*/
 
-//!The transformation from a modified local astronomical reference frame to a XYHs projection
-class  TMLA2XYHsTransformation : public TARefFrameTransformation //: public TObject  
+//! The transformation from a modified local astronomical reference frame to a XYHs projection
+class TMLA2XYHsTransformation : public TARefFrameTransformation //: public TObject
 {
 public:
 	/*!@name Constructors and Destructors */
 	//@{
-		//!Default Constructor 
-		TMLA2XYHsTransformation();
+	//! Default Constructor
+	TMLA2XYHsTransformation();
 
-		//!Constructor taking pointers to the source and destination reference frames
-		TMLA2XYHsTransformation( TXYHeProjection* to );
+	//! Constructor taking pointers to the source and destination reference frames
+	TMLA2XYHsTransformation(TXYHeProjection *to);
 
-		//!Copy Constructor 
-		TMLA2XYHsTransformation(const  TMLA2XYHsTransformation&);
+	//! Copy Constructor
+	TMLA2XYHsTransformation(const TMLA2XYHsTransformation &);
 
-		//!Destructor
-		virtual  ~TMLA2XYHsTransformation();
+	//! Destructor
+	virtual ~TMLA2XYHsTransformation();
 	//@}
-
 
 	/*!@name Member Functions */
 	//@{
-		using TARefFrameTransformation::transform;
-		//using TARefFrameTransformation::inverse;
+	using TARefFrameTransformation::transform;
+	// using TARefFrameTransformation::inverse;
 
-		//!Copy Assignment Operator 
-		TMLA2XYHsTransformation&			operator=( const TMLA2XYHsTransformation& );
+	//! Copy Assignment Operator
+	TMLA2XYHsTransformation &operator=(const TMLA2XYHsTransformation &);
 
-		//!Return a pointer to a clone of this reference frame
-		virtual TMLA2XYHsTransformation *	clone() const;
+	//! Return a pointer to a clone of this reference frame
+	virtual TMLA2XYHsTransformation *clone() const;
 
-		//!Return a pointer to the inverse of this transformtion
-		virtual TARefFrameTransformation *  inverse() const;
+	//! Return a pointer to the inverse of this transformtion
+	virtual TARefFrameTransformation *inverse() const;
 
-		//!Return the source frame
-		virtual TAReferenceFrame*			getSourceFrame() const { return fFrom; }
+	//! Return the source frame
+	virtual TAReferenceFrame *getSourceFrame() const { return fFrom; }
 
-		//!Return the destination frame
-		virtual TAReferenceFrame*			getDestinationFrame() const { return fTo; }
+	//! Return the destination frame
+	virtual TAReferenceFrame *getDestinationFrame() const { return fTo; }
 
-		//!Return the ellipsoid of the transformation
-		virtual TReferenceEllipsoid*		getEllipsoid() const { return fEllipsoid; }
+	//! Return the ellipsoid of the transformation
+	virtual TReferenceEllipsoid *getEllipsoid() const { return fEllipsoid; }
 
-		//!Set the XYHs source frame
-		virtual void						setDestinationFrame( TXYHeProjection* XYHs) {fTo = XYHs; return;}
+	//! Set the XYHs source frame
+	virtual void setDestinationFrame(TXYHeProjection *XYHs)
+	{
+		fTo = XYHs;
+		return;
+	}
 
-		//! tranformation of a position vector between reference frames
-		virtual bool						transform(TPositionVector& pv) const;
+	//! tranformation of a position vector between reference frames
+	virtual bool transform(TPositionVector &pv) const;
 	//@}
-
 
 private:
 	/*!@name Private Member Functions */
 	//@{
-		//!Set the MLA destination frame
-		virtual void							setSourceFrame( TAModifiedLocalAstronomicalRF* LA) {fFrom = LA; return;}
+	//! Set the MLA destination frame
+	virtual void setSourceFrame(TAModifiedLocalAstronomicalRF *LA)
+	{
+		fFrom = LA;
+		return;
+	}
 
-		//!Set the ellipsoid
-		virtual void							setEllipsoid( TReferenceEllipsoid* ellipsoid) {fEllipsoid = ellipsoid; return;}
+	//! Set the ellipsoid
+	virtual void setEllipsoid(TReferenceEllipsoid *ellipsoid)
+	{
+		fEllipsoid = ellipsoid;
+		return;
+	}
 
-		//!get the MLA destination frame
-		virtual TAModifiedLocalAstronomicalRF*	getMLARF() const { return fFrom; }
+	//! get the MLA destination frame
+	virtual TAModifiedLocalAstronomicalRF *getMLARF() const { return fFrom; }
 
-		//!get the MLA destination projection
-		virtual TXYHeProjection*				getXYHs() const { return fTo; }
-	//@}	
-	
-	/*!@name Private Attributs */
-	//@{
-		//!pointer to a TAModifiedLocalAstronomicalRF object
-		TAModifiedLocalAstronomicalRF*		fFrom;
-
-		//!pointer to a TXYHeProjection object
-		TXYHeProjection*					fTo;
-
-		//!pointer to a TReferenceEllipsoid object
-		TReferenceEllipsoid*				fEllipsoid;
+	//! get the MLA destination projection
+	virtual TXYHeProjection *getXYHs() const { return fTo; }
 	//@}
 
-	//ClassDef(TMLA2XYHsTransformation, 1)
+	/*!@name Private Attributs */
+	//@{
+	//! pointer to a TAModifiedLocalAstronomicalRF object
+	TAModifiedLocalAstronomicalRF *fFrom;
+
+	//! pointer to a TXYHeProjection object
+	TXYHeProjection *fTo;
+
+	//! pointer to a TReferenceEllipsoid object
+	TReferenceEllipsoid *fEllipsoid;
+	//@}
+
+	// ClassDef(TMLA2XYHsTransformation, 1)
 };
 
 /*@}*/

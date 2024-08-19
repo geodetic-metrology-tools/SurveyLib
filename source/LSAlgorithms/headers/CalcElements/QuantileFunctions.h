@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2023. All rigths reserved. This software is released under a CERN proprietary software licence.
+© Copyright CERN 2000-2024. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -19,7 +19,7 @@ double deviates_normal_upper_tail(double p);
 double normalQuantile(double p);
 
 // auxiliary functions
-//inverse error function via newtons method
+// inverse error function via newtons method
 double erfInvNewton(double alpha);
 
 #endif
