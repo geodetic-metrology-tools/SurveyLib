@@ -7,18 +7,19 @@ include_directories(
 # Create a variable containing all .cpp files:
 set(Tools_SOURCES 
 	${CMAKE_CURRENT_LIST_DIR}/sources/Behavior.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/StringManager.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/FileUtils.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/ProjectPath.cpp
+	${CMAKE_CURRENT_LIST_DIR}/sources/StringManager.cpp
 )
 
 # Create a variable containing all .h files:
 set(Tools_HEADERS 
-	${CMAKE_CURRENT_LIST_DIR}/headers/TStatusObject.h
 	${CMAKE_CURRENT_LIST_DIR}/headers/Behavior.h
-	${CMAKE_CURRENT_LIST_DIR}/headers/StringManager.h
 	${CMAKE_CURRENT_LIST_DIR}/headers/FileUtils.h
 	${CMAKE_CURRENT_LIST_DIR}/headers/ProjectPath.h
+	${CMAKE_CURRENT_LIST_DIR}/headers/SimpleTimer.h
+	${CMAKE_CURRENT_LIST_DIR}/headers/StringManager.h
+	${CMAKE_CURRENT_LIST_DIR}/headers/TStatusObject.h
 )
 
 # Create a static library from sources:
