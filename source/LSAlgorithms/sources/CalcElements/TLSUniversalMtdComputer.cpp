@@ -190,7 +190,7 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 		fError += "Number of equations + constraints equals number of unknowns, causes zero division!";
 	rm->setSigmaZero2(sigmaZero2Aposteriori);
 	struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk, nbCnstr);
-	rm->setSigmaZero2Limits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
+	rm->setSigmaZeroLimits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
 
 	// ----------Covariance Matrices-----------//
 

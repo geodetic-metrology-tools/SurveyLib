@@ -85,11 +85,11 @@ public:
 	/*! \brief Returns the squared sigma zero 	*/
 	TReal getSigmaZero2() const { return fSigmaZero2; }
 
-	/*! \brief Returns the squared sigma zero statistical lower limit	*/
-	TReal getSigmaZeroLowLimit() const { return fSigmaZero2LowLimit; }
+	/*! \brief Returns the sigma zero statistical lower limit	*/
+	TReal getSigmaZeroLowLimit() const { return fSigmaZeroLowLimit; }
 
-	/*! \brief Returns the squared sigma zero statistical upper limit	*/
-	TReal getSigmaZeroUpLimit() const { return fSigmaZero2UpLimit; }
+	/*! \brief Returns the sigma zero statistical upper limit	*/
+	TReal getSigmaZeroUpLimit() const { return fSigmaZeroUpLimit; }
 
 	//@}
 
@@ -117,10 +117,10 @@ public:
 	/*!	\brief Sets (by vector copy, i.e. operator =) the residues vector 	*/
 	void setResidualsVect(TVector& vect) { *fResidualsVctr = vect; }
 
-	/*!	\brief Sets the squared sigma zero statistical upper and lower limits 	*/
-	void setSigmaZero2Limits(TReal loLimit, TReal upLimit) {
-		fSigmaZero2LowLimit =  loLimit; 
-		fSigmaZero2UpLimit = upLimit;
+	/*!	\brief Sets the sigma zero statistical upper and lower limits 	*/
+	void setSigmaZeroLimits(TReal loLimit, TReal upLimit) {
+		fSigmaZeroLowLimit =  loLimit; 
+		fSigmaZeroUpLimit = upLimit;
 	}
 	//@}
 
@@ -146,8 +146,8 @@ private:
 	std::unique_ptr<TSparseMatrix>	fNormalMatrix;  /*!< N matrix (u+nConstr x u+nConstr) is the normal matrix (extended with the constraints if there are some) */
 
 	TReal fSigmaZero2; /*!< calculated "average variance" on residues */
-	TReal fSigmaZero2LowLimit;
-	TReal fSigmaZero2UpLimit;
+	TReal fSigmaZeroLowLimit;
+	TReal fSigmaZeroUpLimit;
 
 };
 
