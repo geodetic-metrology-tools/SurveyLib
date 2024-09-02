@@ -248,27 +248,11 @@ public:
 	*/
 	int getCoordinateUnknIndex(int d) const;
 
-	/*!
-
-		\brief Returns A standard deviations of the point's component.
-
-		\param[in] d Allowed values are 0(X), 1(Y) and 2(Z) of the point's component.
-
-		\throws Throws a runtime_error if the standard deviation not assigned.
-	*/
-	TReal getStandDev(int d) const;
-
 	/// Returns reference frame of the point
 	inline TRefSystemFactory::ERefFrame getReferenceFrame() const { return fReferential; }
 
 	/// \see TAdjustableObject::isInitialized
 	inline virtual bool isInitialized() const { return !isnotanumber(fProvisionalValue.getX().getMetresValue()); }
-
-	/// Returns Boolean value telling if the standard deviations were assigned to the point.
-	inline bool hasStandDeviations() const
-	{
-		return !isnotanumber(fStandardDeviations[0]) || !isnotanumber(fStandardDeviations[1]) || !isnotanumber(fStandardDeviations[2]);
-	}
 
 	/// Returns the height estimated value
 	TReal getHEstValue() const;
@@ -298,9 +282,6 @@ public:
 	/// Update the adjustment information of a point, used to set point coordinates fixed if ALLFIXED used
 	void updateFixedState(bool lx, bool ly, bool lz);
 
-	/// Assign standard deviations to this point
-	void setStandardDeviations(TReal stDevX, TReal stDevY, TReal stDevZ);
-
 	/*!
 		\brief Re-initialise the object
 
@@ -320,8 +301,6 @@ protected:
 	TRefSystemFactory::ERefFrame fReferential; /*!< Reference frame of the point */
 
 	std::string fName; /*!< Name of the adjustable point. */
-
-	TReal fStandardDeviations[3]; /*!< Standard deviations of the point.*/
 
 	bool fixedState[3]; /*!< Tells which element of the point is FIXED or VARIABLE (TRUE means that point element is fixed).*/
 	int uidx[3]; /*!< Indices of the point elements in LS input matrices (unknowns).*/
