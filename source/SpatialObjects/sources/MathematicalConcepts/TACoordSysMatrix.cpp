@@ -79,6 +79,12 @@ TReal TACoordSysMatrix::getC(const int& i, const int& j) const
 	return mx[i][j];
 }
 
+Eigen::Matrix3d TACoordSysMatrix::getMat() const
+{
+	Eigen::Matrix3d rotMat;
+	rotMat << mx[0][0], mx[0][1], mx[0][2], mx[1][0], mx[1][1], mx[1][2], mx[2][0], mx[2][1], mx[2][2];
+	return rotMat;
+}
 
 void	TACoordSysMatrix::setC(const int& i, const int& j, TReal value)
 {//!set value to (i,j)

@@ -1,6 +1,6 @@
 // TACoordSysMatrix.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2024. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /** Abstract class use for explain T3DMatrix and TRotationMatrixin a Coordonate System */
@@ -19,6 +19,7 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 
 #include  "TCoordSysFactory.h"
 #include  "Quad.h"
+#include <Eigen/Dense>
 class TVCoordinateSystem;
 class TRotationMatrix;
 
@@ -66,6 +67,8 @@ public:
 	//@{
 	//!get the (i,j) value
 	TReal getC(const int& i, const int& j) const;
+	// get the whole matrix
+	Eigen::Matrix3d getMat() const;
 
 	//!set value to (i,j)
 	void setC(const int& i, const int& j, TReal value);
@@ -74,7 +77,7 @@ public:
 
 private:
 	
-	TReal					mx[3][3]; /*!< élément of the 3*3 matrix */
+	TReal					mx[3][3]; /*!< element of the 3*3 matrix */
 	TVCoordinateSystem*		fCoordSys; /*!< coordinate system */
 		
 	

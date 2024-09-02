@@ -6,13 +6,14 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef TADJUSTABLE_POINT
 #define TADJUSTABLE_POINT
 
-#include <TSparseMatrix.h>
 
 #include "TFreeVector.h"
 #include "TPositionVector.h"
 #include "TRefSystemFactory.h"
 #include "TSpatialStatus.h"
 #include "TVAdjustableObject.h"
+
+
 
 /*!
 	\ingroup AdjustableObjects
@@ -74,6 +75,16 @@ public:
 		ensureCovarIsSet();
 		return fCovarianceMatrix;
 	}
+
+	// set and get for a-priori covariance matrix (generalizing the a-priodi standard deviations)
+	// this matrix can very well contain NAN's - this will actually be the standard case for a free point: the apriori standard deviation is infinity
+	inline const Eigen::Matrix3d &getAprioriCovarianceMatrix() const { return fAprioriCovarianceMatrix; }
+	void setAprioriCovarianceMatrix(const Eigen::Matrix3d &apriCovar)
+	{
+		fAprioriCovarianceMatrix = apriCovar;
+		fHasAprioriCovarianceMatrix = true;
+	}
+
 
 	/// Sets a constant reference on the provisional value of the position vector
 	void setProvisionalValue(const TPositionVector &pointProv) { fProvisionalValue = pointProv; };
@@ -297,10 +308,13 @@ protected:
 	TPositionVector fEstimatedValue; /*!< point's estimated value after calculation */
 	Eigen::Matrix3d fCovarianceMatrix = Eigen::Matrix3d::Zero();
 	bool fCovarianceMatrixIsSet{false};
+	Eigen::Matrix3d fAprioriCovarianceMatrix = Eigen::Matrix3d::Constant(INFINITY);
+	bool fHasAprioriCovarianceMatrix{false};
 
 	TRefSystemFactory::ERefFrame fReferential; /*!< Reference frame of the point */
 
 	std::string fName; /*!< Name of the adjustable point. */
+
 
 	bool fixedState[3]; /*!< Tells which element of the point is FIXED or VARIABLE (TRUE means that point element is fixed).*/
 	int uidx[3]; /*!< Indices of the point elements in LS input matrices (unknowns).*/

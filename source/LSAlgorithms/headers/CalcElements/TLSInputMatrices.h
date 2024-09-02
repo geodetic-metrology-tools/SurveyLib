@@ -1,5 +1,5 @@
 /*
-© Copyright CERN 2000-2022. All rigths reserved. This software is released under a CERN proprietary software licence.
+© Copyright CERN 2000-2024. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -53,7 +53,7 @@ public:
 
 		/*!	\brief Set a block in the second design matrix. Each block corresponds to one mathematical observation equation. Also sets the inverse block.
 		*/
-		bool setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block);
+		bool setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, const Eigen::MatrixXd &block);
 
 		/*!	\brief Set the second design matrix to minus Identity for parametric case
 		*/
@@ -74,6 +74,10 @@ public:
 		/*!	\brief Set a misclosure vector element.
 		*/
 		bool setMisclosureVectorElement(MatrixIndex row, TReal coeff);
+
+		/*!	\brief Set a block in the weight matrix. Also sets the inverse block.
+		*/
+		bool setWeightMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, const Eigen::MatrixXd &block);
 
 		/*!	\brief Set the value of an element of the observations weight matrix in the adjustment (P-matrix)
 			\param[in] row of the desired element

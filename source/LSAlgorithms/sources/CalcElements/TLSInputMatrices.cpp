@@ -62,7 +62,7 @@ bool TLSInputMatrices::addFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 	return true;
 }
 
-bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block)
+bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, const Eigen::MatrixXd &block)
 {
 	try
 	{
@@ -176,6 +176,48 @@ bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 		return false;
 	}
 	return true;
+}
+
+bool TLSInputMatrices::setWeightMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, const Eigen::MatrixXd &block)
+{
+	try
+	{
+		// write the block
+		for (int row = 0; row < block.rows(); row++)
+		{
+			for (int col = 0; col < block.cols(); col++)
+			{
+				TSparseUtils::checkedCoeffRef(*weightMatrix, firstIndex + row, secondIndex + col) = block(row, col);
+			}
+		}
+		// check if the block is square and if it is located on the diagonal
+		if ((block.cols() == block.rows() && firstIndex == secondIndex ))
+		{
+			// compute the inverse of the block and write it at the corresponding place of the inverse
+			int dim = block.cols();
+			Eigen::MatrixXd block_inverse = block.lu().solve(Eigen::MatrixXd::Identity(block.rows(), block.cols()));
+			for (int row = 0; row < dim; row++)
+			{
+				for (int col = 0; col < dim; col++)
+				{
+					TSparseUtils::checkedCoeffRef(*secondDesignBlockDiagInvMatrix, firstIndex + row, secondIndex + col) = block_inverse(row, col);
+				}
+			}
+		}
+		else
+		{
+			throw std::runtime_error("Setting of blocks in the weight matrix is only possible on the diagonal.");
+		}
+	}
+	catch (const std::exception &e)
+	{
+		// Setting of weight matrix block failed
+		logFatal() << "Error occurred while setting weight matrix block: " << e.what();
+		return false;
+	}
+
+	return true;
+
 }
 
 bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)

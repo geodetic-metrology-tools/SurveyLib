@@ -62,6 +62,8 @@ TAdjustablePoint::TAdjustablePoint(const TAdjustablePoint &pos) :
 	fSpatialStatus(pos.fSpatialStatus),
 	fCovarianceMatrix(pos.fCovarianceMatrix),
 	fCovarianceMatrixIsSet(pos.fCovarianceMatrixIsSet),
+	fAprioriCovarianceMatrix(pos.fAprioriCovarianceMatrix),
+	fHasAprioriCovarianceMatrix(pos.fHasAprioriCovarianceMatrix),
 	fXValueSet(pos.fXValueSet),
 	fYValueSet(pos.fYValueSet),
 	eolcomment(pos.eolcomment),
@@ -283,6 +285,9 @@ void TAdjustablePoint::updateFixedState(bool lx, bool ly, bool lz)
 	fixedState[0] = (lx);
 	fixedState[1] = (ly);
 	fixedState[2] = (lz);
+	// make sure also the h is updated
+	if (fProvisionalValue.getCoordSys() == TCoordSysFactory::k2DPlusH)
+		fHfixed = lz;
 
 	fXValueSet = (lx);
 	fYValueSet = (ly);
@@ -443,6 +448,8 @@ void TAdjustablePoint::serialize(ObjectSerializer &obj) const
 	obj.addProperty("fCorrection", fCorrection);
 	obj.addProperty("fCovarianceMatrix", fCovarianceMatrix);
 	obj.addProperty("fCovarianceMatrixIsSet", fCovarianceMatrixIsSet);
+	obj.addProperty("fHasAprioriCovarianceMatrix", fHasAprioriCovarianceMatrix);
+	obj.addProperty("fAprioriCovarianceMatrix", fAprioriCovarianceMatrix);
 	obj.addProperty("fEstimatedValue", fEstimatedValue);
 	obj.addProperty("fHfixed", fHfixed);
 	obj.addProperty("fixedState", fixedState);
