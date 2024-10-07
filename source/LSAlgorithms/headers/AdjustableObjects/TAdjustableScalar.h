@@ -7,135 +7,138 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #define TADJUSTABLE_SCALAR
 
 #include <stdexcept>
+
 #include "TVAdjustableObject.h"
 
-/*! 
+/*!
 	\ingroup AdjustableObjects
 	\brief Adds adjustable information to a Scalar object.
 */
 class TAdjustableScalar : public TVAdjustableObject
 {
 public:
-
 	/*!@name Constructor */
 	//@{
-		/*!
-			\brief Constructs an TAdjustableScalar based on an existing scalar value, state (fixed or variable) and its name. 
-		
-			\param[in] scalValue A scalar that will be adjusted. 
-			\param[in] isFixed The scalar will be excluded from the adjustment if set to TRUE, i.e. fixed scalar.
-			\param[in] name Name of the adjustable scalar.
-		*/
-		TAdjustableScalar(TReal scalValue, bool isFixed, const std::string& name);
+	/*!
+		\brief Constructs an TAdjustableScalar based on an existing scalar value, state (fixed or variable) and its name.
 
-		/// Create an unitialized scalar. 
-		static TAdjustableScalar createUninitialized(const std::string& name);
+		\param[in] scalValue A scalar that will be adjusted.
+		\param[in] isFixed The scalar will be excluded from the adjustment if set to TRUE, i.e. fixed scalar.
+		\param[in] name Name of the adjustable scalar.
+	*/
+	TAdjustableScalar(TReal scalValue, bool isFixed, const std::string &name);
+
+	/// Create an unitialized scalar.
+	static TAdjustableScalar createUninitialized(const std::string &name);
 	//@}
 
 	/*!@name Access methods*/
 	//@{
-		/// Returns the provisional value of the scalar. 
-      inline TReal getProvisionalValue() const { return fProvisionalValue; }
+	/// Returns the provisional value of the scalar.
+	inline TReal getProvisionalValue() const { return fProvisionalValue; }
 
-		/// Returns the correction value of the scalar. 
-      inline TReal getCorrection() const { return fCorrection; }
+	/// Returns the correction value of the scalar.
+	inline TReal getCorrection() const { return fCorrection; }
 
-		// Returns the estimated value of the scalar. 
-      inline TReal getEstimatedValue() const { return fEstimatedValue; }
-			
-		/// Returns the estimated precision of the scalar. 
-      inline TReal getEstimatedPrecision() const { return fEstimatedPrecision; }
+	// Returns the estimated value of the scalar.
+	inline TReal getEstimatedValue() const { return fEstimatedValue; }
 
-		/*!
-			\brief Returns The number of unknowns of this scalar.
-			
-			Number of unknowns that are added to the adjustment by this scalar.
-			This number varies from zero to 1 unknowns.		
-		*/
-		inline virtual int getNumUnkn() const { return (int)!isScalarFixed;}
+	/// Returns the estimated precision of the scalar.
+	inline TReal getEstimatedPrecision() const { return fEstimatedPrecision; }
 
-		/// See \ref TVAdjustjustableObject::isFixed
-		inline virtual bool isFixed() const { return isScalarFixed;}
+	/*!
+		\brief Returns The number of unknowns of this scalar.
 
-		/*! 
-			See \ref TVAdjustableObject::getFirstUidx
+		Number of unknowns that are added to the adjustment by this scalar.
+		This number varies from zero to 1 unknowns.
+	*/
+	inline virtual int getNumUnkn() const { return (int)!isScalarFixed; }
 
-			\throws Throws a logic_error if the scalar is fixed.
-		*/
-		inline virtual int getFirstUidx() const{	
-			if (!isScalarFixed)
-				return uidx;			
-			throw std::logic_error("Trying to get unknown index from fixed scalar.");
-		}
+	/// See \ref TVAdjustjustableObject::isFixed
+	inline virtual bool isFixed() const { return isScalarFixed; }
 
-		/*! 
-			See \ref TVAdjustableObject::getLastUidx
+	/*!
+		See \ref TVAdjustableObject::getFirstUidx
 
-			\throws Throws a logic_error if no component of the scalar is variable, i.e. a fixed scalar.
-		*/
-		inline virtual int getLastUidx() const {
-			if (!isScalarFixed)
-				return uidx;			
-			throw std::logic_error("Trying to get unknown index from fixed scalar.");
-		}
+		\throws Throws a logic_error if the scalar is fixed.
+	*/
+	inline virtual int getFirstUidx() const
+	{
+		if (!isScalarFixed)
+			return uidx;
+		throw std::logic_error("Trying to get unknown index from fixed scalar.");
+	}
 
-		/// Returns the estimated variance.
-		inline TReal getVariance() const{ return powq(fEstimatedPrecision, 2);}
+	/*!
+		See \ref TVAdjustableObject::getLastUidx
 
-		/// Returns the estimated precision.
-       inline TReal getEstPrecision() const { return fEstimatedPrecision; }
+		\throws Throws a logic_error if no component of the scalar is variable, i.e. a fixed scalar.
+	*/
+	inline virtual int getLastUidx() const
+	{
+		if (!isScalarFixed)
+			return uidx;
+		throw std::logic_error("Trying to get unknown index from fixed scalar.");
+	}
 
-		/// Returns Name of the scalar.
-		inline virtual const std::string& getName() const { return fName;}
+	/// Returns the estimated variance.
+	inline TReal getVariance() const { return powq(fEstimatedPrecision, 2); }
 
-		/*! 
-			\see TAdjustableObject::isInitialized
-		*/
-		inline virtual bool isInitialized() const { return !(fProvisionalValue!=fProvisionalValue); }                              //isnan(fProvisionalValue);}  // FRK 16/11
+	/// Returns the estimated precision.
+	inline TReal getEstPrecision() const { return fEstimatedPrecision; }
+
+	/// Returns Name of the scalar.
+	inline virtual const std::string &getName() const { return fName; }
+
+	/*!
+		\see TAdjustableObject::isInitialized
+	*/
+	inline virtual bool isInitialized() const { return !(fProvisionalValue != fProvisionalValue); } // isnan(fProvisionalValue);}  // FRK 16/11
 
 	//@}
 
 	/*!@name Settings */
 	//@{
+	/// Set the provisional value of the scalar from a constant reference
+	void setProvisionalValue(const TReal &provisionalValue) { fProvisionalValue = provisionalValue; };
 
-		/*! 
-			See \ref TVAdjustableObject::setFirstUidx
+	/*!
+		See \ref TVAdjustableObject::setFirstUidx
 
-			\throws Throws a logic_error if the scalar is fixed.
-		*/
-		virtual void setFirstUidx(int idx);
+		\throws Throws a logic_error if the scalar is fixed.
+	*/
+	virtual void setFirstUidx(int idx);
 
-		/*! 
-			See \ref TVAdjustableObject::setCorrection
+	/*!
+		See \ref TVAdjustableObject::setCorrection
 
-		*/
-		virtual void setCorrection(int idx, TReal value);
+	*/
+	virtual void setCorrection(int idx, TReal value);
 
-		/// Sets the estimated precision after calculation 
-		void	setEstimatedPrecision(int idx, TReal ep);
+	/// Sets the estimated precision after calculation
+	void setEstimatedPrecision(int idx, TReal ep);
 
-		/*! 
-			\brief Re-initialise the object
+	/*!
+		\brief Re-initialise the object
 
-			Sets the estimated values to be the provisional values and for the precisions, correections and covariances zeros.
-		*/
-		void reInitialise();
+		Sets the estimated values to be the provisional values and for the precisions, correections and covariances zeros.
+	*/
+	void reInitialise();
 
 #if USE_SERIALIZER
-		// Inherited via Serializable
-		virtual void serialize(ObjectSerializer &obj) const override;
+	// Inherited via Serializable
+	virtual void serialize(ObjectSerializer &obj) const override;
 #endif
 	//@}
 
 private:
-
-   TReal					fProvisionalValue; /*!< Scalar's provisional value. */
-   TReal					fCorrection; /*!< Scalar's correction after calculation.  */
-   TReal					fEstimatedValue; /*!< Scalar's estimated value after calculation. */
-   TReal					fEstimatedPrecision;  /*!<Scalar's estimated precision after calculation. */
+	TReal fProvisionalValue; /*!< Scalar's provisional value. */
+	TReal fCorrection; /*!< Scalar's correction after calculation.  */
+	TReal fEstimatedValue; /*!< Scalar's estimated value after calculation. */
+	TReal fEstimatedPrecision; /*!<Scalar's estimated precision after calculation. */
 
 	bool isScalarFixed; /*!< Tells if scalar is excluded from the adjustment, i.e. fixed*/
-	int  uidx;	/*!< Position of the scalar in LS input matrix (column)*/
+	int uidx; /*!< Position of the scalar in LS input matrix (column)*/
 
 	std::string fName; /*!< Name of the adjustable scalar. */
 };
