@@ -10,7 +10,6 @@ set(Tools_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/sources/FileUtils.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/NumericUtils.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/ProjectPath.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/Timer.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/StringManager.cpp
 )
 
