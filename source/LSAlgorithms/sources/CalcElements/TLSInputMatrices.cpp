@@ -1,23 +1,26 @@
 /*SURVEYLIB VERSION !!!!!!!!!!!!!!!!!!!!!!!*/
 
-//TLSInputMatrices.h : implementation file
-// class for input matrices as defined for survey purposes
-// and for the least squares solving algorithm
-/***DEBUG*///
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
-#include "Logger.hpp"
+// TLSInputMatrices.h : implementation file
+//  class for input matrices as defined for survey purposes
+//  and for the least squares solving algorithm
+/***DEBUG*/ //
 #include "TLSInputMatrices.h"
+
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+
 #include <Eigen/Dense>
 
+#include "Logger.hpp"
+
 /////////////////////////////////////////////////////////////////////////////////
-//SET FUNCTIONS
+// SET FUNCTIONS
 /////////////////////////////////////////////////////////////////////////////////
 
 void TLSInputMatrices::initMatrices(UEOIndices ueoi)
-{//sets the dimensions of the matrices
+{ // sets the dimensions of the matrices
 
 	fUEOIndices = ueoi;
 
@@ -31,7 +34,6 @@ void TLSInputMatrices::initMatrices(UEOIndices ueoi)
 
 	fMisclosureVector = std::make_unique<TVector>(fUEOIndices.EIndex);
 	fCnstrMisclosureVector = std::make_unique<TVector>(fUEOIndices.CIndex);
-
 }
 
 bool TLSInputMatrices::setFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
@@ -62,7 +64,7 @@ bool TLSInputMatrices::addFirstDgnMtrxElement(MatrixIndex row, MatrixIndex colum
 	return true;
 }
 
-bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, Eigen::MatrixXd block)
+bool TLSInputMatrices::setSecondDgnMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, const Eigen::MatrixXd &block)
 {
 	try
 	{
@@ -178,6 +180,47 @@ bool TLSInputMatrices::setMisclosureVectorElement(MatrixIndex row, TReal coeff)
 	return true;
 }
 
+bool TLSInputMatrices::setWeightMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, const Eigen::MatrixXd &block)
+{
+	try
+	{
+		// write the block
+		for (int row = 0; row < block.rows(); row++)
+		{
+			for (int col = 0; col < block.cols(); col++)
+			{
+				TSparseUtils::checkedCoeffRef(*weightMatrix, firstIndex + row, secondIndex + col) = block(row, col);
+			}
+		}
+		// check if the block is square and if it is located on the diagonal
+		if ((block.cols() == block.rows() && firstIndex == secondIndex))
+		{
+			// compute the inverse of the block and write it at the corresponding place of the inverse
+			int dim = block.cols();
+			Eigen::MatrixXd block_inverse = block.lu().solve(Eigen::MatrixXd::Identity(block.rows(), block.cols()));
+			for (int row = 0; row < dim; row++)
+			{
+				for (int col = 0; col < dim; col++)
+				{
+					TSparseUtils::checkedCoeffRef(*secondDesignBlockDiagInvMatrix, firstIndex + row, secondIndex + col) = block_inverse(row, col);
+				}
+			}
+		}
+		else
+		{
+			throw std::runtime_error("Setting of blocks in the weight matrix is only possible on the diagonal.");
+		}
+	}
+	catch (const std::exception &e)
+	{
+		// Setting of weight matrix block failed
+		logFatal() << "Error occurred while setting weight matrix block: " << e.what();
+		return false;
+	}
+
+	return true;
+}
+
 bool TLSInputMatrices::setWeightMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try
@@ -234,7 +277,6 @@ bool TLSInputMatrices::setCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex 
 	return true;
 }
 
-
 bool TLSInputMatrices::addCnstrFirstDgnMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient)
 {
 	try
@@ -264,56 +306,54 @@ bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, TReal co
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//ACCESS METHOD FUNCTIONS
+// ACCESS METHOD FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
-const TSparseMatrix* TLSInputMatrices::getFirstDgnMtrx() const noexcept
-{//returns a reference to the first dgn matrix
+const TSparseMatrix *TLSInputMatrices::getFirstDgnMtrx() const noexcept
+{ // returns a reference to the first dgn matrix
 	return firstDesignMatrix.get();
 }
 
-const TSparseMatrix* TLSInputMatrices::getSecondDgnMtrx() const noexcept
-{//returns a reference to the first dgn matrix
+const TSparseMatrix *TLSInputMatrices::getSecondDgnMtrx() const noexcept
+{ // returns a reference to the first dgn matrix
 	return secondDesignMatrix.get();
 }
 
 bool TLSInputMatrices::getSecondDgnBlockDiagStatus() const
-{// returns the private member secondDesignMatrixIsBlockDiag which indicates that B is block diagonal
+{ // returns the private member secondDesignMatrixIsBlockDiag which indicates that B is block diagonal
 	return secondDesignMatrixIsBlockDiag;
 }
-const TSparseMatrix* TLSInputMatrices::getSecondDgnBlockDiagInvMtrx() const noexcept
-{//returns a reference to the inverse of the second dgn matrix
+const TSparseMatrix *TLSInputMatrices::getSecondDgnBlockDiagInvMtrx() const noexcept
+{ // returns a reference to the inverse of the second dgn matrix
 	return secondDesignBlockDiagInvMatrix.get();
 }
 
-const TSparseMatrix* TLSInputMatrices::getWeightMtrx() const noexcept
+const TSparseMatrix *TLSInputMatrices::getWeightMtrx() const noexcept
 {
 	return weightMatrix.get();
 }
 
-const TSparseMatrix* TLSInputMatrices::getWeightInvMtrx() const noexcept
+const TSparseMatrix *TLSInputMatrices::getWeightInvMtrx() const noexcept
 {
 	return weightInvMatrix.get();
 }
 
-const TSparseMatrix* TLSInputMatrices::getWeightUnkMtrx() const noexcept
+const TSparseMatrix *TLSInputMatrices::getWeightUnkMtrx() const noexcept
 {
 	return weightUnkMatrix.get();
 }
 
-const TVector& TLSInputMatrices::getMisclosureVctr() const noexcept
-{// returns a reference to the misclosure vector
+const TVector &TLSInputMatrices::getMisclosureVctr() const noexcept
+{ // returns a reference to the misclosure vector
 	return *fMisclosureVector.get();
 }
 
-
-const TSparseMatrix* TLSInputMatrices::getCnstrFirstDgnMtrx() const noexcept
-{//returns a reference to the constraint first dgn matrix
+const TSparseMatrix *TLSInputMatrices::getCnstrFirstDgnMtrx() const noexcept
+{ // returns a reference to the constraint first dgn matrix
 	return fCnstrFirstDesignMtrx.get();
 }
 
-
-const TVector& TLSInputMatrices::getCnstrMisclosureVctr() const noexcept
-{// returns a reference to the constraint misclosure vector
+const TVector &TLSInputMatrices::getCnstrMisclosureVctr() const noexcept
+{ // returns a reference to the constraint misclosure vector
 	return *fCnstrMisclosureVector.get();
 }
 
@@ -337,21 +377,21 @@ int TLSInputMatrices::getNbrConstraints() const
 	return fUEOIndices.CIndex;
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
-//DEBUG METHOD : saves the content of the matrices to a text file
+// DEBUG METHOD : saves the content of the matrices to a text file
 ///////////////////////////////////////////////////////////////////////////////
-void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
-
+void TLSInputMatrices::saveMatricesToFile(int nbIter) const
+{
 	// TODO: fix
 	std::ostringstream oss;
 	oss << "C:\\temp\\inputMatrices" << nbIter << ".txt";
 	std::string fileName = oss.str();
 
 	std::ofstream of(fileName.c_str(), std::ios::out);
-	if (!of){
+	if (!of)
+	{
 		std::cerr << "Impossible d'ouvrir le fichier C:\\temp\\inputMatrices.txt" << '\n';
-		std::exit (1);
+		std::exit(1);
 	}
 
 	of << std::setprecision(9);
@@ -363,10 +403,9 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of << "***********************" << std::endl;
 	of << "* FIRST DESIGN MATRIX *" << std::endl;
 	of << "***********************" << std::endl << std::endl;
-	
+
 	of << *firstDesignMatrix;
 	of << std::endl << std::endl;
-
 
 	of << "*********************" << std::endl;
 	of << "* MISCLOSURE VECTOR *" << std::endl;
@@ -375,37 +414,32 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of << *fMisclosureVector;
 	of << std::endl << std::endl;
 
-
 	if (fCnstrFirstDesignMtrx != 0)
 	{
 		of << "**********************************" << std::endl;
 		of << "* CONSTRAINT FIRST DESIGN MATRIX *" << std::endl;
 		of << "**********************************" << std::endl << std::endl;
-		
+
 		of << *fCnstrFirstDesignMtrx;
 		of << std::endl << std::endl;
 	}
-
 
 	if (fCnstrMisclosureVector != 0)
 	{
 		of << "********************************" << std::endl;
 		of << "* CONSTRAINT MISCLOSURE VECTOR *" << std::endl;
 		of << "********************************" << std::endl << std::endl;
-		
+
 		of << *fCnstrMisclosureVector;
 		of << std::endl << std::endl;
 	}
 
-
 	of << "*****************" << std::endl;
 	of << "* WEIGHT MATRIX *" << std::endl;
 	of << "*****************" << std::endl << std::endl;
-	
+
 	of << *weightMatrix;
 	of << std::endl << std::endl;
-
-
 
 	of << "************************" << std::endl;
 	of << "* SECOND DESIGN MATRIX *" << std::endl;
@@ -417,8 +451,6 @@ void TLSInputMatrices::saveMatricesToFile(int nbIter) const{
 	of.close();
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////
-//END
+// END
 /////////////////////////////////////////////////////////////////////////////////
-

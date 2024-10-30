@@ -110,52 +110,6 @@ int TAdjustableHelmertTransformation::getLastUidx() const
 	throw std::logic_error("Trying to get unknown index from fixed transformation. Transformation " + getName());
 }
 
-const TLength &TAdjustableHelmertTransformation::getTranslationStandDev(int d) const
-{
-	assert3D(d);
-	if (!isnotanumber(fTransStandDev[d]))
-		return fTransStandDev[d];
-	throw std::runtime_error("Standard deviations of the translation's component not assigned. Transformation " + getName());
-}
-
-const TAngle &TAdjustableHelmertTransformation::getRotationStandDev(int d) const
-{
-	assert3D(d);
-	if (!isnotanumber(fRotStandDev[d]))
-		return fRotStandDev[d];
-	throw std::runtime_error("Standard deviations of the rotation's component not assigned. Transformation " + getName());
-}
-
-TReal TAdjustableHelmertTransformation::getScaleStandDev() const
-{
-	if (!isnotanumber(fScaleStandDev))
-		throw std::runtime_error("Standard deviations of the scale not assigned. Transformation " + getName());
-	return fScaleStandDev;
-}
-
-bool TAdjustableHelmertTransformation::hasRotationStandDev(int d) const
-{
-	assert3D(d);
-	return (!isnotanumber(fRotStandDev[d]));
-}
-
-bool TAdjustableHelmertTransformation::hasTranslStandDev(int d) const
-{
-	assert3D(d);
-	return (!isnotanumber(fTransStandDev[d]));
-}
-
-bool TAdjustableHelmertTransformation::hasScaleStandDev() const
-{
-	return (!isnotanumber(fScaleStandDev));
-}
-
-bool TAdjustableHelmertTransformation::hasStandDev()
-{
-	return (!isnotanumber(fTransStandDev[0]) || !isnotanumber(fTransStandDev[1]) || !isnotanumber(fTransStandDev[2]) || !isnotanumber(fRotStandDev[0])
-		|| !isnotanumber(fRotStandDev[1]) || !isnotanumber(fRotStandDev[2]) || !isnotanumber(fScaleStandDev));
-}
-
 void TAdjustableHelmertTransformation::setCorrection(int idx, TReal value)
 {
 	for (int i = 0; i < 3; i++)
@@ -291,28 +245,8 @@ void TAdjustableHelmertTransformation::setFirstUidx(int idx)
 		uidx_scale = idx++;
 }
 
-void TAdjustableHelmertTransformation::setTranslationStandDev(int d, TLength stDev)
-{
-	assert3D(d);
-	fTransStandDev[d].setMetresValue(stDev);
-}
-
-void TAdjustableHelmertTransformation::setRotationStandDev(int d, TAngle stDev)
-{
-	assert3D(d);
-	fRotStandDev[d] = stDev;
-}
-
-void TAdjustableHelmertTransformation::setScaleStandDev(TReal stDev)
-{
-	fScaleStandDev = stDev;
-}
-
 void TAdjustableHelmertTransformation::setDefaults()
 {
-	fRotStandDev[0] = fRotStandDev[1] = fRotStandDev[2] = TAngle();
-	fTransStandDev[0] = fTransStandDev[1] = fTransStandDev[2] = TLength();
-	fScaleStandDev = NO_VALf;
 	fCovarianceMatrix.setZero();
 	fCovarianceMatrixIsSet = false;
 
@@ -442,17 +376,6 @@ void TAdjustableHelmertTransformation::serialize(ObjectSerializer &obj) const
 			fProvParameter.phi.getRadiansValue(),
 			fProvParameter.kappa.getRadiansValue(),
 			fProvParameter.scale,
-		});
-
-	obj.addProperty("fTranfParamStandDev",
-		std::vector<double>{
-			fTransStandDev[0].getMetresValue(),
-			fTransStandDev[1].getMetresValue(),
-			fTransStandDev[2].getMetresValue(),
-			fRotStandDev[0].getRadiansValue(),
-			fRotStandDev[1].getRadiansValue(),
-			fRotStandDev[2].getRadiansValue(),
-			fScaleStandDev,
 		});
 
 	obj.addProperty("line", line);

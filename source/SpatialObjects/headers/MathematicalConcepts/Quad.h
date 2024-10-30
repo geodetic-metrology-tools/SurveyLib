@@ -353,6 +353,11 @@ static inline bool notZero(TReal v)
 	return (fabsq(v) > std::numeric_limits<TReal>::epsilon());
 }
 
+static inline bool isPositiveFinite(double x)
+{
+	return std::isfinite(x) && x > 0;
+}
+
 // squaring values is done frequently
 static inline TReal pow2(TReal v)
 {

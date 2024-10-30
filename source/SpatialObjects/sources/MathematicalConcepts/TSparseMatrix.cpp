@@ -234,4 +234,22 @@ double &checkedCoeffRef(TVector &vec, int row)
 	return vec.coeffRef(row);
 }
 
+bool isPositiveDefinite(const Eigen::MatrixXd &mat)
+{
+	if (mat.cols() != mat.rows())
+	{
+		throw std::runtime_error("test for positive definiteness only possible for square matrices");
+	}
+	// Compute the eigenvalues of the matrix
+	Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver(mat);
+	if (solver.info() != Eigen::Success)
+	{
+		throw std::runtime_error("Eigenvalue computation failed!");
+	}
+	// test pos definiteness
+	Eigen::Vector3d eigenvalues = solver.eigenvalues();
+	bool isPositiveDefinite = (eigenvalues.array() > 0).all();
+	return isPositiveDefinite;
+}
+
 } // namespace TSparseUtils

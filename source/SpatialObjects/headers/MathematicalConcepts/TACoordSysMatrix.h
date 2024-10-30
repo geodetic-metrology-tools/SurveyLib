@@ -1,41 +1,36 @@
 // TACoordSysMatrix.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2024. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /** Abstract class use for explain T3DMatrix and TRotationMatrixin a Coordonate System */
 //////////////////////////////////////////////////////////////////////
 
-
-
 #ifndef SU_A_COORDSYS_MATRIX
 #define SU_A_COORDSYS_MATRIX
 
-
 #if _MSC_VER >= 1000
-#pragma once
+#	pragma once
 #endif // _MSC_VER >= 1000
 
+#include <Eigen/Dense>
 
-#include  "TCoordSysFactory.h"
-#include  "Quad.h"
+#include "Quad.h"
+#include "TCoordSysFactory.h"
 class TVCoordinateSystem;
 class TRotationMatrix;
-
 
 /*! \ingroup MathematicalConcepts
 	@{*/
 
 //! Abstract class use for explain T3DMatrix and TRotationMatrix
-class  TACoordSysMatrix
+class TACoordSysMatrix
 {
-
 public:
-
 	friend class TACoordinateSystem;
 
 	TACoordSysMatrix();
-	virtual ~TACoordSysMatrix() { }
+	virtual ~TACoordSysMatrix() {}
 
 	/*!\name member public functions*/
 	//@{
@@ -49,43 +44,40 @@ public:
 
 	//! return true if elements of the matrix are not set to NO_VALf
 	bool isInitialise() const;
-	
-	//!get the *TVCoordinateSystem
-	TVCoordinateSystem* getCoordSysPtr() const;
 
-	//!get the ECoordSys
+	//! get the *TVCoordinateSystem
+	TVCoordinateSystem *getCoordSysPtr() const;
+
+	//! get the ECoordSys
 	TCoordSysFactory::ECoordSys getCoordSys() const;
 
 	//! sets the coordinate system
-	void setCoordSys( TCoordSysFactory::ECoordSys);
-	
-	//!set the coordinate system for a rotation matrix
-	void setCoordSysTRotation(TRotationMatrix*, TCoordSysFactory::ECoordSys);
+	void setCoordSys(TCoordSysFactory::ECoordSys);
+
+	//! set the coordinate system for a rotation matrix
+	void setCoordSysTRotation(TRotationMatrix *, TCoordSysFactory::ECoordSys);
 	//@}
-	
+
 	//@{
-	//!get the (i,j) value
-	TReal getC(const int& i, const int& j) const;
+	//! get the (i,j) value
+	TReal getC(const int &i, const int &j) const;
+	// get the whole matrix
+	Eigen::Matrix3d getMat() const;
 
-	//!set value to (i,j)
-	void setC(const int& i, const int& j, TReal value);
+	//! set value to (i,j)
+	void setC(const int &i, const int &j, TReal value);
 	//@}
-
 
 private:
-	
-	TReal					mx[3][3]; /*!< élément of the 3*3 matrix */
-	TVCoordinateSystem*		fCoordSys; /*!< coordinate system */
-		
-	
+	TReal mx[3][3]; /*!< element of the 3*3 matrix */
+	TVCoordinateSystem *fCoordSys; /*!< coordinate system */
 
-	//ClassDef(TACoordSysMatrix, 1)
+	// ClassDef(TACoordSysMatrix, 1)
 };
 /*@}*/
 
 //////////////////////////////////////////////////////////////////////
 // Inline Definitions
 //////////////////////////////////////////////////////////////////////
-
 
 #endif // SU_A_COORDSYS_MATRIX

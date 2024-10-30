@@ -163,29 +163,6 @@ public:
 
 		\param[in] d Allowed values are 0(X), 1(Y) and 2(Z) of the translation's component.
 	*/
-	const TLength &getTranslationStandDev(int d) const;
-
-	/*!
-		\brief Returns the standard deviations of the rotation.
-
-		\param[in] d Allowed values are 0(X), 1(Y) and 2(Z) of the rotation's component.
-	*/
-	const TAngle &getRotationStandDev(int d) const;
-
-	/// Returns the standard deviations of the scale factor.
-	TReal getScaleStandDev() const;
-
-	/// Returns TRUE if at least one component of the transformation has standard deviation, FLASE otherwise.
-	bool hasStandDev();
-
-	/// Returns TRUE if the translation part has assigned standard deviation, FALSE otherwise. Allowed value are 0(X transl.), 1(Y transl.), 2(Z transl)
-	bool hasTranslStandDev(int d) const;
-
-	/// Returns TRUE if the rotation part has assigned standard deviation, FALSE otherwise. Allowed value are 0(X rot.), 1(Y rot.), 2(Z rot.)
-	bool hasRotationStandDev(int d) const;
-
-	/// Returns TRUE if the scale has assigned standard deviation, FALSE otherwise.
-	bool hasScaleStandDev() const;
 
 	/// Returns the estimated precision of the dth rotation
 	const TAngle getEstimatedPrecisionRot(int d) const;
@@ -216,29 +193,6 @@ public:
 		\note Either in radians if setting rotation or scalar value if setting translation.
 	*/
 	virtual void setCorrection(int idx, TReal value);
-
-	/*!
-		\brief Sets a standard deviation of a translation's component.
-
-		\param[in] d Allowed values are 0(X), 1(Y) and 2(Z) of the translation's component.
-		\param[in] stDev Standard deviation.
-	*/
-	void setTranslationStandDev(int d, TLength stDev);
-
-	/*!
-		\brief Sets a standard deviation of a rotation component.
-
-		\param[in] d Allowed values are 0(X), 1(Y) and 2(Z) of the rotation's component.
-		\param[in] stDev Standard deviation.
-	*/
-	void setRotationStandDev(int d, TAngle stDev);
-
-	/*!
-		\brief Sets a standard deviation of a scale.
-
-		\param[in] stDev Standard deviation.
-	*/
-	void setScaleStandDev(TReal stDev);
 
 	/*!
 		\brief Sets the covariance after calculation
@@ -320,10 +274,6 @@ private:
 	std::bitset<3> fixedTranslations; // Translation fixed state
 	std::bitset<3> fixedRotations; // Rotation fixed state
 	std::bitset<1> fixedScale; // Scale fixed state
-
-	TLength fTransStandDev[3]; // Standard deviations of translations
-	TAngle fRotStandDev[3]; // Standard deviations of rotations
-	TReal fScaleStandDev; // Standard deviations of a scale
 
 	Eigen::Matrix<double, 7, 7> fCovarianceMatrix = Eigen::Matrix<double, 7, 7>::Zero(); /*!<Full covariance matrix */
 	bool fCovarianceMatrixIsSet{false};

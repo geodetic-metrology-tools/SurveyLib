@@ -62,6 +62,8 @@ TAdjustablePoint::TAdjustablePoint(const TAdjustablePoint &pos) :
 	fSpatialStatus(pos.fSpatialStatus),
 	fCovarianceMatrix(pos.fCovarianceMatrix),
 	fCovarianceMatrixIsSet(pos.fCovarianceMatrixIsSet),
+	fAprioriCovarianceMatrix(pos.fAprioriCovarianceMatrix),
+	fHasAprioriCovarianceMatrix(pos.fHasAprioriCovarianceMatrix),
 	fXValueSet(pos.fXValueSet),
 	fYValueSet(pos.fYValueSet),
 	eolcomment(pos.eolcomment),
@@ -71,7 +73,6 @@ TAdjustablePoint::TAdjustablePoint(const TAdjustablePoint &pos) :
 	for (int i = 0; i < 3; i++)
 	{
 		fCorrection[i] = pos.fCorrection[i];
-		fStandardDeviations[i] = pos.fStandardDeviations[i];
 		fixedState[i] = pos.fixedState[i];
 		uidx[i] = pos.uidx[i];
 	}
@@ -86,13 +87,6 @@ TAdjustablePoint TAdjustablePoint::createUninitialized(const std::string &name)
 ///////////////////////////////////////////////////////////////////////////
 // PUBLIC ACCESS METHODS
 ///////////////////////////////////////////////////////////////////////////
-TReal TAdjustablePoint::getStandDev(int d) const
-{
-	assert3D(d);
-	if (!isnotanumber(fStandardDeviations[d]))
-		return fStandardDeviations[d];
-	throw std::runtime_error("Standard deviation of the point not assigned. Point " + getName());
-}
 
 TLength TAdjustablePoint::getErrorEllMajorAxis() const
 {
@@ -291,16 +285,12 @@ void TAdjustablePoint::updateFixedState(bool lx, bool ly, bool lz)
 	fixedState[0] = (lx);
 	fixedState[1] = (ly);
 	fixedState[2] = (lz);
+	// make sure also the h is updated
+	if (fProvisionalValue.getCoordSys() == TCoordSysFactory::k2DPlusH)
+		fHfixed = lz;
 
 	fXValueSet = (lx);
 	fYValueSet = (ly);
-}
-
-void TAdjustablePoint::setStandardDeviations(TReal stDevX, TReal stDevY, TReal stDevZ)
-{
-	fStandardDeviations[0] = stDevX;
-	fStandardDeviations[1] = stDevY;
-	fStandardDeviations[2] = stDevZ;
 }
 
 void TAdjustablePoint::reInitialise()
@@ -387,10 +377,6 @@ void TAdjustablePoint::setDefaults(bool lx, bool ly, bool lz)
 	fXValueSet = lx;
 	fYValueSet = ly;
 
-	fStandardDeviations[0] = NO_VALf;
-	fStandardDeviations[1] = NO_VALf;
-	fStandardDeviations[2] = NO_VALf;
-
 	fCorrection[0] = TLength(0.0);
 	fCorrection[1] = TLength(0.0);
 	fCorrection[2] = TLength(0.0);
@@ -462,6 +448,8 @@ void TAdjustablePoint::serialize(ObjectSerializer &obj) const
 	obj.addProperty("fCorrection", fCorrection);
 	obj.addProperty("fCovarianceMatrix", fCovarianceMatrix);
 	obj.addProperty("fCovarianceMatrixIsSet", fCovarianceMatrixIsSet);
+	obj.addProperty("fHasAprioriCovarianceMatrix", fHasAprioriCovarianceMatrix);
+	obj.addProperty("fAprioriCovarianceMatrix", fAprioriCovarianceMatrix);
 	obj.addProperty("fEstimatedValue", fEstimatedValue);
 	obj.addProperty("fHfixed", fHfixed);
 	obj.addProperty("fixedState", fixedState);
@@ -469,7 +457,6 @@ void TAdjustablePoint::serialize(ObjectSerializer &obj) const
 	obj.addProperty("fProvisionalValue", fProvisionalValue);
 	obj.addProperty("fReferential", fReferential);
 	obj.addProperty("fSpatialStatus", fSpatialStatus);
-	obj.addProperty("fStandardDeviations", fStandardDeviations);
 	obj.addProperty("fXValueSet", fXValueSet);
 	obj.addProperty("fYValueSet", fYValueSet);
 	obj.addProperty("hdrcomment", hdrcomment);
