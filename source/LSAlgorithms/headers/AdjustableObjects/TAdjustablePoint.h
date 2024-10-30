@@ -6,14 +6,11 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #ifndef TADJUSTABLE_POINT
 #define TADJUSTABLE_POINT
 
-
 #include "TFreeVector.h"
 #include "TPositionVector.h"
 #include "TRefSystemFactory.h"
 #include "TSpatialStatus.h"
 #include "TVAdjustableObject.h"
-
-
 
 /*!
 	\ingroup AdjustableObjects
@@ -84,7 +81,6 @@ public:
 		fAprioriCovarianceMatrix = apriCovar;
 		fHasAprioriCovarianceMatrix = true;
 	}
-
 
 	/// Sets a constant reference on the provisional value of the position vector
 	void setProvisionalValue(const TPositionVector &pointProv) { fProvisionalValue = pointProv; };
@@ -314,7 +310,6 @@ protected:
 	TRefSystemFactory::ERefFrame fReferential; /*!< Reference frame of the point */
 
 	std::string fName; /*!< Name of the adjustable point. */
-
 
 	bool fixedState[3]; /*!< Tells which element of the point is FIXED or VARIABLE (TRUE means that point element is fixed).*/
 	int uidx[3]; /*!< Indices of the point elements in LS input matrices (unknowns).*/

@@ -252,5 +252,4 @@ bool isPositiveDefinite(const Eigen::MatrixXd &mat)
 	return isPositiveDefinite;
 }
 
-
 } // namespace TSparseUtils
