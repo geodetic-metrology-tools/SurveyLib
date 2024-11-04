@@ -9,6 +9,8 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include <memory>
 #include <string>
 
+#include <ShareablePoints/ShareableFrame.hpp>
+
 /**
  * @defgroup shpoints ShareablePoints
  *
