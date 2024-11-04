@@ -8,6 +8,7 @@ include_directories(
 set(Tools_SOURCES 
 	${CMAKE_CURRENT_LIST_DIR}/sources/Behavior.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/FileUtils.cpp
+	${CMAKE_CURRENT_LIST_DIR}/sources/NumericUtils.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/ProjectPath.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/StringManager.cpp
 )
@@ -16,6 +17,7 @@ set(Tools_SOURCES
 set(Tools_HEADERS 
 	${CMAKE_CURRENT_LIST_DIR}/headers/Behavior.h
 	${CMAKE_CURRENT_LIST_DIR}/headers/FileUtils.h
+	${CMAKE_CURRENT_LIST_DIR}/headers/NumericUtils.h
 	${CMAKE_CURRENT_LIST_DIR}/headers/ProjectPath.h
 	${CMAKE_CURRENT_LIST_DIR}/headers/SimpleTimer.h
 	${CMAKE_CURRENT_LIST_DIR}/headers/StringManager.h
