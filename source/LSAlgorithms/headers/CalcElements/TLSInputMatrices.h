@@ -73,9 +73,9 @@ public:
 	 */
 	bool setMisclosureVectorElement(MatrixIndex row, TReal coeff);
 
-	/*!	\brief Set a block in the weight matrix. Also sets the inverse block.
+	/*!	\brief Set a block on the diagonal of the weight matrix. Also sets the inverse block.
 	 */
-	bool setWeightMtrxBlock(MatrixIndex firstIndex, MatrixIndex secondIndex, const Eigen::MatrixXd &block);
+	bool setWeightMtrxBlock(MatrixIndex index, const Eigen::MatrixXd &block);
 
 	/*!	\brief Set the value of an element of the observations weight matrix in the adjustment (P-matrix)
 		\param[in] row of the desired element
