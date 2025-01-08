@@ -1,10 +1,10 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
+Â© Copyright CERN 2000-2024. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*!
 	TDist.h : definitions of distance functions taking TLength
-	objects as argument
+	objects, or TReal, or TPositionVector as argument
 
 	Patterns:
 
@@ -14,9 +14,10 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #define SU_DIST_FCTS
 
 #if _MSC_VER >= 1000
-#pragma once
+#	pragma once
 #endif // _MSC_VER >= 1000
 
+#include <TPositionVector.h>
 
 #include "TLength.h"
 
@@ -29,10 +30,10 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\param TLength y2, coordinate  y of the second point
 	\return Distance as TReal
 	*/
-	/*!\addtogroup spatialobjects
-	@{*/
-	TReal dist(TLength x1, TLength y1, TLength x2, TLength y2);
-	/*@}*/
+/*!\addtogroup spatialobjects
+@{*/
+TReal dist(TLength x1, TLength y1, TLength x2, TLength y2);
+/*@}*/
 
 /*! computation of the distance from 2D coordinates
 	\param TReal x1, coordinate  x of the first point
@@ -41,10 +42,10 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\param TReal y2, coordinate  y of the second point
 	\return Distance as TReal
 	*/
-	/*!\addtogroup spatialobjects
-	@{*/
-	TReal dist(TReal x1, TReal y1, TReal x2, TReal y2);
-	/*@}*/
+/*!\addtogroup spatialobjects
+@{*/
+TReal dist(TReal x1, TReal y1, TReal x2, TReal y2);
+/*@}*/
 
 /*! computation of the distance from 3D coordinates
 	\param TLength x1, coordinate  x of the first point
@@ -55,10 +56,10 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\param TLength z2, coordinate  z of the second point
 	\return Distance as TReal
 	*/
-	/*!\addtogroup spatialobjects
-	@{*/
-	TReal dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2);
-	/*@}*/
+/*!\addtogroup spatialobjects
+@{*/
+TReal dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2);
+/*@}*/
 
 /*! computation of the distance from 3D coordinates
 	\param TReal x1, coordinate  x of the first point
@@ -69,10 +70,20 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	\param TReal z2, coordinate  z of the second point
 	\return Distance as TReal
 	*/
-	/*!\addtogroup spatialobjects
-	@{*/
-	TReal dist3D(TReal x1, TReal y1, TReal z1, TReal x2, TReal y2, TReal z2);
-	/*@}*/
+/*!\addtogroup spatialobjects
+@{*/
+TReal dist3D(TReal x1, TReal y1, TReal z1, TReal x2, TReal y2, TReal z2);
+/*@}*/
+
+/*! computation of the distance from between 2 TPositionVector
+	\param TPositioVector p1, coordinates of the first point
+	\param TPositioVector p2, coordinates of the second point
+	\return Distance as TReal
+	*/
+/*!\addtogroup spatialobjects
+@{*/
+TReal dist3D(TPositionVector p1, TPositionVector p2);
+/*@}*/
 
 //@}
 
