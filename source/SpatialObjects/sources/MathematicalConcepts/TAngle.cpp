@@ -425,6 +425,28 @@ TDenseMatrix TAngle::dATan2(const TReal x, const TReal y)
 	return derivative;
 }
 
+TAngle TAngle::average(const std::vector<TAngle> &angles)
+{
+	if (angles.empty())
+		throw std::invalid_argument("The list of angles is empty.");
+
+	TReal meanX = 0.0;
+	TReal meanY = 0.0;
+
+	for (const TAngle &angle : angles)
+	{
+		// Convert to Cartesian coordinates
+		meanX += angle.cosine();
+		meanY += angle.sine();
+	}
+
+	// Compute the mean
+	meanX /= angles.size();
+	meanY /= angles.size();
+
+	return aTan2(meanY, meanX);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Utility Member Functions
 //////////////////////////////////////////////////////////////////////

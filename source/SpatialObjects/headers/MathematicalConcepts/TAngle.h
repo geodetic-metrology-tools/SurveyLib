@@ -203,6 +203,8 @@ public:
 	static TAngle aTan2(const TReal, const TReal);
 	/*! Calculates the derivative of atan2(x,y)*/
 	static TDenseMatrix dATan2(const TReal, const TReal);
+	/*! Calculates the circular average of a vector of angles*/
+	static TAngle average(const std::vector<TAngle> &);
 
 	//@}
 
