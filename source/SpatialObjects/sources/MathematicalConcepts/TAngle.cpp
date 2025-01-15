@@ -23,7 +23,7 @@ member functions provide ArcSine, ArcCosine, and ArcTangent operators.
 Patterns:
 
 
-Copyright 1999-2022, CERN. All rights reserved.
+Copyright 1999-2025, CERN. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 
@@ -443,6 +443,12 @@ TAngle TAngle::average(const std::vector<TAngle> &angles)
 	// Compute the mean
 	meanX /= angles.size();
 	meanY /= angles.size();
+
+	if (std::abs(meanX) < seuil() && std::abs(meanY) < seuil())
+	{
+		// Ambiguous result when the resultant vector length is nearly zero
+		return TAngle(0); // Fallback to a convention, e.g., 0 radians
+	}
 
 	return aTan2(meanY, meanX);
 }
