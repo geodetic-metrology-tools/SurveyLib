@@ -23,7 +23,7 @@ member functions provide ArcSine, ArcCosine, and ArcTangent operators.
 Patterns:
 
 
-Copyright 1999-2022, CERN. All rights reserved.
+Copyright 1999-2025, CERN. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 
@@ -423,6 +423,34 @@ TDenseMatrix TAngle::dATan2(const TReal x, const TReal y)
 		throw std::logic_error("Derivative of atan2(x,y) not defined for origin.");
 
 	return derivative;
+}
+
+TAngle TAngle::average(const std::vector<TAngle> &angles)
+{
+	if (angles.empty())
+		throw std::invalid_argument("The list of angles is empty.");
+
+	TReal meanX = 0.0;
+	TReal meanY = 0.0;
+
+	for (const TAngle &angle : angles)
+	{
+		// Convert to Cartesian coordinates
+		meanX += angle.cosine();
+		meanY += angle.sine();
+	}
+
+	// Compute the mean
+	meanX /= angles.size();
+	meanY /= angles.size();
+
+	if (std::abs(meanX) < seuil() && std::abs(meanY) < seuil())
+	{
+		// Ambiguous result when the resultant vector length is nearly zero
+		return TAngle(0); // Fallback to a convention, e.g., 0 radians
+	}
+
+	return aTan2(meanY, meanX);
 }
 
 //////////////////////////////////////////////////////////////////////

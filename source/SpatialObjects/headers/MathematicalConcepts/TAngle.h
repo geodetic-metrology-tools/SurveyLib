@@ -1,6 +1,6 @@
 // TAngle.h
 /*
-© Copyright CERN 2000-2024. All rigths reserved. This software is released under a CERN proprietary software licence.
+© Copyright CERN 2000-2025. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 /*!
@@ -203,6 +203,8 @@ public:
 	static TAngle aTan2(const TReal, const TReal);
 	/*! Calculates the derivative of atan2(x,y)*/
 	static TDenseMatrix dATan2(const TReal, const TReal);
+	/*! Calculates the circular average of a vector of angles*/
+	static TAngle average(const std::vector<TAngle> &);
 
 	//@}
 
