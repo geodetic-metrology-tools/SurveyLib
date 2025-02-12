@@ -21,12 +21,25 @@ void TAdjustableLength::setFirstUidx(int idx)
 	uidx = idx;
 }
 
-void TAdjustableLength::setCorrection(int idx, TReal value)
+Eigen::VectorXd TAdjustableLength::getEstVector() const
+{
+	Eigen::VectorXd estVect(1);
+	estVect << fEstimatedValue.getMetresValue();
+	return estVect;
+}
+
+TReal TAdjustableLength::getValue(int idx) const
+{
+	if (!uidx == idx)
+		throw std::logic_error("Invalid unknown index in parameter access. Length " + getName());
+	return TReal(fEstimatedValue.getMetresValue());
+}
+
+void TAdjustableLength::setValue(int idx, TReal value)
 {
 	if (uidx == idx)
 	{
-		fCorrection.setMetresValue(value);
-		fEstimatedValue.setMetresValue(fEstimatedValue.getMetresValue() + value);
+		fEstimatedValue.setMetresValue(value);
 	}
 	else
 		throw std::logic_error("Invalid unknown index in parameter access. Length " + getName());

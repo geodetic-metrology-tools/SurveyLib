@@ -12,6 +12,13 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #include "TSparseMatrix.h"
 #include "UEOIndices.h"
 
+
+// helper function
+template<typename T>
+std::unique_ptr<T> deepCopy(const std::unique_ptr<T> &ptr)
+{
+	return ptr ? std::make_unique<T>(*ptr) : nullptr;
+}
 /*!
 	\ingroup CalcElements
 
@@ -27,6 +34,45 @@ public:
 	//! Destructor
 	~TLSInputMatrices() = default;
 	//@}
+
+	// copy constructor
+	TLSInputMatrices(const TLSInputMatrices &other) :
+		isInitialized(other.isInitialized),
+		fUEOIndices(other.fUEOIndices),
+		secondDesignMatrixIsBlockDiag(other.secondDesignMatrixIsBlockDiag),
+		fCnstrFirstDesignMtrx(deepCopy(other.fCnstrFirstDesignMtrx)),
+		firstDesignMatrix(deepCopy(other.firstDesignMatrix)),
+		secondDesignMatrix(deepCopy(other.secondDesignMatrix)),
+		secondDesignBlockDiagInvMatrix(deepCopy(other.secondDesignBlockDiagInvMatrix)),
+		weightMatrix(deepCopy(other.weightMatrix)),
+		weightInvMatrix(deepCopy(other.weightInvMatrix)),
+		weightUnkMatrix(deepCopy(other.weightUnkMatrix)),
+		fMisclosureVector(deepCopy(other.fMisclosureVector)),
+		fCnstrMisclosureVector(deepCopy(other.fCnstrMisclosureVector))
+	{
+	}
+	// copy assignment
+	TLSInputMatrices &operator=(const TLSInputMatrices &other)
+	{
+		if (this == &other)
+			return *this;
+
+		isInitialized = other.isInitialized;
+		fUEOIndices = other.fUEOIndices;
+		secondDesignMatrixIsBlockDiag = other.secondDesignMatrixIsBlockDiag;
+
+		fCnstrFirstDesignMtrx = deepCopy(other.fCnstrFirstDesignMtrx);
+		firstDesignMatrix = deepCopy(other.firstDesignMatrix);
+		secondDesignMatrix = deepCopy(other.secondDesignMatrix);
+		secondDesignBlockDiagInvMatrix = deepCopy(other.secondDesignBlockDiagInvMatrix);
+		weightMatrix = deepCopy(other.weightMatrix);
+		weightInvMatrix = deepCopy(other.weightInvMatrix);
+		weightUnkMatrix = deepCopy(other.weightUnkMatrix);
+		fMisclosureVector = deepCopy(other.fMisclosureVector);
+		fCnstrMisclosureVector = deepCopy(other.fCnstrMisclosureVector);
+
+		return *this;
+	}
 
 	/*!@name Setting methods*/
 	//@{
@@ -152,6 +198,7 @@ public:
 
 	/*!	\brief Returns a const reference to the constraints misclosure subvector allocated here*/
 	const TVector &getCnstrMisclosureVctr() const noexcept;
+
 	//@}
 	// check if there are constraints that do not depend on any variable
 	bool hasDegenerateConstraints() const;

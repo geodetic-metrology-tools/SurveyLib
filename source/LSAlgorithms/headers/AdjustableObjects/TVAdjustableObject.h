@@ -7,7 +7,9 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 #define TVADJUSTABLE_OBJECT
 
 #include <string>
+#include <vector>
 #include "Quad.h"
+#include "TSparseMatrix.h"
 #include "TStatusObject.h"
 
 #ifndef isnotanumber
@@ -77,9 +79,17 @@ class TVAdjustableObject : public TStatusObject
 		*/
 		virtual int   getFirstUidx() const = 0;
 
-		/// Sets/updates the value (oldValue+correction), a parameter of this object that is accesed by the unknown index specified by \ref setFirstUidx.
-		virtual void setCorrection(int idx, TReal correction) = 0;
+		// return relative unknown indices associated with the free variables
+		virtual const std::vector<int> getRelativeUnknIndices() const = 0;
 
+		// getting the estimated vector with all variables
+		virtual Eigen::VectorXd getEstVector() const = 0;
+		/// getting the estimated value corresponding to the index
+		virtual TReal getValue(int idx) const = 0;
+		/// setting the estimated value corresponding to the index
+		virtual void setValue(int idx, TReal value) = 0;
+		/// Updates the value (oldValue+correction), a parameter of this object that is accesed by the unknown index specified by \ref setFirstUidx.
+		virtual void setCorrection(int idx, TReal correction) { setValue(idx, getValue(idx) + correction); };
 
 		/// Returns the name (which serves as an ID in most cases) of the adjustable object. This can be a name of: point, line, plane, scalar, angle or HelmertTransformation.
 		virtual const std::string& getName() const = 0;

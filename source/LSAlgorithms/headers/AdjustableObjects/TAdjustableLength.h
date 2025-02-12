@@ -80,6 +80,15 @@ public:
 		throw std::logic_error("Trying to get unknown index from fixed length.");
 	}
 
+	// returns vector of relative indices of free parameters
+	const std::vector<int> getRelativeUnknIndices() const override
+	{
+		std::vector<int> activeIndices;
+		if (!ifFixed)
+			activeIndices.push_back(0);
+		return activeIndices;
+	};
+
 	/// Returns the name of the length.
 	inline virtual const std::string &getName() const { return fName; }
 
@@ -103,10 +112,12 @@ public:
 	*/
 	virtual void setFirstUidx(int idx);
 
-	/*!
-		See \ref TVAdjustableObject::setCorrection. Radians value expected.
-	*/
-	virtual void setCorrection(int idx, TReal value);
+	// getting the estimated vector with all variables
+	virtual Eigen::VectorXd getEstVector() const override;
+	// get value corresponding to unknown index
+	virtual TReal getValue(int idx) const override;
+	// set the value corresponding to an index
+	virtual void setValue(int idx, TReal value) override;
 
 	/*! Sets the estimated precision after calculation in radians.*/
 	void setEstimatedPrecision(int idx, TReal ep);

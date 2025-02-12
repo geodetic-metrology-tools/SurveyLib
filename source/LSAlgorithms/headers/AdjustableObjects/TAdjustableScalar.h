@@ -40,8 +40,13 @@ public:
 	/// Returns the correction value of the scalar.
 	inline TReal getCorrection() const { return fCorrection; }
 
+	// getting the estimated vector with all variables
+	virtual Eigen::VectorXd getEstVector() const override;
 	// Returns the estimated value of the scalar.
 	inline TReal getEstimatedValue() const { return fEstimatedValue; }
+	virtual TReal getValue(int idx) const override;
+	// set the value corresponding to an index
+	virtual void setValue(int idx, TReal value) override;
 
 	/// Returns the estimated precision of the scalar.
 	inline TReal getEstimatedPrecision() const { return fEstimatedPrecision; }
@@ -80,6 +85,13 @@ public:
 			return uidx;
 		throw std::logic_error("Trying to get unknown index from fixed scalar.");
 	}
+	virtual const std::vector<int> getRelativeUnknIndices() const override
+	{
+		std::vector<int> activeIndices;
+		if (!isScalarFixed)
+			activeIndices.push_back(0);
+		return activeIndices;
+	};
 
 	/// Returns the estimated variance.
 	inline TReal getVariance() const { return powq(fEstimatedPrecision, 2); }
@@ -108,12 +120,6 @@ public:
 		\throws Throws a logic_error if the scalar is fixed.
 	*/
 	virtual void setFirstUidx(int idx);
-
-	/*!
-		See \ref TVAdjustableObject::setCorrection
-
-	*/
-	virtual void setCorrection(int idx, TReal value);
 
 	/// Sets the estimated precision after calculation
 	void setEstimatedPrecision(int idx, TReal ep);

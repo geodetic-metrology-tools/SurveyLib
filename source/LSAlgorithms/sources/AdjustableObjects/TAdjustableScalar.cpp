@@ -12,22 +12,35 @@ TAdjustableScalar TAdjustableScalar::createUninitialized(const std::string &name
 	return TAdjustableScalar(NO_VALf, true, name);
 }
 
+Eigen::VectorXd TAdjustableScalar::getEstVector() const
+{
+	Eigen::VectorXd estVect(1);
+	estVect << fEstimatedValue;
+	return estVect;
+}
+
+TReal TAdjustableScalar::getValue(int idx) const
+{
+	if (uidx != idx)
+		throw std::logic_error("Invalid unknown index in parameter access. Scalar " + getName());
+	return fEstimatedValue;
+}
+
+void TAdjustableScalar::setValue(int idx, TReal value)
+{
+	if (uidx == idx)
+	{
+		fEstimatedValue = value;
+		return;
+	}
+	throw std::logic_error("Invalid unknown index in parameter access. Scalar " + getName());
+}
+
 void TAdjustableScalar::setFirstUidx(int idx)
 {
 	if (isScalarFixed)
 		throw std::logic_error("Trying to assign unknown index to fixed scalar. Scalar " + getName());
 	uidx = idx;
-}
-
-void TAdjustableScalar::setCorrection(int idx, TReal value)
-{
-	if (uidx == idx)
-	{
-		fCorrection = value;
-		fEstimatedValue += value;
-		return;
-	}
-	throw std::logic_error("Invalid unknown index in parameter access. Scalar " + getName());
 }
 
 void TAdjustableScalar::setEstimatedPrecision(int idx, TReal ep)
