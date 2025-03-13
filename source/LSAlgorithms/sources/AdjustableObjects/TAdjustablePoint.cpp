@@ -258,6 +258,7 @@ void TAdjustablePoint::setCorrection(int idx, TReal value)
 			return;
 		}
 	}
+}
 
 void TAdjustablePoint::setEstVal(int idx, TReal value)
 {
