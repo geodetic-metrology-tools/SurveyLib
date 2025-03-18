@@ -113,7 +113,20 @@ bool TLSInputMatrices::setSecondDgnMtrxToMinusIdentity()
 	return true;
 }
 
-bool TLSInputMatrices::resetSecondDgnMtrx(UEOIndices ueoi)
+bool TLSInputMatrices::resetFirstDgnMtrx()
+{
+	try
+	{
+		firstDesignMatrix = std::make_unique<TSparseMatrixWithTriplets>(fUEOIndices.EIndex, fUEOIndices.UIndex);
+	}
+	catch (...)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool TLSInputMatrices::resetSecondDgnMtrx()
 {
 	try
 	{
@@ -128,7 +141,7 @@ bool TLSInputMatrices::resetSecondDgnMtrx(UEOIndices ueoi)
 	return true;
 }
 
-bool TLSInputMatrices::resetCnstrFirstDgnMtrx(UEOIndices ueoi)
+bool TLSInputMatrices::resetCnstrFirstDgnMtrx()
 {
 	try
 	{
@@ -142,7 +155,7 @@ bool TLSInputMatrices::resetCnstrFirstDgnMtrx(UEOIndices ueoi)
 	return true;
 }
 
-bool TLSInputMatrices::resetCnstrMisclosureVector(UEOIndices ueoi)
+bool TLSInputMatrices::resetCnstrMisclosureVector()
 {
 	try
 	{

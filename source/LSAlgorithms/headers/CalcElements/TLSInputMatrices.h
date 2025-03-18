@@ -50,17 +50,21 @@ public:
 	 */
 	bool setSecondDgnMtrxToMinusIdentity();
 
-	/*! \brief Reset the second design matrix. It must be filled at each iteration.
+	/*! \brief Reset the first design matrix if it must be filled at each iteration.
 	 */
-	bool resetSecondDgnMtrx(UEOIndices ueoi);
+	bool resetFirstDgnMtrx();
 
-	/*! \brief Reset the constraint design matrix. It must be filled at each iteration.
+	/*! \brief Reset the second design matrix if it must be filled at each iteration.
 	 */
-	bool resetCnstrFirstDgnMtrx(UEOIndices ueoi);
+	bool resetSecondDgnMtrx();
 
-	/*! \brief Reset the constraint vector. It must be filled at each iteration.
+	/*! \brief Reset the constraint design matrix if it must be filled at each iteration.
 	 */
-	bool resetCnstrMisclosureVector(UEOIndices ueoi);
+	bool resetCnstrFirstDgnMtrx();
+
+	/*! \brief Reset the constraint vector if it must be filled at each iteration.
+	 */
+	bool resetCnstrMisclosureVector();
 
 	/*!	\brief Set a misclosure vector element.
 	 */
