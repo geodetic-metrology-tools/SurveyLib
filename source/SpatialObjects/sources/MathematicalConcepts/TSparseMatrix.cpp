@@ -23,6 +23,8 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 	auto nRows = sparseMat.rows();
 	auto nCols = sparseMat.cols();
 
+	if (!sparseMat.isCompressed())
+		throw std::runtime_error("inverse() method requires a sparse matrix in compressed mode. Call .makeCompressed() before passing.");
 	if (nRows != nCols)
 	{
 		logDebug() << "The given matrix A is not a square matrix to inverse!";
@@ -78,7 +80,7 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 	}
 
 	// If both are not working, use Sparse LU
-	Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> LuMat;
+	Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> LuMat;
 	LuMat.compute(sparseMat);
 	if (LuMat.info() != Eigen::Success)
 	{
@@ -109,6 +111,8 @@ bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX
 {
 	vectX.setZero();
 
+	if (!matA.isCompressed())
+		throw std::runtime_error("solveUnique() method requires a sparse matrix in compressed mode. Call .makeCompressed() before passing.");
 	// A must be a square matrix in our case, and the number of B vector elements must be the same!
 	if (matA.rows() != matA.cols() || vectB.rows() != matA.rows())
 	{
@@ -146,7 +150,7 @@ bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX
 	}
 
 	// If both are not working, use Sparse QR
-	Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> QrMat;
+	Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> QrMat;
 	// pivotThreshold important for solving the system accurately in case constraints are present
 	// https://eigen.tuxfamily.org/dox/classEigen_1_1SparseQR.html
 	QrMat.setPivotThreshold(1e-12);
