@@ -363,6 +363,16 @@ void TDataParameters::setPrecision(int precision)
 			observationPrecision = TObservationFormat::k100Nanometres;
 			anglePrecision = TObservationFormat::k100Nanogons;
 			pointPrecision = TPointFormat::k100Nanometres; break;
+		case 8:
+			observationPrecision = TObservationFormat::k10Nanometres;
+			anglePrecision = TObservationFormat::k10Nanogons;
+			pointPrecision = TPointFormat::k10Nanometres;
+			break;
+		case 9:
+			observationPrecision = TObservationFormat::kNanometres;
+			anglePrecision = TObservationFormat::kNanogons;
+			pointPrecision = TPointFormat::kNanometres;
+			break;
 		default:
 			observationPrecision = TObservationFormat::k10Micrometres;
 			anglePrecision = TObservationFormat::k10Microgons;

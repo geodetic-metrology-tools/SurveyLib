@@ -1,6 +1,6 @@
 // TObservationFormat.h
 /*
-© Copyright CERN 2000-2023. All rigths reserved. This software is released under a CERN proprietary software licence.
+© Copyright CERN 2000-2025. All rigths reserved. This software is released under a CERN proprietary software licence.
 Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
 */
 
@@ -47,7 +47,7 @@ public:
 	/*!name Constant*/
 	//@!{
 	/*!Length Precision*/
-	enum ELengthPrecision {kMetre, k100Millimetres, k10Millimetres, kMillimetre, k100Micrometres, k10Micrometres, kMicrometre, k100Nanometres};
+	enum ELengthPrecision {kMetre, k100Millimetres, k10Millimetres, kMillimetre, k100Micrometres, k10Micrometres, kMicrometre, k100Nanometres, k10Nanometres, kNanometres};
 
 	/*!AnglePrecision*/
 	// here we need more precision for geodetic angles
