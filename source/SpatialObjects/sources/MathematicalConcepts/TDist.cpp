@@ -14,6 +14,11 @@ TReal dist(TReal x1, TReal y1, TReal x2, TReal y2)
 	return dist3D(x1, y1, 0, x2, y2, 0);
 }
 
+TReal dist(const TPositionVector &p1, const TPositionVector &p2)
+{
+	return dist3D(p1.getX(), p1.getY(), 0, p2.getX(), p2.getY(), 0);
+}
+
 TReal dist3D(TLength x1, TLength y1, TLength z1, TLength x2, TLength y2, TLength z2)
 {
 	return dist3D(x1.getMetresValue(), y1.getMetresValue(), z1.getMetresValue(), x2.getMetresValue(), y2.getMetresValue(), z2.getMetresValue());

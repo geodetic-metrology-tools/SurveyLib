@@ -47,6 +47,19 @@ TReal dist(TLength x1, TLength y1, TLength x2, TLength y2);
 TReal dist(TReal x1, TReal y1, TReal x2, TReal y2);
 /*@}*/
 
+/*@}*/
+
+/*! computation of the 2D distance from between 2 TPositionVector
+	\param TPositioVector p1, coordinates of the first point
+	\param TPositioVector p2, coordinates of the second point
+	\return Distance as TReal
+	*/
+/*!\addtogroup spatialobjects
+@{*/
+TReal dist(const TPositionVector &p1,const TPositionVector &p2);
+/*@}*/
+
+
 /*! computation of the distance from 3D coordinates
 	\param TLength x1, coordinate  x of the first point
 	\param TLength y1, coordinate  y of the first point
