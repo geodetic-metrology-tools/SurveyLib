@@ -1,4 +1,10 @@
-// TFreeFormatTStream.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TFreeFormatTStream.h
 //
 //
 // Concrete class defining the free format file syntax,

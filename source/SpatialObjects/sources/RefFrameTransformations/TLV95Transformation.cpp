@@ -1,4 +1,8 @@
-#include <TLV95Transformation.h>
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#include <TLV95Transformation.h>
 #include <TRefFrameInfo.h>
 #include <TConstants.h>
 
@@ -97,7 +101,7 @@ bool TLV95Transformation::transform(TPositionVector & pv) const
 bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
 {
 	/* Reference:
-	Formules et constantes pour le calcul de la projection cylindrique à axe oblique et pour la transformation entre des systèmes de référence
+	Formules et constantes pour le calcul de la projection cylindrique Ã  axe oblique et pour la transformation entre des systÃ¨mes de rÃ©fÃ©rence
 	Swisstopo, 2016
 	*/
 
@@ -165,7 +169,7 @@ bool TLV95Transformation::transformFromCH1903plus(TPositionVector & pv) const
 bool TLV95Transformation::transformToCH1903plus(TPositionVector & pv) const
 {
 	/* Reference:
-	Formules et constantes pour le calcul de la projection cylindrique à axe oblique et pour la transformation entre des systèmes de référence
+	Formules et constantes pour le calcul de la projection cylindrique Ã  axe oblique et pour la transformation entre des systÃ¨mes de rÃ©fÃ©rence
 	Swisstopo, 2016
 	*/
 

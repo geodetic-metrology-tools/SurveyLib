@@ -1,4 +1,8 @@
-// TACoordinateSystem.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TACoordinateSystem.cpp
 //
 /** Abstract class use for explain  a Coordinate System */
 //

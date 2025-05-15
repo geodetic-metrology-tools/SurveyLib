@@ -1,4 +1,8 @@
-// TAStreamFormatter.cpp: 
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TAStreamFormatter.cpp: 
 //
 // Abstract Base Class for a QTextStream Formatter.
 // Enables the output of all the standard survey objects.

@@ -1,4 +1,8 @@
-#include "TAngle.h"
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+ï»¿#include "TAngle.h"
 #include "TWorkingPoints.h"
 #include "TSpatialPoint.h"
 #include "TSpatialPosition.h"
@@ -179,7 +183,7 @@ void main(){
 	edmSt = new TEDMStation(ws, iterPt);
 	delete edmSt;
 
-	//unique série de mesures
+	//unique sÃ©rie de mesures
 	iterEDMSt ++;
 	edmRom= new TEDMDistROM(*iterEDMSt);
 	delete edmRom;
@@ -246,7 +250,7 @@ void main(){
 	edmSt = new TEDMStation(ws, iterPt);
 	delete edmSt;
 
-//unique série de mesures
+//unique sÃ©rie de mesures
 	iterEDMSt ++;
 	edmRom= new TEDMDistROM(*iterEDMSt);
 	delete edmRom;

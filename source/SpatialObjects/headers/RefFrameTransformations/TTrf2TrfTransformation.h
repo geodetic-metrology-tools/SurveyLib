@@ -1,4 +1,10 @@
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
+﻿
 
 #ifndef SU_TRF_2_TRF
 #define SU_TRF_2_TRF

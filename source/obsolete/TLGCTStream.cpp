@@ -1,3 +1,9 @@
+﻿// SPDX-FileCopyrightText: 2025 CERN
+
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TLGCTStream.cpp
 //
 // Concrete class defining the old LGC file syntax,

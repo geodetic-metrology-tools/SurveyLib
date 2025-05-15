@@ -6,7 +6,7 @@ This project, **SurveyLib**, includes third-party software components with their
 
 ## SurveyLib License
 
-Licensed under the Mozilla Public License 2.0.  
+Licensed under the GNU General Public License v3.0 or later.  
 See [LICENSE](LICENSE) for full terms.
 
 ---
@@ -18,7 +18,7 @@ See [LICENSE](LICENSE) for full terms.
 - Source: https://gitlab.com/libeigen/eigen
 
 ### TUT
-- License: Boost Software License 1.0
+- License: BSD 2-Clause "Simplified" License
 - Source: https://github.com/martinmoene/tut
 
 ### RapidJSON
@@ -26,8 +26,8 @@ See [LICENSE](LICENSE) for full terms.
 - Source: https://github.com/Tencent/rapidjson
 
 ### Reframe
-- License: Custom (Redistributable, delivery to customers must be free)
-- Source: https://www.swisstopo.admin.ch
+- License: Creative Commons Attribution No Derivatives 4.0 International
+- Source: https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar
 
 ### `counted_ptr.h`
 - License: Custom Permissive License

@@ -1,4 +1,10 @@
-// T3DMatrix.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// T3DMatrix.h
 
 /*!
 	Class for a general 3x3 TReal matrix

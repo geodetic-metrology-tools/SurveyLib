@@ -1,4 +1,8 @@
-//T2DCartesianPlusHSys.h 
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿//T2DCartesianPlusHSys.h 
 //
 //Class for explain vector in a 2D+H cartesian
 //Coordinate system 

@@ -1,3 +1,9 @@
+﻿// SPDX-FileCopyrightText: 2025 CERN
+
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TSpatialOrientationError.h: 
 //
 // The Spatial Orientation Error of an orientation in a given reference frame.

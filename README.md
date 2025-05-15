@@ -154,7 +154,7 @@ Once the PR has been accepted and merged into `master`, GitLab-CI will automatic
 
 ## Licensing
 
-SurveyLib is licensed under the [Mozilla Public License 2.0](LICENSE).
+SurveyLib is licensed under the [GNU General Public License v3.0 or later](LICENSE).
 
 This project complies with the [REUSE specification](https://reuse.software/), which standardizes license documentation and attribution.
 
@@ -163,9 +163,9 @@ This project complies with the [REUSE specification](https://reuse.software/), w
 | Library           | License                              | Source                                       |
 |-------------------|---------------------------------------|----------------------------------------------|
 | Eigen             | MPL-2.0                               | https://gitlab.com/libeigen/eigen            |
-| TUT               | Boost Software License 1.0            | https://github.com/martinmoene/tut           |
+| TUT               | BSD 2-Clause "Simplified" License           | https://github.com/mrzechonek/tut-framework           |
 | RapidJSON         | MIT                                   | https://github.com/Tencent/rapidjson         |
-| Reframe           | Custom (redistributable, free only)   | https://www.swisstopo.admin.ch               |
+| Reframe           | Creative Commons Attribution No Derivatives 4.0 International   | https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar |
 | `counted_ptr.h` | Custom Permissive License (1999) | http://snowball.digitalspace.net/cpp/        |
 
 All third-party license texts are stored in the [`LICENSES/`](LICENSES/) directory.

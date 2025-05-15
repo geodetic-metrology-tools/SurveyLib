@@ -1,4 +1,10 @@
-//  TLG2GCTransformation.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TLG2GCTransformation.h
 
 /** The transformation from a geodetic reference frame to a
     local geodetic reference frame.

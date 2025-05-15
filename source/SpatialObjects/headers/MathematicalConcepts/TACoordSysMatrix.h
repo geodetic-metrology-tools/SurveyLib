@@ -1,4 +1,10 @@
-// TACoordSysMatrix.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TACoordSysMatrix.h
 
 /** Abstract class use for explain T3DMatrix and TRotationMatrixin a Coordonate System */
 //////////////////////////////////////////////////////////////////////

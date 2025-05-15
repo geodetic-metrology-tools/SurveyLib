@@ -1,4 +1,8 @@
-//  TLA2LGTransformation.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿//  TLA2LGTransformation.cpp
 //
 /** The transformation from a local astronomical reference frame to a
     local geodetic reference frame.

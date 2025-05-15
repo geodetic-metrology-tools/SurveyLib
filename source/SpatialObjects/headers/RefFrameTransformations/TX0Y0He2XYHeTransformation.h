@@ -1,4 +1,10 @@
-//  TXYHe2XYHeTransformation.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TXYHe2XYHeTransformation.h
 
 /** The transformation from a X0Y0He projection to XYHe projection.
 

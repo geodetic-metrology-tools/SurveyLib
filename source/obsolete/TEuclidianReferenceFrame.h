@@ -1,4 +1,10 @@
-// 
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// 
 // TEuclidianReferenceFrame.h : Header File
 //
 // Class for a frame of reference as defined for survey purposes

@@ -1,4 +1,10 @@
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
+﻿
 
 #ifndef SURVEYLIB_GEODETIC_2_MERCATORPROJECTION
 #define SURVEYLIB_GEODETIC_2_MERCATORPROJECTION

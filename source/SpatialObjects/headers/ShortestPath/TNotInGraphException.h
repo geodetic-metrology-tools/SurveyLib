@@ -1,4 +1,10 @@
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
+﻿
 
 #ifndef T_NOT_IN_GRAPH_EXCEPTION_89670E6B_13FA_4ec4_A91E_C7E925AAF765
 #define T_NOT_IN_GRAPH_EXCEPTION_89670E6B_13FA_4ec4_A91E_C7E925AAF765

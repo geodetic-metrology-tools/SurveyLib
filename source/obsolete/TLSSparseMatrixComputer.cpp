@@ -1,4 +1,8 @@
+// SPDX-FileCopyrightText: 2025 CERN
 //
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿//
 // TLSSparseMatrixComputer.cpp : implementation file
 // class for a least squares computer producing the results matrices 
 // using the parametric method (case where 2nd dgn mtrx = -I)

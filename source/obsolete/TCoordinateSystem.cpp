@@ -1,4 +1,8 @@
-// TCoordinateSystem 
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TCoordinateSystem 
 //
 // Abstract Base Class for a Coordinate System.
 //

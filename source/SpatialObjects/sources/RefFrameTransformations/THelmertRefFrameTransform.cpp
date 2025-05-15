@@ -1,4 +1,8 @@
-//  THelmertRefFrameTransform.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿//  THelmertRefFrameTransform.cpp
 //
 /** A Helmert transformation between two reference frames.
     

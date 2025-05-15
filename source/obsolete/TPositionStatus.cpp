@@ -1,4 +1,8 @@
-// TPositionStatus.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TPositionStatus.cpp
 //
 /** Class storing the statuses of objects related to a 3D position */
 //

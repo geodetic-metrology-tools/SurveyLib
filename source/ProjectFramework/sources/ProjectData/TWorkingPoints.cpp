@@ -1,4 +1,8 @@
-// TWorkingPoints.cpp: implementation of the TWorkingPoints class.
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TWorkingPoints.cpp: implementation of the TWorkingPoints class.
 //
 
 

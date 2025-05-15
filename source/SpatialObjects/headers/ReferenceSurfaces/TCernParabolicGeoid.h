@@ -1,4 +1,10 @@
-//  TCernParabolicGeoid.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TCernParabolicGeoid.h
 
 /** Paraboloid defined to model the geoid in CERN's area
 

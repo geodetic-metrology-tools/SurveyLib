@@ -1,4 +1,10 @@
-// TDataParameters.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TDataParameters.h
 //
 
 /*! The parameters of a dataset. Identifies the :

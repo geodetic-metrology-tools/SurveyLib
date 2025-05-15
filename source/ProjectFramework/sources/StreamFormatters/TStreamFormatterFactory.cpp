@@ -1,4 +1,8 @@
-/** A Factory producing the different TQtStreamFormatter objects.
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿/** A Factory producing the different TQtStreamFormatter objects.
 
     Patterns:
 	A singleton to ensure only one Factory exists.

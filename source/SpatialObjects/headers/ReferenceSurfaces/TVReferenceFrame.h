@@ -1,4 +1,10 @@
-// TVReferenceFrame.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TVReferenceFrame.h
 
 /*!	 
 	definition of the global members for concrete reference frames 

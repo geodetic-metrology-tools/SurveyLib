@@ -1,8 +1,0 @@
-[reuse]
-project_name = "SurveyLib"
-copyright_owner = "CERN"
-license = "MPL-2.0"
-version = "1.0"
-
-[extra.licenses]
-"LicenseRef-MarkE-Permissive" = { text_file = "LICENSES/LicenseRef-MarkE-Permissive.txt" }

@@ -1,4 +1,8 @@
+// SPDX-FileCopyrightText: 2025 CERN
 //
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿//
 // TLSCalculation.cpp : implementation file
 // Class managing the ls calculation from input matrices preparation to final
 // results extraction

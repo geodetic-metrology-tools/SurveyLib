@@ -1,4 +1,10 @@
-// Define the variables necessary for the export of DLL functions
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// Define the variables necessary for the export of DLL functions
 
 #ifndef __linux__
 

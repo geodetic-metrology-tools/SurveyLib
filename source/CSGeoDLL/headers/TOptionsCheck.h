@@ -1,4 +1,10 @@
-#ifndef CSGEODLL_T_OPTIONS_CHECK_H_acaac7fcab6442d681b471fa1f8d9ec5
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef CSGEODLL_T_OPTIONS_CHECK_H_acaac7fcab6442d681b471fa1f8d9ec5
 #define CSGEODLL_T_OPTIONS_CHECK_H_acaac7fcab6442d681b471fa1f8d9ec5
 
 #include <TDataParameters.h>

@@ -1,4 +1,10 @@
-#ifndef CSGEODLL_PLAIN_TRANSFORM_H_d7ce960c186c42ecb9f59ecaff70b1bb
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef CSGEODLL_PLAIN_TRANSFORM_H_d7ce960c186c42ecb9f59ecaff70b1bb
 #define CSGEODLL_PLAIN_TRANSFORM_H_d7ce960c186c42ecb9f59ecaff70b1bb
 
 #include <utils/TGlobalDefs.h>

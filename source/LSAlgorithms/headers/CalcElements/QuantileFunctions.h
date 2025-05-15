@@ -1,4 +1,10 @@
-#ifndef QUANTILEFUNCTIONS
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef QUANTILEFUNCTIONS
 #define QUANTILEFUNCTIONS
 
 // chi-square quantiles for p=0.025

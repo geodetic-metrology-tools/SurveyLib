@@ -1,4 +1,8 @@
-// TRadiansFilter.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TRadiansFilter.cpp
 //
 // Concrete Class of the TAngleFilter PABC.
 // Handles the IO of an TAngle object angles in a text stream with 

@@ -1,4 +1,10 @@
-//  TAAffineTransformation.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TAAffineTransformation.h
 
 /** Classe de base pour une transformation affine
 */

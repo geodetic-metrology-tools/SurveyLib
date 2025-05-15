@@ -1,4 +1,10 @@
-//  TASpatialAttribute.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TASpatialAttribute.h
 
 /** An abstract class containing methods to access to spatial objects' attributes*/
 //////////////////////////////////////////////////////////////////////

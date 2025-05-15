@@ -1,4 +1,8 @@
-// TSpatialVector.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TSpatialVector.cpp
 //
 /** 3D Vector used as a Spatial Position for stations or as translation vector in Helmert transformation */
 //

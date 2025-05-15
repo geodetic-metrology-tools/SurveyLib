@@ -1,3 +1,9 @@
+﻿// SPDX-FileCopyrightText: 2025 CERN
+
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //T3DCartesianCoordSys.h 
 //
 //Class for explain matrix and vector in a 3D cartesian

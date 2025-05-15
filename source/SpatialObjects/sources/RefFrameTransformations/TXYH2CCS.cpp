@@ -1,4 +1,8 @@
-#include "TXYH2CCS.h"
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#include "TXYH2CCS.h"
 #include "GeodeticConstants.h"
 #include "TSpatialPosition.h"
 #include "TAGeoidModel.h"

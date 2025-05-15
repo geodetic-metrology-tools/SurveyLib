@@ -1,4 +1,10 @@
-//TPtrWrapper
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//TPtrWrapper
 
 //! A templated counter pointer. 
 //! A wrapper around the pointed to object that manages a count of it's copies.

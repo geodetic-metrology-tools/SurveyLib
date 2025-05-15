@@ -1,4 +1,10 @@
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
+﻿
 
 #ifndef CSGEOCORE_T_REF_FRAME_INFO_H_78d85635badc4fa08dd883eb60f912d4
 #define CSGEOCORE_T_REF_FRAME_INFO_H_78d85635badc4fa08dd883eb60f912d4

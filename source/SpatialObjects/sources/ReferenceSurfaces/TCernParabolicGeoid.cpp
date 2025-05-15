@@ -1,4 +1,8 @@
-// 
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// 
 // TCernParabolicGeoid
 //
 // Paraboloid defined to approximate the geoid in CERN's area, 

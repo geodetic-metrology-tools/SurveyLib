@@ -1,4 +1,10 @@
-#ifndef __FRENCH_RAF20__
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef __FRENCH_RAF20__
 #define __FRENCH_RAF20__
 
 #include <Quad.h>

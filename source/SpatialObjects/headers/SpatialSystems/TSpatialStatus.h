@@ -1,4 +1,10 @@
-// TSpatialStatus.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TSpatialStatus.h
 
 // General class for status of spatial objects. The three components are considered to be
 // linked with axis.

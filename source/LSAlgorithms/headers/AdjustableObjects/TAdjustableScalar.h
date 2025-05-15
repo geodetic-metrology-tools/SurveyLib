@@ -1,4 +1,10 @@
-#ifndef TADJUSTABLE_SCALAR
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef TADJUSTABLE_SCALAR
 #define TADJUSTABLE_SCALAR
 
 #include <stdexcept>

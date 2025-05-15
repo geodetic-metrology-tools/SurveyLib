@@ -1,4 +1,8 @@
-/*SURVEYLIB VERSION !!!!!!!!!!!!!!!!!!!!!!!*/
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿/*SURVEYLIB VERSION !!!!!!!!!!!!!!!!!!!!!!!*/
 
 //TLSInputSparseMatrices.h : implementation file
 // class for input matrices as defined for survey purposes

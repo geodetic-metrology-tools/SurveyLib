@@ -1,4 +1,8 @@
-#ifndef ILOGHANDLER_HPP
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#ifndef ILOGHANDLER_HPP
 #define ILOGHANDLER_HPP
 
 #include "LogMessage.hpp"

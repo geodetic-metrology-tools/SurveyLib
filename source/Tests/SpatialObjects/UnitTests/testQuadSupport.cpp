@@ -1,4 +1,8 @@
-#include "Quad.h"
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#include "Quad.h"
 
 #include <sstream>
 #include <tut/tut.hpp>

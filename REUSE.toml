@@ -1,0 +1,40 @@
+version = 1
+
+[[annotations]]
+# other documents
+path = [
+"Documentation/*",
+".clang-format",
+".editorconfig",
+".gitignore",
+".gitlab-ci.yml",
+".gitmodules",
+"NOTICE.md",
+"README.md",
+"source/**/*.txt",
+"source/**/*.def",
+"source/**/*.in",
+"source/**/*.py",
+"source/**/*.cmake",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "NONE"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+
+#[[annotations]]
+#path = "source/SpatialObjects/headers/SpatialSystems/counted_ptr.h"
+#precedence = "override"
+#SPDX-FileCopyrightText = "1998, 1999 Mark E. <snowball3@usa.net>"
+#SPDX-License-Identifier = "LicenseRef-countedPrt"
+#
+#
+#[[annotations]]
+#path = [
+#"source/**/*.h",
+#"source/**/*.hpp",
+#"source/**/*.cpp",
+#]
+#precedence = "override"
+#SPDX-FileCopyrightText = "CERN"
+#SPDX-License-Identifier = "GPL-3.0-or-later"

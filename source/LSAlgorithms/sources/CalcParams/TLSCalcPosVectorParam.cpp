@@ -1,4 +1,8 @@
-// TLSCalcPosVectorParam.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TLSCalcPosVectorParam.cpp
 #include <stdio.h>
 
 #include <Eigen/Core>

@@ -1,4 +1,8 @@
-// TSeparatedFormatTStream.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TSeparatedFormatTStream.cpp
 //
 // Concrete class defining a separated stream text stream formatter
 //

@@ -1,4 +1,10 @@
-#ifndef TADJUSTABLE_HELMERT_TRANSFORMATION
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef TADJUSTABLE_HELMERT_TRANSFORMATION
 #define TADJUSTABLE_HELMERT_TRANSFORMATION
 
 #include <bitset>

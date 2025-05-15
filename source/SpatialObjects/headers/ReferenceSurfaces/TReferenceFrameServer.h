@@ -1,4 +1,10 @@
-//  TReferenceFrameServer.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TReferenceFrameServer.h
 
 /** A class that instantiates and provides access to all available
 	reference frames.

@@ -1,4 +1,10 @@
-// TLengthFilter.h: 
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TLengthFilter.h: 
 
 /*!
 Purely Abstract Base Class (Interface) for aa TLengthFilter.

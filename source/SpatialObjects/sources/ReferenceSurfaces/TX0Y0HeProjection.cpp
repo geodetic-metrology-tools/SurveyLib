@@ -1,4 +1,8 @@
-// TX0Y0HeProjection.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TX0Y0HeProjection.cpp
 //
 /** A projection on XY plane with ellipsoidal height 
 

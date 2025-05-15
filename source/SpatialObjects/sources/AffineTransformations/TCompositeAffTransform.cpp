@@ -1,4 +1,8 @@
-#include  "TCompositeAffTransform.h"
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#include  "TCompositeAffTransform.h"
 #include  "TPositionVector.h"
 #include  "TFreeVector.h"
 #include  "TRotationMatrix.h"

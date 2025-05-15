@@ -1,4 +1,10 @@
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
+﻿
 
 #ifndef TMATRIX_IMPL_79CFF806_6A12_46e0_BC89_66C513C8875F
 #define TMATRIX_IMPL_79CFF806_6A12_46e0_BC89_66C513C8875F

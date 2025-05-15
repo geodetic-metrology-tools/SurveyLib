@@ -1,4 +1,8 @@
-// TWTWHFilter.h
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TWTWHFilter.h
 //
 // Concrete Class of the TWTWFilter PABC.
 // Handles the IO of an TWireToWireDistMeas object for the case

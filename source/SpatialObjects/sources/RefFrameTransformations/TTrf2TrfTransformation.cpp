@@ -1,4 +1,8 @@
-//  TTrf2TrfTransformation.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿//  TTrf2TrfTransformation.cpp
 //
 /** A Helmert transformation between two terrestrial reference frames.
 
@@ -439,7 +443,7 @@ TFreeVector TTrf2TrfTransformation::itrf2014velocity(TPositionVector& pv) const 
 
 	TFreeVector pvFree = positionToFree(pv);
 
-	//Zuheir Altamimi, Laurent Métivier, Paul Rebischung, Hélène Rouby, Xavier Collilieux, ITRF2014 plate motion model, Geophysical Journal International, Volume 209, Issue 3, June 2017, Pages 1906–1912, https://doi.org/10.1093/gji/ggx136
+	//Zuheir Altamimi, Laurent MÃ©tivier, Paul Rebischung, HÃ©lÃ¨ne Rouby, Xavier Collilieux, ITRF2014 plate motion model, Geophysical Journal International, Volume 209, Issue 3, June 2017, Pages 1906â€“1912, https://doi.org/10.1093/gji/ggx136
 	//CERN is located on the eurasian (EURA) plate
 
 	TAngle fOmegaX, fOmegaY, fOmegaZ;

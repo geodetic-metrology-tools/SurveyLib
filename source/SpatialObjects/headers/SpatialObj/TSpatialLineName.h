@@ -1,4 +1,10 @@
-// TSpatialLineName.h : header file
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TSpatialLineName.h : header file
 
 /*!	  
 	Class modelising a line	

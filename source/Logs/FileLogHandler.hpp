@@ -1,4 +1,8 @@
-#ifndef FILELOGHANDLER_HPP
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#ifndef FILELOGHANDLER_HPP
 #define FILELOGHANDLER_HPP
 
 #include <string>

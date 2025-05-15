@@ -1,4 +1,10 @@
-//  TTransformWrapper.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TTransformWrapper.h
 
 /** A Wrapper around a spatial transformation.
     The wrapper enables a pointer to a transformation to be stored

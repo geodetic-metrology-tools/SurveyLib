@@ -1,4 +1,10 @@
-// TSeparatedFormatTStream.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TSeparatedFormatTStream.h
 
 /*! 
  Concrete class defining a separated stream text stream formatter

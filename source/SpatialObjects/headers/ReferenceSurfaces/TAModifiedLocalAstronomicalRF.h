@@ -1,4 +1,10 @@
-//  TAModifiedLocalAstronomicalRF.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TAModifiedLocalAstronomicalRF.h
 
 /** Patterns:
     An abstract base classe for the modified local astronomical reference frame

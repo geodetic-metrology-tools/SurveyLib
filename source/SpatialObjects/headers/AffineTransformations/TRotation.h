@@ -1,4 +1,10 @@
-// TRotation.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TRotation.h
 
 /** Class for rotations. Affine Transformation. Uses as default representation RzRyRx matrix
 It authorizes the inverse rotation and the multiplication 

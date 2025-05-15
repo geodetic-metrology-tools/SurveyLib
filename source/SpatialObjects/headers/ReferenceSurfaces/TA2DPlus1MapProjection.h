@@ -1,4 +1,10 @@
-// TA2DPlus1MapProjection.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TA2DPlus1MapProjection.h
 
 /*!
 	Abstract base class for a 2D+1 projection

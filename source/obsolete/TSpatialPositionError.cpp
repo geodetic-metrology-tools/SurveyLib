@@ -1,4 +1,8 @@
-// TSpatialPositionError.h: 
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TSpatialPositionError.h: 
 //
 // The Spatial Position Error of a point in a given reference frame.
 // 

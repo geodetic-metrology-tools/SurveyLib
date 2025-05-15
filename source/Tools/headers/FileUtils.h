@@ -1,4 +1,10 @@
-#ifndef __FILE_UTILS__
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef __FILE_UTILS__
 #define __FILE_UTILS__
 
 #ifdef __linux__

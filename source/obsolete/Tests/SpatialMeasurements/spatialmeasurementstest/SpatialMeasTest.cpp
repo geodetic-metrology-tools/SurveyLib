@@ -1,4 +1,8 @@
-// Test du module SpatialMeasurements: test des fonctions de stockage uniquement.
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+ï»¿// Test du module SpatialMeasurements: test des fonctions de stockage uniquement.
 
 #include <iostream>
 #include <string>
@@ -266,7 +270,7 @@ void main() {
 	if (hdrom.notInContainer(&hdm3))
 		hdrom.addHorDist(&hdm3);
 	else
-		cout << "déjà dans la liste!!" << endl;
+		cout << "dÃ©jÃ  dans la liste!!" << endl;
 
 	cout << hdrom.getSeries() << endl;
 

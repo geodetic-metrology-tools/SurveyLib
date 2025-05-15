@@ -1,4 +1,8 @@
-#include  "TSpatialPosition.h"
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+ï»¿#include  "TSpatialPosition.h"
 #include  "TSpatialVector.h"
 //#include  "TSpatialOrientation.h"
 
@@ -154,7 +158,7 @@ void main(){
 
 	
 	//test TEuclideanRefFrame
-	//toutes les fonctions sont testées avec les deux classes précédentes.
+	//toutes les fonctions sont testÃ©es avec les deux classes prÃ©cÃ©dentes.
 
 
 

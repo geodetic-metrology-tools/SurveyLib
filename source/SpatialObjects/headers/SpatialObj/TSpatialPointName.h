@@ -1,4 +1,10 @@
-// TSpatialPointName.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TSpatialPointName.h
 
 /*! 
 Breaks the name tag down into three components, a name, a point, and a class.

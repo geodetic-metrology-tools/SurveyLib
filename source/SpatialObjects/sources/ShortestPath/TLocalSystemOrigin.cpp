@@ -1,4 +1,8 @@
-#include <TLocalSystemOrigin.h>
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#include <TLocalSystemOrigin.h>
 
 TLocalSystemOrigin::TLocalSystemOrigin(const TSpatialPosition & origin, const TAngle & gisement, const TAngle & slope, const std::string & name)
 : fOrigin(origin)

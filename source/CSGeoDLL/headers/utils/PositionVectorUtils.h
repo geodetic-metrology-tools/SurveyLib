@@ -1,4 +1,10 @@
-#ifndef CSGEODLL_POSITION_VECTOR_UTILS_H_e1f47af6538b4dd9bb47c4ffeff0fa0c
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef CSGEODLL_POSITION_VECTOR_UTILS_H_e1f47af6538b4dd9bb47c4ffeff0fa0c
 #define CSGEODLL_POSITION_VECTOR_UTILS_H_e1f47af6538b4dd9bb47c4ffeff0fa0c
 
 #include <TPositionVector.h>

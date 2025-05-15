@@ -1,4 +1,8 @@
-// TGeodeticRefFrame.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TGeodeticRefFrame.cpp
 //
 /** A Geodetic Ellipsoidal Reference Frame. 
     Deals with requests for Spatial Position coordinates

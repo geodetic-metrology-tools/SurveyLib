@@ -1,4 +1,10 @@
-// TFreeVector.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TFreeVector.h
 
 /** 3D Vector used as a free vector only affected by rotations and scaling*/
 //////////////////////////////////////////////////////////////////////

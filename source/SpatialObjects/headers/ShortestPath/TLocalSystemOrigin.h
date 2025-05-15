@@ -1,4 +1,10 @@
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
+﻿
 
 #ifndef SPATIAL_OBJECTS_e62c6be5_6903_4e36_b58e_5dd8c858f5d2
 #define SPATIAL_OBJECTS_e62c6be5_6903_4e36_b58e_5dd8c858f5d2

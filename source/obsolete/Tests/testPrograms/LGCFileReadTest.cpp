@@ -1,4 +1,8 @@
-#pragma warning(disable:4786)
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#pragma warning(disable:4786)
 
 #include "TEDMStation.h"
 #include "TEDMDistROM.h"

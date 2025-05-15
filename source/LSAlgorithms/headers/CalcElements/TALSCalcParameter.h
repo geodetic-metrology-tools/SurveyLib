@@ -1,4 +1,10 @@
-#ifndef SU_ABS_PARA
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef SU_ABS_PARA
 #define SU_ABS_PARA
 
 /*!

@@ -1,4 +1,8 @@
-// 
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// 
 // TUnknownAngle.cpp : implementation file
 //
 // Class for an unknown angle as defined for survey purposes

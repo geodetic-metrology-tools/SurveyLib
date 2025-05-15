@@ -1,4 +1,0 @@
-SPDX-License-Identifier: LicenseRef-Reframe
-
-The REFRAME library may be distributed to third parties and integrated into commercial products, but it must be delivered to the customer free of charge.
-(Swisstopo)

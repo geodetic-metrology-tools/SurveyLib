@@ -1,4 +1,10 @@
-// TLength.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TLength.h
 
 
 // Class for a length

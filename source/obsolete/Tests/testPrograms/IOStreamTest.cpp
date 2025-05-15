@@ -1,4 +1,8 @@
-// Test File for the IOStreams
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// Test File for the IOStreams
 
 #include <iostream.h>
 //#include <iomanip.h>

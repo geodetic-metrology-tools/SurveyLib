@@ -1,4 +1,8 @@
-//  TXYHg2XYHeTransformation.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿//  TXYHg2XYHeTransformation.cpp
 //
 /** The direct transformation from a modified local geodetic reference frame to a
     geodetic reference frame.

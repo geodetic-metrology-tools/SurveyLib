@@ -1,4 +1,8 @@
-/*test	TSpatialLine
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿/*test	TSpatialLine
 		TSpatialPlane
 
   02/2003*/

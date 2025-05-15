@@ -1,4 +1,10 @@
-// TCompositeAffTransform.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TCompositeAffTransform.h
 
 /** Class for transformations composed of multiple single transformations
 Wrappers around those transformations are kept in a list

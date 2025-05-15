@@ -1,4 +1,10 @@
-//  TRefSystemFactory.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TRefSystemFactory.h
 
 /*! A singleton class listing reference surface, reference frame and reference frame transformation.
 	A "server" of these systems. 

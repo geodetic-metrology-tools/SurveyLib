@@ -1,4 +1,8 @@
-// TLocalGeodeticRefFrame.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TLocalGeodeticRefFrame.cpp
 //
 /** A Geodetic Ellisoidal Reference Frame. 
     Deals with requests for Spatial Position coordinates

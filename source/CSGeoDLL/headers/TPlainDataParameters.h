@@ -1,4 +1,10 @@
-#ifndef CSGEODLL_T_PLAIN_DATA_PARAMETERS_H_b34c08fd435f4e4596bbdace8a678014
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef CSGEODLL_T_PLAIN_DATA_PARAMETERS_H_b34c08fd435f4e4596bbdace8a678014
 #define CSGEODLL_T_PLAIN_DATA_PARAMETERS_H_b34c08fd435f4e4596bbdace8a678014
 
 #include <string>

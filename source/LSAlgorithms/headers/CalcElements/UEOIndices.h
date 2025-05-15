@@ -1,4 +1,10 @@
-#ifndef SU_UEOINDICES
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef SU_UEOINDICES
 #define SU_UEOINDICES
 
 #if USE_SERIALIZER

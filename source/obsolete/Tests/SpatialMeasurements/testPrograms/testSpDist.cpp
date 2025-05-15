@@ -1,4 +1,8 @@
-//#include "TInstrumentStation.h"
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿//#include "TInstrumentStation.h"
 #include "TDistMeasStation.h"
 #include "TEDMStation.h"
 #include "TWorkingPoints.h"

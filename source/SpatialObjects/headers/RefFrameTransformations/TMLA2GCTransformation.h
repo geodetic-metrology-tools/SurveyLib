@@ -1,4 +1,10 @@
-//  TMLA2GCTransformation.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TMLA2GCTransformation.h
 
 /*! The direct transformation from a modified local astronomical reference frame to a
 	geodetic reference frame.

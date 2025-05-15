@@ -1,3 +1,9 @@
+﻿// SPDX-FileCopyrightText: 2025 CERN
+
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TFileParameters.cpp
 //
 // A class defining the parameters of a data file.

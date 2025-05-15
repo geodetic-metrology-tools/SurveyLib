@@ -1,4 +1,10 @@
-//  TX0Y0HeProjection.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TX0Y0HeProjection.h
 
 /** A projection on XY plane at 0-level with ellipsoidal height 
 

@@ -1,4 +1,10 @@
-// TSpatialPositionFilter.h: 
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TSpatialPositionFilter.h: 
 
 //
 // Purely Abstract Base Class (Interface) for a Spatial Position Filter.

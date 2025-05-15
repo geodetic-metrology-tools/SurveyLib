@@ -1,4 +1,8 @@
-// TSpatialOrientation.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TSpatialOrientation.cpp
 //
 /** Class used for a spatial orientation for RF or stations */
 //

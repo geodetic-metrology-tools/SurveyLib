@@ -1,4 +1,10 @@
-#ifndef SU_TLS_UNIVERSAL_MTD_COMPUTER
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef SU_TLS_UNIVERSAL_MTD_COMPUTER
 #define SU_TLS_UNIVERSAL_MTD_COMPUTER
 
 #if _MSC_VER >= 1000

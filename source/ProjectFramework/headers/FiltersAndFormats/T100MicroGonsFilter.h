@@ -1,4 +1,10 @@
-//T100MicroGonsFilter.h:
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//T100MicroGonsFilter.h:
 
 /*!
 Concrete Class of the TAngleFilter PABC.

@@ -1,3 +1,9 @@
+﻿// SPDX-FileCopyrightText: 2025 CERN
+
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include <TCoordSysInfo.h>
 
 #include <tut/tut.hpp>

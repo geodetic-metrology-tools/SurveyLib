@@ -1,4 +1,10 @@
-//  TModifiedLocalGeodeticRF.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TModifiedLocalGeodeticRF.h
 
 /** A Geodetic Ellisoidal Reference Frame. 
     Deals with requests for Spatial Position coordinates

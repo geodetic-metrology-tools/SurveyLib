@@ -1,4 +1,10 @@
-#ifndef SURVEYLIB_TLV03TRANSFORMATION_95abd36b_d26e_463b_9931_6d0d3d756fab
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef SURVEYLIB_TLV03TRANSFORMATION_95abd36b_d26e_463b_9931_6d0d3d756fab
 #define SURVEYLIB_TLV03TRANSFORMATION_95abd36b_d26e_463b_9931_6d0d3d756fab
 
 

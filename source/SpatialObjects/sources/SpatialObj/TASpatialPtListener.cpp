@@ -1,4 +1,8 @@
+// SPDX-FileCopyrightText: 2025 CERN
 //
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿//
 //TASpatialPtListener.cpp : implementation file
 // abstract base class defining the default implementation
 // of the method of the TVSpatialPtListener interface

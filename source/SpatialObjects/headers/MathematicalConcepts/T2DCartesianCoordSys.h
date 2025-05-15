@@ -1,4 +1,10 @@
-//T2DCartesianCoordSys.h 
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//T2DCartesianCoordSys.h 
 
 /*! Class for explain vector in a 2D cartesian Coordinate system */
 /////////////////////////////////////////////////////////

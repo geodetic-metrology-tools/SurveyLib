@@ -1,4 +1,8 @@
-//TLSResultsMatrices.h : header file
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿//TLSResultsMatrices.h : header file
 // class for result matrices as defined for survey purposes 
 // and for the least squares solving algorithm
 #include <iomanip>

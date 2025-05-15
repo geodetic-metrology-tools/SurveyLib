@@ -1,4 +1,8 @@
-// TWPS2DFilter.h
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TWPS2DFilter.h
 //
 // Concrete Class of the TWPSFilter PABC.
 // Handles the IO of an TWPSMeasurement object for the case

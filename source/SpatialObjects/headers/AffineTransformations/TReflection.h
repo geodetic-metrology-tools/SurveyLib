@@ -1,4 +1,10 @@
-// TReflection.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TReflection.h
 
 /** 3D Reflection, affine transformation, six cases are distinguished:
 Reflection by a plane x=0, y=0, z=0 or Reflection by the plane x=y, x=z or y=z*/

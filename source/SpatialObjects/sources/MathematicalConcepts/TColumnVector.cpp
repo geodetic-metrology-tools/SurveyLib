@@ -1,4 +1,8 @@
-// TColumnVector.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TColumnVector.cpp
 //
 /** Class for a vector of doubles.
 Designed to be easiliy usable with vector functions of the NagC math library */

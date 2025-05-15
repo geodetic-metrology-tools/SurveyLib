@@ -1,4 +1,10 @@
-// TMatrix.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TMatrix.h
 
 /*! Class for a matrix of doubles.
 Designed to be easiliy usable with matrix functions of the NagC math library 

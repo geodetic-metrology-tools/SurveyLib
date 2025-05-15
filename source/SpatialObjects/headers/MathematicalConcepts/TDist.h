@@ -1,4 +1,10 @@
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
+﻿
 /*!
 	TDist.h : definitions of distance functions taking TLength
 	objects, or TReal, or TPositionVector as argument

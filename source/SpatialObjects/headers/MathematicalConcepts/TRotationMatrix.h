@@ -1,4 +1,10 @@
-// TRotationMatrix.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TRotationMatrix.h
 
 /** Class for the matrices of rotation used for points transformations */
 //////////////////////////////////////////////////////////////////////

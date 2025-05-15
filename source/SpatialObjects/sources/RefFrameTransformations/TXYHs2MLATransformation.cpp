@@ -1,4 +1,8 @@
-//  TXYHs2MLATransformation.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿//  TXYHs2MLATransformation.cpp
 //
 /** The direct transformation from a modified local astronomical reference frame to a
     geodetic reference frame.

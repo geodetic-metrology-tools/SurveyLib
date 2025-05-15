@@ -1,4 +1,10 @@
-//  TARefFrameTransformation.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TARefFrameTransformation.h
 
 /** Classe de base abstraite pour une transformation d'objets d'un 
 	referentiel dans un autre.

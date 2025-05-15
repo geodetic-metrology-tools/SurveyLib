@@ -1,4 +1,10 @@
-//  TXYHg2XYHeTransformation.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TXYHg2XYHeTransformation.h
 
 /** The transformation from a XYHg reference frame to a XYHe reference frame.
 

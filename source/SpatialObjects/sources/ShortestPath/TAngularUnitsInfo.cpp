@@ -1,4 +1,8 @@
-#include <TAngularUnitsInfo.h>
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#include <TAngularUnitsInfo.h>
 
 #include <stdexcept>
 #include <memory> // for std::auto_ptr

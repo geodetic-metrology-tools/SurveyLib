@@ -1,4 +1,10 @@
-//  TXYHe2MLATransformation.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TXYHe2MLATransformation.h
 
 /** The transformation from a XYHe projection to a modified local
 	astronomical reference frame.

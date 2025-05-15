@@ -1,4 +1,10 @@
-// TACoordSysVector.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TACoordSysVector.h
 
 /** Abstract class use for explain TPositionVector and TFreeVector in a Coordonate System */
 //////////////////////////////////////////////////////////////////////

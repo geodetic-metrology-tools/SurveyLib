@@ -1,4 +1,10 @@
-// TPositionVector.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TPositionVector.h
 
 /** 3D Vector used to define position in a space*/
 //////////////////////////////////////////////////////////////////////

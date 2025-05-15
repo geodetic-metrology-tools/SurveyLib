@@ -1,4 +1,8 @@
-// TGeodeticFilter.cpp
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TGeodeticFilter.cpp
 //
 // Concrete class of a TSpatialPositionFilter.
 // Handles the IO of an TSpatialPosition object for a

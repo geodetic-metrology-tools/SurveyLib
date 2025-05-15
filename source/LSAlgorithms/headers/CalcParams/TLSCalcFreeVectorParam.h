@@ -1,4 +1,10 @@
-#ifndef SU_FREE_VECTOR_PARA
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef SU_FREE_VECTOR_PARA
 #define SU_FREE_VECTOR_PARA
 
 #if _MSC_VER >= 1000

@@ -1,4 +1,8 @@
-#include <TOptionsCheck.h>
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#include <TOptionsCheck.h>
 #include <PlainTransform.h>
 #include <utils/PositionVectorUtils.h>
 #include <TPlainDataParameters.h>

@@ -1,4 +1,10 @@
-//TGeodeticCoordSys.h 
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//TGeodeticCoordSys.h 
 
 /*! Class for explain vector in a geodetic coordinate system */
 /////////////////////////////////////////////////////////

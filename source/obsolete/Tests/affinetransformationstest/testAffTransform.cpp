@@ -1,4 +1,8 @@
-#include <iostream>
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+ï»¿#include <iostream>
 #include <iomanip>
 #include <string>
 using namespace std;
@@ -315,7 +319,7 @@ void main ()
 
 
 		// TEST TCOMPOSITE 
-	//verifier les résultats numériques à partir de ce breakpoint
+	//verifier les rÃ©sultats numÃ©riques Ã  partir de ce breakpoint
 
 	TCompositeAffTransform comp, comp3, comp4;
 	//ry.setStatus(TVNumericValue::kNull);

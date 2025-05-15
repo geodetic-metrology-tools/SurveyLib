@@ -1,4 +1,10 @@
-//  TTerrestrialReferenceFrame.h
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿//  TTerrestrialReferenceFrame.h
 
 /** A Terrestrial reference frame like ETRF or ITRF
 	Specific solution at specific epoch

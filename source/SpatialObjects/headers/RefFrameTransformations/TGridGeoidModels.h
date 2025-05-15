@@ -1,4 +1,10 @@
-#ifndef SU_GRID_GEOID_MODELS
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef SU_GRID_GEOID_MODELS
 #define SU_GRID_GEOID_MODELS
 
 #include <TCernGridGeoid.h>

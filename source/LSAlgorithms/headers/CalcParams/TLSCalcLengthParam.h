@@ -1,4 +1,10 @@
-#ifndef SU_LENGTH_PARA
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿#ifndef SU_LENGTH_PARA
 #define SU_LENGTH_PARA
 
 #if _MSC_VER >= 1000

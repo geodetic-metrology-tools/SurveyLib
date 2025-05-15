@@ -1,4 +1,10 @@
-// TAGeoidModel.h: 
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+﻿// TAGeoidModel.h: 
 
 /*!Purely Abstract Base Class (Interface) for a TGeoid.*/
 //////////////////////////////////////////////////////////////////////

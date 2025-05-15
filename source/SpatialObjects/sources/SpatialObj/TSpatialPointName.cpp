@@ -1,4 +1,8 @@
-// TSpatialPointName
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿// TSpatialPointName
 //
 // Class for a spatial point name tag.
 //
@@ -187,9 +191,9 @@ bool TSpatialPointName::operator<( const TSpatialPointName &right ) const{
 	bool answer=false;
 	bool answerFound=false;
 
-	//Name Point et Class ne sont pas concaténés pour la comparaison car si par ex. les
-	//deux Name n'ont pas la même longueur des caractères de l'un vont être comparés 
-	//avec des caractères qui sont de Point ou Class de l'autre  
+	//Name Point et Class ne sont pas concatÃ©nÃ©s pour la comparaison car si par ex. les
+	//deux Name n'ont pas la mÃªme longueur des caractÃ¨res de l'un vont Ãªtre comparÃ©s 
+	//avec des caractÃ¨res qui sont de Point ou Class de l'autre  
 
 	if (fName<right.fName){
 		answer=true;

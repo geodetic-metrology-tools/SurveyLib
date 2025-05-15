@@ -1,4 +1,8 @@
-#include <TCoordSysInfo.h>
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#include <TCoordSysInfo.h>
 
 #include <memory> // for std::auto_ptr
 #include <utility> // for std::make_pair

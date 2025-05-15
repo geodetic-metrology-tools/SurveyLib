@@ -1,4 +1,8 @@
-#include <iostream>
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#include <iostream>
 #include <string>
 //#include <limits>
 using namespace std;

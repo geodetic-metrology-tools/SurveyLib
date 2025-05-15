@@ -1,4 +1,10 @@
+/*
+ * SPDX-FileCopyrightText: 2025 CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
+﻿
 
 #ifndef SURVEYLIB_TLV95_PROJECTION_fbf774f0_9fc2_4c4c_ae17_4c2a804516b8
 #define SURVEYLIB_TLV95_PROJECTION_fbf774f0_9fc2_4c4c_ae17_4c2a804516b8

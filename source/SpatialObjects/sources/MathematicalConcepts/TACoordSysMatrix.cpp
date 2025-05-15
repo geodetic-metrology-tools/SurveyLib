@@ -1,4 +1,8 @@
-#include "TACoordSysMatrix.h"
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+﻿#include "TACoordSysMatrix.h"
 
 #include "TVCoordinateSystem.h"
 

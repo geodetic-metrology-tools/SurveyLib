@@ -1,4 +1,8 @@
+// SPDX-FileCopyrightText: 2025 CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
+﻿
 
 #ifndef _CUSTOM_TYPE_TRAITS
 #define _CUSTOM_TYPE_TRAITS
