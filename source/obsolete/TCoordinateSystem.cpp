@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TCoordinateSystem 
 //
 // Abstract Base Class for a Coordinate System.
@@ -8,7 +12,6 @@
 // 
 // Patterns:
 //
-// Copyright 1999,2000, Mark Jones, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

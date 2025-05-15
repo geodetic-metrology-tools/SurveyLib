@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //TLSCalcDataSet.cpp : implementation file
 //Class for a data holding all the Ls calc data
 

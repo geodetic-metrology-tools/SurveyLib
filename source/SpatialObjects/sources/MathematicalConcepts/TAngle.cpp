@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TAngle.cpp
 /*
 The TAngle class represents a mathematical angle value.
@@ -23,7 +27,6 @@ member functions provide ArcSine, ArcCosine, and ArcTangent operators.
 Patterns:
 
 
-Copyright 1999-2025, CERN. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

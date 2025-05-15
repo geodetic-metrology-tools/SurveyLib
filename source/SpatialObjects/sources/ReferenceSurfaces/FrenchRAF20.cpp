@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include <FrenchRAF20.h>
 #include <string>
 #include <sstream>
@@ -22,30 +26,30 @@ void FrenchRAF20::circeTransfoHToRaf(const double &latitude_rgf93_rad, const dou
 double FrenchRAF20::interpolRAF20(const double &latitude_rgf93_deg, const double &longitude_rgf93_deg)
 {
 	//RAF 20 grid constants
-	const double maxLat_deg = 51.5; //Latitude maximale en degrés décimaux comptée positivement vers le nord
-	const double minLat_deg = 42.0; //Latitude minimale en degrés décimaux comptée positivement vers le nord 
-	const double maxLong_deg = 8.5; //Longitude maximale en degrés décimaux comptée positivement vers l’est
-	const double minLong_deg = -5.5; //	Longitude minimale en degrés décimaux comptée positivement vers l’est
-	const double stepLong_deg = 0.0333333333333; //Pas en longitude en degrés décimaux
-	const double stepLat_deg = 0.025; // Pas en latitude en degrés décimaux
+	const double maxLat_deg = 51.5; //Latitude maximale en degres decimaux comptee positivement vers le nord
+	const double minLat_deg = 42.0; //Latitude minimale en degres decimaux comptee positivement vers le nord 
+	const double maxLong_deg = 8.5; //Longitude maximale en degres decimaux comptee positivement vers lâ?�™est
+	const double minLong_deg = -5.5; //	Longitude minimale en degres decimaux comptee positivement vers lâ?�™est
+	const double stepLong_deg = 0.0333333333333; //Pas en longitude en degres decimaux
+	const double stepLat_deg = 0.025; // Pas en latitude en degres decimaux
 
 	//Other informations (provided by IGN in the description of the file format)
 	//
 	/*
-	Ordre de rangement(voir « ordre de rangement »): 2 : à latitude constante maximale, longitude croissante, puis latitude décroissante
-	Présence des coordonnées de chaque noeud : 0 (non)
-	Nombre de valeurs par noeud(hors code de précision, cf.ci - dessous) 1
-	Présence du code de précision : 1 (oui)
-	Translation appliquée aux valeurs de la grille(autant que de valeurs par noeud) : 0.
+	Ordre de rangement("ordre de rangement"): 2 : ?? latitude constante maximale, longitude croissante, puis latitude decroissante
+	Presence des coordonnees de chaque noeud : 0 (non)
+	Nombre de valeurs par noeud(hors code de precision, cf.ci - dessous) 1
+	Presence du code de precision : 1 (oui)
+	Translation appliquee aux valeurs de la grille(autant que de valeurs par noeud) : 0.
 
-	Code de précision:
+	Code de precision:
 	Code	Signification
 	00		aucune information
 	01		< 5 cm
-	02		5 à 10 cm
-	03		10 à 20 cm
-	04		20 à 50 cm
-	07		< 2 cm (à venir)
+	02		5 ?? 10 cm
+	03		10 ?? 20 cm
+	04		20 ?? 50 cm
+	07		< 2 cm (?? venir)
 	99		> 1 m
 
 	https://geodesie.ign.fr/contenu/fichiers/documentation/grilles/notices/Grilles-MNT-TXT_Formats.pdf 
@@ -16455,9 +16459,9 @@ static const std::array<std::array<TReal, 20>, 16383> raf20grid = {{
 	//{
 
 		/*
-		Le premier bloc est à latitude max et de longitude min à longitude max avec un pas de 0.03333333
-		Le deuxième bloc est à latitude max - 0.025 et de longitude min à longitude max avec un pas de 0.03333333
-		Le dernier bloc est à latitude min et de longitude min à longitude max avec un pas de 0.03333333
+		Le premier bloc est ?? latitude max et de longitude min ?? longitude max avec un pas de 0.03333333
+		Le deuxi?¨me bloc est ?? latitude max - 0.025 et de longitude min ?? longitude max avec un pas de 0.03333333
+		Le dernier bloc est ?? latitude min et de longitude min ?? longitude max avec un pas de 0.03333333
 
 		*/
 		//Find line to get latitude and position of longitude

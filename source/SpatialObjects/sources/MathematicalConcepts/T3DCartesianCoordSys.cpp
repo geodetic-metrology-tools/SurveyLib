@@ -1,9 +1,12 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //T3DCartesianCoordSys.h 
 //
 //Class for explain matrix and vector in a 3D cartesian
 //Coordinate system 
 //
-//Copyright 2002, CERN, EST/SU. All rights reserved.
 /////////////////////////////////////////////////////////
 
 //For ROOT//////////////////////////////////////////////////////

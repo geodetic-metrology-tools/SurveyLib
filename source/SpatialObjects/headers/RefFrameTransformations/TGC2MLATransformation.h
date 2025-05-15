@@ -1,8 +1,11 @@
-//  TGC2MLATransformation.h
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
-Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
-*/
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+//  TGC2MLATransformation.h
+
 /** The direct transformation from a modified local astronomical reference frame to a
     geodetic reference frame.
 	

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TDeciDegsFilter.cpp
 //
 // Concrete Class of the TAngleFilter PABC.
@@ -8,7 +12,6 @@
 // This class is a Singleton.
 // Works as a Strategy of a TTStreamFormatter object.
 //
-// Copyright 1999,2022, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////

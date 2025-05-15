@@ -1,10 +1,14 @@
+/*
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 // TA2DXYRefFrame.h
 //
 /*  
    Patterns:
    An Abstract STATE of a Spatial Position
-   
-   Copyright 2000 CERN EST/SU. All rights reserved.
 */
 ////////////////////////////////////////////////////////////////////
 

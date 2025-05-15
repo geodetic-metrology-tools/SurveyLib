@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TTranslation.cpp
 //
 /** A Scaling Transformation */
@@ -5,7 +9,6 @@
 // Patterns:
 //
 // 
-// Copyright 2010 CERN SU, M.Jones. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

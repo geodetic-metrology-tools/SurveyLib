@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 #ifndef SURVEYLIB_TSWISS_TRANSFO
 #	define SURVEYLIB_TSWISS_TRANSFO

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TObservationFormat.cpp
 //
 /** Class used by a text stream to store and get all necessary formatting information for observations*/
@@ -5,7 +9,6 @@
 // Patterns:
 //
 // 
-// Copyright 2000 CERN EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

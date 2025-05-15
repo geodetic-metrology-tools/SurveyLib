@@ -1,9 +1,12 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //  TRefSystemFactory.cpp
 //
 /* Factory for reference surfaces, reference frames et reference frame transformations. 
   
    
-    Copyright 2002-2023 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

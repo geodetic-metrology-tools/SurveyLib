@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //  TReferenceFrameServer.cpp
 //
 /** A class that instantiates and provides access to all available
@@ -7,7 +11,6 @@
     Patterns:
 	A singleton to ensure only one such server exists.
      
-    Copyright 2000 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

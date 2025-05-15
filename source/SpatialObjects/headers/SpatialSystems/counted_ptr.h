@@ -1,22 +1,11 @@
+/*
+ * SPDX-FileCopyrightText: 1998, 1999 Mark E. <snowball3@usa.net>
+ *
+ * SPDX-License-Identifier: LicenseRef-countedPrt
+ */
+
 #ifndef __RC_PTRS_H
 #define __RC_PTRS_H
-
-/*
-  Copyright 1998, 1999
-  Mark E. (snowball3@usa.net)
-  http://snowball.digitalspace.net/cpp/
-
-  Permission to use, copy, modify, and distribute this software
-  and its documentation for any purpose is hereby granted without fee,
-  provided that the above copyright notice appear in all copies and
-  that both that copyright notice and this permission notice appear
-  in supporting documentation.
-
-  Mark E. makes no representations about the suitability of
-  this software for any purpose. It is provided "as is" without
-  express or implied warranty.
- 
-*/
 
 /*
   This header contains the classes counted_ptr 

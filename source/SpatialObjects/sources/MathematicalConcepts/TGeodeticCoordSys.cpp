@@ -1,8 +1,11 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //TGeodeticCoordSys.cpp 
 //
 //Class for explain vector in a geodetic Coordinate system 
 //
-//Copyright 2002, CERN, EST/SU. All rights reserved.
 /////////////////////////////////////////////////////////
 
 //For ROOT//////////////////////////////////////////////////////

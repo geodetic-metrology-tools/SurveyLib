@@ -1,3 +1,9 @@
+﻿// SPDX-FileCopyrightText: CERN
+
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TSpatialOrientationError.h: 
 //
 // The Spatial Orientation Error of an orientation in a given reference frame.
@@ -8,7 +14,6 @@
 // Patterns:
 // This class is a Proxy.
 //
-// Copyright 1999,2000, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////

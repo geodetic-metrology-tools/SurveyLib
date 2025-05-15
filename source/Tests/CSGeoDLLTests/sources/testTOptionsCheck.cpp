@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include <TOptionsCheck.h>
 
 #include <PlainTransform.h> // Move EStatus to separate file

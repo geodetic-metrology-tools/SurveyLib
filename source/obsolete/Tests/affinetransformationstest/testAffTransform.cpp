@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -315,7 +319,7 @@ void main ()
 
 
 		// TEST TCOMPOSITE 
-	//verifier les résultats numériques à partir de ce breakpoint
+	//verifier les rÃ©sultats numÃ©riques ? partir de ce breakpoint
 
 	TCompositeAffTransform comp, comp3, comp4;
 	//ry.setStatus(TVNumericValue::kNull);

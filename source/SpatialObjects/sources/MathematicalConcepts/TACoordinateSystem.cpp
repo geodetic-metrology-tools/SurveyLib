@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TACoordinateSystem.cpp
 //
 /** Abstract class use for explain  a Coordinate System */
@@ -5,7 +9,6 @@
 // Patterns:
 //
 // 
-// Copyright 2002 CERN EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TSeparatedFormatTStream.cpp
 //
 // Concrete class defining a separated stream text stream formatter
@@ -5,7 +9,6 @@
 // Patterns:
 // A concrete decorator class of a TAStreamFormatter.
 // 
-// Copyright 1999-2008 M.Jones, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

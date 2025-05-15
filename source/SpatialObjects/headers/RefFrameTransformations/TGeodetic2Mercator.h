@@ -1,17 +1,8 @@
 /*
-© Copyright CERN 2000-2012. All rigths reserved. This software is released under a CERN proprietary software licence.
-Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
-
-/** Conversion between projected and ellipsoidal coordinates using transverse mercator projection
-* The tranverse mercator is defined as follow:
-* scale factor on central meridian : 1.00006
-* Central meridian (center of the FCC) : 6.14°
-* False easting and false northing: 0
-* Ellipsoid: GRS 80
-
-It is valid for the CGRF
-
-*/
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 #ifndef SURVEYLIB_GEODETIC_2_MERCATORPROJECTION
 #define SURVEYLIB_GEODETIC_2_MERCATORPROJECTION

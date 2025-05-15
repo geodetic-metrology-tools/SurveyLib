@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include <TAngle.h>
 #include <TLocalSystemOrigin.h>
 #include <TRefSystemFactory.h>

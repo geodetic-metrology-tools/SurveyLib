@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TIStreamFormatterCatalogue.h: 
 //
 // A catalogue for obtaining TQTAStreamFormatter objects.
@@ -7,7 +11,6 @@
 // A singleton to ensure only one catalogue exists.
 // 
 //
-// Copyright 2000, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

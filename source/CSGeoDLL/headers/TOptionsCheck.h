@@ -1,7 +1,8 @@
 /*
-© Copyright CERN 2000-2022. All rigths reserved. This software is released under a CERN proprietary software licence.
-Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
-*/
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 #ifndef CSGEODLL_T_OPTIONS_CHECK_H_acaac7fcab6442d681b471fa1f8d9ec5
 #define CSGEODLL_T_OPTIONS_CHECK_H_acaac7fcab6442d681b471fa1f8d9ec5

@@ -151,3 +151,26 @@ Once your PR has been reviewed by another developer and accepted, it can be merg
 Automatic tests are performed each time you push a commit. These tests include compilation of `ALL_BUILD` target, and running the `UnitTests` target, all on Linux 64 bits, Windows 32 and 64 bits. If the tests don't pass, your PR will not be merged.
 
 Once the PR has been accepted and merged into `master`, GitLab-CI will automatically build the dynamic library.
+
+## Licensing
+
+SurveyLib source code is licensed under the [GNU General Public License v3.0 or later](LICENSE).
+
+Documentation and metadata (such as configuration and non-code files) are licensed under the [Creative Commons Attribution 4.0 International (CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/).  
+This distinction is defined in [`REUSE.toml`](REUSE.toml).
+
+This project complies with the [REUSE specification](https://reuse.software/), which standardizes license documentation and attribution.
+
+### Third-Party Dependencies
+
+| Library           | License                              | Source                                       |
+|-------------------|---------------------------------------|----------------------------------------------|
+| Eigen             | MPL-2.0                               | https://gitlab.com/libeigen/eigen            |
+| TUT               | BSD 2-Clause "Simplified" License     | https://github.com/mrzechonek/tut-framework  |
+| RapidJSON         | MIT                                   | https://github.com/Tencent/rapidjson         |
+| Reframe           | Creative Commons Attribution No Derivatives 4.0 International | https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar |
+| `counted_ptr.h`   | Custom Permissive License (1999)      | http://snowball.digitalspace.net/cpp/        |
+
+All third-party license texts are stored in the [`LICENSES/`](LICENSES/) directory.  
+For an overview of licensing across the project, see [`NOTICE.md`](NOTICE.md).
+

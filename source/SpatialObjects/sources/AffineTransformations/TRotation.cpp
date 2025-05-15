@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TRotation.cpp
 //
 /** Class for rotations of TPositionVector and TFreeVector. 
@@ -7,7 +11,6 @@ by an other rotation or vector. Sub classes for rotations around each axis*/
 // Patterns:
 //
 // 
-// Copyright 2000-2010 CERN SU, M.Jones. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

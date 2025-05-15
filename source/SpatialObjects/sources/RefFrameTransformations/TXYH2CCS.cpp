@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "TXYH2CCS.h"
 #include "GeodeticConstants.h"
 #include "TSpatialPosition.h"

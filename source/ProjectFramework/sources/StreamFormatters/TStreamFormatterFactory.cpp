@@ -1,10 +1,13 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 /** A Factory producing the different TQtStreamFormatter objects.
 
     Patterns:
 	A singleton to ensure only one Factory exists.
 
  
-    Copyright 2000 CERN EST/SU. All rights reserved.
 */
 
 

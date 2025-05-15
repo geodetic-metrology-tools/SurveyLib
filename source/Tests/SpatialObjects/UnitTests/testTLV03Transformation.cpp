@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifdef _WIN32
 
 #include <TLV03Transformation.h>
@@ -6,7 +10,7 @@
 #include <tut/tut.hpp>
 
 /* Reference:
-Formules et constantes pour le calcul de la projection cylindrique à axe oblique et pour la transformation entre des systèmes de référence
+Formules et constantes pour le calcul de la projection cylindrique ?? axe oblique et pour la transformation entre des syst?¨mes de reference
 Swisstopo, 2016
 */
 

@@ -1,3 +1,9 @@
+﻿// SPDX-FileCopyrightText: CERN
+
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TLGCTStream.cpp
 //
 // Concrete class defining the old LGC file syntax,
@@ -5,7 +11,6 @@
 // Patterns:
 // A concrete decorator class of a QTextStream.
 // 
-// Copyright 1999,2000 CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

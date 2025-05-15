@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //TCoordSysFactory.cpp
 //
 //Class for use of coordinate system
@@ -5,7 +9,6 @@
 // Patterns:
 //
 // 
-// Copyright 2002 CERN EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

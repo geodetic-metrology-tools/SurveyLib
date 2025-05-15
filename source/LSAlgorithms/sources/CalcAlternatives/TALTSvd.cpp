@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TALTSvd.h : implementation file
 // class making an approximative best fit between points
 // the class is the minimal required for chaba

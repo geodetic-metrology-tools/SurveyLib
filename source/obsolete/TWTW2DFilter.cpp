@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TWTW2DFilter.h
 //
 // Concrete Class of the TWTWFilter PABC.
@@ -8,7 +12,6 @@
 // This class is a Singleton.
 // Works as a Strategy of a TLGCTStream object. 
 //
-// Copyright 2000, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

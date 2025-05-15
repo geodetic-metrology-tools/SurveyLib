@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TQtStreamFormatterFactory.h: 
 //
 /** A Factory producing the different TQtStreamFormatter objects.
@@ -6,7 +10,6 @@
 	A singleton to ensure only one Factory exists.
 
  
-    Copyright 2000 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 
