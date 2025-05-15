@@ -7,9 +7,7 @@
   
     Patterns:
     A concrete STATE of a Spatial Position
-   
-    Copyright 2000 CERN EST/SU. All rights reserved.
-*/
+   */
 //////////////////////////////////////////////////////////////////////
 
 

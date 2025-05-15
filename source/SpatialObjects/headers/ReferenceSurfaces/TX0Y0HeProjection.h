@@ -1,8 +1,5 @@
 //  TX0Y0HeProjection.h
-/*
-© Copyright CERN 2000-2024. All rigths reserved. This software is released under a CERN proprietary software licence.
-Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
-*/
+
 /** A projection on XY plane at 0-level with ellipsoidal height 
 
   

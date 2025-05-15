@@ -7,7 +7,6 @@ sends the appropriate messages
 Patterns:
 
  
-Copyright 2003 CERN EST/SU. All rights reserved.
 */
 /////////////////////////////////////////////////////////////////////
 

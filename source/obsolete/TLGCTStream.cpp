@@ -5,7 +5,6 @@
 // Patterns:
 // A concrete decorator class of a QTextStream.
 // 
-// Copyright 1999,2000 CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

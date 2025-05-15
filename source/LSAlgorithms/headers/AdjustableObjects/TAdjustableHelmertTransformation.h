@@ -1,8 +1,3 @@
-/*
-© Copyright CERN 2000-2024. All rights reserved. This software is released under a CERN proprietary software license.
-Any permission to use it shall be granted in writing. Request shall be addressed to CERN through mail-KT@cern.ch
-*/
-
 #ifndef TADJUSTABLE_HELMERT_TRANSFORMATION
 #define TADJUSTABLE_HELMERT_TRANSFORMATION
 

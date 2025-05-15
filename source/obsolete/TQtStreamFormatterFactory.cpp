@@ -6,7 +6,6 @@
 	A singleton to ensure only one Factory exists.
 
  
-    Copyright 2000 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

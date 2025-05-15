@@ -2,7 +2,6 @@
 //
 // Class for geoidal values as defined for survey purposes
 //
-// Copyright 1999,2000, Mark Jones, EST/SU. All rights reserved.
 ////////////////////////////////////////////////////////////////
 
 

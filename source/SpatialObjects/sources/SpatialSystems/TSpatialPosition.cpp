@@ -8,7 +8,6 @@
 // Patterns:
 // This class is a Proxy.
 //
-// Copyright 1999,2000, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

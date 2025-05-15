@@ -3,7 +3,6 @@
 /* Factory for reference surfaces, reference frames et reference frame transformations. 
   
    
-    Copyright 2002-2023 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

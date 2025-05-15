@@ -151,3 +151,22 @@ Once your PR has been reviewed by another developer and accepted, it can be merg
 Automatic tests are performed each time you push a commit. These tests include compilation of `ALL_BUILD` target, and running the `UnitTests` target, all on Linux 64 bits, Windows 32 and 64 bits. If the tests don't pass, your PR will not be merged.
 
 Once the PR has been accepted and merged into `master`, GitLab-CI will automatically build the dynamic library.
+
+## Licensing
+
+SurveyLib is licensed under the [Mozilla Public License 2.0](LICENSE).
+
+This project complies with the [REUSE specification](https://reuse.software/), which standardizes license documentation and attribution.
+
+### Third-Party Dependencies
+
+| Library           | License                              | Source                                       |
+|-------------------|---------------------------------------|----------------------------------------------|
+| Eigen             | MPL-2.0                               | https://gitlab.com/libeigen/eigen            |
+| TUT               | Boost Software License 1.0            | https://github.com/martinmoene/tut           |
+| RapidJSON         | MIT                                   | https://github.com/Tencent/rapidjson         |
+| Reframe           | Custom (redistributable, free only)   | https://www.swisstopo.admin.ch               |
+| `counted_ptr.h` | Custom Permissive License (1999) | http://snowball.digitalspace.net/cpp/        |
+
+All third-party license texts are stored in the [`LICENSES/`](LICENSES/) directory.
+

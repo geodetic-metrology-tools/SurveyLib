@@ -8,7 +8,6 @@
 // This class is a Singleton.
 // Works as a Strategy of a TTStreamFormatter object. 
 //
-// Copyright 2003, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

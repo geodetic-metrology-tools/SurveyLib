@@ -8,7 +8,6 @@
 // Patterns:
 // Works as a Strategy of a TTStreamFormatter object. 
 //
-// Copyright 1999,2000, Mark Jones, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

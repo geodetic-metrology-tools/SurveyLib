@@ -3,7 +3,6 @@
 // Class for storing the tile of a application data set 
 // 
 //
-// Copyright 1999,2000, Mark Jones, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 #if !defined(SU_TITLE)

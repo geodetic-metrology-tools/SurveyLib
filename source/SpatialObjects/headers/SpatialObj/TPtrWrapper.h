@@ -1,8 +1,5 @@
 //TPtrWrapper
-/*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
-Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
-*/
+
 //! A templated counter pointer. 
 //! A wrapper around the pointed to object that manages a count of it's copies.
 //! It is responsible for deleting the object being pointed to, and only does

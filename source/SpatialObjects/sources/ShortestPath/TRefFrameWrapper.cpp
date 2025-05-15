@@ -9,7 +9,6 @@
     Patterns:
     Wrapper around TVReferenceFrame.
    
-    Copyright 2000 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

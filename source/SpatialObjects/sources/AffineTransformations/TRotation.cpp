@@ -7,7 +7,6 @@ by an other rotation or vector. Sub classes for rotations around each axis*/
 // Patterns:
 //
 // 
-// Copyright 2000-2010 CERN SU, M.Jones. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

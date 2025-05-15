@@ -23,7 +23,6 @@ member functions provide ArcSine, ArcCosine, and ArcTangent operators.
 Patterns:
 
 
-Copyright 1999-2025, CERN. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

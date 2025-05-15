@@ -5,7 +5,6 @@
 // include math operators +, -, *factor, =.
 //
 //
-// Copyright 1999,2000, Mark Jones, EST/SU. All rights reserved.
 ////////////////////////////////////////////////////////////////
 
 #include "TLength.h"

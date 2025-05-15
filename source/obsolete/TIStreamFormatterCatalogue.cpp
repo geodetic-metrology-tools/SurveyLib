@@ -7,7 +7,6 @@
 // A singleton to ensure only one catalogue exists.
 // 
 //
-// Copyright 2000, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 1998, 1999 Mark E. <snowball3@usa.net>
+// SPDX-License-Identifier: LicenseRef-MarkE
+
 #ifndef __RC_PTRS_H
 #define __RC_PTRS_H
 

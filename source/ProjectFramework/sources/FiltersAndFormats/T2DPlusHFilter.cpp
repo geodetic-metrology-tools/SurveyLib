@@ -9,7 +9,6 @@
 // This is a Singleton.
 // Works as a Strategy of a TAStreamFormatter object. 
 //
-// Copyright 2002, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

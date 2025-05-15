@@ -1,8 +1,5 @@
 //  TTerrestrialReferenceFrame.cpp
-/*
-© Copyright CERN 2000-2021. All rigths reserved. This software is released under a CERN proprietary software licence.
-Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
-*/
+
 /** A Terrestrial reference frame like ETRF or ITRF
 	It is a Geodetic Reference Frame with an epoch parameter
 
@@ -10,7 +7,6 @@ Any permission to use it shall be granted in writing. Request shall be adressed 
 	Patterns:
 	A concrete STATE of a Spatial Position
 
-	Copyright 2021 CERN EST/SU. All rights reserved.
 
 */
 //////////////////////////////////////////////////////////////////////
