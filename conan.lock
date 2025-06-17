@@ -1,0 +1,9 @@
+{
+    "version": "0.5",
+    "requires": [
+        "eigen/3.4.0#2e192482a8acff96fe34766adca2b24c%1680436083.8"
+    ],
+    "build_requires": [],
+    "python_requires": [],
+    "config_requires": []
+}
