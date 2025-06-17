@@ -194,8 +194,5 @@ windows32_release:
         CMAKEARCHITECTURE: "-A Win32"
     artifacts:
         name: win32dll
-stages:
-  - build
-  - test
-  - dependency_scanning  # or any name
+
 
