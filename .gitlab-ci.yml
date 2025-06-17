@@ -1,6 +1,7 @@
 include:
   - project: 'apc/common/gitlab-ci-utils'
     file: 'ci/scripts/gitlab-ci-susoft.yml'
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
 
 ##################
 # LINUX BUILDS   #
@@ -198,5 +199,3 @@ stages:
   - test
   - dependency_scanning  # or any name
 
-include:
-  - template: Security/Dependency-Scanning.gitlab-ci.yml
