@@ -4,6 +4,6 @@
         "conan": {}
     },
     "include": [
-        "..\\build\\CMakePresets.json"
+        "C:\\Users\\rishabh\\SurveyLib\\CMakePresets.json"
     ]
 }

@@ -14,9 +14,9 @@ class SurveyLibConan(ConanFile):
         "eigen/3.4.0",
     )
 
-    default_options = {
-        "eigen/*:build_tests": False,
-    }
+    # default_options = {
+    #     "eigen/*:build_tests": False,
+    # }
 
     def layout(self):
         self.folders.source = "source"
