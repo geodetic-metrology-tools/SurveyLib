@@ -109,7 +109,7 @@ public:
 	virtual int getFirstUidx() const;
 
 	// returns vector of relative indices of free parameters
-	const std::vector<int> getRelativeUnknIndices() const;
+	const std::vector<int> getRelativeUnknIndices() const override;
 
 #if USE_SERIALIZER
 	// Inherited via Serializable
@@ -259,16 +259,15 @@ public:
 	inline TSpatialStatus::ESpatialStatus getSpatialStatus() const { return fSpatialStatus; }
 	//@}
 
+	// getting the estimated vector with all variables
+	virtual Eigen::VectorXd getEstVector() const override;
+	// get the value corresponding to an index
+	virtual TReal getValue(int idx) const override;
+	// set the value corresponding to an index
+	virtual void setValue(int idx, TReal value) override;
+
 	/*!@name Settings */
 	//@{
-	/*!
-		\brief See \ref TVAdjustableObject::setCorrection
-
-		Sets correction for the current estimatedValue and updates it, if point has fixed H value transformation is made.
-
-		\throws Throws a logic_error if the adjusted point does not contain required index.
-	*/
-	virtual void setCorrection(int idx, TReal value);
 
 	/*!
 		\brief See \ref TVAdjustableObject::setFirstUidx

@@ -222,46 +222,6 @@ TAdjustablePoint::ErrorEllipsoid TAdjustablePoint::getErrorEllipsoid() const
 	return ell;
 }
 
-void TAdjustablePoint::setCorrection(int idx, TReal value)
-{
-	for (int i = 0; i < 3; i++)
-	{
-		if (uidx[i] == idx)
-		{
-			if (i == 0)
-			{
-				fCorrection[i] = (TLength(value));
-				fEstimatedValue.setX(fEstimatedValue.getX() + TLength(value));
-				fXValueSet = true;
-			}
-			else if (i == 1)
-			{
-				fCorrection[i] = (TLength(value));
-				fEstimatedValue.setY(fEstimatedValue.getY() + TLength(value));
-				fYValueSet = true;
-			}
-			else
-			{
-				fCorrection[2] = (TLength(value));
-				fEstimatedValue.setZ(fEstimatedValue.getZ() + TLength(value));
-			}
-
-			// If H value is fixed and all variables were set in this step, we need to make transformation: X1Y1Z1 -> X1Y1H0 --> X1Y1Z0new
-			if (fHfixed && fXValueSet && fYValueSet)
-			{
-				transformEstimatedValue();
-				if (!(fixedState[0]))
-					fXValueSet = false;
-				if (!(fixedState[1]))
-					fYValueSet = false;
-			}
-			return;
-		}
-	}
-
-	throw std::logic_error("Invalid unknown index in parameter access. Point " + getName());
-}
-
 /*!
 	See \ref TVAdjustableObject::setFirstUidx
 
@@ -427,6 +387,54 @@ TReal TAdjustablePoint::getHEstValue() const
 		TXYH2CCS::CCS2XYHg1985Machine(pvEst);
 
 	return pvEst.getH().getMetresValue();
+}
+
+Eigen::VectorXd TAdjustablePoint::getEstVector() const
+{
+	return fEstimatedValue.toRealVector();
+}
+
+TReal TAdjustablePoint::getValue(int idx) const
+{
+	TReal value = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		if (uidx[i] == idx)
+		{
+			if (i == 0)
+				value = TReal(fEstimatedValue.getX());
+			else if (i == 1)
+				value = TReal(fEstimatedValue.getY());
+			else
+				value = TReal(fEstimatedValue.getZ());
+		}
+	}
+	return value;
+}
+
+void TAdjustablePoint::setValue(int idx, TReal value)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		if (uidx[i] == idx)
+		{
+			if (i == 0)
+			{
+				fEstimatedValue.setX(TLength(value));
+			}
+			else if (i == 1)
+			{
+				fEstimatedValue.setY(TLength(value));
+			}
+			else
+			{
+				fEstimatedValue.setZ(TLength(value));
+			}
+			return;
+		}
+	}
+
+	throw std::logic_error("Invalid unknown index in parameter access. Point " + getName());
 }
 
 /*! Gets the euclidean estimated distance from this adjustable point to another one.

@@ -15,17 +15,39 @@ TAdjustableAngle TAdjustableAngle::createUninitialized(const std::string& name){
 	return TAdjustableAngle(TAngle(NO_VALf), true, name);
 }
 
-void TAdjustableAngle::setFirstUidx(int idx) {
+const std::vector<int> TAdjustableAngle::getRelativeUnknIndices() const
+{
+	std::vector<int> activeIndices;
+	if (!ifFixed)
+		activeIndices.push_back(0);
+	return activeIndices;
+}
+
+void TAdjustableAngle::setFirstUidx(int idx)
+{
 	if (isFixed())
 		throw std::logic_error("Trying to assign unknown index to a fixed angle. Angle " + getName());
 	uidx = idx;
 }
 
-void TAdjustableAngle::setCorrection(int idx, TReal value) {
-	if (uidx == idx){
-		fCorrection.setRadiansValue(value);
-		fEstimatedValue.setRadiansValue(fEstimatedValue.getRadiansValue() + value);
-	}
+Eigen::VectorXd TAdjustableAngle::getEstVector() const
+{
+	Eigen::VectorXd estVect(1);
+	estVect << fEstimatedValue.getRadiansValue();
+	return estVect;
+}
+
+TReal TAdjustableAngle::getValue(int idx) const
+{
+	if (uidx != idx)
+		throw std::logic_error("Invalid unknown index in parameter access. Angle " + getName());
+	return TReal(fEstimatedValue.getRadiansValue());
+}
+
+void TAdjustableAngle::setValue(int idx, TReal value)
+{
+	if (uidx == idx)
+		fEstimatedValue.setRadiansValue(value);
 	else
 		throw std::logic_error("Invalid unknown index in parameter access. Angle " + getName());
 }

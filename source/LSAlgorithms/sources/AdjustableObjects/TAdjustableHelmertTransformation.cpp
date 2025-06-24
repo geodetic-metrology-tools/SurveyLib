@@ -110,31 +110,6 @@ int TAdjustableHelmertTransformation::getLastUidx() const
 	throw std::logic_error("Trying to get unknown index from fixed transformation. Transformation " + getName());
 }
 
-void TAdjustableHelmertTransformation::setCorrection(int idx, TReal value)
-{
-	for (int i = 0; i < 3; i++)
-		if (uidx_trans[i] == idx)
-		{
-			setTranslationCorrection(i, TLength(value));
-			return;
-		}
-
-	for (int i = 0; i < 3; i++)
-		if (uidx_rot[i] == idx)
-		{
-			setRotationCorrection(i, TAngle(value, TAngle::kRadians));
-			return;
-		}
-
-	if (uidx_scale == idx)
-	{
-		setScaleCorrection(value);
-		return;
-	}
-
-	throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
-}
-
 void TAdjustableHelmertTransformation::setParam(const TAngle &rx, const TAngle &ry, const TAngle &rz)
 {
 	fEstParameter.omega = fProvParameter.omega = rx;
@@ -161,35 +136,35 @@ void TAdjustableHelmertTransformation::setParam(const TLength tx, const TLength 
 	setParam(scl);
 }
 
-void TAdjustableHelmertTransformation::setTranslationCorrection(int idx, TLength value)
+void TAdjustableHelmertTransformation::setTranslation(int idx, TLength value)
 {
 	if (idx == 0)
-		fEstParameter.tX = fEstParameter.tX + value;
+		fEstParameter.tX = value;
 	else if (idx == 1)
-		fEstParameter.tY = fEstParameter.tY + value;
+		fEstParameter.tY = value;
 	else if (idx == 2)
-		fEstParameter.tZ = fEstParameter.tZ + value;
+		fEstParameter.tZ = value;
 	else
 		throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
 	return;
 }
 
-void TAdjustableHelmertTransformation::setRotationCorrection(int idx, const TAngle &value)
+void TAdjustableHelmertTransformation::setRotation(int idx, const TAngle &value)
 {
 	if (idx == 0)
-		fEstParameter.omega = fEstParameter.omega + value;
+		fEstParameter.omega = value;
 	else if (idx == 1)
-		fEstParameter.phi = fEstParameter.phi + value;
+		fEstParameter.phi = value;
 	else if (idx == 2)
-		fEstParameter.kappa = fEstParameter.kappa + value;
+		fEstParameter.kappa = value;
 	else
 		throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
 	return;
 }
 
-void TAdjustableHelmertTransformation::setScaleCorrection(TReal value)
+void TAdjustableHelmertTransformation::setScale(TReal value)
 {
-	fEstParameter.scale = fEstParameter.scale + value;
+	fEstParameter.scale = value;
 }
 
 const TAngle TAdjustableHelmertTransformation::getEstimatedPrecisionRot(int d) const
@@ -243,6 +218,64 @@ void TAdjustableHelmertTransformation::setFirstUidx(int idx)
 
 	if (!fixedScale[0])
 		uidx_scale = idx++;
+}
+
+Eigen::VectorXd TAdjustableHelmertTransformation::getEstVector() const
+{
+	int fullDimension = 7;
+	Eigen::VectorXd estVect(fullDimension);
+	estVect << fEstParameter.tX.getMetresValue(), fEstParameter.tY.getMetresValue(), fEstParameter.tZ.getMetresValue(), fEstParameter.omega.getRadiansValue(),
+		fEstParameter.phi.getRadiansValue(), fEstParameter.kappa.getRadiansValue(), fEstParameter.scale;
+
+	return estVect;
+}
+
+TReal TAdjustableHelmertTransformation::getValue(int idx) const
+{
+	TReal value = 0;
+	if (idx == uidx_trans[0])
+		value = fEstParameter.tX.getMetresValue();
+	else if (idx == uidx_trans[1])
+		value = fEstParameter.tY.getMetresValue();
+	else if (idx == uidx_trans[2])
+		value = fEstParameter.tZ.getMetresValue();
+	else if (idx == uidx_rot[0])
+		value = fEstParameter.omega.getRadiansValue();
+	else if (idx == uidx_rot[1])
+		value = fEstParameter.phi.getRadiansValue();
+	else if (idx == uidx_rot[2])
+		value = fEstParameter.kappa.getRadiansValue();
+	else if (idx == uidx_scale)
+		value = fEstParameter.scale;
+	else
+		throw std::logic_error("Trying to get unknown index from fixed transformation parameter. Transformation " + getName());
+	return value;
+}
+
+void TAdjustableHelmertTransformation::setValue(int idx, TReal value)
+{
+	for (int i = 0; i < 3; i++)
+		if (uidx_trans[i] == idx)
+		{
+			setTranslation(i, TLength(value));
+			return;
+		}
+
+	for (int i = 0; i < 3; i++)
+		if (uidx_rot[i] == idx)
+		{
+			setRotation(i, TAngle(value, TAngle::kRadians));
+			return;
+		}
+
+	if (uidx_scale == idx)
+	{
+		setScale(value);
+		return;
+	}
+
+	throw std::logic_error("Invalid unknown index in parameter access. Transformation " + getName());
+
 }
 
 void TAdjustableHelmertTransformation::setDefaults()

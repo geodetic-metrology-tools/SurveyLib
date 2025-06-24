@@ -10,7 +10,6 @@ Any permission to use it shall be granted in writing. Request shall be addressed
 #include <vector>
 
 #include "TLength.h"
-#include "TSparseMatrix.h"
 #include "TTransformParameters.h"
 #include "TVAdjustableObject.h"
 
@@ -130,7 +129,7 @@ public:
 	int getScaleUnknIndex() const;
 
 	// returns vector of relative indices of active parameters
-	const std::vector<int> getRelativeUnknIndices() const;
+	const std::vector<int> getRelativeUnknIndices() const override;
 
 	/*!
 		\brief Checks if a component of the translation is fixed.
@@ -188,11 +187,12 @@ public:
 	*/
 	virtual void setFirstUidx(int idx);
 
-	/*!
-		See \ref TVAdjustableObject::setParameter
-		\note Either in radians if setting rotation or scalar value if setting translation.
-	*/
-	virtual void setCorrection(int idx, TReal value);
+	// getting the estimated vector with all variables
+	virtual Eigen::VectorXd getEstVector() const override;
+	// get value corresponding to unknown index
+	virtual TReal getValue(int idx) const override;
+	// set the value corresponding to an index
+	virtual void setValue(int idx, TReal value) override;
 
 	/*!
 		\brief Sets the covariance after calculation
@@ -231,12 +231,13 @@ public:
 	*/
 	void setParam(const TLength tx, const TLength ty, const TLength tz, const TAngle &rx, const TAngle &ry, const TAngle &rz, const TReal scl);
 
-	/// Sets the translation correction
-	void setTranslationCorrection(int idx, TLength value);
-	/// Sets the rotation correction
-	void setRotationCorrection(int idx, const TAngle &value);
-	/// Sets the scale correction
-	void setScaleCorrection(TReal value);
+	/// Sets the translation
+	void setTranslation(int idx, TLength value);
+	/// Sets the rotation
+	void setRotation(int idx, const TAngle &value);
+	/// Sets the scale
+	void setScale(TReal value);
+
 
 	/// Returns Estimated parameters of the Helmert transformation
 	const TransformParameters &getEstParam() const { return fEstParameter; }
