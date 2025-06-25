@@ -13,6 +13,16 @@
 #include "TSparseMatrix.h"
 #include "UEOIndices.h"
 
+#include <set>
+
+struct maskData
+{
+	// mask data stored as sets - so it is ordered
+	std::set<int> PIndices;
+	std::set<int> EIndices;
+	std::set<int> OIndices;
+};
+
 
 // helper function
 template<typename T>
@@ -210,6 +220,27 @@ public:
 	/// Debug method
 	void saveMatricesToFile(int nbIter) const;
 	bool isInitialized = false;
+
+		// can be used to mask rows of the A matrix during adjustment
+	maskData fMaskData;
+
+	// mult from right to mask columns
+	const TSparseMatrix getObsMask();
+	// mult from right to mask parameters
+	const TSparseMatrix getParMask();
+	// mult from left to mask rows
+	const TSparseMatrix getEqnMask();
+	// cannot reuse the pointers for masked matrices
+	const TSparseMatrix maskEqnRows(const TSparseMatrix *mat);
+	const TSparseMatrix maskObsCols(const TSparseMatrix *mat);
+	const TSparseMatrix maskParCols(const TSparseMatrix *mat);
+	// used for weight matrix
+	const TSparseMatrix maskObsColsAndRows(const TSparseMatrix *mat);
+
+	std::vector<int> getActiveEqnIndices();
+	std::vector<int> getActiveObsIndices();
+	std::vector<int> getActiveParIndices();
+
 
 private:
 	UEOIndices fUEOIndices; /*!< number of unknowns, equations, observations and constraints */

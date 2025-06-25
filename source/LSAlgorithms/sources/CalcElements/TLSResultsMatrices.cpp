@@ -32,7 +32,40 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 	fNormalMatrix = std::make_unique<TSparseMatrix>(ueoi.UIndex + ueoi.CIndex, ueoi.UIndex + ueoi.CIndex);
 	fInvN1Matrix = std::make_unique<TSparseMatrix>(ueoi.EIndex, ueoi.EIndex);
 
+	fUeoi = ueoi;
 	fSigmaZero2 = NO_VALf;
+}
+
+TSparseMatrix TLSResultsMatrices::blowUpParCovarianceMatrix(TSparseMatrix reducedCovar, std::vector<int> activeIndices)
+{
+	int nbUnk = fUeoi.UIndex;
+	TSparseMatrix result(nbUnk, nbUnk);
+	int nActIndices = activeIndices.size();
+	for (int row = 0; row < nActIndices; row++)
+	{
+		for (int col = 0; col < nActIndices; col++)
+		{
+			result.coeffRef(activeIndices[row], activeIndices[col]) = reducedCovar.coeff(row, col);
+		}
+	}
+
+	return result;
+}
+
+TSparseMatrix TLSResultsMatrices::blowUpObsCovarianceMatrix(TSparseMatrix reducedCovar, std::vector<int> activeIndices)
+{
+	int nbObs = fUeoi.OIndex;
+	TSparseMatrix result(nbObs, nbObs);
+	int nActIndices = activeIndices.size();
+	for (int row = 0; row < nActIndices; row++)
+	{
+		for (int col = 0; col < nActIndices; col++)
+		{
+			result.coeffRef(activeIndices[row], activeIndices[col]) = reducedCovar.coeff(row, col);
+		}
+	}
+
+	return result;
 }
 
 
