@@ -267,7 +267,7 @@ public:
 	// set the value corresponding to an index
 	virtual void setValue(int idx, TReal value) override;
 	// set the estimated value by coordinate index
-	void TAdjustablePoint::setEstVal(int idx, TReal value);
+	void setEstVal(int idx, TReal value);
 
 	/*!@name Settings */
 	//@{
