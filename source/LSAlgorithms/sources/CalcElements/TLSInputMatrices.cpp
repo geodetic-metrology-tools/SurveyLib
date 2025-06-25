@@ -437,24 +437,24 @@ const TSparseMatrix TLSInputMatrices::getEqnMask()
 	return leftFactor;
 }
 
-const TSparseMatrix TLSInputMatrices::maskEqnRows(const TSparseMatrix *mat)
+const TSparseMatrix TLSInputMatrices::maskEqnRows(const TSparseMatrix &mat)
 {
-	return getEqnMask() * (*mat);
+	return getEqnMask() * (mat);
 }
 
-const TSparseMatrix TLSInputMatrices::maskObsCols(const TSparseMatrix *mat)
+const TSparseMatrix TLSInputMatrices::maskObsCols(const TSparseMatrix &mat)
 {
-	return (*mat) * getObsMask();
+	return (mat) * getObsMask();
 }
 
-const TSparseMatrix TLSInputMatrices::maskParCols(const TSparseMatrix *mat)
+const TSparseMatrix TLSInputMatrices::maskParCols(const TSparseMatrix &mat)
 {
-	return (*mat) * getParMask();
+	return (mat) * getParMask();
 }
 
-const TSparseMatrix TLSInputMatrices::maskObsColsAndRows(const TSparseMatrix *mat)
+const TSparseMatrix TLSInputMatrices::maskObsColsAndRows(const TSparseMatrix &mat)
 {
-	return getObsMask().transpose() * (*mat) * getObsMask();
+	return getObsMask().transpose() * (mat) * getObsMask();
 }
 
 std::vector<int> TLSInputMatrices::getActiveEqnIndices()

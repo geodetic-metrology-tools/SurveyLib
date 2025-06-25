@@ -231,11 +231,11 @@ public:
 	// mult from left to mask rows
 	const TSparseMatrix getEqnMask();
 	// cannot reuse the pointers for masked matrices
-	const TSparseMatrix maskEqnRows(const TSparseMatrix *mat);
-	const TSparseMatrix maskObsCols(const TSparseMatrix *mat);
-	const TSparseMatrix maskParCols(const TSparseMatrix *mat);
+	const TSparseMatrix maskEqnRows(const TSparseMatrix &mat);
+	const TSparseMatrix maskObsCols(const TSparseMatrix &mat);
+	const TSparseMatrix maskParCols(const TSparseMatrix &mat);
 	// used for weight matrix
-	const TSparseMatrix maskObsColsAndRows(const TSparseMatrix *mat);
+	const TSparseMatrix maskObsColsAndRows(const TSparseMatrix &mat);
 
 	std::vector<int> getActiveEqnIndices();
 	std::vector<int> getActiveObsIndices();
