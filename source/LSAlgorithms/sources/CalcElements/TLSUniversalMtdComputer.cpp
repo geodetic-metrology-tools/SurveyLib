@@ -127,7 +127,7 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	return true;
 }
 
-bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices *im, TLSResultsMatrices *rm)
+bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, TLSResultsMatrices *rm)
 {
 	if (!fError.empty())
 		return false;
