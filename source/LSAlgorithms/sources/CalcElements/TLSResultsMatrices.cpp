@@ -39,33 +39,33 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 TSparseMatrix TLSResultsMatrices::blowUpParCovarianceMatrix(TSparseMatrix reducedCovar, std::vector<int> activeIndices)
 {
 	int nbUnk = fUeoi.UIndex;
-	TSparseMatrix result(nbUnk, nbUnk);
+	TSparseMatrixWithTriplets result(nbUnk, nbUnk);
 	int nActIndices = activeIndices.size();
 	for (int row = 0; row < nActIndices; row++)
 	{
 		for (int col = 0; col < nActIndices; col++)
 		{
-			result.coeffRef(activeIndices[row], activeIndices[col]) = reducedCovar.coeff(row, col);
+			result.addTriplet(activeIndices[row], activeIndices[col], reducedCovar.coeff(row, col));
 		}
 	}
-
-	return result;
+	result.finalize();
+	return result.getMatrix();
 }
 
 TSparseMatrix TLSResultsMatrices::blowUpObsCovarianceMatrix(TSparseMatrix reducedCovar, std::vector<int> activeIndices)
 {
 	int nbObs = fUeoi.OIndex;
-	TSparseMatrix result(nbObs, nbObs);
+	TSparseMatrixWithTriplets result(nbObs, nbObs);
 	int nActIndices = activeIndices.size();
 	for (int row = 0; row < nActIndices; row++)
 	{
 		for (int col = 0; col < nActIndices; col++)
 		{
-			result.coeffRef(activeIndices[row], activeIndices[col]) = reducedCovar.coeff(row, col);
+			result.addTriplet(activeIndices[row], activeIndices[col], reducedCovar.coeff(row, col));
 		}
 	}
-
-	return result;
+	result.finalize();
+	return result.getMatrix();
 }
 
 

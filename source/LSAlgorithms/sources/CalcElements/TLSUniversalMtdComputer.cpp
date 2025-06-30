@@ -129,7 +129,7 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	TVector solutionExt(nbUnkReduced + nbCnstr);
 
 	// use Cholesky decomposition if nbCnstr=0, otherwise SparseLU as positive definiteness of NBig may be violated
-    if (!TSparseUtils::solveUnique(NBigReduced, -VBig, solutionExt, (nbCnstr == 0)))
+	if (!TSparseUtils::solveUnique(NBigReduced, -VBig, solutionExt, (nbCnstr == 0)))
 	{
 		logCritical() << "No solution could be found when solving equation system: Nbig * dX = -VBig (extended matrices with conditions)";
 		return false;
