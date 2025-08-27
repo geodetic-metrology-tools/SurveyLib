@@ -126,8 +126,8 @@ public:
 	//@}
 
 	// for creating the full covar matrix from the reduced one that only contains information on active indices
-	TSparseMatrix blowUpParCovarianceMatrix(TSparseMatrix reducedCovar, std::vector<int> activeIndices);
-	TSparseMatrix blowUpObsCovarianceMatrix(TSparseMatrix reducedCovar, std::vector<int> activeIndices);
+	TSparseMatrix blowUpParCovarianceMatrix(const TSparseMatrix& reducedCovar, std::vector<int> activeIndices);
+	TSparseMatrix blowUpObsCovarianceMatrix(const TSparseMatrix& reducedCovar, std::vector<int> activeIndices);
 
 
 	/*!@name Other methods*/
