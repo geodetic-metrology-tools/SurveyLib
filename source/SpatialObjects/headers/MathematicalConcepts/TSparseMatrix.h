@@ -85,14 +85,16 @@ private:
 namespace TSparseUtils
 {
 
-bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCholeskyFirst = false, bool bTryFullPivotSecond = true);
-
-bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool bTryCholeskyFirst = true, bool bTryFullPivotSecond = true);
+// solve and invert using different methods depending wether the matrix is SPD (symmetric positive definite) or not
+TSparseMatrix createSymmetricScaling(const TSparseMatrix &inputMat, TVector &scalingVector);
+bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool isSPD);
+bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool isSPD);
 
 // optimized multiplication routine that returns the main diagonal of A*B*A'
 TVector &multABATasDiag(TVector &res, const TSparseMatrix &A, const TSparseMatrix &B);
 double &checkedCoeffRef(TSparseMatrix &mat, int row, int col);
 double &checkedCoeffRef(TVector &mat, int row);
+// test for positive definitness. Only usable for small, dense matrices, expensive
 bool isPositiveDefinite(const Eigen::MatrixXd &mat);
 
 } // namespace TSparseUtils
