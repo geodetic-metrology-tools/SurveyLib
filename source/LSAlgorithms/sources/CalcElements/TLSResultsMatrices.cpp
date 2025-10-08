@@ -27,7 +27,8 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 	// constructor dimensioning the matrices
 	fSolutionVctr = std::make_unique<TVector>(ueoi.UIndex);
 	fResidualsVctr = std::make_unique<TVector>(ueoi.OIndex);
-	fResCovarianceMtrx = std::make_unique<TSparseMatrix>(ueoi.OIndex, ueoi.OIndex);
+	fResCovarDiag	= std::make_unique<TVector>(ueoi.OIndex);
+	fZReliability = std::make_unique<TVector>(ueoi.OIndex);
 	fUnkCovarianceMtrx = std::make_unique<TSparseMatrix>(ueoi.UIndex, ueoi.UIndex);
 	fNormalMatrix = std::make_unique<TSparseMatrix>(ueoi.UIndex + ueoi.CIndex, ueoi.UIndex + ueoi.CIndex);
 	fInvN1Matrix = std::make_unique<TSparseMatrix>(ueoi.EIndex, ueoi.EIndex);
@@ -99,13 +100,13 @@ void TLSResultsMatrices::saveMatricesToFile(int nbIter) const
 	of << std::endl << std::endl;
 
 
-	of << "******************************" << std::endl;
-	of << "* RESIDUALS COVARIANCE MATRIX *" << std::endl;
-	of << "******************************" << std::endl << std::endl;
 
-	of<< *fResCovarianceMtrx << std::endl;
+	of << "*********************************" << std::endl;
+	of << "* RESIDUALS COVARIANCE DIAGONAL *" << std::endl;
+	of << "*********************************" << std::endl << std::endl;
+
+	of << *fResCovarDiag << std::endl;
 	of << std::endl << std::endl;
-
 	of.close();
 }
 

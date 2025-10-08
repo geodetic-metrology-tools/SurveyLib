@@ -53,11 +53,6 @@ public:
 		\param[in] row the desired element's index*/
 	TReal getResidualsVctrElmt(MatrixIndex row) const { return (*fResidualsVctr)(row); }
 
-	/*! \brief Returns an element of the residuals covariance matrix
-		\param[in] row the desired element's row index
-		\param[in] column the desired element's column index*/
-	TReal getResCovarMtrxElmt(MatrixIndex row, MatrixIndex column) const { return (*fResCovarianceMtrx).coeff(row, column); }
-
 	/*! \brief Returns an element of the observations covariance matrix
 		\param[in] row the desired element's row index
 		\param[in] column the desired element's column index*/
@@ -69,8 +64,11 @@ public:
 	/*! \brief Returns a pointer to the Residuals Vector (vector content cannot be changed when receiving this pointer) */
 	const TVector *getResidualsVectByConst() const noexcept { return fResidualsVctr.get(); }
 
-	/*! \brief Returns a pointer to the residuals covariance matrix	(matrix content cannot be changed when receiving this pointer) */
-	const TSparseMatrix *getResCovarMtrxByConst() const noexcept { return fResCovarianceMtrx.get(); }
+	/*! \brief Returns a pointer to the Residuals covariance diagonal Vector (vector content cannot be changed when receiving this pointer) */
+	const TVector *getResCovarDiagByConst() const noexcept { return fResCovarDiag.get(); }
+
+	/*! \brief Returns a pointer to the Z reliability vector (vector content cannot be changed when receiving this pointer) */
+	const TVector *getZReliabilityVectByConst() const noexcept { return fZReliability.get(); }
 
 	/*! \brief Returns a pointer to the unknowns covariance matrix	(matrix content cannot be changed when receiving this pointer)*/
 	const TSparseMatrix *getUnkCovarMtrxByConst() const noexcept { return fUnkCovarianceMtrx.get(); }
@@ -99,9 +97,6 @@ public:
 	/*! \brief Sets the sigma zero 	*/
 	void setSigmaZero2(TReal s) { fSigmaZero2 = s; }
 
-	/*! \brief Sets (by matrix copy, i.e. operator =) the residuals covariance matrix  	*/
-	void setResCovarMtrx(TSparseMatrix &matrix) { *fResCovarianceMtrx = matrix; }
-
 	/*! \brief Sets (by matrix copy, i.e. operator =) the unknowns covariance matrix */
 	void setUnkCovarMtrx(TSparseMatrix &matrix) { *fUnkCovarianceMtrx = matrix; }
 
@@ -116,6 +111,12 @@ public:
 
 	/*!	\brief Sets (by vector copy, i.e. operator =) the residues vector 	*/
 	void setResidualsVect(TVector &vect) { *fResidualsVctr = vect; }
+
+		/*!	\brief Sets (by vector copy, i.e. operator =) the Z reliability vector 	*/
+	void setZReliabilityVect(TVector &vect) { *fZReliability = vect; }
+
+	/*!	\brief Sets (by vector copy, i.e. operator =) the residues coavr diag vector 	*/
+	void setResCovarDiag(TVector &vect) { *fResCovarDiag = vect; }
 
 	/*!	\brief Sets the sigma zero statistical upper and lower limits 	*/
 	void setSigmaZeroLimits(TReal loLimit, TReal upLimit)
@@ -139,7 +140,9 @@ public:
 private:
 	std::unique_ptr<TVector> fSolutionVctr; /*!< vector (u x 1) containing the calculated parameters */
 	std::unique_ptr<TVector> fResidualsVctr; /*!< vector (o x 1) containing the calculated residues on observations */
-	std::unique_ptr<TSparseMatrix> fResCovarianceMtrx; /*!< Qvv matrix (o x o) containing the variances and covariances for residuals */
+	std::unique_ptr<TVector> fResCovarDiag;
+	std::unique_ptr<TVector> fZReliability;
+
 	std::unique_ptr<TSparseMatrix> fUnkCovarianceMtrx; /*!< Qxx matrix (u x u) containing the variances and covariances for unknowns */
 	std::unique_ptr<TSparseMatrix> fInvN1Matrix; /*!< invN1 matrix (eq x eq) is the inverse of the matrix N1 = B*Pv^-1*BT */
 	std::unique_ptr<TSparseMatrix> fNormalMatrix; /*!< N matrix (u+nConstr x u+nConstr) is the normal matrix (extended with the constraints if there are some) */

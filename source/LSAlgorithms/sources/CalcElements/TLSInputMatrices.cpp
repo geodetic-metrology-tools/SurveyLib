@@ -202,12 +202,16 @@ bool TLSInputMatrices::addWeightMtrxBlock(MatrixIndex index, const Eigen::Matrix
 		{
 			throw std::runtime_error("The setWeightMtrxBlock attempts to set a block in the weight matrix that is too big.");
 		}
-		// write the block
+		// write the block, avoid explicit zeros
 		for (int row = 0; row < dimBlock; row++)
 		{
 			for (int col = 0; col < dimBlock; col++)
 			{
-				weightMatrix->addTriplet(index + row, index + col, block(row, col));
+				double value = block(row, col);
+				if (notZero(value))
+				{
+					weightMatrix->addTriplet(index + row, index + col, value);
+				}
 			}
 		}
 		// compute the inverse of the block and write it at the corresponding place of the inverse
@@ -216,7 +220,11 @@ bool TLSInputMatrices::addWeightMtrxBlock(MatrixIndex index, const Eigen::Matrix
 		{
 			for (int col = 0; col < dimBlock; col++)
 			{
-				weightInvMatrix->addTriplet(index + row, index + col, blockInverse(row, col));
+				double value = blockInverse(row, col);
+				if (notZero(value))
+				{
+					weightInvMatrix->addTriplet(index + row, index + col, value);
+				}
 			}
 		}
 	}

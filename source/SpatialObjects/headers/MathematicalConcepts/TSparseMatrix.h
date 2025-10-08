@@ -85,10 +85,17 @@ private:
 
 namespace TSparseUtils
 {
-
+struct InverseExtras
+{
+	// tell the inverse method to only compute a certain size top left block of the inverse matrix, the default value -1 means the whole inverse is computed
+	int topLeftSize = -1;
+	// if M and specified diag_MinvMT are specified, this triggers the computation of diag(M invMat M^T) in the inverse method
+	const Eigen::SparseMatrix<double> *M = nullptr;
+	Eigen::VectorXd *diag_MinvMT = nullptr;
+};
 // solve and invert using different methods depending wether the matrix is SPD (symmetric positive definite) or not
 TSparseMatrix createSymmetricScaling(const TSparseMatrix &inputMat, TVector &scalingVector);
-bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool isSPD);
+bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool isSPD, const InverseExtras &extras = {});
 bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool isSPD);
 
 // optimized multiplication routine that returns the main diagonal of A*B*A'

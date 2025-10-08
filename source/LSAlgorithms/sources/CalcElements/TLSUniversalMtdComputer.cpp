@@ -138,7 +138,7 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	int nbCnstr = im->getNbrConstraints();
 	TReal sigmaZero2Aposteriori = LITERAL(0.0);
 
-	if (!(rm->getSolutionVectByConst()) || !(rm->getResidualsVectByConst()) || !(rm->getResCovarMtrxByConst()))
+	if (!(rm->getSolutionVectByConst()) || !(rm->getResidualsVectByConst()) || !(rm->getZReliabilityVectByConst()) || !(rm->getResCovarDiagByConst()))
 		throw std::runtime_error("Some of the result matrices are not initialized!");
 
 	const TSparseMatrix &A = im->getFirstDgnMtrx();
@@ -183,36 +183,67 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	rm->setSigmaZeroLimits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
 
 	// ----------Covariance Matrices-----------//
-
-	TSparseMatrix Qxx_big(nbUnk + nbCnstr, nbUnk + nbCnstr);
+	// test if Pv is diagonal. Exploiting that we know it is already block diagonal and invertible.
+	bool PvIsDiag = (Pv.nonZeros() == Pv.rows());
 	TSparseMatrix Qxx(nbUnk, nbUnk);
+	TVector QvvDiag(nbObs);
+	TVector ZReliability(nbObs);
 
-	// use Cholesky decomposition if nbCnstr=0, otherwise use LU as positive definiteness may be violated
-	if (!TSparseUtils::inverse(NBig, Qxx_big, (nbCnstr == 0)))
+	// prepare the extra infos for the inversion
+	TSparseUtils::InverseExtras inversionExtras;
+	// in any case we only need the Qxx part
+	inversionExtras.topLeftSize = nbUnk;
+
+	if (PvIsDiag)
 	{
-		logCritical() << "The normal matrix NBig could not be inverted!";
-		return false;
-	}
-	Qxx = Qxx_big.topLeftCorner(nbUnk, nbUnk);
-	//--------------- Residual covariance matrix: ---------------//
-	TSparseMatrix Qvv(nbObs, nbObs);
-	if (im->getSecondDgnBlockDiagStatus())
-	{ // formula with simplifications if B is invertible Qvv = inv(P) - invB*A*Qxx*At*invBT
-		TDenseMatrix QxxATinvBT(nbUnk, nbObs);
-		TSparseMatrix invBA(nbObs, nbUnk);
-		const TSparseMatrix &invB = im->getSecondDgnBlockDiagInvMtrx();
-		invBA = invB * A;
-		QxxATinvBT = Qxx * invBA.transpose();
-		Qvv = InvPv - invBA * QxxATinvBT;
+		// during the Qxx computation we want also the diagonal of M Qxx MT
+		TSparseMatrix M = S * A;
+		inversionExtras.M = &M;
+		// prepare the resulting diagonal
+		TVector diagMQxxMT = TVector::Zero(nbObs);
+		inversionExtras.diag_MinvMT = &diagMQxxMT;
+		// do the inversion
+		if (!TSparseUtils::inverse(NBig, Qxx, (nbCnstr == 0), inversionExtras))
+		{
+			logCritical() << "The normal matrix NBig could not be inverted!";
+			return false;
+		}
+		// set the diagonal of Qvv
+		if (im->getSecondDgnBlockDiagStatus())
+		{
+			QvvDiag = InvPv.diagonal() - diagMQxxMT;
+		}
+		else
+		{
+			TSparseMatrix SBInvPv = (S * B * InvPv);
+			QvvDiag = (SBInvPv).diagonal() - diagMQxxMT;
+		}
+		// we can set the ZReliability cheaply here because Pv is diagonbal and Z=diag(Qvv * Pv)=diag(Qvv)*diag(Pv) holds
+		ZReliability = QvvDiag.cwiseProduct(Pv.diagonal());
 	}
 	else
 	{
-		// general formula
-		Qvv = -S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose();
+		// compute Qxx without extra requests beside the topleft dimension
+		if (!TSparseUtils::inverse(NBig, Qxx, (nbCnstr == 0), inversionExtras))
+		{
+			logCritical() << "The normal matrix NBig could not be inverted!";
+			return false;
+		}
+		if (im->getSecondDgnBlockDiagStatus())
+		{
+			// general formula, because we need the full Qvv for the ZReliability vector computation (expensive because of big matrix multiplication with dense Qxx)
+			TSparseMatrix Qvv = -S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose();
+			QvvDiag = Qvv.diagonal();
+			// because Pv is not diagonal, we have to do the full matrix multiplication here to get the the ZReliability vector
+			TSparseMatrix QvvPv = Qvv * Pv;
+			ZReliability = QvvPv.diagonal();
+		}
 	}
-	// Copies the matrices into the members of the TResultsMatrices object
+
+	// Copies the data into the members of the TResultsMatrices object
+	rm->setResCovarDiag(QvvDiag);
+	rm->setZReliabilityVect(ZReliability);
 	rm->setUnkCovarMtrx(Qxx);
-	rm->setResCovarMtrx(Qvv);
 	rm->setResidualsVect(V);
 	return true;
 }
