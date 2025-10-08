@@ -1,24 +1,135 @@
 #include "TSparseMatrix.h"
 
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <vector>
 
 #include <Eigen/Dense>
-#include <Eigen/LU>
-#include <Eigen/SparseQR>
 
 #include <Logger.hpp>
 
 namespace TSparseUtils
 {
+// for a given square matrix, apply a simple, symmetry preserving diagonal scaling, return the scaled matrix and also the diagonal scaling vector
+TSparseMatrix createSymmetricScaling(const TSparseMatrix &inputMat, TVector &scalingVector)
+{
+	if (inputMat.rows() != inputMat.cols())
+	{
+		throw std::runtime_error("Symmetric Scaling: Matrix must be square");
+	}
+	// symmetry preserving diagonal matrix scaling (suitable for cholesky)
+	scalingVector = inputMat.diagonal().cwiseAbs().cwiseMax(1e-12).cwiseSqrt().cwiseInverse();
+	const Eigen::DiagonalMatrix<double, Eigen::Dynamic> D(scalingVector);
+	return D * inputMat * D;
+}
+
+// preparing the decomposition (and the scaling is desired)
+template<class Decomposition>
+bool scaleAndDecompose(const TSparseMatrix &A, bool useScaling, TSparseMatrix &AScaled, TVector &scalingVector, Decomposition &solver)
+{
+	if (A.rows() == 0)
+	{
+		return true;
+	}
+	if (useScaling)
+	{
+		AScaled = createSymmetricScaling(A, scalingVector); // computes scalingVector and AScaled = D*A*D
+		solver.compute(AScaled);
+	}
+	else
+	{
+		scalingVector = TVector::Ones(A.rows());
+		solver.compute(A);
+	}
+	return solver.info() == Eigen::Success;
+}
+
+// utility template to solve with a given decomposition. Only used in TSparseMatrix.cpp
+template<typename Decomposition>
+bool solveUniqueWithDecomposition(const TSparseMatrix &A, const TVector &b, TVector &sol, bool useScaling = true)
+{
+	const int nRows = A.rows();
+	if (nRows == 0)
+	{
+		sol.resize(0);
+		return true;
+	}
+
+	TSparseMatrix AScaled;
+	TVector d;
+	Decomposition solver;
+
+	if (!scaleAndDecompose(A, useScaling, AScaled, d, solver))
+	{
+		return false;
+	}
+	const TVector bScaled = useScaling ? d.asDiagonal() * b : b;
+	const TVector y = solver.solve(bScaled);
+	sol = useScaling ? d.asDiagonal() * y : y; // scaling case: A' y = b' => A (D y) = b, i.e. D y is the solution of the original system
+
+	const double bNorm = b.norm();
+	if (bNorm > 0.0)
+	{
+		logDebug() << "solve operation relative accuracy |A*x-b|/|b|= " << (A * sol - b).norm() / bNorm;
+	}
+
+	return solver.info() == Eigen::Success;
+}
+
+// utility template to invert with a given decomposition. Only used in TSparseMatrix.cpp
+template<typename Decomposition>
+bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool useScaling = true)
+{
+	const int nRows = A.rows();
+	if (nRows == 0)
+	{
+		invMat.resize(0, 0);
+		return true;
+	}
+
+	TSparseMatrix AScaled;
+	TVector d;
+	Decomposition solver;
+
+	if (!scaleAndDecompose(A, useScaling, AScaled, d, solver))
+	{
+		return false;
+	}
+
+	const Eigen::DiagonalMatrix<double, Eigen::Dynamic> D(d);
+	Eigen::MatrixXd inverse = Eigen::MatrixXd::Zero(nRows, nRows);
+	// variable to estimate the condition number
+	double maxRatio = 0;
+#pragma omp parallel for
+	for (int i = 0; i < nRows; ++i)
+	{
+		TVector bScaled = TVector::Unit(nRows, i);
+		if (useScaling)
+			bScaled = D * bScaled;
+
+		TVector y = solver.solve(bScaled);
+		maxRatio = std::max(maxRatio, y.norm());
+		TVector sol = useScaling ? D * y : y; // scaling case: A' y = b' => A (D y) = b, i.e. D y is the solution of the original system
+		inverse.col(i) = sol;
+	}
+	if (maxRatio > 1e+12)
+	{
+		std::stringstream msg;
+		msg << std::scientific << std::setprecision(3) << "Condition number estimate = " << maxRatio << " indicating ill-conditioned matrix, possibly singular.";
+		logWarning() << msg.str();
+	}
+
+	invMat = inverse.sparseView();
+	return true;
+}
 
 /*!
 		\brief Main method for inverting sparse matrices
 		\param[in]  sparseMat The sparse matrix to be inverted
 		\param[out] invMat    The resulting inverted matrix.
 */
-bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCholeskyFirst, bool bTryFullPivotSecond)
+bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool isSPD)
 {
 	auto nRows = sparseMat.rows();
 	auto nCols = sparseMat.cols();
@@ -30,74 +141,17 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 		logDebug() << "The given matrix A is not a square matrix to inverse!";
 		return false;
 	}
-
-	// Setting the identity matrix
-
-	TSparseMatrix IdMat(nRows, nRows);
-	IdMat.setIdentity();
-
-	// By default, tries Cholesky method first (it's the fastest method)
-	// Cholesky is valid only for selfadjoint (symmetric) and positive definite matrices.
-	if (bTryCholeskyFirst)
+	bool invertSuccess;
+	if (isSPD)
 	{
-		// LDL^T Cholesky factorizations without square root of sparse matrices that are selfadjoint and positive definite
-		Eigen::SimplicialLDLT<TSparseMatrix> cholMat(sparseMat);
-		if (cholMat.info() == Eigen::Success)
-		{
-			TDenseMatrix idMat_dense(nRows, nRows);
-			idMat_dense.setIdentity();
-			TVector aux(nRows, 1);
-			TDenseMatrix inverse(nRows, nRows);
-			inverse = TDenseMatrix::Zero(nRows, nRows);
-#pragma omp parallel for
-			for (int i = 0; i < nRows; i++)
-			{
-				inverse.col(i) = cholMat.solve(idMat_dense.col(i));
-			}
-			invMat = inverse.sparseView();
-
-			logDebug() << "Cholesky method is used to invert the matrix!";
-			return true;
-		}
-		else
-			logDebug() << "Cholesky method failed to invert the matrix!";
-	}
-
-	// Cholesky method does not work (if the matrix is not symmetric), try FullPiv
-	// LU decomposition of any matrix, with complete pivoting : the matrix A is decomposed as
-	// A = P ^ { -1 } L U Q^{ -1 },  where L is unit -lower-triangular, U is upper-triangular, and P and Q are permutation matrices.
-	if (bTryFullPivotSecond)
-	{
-		Eigen::FullPivLU<TMatrixDouble> luMat(sparseMat.toDense());
-		if (luMat.isInvertible())
-		{
-			invMat = luMat.inverse().sparseView();
-			logDebug() << "FullPivLU method is used to invert the matrix!";
-			return true;
-		}
-		else
-			logDebug() << "FullPivLU method failed to invert the matrix!";
-	}
-
-	// If both are not working, use Sparse LU
-	Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> LuMat;
-	LuMat.compute(sparseMat);
-	if (LuMat.info() != Eigen::Success)
-	{
-		logDebug() << "Decomposition with the SparseLU method failed to invert the matrix!!";
-		return false;
-	}
-	invMat = LuMat.solve(IdMat);
-	if (LuMat.info() == Eigen::Success)
-	{
-		logDebug() << "SparseLU method method is used to invert the matrix!";
-		return true;
+		invertSuccess = invertWithDecomposition<Eigen::SimplicialLDLT<TSparseMatrix>>(sparseMat, invMat);
 	}
 	else
 	{
-		logDebug() << "SparseLU method failed to invert the matrix!!";
-		return false;
+		invertSuccess = invertWithDecomposition<Eigen::SparseLU<TSparseMatrix>>(sparseMat, invMat);
 	}
+
+	return invertSuccess;
 }
 
 /*!
@@ -107,7 +161,7 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool bTryCho
 		\param[out] vectX The resulting solution vector.
 */
 
-bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool bTryCholeskyFirst, bool bTryFullPivotSecond)
+bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX, bool isSPD)
 {
 	vectX.setZero();
 
@@ -119,58 +173,32 @@ bool solveUnique(const TSparseMatrix &matA, const TVector &vectB, TVector &vectX
 		logDebug() << "The given matrix A is not a square matrix, or the number of vector B elements does not correspond to A dimensions!";
 		return false;
 	}
-
-	// By default, tries Cholesky method first
-	if (bTryCholeskyFirst)
+	bool solveSuccess = false;
+	if (isSPD)
 	{
-		Eigen::SimplicialLDLT<TSparseMatrix> cholMat(matA);
-		if (cholMat.info() == Eigen::Success)
+		solveSuccess = solveUniqueWithDecomposition<Eigen::SimplicialLDLT<TSparseMatrix>>(matA, vectB, vectX);
+		if (solveSuccess)
 		{
-			// Uses Cholesky method
-			vectX = cholMat.solve(vectB);
 			logDebug() << "Cholesky method is used for solving the equations system!";
-			return true;
 		}
 		else
-			logDebug() << "Cholesky method failed for solving the equations system!";
-	}
-
-	// Cholesky method does not work, try FullPiv
-	if (bTryFullPivotSecond)
-	{
-		Eigen::FullPivLU<TMatrixDouble> luMat(matA.toDense());
-		if (luMat.isInvertible())
 		{
-			vectX = luMat.solve(vectB);
-			logDebug() << "FullPivLU method is used for solving the equations system!";
-			return true;
+			logDebug() << "Cholesky method failed for solving the equations system! Check if matrix is symmetric and positive definite. ";
 		}
-		else
-			logDebug() << "FullPivLU method failed for solving the equations system!";
-	}
-
-	// If both are not working, use Sparse QR
-	Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> QrMat;
-	// pivotThreshold important for solving the system accurately in case constraints are present
-	// https://eigen.tuxfamily.org/dox/classEigen_1_1SparseQR.html
-	QrMat.setPivotThreshold(1e-12);
-	QrMat.compute(matA);
-	if (QrMat.info() != Eigen::Success)
-	{
-		logDebug() << "Decomposition with the SparseQR method failed!";
-		return false;
-	}
-	vectX = QrMat.solve(vectB);
-	if (QrMat.info() != Eigen::Success)
-	{
-		logDebug() << "SparseQR method failed for solving the equations system!";
-		return false;
 	}
 	else
 	{
-		logDebug() << "SparseQR method is used for solving the equations system!";
-		return true;
+		solveSuccess = solveUniqueWithDecomposition<Eigen::SparseLU<TSparseMatrix>>(matA, vectB, vectX);
+		if (solveSuccess)
+		{
+			logDebug() << "SparseLU method is used for solving the equations system!";
+		}
+		else
+		{
+			logDebug() << "SparseLU method failed for solving the equations system!";
+		}
 	}
+	return solveSuccess;
 }
 
 inline double ABij(const TSparseMatrix &A, const TSparseMatrix &B, int i, int j)
