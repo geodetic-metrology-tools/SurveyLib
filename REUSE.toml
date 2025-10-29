@@ -9,8 +9,8 @@ path = [
 ".gitignore",
 ".gitlab-ci.yml",
 ".gitmodules",
-"NOTICE.md",
-"README.md",
+"*.md",
+"DCO.txt",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "CERN"
