@@ -86,13 +86,74 @@ The following tools and dependencies are required:
 | **Doxygen** | [≥ 1.8.18](https://www.doxygen.nl/download.html) | Developer documentation generation (optional) |
 | **GraphViz** | [≥ 2.38](https://graphviz.org/download/) | Visualization in Doxygen (optional) |
 
-### Clone and Configure
+### Submodules and External Dependencies
+
+**SurveyLib** depends one submodules:
+
+| Submodule | Purpose | Repository (Internal) | Repository (Public) |
+|------------|----------|----------------------|---------------------|
+| **SUSoftCMakeCommon** | Common CMake configuration, packaging setup, and compiler options | `https://gitlab.cern.ch/apc/susofts/shared/SUSoftCMakeCommon` | `https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon` |
+
+**SurveyLib**  also uses the following third-party libraries fetched automatically via CMake’s [`FetchContent`](https://cmake.org/cmake/help/latest/module/FetchContent.html):
+
+- **[RapidJSON](https://github.com/Tencent/rapidjson) ** – A fast JSON parser/generator for C++ with both SAX/DOM style API.
+  _Licensed under the [MIT license](https://spdx.org/licenses/MIT.html)._
+
+
+### Clone and Configure the Repository
+
+#### Clone the repository
 
 ```bash
 git clone https://github.com/geodetic-metrology-tools/SurveyLib.git
 cd SurveyLib
-git submodule update --init
 ```
+
+#### Submodule Setup
+
+
+- **Internal (CERN) users**
+  ```bash
+  git submodule update --init
+  ```
+
+- **External (public GitHub) users**
+  **SUSoftCMakeCommon** submodule is publicly available.  
+  
+  ```bash
+	# Initialize submodules without fetching content yet
+	git submodule init
+	
+	# Fix URLs for public repositories
+	git config submodule.lib/SUSoftCMakeCommon.url https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon.git
+	
+	# Fetch content from the corrected public URLs
+	git submodule update --remote lib/SUSoftCMakeCommon
+  ```
+
+> The submodule is not need if **SurveyLib** is used as a submodule for **LGC2**
+
+##### External Dependency Configuration
+
+**SUSoftCMakeCommon** provides:
+
+- Default compiler and build flags
+- Doxygen setup options
+- Installer and packaging configuration (`create_default_installer`)
+- Helper functions for DLL copy and installer generation
+
+External developers can adjust `"lib/SUSoftCMakeCommon/ext_libs.txt"` to define paths for locally installed dependencies:
+```cmake
+set(EXT_LIB_PATH "C:/dev/ext")
+set(EIGEN_INCLUDE_PATH "${EXT_LIB_PATH}/eigen")
+set(TUT_INCLUDE_PATH "${EXT_LIB_PATH}/tut-framework")
+```
+
+These paths can also be overridden at configuration time:
+```bash
+cmake -DEXT_LIBS_TXT_PATH="C:/path/to/custom/ext_libs.txt" ../source
+```
+
 
 ### Generate project 
 
@@ -179,6 +240,8 @@ This project complies with the [REUSE specification](https://reuse.software/), w
 | RapidJSON         | MIT                                   | https://github.com/Tencent/rapidjson         |
 | Reframe           | Creative Commons Attribution No Derivatives 4.0 International | https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar |
 | `counted_ptr.h`   | Custom Permissive License (1999)      | http://snowball.digitalspace.net/cpp/        |
+| SUSoftCMakeCommon | GPL-3.0-or-later | [https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon](https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon) |
 
 All third-party license texts are stored in the [`LICENSES/`](LICENSES/) directory.  
 For an overview of licensing across the project, see [`NOTICE.md`](NOTICE.md).
+

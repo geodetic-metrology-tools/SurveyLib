@@ -41,6 +41,10 @@ Applies to documentation, configuration, and non-code files as specified in [`RE
   > Permission to use, copy, modify, and distribute this software and its documentation for any purpose is hereby granted without fee, provided that the above copyright notice appear in all copies and that both that copyright notice and this permission notice appear in supporting documentation.  
   > Mark E. makes no representations about the suitability of this software for any purpose. It is provided "as is" without express or implied warranty.
 
+### SUSoftCMakeCommon
+- License: GNU General Public License v3.0 or later
+- Source: https://gitlab.cern.ch/apc/susofts/shared/SUSoftCMakeCommon
+
 ---
 
 All license texts are available in the [`LICENSES/`](LICENSES/) directory.  
