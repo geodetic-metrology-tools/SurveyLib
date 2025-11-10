@@ -36,7 +36,7 @@ Applies to documentation, configuration, and non-code files as specified in [`RE
 
 ### `counted_ptr.h`
 - License: Custom Permissive License
-- Source: http://snowball.digitalspace.net/cpp/
+- Source: http://snowball.digitalspace.net/cpp/ (not accessible anymore)
 - Terms:
   > Permission to use, copy, modify, and distribute this software and its documentation for any purpose is hereby granted without fee, provided that the above copyright notice appear in all copies and that both that copyright notice and this permission notice appear in supporting documentation.  
   > Mark E. makes no representations about the suitability of this software for any purpose. It is provided "as is" without express or implied warranty.
