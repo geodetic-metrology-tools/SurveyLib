@@ -29,6 +29,15 @@ precedence = "override"
 SPDX-FileCopyrightText = "CERN"
 SPDX-License-Identifier = "GPL-3.0-or-later"
 
+# --- Custom license files ---
+[[annotations]]
+path = [
+"source/SpatialObjects/headers/SpatialSystems/counted_ptr.h",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "1998, 1999 Mark E. (snowball3@usa.net)"
+SPDX-License-Identifier = "LicenseRef-countedPrt"
+
 
 # --- Test files and simulation outputs (no copyright) ---
 [[annotations]]
