@@ -1,0 +1,50 @@
+version = 1
+
+# --- Documentation and metadata ---
+[[annotations]]
+path = [
+"Documentation/*",
+".clang-format",
+".editorconfig",
+".gitignore",
+".gitlab-ci.yml",
+".gitmodules",
+"*.md",
+"DCO.txt",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "CERN"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+# --- Source, scripts, and build/config files ---
+[[annotations]]
+path = [
+"source/**/CMakeLists.txt",
+"source/**/*.def",
+"source/**/*.in",
+"source/**/*.py",
+"source/**/*.cmake",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "CERN"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+# --- Custom license files ---
+[[annotations]]
+path = [
+"source/SpatialObjects/headers/SpatialSystems/counted_ptr.h",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "1998, 1999 Mark E. (snowball3@usa.net)"
+SPDX-License-Identifier = "LicenseRef-countedPrt"
+
+
+# --- Test files and simulation outputs (no copyright) ---
+[[annotations]]
+path = [
+"source/Tests/CSGeoDLLTests/test_files/*.txt",
+"source/Tests/SpatialObjects/UnitTests/test_files/*.txt",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "NONE"
+SPDX-License-Identifier = "GPL-3.0-or-later"

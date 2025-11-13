@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TColumnVector.cpp
 //
 /** Class for a vector of doubles.
@@ -6,7 +10,6 @@ Designed to be easiliy usable with vector functions of the NagC math library */
 // Patterns:
 //
 // 
-// Copyright 2002 CERN EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

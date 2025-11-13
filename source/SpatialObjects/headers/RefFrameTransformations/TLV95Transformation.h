@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef SURVEYLIB_TLV95TRANSFORMATION_4599afe1_7725_409d_8ea5_b2b9f5f3a95a
 #define SURVEYLIB_TLV95TRANSFORMATION_4599afe1_7725_409d_8ea5_b2b9f5f3a95a
 

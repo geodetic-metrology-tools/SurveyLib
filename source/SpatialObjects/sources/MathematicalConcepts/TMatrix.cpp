@@ -1,10 +1,13 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "TDouble.h"
 #include "TMatrix.h"
 #include "TColumnVector.h"
 #include "TSparseMatrix.h"
 #include <TMatrixImpl.h>
 #include <iostream>
-
 
 //////////////////////////////////////////////////////////////////////
 // Constructor/Destructor

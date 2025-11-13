@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TDataParameters.cpp
 //
 // A class defining the parameters of a data file.
@@ -6,7 +10,6 @@
 // Patterns:
 //
 // 
-// Copyright 2000-2022 CERN EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

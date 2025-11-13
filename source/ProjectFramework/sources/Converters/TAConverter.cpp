@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 ////////////////////////////////////////////////////////////////////
 // TAConverter.cpp
 /*!
@@ -7,7 +11,6 @@ sends the appropriate messages
 Patterns:
 
  
-Copyright 2003 CERN EST/SU. All rights reserved.
 */
 /////////////////////////////////////////////////////////////////////
 

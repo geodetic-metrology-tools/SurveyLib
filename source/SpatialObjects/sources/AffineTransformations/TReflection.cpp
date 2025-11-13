@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TReflection.cpp
 //
 /** 3D Reflection, affine transformation, six cases are distinguished:
@@ -6,7 +10,6 @@ Reflection by a plane x=0, y=0, z=0 or Reflection by the plane x=y, x=z or y=z*/
 // Patterns:
 //
 // 
-// Copyright 2000-10 CERN SU, M.Jones. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

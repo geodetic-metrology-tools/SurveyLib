@@ -1,3 +1,7 @@
+﻿// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TSUException
 //
 // Singleton that deals with the exceptions
@@ -5,7 +9,6 @@
 // Handles with the exceptions thrown by SU Objects
 //
 //
-//EST/SU 2000 copyright Mark Jones
 /////////////////////////////////////////////////////////////////////////
 
 //For ROOT//////////////////////////////////////////////////////

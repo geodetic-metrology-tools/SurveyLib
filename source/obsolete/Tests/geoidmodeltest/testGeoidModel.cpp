@@ -1,3 +1,7 @@
+﻿// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include  "TGraph.h"
 #include  "TCernGridGeoid.h"
 #include  "TGeodeticRefFrame.h"

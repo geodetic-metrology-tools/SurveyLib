@@ -1,10 +1,15 @@
+/*
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 // TSUException.h: 
 //
 // Singleton that deals with the exceptions
 // 
 // 
 //
-// Copyright 1999,2000, Mark Jones, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 #ifndef SU_EXCEPTION

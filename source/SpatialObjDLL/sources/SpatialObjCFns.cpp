@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include  "SpatialObjCFns.h"
 #include  "SpatialObjFns.h"
 #include  "TSpatialPosition.h"

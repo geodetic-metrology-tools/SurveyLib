@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #pragma warning(disable:4786)
 
 #include "TEDMStation.h"

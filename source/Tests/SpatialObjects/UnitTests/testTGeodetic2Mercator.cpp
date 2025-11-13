@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include <TGeodetic2Mercator.h>
 #include <TSpatialPosition.h>
 #include <TRefFrameInfo.h>

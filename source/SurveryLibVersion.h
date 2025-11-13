@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef SURVEYLIB_VERSION_H
 #define SURVEYLIB_VERSION_H
 

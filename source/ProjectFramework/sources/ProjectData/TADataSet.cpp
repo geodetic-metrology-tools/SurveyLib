@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //  TADataSet.cpp
 //
 /*  A spatial point data set for geodetic transformation programs.  
@@ -5,7 +9,6 @@
     Patterns:
   
    
-    Copyright 2002 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

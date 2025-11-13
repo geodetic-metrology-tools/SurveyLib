@@ -1,9 +1,12 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //T2DCartesianCoordSys.h 
 //
 //Class for explain vector in a 2D cartesian
 //Coordinate system 
 //
-//Copyright 2002, CERN, EST/SU. All rights reserved.
 /////////////////////////////////////////////////////////
 
 //For ROOT//////////////////////////////////////////////////////

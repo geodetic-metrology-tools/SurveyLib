@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //  TLG2LATransformation.cpp
 //
 /** The transformation from a local geodetic reference frame to a 
@@ -10,7 +14,6 @@
     Patterns:
   
    
-    Copyright 2000 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

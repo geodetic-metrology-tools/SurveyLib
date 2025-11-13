@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // T2DPlusHFilter.cpp
 //
 // Concrete class of a TSpatialPositionFilter.
@@ -9,7 +13,6 @@
 // This is a Singleton.
 // Works as a Strategy of a TAStreamFormatter object. 
 //
-// Copyright 2002, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 

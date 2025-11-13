@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include	"TFreeVector.h"
 #include	"T3DMatrix.h"
 #include	"TScalar.h"

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //  TRefFrameWrapper.cpp
 //
 /** A Wrapper around a reference frame.
@@ -9,7 +13,6 @@
     Patterns:
     Wrapper around TVReferenceFrame.
    
-    Copyright 2000 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

@@ -1,7 +1,8 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
-Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
-*/
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 #ifndef CSGEOCORE_T_ANGULAR_UNITS_INFO_H_28966B862F2A46f4900219F55E582392
 #define CSGEOCORE_T_ANGULAR_UNITS_INFO_H_28966B862F2A46f4900219F55E582392

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include  "TSpatialPosition.h"
 #include  "TSpatialVector.h"
 //#include  "TSpatialOrientation.h"
@@ -154,7 +158,7 @@ void main(){
 
 	
 	//test TEuclideanRefFrame
-	//toutes les fonctions sont testées avec les deux classes précédentes.
+	//toutes les fonctions sont testees avec les deux classes precedentes.
 
 
 

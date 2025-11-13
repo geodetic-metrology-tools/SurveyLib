@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TModifiedLocalGeodeticRF.cpp
 //
 /** A Geodetic Ellisoidal Reference Frame. 
@@ -8,7 +12,6 @@
     Patterns:
     A concrete STATE of a Spatial Position
    
-    Copyright 2000-2022 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

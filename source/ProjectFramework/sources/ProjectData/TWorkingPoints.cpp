@@ -1,8 +1,9 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TWorkingPoints.cpp: implementation of the TWorkingPoints class.
 //
-
-
-
 
 #include "TWorkingPoints.h"
 //ClassImp(TWorkingPoints)

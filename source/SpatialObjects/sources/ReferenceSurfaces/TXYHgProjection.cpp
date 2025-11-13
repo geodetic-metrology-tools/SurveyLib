@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TXYHgProjection.cpp
 //
 /** A projection on XY plane with height above the Geoid
@@ -6,7 +10,6 @@
     Patterns:
     A concrete STATE of a Spatial Position
    
-    Copyright 2000 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

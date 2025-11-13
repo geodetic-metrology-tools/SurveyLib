@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //  TARefFrameTransformation.cpp
 //
 /** Classe de base abstraite pour une transformation d'objets d'un 
@@ -10,7 +14,6 @@
     Patterns:
   
    
-    Copyright 2000 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

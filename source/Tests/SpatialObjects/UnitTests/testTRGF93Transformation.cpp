@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include <TRGF93CC46Transformation.h>
 #include <TRefFrameInfo.h>
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TLength.cpp
 //
 // Class for a length
@@ -5,7 +9,6 @@
 // include math operators +, -, *factor, =.
 //
 //
-// Copyright 1999,2000, Mark Jones, EST/SU. All rights reserved.
 ////////////////////////////////////////////////////////////////
 
 #include "TLength.h"

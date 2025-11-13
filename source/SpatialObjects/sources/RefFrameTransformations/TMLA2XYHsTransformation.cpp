@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //  TMLA2XYHsTransformation.h
 //
 /** The direct transformation from a modified local astronomical reference frame to a
@@ -10,7 +14,6 @@
     Patterns:
   
    
-    Copyright 2002 CERN EST/SU. All rights reserved.
 */
 //////////////////////////////////////////////////////////////////////
 

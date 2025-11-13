@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "TXYHg2XYHeTransformation.h"
 //#include "TGraph.h"
 //#include "TPositionVector.h"

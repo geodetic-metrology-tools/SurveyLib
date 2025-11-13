@@ -1,10 +1,15 @@
+/*
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 // TSpatialVectorError.h: 
 //
 /*  
    Patterns:
   
    
-   Copyright 1999,2000 CERN EST/SU. All rights reserved.
 */
 ////////////////////////////////////////////////////////
 

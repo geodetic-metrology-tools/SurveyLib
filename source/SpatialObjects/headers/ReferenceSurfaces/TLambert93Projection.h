@@ -1,7 +1,8 @@
 /*
-© Copyright CERN 2000-2019. All rigths reserved. This software is released under a CERN proprietary software licence.
-Any permission to use it shall be granted in writing. Request shall be adressed to CERN through mail-KT@cern.ch
-*/
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 #ifndef SURVEYLIB_TLANBERT93_PROJECTION_612FCB01_8A89_4cff_A962_A709D25C2195
 #define SURVEYLIB_TLANBERT93_PROJECTION_612FCB01_8A89_4cff_A962_A709D25C2195

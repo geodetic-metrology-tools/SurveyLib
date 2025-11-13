@@ -1,96 +1,239 @@
 [![pipeline status](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/badges/master/pipeline.svg)](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/commits/master)
 
+# SurveyLib
 
-SurveyLib
-=========
+**SurveyLib** is the core computation library used by nearly all survey and alignment software at **CERN**.  
+It provides geometric and adjustment algorithms for high-precision geodetic and metrological computations.
 
-The SurveyLib is a computation library used by almost all survey application at CERN.
+[[_TOC_]]
 
-#### Table of Content ####
+---
 
-[Purpose](#purpose)
+## Purpose
 
-[Download](#download)
+SurveyLib defines the **mathematical and geometric foundations** of SU software, including **LGC2**, **SurveyPad**, and **CSGeo**.  
+It contains point and matrix structures, least-squares adjustment algorithms, coordinate transformations, and statistical tools.
 
-[Documentation](#documentation)
-- [User guide](#user-guide)
-- [Doxygen](#doxygen)
-- [Other](#other)
+SurveyLib is typically linked as a **static or dynamic library** in other projects but can also be built standalone for development or testing.
 
-[Build instructions](#build-instructions)
-- [Requirements](#requirements)
-- [Generate project](#generate-project)
-- [Build](#build)
-- [Tests](#tests)
+**Legacy Notice:**
+SurveyLib integrates code developed over more than 40 years of survey and alignment computation.
+Some functions and methods preserve older programming styles or mathematical formalisms for backward compatibility.
+Contributors are encouraged to propose modern replacements or simplifications where possible — while maintaining compatibility with dependent projects.
 
-[Contribute](#contribute)
-- [Jira](#jira)
-- [Pull requests](#pull-requests)
-- [Automatic tests](#automatic-tests)
+---
 
-Purpose
--------
+## Download
 
-The SurveyLib holds the computation part of all survey software. It defines the points, matrices and all sorts of operations to perform on it (and way more!). It is generally included in other projects as a Git submodule and linked as a static library. Though, it also provides a subset of its features in a dynamic library, usable with both Linux and Windows.
+You can download the last version of the dynamic library of surveyLib or CSGEO by checking the [Releases](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/releases) in gitlab (CERN internal)
 
-Download
---------
+---
 
-You can download the last version of the dynamic library of the surveyLib here:
-- Linux (64 bits): [libSpatialObjDLL.so](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/jobs/artifacts/master/raw/libSpatialObjDLL.so?job=linux_release)
-- Windows (64 bits): [SpatialObjDLL.dll](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/jobs/artifacts/master/raw/SpatialObjDLL.dll?job=windows64_release)
-- Windows (32 bits): [SpatialObjDLL.dll](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/jobs/artifacts/master/raw/SpatialObjDLL.dll?job=windows32_release)
+## GitHub vs GitLab Notice
 
-You can download the last version of the dynamic library of CSGeo here:
-- Linux (64 bits): [libCSGeoDLL.so](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/jobs/artifacts/master/raw/libCSGeoDLL.so?job=linux_release)
-- Windows (64 bits): [CSGeoDLL.dll](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/jobs/artifacts/master/raw/CSGeoDLL.dll?job=windows64_release)
-- Windows (32 bits): [CSGeoDLL.dll](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/-/jobs/artifacts/master/raw/CSGeoDLL.dll?job=windows32_release)
+Historically, the **SurveyLib** project has been developed within **CERN’s GitLab environment** (`gitlab.cern.ch`).  
 
+The project is now entering a **transition phase** toward a more open and collaborative model.  
+Development will progressively move to **GitHub**, with future updates.
+This migration aims to make the project’s source code, issue tracking, and documentation more accessible to the broader scientific and open-source communities.  
+It also creates new opportunities for **community contributors** to participate in development, testing, and documentation improvements.
 
-Documentation
--------------
+For the time being, the **continuous integration and deployment (CI/CD)** processes continue to run on CERN’s GitLab infrastructure.
+In a later phase, the CI/CD system will also be **migrated to GitHub**, providing a unified, open workflow for building, testing, and packaging the software.  
+This migration will represent a **valuable entry point for contributors**.
 
-### User guide ###
+> During this transition, both GitLab and GitHub repositories will remain synchronized,  
+> and development activity will increasingly focus on GitHub.  
+> For contribution procedures, please continue reading below.
 
-The SurveyLib mainly targets the developers as it is meant to be integrated and used by other software. Though you can find a draft of a user documentation here: <https://confluence.cern.ch/display/SUS/SurveyLib+User+Guide>.
+**At this stage, the GitHub repository remains private and will be made public after the contribution workflow and Developer Certificate of Origin (DCO) receive formal approval from CERN’s Open Source Program Office (OSPO).**
 
-### Doxygen ###
+---
 
-The Doxygen documentation is meant for developers only. Follow the [Build instructions](#build-instructions) to set up your projects. Then you can build the `doc` target to create the Doxygen documentation. You will need [Doxygen](https://www.stack.nl/~dimitri/doxygen/download.html#srcbin) and [GraphViz](http://www.graphviz.org/download/#executable-packages) installed and configured.
+## Documentation
 
-Once built, you can open the file `build/html/index.html` as an entry point to the documentation.
+### Developer Documentation
 
-### Other ###
+SurveyLib is intended for **developers** integrating it into other software.  
+Documentation and usage notes are available here:
+
+- **[CERN Confluence Page](https://confluence.cern.ch/display/SUS/SurveyLib+User+Guide)** (only accessible for CERN users)  
+
+### Doxygen API Reference
+
+To generate the Doxygen documentation locally:
+
+```bash
+cmake --build . --target doc
+```
+
+You need:
+- [Doxygen](https://www.doxygen.nl/download.html)
+- [GraphViz](https://graphviz.org/download/)
+
+Then open:
+```
+build/html/index.html
+```
+
+> The Doxygen coverage is partial. Expanding and improving documentation is welcome as a contribution
+
+### Other
 
 You can find further documentation in the folder [Documentation](./Documentation).
 
-Build instructions
-------------------
+## Build Instructions
 
-Before starting, you can have a look at the documentation about [Getting started with C++](https://confluence.cern.ch/pages/viewpage.action?pageId=22153013) for the CERN survey applications.
+SurveyLib builds on **Windows** and **Linux** with **CMake**.
 
-### Requirements ###
+CERN internal developers can refer to the detailed Confluence guide for the full setup and environment configuration:  
+**[Getting Started with C++ for Survey Applications (CERN internal)](https://confluence.cern.ch/pages/viewpage.action?pageId=22153013)**
 
-The SurveyLib can be built on Windows or Linux. To do so, you need at least:
-- a C++14 compiler
-- CMake 3.6+
-- Eigen
-- TUT
+External contributors can follow the summarized instructions below.
 
-For Windows, you can follow the steps in the aforementioned [Getting started with C++](https://confluence.cern.ch/pages/viewpage.action?pageId=22153013) documentation.
+### Prerequisites
 
-For Linux, you have an example of the needed steps in the dockerfiles of the [sus_ci_cppworker](https://gitlab.cern.ch/apc/common/docker-image-susoft-cpp) project (the Docker image used to automatically run the tests on GitLab-CI).
-Note that the `devtoolset` trick is only necessary on the CC7 (Cern CentOS 7) as it doesn't provide a C++14 compiler by default.
+The following tools and dependencies are required:
 
-### Generate project ###
+| Component | Version / Example | Purpose |
+|------------|------------------|----------|
+| **C++ Compiler** | C++14-compliant (MSVC v142, GCC ≥ 7.0, Clang ≥ 5.0) | Core compilation |
+| **CMake** | [≥ 3.10 (recommended 3.20+)](https://cmake.org/download/) | Project configuration |
+| **NSIS** | [3.05](https://nsis.sourceforge.io/Main_Page) | Windows installer generation |
+| **Eigen** | [3.4.0](https://eigen.tuxfamily.org/) | Matrix and numerical computations |
+| **TUT** | [2016-12-19](https://mrzechonek.github.io/tut-framework/) | Unit testing framework |
+| **Git** | [Latest stable](https://gitforwindows.org/) | Source control and submodules |
+| **Reframe** | [2016](https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar) | SwissTopo transformations (Windows-only, optional) |
+| **Doxygen** | [≥ 1.8.18](https://www.doxygen.nl/download.html) | Developer documentation generation (optional) |
+| **GraphViz** | [≥ 2.38](https://graphviz.org/download/) | Visualization in Doxygen (optional) |
+
+### Submodules and External Dependencies
+
+**SurveyLib** depends one submodules:
+
+| Submodule | Purpose | Repository (Internal) | Repository (Public) |
+|------------|----------|----------------------|---------------------|
+| **SUSoftCMakeCommon** | Common CMake configuration, packaging setup, and compiler options | `https://gitlab.cern.ch/apc/susofts/shared/SUSoftCMakeCommon` | `https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon` |
+
+**SurveyLib**  also uses the following third-party libraries fetched automatically via CMake’s [`FetchContent`](https://cmake.org/cmake/help/latest/module/FetchContent.html):
+
+- [**RapidJSON**](https://github.com/Tencent/rapidjson) – A fast JSON parser/generator for C++ with both SAX/DOM style API.
+  _Licensed under the [MIT license](https://spdx.org/licenses/MIT.html)._
+
+You do **not** need to install it manually.
+
+#### Windows Environment (External Setup)
+
+If you are developing on **Windows**, follow these summarized steps adapted from the typical setup:
+
+1. **Install Visual Studio 2019 or later**  
+   - Launch Visual Studio Installer → *Modify Installation* → *Individual Components* tab.  
+   - Ensure the following components are selected:  
+     - *C++ 2019 Redistributable Update*  
+     - *MSVC v142 - VS 2019 C++ x64/x86 build tools*  
+     - *C++ core features*  
+     - *Windows 10 SDK (10.0.16299.0)* or later  
+
+2. **Install Git for Windows**   
+   - Ensure the installer adds Git to your system PATH.
+
+3. **Install CMake**  
+   - Download from [https://cmake.org/download/](https://cmake.org/download/).  
+   - During installation, select *Add CMake to PATH for all users*.  
+
+4. **Install NSIS (optional, for packaging)**  
+   - Download version 3.05 from [https://nsis.sourceforge.io/Download](https://nsis.sourceforge.io/Download).
+
+5. **Install Eigen and TUT**  
+   - Clone Eigen:  
+     ```bash
+     git clone https://gitlab.com/libeigen/eigen.git
+     cd eigen && git checkout 3.4.0
+     ```  
+   - Clone TUT:  
+     ```bash
+     git clone https://github.com/mrzechonek/tut-framework.git
+     cd tut-framework && git checkout 2016-12-19
+     ```  
+   - Place both in a directory accessible to your project (e.g. `C:\susoft\ext\`).
+
+6. **Install Doxygen and GraphViz (optional)**  
+   - [Doxygen](https://www.doxygen.nl/download.html)  
+   - [GraphViz](https://graphviz.org/download/) (add `bin/` directory to PATH)
+
+7. **Install Reframe (optional)**
+   - Download and install Reframe from [SwissTopo website](https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar)
+   
+> This setup represents the standard CERN configuration but can be adapted as needed.
+
+### Clone and Configure the Repository
+
+#### Clone the repository
+
+- **from gitlab.cern.ch (if accessible):**
+  ```bash
+  git clone https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib.git
+  ```
+ 
+- **from github:**
+  ```bash
+  git clone https://github.com/geodetic-metrology-tools/SurveyLib.git
+  ```
+
+Then:
+```bash
+cd SurveyLib
+```
+
+#### Submodule Setup
+
+
+- **from gitlab.cern.ch (if accessible)**
+  ```bash
+  git submodule update --init
+  ```
+
+- **from github:**
+  **SUSoftCMakeCommon** submodule is publicly available.  
+  
+  ```bash
+	# Initialize submodules without fetching content yet
+	git submodule init
+	
+	# Fix URLs for public repositories
+	git config submodule.lib/SUSoftCMakeCommon.url https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon.git
+	
+	# Fetch content from the corrected public URLs
+	git submodule update --remote lib/SUSoftCMakeCommon
+  ```
+
+> The submodule **SUSoftCMakeCommon** is not need if **SurveyLib** is used as a submodule for **LGC2**
+
+##### External Dependency Configuration
+
+**SUSoftCMakeCommon** provides:
+
+- Default compiler and build flags
+- Doxygen setup options
+- Installer and packaging configuration (`create_default_installer`)
+- Helper functions for DLL copy and installer generation
+
+External developers can adjust `"lib/SUSoftCMakeCommon/ext_libs.txt"` to define paths for locally installed dependencies:
+```cmake
+set(EXT_LIB_PATH "C:/dev/ext")
+set(EIGEN_INCLUDE_PATH "${EXT_LIB_PATH}/eigen")
+set(TUT_INCLUDE_PATH "${EXT_LIB_PATH}/tut-framework")
+```
+
+These paths can also be overridden at configuration time:
+```bash
+cmake -DEXT_LIBS_TXT_PATH="C:/path/to/custom/ext_libs.txt" ../source
+```
+
+
+### Generate project 
 
 We use CMake to generate projects, thus it is possible to generate projects for MSVC, Eclipse, or simple Unix makefiles. See the [CMake Generators documentation](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html) page.
-
-First of all, ensure that you have all the submodules initialized with:
-
-```bash 
-$ git submodule update --init
-```
 
 To generate the project, you need to create a subdirectory named `build/`, and then run CMake inside:
 
@@ -99,12 +242,12 @@ $ mkdir build && cd build/
 $ cmake -G "Visual Studio 16 2019" -A x64 ../source # Use another generator here if you wish
 ```
 
-In order to use a custom ext_libs.txt file defining the dependencies, please use:
+In order to use a custom `ext_libs.txt` file defining the dependencies, please use:
 ```bash
 $ cmake -G "Visual Studio 16 2019" -A x64 -DEXT_LIBS_TXT_PATH="C:/susoft/SUSoftCMakeCommon/ext_libs.txt" ../source # Use another file defining the dependencies
 ```
 
-### Build ###
+### Build 
 
 Once generated, you can open your project in the `build/` subfolder. If you use MSVC, you can open the file `build/SurveyLib.sln`.
 
@@ -123,31 +266,82 @@ you can see that CMake has generated several targets, among others:
 - `doc` builds the Doxygen documentation
 - `UnitTests` builds the tests, the only runnable project (by default the startup project in MSVC)
 
-### Tests ###
+## Contributing
 
-To build the tests, build the target `UnitTests` and run it. We Use TUT to generate unit tests. Note that the tests are automatically performed on Gitlab-CI for each contribution. You can see the results in the [CI page](https://gitlab.cern.ch/apc/susofts/libraries/SurveyLib/pipelines).
+**At this stage, the GitHub repository remains private and will be made public after the contribution workflow and Developer Certificate of Origin (DCO) receive formal approval from CERN’s Open Source Program Office (OSPO).**
 
-Contribute
-----------
 
-SurveyLib is a private CERN repository, thus it doesn't accept contributions from outside CERN.
+All contributions are **warmly welcomed** — whether from CERN personnel, collaborators from other institutes, or community contributors interested in large-scale or geodetic metrology software.
+However, contribution workflows are not yet enabled while the approval process is ongoing.
 
-To report an issue (bug, or feature request), follow the [Jira](#jira) subsection. For development, please read on.
+### How to Report Issues
 
-### Jira ###
+- **CERN contributors/Users:**  
+  Report or track issues on the [CERN Jira board](https://its.cern.ch/jira/browse/SUS).  
+  All developments and bug reports must have a corresponding Jira issue.
+  
+- **Community contributors:**  
+  Open a [GitHub Issue](https://github.com/geodetic-metrology-tools/SurveyLib/issues) to:  
+  - Report bugs  
+  - Suggest improvements or new features  
+  - Discuss documentation or CI/CD integration  
 
-Any request, bug or development should have a Jira issue. You can create an issue on the [dedicated Jira board](https://its.cern.ch/jira/browse/SUS). This is mandatory for both the users and the developers.
 
-### Pull requests ###
+> Maintainers will ensure smooth coordination between JIRA and GitHub issue-tracking systems. Some automation from JIRA to Github could be implemented.
+> Future plans include publishing a consolidated project roadmap, milestone tracker, and CI/CD activity dashboard.
 
-The most up-to-date stable branch is `master`. As a stable branch, you **must not** commit directly in it. You need to create a specific branch for your on-going development and commit there. As we use CMake, if you add a file, don't forget to add it in one of the `CMakeFile.txt`!
+### How to Contribute Code
 
-Once you have finished your work, you should create a Pull Request (PR, or Merge Request) from your branch to `master`. The description of your PR should include a link to the corresponding task in Jira.
+Code contributions are **temporarily disabled** until the OSPO approval process is completed.  
+The repository will accept Pull Requests once the contribution model and DCO are officially validated.
 
-Once your PR has been reviewed by another developer and accepted, it can be merged into master. Note that, for the sake of a nice Git history, your branch needs to be up to date with `master`. If it is not the case, you will have to rebase, either automatically from GitLab if there are no conflicts, or manually otherwise.
+---
 
-### Automatic tests ###
+## Licensing
 
-Automatic tests are performed each time you push a commit. These tests include compilation of `ALL_BUILD` target, and running the `UnitTests` target, all on Linux 64 bits, Windows 32 and 64 bits. If the tests don't pass, your PR will not be merged.
+SurveyLib is licensed under the [GNU General Public License v3.0 or later (GPL-3.0-or-later)](LICENSE).
 
-Once the PR has been accepted and merged into `master`, GitLab-CI will automatically build the dynamic library.
+Documentation, metadata, and non-code assets (e.g., configuration or documentation files) are licensed under the [Creative Commons Attribution 4.0 International (CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/).
+
+This distinction and file classification are defined in [`REUSE.toml`](./REUSE.toml).
+
+### Third-Party Dependencies
+
+| Library           | License                              | Source                                       |
+|-------------------|---------------------------------------|----------------------------------------------|
+| Eigen             | MPL-2.0                               | https://gitlab.com/libeigen/eigen            |
+| TUT               | BSD 2-Clause "Simplified" License     | https://github.com/mrzechonek/tut-framework  |
+| RapidJSON         | MIT                                   | https://github.com/Tencent/rapidjson         |
+| Reframe           | Under revision | https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar |
+| `counted_ptr.h`   | Custom Permissive License (1999)      | http://snowball.digitalspace.net/cpp/        |
+| SUSoftCMakeCommon | GPL-3.0-or-later | [https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon](https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon) |
+
+**Reframe is not included in the repository.**  
+Its use is **optional** and can be enabled in CMake **only if the user has independently obtained the library and the legal right to use it** under the licensing terms defined by swisstopo.  
+
+All third-party license texts are stored in the [`LICENSES/`](LICENSES/) directory.  
+For an overview of licensing across the project, see [`NOTICE.md`](NOTICE.md).
+
+### License Compliance (REUSE)
+
+This project follows the [REUSE Specification](https://reuse.software/) to ensure proper copyright and license attribution.
+
+To verify compliance, install the **REUSE tool** and run:
+
+```bash
+reuse lint
+```
+
+If successful, you’ll see:
+```
+Congratulations! Your project is REUSE compliant.
+```
+
+When adding new files:
+- Add SPDX headers directly to text-based files where possible.  
+- If headers are not possible (e.g., binaries, PDFs), list them in [`REUSE.toml`](./REUSE.toml).  
+- Add any new third-party licenses to the [`LICENSES/`](./LICENSES/) folder.
+
+---
+
+Thank you for contributing to this project and helping us make **geodetic metrology software** open, reliable, and accessible to the wider community!

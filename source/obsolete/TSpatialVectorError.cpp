@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TSpatialVectorError.h: 
 //
 // The Spatial Vector Error of a vector in a given reference frame.
@@ -8,7 +12,6 @@
 // Patterns:
 // This class is a Proxy.
 //
-// Copyright 1999,2000, CERN, EST/SU. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////

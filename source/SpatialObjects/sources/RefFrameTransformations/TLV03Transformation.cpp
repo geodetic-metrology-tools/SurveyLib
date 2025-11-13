@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "TLV03Transformation.h"
 #include <TRefFrameInfo.h>
 #include <ReframeSwisstopo.h>

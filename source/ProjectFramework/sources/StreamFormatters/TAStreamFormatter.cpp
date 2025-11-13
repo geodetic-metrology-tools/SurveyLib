@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TAStreamFormatter.cpp: 
 //
 // Abstract Base Class for a QTextStream Formatter.
@@ -9,7 +13,6 @@
 // the decorator pattern.
 // 
 //
-// Copyright 2002-2022, CERN. All rights reserved.
 //////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////

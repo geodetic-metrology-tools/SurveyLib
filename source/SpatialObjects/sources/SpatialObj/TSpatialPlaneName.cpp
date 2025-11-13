@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // TSpatialPlaneName.cpp
 // class modelising a straight spatial line
 /////////////////////////////////////////////////////////////////////////////
