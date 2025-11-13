@@ -28,8 +28,8 @@ double FrenchRAF20::interpolRAF20(const double &latitude_rgf93_deg, const double
 	//RAF 20 grid constants
 	const double maxLat_deg = 51.5; //Latitude maximale en degres decimaux comptee positivement vers le nord
 	const double minLat_deg = 42.0; //Latitude minimale en degres decimaux comptee positivement vers le nord 
-	const double maxLong_deg = 8.5; //Longitude maximale en degres decimaux comptee positivement vers lâ?�™est
-	const double minLong_deg = -5.5; //	Longitude minimale en degres decimaux comptee positivement vers lâ?�™est
+	const double maxLong_deg = 8.5; //Longitude maximale en degres decimaux comptee positivement vers l'est
+	const double minLong_deg = -5.5; //	Longitude minimale en degres decimaux comptee positivement vers l'est
 	const double stepLong_deg = 0.0333333333333; //Pas en longitude en degres decimaux
 	const double stepLat_deg = 0.025; // Pas en latitude en degres decimaux
 

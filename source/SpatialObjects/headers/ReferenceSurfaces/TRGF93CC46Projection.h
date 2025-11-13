@@ -4,10 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
-
-
-
 #ifndef SURVEYLIB_TRGF93_PROJECTION
 #define SURVEYLIB_TRGF93_PROJECTION
 

@@ -192,8 +192,8 @@ bool TSpatialPointName::operator<( const TSpatialPointName &right ) const{
 	bool answerFound=false;
 
 	//Name Point et Class ne sont pas concatenes pour la comparaison car si par ex. les
-	//deux Name n'ont pas la m?ªme longueur des caract?¨res de l'un vont ?ªtre compares 
-	//avec des caract?¨res qui sont de Point ou Class de l'autre  
+	//deux Name n'ont pas la meme longueur des caracteres de l'un vont etre compares 
+	//avec des caracteres qui sont de Point ou Class de l'autre  
 
 	if (fName<right.fName){
 		answer=true;

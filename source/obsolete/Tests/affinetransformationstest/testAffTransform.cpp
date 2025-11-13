@@ -319,7 +319,7 @@ void main ()
 
 
 		// TEST TCOMPOSITE 
-	//verifier les résultats numériques ? partir de ce breakpoint
+	//verifier les resultats numeriques a partir de ce breakpoint
 
 	TCompositeAffTransform comp, comp3, comp4;
 	//ry.setStatus(TVNumericValue::kNull);

@@ -443,7 +443,7 @@ TFreeVector TTrf2TrfTransformation::itrf2014velocity(TPositionVector& pv) const 
 
 	TFreeVector pvFree = positionToFree(pv);
 
-	//Zuheir Altamimi, Laurent Metivier, Paul Rebischung, Hel?Â¨ne Rouby, Xavier Collilieux, ITRF2014 plate motion model, Geophysical Journal International, Volume 209, Issue 3, June 2017, Pages 1906Ã¢?¬â€?912, https://doi.org/10.1093/gji/ggx136
+	//Zuheir Altamimi, Laurent Metivier, Paul Rebischung, Helene Rouby, Xavier Collilieux, ITRF2014 plate motion model, Geophysical Journal International, Volume 209, Issue 3, June 2017, Pages 1906 - 1912, https://doi.org/10.1093/gji/ggx136
 	//CERN is located on the eurasian (EURA) plate
 
 	TAngle fOmegaX, fOmegaY, fOmegaZ;

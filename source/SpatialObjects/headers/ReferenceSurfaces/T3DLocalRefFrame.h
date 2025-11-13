@@ -7,9 +7,6 @@
 // T3DLocalRefFrame.h
 
 
-// T3DLocalRefFrame.h
-
-
 /*!
 	class for a local 3D cartesian reference frame
 

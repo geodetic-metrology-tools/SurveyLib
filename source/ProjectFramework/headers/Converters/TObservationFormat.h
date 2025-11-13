@@ -7,9 +7,6 @@
 // TObservationFormat.h
 
 
-// TObservationFormat.h
-
-
 /*!
 Class used by a text stream to store and get all necessary formatting information
 for observations

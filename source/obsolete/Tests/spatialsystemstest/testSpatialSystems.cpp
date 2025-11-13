@@ -158,7 +158,7 @@ void main(){
 
 	
 	//test TEuclideanRefFrame
-	//toutes les fonctions sont testées avec les deux classes précédentes.
+	//toutes les fonctions sont testees avec les deux classes precedentes.
 
 
 

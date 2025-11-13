@@ -31,8 +31,9 @@ Applies to documentation, configuration, and non-code files as specified in [`RE
 - Source: https://github.com/Tencent/rapidjson
 
 ### Reframe
-- License: Creative Commons Attribution No Derivatives 4.0 International
+- License: under revision 
 - Source: https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar
+- Note: optional and not included in the repository.
 
 ### `counted_ptr.h`
 - License: Custom Permissive License

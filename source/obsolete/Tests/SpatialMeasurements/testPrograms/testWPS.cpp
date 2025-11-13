@@ -183,7 +183,7 @@ void main(){
 	edmSt = new TEDMStation(ws, iterPt);
 	delete edmSt;
 
-	//unique série de mesures
+	//unique serie de mesures
 	iterEDMSt ++;
 	edmRom= new TEDMDistROM(*iterEDMSt);
 	delete edmRom;
@@ -250,7 +250,7 @@ void main(){
 	edmSt = new TEDMStation(ws, iterPt);
 	delete edmSt;
 
-//unique série de mesures
+//unique serie de mesures
 	iterEDMSt ++;
 	edmRom= new TEDMDistROM(*iterEDMSt);
 	delete edmRom;

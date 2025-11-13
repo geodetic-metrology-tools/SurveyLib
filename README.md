@@ -46,6 +46,8 @@ This migration will represent a **valuable entry point for contributors**.
 > and development activity will increasingly focus on GitHub.  
 > For contribution procedures, please continue reading below.
 
+**At this stage, the GitHub repository remains private and will be made public after the contribution workflow and Developer Certificate of Origin (DCO) receive formal approval from CERN’s Open Source Program Office (OSPO).**
+
 ---
 
 ## Documentation
@@ -266,7 +268,11 @@ you can see that CMake has generated several targets, among others:
 
 ## Contributing
 
+**At this stage, the GitHub repository remains private and will be made public after the contribution workflow and Developer Certificate of Origin (DCO) receive formal approval from CERN’s Open Source Program Office (OSPO).**
+
+
 All contributions are **warmly welcomed** — whether from CERN personnel, collaborators from other institutes, or community contributors interested in large-scale or geodetic metrology software.
+However, contribution workflows are not yet enabled while the approval process is ongoing.
 
 ### How to Report Issues
 
@@ -286,8 +292,8 @@ All contributions are **warmly welcomed** — whether from CERN personnel, colla
 
 ### How to Contribute Code
 
-This repository follows the standard **fork → pull request → review → merge** workflow.
-See the [`CONTRIBUTING.md`](./CONTRIBUTING.md) for details about how to contribute.
+Code contributions are **temporarily disabled** until the OSPO approval process is completed.  
+The repository will accept Pull Requests once the contribution model and DCO are officially validated.
 
 ---
 
@@ -306,9 +312,12 @@ This distinction and file classification are defined in [`REUSE.toml`](./REUSE.t
 | Eigen             | MPL-2.0                               | https://gitlab.com/libeigen/eigen            |
 | TUT               | BSD 2-Clause "Simplified" License     | https://github.com/mrzechonek/tut-framework  |
 | RapidJSON         | MIT                                   | https://github.com/Tencent/rapidjson         |
-| Reframe           | Creative Commons Attribution No Derivatives 4.0 International | https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar |
+| Reframe           | Under revision | https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar |
 | `counted_ptr.h`   | Custom Permissive License (1999)      | http://snowball.digitalspace.net/cpp/        |
 | SUSoftCMakeCommon | GPL-3.0-or-later | [https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon](https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon) |
+
+**Reframe is not included in the repository.**  
+Its use is **optional** and can be enabled in CMake **only if the user has independently obtained the library and the legal right to use it** under the licensing terms defined by swisstopo.  
 
 All third-party license texts are stored in the [`LICENSES/`](LICENSES/) directory.  
 For an overview of licensing across the project, see [`NOTICE.md`](NOTICE.md).

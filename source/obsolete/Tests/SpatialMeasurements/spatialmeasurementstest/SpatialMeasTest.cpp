@@ -270,7 +270,7 @@ void main() {
 	if (hdrom.notInContainer(&hdm3))
 		hdrom.addHorDist(&hdm3);
 	else
-		cout << "déj? dans la liste!!" << endl;
+		cout << "deja dans la liste!!" << endl;
 
 	cout << hdrom.getSeries() << endl;
 

@@ -41,7 +41,7 @@ namespace tut
         //TLambert93Transformation trans(true);
         //ensure("Transform returns true", trans.transform(position));
 			
-		//Comparison with coordinates computed using IGN CircAc software
+		//Comparison with coordinates computed using IGN Circe software
         ensure_equals("Lambert 93 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1082722.205), static_cast<TReal>(0.001));
 		ensure_equals("Lambert 93 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(7001994.409), static_cast<TReal>(0.001));
 		ensure_equals("Lambert 93 H (ellipsoidal height)", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(),static_cast<TReal>(400.157 ), static_cast<TReal>(0.001));
@@ -74,7 +74,7 @@ namespace tut
 		ensure("Transform returns true", 
 			position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93)));
 
-		// Comparison with coordinates computed using IGN CircAc software
+		// Comparison with coordinates computed using IGN Circe software
         ensure_equals("ETRF93 PHI", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue(), static_cast<TReal>(0.872664626), static_cast<TReal>(1.6e-10)); //(1 mm ~1.6e-10 rad)
         ensure_equals("ETRF93 LAM", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue(), static_cast<TReal>(0.145512099), static_cast<TReal>(1.6e-10)); //(1 mm ~1.6e-10 rad) 
         ensure_equals("ETRF93 H", position.getCoordinates(TCoordSysFactory::kGeodetic).getH().getMetresValue(), static_cast<TReal>(400.157), static_cast<TReal>(1e-3));
@@ -92,7 +92,7 @@ namespace tut
 
 		ensure("Transform returns true", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kRGF93)));
 
-		// Comparison with coordinates computed using IGN CircAc software
+		// Comparison with coordinates computed using IGN Circe software
 		ensure_equals("ETRF93 PHI", position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue(), static_cast<TReal>(0.872664626),
 			static_cast<TReal>(1.6e-10)); //(1 mm ~1.6e-10 rad)
 		ensure_equals("ETRF93 LAM", position.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue(), static_cast<TReal>(0.145512099),
@@ -113,7 +113,7 @@ namespace tut
 
 		ensure("Transform returns true", position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLambert93_ign69)));
 
-		// Comparison with coordinates computed using IGN CircAc software
+		// Comparison with coordinates computed using IGN Circe software
 		ensure_equals("Lambert 93 X", position.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(1082722.205), static_cast<TReal>(0.001));
 		ensure_equals("Lambert 93 Y", position.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(7001994.409), static_cast<TReal>(0.001));
 		ensure_equals("Lambert 93 H (altitude NGF-IGN69)", position.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(),static_cast<TReal>(352.697), static_cast<TReal>(0.001));
