@@ -46,8 +46,6 @@ This migration will represent a **valuable entry point for contributors**.
 > and development activity will increasingly focus on GitHub.  
 > For contribution procedures, please continue reading below.
 
-**At this stage, the GitHub repository remains private and will be made public after the contribution workflow and Developer Certificate of Origin (DCO) receive formal approval from CERN’s Open Source Program Office (OSPO).**
-
 ---
 
 ## Documentation
@@ -268,11 +266,7 @@ you can see that CMake has generated several targets, among others:
 
 ## Contributing
 
-**At this stage, the GitHub repository remains private and will be made public after the contribution workflow and Developer Certificate of Origin (DCO) receive formal approval from CERN’s Open Source Program Office (OSPO).**
-
-
 All contributions are **warmly welcomed** — whether from CERN personnel, collaborators from other institutes, or community contributors interested in large-scale or geodetic metrology software.
-However, contribution workflows are not yet enabled while the approval process is ongoing.
 
 ### How to Report Issues
 
@@ -292,8 +286,8 @@ However, contribution workflows are not yet enabled while the approval process i
 
 ### How to Contribute Code
 
-Code contributions are **temporarily disabled** until the OSPO approval process is completed.  
-The repository will accept Pull Requests once the contribution model and DCO are officially validated.
+This repository follows the standard **fork → pull request → review → merge** workflow.
+See the [`CONTRIBUTING.md`](./CONTRIBUTING.md) for details about how to contribute.
 
 ---
 
@@ -321,6 +315,7 @@ Its use is **optional** and can be enabled in CMake **only if the user has indep
 
 All third-party license texts are stored in the [`LICENSES/`](LICENSES/) directory.  
 For an overview of licensing across the project, see [`NOTICE.md`](NOTICE.md).
+
 
 ### License Compliance (REUSE)
 
