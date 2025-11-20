@@ -83,7 +83,7 @@ bool solveUniqueWithDecomposition(const TSparseMatrix &A, const TVector &b, TVec
 
 // utility template to invert with a given decomposition. Only used in TSparseMatrix.cpp
 template<typename Decomposition>
-bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool useScaling, const InverseExtras &extras, int bandWidth = 0)
+bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool useScaling, const InverseExtras &extras)
 {
 	const int nRows = A.rows();
 	if (nRows == 0)
@@ -112,6 +112,7 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 		}
 		extras.diag_MinvMT->setZero(extras.M->rows()); // will be filled after the parallel section
 	}
+	int bandWidth = extras.bandWidth;
 	// Effective bandwidth; if <=0, treat as full (bandWidth = m-1)
 	const int bw = (bandWidth <= 0) ? (m - 1) : bandWidth;
 	// variable to estimate the condition number
@@ -120,35 +121,41 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 	TVector norms(m);
 	norms.setZero();
 	// Per-thread partial diagonals for diag(M * Qxx * M^T) (empty if not needed)
-	std::vector<TVector> partials;
-	if (wantDiagonal)
-	{
-		// Reserve some space to avoid repeated reallocations in critical section
+	int max_threads = 1;
 #ifdef _OPENMP
-		partials.reserve(omp_get_max_threads());
-#else
-		partials.reserve(1);
+	max_threads = omp_get_max_threads();
 #endif
-	}
-	// Per-thread triplet lists for the sparse inverse
-	std::vector<std::vector<Eigen::Triplet<double>>> threadTriplets;
-#ifdef _OPENMP
-	threadTriplets.reserve(omp_get_max_threads());
-#else
-	threadTriplets.reserve(1);
-#endif
+	std::vector<TVector> partialDiags(max_threads);
+	int num_threads_used = 1;
+	// Band storage for the inverse elements
+	const int band_rows = 2 * bw + 1;
+	Eigen::MatrixXd band(band_rows, m);
 	// Single parallel loop for both cases: normal and diagonal requested
 #pragma omp parallel
 	{
-		TVector local; // thread-local diag vector, size 0 if not used
+#ifdef _OPENMP
+		int tid = omp_get_thread_num();
+		int num_threads = omp_get_num_threads();
+#	pragma omp master
+		{
+			num_threads_used = num_threads;
+		}
+#else
+		int tid = 0;
+		int num_threads = 1;
+#endif
+		TVector localDiag;
 		if (wantDiagonal)
 		{
-			local = TVector::Zero(extras.M->rows());
+			localDiag = TVector::Zero(extras.M->rows());
 		}
-		std::vector<Eigen::Triplet<double>> localTriplets;
 #pragma omp for nowait
 		for (int i = 0; i < m; ++i)
 		{
+			if (i % 1000 == 0)
+			{
+				std::cout << "Treating covariance matrix row " << i << " of " << m << " rows." << std::endl;
+			}
 			TVector bScaled = TVector::Zero(nRows);
 			bScaled[i] = 1.0;
 			if (useScaling)
@@ -164,7 +171,8 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 			const int upper = std::min(m - 1, i + bw);
 			for (int j = lower; j <= upper; ++j)
 			{
-				localTriplets.push_back(Eigen::Triplet<double>(j, i, x_i[j]));
+				int r = j - i + bw;
+				band(r, i) = x_i[j];
 			}
 			// accumulate diag(M * Qxx * M^T) if requested (using full x_i for accuracy)
 			if (wantDiagonal)
@@ -174,17 +182,13 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 				for (TSparseMatrix::InnerIterator it(*extras.M, i); it; ++it)
 				{
 					const int row = it.row();
-					local[row] += it.value() * t[row];
+					localDiag[row] += it.value() * t[row];
 				}
 			}
 		}
-#pragma omp critical
+		if (wantDiagonal)
 		{
-			if (wantDiagonal)
-			{
-				partials.push_back(std::move(local));
-			}
-			threadTriplets.push_back(std::move(localTriplets));
+			partialDiags[tid] = std::move(localDiag);
 		}
 	}
 	maxRatio = norms.maxCoeff();
@@ -197,22 +201,38 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 	// Adding up all diagonals from different threads to compute diag(M * Qxx * M^T)
 	if (wantDiagonal)
 	{
-		for (const auto &v : partials)
+		for (int t = 0; t < num_threads_used; ++t)
 		{
-			(*extras.diag_MinvMT) += v;
+			(*extras.diag_MinvMT) += partialDiags[t];
 		}
 	}
-	// Combine all thread triplets into one list
+	//std::cout << "main inversion loop finished" << std::endl;
+	// Combine band storage into triplet list
 	std::vector<Eigen::Triplet<double>> triplets;
-	for (auto &lt : threadTriplets)
+	size_t est_nnz = static_cast<size_t>(m) * (2LL * bw + 1);
+	if (est_nnz > static_cast<size_t>(m) * m)
+		est_nnz = static_cast<size_t>(m) * m; // cap for large bw
+	triplets.reserve(est_nnz);
+	for (int i = 0; i < m; ++i)
 	{
-		triplets.insert(triplets.end(), std::make_move_iterator(lt.begin()), std::make_move_iterator(lt.end()));
+		const int lower = std::max(0, i - bw);
+		const int upper = std::min(m - 1, i + bw);
+		for (int j = lower; j <= upper; ++j)
+		{
+			int r = j - i + bw;
+			triplets.push_back(Eigen::Triplet<double>(j, i, band(r, i)));
+		}
 	}
+	//std::cout << "triplets are prepared now" << std::endl;
 	// Set the sparse inverse matrix from triplets
 	invMat.resize(m, m);
+	//std::cout << "start setting matrix from triplets " << std::endl;
 	invMat.setFromTriplets(triplets.begin(), triplets.end());
+	//std::cout << "finished setting matrix from triplets " << std::endl;
+	invMat.makeCompressed();
 	return true;
 }
+
 
 /*!
 		\brief Main method for inverting sparse matrices
@@ -224,6 +244,7 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool isSPD, 
 	auto nRows = sparseMat.rows();
 	auto nCols = sparseMat.cols();
 
+	//std::cout << "inversion and res covar starts" << std::endl;
 	if (!sparseMat.isCompressed())
 		throw std::runtime_error("inverse() method requires a sparse matrix in compressed mode. Call .makeCompressed() before passing.");
 	if (nRows != nCols)
@@ -240,7 +261,7 @@ bool inverse(const TSparseMatrix &sparseMat, TSparseMatrix &invMat, bool isSPD, 
 	{
 		invertSuccess = invertWithDecomposition<Eigen::SparseLU<TSparseMatrix>>(sparseMat, invMat, true, extras);
 	}
-
+	//std::cout << "inversion and res covar finished" << std::endl;
 	return invertSuccess;
 }
 
