@@ -89,6 +89,7 @@ struct InverseExtras
 {
 	// tell the inverse method to only compute a certain size top left block of the inverse matrix, the default value -1 means the whole inverse is computed
 	int topLeftSize = -1;
+	int bandWidth = -1;
 	// if M and specified diag_MinvMT are specified, this triggers the computation of diag(M invMat M^T) in the inverse method
 	const Eigen::SparseMatrix<double> *M = nullptr;
 	Eigen::VectorXd *diag_MinvMT = nullptr;

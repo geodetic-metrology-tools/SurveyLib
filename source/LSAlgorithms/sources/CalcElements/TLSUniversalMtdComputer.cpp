@@ -193,6 +193,8 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	TSparseUtils::InverseExtras inversionExtras;
 	// in any case we only need the Qxx part
 	inversionExtras.topLeftSize = nbUnk;
+	// only store a band around the diagonal in the big File version
+	inversionExtras.bandWidth = 7;
 
 	if (PvIsDiag)
 	{
