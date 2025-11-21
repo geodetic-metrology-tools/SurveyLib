@@ -4,6 +4,7 @@
 
 #include "TSparseMatrix.h"
 
+#include <mutex>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -64,7 +65,13 @@ bool solveUniqueWithDecomposition(const TSparseMatrix &A, const TVector &b, TVec
 	TVector d;
 	Decomposition solver;
 
-	if (!scaleAndDecompose(A, useScaling, AScaled, d, solver))
+	// use slight regularization
+	TSparseMatrix id(A.rows(), A.cols());
+	id.setIdentity();
+	double reg = 1e-6;
+	TSparseMatrix AReg = A + reg * id;
+
+	if (!scaleAndDecompose(AReg, useScaling, AScaled, d, solver))
 	{
 		return false;
 	}
@@ -81,7 +88,69 @@ bool solveUniqueWithDecomposition(const TSparseMatrix &A, const TVector &b, TVec
 	return solver.info() == Eigen::Success;
 }
 
-// utility template to invert with a given decomposition. Only used in TSparseMatrix.cpp
+static void printProgress(int current, int total, bool clear = false)
+{
+	if (total == 0)
+		return;
+	static std::mutex printMutex; // Thread-safety
+	std::lock_guard<std::mutex> lock(printMutex);
+	const int barWidth = 50;
+	const int clearWidth = 200; // Fixed generous width to clear the line fully
+	float progress = static_cast<float>(current) / total;
+	// Higher resolution: total "sub-steps" = barWidth * 8
+	float finePos = barWidth * progress * 8.0f;
+	int fullBlocks = static_cast<int>(finePos / 8);
+	int fracBlock = static_cast<int>(finePos) % 8;
+	// Spinning animation (fancy!)
+	static const char spinner[] = {'|', '/', '-', '\\'};
+	static int spinIdx = 0;
+	char spinChar = spinner[spinIdx % 4];
+	spinIdx++;
+	// Compute color for spinner based on overall progress (red to green)
+	int spinR = static_cast<int>(255 * (1 - progress));
+	int spinG = static_cast<int>(255 * progress);
+	int spinB = 0;
+	std::string spinColor = "\033[38;2;" + std::to_string(spinR) + ";" + std::to_string(spinG) + ";" + std::to_string(spinB) + "m";
+	// Reset color
+	const std::string reset = "\033[0m";
+	// Unicode fractional blocks (from 0/8 to 8/8)
+	static const std::string blocks[9] = {" ", "▏", "▎", "▍", "▌", "▋", "▊", "▉", "█"};
+	std::ostringstream oss;
+	oss << "Inversion progress " << spinColor << spinChar << reset << " [";
+	// Filled part with gradient from red to green based on position
+	for (int k = 0; k < fullBlocks; ++k)
+	{
+		float frac = static_cast<float>(k) / (barWidth - 1);
+		int R = static_cast<int>(255 * (1 - frac));
+		int G = static_cast<int>(255 * frac);
+		int B = 0;
+		std::string color = "\033[38;2;" + std::to_string(R) + ";" + std::to_string(G) + ";" + std::to_string(B) + "m";
+		oss << color << blocks[8];
+	}
+	if (fullBlocks < barWidth)
+	{
+		float frac = static_cast<float>(fullBlocks) / (barWidth - 1);
+		int R = static_cast<int>(255 * (1 - frac));
+		int G = static_cast<int>(255 * frac);
+		int B = 0;
+		std::string color = "\033[38;2;" + std::to_string(R) + ";" + std::to_string(G) + ";" + std::to_string(B) + "m";
+		oss << color << blocks[fracBlock];
+	}
+	oss << reset;
+	for (int k = fullBlocks + 1; k < barWidth; ++k)
+	{
+		oss << " ";
+	}
+	oss << "] " << std::fixed << std::setprecision(0) << progress * 100.0 << "% " << current << "/" << total;
+	std::string line = oss.str();
+	std::cout << "\r" << std::string(clearWidth, ' ') << "\r" << line;
+	if (clear)
+	{
+		std::cout << "\r" << std::string(clearWidth, ' ') << "\r";
+	}
+	std::cout.flush();
+}
+
 template<typename Decomposition>
 bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool useScaling, const InverseExtras &extras)
 {
@@ -95,8 +164,13 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 	const int m = (extras.topLeftSize > 0) ? std::min(extras.topLeftSize, nRows) : nRows;
 	TSparseMatrix AScaled;
 	TVector d;
+	// use slight regularization
+	TSparseMatrix id(A.rows(), A.cols());
+	id.setIdentity();
+	double reg = 1e-6;
+	TSparseMatrix AReg = A + reg * id;
 	Decomposition solver;
-	if (!scaleAndDecompose(A, useScaling, AScaled, d, solver))
+	if (!scaleAndDecompose(AReg, useScaling, AScaled, d, solver))
 	{
 		return false;
 	}
@@ -130,6 +204,8 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 	// Band storage for the inverse elements
 	const int band_rows = 2 * bw + 1;
 	Eigen::MatrixXd band(band_rows, m);
+	// Progress tracking
+	std::atomic<int> completed(0);
 	// Single parallel loop for both cases: normal and diagonal requested
 #pragma omp parallel
 	{
@@ -152,10 +228,6 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 #pragma omp for nowait
 		for (int i = 0; i < m; ++i)
 		{
-			if (i % 1000 == 0)
-			{
-				std::cout << "Treating covariance matrix row " << i << " of " << m << " rows." << std::endl;
-			}
 			TVector bScaled = TVector::Zero(nRows);
 			bScaled[i] = 1.0;
 			if (useScaling)
@@ -185,12 +257,21 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 					localDiag[row] += it.value() * t[row];
 				}
 			}
+			// Update progress
+			++completed;
+			if (completed % 100 == 0)
+			{
+				printProgress(completed.load(), m);
+			}
 		}
 		if (wantDiagonal)
 		{
 			partialDiags[tid] = std::move(localDiag);
 		}
 	}
+	// Finish progress bar
+	printProgress(m, m);
+	std::cout << std::endl;
 	maxRatio = norms.maxCoeff();
 	if (maxRatio > 1e+12)
 	{
@@ -206,7 +287,6 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 			(*extras.diag_MinvMT) += partialDiags[t];
 		}
 	}
-	//std::cout << "main inversion loop finished" << std::endl;
 	// Combine band storage into triplet list
 	std::vector<Eigen::Triplet<double>> triplets;
 	size_t est_nnz = static_cast<size_t>(m) * (2LL * bw + 1);
@@ -223,15 +303,14 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 			triplets.push_back(Eigen::Triplet<double>(j, i, band(r, i)));
 		}
 	}
-	//std::cout << "triplets are prepared now" << std::endl;
 	// Set the sparse inverse matrix from triplets
 	invMat.resize(m, m);
-	//std::cout << "start setting matrix from triplets " << std::endl;
 	invMat.setFromTriplets(triplets.begin(), triplets.end());
-	//std::cout << "finished setting matrix from triplets " << std::endl;
 	invMat.makeCompressed();
 	return true;
 }
+
+
 
 
 /*!
