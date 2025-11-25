@@ -8,6 +8,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <fstream>
 #include <vector>
 
 #include <Eigen/Dense>
@@ -454,6 +455,32 @@ double &checkedCoeffRef(TVector &vec, int row)
 		throw std::runtime_error("Attempting to get reference of vector entry at index " + std::to_string(row) + " of " + std::to_string(vec.rows()) + " dimensional vector.");
 	}
 	return vec.coeffRef(row);
+}
+
+void saveToMatrixMarket(const std::string &filename, const Eigen::SparseMatrix<double> &matrix)
+{
+	
+		std::ofstream out(filename);
+		if (!out.is_open())
+		{
+			throw std::runtime_error("Cannot open file: " + filename);
+		}
+		out << std::setprecision(17);
+		// Header
+		out << "%%MatrixMarket matrix format: row, column, value, indices 1-based \n";
+		out << matrix.rows() << " " << matrix.cols() << " " << matrix.nonZeros() << "\n";
+
+		// Write non-zeros (1-based indices; loop handles ColMajor/RowMajor via InnerIterator)
+		for (int k = 0; k < matrix.outerSize(); ++k)
+		{
+			for (Eigen::SparseMatrix<double>::InnerIterator it(matrix, k); it; ++it)
+			{
+				out << (it.row() + 1) << " " << (it.col() + 1) << " " << it.value() << "\n";
+			}
+		}
+
+		out.close();
+	
 }
 
 bool isPositiveDefinite(const TDenseMatrix &mat)

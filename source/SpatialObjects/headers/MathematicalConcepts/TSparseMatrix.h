@@ -105,6 +105,7 @@ double &checkedCoeffRef(TSparseMatrix &mat, int row, int col);
 double &checkedCoeffRef(TVector &mat, int row);
 // test for positive definitness. Only usable for small, dense matrices, expensive
 bool isPositiveDefinite(const Eigen::MatrixXd &mat);
+void saveToMatrixMarket(const std::string &filename, const Eigen::SparseMatrix<double> &matrix);
 
 } // namespace TSparseUtils
 
