@@ -50,6 +50,7 @@ TDataParameters::TDataParameters()
 	fCoordPrecision = TPointFormat::kMillimetre;
 	fCoordEpoch = NO_VALf;
 	fSolution = "noSolution";
+	fMatrixPath = "";
 	fPointNameWidth=7;
 	fObsIdWidth = 0;
 }
@@ -68,6 +69,7 @@ TDataParameters::TDataParameters(const TDataParameters& original )
 , fCoordPrecision(original.fCoordPrecision)
 , fCoordEpoch(original.fCoordEpoch)
 , fSolution(original.fSolution)
+, fMatrixPath(original.fMatrixPath)
 , fPointNameWidth(original.fPointNameWidth)
 , fObsIdWidth(original.fObsIdWidth)
 {
@@ -104,6 +106,7 @@ void TDataParameters::swap(TDataParameters & other) noexcept
     std::swap(fCoordPrecision,other.fCoordPrecision);
 	std::swap(fCoordEpoch, other.fCoordEpoch);
 	std::swap(fSolution, other.fSolution);
+	std::swap(fMatrixPath, other.fMatrixPath);
     std::swap(fPointNameWidth,other.fPointNameWidth);
 	std::swap(fObsIdWidth, other.fObsIdWidth);
 }
@@ -147,6 +150,11 @@ bool	TDataParameters::isOriginExpected() const
 bool	TDataParameters::trfInfoExpected() const
 {
 	return TRefFrameInfo::isTerrestrialRefFrame(fRefFrameEnum);
+}
+
+bool TDataParameters::matrixPathExpected() const
+{
+	return TRefFrameInfo::isCadRefFrame(fRefFrameEnum);
 }
 
 
@@ -443,13 +451,25 @@ void TDataParameters::setSolution(const std::string solution) {
 	fSolution = solution;
 }
 
+void TDataParameters::setMatrixPath(std::string matrixPath)
+{
+	fMatrixPath = matrixPath;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 //get Functions
 //////////////////////////////////////////////////////////////////////
 TAReferenceFrame*  TDataParameters::getRefFrame() const
 {//! get the reference system identifier
-    return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fLSO, fCoordEpoch, fSolution);
+	if (fRefFrameEnum == TRefSystemFactory::ERefFrame::kCADin || fRefFrameEnum == TRefSystemFactory::ERefFrame::kCADout)
+	{
+		return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fMatrixPath);
+	}
+	else
+	{
+		return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fLSO, fCoordEpoch, fSolution);
+	}
 }
 
 
@@ -526,6 +546,11 @@ TReal TDataParameters::getCoordEpoch() const
 std::string TDataParameters::getSolution() const
 {
 	return fSolution;
+}
+
+std::string TDataParameters::getMatrixPath() const
+{
+	return fMatrixPath;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -639,6 +664,10 @@ std::string TDataParameters::getRFName() const
 		return "ETRF_input";
 	case TRefSystemFactory::ERefFrame::kETRFout:
 		return "ETRF_output";
+	case TRefSystemFactory::ERefFrame::kCADin:
+		return "CADin";
+	case TRefSystemFactory::ERefFrame::kCADout:
+		return "CADout";
 	default: return "";
 	}
 }

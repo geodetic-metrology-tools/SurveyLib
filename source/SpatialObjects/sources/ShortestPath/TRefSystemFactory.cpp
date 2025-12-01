@@ -43,6 +43,7 @@
 #include <TRGF93CC46Projection.h>
 #include <TLambert93Projection.h>
 #include <TTransverseMercatorProjection.h>
+#include <TCADReferenceFrame.h>
 
 
 #include <TMLA2GCTransformation.h>
@@ -73,6 +74,7 @@
 
 #include "TRefSystemFactory.h"
 #include "TNotInGraphException.h"
+#include <TCAD2CCSTransformation.h>
 
 /** Generate a TReal quiet NaN. */
 TReal trnan()
@@ -737,7 +739,13 @@ void TRefSystemFactory::init()
 	pCernXYHg85Machine->setRefFrameId(kCernXYHg85Machine);
 	fRefFrameList.push_back(pCernXYHg85Machine);
 
-
+	// CAD Systems
+	TCADReferenceFrame *pCADin = new TCADReferenceFrame("CADin", "");
+	pCADin->setRefFrameId(kCADin);
+	fRefFrameList.push_back(pCADin);
+	TCADReferenceFrame *pCADout = new TCADReferenceFrame("CADout", "");
+	pCADout->setRefFrameId(kCADout);
+	fRefFrameList.push_back(pCADout);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// Definition of the CERN's ref. frames transformations
@@ -1196,7 +1204,14 @@ void TRefSystemFactory::init()
 	pXYHe85Machine2XYHg->setTransformId(kXYHe85Machine2XYHg);
 	fTransformList.push_back(pXYHe85Machine2XYHg);
 
-	
+	// Empty transformation between CAD projection and CCS (transformation are updated with a transformation file)
+	TCAD2CCSTransformation *pCADin2CCS = new TCAD2CCSTransformation(pCADin, pCCS, TScaleFactor(), TRotationMatrix(), TTranslation());
+	pCADin2CCS->setTransformId(kCADin2CCS);
+	fTransformList.push_back(pCADin2CCS);
+	// Inverse
+	TCAD2CCSTransformation *pCCS2CADout = new TCAD2CCSTransformation(pCCS, pCADout, TScaleFactor(), TRotationMatrix(), TTranslation());
+	pCCS2CADout->setTransformId(kCCS2CADout);
+	fTransformList.push_back(pCCS2CADout);
 
 	// TRefSystemFactory instantiated
 	delete NMatrix0;
@@ -1536,8 +1551,20 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 	return pRF;
 }
 
+TAReferenceFrame *TRefSystemFactory::updatePathTotransformationMatrix(const std::string &pathToTransformationMatrix, ERefFrame frame)
+{
+	if (frame != TRefSystemFactory::kCADin && frame != TRefSystemFactory::kCADout)
+	{
+		throw std::invalid_argument("This method is only valid for CAD reference frame!");
+	}
+	else
+	{
+		auto *cad = dynamic_cast<TCADReferenceFrame *>(getRefFrame(frame));
+		cad->setPathToTransformationMatrix(pathToTransformationMatrix);
+	}
 
-
+	return TRefSystemFactory::getRefSystemFactory()->getRefFrame(frame);
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

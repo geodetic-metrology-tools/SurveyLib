@@ -145,6 +145,12 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
 
         tmp->insert(std::make_pair(TRefSystemFactory::kLocalRefFrame, 
             TDetails("kLocalRefFrame","LocalRefFrame (RESERVED)", TCoordSysFactory::k3DCartesian, 0, true)));
+
+		tmp->insert(std::make_pair(TRefSystemFactory::kCADin,
+			TDetails("kCADin", "CADin", TCoordSysFactory::k3DCartesian, 0, false)));
+
+		tmp->insert(std::make_pair(TRefSystemFactory::kCADout,
+			TDetails("kCADout", "CADout", TCoordSysFactory::k3DCartesian, 0, false)));
 		// ...
 		mapping = std::move(tmp);
 	}
@@ -292,6 +298,17 @@ bool TRefFrameInfo::isTerrestrialRefFrame(int frame) {
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
 
+bool TRefFrameInfo::isCadRefFrame(int frame)
+{
+	MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
+	if (iter != getMapping().end())
+	{
+		return (iter->second.fRefFrameName.find("kCADin") != std::string::npos ||
+			iter->second.fRefFrameName.find("kCADout") != std::string::npos);
+	}
+	throw std::invalid_argument("Unknown ERefFrame value");
+}
+
 TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso, TReal epoch, std::string solution)
 {
 	bool isdefinedlocal = false;
@@ -353,4 +370,13 @@ TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSyste
         return TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame();
 	else
 		return TRefSystemFactory::getRefSystemFactory()->getRefFrame(refFrame);
+}
+
+TAReferenceFrame *TRefFrameInfo::getReferenceFrame(int frame, const std::string &pathToTransformationMatrix)
+{
+	if (frame != TRefSystemFactory::kCADin && frame != TRefSystemFactory::kCADout)
+	{
+		throw std::invalid_argument("This method is only valid for CAD reference frame!");
+	}
+	return TRefSystemFactory::getRefSystemFactory()->updatePathTotransformationMatrix(pathToTransformationMatrix, fromNumber(frame));
 }
