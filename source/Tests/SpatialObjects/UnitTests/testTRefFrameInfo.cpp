@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: CERN
+// SPDX-FileCopyrightText: CERN
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -32,9 +32,9 @@ namespace tut
         set_test_name("Iterating over the all registered ERefFrame values");
 
 #ifdef _WIN32
-		size_t nbtrans = 52;
+		size_t nbtrans = 54;
 #else
-		size_t nbtrans = 46;
+		size_t nbtrans = 48;
 #endif
 		TRefFrameInfo::RefFrameSet set = TRefFrameInfo::getRefFrameSet();
 		ensure_equals(set.count(TRefSystemFactory::kITRF97),1);

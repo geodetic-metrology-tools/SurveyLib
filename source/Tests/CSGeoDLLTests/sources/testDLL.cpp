@@ -83,7 +83,7 @@ namespace tut
 				outputParams.fCoordSys = TRefFrameInfo::getDefaultCoordSys((*it));
 				outputParams.fAngUnits = TAngle::kGons;
 
-				if(TRefFrameInfo::isLocalRefFrame(*it))
+				if(TRefFrameInfo::isLocalRefFrame(*it) || TRefFrameInfo::isCadRefFrame(*it))
 				    continue;
 
 				// Special settings for terrestrial reference frame
