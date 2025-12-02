@@ -19,8 +19,8 @@ set (SurveyLib_VERSION_MINOR 03)
 set (SurveyLib_VERSION_PATCH 01)
 
 configure_file (
-  "${CMAKE_SOURCE_DIR}/SurveryLibVersion.in"
-  "${CMAKE_SOURCE_DIR}/SurveryLibVersion.h"
+  "${CMAKE_SOURCE_DIR}/SurveyLibVersion.in"
+  "${CMAKE_SOURCE_DIR}/SurveyLibVersion.h"
   )
 
 #############################################################
