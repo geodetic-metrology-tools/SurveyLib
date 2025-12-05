@@ -69,7 +69,7 @@ bool solveUniqueWithDecomposition(const TSparseMatrix &A, const TVector &b, TVec
 	// use slight regularization
 	TSparseMatrix id(A.rows(), A.cols());
 	id.setIdentity();
-	double reg = 1e-6;
+	double reg = 0;
 	TSparseMatrix AReg = A + reg * id;
 
 	if (!scaleAndDecompose(AReg, useScaling, AScaled, d, solver))
@@ -168,7 +168,8 @@ bool invertWithDecomposition(const TSparseMatrix &A, TSparseMatrix &invMat, bool
 	// use slight regularization
 	TSparseMatrix id(A.rows(), A.cols());
 	id.setIdentity();
-	double reg = 1e-6;
+	double reg = 0;
+	//1e-6;
 	TSparseMatrix AReg = A + reg * id;
 	Decomposition solver;
 	if (!scaleAndDecompose(AReg, useScaling, AScaled, d, solver))

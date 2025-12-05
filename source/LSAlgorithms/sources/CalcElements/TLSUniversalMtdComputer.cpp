@@ -85,10 +85,19 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	coeffs.reserve(N2.nonZeros() + 2 * A2.nonZeros());
 
 	// Fill in the N2 part
+	// regularize the primal part only
+	double regTerm = 1e-6;
 	for (int k = 0; k < N2.outerSize(); ++k)
 	{
 		for (TSparseMatrix::InnerIterator it(N2, k); it; ++it)
-			coeffs.push_back(TTriplet(it.row(), it.col(), it.value()));
+		{
+			if (it.row() == it.col())
+			{
+				coeffs.push_back(TTriplet(it.row(), it.col(), it.value() + regTerm));
+			}
+			else
+				coeffs.push_back(TTriplet(it.row(), it.col(), it.value()));
+		}
 	}
 
 	// Fill the A2 and A2T
