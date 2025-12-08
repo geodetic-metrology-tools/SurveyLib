@@ -35,7 +35,11 @@ void object::test<1>()
 	TPositionVector pv(x, y, z, TCoordSysFactory::k3DCartesian);
 
 	// Path to folder containing transformation matrix files (ensure trailing backslash)
+#ifdef _WIN32
 	const std::string folder = "\\\\eosproject-smb\\eos\\project\\g\\geodetic-metrology\\Geodesy\\CAD_Systems\\TransformationMatrixCATIA\\";
+#else
+	const std::string folder = "/eos/project/g/geodetic-metrology/Geodesy/CAD_Systems/TransformationMatrixCATIA/";
+#endif
 
 	namespace fs = std::filesystem;
 
@@ -154,7 +158,11 @@ void object::test<2>()
 	TPositionVector pv(xOrig, yOrig, zOrig, TCoordSysFactory::k3DCartesian);
 
 	// Path to folder containing transformation matrix files (ensure trailing backslash)
+#ifdef _WIN32
 	const std::string path = "\\\\eosproject-smb\\eos\\project\\g\\geodetic-metrology\\Geodesy\\CAD_Systems\\TransformationMatrixCATIA\\1101_SURVEY.TRSF";
+#else
+	const std::string path = "/eos/project/g/geodetic-metrology/Geodesy/CAD_Systems/TransformationMatrixCATIA/1101_SURVEY.TRSF";
+#endif
 
 	// Create position with CAD-in reference frame (forward matrix)
 	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCADin, path));
