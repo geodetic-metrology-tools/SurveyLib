@@ -306,12 +306,11 @@ This distinction and file classification are defined in [`REUSE.toml`](./REUSE.t
 | Eigen             | MPL-2.0                               | https://gitlab.com/libeigen/eigen            |
 | TUT               | BSD 2-Clause "Simplified" License     | https://github.com/mrzechonek/tut-framework  |
 | RapidJSON         | MIT                                   | https://github.com/Tencent/rapidjson         |
-| Reframe           | Under revision | https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar |
+| Reframe           | BSD-3-Clause  | https://www.swisstopo.admin.ch/en/geodetic-software-resources-dll-jar |
 | `counted_ptr.h`   | Custom Permissive License (1999)      | http://snowball.digitalspace.net/cpp/        |
 | SUSoftCMakeCommon | GPL-3.0-or-later | [https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon](https://github.com/geodetic-metrology-tools/SUSoftCMakeCommon) |
 
-**Reframe is not included in the repository.**  
-Its use is **optional** and can be enabled in CMake **only if the user has independently obtained the library and the legal right to use it** under the licensing terms defined by swisstopo.  
+**Dependencies source code or binaries are not included in the repository.**  
 
 All third-party license texts are stored in the [`LICENSES/`](LICENSES/) directory.  
 For an overview of licensing across the project, see [`NOTICE.md`](NOTICE.md).

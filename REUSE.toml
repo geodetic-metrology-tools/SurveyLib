@@ -24,6 +24,7 @@ path = [
 "source/**/*.in",
 "source/**/*.py",
 "source/**/*.cmake",
+"source/SurveyLibVersion.h",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "CERN"
