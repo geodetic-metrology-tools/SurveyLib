@@ -661,13 +661,13 @@ std::string TDataParameters::getRFName() const
 	case TRefSystemFactory::ERefFrame::kITRFout:
 		return "ITRF_Output";
 	case TRefSystemFactory::ERefFrame::kETRFin:
-		return "ETRF_input";
+		return "ETRF_Input";
 	case TRefSystemFactory::ERefFrame::kETRFout:
-		return "ETRF_output";
+		return "ETRF_Output";
 	case TRefSystemFactory::ERefFrame::kCADin:
-		return "CADin";
+		return "CAD_Input";
 	case TRefSystemFactory::ERefFrame::kCADout:
-		return "CADout";
+		return "CAD_Output";
 	default: return "";
 	}
 }

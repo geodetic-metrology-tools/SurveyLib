@@ -1,6 +1,8 @@
-// SPDX-FileCopyrightText: CERN
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+/*
+ * SPDX-FileCopyrightText: CERN
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 /*!
 	class for a local 3D cartesian reference frame used in CAD softwares

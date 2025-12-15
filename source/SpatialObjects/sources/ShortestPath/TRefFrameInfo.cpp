@@ -147,10 +147,10 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
             TDetails("kLocalRefFrame","LocalRefFrame (RESERVED)", TCoordSysFactory::k3DCartesian, 0, true)));
 
 		tmp->insert(std::make_pair(TRefSystemFactory::kCADin,
-			TDetails("kCADin", "CADin", TCoordSysFactory::k3DCartesian, 0, false)));
+			TDetails("kCADin", "CAD Input", TCoordSysFactory::k3DCartesian, 0, false)));
 
 		tmp->insert(std::make_pair(TRefSystemFactory::kCADout,
-			TDetails("kCADout", "CADout", TCoordSysFactory::k3DCartesian, 0, false)));
+			TDetails("kCADout", "CAD Output", TCoordSysFactory::k3DCartesian, 0, false)));
 		// ...
 		mapping = std::move(tmp);
 	}

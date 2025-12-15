@@ -740,10 +740,10 @@ void TRefSystemFactory::init()
 	fRefFrameList.push_back(pCernXYHg85Machine);
 
 	// CAD Systems
-	TCADReferenceFrame *pCADin = new TCADReferenceFrame("CADin", "");
+	TCADReferenceFrame *pCADin = new TCADReferenceFrame("CAD_Input", "");
 	pCADin->setRefFrameId(kCADin);
 	fRefFrameList.push_back(pCADin);
-	TCADReferenceFrame *pCADout = new TCADReferenceFrame("CADout", "");
+	TCADReferenceFrame *pCADout = new TCADReferenceFrame("CAD_Output", "");
 	pCADout->setRefFrameId(kCADout);
 	fRefFrameList.push_back(pCADout);
 
