@@ -24,15 +24,15 @@
 	@{*/
 
 //! Defines a local 3D cartesian system
-class TCADReferenceFrame : public T3DLocalRefFrame
+class TLocalRFWithTransformationMatrix : public T3DLocalRefFrame
 {
 public:
 	/*!@name Constructors/Destructors*/
 	//@{
 	/*! Constructor taking the name of the ref.frame */
-	TCADReferenceFrame(const std::string &name, const std::string &pathToTransformationMatrix);
+	TLocalRFWithTransformationMatrix(const std::string &name, const std::string &pathToTransformationMatrix);
 	/*! Destructors */
-	~TCADReferenceFrame();
+	~TLocalRFWithTransformationMatrix();
 	//@}
 
 	/**@name Member Functions */

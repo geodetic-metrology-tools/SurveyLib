@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "TCADReferenceFrame.h"
+#include "TLocalRFWithTransformationMatrix.h"
 
 ///////////////////////////////////////
 // constructor
 ////////////////////////////////////////
-TCADReferenceFrame::TCADReferenceFrame(const std::string &name, const std::string &pathToTransformationMatrix) :
+TLocalRFWithTransformationMatrix::TLocalRFWithTransformationMatrix(const std::string &name, const std::string &pathToTransformationMatrix) :
 	T3DLocalRefFrame(name), fPathToTransformationMatrix(pathToTransformationMatrix)
 {
 }
@@ -15,6 +15,6 @@ TCADReferenceFrame::TCADReferenceFrame(const std::string &name, const std::strin
 ///////////////////////////////////////
 // destructor
 ////////////////////////////////////////
-TCADReferenceFrame::~TCADReferenceFrame()
+TLocalRFWithTransformationMatrix::~TLocalRFWithTransformationMatrix()
 {
 }

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "TCAD2CCSTransformation.h"
+#include "TLocal2CCSTransformation.h"
 #include "THelmertTransformation.h"
 #include <fstream>
 #include <sstream>
@@ -10,21 +10,21 @@
 #include <stdexcept>
 #include <string>
 
-TCAD2CCSTransformation::TCAD2CCSTransformation(TAReferenceFrame *from, TAReferenceFrame *to, const TScaleFactor &scaleFactor, const TRotation &rotation, const TTranslation &translation):
+TLocal2CCSTransformation::TLocal2CCSTransformation(TAReferenceFrame *from, TAReferenceFrame *to, const TScaleFactor &scaleFactor, const TRotation &rotation, const TTranslation &translation):
 	THelmertRefFrameTransform(from, to, scaleFactor, rotation, translation)
 {
 }
 
-TCAD2CCSTransformation::TCAD2CCSTransformation(TAReferenceFrame *from, TAReferenceFrame *to, std::string pathToTransformationMatrix) :
-	fPathToTransformationMatrix(pathToTransformationMatrix)
+TLocal2CCSTransformation::TLocal2CCSTransformation(TAReferenceFrame *from, TAReferenceFrame *to, std::string pathToTransformationMatrix, TLength::EUnits translationUnit) :
+	fPathToTransformationMatrix(pathToTransformationMatrix), fTranslationUnit(translationUnit)
 {
 	// Initialize the transformation from file
 	setSourceFrame(from);
 	setDestinationFrame(to);
-	setMatrixFromTRSFfile(pathToTransformationMatrix);
+	setMatrixFromFile(pathToTransformationMatrix, translationUnit);
 }
 
-THelmertTransformation TCAD2CCSTransformation::setMatrixFromTRSFfile(std::string pathToTransformationMatrix) const
+THelmertTransformation TLocal2CCSTransformation::setMatrixFromFile(std::string pathToTransformationMatrix, TLength::EUnits translationUnit) const
 {
 	std::ifstream ifs(pathToTransformationMatrix);
 	if (!ifs.is_open()) {
@@ -59,11 +59,10 @@ THelmertTransformation TCAD2CCSTransformation::setMatrixFromTRSFfile(std::string
 	// Create rotation
 	TRotation rotation(rotMat);
 
-	// Create translation from the 4th line values (values stored in milimeters in the file)
-	TLength tx, ty, tz;
-	tx.setMMetresValue((rows[3][0]));
-	ty.setMMetresValue((rows[3][1]));
-	tz.setMMetresValue((rows[3][2]));
+	// Create translation from the 4th line values
+	TLength tx((rows[3][0]), translationUnit);
+	TLength ty((rows[3][1]), translationUnit);
+	TLength tz((rows[3][2]), translationUnit);
 	TTranslation translation(tx, ty, tz);
 
 	// Use unit scale of 1.0
@@ -73,7 +72,7 @@ THelmertTransformation TCAD2CCSTransformation::setMatrixFromTRSFfile(std::string
 	return THelmertTransformation(scale, rotation, translation);
 }
 
-void TCAD2CCSTransformation::checkAfterReadingInputFile(const std::vector<std::vector<double>> &rows, const std::string &pathToTransformationMatrix) const
+void TLocal2CCSTransformation::checkAfterReadingInputFile(const std::vector<std::vector<double>> &rows, const std::string &pathToTransformationMatrix) const
 {
 
 	if (rows.size() < 4)
@@ -95,25 +94,25 @@ void TCAD2CCSTransformation::checkAfterReadingInputFile(const std::vector<std::v
 	}
 }
 
-bool TCAD2CCSTransformation::transform(TPositionVector &pv) const
+bool TLocal2CCSTransformation::transform(TPositionVector &pv) const
 { // transform a position vector
 	bool result = false;
 
 	if (isInitialised())
 
-		if (fFrom->getRefFrameId() == TRefSystemFactory::ERefFrame::kCADin && fTo->getRefFrameId() == TRefSystemFactory::ERefFrame::kCCS)
+		if (fFrom->getRefFrameId() == TRefSystemFactory::ERefFrame::kLocalRFin && fTo->getRefFrameId() == TRefSystemFactory::ERefFrame::kCCS)
 		{
-			auto *cad = dynamic_cast<TCADReferenceFrame *>(fFrom);
-			result = setMatrixFromTRSFfile(cad->getPathToTransformationMatrix()).transform(pv);
+			auto *cad = dynamic_cast<TLocalRFWithTransformationMatrix *>(fFrom);
+			result = setMatrixFromFile(cad->getPathToTransformationMatrix(), fTranslationUnit).transform(pv);
 		}
-		else if (fFrom->getRefFrameId() == TRefSystemFactory::ERefFrame::kCCS && fTo->getRefFrameId() == TRefSystemFactory::ERefFrame::kCADout)
+		else if (fFrom->getRefFrameId() == TRefSystemFactory::ERefFrame::kCCS && fTo->getRefFrameId() == TRefSystemFactory::ERefFrame::kLocalRFout)
 		{
-			auto *cad = dynamic_cast<TCADReferenceFrame *>(fTo);
-			result = setMatrixFromTRSFfile(cad->getPathToTransformationMatrix()).transform(pv);
+			auto *cad = dynamic_cast<TLocalRFWithTransformationMatrix *>(fTo);
+			result = setMatrixFromFile(cad->getPathToTransformationMatrix(), fTranslationUnit).transform(pv);
 		}
 		else
 		{
-			throw std::runtime_error("TCAD2CCSTransformation can only transform between CAD and CCS reference frames.");
+			throw std::runtime_error("TLocal2CCSTransformation can only transform between CAD and CCS reference frames.");
 		}
 
 	return result;

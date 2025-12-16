@@ -122,7 +122,7 @@ void object::test<1>()
 		std::string pathToTransformationMatrixBack = folder + backFilename;
 
 		// Create position with CAD-in reference frame (forward matrix)
-		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCADin, pathToTransformationMatrixFor));
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLocalRFin, pathToTransformationMatrixFor));
 		ensure(("Setting the coordinates of TSpatialPosition for id " + id).c_str(), position.setCoordinates(pv));
 
 		// Transform to CCS
@@ -130,7 +130,7 @@ void object::test<1>()
 		ensure(("Transform to CCS succeeded for id " + id).c_str(), ok1);
 
 		// Transform back using CAD-out (back matrix)
-		bool ok2 = position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCADout, pathToTransformationMatrixBack));
+		bool ok2 = position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLocalRFout, pathToTransformationMatrixBack));
 		ensure(("Transform back to CAD succeeded for id " + id).c_str(), ok2);
 
 		// Compare coordinates
@@ -170,7 +170,7 @@ void object::test<2>()
 #endif
 
 	// Create position with CAD-in reference frame (forward matrix)
-	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCADin, path));
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kLocalRFin, path));
 	position.setCoordinates(pv);
 	bool ok1 = position.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCCS));
 

@@ -50,7 +50,7 @@ set(SpatialObject_SOURCES
 	sources/ReferenceSurfaces/TAGeoidModel.cpp
 	sources/ReferenceSurfaces/TAModifiedLocalAstronomicalRF.cpp
 	sources/ReferenceSurfaces/TAReferenceFrame.cpp
-	sources/ReferenceSurfaces/TCADReferenceFrame.cpp
+	sources/ReferenceSurfaces/TLocalRFWithTransformationMatrix.cpp
 	sources/ReferenceSurfaces/TCernGridGeoid.cpp
 	sources/ReferenceSurfaces/TCernParabolicGeoid.cpp
 	sources/ReferenceSurfaces/TCernSphereGeoid.cpp
@@ -66,7 +66,7 @@ set(SpatialObject_SOURCES
 	sources/ReferenceSurfaces/TXYHeProjection.cpp
 	sources/ReferenceSurfaces/TXYHgProjection.cpp
 	sources/RefFrameTransformations/TARefFrameTransformation.cpp
-	sources/RefFrameTransformations/TCAD2CCSTransformation.cpp
+	sources/RefFrameTransformations/TLocal2CCSTransformation.cpp
 	sources/RefFrameTransformations/TGC2LGTransformation.cpp
 	sources/RefFrameTransformations/TGC2MLATransformation.cpp
 	sources/RefFrameTransformations/TGeodetic2Mercator.cpp
@@ -153,7 +153,7 @@ set(SpatialObject_HEADERS
 	headers/ReferenceSurfaces/TAGeoidModel.h
 	headers/ReferenceSurfaces/TAModifiedLocalAstronomicalRF.h
 	headers/ReferenceSurfaces/TAReferenceFrame.h
-	headers/ReferenceSurfaces/TCADReferenceFrame.h
+	headers/ReferenceSurfaces/TLocalRFWithTransformationMatrix.h
 	headers/ReferenceSurfaces/TCernGridGeoid.h
 	headers/ReferenceSurfaces/TCernParabolicGeoid.h
 	headers/ReferenceSurfaces/TCernSphereGeoid.h
@@ -179,7 +179,7 @@ set(SpatialObject_HEADERS
 	headers/ReferenceSurfaces/TXYHeProjection.h
 	headers/ReferenceSurfaces/TXYHgProjection.h
 	headers/RefFrameTransformations/TARefFrameTransformation.h
-	headers/RefFrameTransformations/TCAD2CCSTransformation.h
+	headers/RefFrameTransformations/TLocal2CCSTransformation.h
 	headers/RefFrameTransformations/TGC2LGTransformation.h
 	headers/RefFrameTransformations/TGC2MLATransformation.h
 	headers/RefFrameTransformations/TGeodetic2Mercator.h

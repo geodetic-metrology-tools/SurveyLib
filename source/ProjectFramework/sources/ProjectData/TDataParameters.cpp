@@ -154,7 +154,7 @@ bool	TDataParameters::trfInfoExpected() const
 
 bool TDataParameters::matrixPathExpected() const
 {
-	return TRefFrameInfo::isCadRefFrame(fRefFrameEnum);
+	return TRefFrameInfo::isLocalRFWithMatrix(fRefFrameEnum);
 }
 
 
@@ -462,7 +462,7 @@ void TDataParameters::setMatrixPath(std::string matrixPath)
 //////////////////////////////////////////////////////////////////////
 TAReferenceFrame*  TDataParameters::getRefFrame() const
 {//! get the reference system identifier
-	if (fRefFrameEnum == TRefSystemFactory::ERefFrame::kCADin || fRefFrameEnum == TRefSystemFactory::ERefFrame::kCADout)
+	if (fRefFrameEnum == TRefSystemFactory::ERefFrame::kLocalRFin || fRefFrameEnum == TRefSystemFactory::ERefFrame::kLocalRFout)
 	{
 		return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fMatrixPath);
 	}
@@ -664,10 +664,10 @@ std::string TDataParameters::getRFName() const
 		return "ETRF_Input";
 	case TRefSystemFactory::ERefFrame::kETRFout:
 		return "ETRF_Output";
-	case TRefSystemFactory::ERefFrame::kCADin:
-		return "CAD_Input";
-	case TRefSystemFactory::ERefFrame::kCADout:
-		return "CAD_Output";
+	case TRefSystemFactory::ERefFrame::kLocalRFin:
+		return "LocalRF_Input";
+	case TRefSystemFactory::ERefFrame::kLocalRFout:
+		return "LocalRF_Output";
 	default: return "";
 	}
 }

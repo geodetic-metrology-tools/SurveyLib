@@ -146,11 +146,11 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
         tmp->insert(std::make_pair(TRefSystemFactory::kLocalRefFrame, 
             TDetails("kLocalRefFrame","LocalRefFrame (RESERVED)", TCoordSysFactory::k3DCartesian, 0, true)));
 
-		tmp->insert(std::make_pair(TRefSystemFactory::kCADin,
-			TDetails("kCADin", "CAD Input", TCoordSysFactory::k3DCartesian, 0, false)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kLocalRFin,
+			TDetails("kLocalRFin", "CAD Input", TCoordSysFactory::k3DCartesian, 0, false)));
 
-		tmp->insert(std::make_pair(TRefSystemFactory::kCADout,
-			TDetails("kCADout", "CAD Output", TCoordSysFactory::k3DCartesian, 0, false)));
+		tmp->insert(std::make_pair(TRefSystemFactory::kLocalRFout,
+			TDetails("kLocalRFout", "CAD Output", TCoordSysFactory::k3DCartesian, 0, false)));
 		// ...
 		mapping = std::move(tmp);
 	}
@@ -298,13 +298,13 @@ bool TRefFrameInfo::isTerrestrialRefFrame(int frame) {
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
 
-bool TRefFrameInfo::isCadRefFrame(int frame)
+bool TRefFrameInfo::isLocalRFWithMatrix(int frame)
 {
 	MappingType::const_iterator iter = getMapping().find(static_cast<TRefSystemFactory::ERefFrame>(frame));
 	if (iter != getMapping().end())
 	{
-		return (iter->second.fRefFrameName.find("kCADin") != std::string::npos ||
-			iter->second.fRefFrameName.find("kCADout") != std::string::npos);
+		return (iter->second.fRefFrameName.find("kLocalRFin") != std::string::npos ||
+			iter->second.fRefFrameName.find("kLocalRFout") != std::string::npos);
 	}
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
@@ -374,7 +374,7 @@ TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSyste
 
 TAReferenceFrame *TRefFrameInfo::getReferenceFrame(int frame, const std::string &pathToTransformationMatrix)
 {
-	if (frame != TRefSystemFactory::kCADin && frame != TRefSystemFactory::kCADout)
+	if (frame != TRefSystemFactory::kLocalRFin && frame != TRefSystemFactory::kLocalRFout)
 	{
 		throw std::invalid_argument("This method is only valid for CAD reference frame!");
 	}

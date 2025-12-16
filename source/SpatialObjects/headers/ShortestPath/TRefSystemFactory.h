@@ -132,9 +132,9 @@ public:
 			kLGGRS80             = 2010,
 			kLGSphere            = 2011,
 
-			// CAD systems
-			kCADin = 3001,
-			kCADout = 3002,
+			// Local RF with transformation matrix
+			kLocalRFin = 3001,
+			kLocalRFout = 3002,
 
 			// Reserved value:
 			kNotInGraph			 = -1,
@@ -176,8 +176,8 @@ public:
 			kITRF972WGS84, kWGS842ITRF97,
 
 			//Transformation between CAD systems and CCS
-			kCADin2CCS,
-			kCCS2CADout
+			kLocalRFin2CCS,
+			kCCS2LocalRFout
 		};
 	//@}
 	
