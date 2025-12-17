@@ -38,7 +38,7 @@ public:
 	/**@name Member Functions */
 	//@{
 	//! set the path to the associated transformation matrix
-	void setPathToTransformationMatrix(const std::string &pathToTransformationMatrix) { fPathToTransformationMatrix = pathToTransformationMatrix; };
+	void setPathToTransformationMatrix(const std::string &pathToTransformationMatrix);
 
 	//! return the path to the associated transformation matrix
 	std::string getPathToTransformationMatrix() { return fPathToTransformationMatrix; }

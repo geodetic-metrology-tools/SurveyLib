@@ -26,6 +26,7 @@
 #include  "TModifiedLocalAstronomicalRF.h"
 #include  "T3DLocalRefFrame.h"
 
+#include <filesystem>
 ////////////////////////////////////////////////////////////////
 
 
@@ -453,7 +454,8 @@ void TDataParameters::setSolution(const std::string solution) {
 
 void TDataParameters::setMatrixPath(std::string matrixPath)
 {
-	fMatrixPath = matrixPath;
+	std::filesystem::path p(matrixPath);
+	fMatrixPath = p.generic_string();
 }
 
 
