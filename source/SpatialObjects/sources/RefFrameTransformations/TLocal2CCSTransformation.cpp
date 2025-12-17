@@ -43,6 +43,10 @@ THelmertTransformation TLocal2CCSTransformation::setMatrixFromFile(std::string p
 		std::vector<double> vals;
 		double v;
 		while (iss >> v) vals.push_back(v);
+		if (!iss.eof())
+		{
+			throw std::runtime_error("Invalid token in matrix file: " + line);
+		}
 		if (!vals.empty()) rows.push_back(std::move(vals));
 	}
 
