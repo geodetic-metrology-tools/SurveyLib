@@ -131,6 +131,11 @@ public:
 			kMLGSphere           = 2001,
 			kLGGRS80             = 2010,
 			kLGSphere            = 2011,
+
+			// Local RF with transformation matrix
+			kLocalRFin = 3001,
+			kLocalRFout = 3002,
+
 			// Reserved value:
 			kNotInGraph			 = -1,
 			kLocalRefFrame       = -2 /*!< This was present in the TDataParameters variant. Referenced in LGC in few places */
@@ -168,8 +173,11 @@ public:
 			kITRFin2ITRF97, kITRF972ITRFout,
 			kITRF972RGF93, kRGF932ITRF97,
 			kITRF972CHTRF95, kCHTRF952ITRF97,
-			kITRF972WGS84, kWGS842ITRF97
+			kITRF972WGS84, kWGS842ITRF97,
 
+			//Transformation between CAD systems and CCS
+			kLocalRFin2CCS,
+			kCCS2LocalRFout
 		};
 	//@}
 	
@@ -222,6 +230,9 @@ public:
 
 		//return a pointer to a new Modified Local Astronomic ref Frame and put it in a list in order to be deleted
 		TAReferenceFrame* getNewLocalRefFrame(const TLocalSystemOrigin & LSO, EGeoid geoid, ERefFrame frame);
+
+		// return a pointer to the CAD system with the path to the transformation matrix
+		TAReferenceFrame* updatePathTotransformationMatrix(const std::string &pathToTransformationMatrix, ERefFrame frame);
 	//@}
 
 

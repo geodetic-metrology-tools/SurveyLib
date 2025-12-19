@@ -18,6 +18,7 @@ set(SpatialObjects_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testTCoordSysInfo.cpp
 	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testLocalSystems.cpp
 	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testTGeodetic2Mercator.cpp
+	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testTransformationWithCADmatrix.cpp
 )
 
 set(SurveyLibDLLTests_SOURCES
