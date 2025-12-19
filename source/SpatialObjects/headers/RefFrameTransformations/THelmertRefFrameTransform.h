@@ -119,7 +119,7 @@ public:
 	//@}
 
 
-private:
+protected:
 
 	THelmertTransformation*		fTransform;
 	TAReferenceFrame*			fFrom;

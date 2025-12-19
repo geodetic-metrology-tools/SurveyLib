@@ -43,6 +43,7 @@
 #include <TRGF93CC46Projection.h>
 #include <TLambert93Projection.h>
 #include <TTransverseMercatorProjection.h>
+#include <TLocalRFWithTransformationMatrix.h>
 
 
 #include <TMLA2GCTransformation.h>
@@ -73,6 +74,7 @@
 
 #include "TRefSystemFactory.h"
 #include "TNotInGraphException.h"
+#include <TLocal2CCSTransformation.h>
 
 /** Generate a TReal quiet NaN. */
 TReal trnan()
@@ -737,7 +739,13 @@ void TRefSystemFactory::init()
 	pCernXYHg85Machine->setRefFrameId(kCernXYHg85Machine);
 	fRefFrameList.push_back(pCernXYHg85Machine);
 
-
+	// CAD Systems
+	TLocalRFWithTransformationMatrix *pLocalRFin = new TLocalRFWithTransformationMatrix("LocalRF_Input", "");
+	pLocalRFin->setRefFrameId(kLocalRFin);
+	fRefFrameList.push_back(pLocalRFin);
+	TLocalRFWithTransformationMatrix *pLocalRFout = new TLocalRFWithTransformationMatrix("LocalRF_Output", "");
+	pLocalRFout->setRefFrameId(kLocalRFout);
+	fRefFrameList.push_back(pLocalRFout);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// Definition of the CERN's ref. frames transformations
@@ -1196,7 +1204,14 @@ void TRefSystemFactory::init()
 	pXYHe85Machine2XYHg->setTransformId(kXYHe85Machine2XYHg);
 	fTransformList.push_back(pXYHe85Machine2XYHg);
 
-	
+	// Empty transformation between local RF and CCS (transformation are updated with a transformation file)
+	TLocal2CCSTransformation *pLocalRFin2CCS = new TLocal2CCSTransformation(pLocalRFin, pCCS, TScaleFactor(), TRotationMatrix(), TTranslation());
+	pLocalRFin2CCS->setTransformId(kLocalRFin2CCS);
+	fTransformList.push_back(pLocalRFin2CCS);
+	// Inverse
+	TLocal2CCSTransformation *pCCS2LocalRFout = new TLocal2CCSTransformation(pCCS, pLocalRFout, TScaleFactor(), TRotationMatrix(), TTranslation());
+	pCCS2LocalRFout->setTransformId(kCCS2LocalRFout);
+	fTransformList.push_back(pCCS2LocalRFout);
 
 	// TRefSystemFactory instantiated
 	delete NMatrix0;
@@ -1536,8 +1551,20 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 	return pRF;
 }
 
+TAReferenceFrame *TRefSystemFactory::updatePathTotransformationMatrix(const std::string &pathToTransformationMatrix, ERefFrame frame)
+{
+	if (frame != TRefSystemFactory::kLocalRFin && frame != TRefSystemFactory::kLocalRFout)
+	{
+		throw std::invalid_argument("This method is only valid for CAD reference frame!");
+	}
+	else
+	{
+		auto *cad = dynamic_cast<TLocalRFWithTransformationMatrix *>(getRefFrame(frame));
+		cad->setPathToTransformationMatrix(pathToTransformationMatrix);
+	}
 
-
+	return TRefSystemFactory::getRefSystemFactory()->getRefFrame(frame);
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

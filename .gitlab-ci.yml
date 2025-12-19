@@ -21,7 +21,10 @@ include:
 # Build all targets and run the tests
 linux_build_and_test:
     extends: .linux_build_and_test
+    tags:
+        - eos
     script:
+        - echo "${SUSOFT_PASSWORD}" | kinit -f ${SUSOFT_USERNAME}@CERN.CH
         - !reference [.linux_build_and_test, script]
         - *buildSO
         - *orderLinuxArtifact

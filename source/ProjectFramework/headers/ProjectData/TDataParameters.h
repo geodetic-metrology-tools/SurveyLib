@@ -88,6 +88,7 @@ public:
 
 		bool	trfInfoExpected() const;
 
+		bool	matrixPathExpected() const;
 		/// set the reference system identifier
 		bool	setRefFrame(TRefSystemFactory::ERefFrame);
 
@@ -131,6 +132,8 @@ public:
 		///set the solution
 		void	setSolution(std::string solution);
 
+		/// set the path to the transformation matrix file
+		void	setMatrixPath(std::string matrixPath);
 
 		/// get the reference system identifier
 		TAReferenceFrame*	getRefFrame() const;
@@ -171,6 +174,8 @@ public:
 		/// get the solution
 		std::string								getSolution() const;
 
+		// get the path to the transformation matrix
+		std::string								getMatrixPath() const;
 		std::string getRFName() const;
 	//@}
 
@@ -194,6 +199,7 @@ private:
 	int											fObsIdWidth;
 	TReal										fCoordEpoch;
 	std::string									fSolution;
+	std::string									fMatrixPath;
 
 	TAStreamFormatter::ETextFormat punchFileFormat;
 	TAStreamFormatter::ETextFormat resultsFileFormat;
