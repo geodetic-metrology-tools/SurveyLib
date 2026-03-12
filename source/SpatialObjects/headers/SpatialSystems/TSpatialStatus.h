@@ -98,6 +98,19 @@ public:
 		virtual void			setObjectStatus(ESpatialStatus s) {fSpatialStatus = s; return;}
 
 	//@}
+
+	/// Derive spatial status from fixed-state booleans (x-fixed, y-fixed, z-fixed)
+	static ESpatialStatus fromFixedState(bool fx, bool fy, bool fz)
+	{
+		if ( fx &&  fy &&  fz) return kCala;
+		if ( fx &&  fy && !fz) return kVz;
+		if ( fx && !fy &&  fz) return kVy;
+		if (!fx &&  fy &&  fz) return kVx;
+		if (!fx && !fy &&  fz) return kVxy;
+		if ( fx && !fy && !fz) return kVyz;
+		if (!fx &&  fy && !fz) return kVxz;
+		return kVxyz;
+	}
 #if USE_SERIALIZER
 		// Inherited via Serializable
 		virtual void serialize(ObjectSerializer &obj) const override;

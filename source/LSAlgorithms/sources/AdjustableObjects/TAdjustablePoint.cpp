@@ -19,8 +19,7 @@ TAdjustablePoint::TAdjustablePoint(const std::string &name) :
 	fProvisionalValue(NO_VALf, NO_VALf, NO_VALf, TCoordSysFactory::k3DCartesian),
 	fEstimatedValue(fProvisionalValue),
 	fHfixed(false),
-	fReferential(TRefSystemFactory::ERefFrame::kNotInGraph),
-	fSpatialStatus(TSpatialStatus::kUnknown)
+	fReferential(TRefSystemFactory::ERefFrame::kNotInGraph)
 {
 	setDefaults(true, true, true);
 }
@@ -30,14 +29,13 @@ TAdjustablePoint::TAdjustablePoint() :
 	fProvisionalValue(NO_VALf, NO_VALf, NO_VALf, TCoordSysFactory::k3DCartesian),
 	fEstimatedValue(fProvisionalValue),
 	fHfixed(false),
-	fReferential(TRefSystemFactory::ERefFrame::kNotInGraph),
-	fSpatialStatus(TSpatialStatus::kUnknown)
+	fReferential(TRefSystemFactory::ERefFrame::kNotInGraph)
 {
 	setDefaults(true, true, true);
 }
 
 TAdjustablePoint::TAdjustablePoint(const TPositionVector &pos, bool isXfixed, bool isYfixed, bool isZHfixed, const std::string &name, TRefSystemFactory::ERefFrame referential) :
-	fName(name), fProvisionalValue(pos), fEstimatedValue(fProvisionalValue), fReferential(referential), fHfixed(false), fSpatialStatus(TSpatialStatus::kUnknown)
+	fName(name), fProvisionalValue(pos), fEstimatedValue(fProvisionalValue), fReferential(referential), fHfixed(false)
 {
 	if (pos.getCoordSys() == TCoordSysFactory::k2DPlusH)
 	{ // If position is given in 2D + H system
@@ -63,7 +61,6 @@ TAdjustablePoint::TAdjustablePoint(const TAdjustablePoint &pos) :
 	fEstimatedValue(pos.fEstimatedValue),
 	fReferential(pos.fReferential),
 	fHfixed(pos.fHfixed),
-	fSpatialStatus(pos.fSpatialStatus),
 	fCovarianceMatrix(pos.fCovarianceMatrix),
 	fCovarianceMatrixIsSet(pos.fCovarianceMatrixIsSet),
 	fXValueSet(pos.fXValueSet),
@@ -94,7 +91,7 @@ TLength TAdjustablePoint::getErrorEllMajorAxis() const
 {
 	TReal gdAxe(NO_VALf);
 
-	switch (fSpatialStatus)
+	switch (getSpatialStatus())
 	{
 	case TSpatialStatus::ESpatialStatus::kVxy: {
 		TReal vxy = getXYCovar() * M2MM * M2MM; // because vxy is store in m^2
@@ -127,7 +124,7 @@ TLength TAdjustablePoint::getErrorEllMinorAxis() const
 {
 	TReal ptAxe(NO_VALf);
 
-	switch (fSpatialStatus)
+	switch (getSpatialStatus())
 	{
 	case TSpatialStatus::ESpatialStatus::kVxy: {
 		TReal vxy = getXYCovar() * M2MM * M2MM; // because vxy is store in m^2
@@ -160,7 +157,7 @@ TAngle TAdjustablePoint::getErrorEllGis() const
 {
 	TAngle gis(0.0);
 
-	switch (fSpatialStatus)
+	switch (getSpatialStatus())
 	{
 	case TSpatialStatus::ESpatialStatus::kVxy: {
 		TReal vxy = getXYCovar() * M2MM * M2MM; // because vxy is store in m^2
@@ -345,23 +342,6 @@ void TAdjustablePoint::setDefaults(bool lx, bool ly, bool lz)
 
 	fCovarianceMatrix.setZero();
 	fCovarianceMatrixIsSet = false;
-
-	if (lx && ly && lz)
-		fSpatialStatus = TSpatialStatus::kCala;
-	else if (lx && ly && !lz)
-		fSpatialStatus = TSpatialStatus::kVz;
-	else if (lx && !ly && lz)
-		fSpatialStatus = TSpatialStatus::kVy;
-	else if (!lx && ly && lz)
-		fSpatialStatus = TSpatialStatus::kVx;
-	else if (!lx && !ly && lz)
-		fSpatialStatus = TSpatialStatus::kVxy;
-	else if (lx && !ly && !lz)
-		fSpatialStatus = TSpatialStatus::kVyz;
-	else if (!lx && ly && !lz)
-		fSpatialStatus = TSpatialStatus::kVxz;
-	else if (!lx && !ly && !lz)
-		fSpatialStatus = TSpatialStatus::kVxyz;
 }
 
 void TAdjustablePoint::transformEstimatedValue()
@@ -478,7 +458,6 @@ void TAdjustablePoint::serialize(ObjectSerializer &obj) const
 	obj.addProperty("fName", fName);
 	obj.addProperty("fProvisionalValue", fProvisionalValue);
 	obj.addProperty("fReferential", fReferential);
-	obj.addProperty("fSpatialStatus", fSpatialStatus);
 	obj.addProperty("fXValueSet", fXValueSet);
 	obj.addProperty("fYValueSet", fYValueSet);
 	obj.addProperty("hdrcomment", hdrcomment);

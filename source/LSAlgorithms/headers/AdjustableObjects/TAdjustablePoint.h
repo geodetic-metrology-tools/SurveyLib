@@ -256,8 +256,8 @@ public:
 	/// Returns the height estimated value
 	TReal getHEstValue() const;
 
-	/// Returns the spatial status
-	inline TSpatialStatus::ESpatialStatus getSpatialStatus() const { return fSpatialStatus; }
+	/// Returns the spatial status (derived from fixedState)
+	inline TSpatialStatus::ESpatialStatus getSpatialStatus() const { return TSpatialStatus::fromFixedState(fixedState[0], fixedState[1], fixedState[2]); }
 	//@}
 
 	// getting the estimated vector with all variables
@@ -331,6 +331,5 @@ protected:
 	/*!Private constructor for creating uninitialized object	*/
 	TAdjustablePoint(const std::string &name);
 
-	TSpatialStatus::ESpatialStatus fSpatialStatus;
 };
 #endif // TADJUSTABLE_POINT
