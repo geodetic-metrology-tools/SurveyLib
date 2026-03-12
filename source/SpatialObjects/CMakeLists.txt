@@ -55,7 +55,6 @@ set(SpatialObject_SOURCES
 	sources/ReferenceSurfaces/TCernParabolicGeoid.cpp
 	sources/ReferenceSurfaces/TCernSphereGeoid.cpp
 	sources/ReferenceSurfaces/TGeodeticRefFrame.cpp
-	sources/ReferenceSurfaces/TGeoidValues.cpp
 	sources/ReferenceSurfaces/TGraphLocalAstronomicalRF.cpp
 	sources/ReferenceSurfaces/TGraphMLARF.cpp
 	sources/ReferenceSurfaces/TModifiedLocalAstronomicalRF.cpp
@@ -158,7 +157,6 @@ set(SpatialObject_HEADERS
 	headers/ReferenceSurfaces/TCernParabolicGeoid.h
 	headers/ReferenceSurfaces/TCernSphereGeoid.h
 	headers/ReferenceSurfaces/TGeodeticRefFrame.h
-	headers/ReferenceSurfaces/TGeoidValues.h
 	headers/ReferenceSurfaces/TGraphLocalAstronomicalRF.h
 	headers/ReferenceSurfaces/TGraphMLARF.h
 	headers/ReferenceSurfaces/TLambert93Projection.h
