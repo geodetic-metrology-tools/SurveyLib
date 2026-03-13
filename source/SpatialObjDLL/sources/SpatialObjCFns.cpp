@@ -8,7 +8,6 @@
 #include  "TGraph.h"
 #include  "TRefSystemFactory.h"
 #include  "TLength.h"
-#include  "TVGeoidModel.h"
 #include  "TVReferenceFrame.h"
 #include  "TModifiedLocalAstronomicalRF.h"
 

@@ -171,7 +171,6 @@ set(SpatialObject_HEADERS
 	headers/ReferenceSurfaces/TRGF93CC46Projection.h
 	headers/ReferenceSurfaces/TTerrestrialReferenceFrame.h
 	headers/ReferenceSurfaces/TTransverseMercatorProjection.h
-	headers/ReferenceSurfaces/TVGeoidModel.h
 	headers/ReferenceSurfaces/TVReferenceFrame.h
 	headers/ReferenceSurfaces/TX0Y0HeProjection.h
 	headers/ReferenceSurfaces/TXYHeProjection.h
