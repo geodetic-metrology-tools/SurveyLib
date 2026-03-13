@@ -48,7 +48,7 @@
 	@{*/
 
 //! An abstract base class for a reference frame.
-class  TA3DEuclideanRefFrame : public  TAReferenceFrame //: public TObject  
+class  TA3DEuclideanRefFrame : public  TAReferenceFrame  
 {
 public:
 	 

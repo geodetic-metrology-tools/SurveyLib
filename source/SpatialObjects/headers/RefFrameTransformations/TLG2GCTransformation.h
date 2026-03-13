@@ -48,7 +48,7 @@
 	@{*/
 
 //! The transformation from a geodetic reference frame to a local geodetic reference frame
-class  TLG2GCTransformation : public TARefFrameTransformation //: public TObject  
+class  TLG2GCTransformation : public TARefFrameTransformation  
 {
 public:
 	/**@name Constructors and Destructors */

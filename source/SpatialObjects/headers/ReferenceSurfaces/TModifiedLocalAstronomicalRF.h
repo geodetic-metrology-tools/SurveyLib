@@ -40,7 +40,7 @@
 	@{*/
 
 //! Class for a modified local astronomical ref. frame
-class  TModifiedLocalAstronomicalRF : public TAModifiedLocalAstronomicalRF //: public TObject  
+class  TModifiedLocalAstronomicalRF : public TAModifiedLocalAstronomicalRF  
 {
 public:
 	

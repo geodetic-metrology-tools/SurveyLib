@@ -45,7 +45,7 @@ class  TReferenceEllipsoid;
 	@{*/
 
 //!A projection on XY plane at 0-level with ellipsoidal height
-class  TX0Y0HeProjection : public TA2DPlus1MapProjection //: public TObject  
+class  TX0Y0HeProjection : public TA2DPlus1MapProjection  
 {
 public:
 	

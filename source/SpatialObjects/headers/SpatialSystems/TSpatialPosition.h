@@ -54,7 +54,7 @@ typedef  bool  CoordKnown;
 	@{*/
 
 //! The Spatial Position of a point in a given reference frame 
-class TSpatialPosition : public TASpatialAttribute //: public TObject  
+class TSpatialPosition : public TASpatialAttribute  
 {
 
 public:

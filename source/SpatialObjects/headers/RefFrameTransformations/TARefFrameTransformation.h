@@ -46,7 +46,7 @@ class		TAReferenceFrame;
 	@{*/
 
 //! Classe de base abstraite pour une transformation d'objets d'un referentiel dans un autre
-class  TARefFrameTransformation : public TVRefFrameTransformation //: public TObject  
+class  TARefFrameTransformation : public TVRefFrameTransformation  
 {
 public:
 	/**@name Constructors and Destructors */

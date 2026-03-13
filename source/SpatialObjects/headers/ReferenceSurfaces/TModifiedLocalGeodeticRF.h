@@ -50,7 +50,7 @@ class TLG2GCTransformation;
 	@{*/
 
 //! A Geodetic Ellisoidal Reference Frame
-class  TModifiedLocalGeodeticRF : public TA3DEuclideanRefFrame //: public TObject  
+class  TModifiedLocalGeodeticRF : public TA3DEuclideanRefFrame  
 {
 public:
 	

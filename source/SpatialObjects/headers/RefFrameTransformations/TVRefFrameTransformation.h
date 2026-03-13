@@ -51,7 +51,7 @@ class  TSpatialPosition;
 
 
 //! Classe de base purement abstraite pour une transformation d'objets d'un referentiel dans un autre
-class  TVRefFrameTransformation : public TVTransformation //: public TObject  
+class  TVRefFrameTransformation : public TVTransformation  
 {
 public:
 

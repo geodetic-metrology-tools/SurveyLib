@@ -64,7 +64,7 @@ class TTerrestrialReferenceFrame;
 	@{*/
 
 //!	A Purely abstract base class for a reference frame
-class  TVReferenceFrame //: public TObject  
+class  TVReferenceFrame  
 {
 public:
 	friend class TA3DEuclideanRefFrame;

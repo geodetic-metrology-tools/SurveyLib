@@ -44,7 +44,7 @@ class  TRotationMatrix;
 	@{*/
 
 //! Classe de base purement abstraite pour une transformation spatiale
-class /*SU_DECLSPEC*/ TVTransformation //: public TObject  
+class /*SU_DECLSPEC*/ TVTransformation  
 {
 public:
 

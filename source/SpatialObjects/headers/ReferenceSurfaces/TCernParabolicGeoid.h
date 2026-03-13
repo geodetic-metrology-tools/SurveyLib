@@ -8,7 +8,7 @@
 
 /** Paraboloid defined to model the geoid in CERN's area
 
-	Concrete Class derived from TVGeoid.
+	Concrete Class derived from TAGeoidModel.
 
 
     Patterns:
@@ -45,7 +45,7 @@ class  TRefSystemFactory;
 	@{*/
 
 //! Paraboloid defined to model the geoid in CERN's area
-class  TCernParabolicGeoid : public TAGeoidModel //: public TObject  
+class  TCernParabolicGeoid : public TAGeoidModel  
 {
 public:
 

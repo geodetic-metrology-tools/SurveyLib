@@ -47,7 +47,7 @@ class  TReferenceEllipsoid;
 	@{*/
 
 //! A Geodetic Ellipsoidal Reference Frame
-class  TGeodeticRefFrame : public TA3DEuclideanRefFrame //: public TObject  
+class  TGeodeticRefFrame : public TA3DEuclideanRefFrame  
 {
 public:
 	

@@ -34,7 +34,7 @@ class  TSpatialPosition;
 	@{*/
 
 //! Purely Abstract Base Class (Interface) for a TGeoid
-class TAGeoidModel //: public TObject  
+class TAGeoidModel  
 {
 public:
 	/**@name Constructors and Destructors */

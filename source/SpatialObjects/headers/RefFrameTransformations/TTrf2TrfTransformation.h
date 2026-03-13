@@ -24,7 +24,7 @@ class  TTranslation;
 	@{*/
 
 //! The definition of the transformation between two terrestrial reference frames (ITRF or ETRF)
-class TTrf2TrfTransformation : public TARefFrameTransformation //: public TObject  
+class TTrf2TrfTransformation : public TARefFrameTransformation  
 {
 public:
 

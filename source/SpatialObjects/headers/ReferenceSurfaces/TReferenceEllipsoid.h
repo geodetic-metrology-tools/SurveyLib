@@ -45,7 +45,7 @@ typedef TReal EllipseParameter;
 	@{*/
 
 //! A Geodetic Reference ellipsoid
-class	TReferenceEllipsoid //: public TVReferenceEllipsoid //: public TObject
+class	TReferenceEllipsoid //: public TVReferenceEllipsoid
 {
 
 public:

@@ -48,7 +48,7 @@
 
 
 //! An abstract base class for a reference frame.
-class  TAReferenceFrame : public  TVReferenceFrame //: public TObject  
+class  TAReferenceFrame : public  TVReferenceFrame  
 {
 public:
 

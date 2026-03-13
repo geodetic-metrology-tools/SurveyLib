@@ -37,10 +37,10 @@ class TPositionVector;
 	@{*/
 #if USE_SERIALIZER
 //! Virtual class for Coordonate System
-class TVCoordinateSystem : public Serializable //: public TObject 
+class TVCoordinateSystem : public Serializable 
 #else
 //! Virtual class for Coordonate System
-class TVCoordinateSystem //: public TObject
+class TVCoordinateSystem
 #endif // USE_SERIALIZER
 
 {

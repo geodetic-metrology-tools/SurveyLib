@@ -37,7 +37,7 @@
 	@{*/
 
 //! Class for explain matrix and vector in a 3D cartesian coordinate system 
-class	T3DCartesianCoordSys : public  TACoordinateSystem //: public TObject
+class	T3DCartesianCoordSys : public  TACoordinateSystem
 {
 
 public:

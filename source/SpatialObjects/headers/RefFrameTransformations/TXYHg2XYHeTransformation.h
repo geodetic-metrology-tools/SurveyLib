@@ -41,7 +41,7 @@
 	@{*/
 
 //! The transformation from a XYHg reference frame to a XYHe reference frame
-class TXYHg2XYHeTransformation : public TARefFrameTransformation //: public TObject
+class TXYHg2XYHeTransformation : public TARefFrameTransformation
 {
 public:
 	/**@name Constructors and Destructors */

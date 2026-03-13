@@ -8,7 +8,7 @@
 
 /** Geoid in CERN's area interpolated trought a grid of values
 
-	Concrete Class derived from TVGeoid.
+	Concrete Class derived from TAGeoidModel.
 
 
     Patterns:
@@ -46,8 +46,8 @@ class	TRefSystemFactory;
 /*! \ingroup spatialobjects
 	@{*/
 
-//! Concrete Class derived from TVGeoid
-class  TCernGridGeoid : public TAGeoidModel //: public TObject  
+//! Concrete Class derived from TAGeoidModel
+class  TCernGridGeoid : public TAGeoidModel  
 {
 public:
 

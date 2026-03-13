@@ -45,7 +45,7 @@ class		TXYHeProjection;
 	@{*/
 
 //!A projection on XY plane with height above the Geoid
-class  TXYHgProjection : public TA2DPlus1MapProjection //: public TObject  
+class  TXYHgProjection : public TA2DPlus1MapProjection  
 {
 public:
 	
