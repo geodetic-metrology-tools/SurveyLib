@@ -61,6 +61,7 @@ set(SpatialObject_SOURCES
 	sources/ReferenceSurfaces/TModifiedLocalGeodeticRF.cpp
 	sources/ReferenceSurfaces/TTerrestrialReferenceFrame.cpp
 	sources/ReferenceSurfaces/TReferenceEllipsoid.cpp
+	sources/ReferenceSurfaces/TRegionalGeoid.cpp
 	sources/ReferenceSurfaces/TX0Y0HeProjection.cpp
 	sources/ReferenceSurfaces/TXYHeProjection.cpp
 	sources/ReferenceSurfaces/TXYHgProjection.cpp
@@ -172,6 +173,7 @@ set(SpatialObject_HEADERS
 	headers/ReferenceSurfaces/TTerrestrialReferenceFrame.h
 	headers/ReferenceSurfaces/TTransverseMercatorProjection.h
 	headers/ReferenceSurfaces/TVReferenceFrame.h
+	headers/ReferenceSurfaces/TRegionalGeoid.h
 	headers/ReferenceSurfaces/TX0Y0HeProjection.h
 	headers/ReferenceSurfaces/TXYHeProjection.h
 	headers/ReferenceSurfaces/TXYHgProjection.h
