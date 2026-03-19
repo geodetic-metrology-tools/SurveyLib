@@ -58,6 +58,9 @@ public:
 		/// Constructor taking the name of the reference ellipsoid
 		explicit  TReferenceEllipsoid( const  std::string& name );
 
+		/// Constructor taking the name of the reference ellipsoid, the semi-major axis, the reciprocal flattening and the ID of the ellipsoid
+		explicit TReferenceEllipsoid(const std::string &name, const EllipseParameter &a, const EllipseParameter &reciprocalF, const TRefSystemFactory::ERefEll &ellId);
+
 		/// Destructor
 		virtual	~TReferenceEllipsoid();
 	//@}
@@ -67,21 +70,6 @@ public:
 	//@{
 		/// Overloaded equivalence operator
 		bool operator==(const TReferenceEllipsoid &) const;
-
-		/** Set the parameters a and e^2 to define the geodetic ellipsoid
-			
-			@param a  the semi-major axis
-			@param e^2  the eccentricity squared
-		*/
-		void  setAAndESquared(EllipseParameter a, EllipseParameter eSquared);
-
-		/** Set the parameters a and 1/f to define the geodetic ellipsoid
-			
-			@param a  the semi-major axis
-			@param f  the flattening
-		*/
-		void  setAAndReciprocalF(EllipseParameter a, EllipseParameter reciprocalF);
-	
 
 		/// return ellipsoid name
 		virtual std::string  getName()  const;

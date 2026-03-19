@@ -33,7 +33,15 @@ TReferenceEllipsoid::TReferenceEllipsoid( const  std::string& name ) : fName( na
 {	 
 }
 
+TReferenceEllipsoid::TReferenceEllipsoid(const std::string &name, const EllipseParameter &a, const EllipseParameter &reciprocalF, const TRefSystemFactory::ERefEll &ellId):
+	fName(name), fEllId(ellId), fA(a)
+{
+	fF = LITERAL(1.0) / reciprocalF;
+	fESquared = fF * (LITERAL(2.0) - fF);
 
+	setDerivedParameters();
+
+}
 
 TReferenceEllipsoid::~TReferenceEllipsoid()
 {
@@ -43,31 +51,6 @@ TReferenceEllipsoid::~TReferenceEllipsoid()
 //////////////////////////////////////////////////////////////////////
 // Member Functions
 //////////////////////////////////////////////////////////////////////
-
-void	TReferenceEllipsoid::setAAndESquared( const EllipseParameter a, const EllipseParameter eSquared ) 
-{	// set all parameters when the values of semi-major axis and eccentricity squared are given
-
-	fA = a;
-	fESquared = eSquared;
-	fF = LITERAL(1.0) - sqrtq(LITERAL(1.0) - eSquared);
-
-	setDerivedParameters();
-	
-}
-
-
-void	TReferenceEllipsoid::setAAndReciprocalF( const EllipseParameter a, const EllipseParameter reciprocalF ) 
-{	// set all parameters when the values of semi-major axis and reciprocal of the flattening are given
-
-	fA = a;
-	fF = LITERAL(1.0) / reciprocalF;
-	fESquared = fF * (LITERAL(2.0) - fF);
-
-	setDerivedParameters();
-
-		
-}
-
 
 void TReferenceEllipsoid::setDerivedParameters() 
 { //set remaining parameters of the ellipsoid

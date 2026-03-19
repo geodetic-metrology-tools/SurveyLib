@@ -95,43 +95,12 @@ TRefSystemFactory::~TRefSystemFactory()
 //INIT FUNCTION
 //////////////////////////////////////////////////////////////////////
 void TRefSystemFactory::init()
-{// default constructor: build the unique instance of TRefSystemFactory
+{// Build the unique instance of TRefSystemFactory
 	
 	///////////////////////////////////////////////////////////////////
 	// Definition of the ellipsoid list
-	std::string grs("GRS80"), wgsEll("WGS84 Ellipsoid"), internationalEll("Hayford1903 Ellipsoid"), sps("SphereSPS"), Bessel("Bessel Ellipsoid");
 
-		// Sphere SPS
-	TReferenceEllipsoid* pSphere = new TReferenceEllipsoid(sps);
-	pSphere->setAAndESquared(LITERAL(6371000.0), LITERAL(0.0));
-	pSphere->setEllId(kSphere);
-	fRefEllList.push_back(pSphere);	
-
-		// GRS80
-	TReferenceEllipsoid* pGRS80 = new TReferenceEllipsoid(grs);
-	pGRS80->setAAndESquared(LITERAL(6378137.0), LITERAL(0.0066943800229));
-	pGRS80->setEllId(kGRS80);
-	fRefEllList.push_back(pGRS80);
-
-		// WGS
-	TReferenceEllipsoid* pWGSEll = new TReferenceEllipsoid(wgsEll);
-	pWGSEll->setAAndReciprocalF(LITERAL(6378137.0), LITERAL(298.257223563));
-	pWGSEll->setEllId(kWGSEll);
-	fRefEllList.push_back(pWGSEll);
-
-		// Hayford
-	TReferenceEllipsoid* pInternationalEll = new TReferenceEllipsoid(internationalEll);
-	pInternationalEll->setAAndESquared(LITERAL(6378388.0), LITERAL(0.006722670022));
-	pInternationalEll->setEllId(kInternationalEll);
-	fRefEllList.push_back(pInternationalEll);
-
-    	// Bessel 1841
-	TReferenceEllipsoid* pBessel1841 = new TReferenceEllipsoid(Bessel);
-	pBessel1841->setAAndESquared(LITERAL(6377397.155), LITERAL(0.006674372230614));
-	pBessel1841->setEllId(kBessel1841);
-	fRefEllList.push_back(pBessel1841);
-
-
+	initEllipsoidList();
 
 	// Definition of the reference frame list
 	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf97("ITRF97"), wgs("WGS84 (G2139)");
@@ -143,19 +112,19 @@ void TRefSystemFactory::init()
 	std::string etrfOut("ETRFout");
 	
 		//new CGRF (coordinate of P0 have been changed)
-	TGeodeticRefFrame* pCGRF2 = new TGeodeticRefFrame(cgrf2, pGRS80);
+	TGeodeticRefFrame* pCGRF2 = new TGeodeticRefFrame(cgrf2, getEllipsoid(TRefSystemFactory::kGRS80));
 	pCGRF2->setRefFrameId(kCGRF_new);
 	fRefFrameList.push_back(pCGRF2);
 	fCGRF2 = pCGRF2;
 
 		// CGRF
-	TGeodeticRefFrame* pCGRF = new TGeodeticRefFrame(cgrf, pGRS80);
+	TGeodeticRefFrame* pCGRF = new TGeodeticRefFrame(cgrf, getEllipsoid(TRefSystemFactory::kGRS80));
 	pCGRF->setRefFrameId(kCGRF);
 	fRefFrameList.push_back(pCGRF);
 	fCGRF = pCGRF;
 	
 		// CGRF sphere
-	TGeodeticRefFrame* pCGRFs = new TGeodeticRefFrame(cgrfs, pSphere);
+	TGeodeticRefFrame* pCGRFs = new TGeodeticRefFrame(cgrfs, getEllipsoid(TRefSystemFactory::kSphere));
 	pCGRFs->setRefFrameId(kCGRFSphere);
 	fRefFrameList.push_back(pCGRFs);
 	fCGRFSphere = pCGRFs;
@@ -168,33 +137,33 @@ void TRefSystemFactory::init()
 		// ITRF97 at epoch 1998.5.Link between global and local frames
 	TReal epoch = 1998.5;
 	std::string solution = "ITRF 97";
-	TTerrestrialReferenceFrame* pITRF97 = new TTerrestrialReferenceFrame(itrf97, pGRS80, epoch, solution);
+	TTerrestrialReferenceFrame* pITRF97 = new TTerrestrialReferenceFrame(itrf97, getEllipsoid(TRefSystemFactory::kGRS80), epoch, solution);
 	pITRF97->setRefFrameId(kITRF97);
 	fRefFrameList.push_back(pITRF97);
 
 	//Generic ITRF solution at specified epoch (input)
 	TReal initEpochITRF = NO_VALf;
 	std::string initSolution = "noSolution";
-	TTerrestrialReferenceFrame* pITRFin = new TTerrestrialReferenceFrame(itrfIn, pGRS80, initEpochITRF, initSolution);
+	TTerrestrialReferenceFrame* pITRFin = new TTerrestrialReferenceFrame(itrfIn, getEllipsoid(TRefSystemFactory::kGRS80), initEpochITRF, initSolution);
 	pITRFin->setRefFrameId(kITRFin);
 	fRefFrameList.push_back(pITRFin);
 	fITRFin = pITRFin;
 
 	//Generic ITRF solution at specified epoch (output)
-	TTerrestrialReferenceFrame* pITRFout = new TTerrestrialReferenceFrame(itrfOut, pGRS80, initEpochITRF, initSolution);
+	TTerrestrialReferenceFrame* pITRFout = new TTerrestrialReferenceFrame(itrfOut, getEllipsoid(TRefSystemFactory::kGRS80), initEpochITRF, initSolution);
 	pITRFout->setRefFrameId(kITRFout);
 	fRefFrameList.push_back(pITRFout);
 	fITRFout = pITRFout;
 
 	//Generic ETRF solution at specified epoch (input)
 	TReal initEpochETRF = NO_VALf;
-	TTerrestrialReferenceFrame* pETRFin = new TTerrestrialReferenceFrame(etrfIn, pGRS80, initEpochETRF, initSolution);
+	TTerrestrialReferenceFrame* pETRFin = new TTerrestrialReferenceFrame(etrfIn, getEllipsoid(TRefSystemFactory::kGRS80), initEpochETRF, initSolution);
 	pETRFin->setRefFrameId(kETRFin);
 	fRefFrameList.push_back(pETRFin);
 	fETRFin = pETRFin;
 
 	//Generic ETRF solution at specified epoch (output)
-	TTerrestrialReferenceFrame* pETRFout = new TTerrestrialReferenceFrame(etrfOut, pGRS80, initEpochETRF, initSolution);
+	TTerrestrialReferenceFrame* pETRFout = new TTerrestrialReferenceFrame(etrfOut, getEllipsoid(TRefSystemFactory::kGRS80), initEpochETRF, initSolution);
 	pETRFout->setRefFrameId(kETRFout);
 	fRefFrameList.push_back(pETRFout);
 	fETRFout = pETRFout;
@@ -220,29 +189,29 @@ void TRefSystemFactory::init()
     // ETRF93
 	epoch = 1993;
 	solution = "ETRF 93";
-	TTerrestrialReferenceFrame* pETRF93 = new TTerrestrialReferenceFrame(etrf93, pGRS80, epoch, solution);
-	//TGeodeticRefFrame* pETRF93 = new TGeodeticRefFrame(etrf93, pGRS80);
+	TTerrestrialReferenceFrame* pETRF93 = new TTerrestrialReferenceFrame(etrf93, getEllipsoid(TRefSystemFactory::kGRS80), epoch, solution);
+	//TGeodeticRefFrame* pETRF93 = new TGeodeticRefFrame(etrf93, getEllipsoid(TRefSystemFactory::kGRS80));
 	pETRF93->setRefFrameId(kETRF93);
 	fRefFrameList.push_back(pETRF93);
 
 	// RGF93
 	epoch = 2019;
 	solution = "ETRF 2000";
-	TTerrestrialReferenceFrame* pRGF93 = new TTerrestrialReferenceFrame("RGF93", pGRS80, epoch, solution);
-	//TGeodeticRefFrame* pRGF93 = new TGeodeticRefFrame("RGF93", pGRS80);
+	TTerrestrialReferenceFrame* pRGF93 = new TTerrestrialReferenceFrame("RGF93", getEllipsoid(TRefSystemFactory::kGRS80), epoch, solution);
+	//TGeodeticRefFrame* pRGF93 = new TGeodeticRefFrame("RGF93", getEllipsoid(TRefSystemFactory::kGRS80));
 	pRGF93->setRefFrameId(kRGF93);
 	fRefFrameList.push_back(pRGF93);
 
 	// CHTRF95
 	epoch = 1993;
 	solution = "ETRF 93";
-	TTerrestrialReferenceFrame* pCHTRF95 = new TTerrestrialReferenceFrame("CHTRF95", pGRS80, epoch, solution);
-	//TGeodeticRefFrame* pCHTRF95 = new TGeodeticRefFrame("CHTRF95", pGRS80);
+	TTerrestrialReferenceFrame* pCHTRF95 = new TTerrestrialReferenceFrame("CHTRF95", getEllipsoid(TRefSystemFactory::kGRS80), epoch, solution);
+	//TGeodeticRefFrame* pCHTRF95 = new TGeodeticRefFrame("CHTRF95", getEllipsoid(TRefSystemFactory::kGRS80));
 	pCHTRF95->setRefFrameId(kCHTRF95);
 	fRefFrameList.push_back(pCHTRF95);
 
         // CH1903plus
-	TGeodeticRefFrame* pCH1903plus = new TGeodeticRefFrame("CH1903plus", pBessel1841);
+	TGeodeticRefFrame* pCH1903plus = new TGeodeticRefFrame("CH1903plus", getEllipsoid(TRefSystemFactory::kBessel1841));
 	pCH1903plus->setRefFrameId(kCH1903plus);
 	fRefFrameList.push_back(pCH1903plus);
 #ifdef USE_SWISSTOPO
@@ -276,7 +245,7 @@ void TRefSystemFactory::init()
 		// WGS84 (G2139)
 	epoch = 2016;
 	solution = "ITRF 2014";
-	TTerrestrialReferenceFrame *pWGS84_G2139 = new TTerrestrialReferenceFrame(wgs, pWGSEll, epoch, solution);
+	TTerrestrialReferenceFrame *pWGS84_G2139 = new TTerrestrialReferenceFrame(wgs, getEllipsoid(TRefSystemFactory::kWGSEll), epoch, solution);
 	pWGS84_G2139->setRefFrameId(kWGS84_G2139);
 	fRefFrameList.push_back(pWGS84_G2139);
 
@@ -456,7 +425,7 @@ void TRefSystemFactory::init()
 
 
 	TCernGridGeoid* pCG2000 = new TCernGridGeoid(cg00,
-		NMatrix0, EtaMatrix0, XsiMatrix0, dl, ur, pCGRF, pGRS80, pCCS);
+		NMatrix0, EtaMatrix0, XsiMatrix0, dl, ur, pCGRF, getEllipsoid(TRefSystemFactory::kGRS80), pCCS);
 	pCG2000->setGeoidId(kCG2000);
 	fGeoidList.push_back(pCG2000);
 
@@ -553,7 +522,7 @@ void TRefSystemFactory::init()
 
 
 	TCernGridGeoid* pCG2000Topo = new TCernGridGeoid(cg00topo,
-		NMatrixTopo, EtaMatrixTopo, XsiMatrixTopo, dl, ur, pCGRF, pGRS80, pCCS);
+		NMatrixTopo, EtaMatrixTopo, XsiMatrixTopo, dl, ur, pCGRF, getEllipsoid(TRefSystemFactory::kGRS80), pCCS);
 	pCG2000Topo->setGeoidId(kCG2000topo);
 	fGeoidList.push_back(pCG2000Topo);
 
@@ -650,14 +619,14 @@ void TRefSystemFactory::init()
 
 
 	TCernGridGeoid* pCG2000Machine = new TCernGridGeoid(cg00Machine,
-		NMatrixLEP, EtaMatrixLEP, XsiMatrixLEP, dl, ur, pCGRF, pGRS80, pCCS);
+		NMatrixLEP, EtaMatrixLEP, XsiMatrixLEP, dl, ur, pCGRF, getEllipsoid(TRefSystemFactory::kGRS80), pCCS);
 	pCG2000Machine->setGeoidId(kCG2000Machine);
 	fGeoidList.push_back(pCG2000Machine);
 
 
 
 		//CGSphere
-	TCernSphereGeoid* pCGSphere = new TCernSphereGeoid(cgSphere, pCGRFs, pSphere, pCCS);
+	TCernSphereGeoid* pCGSphere = new TCernSphereGeoid(cgSphere, pCGRFs, getEllipsoid(TRefSystemFactory::kSphere), pCCS);
 	pCGSphere->setGeoidId(kCGSphere);
 	fGeoidList.push_back(pCGSphere);
 	
@@ -665,7 +634,7 @@ void TRefSystemFactory::init()
 	TAngle ang;
 	ang.setGonsValue(LITERAL(48.772));
 	TReal a(LITERAL(0.535)), b(-LITERAL(0.096)), th(ang.getRadiansValue());
-	TCernParabolicGeoid* pCG1985 = new TCernParabolicGeoid(cg85,a,b,th, pCGRF, pGRS80, pCCS);
+	TCernParabolicGeoid* pCG1985 = new TCernParabolicGeoid(cg85,a,b,th, pCGRF, getEllipsoid(TRefSystemFactory::kGRS80), pCCS);
 	pCG1985->setGeoidId(kCG1985);
 	fGeoidList.push_back(pCG1985);
 
@@ -673,7 +642,7 @@ void TRefSystemFactory::init()
 	TAngle angLEP;
 	angLEP.setGonsValue(LITERAL(48.219));
 	TReal aLEP(LITERAL(0.614)), bLEP(-LITERAL(0.106)), thLEP(angLEP.getRadiansValue());
-	TCernParabolicGeoid* pCG1985Machine = new TCernParabolicGeoid(cg85Machine,aLEP,bLEP,thLEP, pCGRF, pGRS80, pCCS);
+	TCernParabolicGeoid* pCG1985Machine = new TCernParabolicGeoid(cg85Machine,aLEP,bLEP,thLEP, pCGRF, getEllipsoid(TRefSystemFactory::kGRS80), pCCS);
 	pCG1985Machine->setGeoidId(kCG1985Machine);
 	fGeoidList.push_back(pCG1985Machine);
 
@@ -681,12 +650,12 @@ void TRefSystemFactory::init()
 	// Definition of the CERN projection list (included in ref frame list)
 
 	// CERN XYHs projection: XY system = CCS, Hs = height above SPS sphere (projection of the xy point on the sphere)
-	TXYHeProjection* pCernXYHs = new TXYHeProjection( "CERN_XYHs", pSphere, pCCS);
+	TXYHeProjection* pCernXYHs = new TXYHeProjection( "CERN_XYHs", getEllipsoid(TRefSystemFactory::kSphere), pCCS);
 	pCernXYHs->setRefFrameId(kCERNXYHsSphereSPS);
 	fRefFrameList.push_back(pCernXYHs);
 
 	// CERN XYHe projection: XY system = CCS, He = height above ellipsoid (projection of the xy point on the ellipsoid)
-	TXYHeProjection* pCernXYHe = new TXYHeProjection( "CERN_XYHe", pGRS80, pCCS);
+	TXYHeProjection* pCernXYHe = new TXYHeProjection( "CERN_XYHe", getEllipsoid(TRefSystemFactory::kGRS80), pCCS);
 	pCernXYHe->setRefFrameId(kCernXYHe);
 	fRefFrameList.push_back(pCernXYHe);
 
@@ -1206,8 +1175,26 @@ void TRefSystemFactory::init()
 	delete XsiMatrixLEP;
 }
 
+void TRefSystemFactory::initEllipsoidList()
+{
+	///////////////////////////////////////////////////////////////////
+	// Definition of the ellipsoid list
 
+	// Sphere SPS
+	addObject(fRefEllList, "SphereSPS", LITERAL(6371000.0), LITERAL(0.0), kSphere);
 
+	// GRS80
+	addObject(fRefEllList, "GRS80", LITERAL(6378137.0), LITERAL(298.257222101), kGRS80);
+
+	// WGS84
+	addObject(fRefEllList, "WGS84 Ellipsoid", LITERAL(6378137.0), LITERAL(298.257223563), kWGSEll);
+
+	// Hayford
+	addObject(fRefEllList, "Hayford1903 Ellipsoid", LITERAL(6378388.0), LITERAL(297), kInternationalEll);
+
+	// Bessel 1841
+	addObject(fRefEllList, "Bessel Ellipsoid", LITERAL(6377397.155), LITERAL(299.1528128), kBessel1841);
+}
 
 
 
