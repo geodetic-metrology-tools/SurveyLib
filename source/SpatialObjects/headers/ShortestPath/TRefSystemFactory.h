@@ -251,9 +251,17 @@ private:
 	//@}
 
 	void	init();
+	void initEllipsoidList();
 
 	/*! Copy Assigment Operator */
 	TRefSystemFactory& operator=( const TRefSystemFactory& );
+
+	/*! Add an object to a list of unique pointers, forwarding the arguments to the constructor of the object */
+	template<typename T, typename... Args>
+	void addObject(std::vector<T*> &list, Args &&...args)
+	{
+		list.push_back(new T(std::forward<Args>(args)...));
+	}
 
 	
 private:
