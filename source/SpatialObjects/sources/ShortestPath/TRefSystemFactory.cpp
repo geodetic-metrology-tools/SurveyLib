@@ -8,19 +8,7 @@
   
    
 */
-//////////////////////////////////////////////////////////////////////
 
-
-
-//////////////////////////////////////////////////////////////////////
-
-
-
-//For ROOT//////////////////////////////////////////////////////
-//#include	"TROOT.h"
-//
-// other forward declarations
-// #include <limits>
 #include <array>
 #include <iomanip>
 #include <limits>
@@ -82,12 +70,6 @@ TReal trnan()
 	return std::numeric_limits<TReal>::quiet_NaN();
 }
 
-////////////////////////////////////////////////////////////////
-
-
-//ClassImp(TRefSystemFactory)
-
-
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
@@ -106,7 +88,6 @@ TRefSystemFactory::TRefSystemFactory()
 
 TRefSystemFactory::~TRefSystemFactory()
 {// destructor
-	//la fonction deleteRefSystemFactory est appele dans les destructeurs des projets
 }
 
 
@@ -1244,85 +1225,6 @@ TRefSystemFactory* TRefSystemFactory::getRefSystemFactory()
 
 	return fRefSystemFactory;
 }
-
-
-void	TRefSystemFactory::deleteRefSystemFactory()
-{
-	if(fRefSystemFactory != 0)
-	{
-		TGraph::deleteGraph();
-
-		if(fTransformList.size() != 0)
-		{
-			std::vector<TARefFrameTransformation*>::iterator iter;
-			while(fTransformList.begin() != fTransformList.end())
-			{
-				iter = fTransformList.begin();
-				delete (*iter);
-				fTransformList.erase(fTransformList.begin());
-			}
-		}
-			fTransformList.clear();	
-
-
-		if(fGeoidList.size() != 0)
-		{
-			std::vector<TAGeoidModel*>::iterator iter;
-			while(fGeoidList.begin() != fGeoidList.end())
-			{
-				iter = fGeoidList.begin();
-				delete (*iter);
-				fGeoidList.erase(fGeoidList.begin());
-			}
-		}
-			fGeoidList.clear();	
-
-		if(fRefEllList.size() != 0)
-		{
-			std::vector<TReferenceEllipsoid*>::iterator iter;
-			while(fRefEllList.begin() != fRefEllList.end())
-			{
-				iter = fRefEllList.begin();
-				delete (*iter);
-				fRefEllList.erase(fRefEllList.begin());
-			}
-		}
-			fRefEllList.clear();	
-
-		if(fRefFrameList.size() != 0)
-		{
-			std::vector<TAReferenceFrame*>::iterator iter;
-			while(fRefFrameList.begin() != fRefFrameList.end())
-			{
-				iter = fRefFrameList.begin();
-				delete (*iter);
-				fRefFrameList.erase(fRefFrameList.begin());
-			}
-		}
-			fRefFrameList.clear();	
-
-
-		if(fLocalRefFrameList.size() != 0)
-		{
-			std::vector<TAReferenceFrame*>::iterator iter;
-			while(fLocalRefFrameList.begin() != fLocalRefFrameList.end())
-			{
-				iter = fLocalRefFrameList.begin();
-				delete (*iter);
-				fLocalRefFrameList.erase(fLocalRefFrameList.begin());
-			}
-		}
-			fLocalRefFrameList.clear();	
-
-		delete fRefSystemFactory;
-	}
-
-	
-
-	return;
-}
-
-
 
 TAGeoidModel*  TRefSystemFactory::getGeoid(const EGeoid geoidId)
 {//return a pointer to the geoid asked for

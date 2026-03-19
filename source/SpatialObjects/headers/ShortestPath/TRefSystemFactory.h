@@ -187,8 +187,6 @@ public:
 		/*! Instance method to obtain a pointer to the TRefSystemFactory instance */
 		static TRefSystemFactory* getRefSystemFactory();	
 		
-		void	deleteRefSystemFactory();
-
 		/*! Return a pointer to the geoid asked for 
 		\param geoidId an element of the existing geoid enumeration */
 		TAGeoidModel* getGeoid(const EGeoid geoidId);
