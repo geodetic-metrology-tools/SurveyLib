@@ -167,7 +167,6 @@ set(SpatialObject_HEADERS
 	headers/ReferenceSurfaces/TNotInGeoidGridException.h
 	headers/ReferenceSurfaces/TNotInLepGridException.h
 	headers/ReferenceSurfaces/TReferenceEllipsoid.h
-	headers/ReferenceSurfaces/TReferenceFrameServer.h
 	headers/ReferenceSurfaces/TRGF93CC46Projection.h
 	headers/ReferenceSurfaces/TTerrestrialReferenceFrame.h
 	headers/ReferenceSurfaces/TTransverseMercatorProjection.h
