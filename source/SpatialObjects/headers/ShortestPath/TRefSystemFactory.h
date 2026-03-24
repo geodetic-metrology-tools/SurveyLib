@@ -33,6 +33,7 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <memory>
 #include <stddef.h>
 
 class TAGeoidModel;
@@ -41,7 +42,7 @@ class TAReferenceFrame;
 class TGeodeticRefFrame;
 class TTerrestrialReferenceFrame;
 class TModifiedLocalAstronomicalRF;
-
+class TCernGridGeoid;
 class TARefFrameTransformation;
 class TSpatialPosition;
 
@@ -252,6 +253,7 @@ private:
 
 	void	init();
 	void initEllipsoidList();
+	void initGeoidList();
 
 	/*! Copy Assigment Operator */
 	TRefSystemFactory& operator=( const TRefSystemFactory& );
@@ -261,6 +263,39 @@ private:
 	void addObject(std::vector<T*> &list, Args &&...args)
 	{
 		list.push_back(new T(std::forward<Args>(args)...));
+	}
+
+	/*! Geoid matrix creation helper*/
+	template<size_t R, size_t C>
+	std::unique_ptr<TMatrix> makeMatrix(const std::array<std::array<TReal, C>, R> &src)
+	{
+		auto m = std::make_unique<TMatrix>(R, C);
+
+		for (size_t i = 0; i < R; ++i)
+			for (size_t j = 0; j < C; ++j)
+				(*m)(static_cast<int>(i), static_cast<int>(j)) = src[i][j];
+
+		return m;
+	}
+
+	/*! Geoid grid creation helper*/
+	template<size_t R, size_t C>
+	TCernGridGeoid *createCernGridGeoid(const std::string &name,
+		const std::array<std::array<TReal, C>, R> &n,
+		const std::array<std::array<TReal, C>, R> &eta,
+		const std::array<std::array<TReal, C>, R> &xsi,
+		const TPositionVector &dl,
+		const TPositionVector &ur,
+		const TRefSystemFactory::EGeoid geoidId)
+	{
+		auto N = makeMatrix(n);
+		auto Eta = makeMatrix(eta);
+		auto Xsi = makeMatrix(xsi);
+
+		TCernGridGeoid *g = new TCernGridGeoid(name, geoidId, N.release(), Eta.release(), Xsi.release(), dl, ur, getRefFrame(TRefSystemFactory::kCGRF),
+			getEllipsoid(TRefSystemFactory::kGRS80), getRefFrame(TRefSystemFactory::kCCS));
+
+		return g;
 	}
 
 	

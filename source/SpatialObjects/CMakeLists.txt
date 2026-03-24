@@ -145,6 +145,7 @@ set(SpatialObject_HEADERS
 	headers/MathematicalConcepts/TScalar.h
 	headers/MathematicalConcepts/TSparseMatrix.h
 	headers/MathematicalConcepts/TVCoordinateSystem.h
+	headers/ReferenceSurfaces/CernGridGeoidData.h
 	headers/ReferenceSurfaces/FrenchRAF20.h
 	headers/ReferenceSurfaces/T3DLocalRefFrame.h
 	headers/ReferenceSurfaces/TA2DPlus1MapProjection.h

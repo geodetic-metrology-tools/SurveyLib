@@ -88,17 +88,20 @@ fCalcRFPtr(0), fDefEllPtr(0)
 
 
 
-TCernParabolicGeoid::TCernParabolicGeoid( const std::string& name, const TReal a,
-										 const TReal b, const TReal ths,
-										 TAReferenceFrame* def, TReferenceEllipsoid* ell,
-										 TAReferenceFrame* calc)
-		:  fName( name ), fA( a ), fB( b ), fThs( ths ),
-		fDefRFPtr(def), fDefEllPtr(ell), fCalcRFPtr(calc)
-{		
-		// set the derived parameters of the paraboloid
-		TReal thc, azp;
-		TReal azxs = -LITERAL(1.12878) * GON2RAD;
-		TReal gsc = LITERAL(38.90742) * GON2RAD;
+TCernParabolicGeoid::TCernParabolicGeoid(const std::string &name,
+	const TRefSystemFactory::EGeoid &geoidId,
+	const TReal a,
+	const TReal b,
+	const TReal ths,
+	TAReferenceFrame *def,
+	TReferenceEllipsoid *ell,
+	TAReferenceFrame *calc) :
+	fName(name), fGeoidId(geoidId), fA(a), fB(b), fThs(ths), fDefRFPtr(def), fDefEllPtr(ell), fCalcRFPtr(calc)
+{
+	// set the derived parameters of the paraboloid
+	TReal thc, azp;
+	TReal azxs = -LITERAL(1.12878) * GON2RAD;
+	TReal gsc = LITERAL(38.90742) * GON2RAD;
 
 	/*	//modif du 25/07/03 pour representer le niv5 utiliser dans LGC
 		if(fThs* TAngle::radsToGonsFactor() == LITERAL(48.219))
@@ -110,12 +113,12 @@ TCernParabolicGeoid::TCernParabolicGeoid( const std::string& name, const TReal a
 		{
 			thc = fThs - gsc;
 		}*/
-		thc = fThs - gsc;
-		azp = fThs + azxs;
-		costhc = cosq(thc);
-		sinthc = sinq(thc);
-		cosazp = cosq(azp);
-		sinazp = sinq(azp);
+	thc = fThs - gsc;
+	azp = fThs + azxs;
+	costhc = cosq(thc);
+	sinthc = sinq(thc);
+	cosazp = cosq(azp);
+	sinazp = sinq(azp);
 }
 
 

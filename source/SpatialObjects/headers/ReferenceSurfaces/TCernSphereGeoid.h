@@ -58,8 +58,7 @@ public:
 		TCernSphereGeoid();
 		
 		/// constructor taking the name, the definition reference frame and ellipsoid, and the calculation reference frame
-		TCernSphereGeoid(	const std::string& name, TAReferenceFrame* def, TReferenceEllipsoid* ell,
-							TAReferenceFrame* calc);
+		TCernSphereGeoid(const std::string &name, const TRefSystemFactory::EGeoid& geoidId, TAReferenceFrame *def, TReferenceEllipsoid *ell, TAReferenceFrame *calc);
 		
 		/// Destructor
 		virtual  ~TCernSphereGeoid();
@@ -103,9 +102,6 @@ public:
 
 		/// Get the calculation reference frame
 		virtual TAReferenceFrame* getCalcRefFrame() const { return fCalcRFPtr; }
-
-		/// Set the geoid identifier as an enum type
-		void setGeoidId(const TRefSystemFactory::EGeoid);
 
 		/// Return the geoid identifier
 		virtual TRefSystemFactory::EGeoid getGeoidId() const { return fGeoidId; }

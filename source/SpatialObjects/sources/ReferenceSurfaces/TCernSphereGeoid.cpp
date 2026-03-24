@@ -27,15 +27,13 @@ TCernSphereGeoid::TCernSphereGeoid() : fName("")
 }
 
 
-TCernSphereGeoid::TCernSphereGeoid( const std::string& name, TAReferenceFrame* def,
-									TReferenceEllipsoid* ell, TAReferenceFrame* calc)
-: fName(name)
+TCernSphereGeoid::TCernSphereGeoid(const std::string &name, const TRefSystemFactory::EGeoid &geoidId, TAReferenceFrame *def, TReferenceEllipsoid *ell, TAReferenceFrame *calc) :
+	fName(name), fGeoidId(geoidId)
 
-{//Constructor
+{ // Constructor
 	fDefRFPtr = def;
 	fDefEllPtr = ell;
 	fCalcRFPtr = calc;
-	
 }
 
 
@@ -88,12 +86,6 @@ TAngle	TCernSphereGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& l
 	ignoring(latitude);
 	TAngle alpha (LITERAL(0.0));
 	return alpha;
-}
-
-
-void TCernSphereGeoid::setGeoidId(const TRefSystemFactory::EGeoid geoidId)
-{
-	fGeoidId = geoidId;
 }
 
 ////////////////////////////////////////////////////
