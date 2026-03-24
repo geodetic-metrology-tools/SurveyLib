@@ -73,8 +73,8 @@ public:
 
 		//TCernParabolicGeoid( const string& name, const TReal a, const TReal b, const TReal ths);
 
-		TCernParabolicGeoid( const std::string& name, const TReal a, const TReal b, const TReal ths,
-			TAReferenceFrame* def, TReferenceEllipsoid* ell, TAReferenceFrame* calc);
+		TCernParabolicGeoid(const std::string &name, const TRefSystemFactory::EGeoid &geoidId, const TReal a, const TReal b, const TReal ths, TAReferenceFrame *def, TReferenceEllipsoid *ell, TAReferenceFrame *calc);
+
 
 		/// Destructor
 		virtual  ~TCernParabolicGeoid();
@@ -112,9 +112,6 @@ public:
 
 		/// return the geoid identifier
 		virtual  TRefSystemFactory::EGeoid  getGeoidId()  const { return fGeoidId; }
-
-		/// set the geoid identifier as an enum type
-		virtual  void  setGeoidId( const TRefSystemFactory::EGeoid geoidId ) { fGeoidId = geoidId; return; }
 
 	//@}
 

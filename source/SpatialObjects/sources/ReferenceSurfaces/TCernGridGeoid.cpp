@@ -31,29 +31,30 @@ TCernGridGeoid::TCernGridGeoid() : fName(""), fDownLeft(0,0,0,TCoordSysFactory::
 }
 
 
-TCernGridGeoid::TCernGridGeoid( const std::string& name,
-								const TMatrix* N, const TMatrix* Eta, const TMatrix* Xsi,
-								const TPositionVector downLeft, const TPositionVector upRight,
-								TAReferenceFrame* def, TReferenceEllipsoid* ell,
-								TAReferenceFrame* calc)
-	: fName(name), fDownLeft(downLeft), fUpRight(upRight)
-{//Constructor
-	
+TCernGridGeoid::TCernGridGeoid(const std::string &name,
+	const TRefSystemFactory::EGeoid &geoidId,
+	const TMatrix *N,
+	const TMatrix *Eta,
+	const TMatrix *Xsi,
+	const TPositionVector downLeft,
+	const TPositionVector upRight,
+	TAReferenceFrame *def,
+	TReferenceEllipsoid *ell,
+	TAReferenceFrame *calc) :
+	fName(name), fGeoidId(geoidId), fDownLeft(downLeft), fUpRight(upRight)
+{ // Constructor
 
 	fNMatrix.setDimensions(N->numRows(), N->numCols());
 	fEtaMatrix.setDimensions(Eta->numRows(), Eta->numCols());
 	fXiMatrix.setDimensions(Xsi->numRows(), Xsi->numCols());
-	
-	
+
 	fNMatrix = *N;
 	fEtaMatrix = *Eta;
 	fXiMatrix = *Xsi;
 
-
 	fDefRFPtr = def;
 	fDefEllPtr = ell;
 	fCalcRFPtr = calc;
-	
 }
 
 
@@ -268,12 +269,6 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& lat
 		throw TNotInLepGridException(ss.str());
 	}
 	return fDAlphaValue;
-}
-
-
-void TCernGridGeoid::setGeoidId(const TRefSystemFactory::EGeoid geoidId)
-{
-	fGeoidId = geoidId;
 }
 
 bool TCernGridGeoid::isInGrid(const TSpatialPosition& point) const

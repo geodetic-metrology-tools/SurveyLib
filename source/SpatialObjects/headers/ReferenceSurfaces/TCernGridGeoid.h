@@ -59,10 +59,16 @@ public:
 		TCernGridGeoid();
 		
 		/// constructor taking the name, the definition reference frame and ellipsoid, and the calculation reference frame
-		TCernGridGeoid( const std::string& name,
-			const TMatrix* N, const TMatrix* Eta, const TMatrix* Xsi,
-			const TPositionVector downLeft, const TPositionVector upRight,
-			TAReferenceFrame* def, TReferenceEllipsoid* ell, TAReferenceFrame* calc);
+		TCernGridGeoid(const std::string &name,
+			const TRefSystemFactory::EGeoid &geoidId,
+			const TMatrix *N,
+			const TMatrix *Eta,
+			const TMatrix *Xsi,
+			const TPositionVector downLeft,
+			const TPositionVector upRight,
+			TAReferenceFrame *def,
+			TReferenceEllipsoid *ell,
+			TAReferenceFrame *calc);
 		
 		/// Destructor
 		virtual  ~TCernGridGeoid();
@@ -106,9 +112,6 @@ public:
 
 		/// Get the calculation reference frame
 		virtual TAReferenceFrame* getCalcRefFrame() const { return fCalcRFPtr; }
-
-		/// Set the geoid identifier as an enum type
-		void setGeoidId(const TRefSystemFactory::EGeoid);
 
 		/// Return the geoid identifier
 		virtual TRefSystemFactory::EGeoid getGeoidId() const { return fGeoidId; }
