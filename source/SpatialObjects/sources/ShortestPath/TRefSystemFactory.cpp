@@ -486,127 +486,80 @@ void TRefSystemFactory::init()
 		// Transformation ITRF-ETRF, ETRF-ITRF
 		////////////////////////////////////////////////////////////////
 	{
-		//Transformation parameters from ITRF2020 to past ITRFs and their rates
-		//Data format: Tx[mm], Ty[mm], Tz[mm],D (scale factor) [ppb], Rx [0.001"], Ry [0.001"], Rz [0.001"],Epoch, vTx [mm/yr], vTy [mm/yr], vTz [mm/yr], vD [ppb/yr], vRx [0.001"/yr], vRy [0.001"/yr], vRz [0.001"/yr]
-		//https://itrf.ign.fr/docs/solutions/itrf2020/Transfo-ITRF2020_TRFs.txt
-		//
-		static const std::array<std::array<TReal, 15>, 13> coeffITRF2020_toPastITRF = { {
-			{LITERAL(-1.4),LITERAL(-0.9),LITERAL(1.4),LITERAL(-0.42),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00),LITERAL(2015.0),LITERAL(0.0),LITERAL(-0.1),LITERAL(0.2),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00)},        //ITRF2014
-			{LITERAL(0.2),LITERAL(1.0),LITERAL(3.3),LITERAL(-0.29),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00),LITERAL(2015.0),LITERAL(0.0),LITERAL(-0.1),LITERAL(0.1),LITERAL(0.03),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00)},          //ITRF2008
-			{LITERAL(2.7),LITERAL(0.1),LITERAL(-1.4),LITERAL(0.65),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00),LITERAL(2015.0),LITERAL(0.3),LITERAL(-0.1),LITERAL(0.1),LITERAL(0.03),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00)},          //ITRF2005
-			{LITERAL(-0.2),LITERAL(0.8),LITERAL(-34.2),LITERAL(2.25),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00),LITERAL(2015.0),LITERAL(0.1),LITERAL(0.0),LITERAL(-1.7),LITERAL(0.11),LITERAL(0.00),LITERAL(0.00),LITERAL(0.00)},        //ITRF2000
-			{LITERAL(6.5),LITERAL(-3.9),LITERAL(-77.9),LITERAL(3.98),LITERAL(0.00),LITERAL(0.00),LITERAL(0.36),LITERAL(2015.0),LITERAL(0.1),LITERAL(-0.6),LITERAL(-3.1),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},       //ITRF97
-			{LITERAL(6.5),LITERAL(-3.9),LITERAL(-77.9),LITERAL(3.98),LITERAL(0.00),LITERAL(0.00),LITERAL(0.36),LITERAL(2015.0),LITERAL(0.1),LITERAL(-0.6),LITERAL(-3.1),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},       //ITRF96
-			{LITERAL(6.5),LITERAL(-3.9),LITERAL(-77.9),LITERAL(3.98),LITERAL(0.00),LITERAL(0.00),LITERAL(0.36),LITERAL(2015.0),LITERAL(0.1),LITERAL(-0.6),LITERAL(-3.1),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},       //ITRF94
-			{LITERAL(-65.8),LITERAL(1.9),LITERAL(-71.3),LITERAL(4.47),LITERAL(-3.36),LITERAL(-4.33),LITERAL(0.75),LITERAL(2015.0),LITERAL(-2.8),LITERAL(-0.2),LITERAL(-2.3),LITERAL(0.12),LITERAL(-0.11),LITERAL(-0.19),LITERAL(0.07)}, //ITRF93
-			{LITERAL(14.5),LITERAL(-1.9),LITERAL(-85.9),LITERAL(3.27),LITERAL(0.00),LITERAL(0.00),LITERAL(0.36),LITERAL(2015.0),LITERAL(0.1),LITERAL(-0.6),LITERAL(-3.1),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},      //ITRF92
-			{LITERAL(26.5),LITERAL(12.1),LITERAL(-91.9),LITERAL(4.67),LITERAL(0.00),LITERAL(0.00),LITERAL(0.36),LITERAL(2015.0),LITERAL(0.1),LITERAL(-0.6),LITERAL(-3.1),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},      //ITRF91
-			{LITERAL(24.5),LITERAL(8.1),LITERAL(-107.9),LITERAL(4.97),LITERAL(0.00),LITERAL(0.00),LITERAL(0.36),LITERAL(2015.0),LITERAL(0.1),LITERAL(-0.6),LITERAL(-3.1),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},      //ITRF90
-			{LITERAL(29.5),LITERAL(32.1),LITERAL(-145.9),LITERAL(8.37),LITERAL(0.00),LITERAL(0.00),LITERAL(0.36),LITERAL(2015.0),LITERAL(0.1),LITERAL(-0.6),LITERAL(-3.1),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)},     //ITRF89
-			{LITERAL(24.5),LITERAL(-3.9),LITERAL(-169.9),LITERAL(11.47),LITERAL(0.10),LITERAL(0.00),LITERAL(0.36),LITERAL(2015.0),LITERAL(0.1),LITERAL(-0.6),LITERAL(-3.1),LITERAL(0.12),LITERAL(0.00),LITERAL(0.00),LITERAL(0.02)}     //ITRF88
-		} };
+		auto itrf2020_toPastITRF = makeMatrix(TrfTransformationCoefficients::coeffITRF2020_toPastITRF);
+		auto itrfyy_toETRFyy = makeMatrix(TrfTransformationCoefficients::coeffITRFyy_toETRFyy);
 
-		//Transformation parameters from ITRFyy to past ETRFyy at epoch 1989.0 and their rates
-		//Data format: Tx[mm], Ty[mm], Tz[mm],D (scale factor) [ppb], Rx [0.001"], Ry [0.001"], Rz [0.001"],Epoch, vTx [mm/yr], vTy [mm/yr], vTz [mm/yr], vD [ppb/yr], vRx [0.001"/yr], vRy [0.001"/yr], vRz [0.001"/yr]
-		//Altamimi, Z. (2018) EUREF Technical Note 1: Relationship and Transformation between the Internationaland the European Terrestrial Reference Systems
-		static const std::array<std::array<TReal, 15>, 11> coeffITRFyy_toETRFyy = { {
-			{LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.085),LITERAL(0.531),LITERAL(-0.770)},//ETRF2014
-			{LITERAL(56.0),LITERAL(48.0),LITERAL(-37.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.054),LITERAL(0.518),LITERAL(-0.781)}, //ETRF2005
-			{LITERAL(54.0),LITERAL(51.0),LITERAL(-48.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.081),LITERAL(0.490),LITERAL(-0.792)}, //ETRF2000
-			{LITERAL(41.0),LITERAL(41.0),LITERAL(-49.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.200),LITERAL(0.500),LITERAL(-0.650)}, //ETRF97
-			{LITERAL(41.0),LITERAL(41.0),LITERAL(-49.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.200),LITERAL(0.500),LITERAL(-0.650)}, //ETRF96
-			{LITERAL(41.0),LITERAL(41.0),LITERAL(-49.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.200),LITERAL(0.500),LITERAL(-0.650)}, //ETRF94
-			{LITERAL(19.0),LITERAL(53.0),LITERAL(-21.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.320),LITERAL(0.780),LITERAL(-0.670)}, //ETRF93
-			{LITERAL(38.0),LITERAL(40.0),LITERAL(-37.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.210),LITERAL(0.520),LITERAL(-0.680)}, //ETRF92
-			{LITERAL(21.0),LITERAL(25.0),LITERAL(-37.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.210),LITERAL(0.520),LITERAL(-0.680)}, //ETRF91
-			{LITERAL(19.0),LITERAL(28.0),LITERAL(-23.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.110),LITERAL(0.570),LITERAL(-0.710)}, //ETRF90
-			{LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.000),LITERAL(0.000),LITERAL(0.000),LITERAL(1989.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.0),LITERAL(0.00),LITERAL(0.110),LITERAL(0.570),LITERAL(-0.710)} //ETRF89
-		} };
-		int i, j;
-		TMatrix* itrf2020_toPastITRF = new TMatrix(13, 15);
-		TMatrix* itrfyy_toETRFyy = new TMatrix(11, 15);
-		for (i = 0; i < coeffITRF2020_toPastITRF.size(); i++)
-		{
-			for (j = 0; j < coeffITRF2020_toPastITRF[i].size(); j++)
-				(*itrf2020_toPastITRF)((int)i, (int)j) = coeffITRF2020_toPastITRF[i][j];
-		}
-
-		for (i = 0; i < coeffITRFyy_toETRFyy.size(); i++)
-		{
-			for (j = 0; j < coeffITRFyy_toETRFyy[i].size(); j++)
-				(*itrfyy_toETRFyy)((int)i, (int)j) = coeffITRFyy_toETRFyy[i][j];
-		}
 
 		// Transformtion between ITRF and ETRF
-		TTrf2TrfTransformation *pITRFin2ETRFout = new TTrf2TrfTransformation(pITRFin, pETRFout, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pITRFin2ETRFout = new TTrf2TrfTransformation(pITRFin, pETRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pITRFin2ETRFout->setTransformId(kITRFin2ETRFout);
 		fTransformList.push_back(pITRFin2ETRFout);
 		// Inverse
-		TTrf2TrfTransformation *pETRFin2ITRFout = new TTrf2TrfTransformation(pETRFin, pITRFout, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pETRFin2ITRFout = new TTrf2TrfTransformation(pETRFin, pITRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pETRFin2ITRFout->setTransformId(kETRFin2ITRFout);
 		fTransformList.push_back(pETRFin2ITRFout);
 
 		// Transformation between any ITRF an ITRF97 (ep 1998.5)
-		TTrf2TrfTransformation *pITRFin2ITRF97 = new TTrf2TrfTransformation(pITRFin, pITRF97, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pITRFin2ITRF97 = new TTrf2TrfTransformation(pITRFin, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pITRFin2ITRF97->setTransformId(kITRFin2ITRF97);
 		fTransformList.push_back(pITRFin2ITRF97);
 		// Inverse
-		TTrf2TrfTransformation *pITRF972ITRFout = new TTrf2TrfTransformation(pITRF97, pITRFout, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pITRF972ITRFout = new TTrf2TrfTransformation(pITRF97, pITRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pITRF972ITRFout->setTransformId(kITRF972ITRFout);
 		fTransformList.push_back(pITRF972ITRFout);
 
 		// Transformation between any ETRF an ITRF97 (ep 1998.5)
-		TTrf2TrfTransformation *pITRF972ETRFout = new TTrf2TrfTransformation(pITRF97, pETRFout, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pITRF972ETRFout = new TTrf2TrfTransformation(pITRF97, pETRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pITRF972ETRFout->setTransformId(kITRF972ETRFout);
 		fTransformList.push_back(pITRF972ETRFout);
 		// Inverse
-		TTrf2TrfTransformation *pETRFin2ITRF97 = new TTrf2TrfTransformation(pETRFin, pITRF97, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pETRFin2ITRF97 = new TTrf2TrfTransformation(pETRFin, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pETRFin2ITRF97->setTransformId(kETRFin2ITRF97);
 		fTransformList.push_back(pETRFin2ITRF97);
 
 		// Transformation between 2 ITRF
-		TTrf2TrfTransformation *pITRFin2ITRFout = new TTrf2TrfTransformation(pITRFin, pITRFout, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pITRFin2ITRFout = new TTrf2TrfTransformation(pITRFin, pITRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pITRFin2ITRFout->setTransformId(kITRFin2ITRFout);
 		fTransformList.push_back(pITRFin2ITRFout);
 
 		// Transformation between 2 ETRF
-		TTrf2TrfTransformation *pETRFin2ETRFout = new TTrf2TrfTransformation(pETRFin, pETRFout, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pETRFin2ETRFout = new TTrf2TrfTransformation(pETRFin, pETRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pETRFin2ETRFout->setTransformId(kETRFin2ETRFout);
 		fTransformList.push_back(pETRFin2ETRFout);
 		
 		// Transformation between ITRF97 (ep1998.5) and ETRF93 (ep 1993.0)
-		TTrf2TrfTransformation *pITRF972ETRF93 = new TTrf2TrfTransformation(pITRF97, pETRF93, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pITRF972ETRF93 = new TTrf2TrfTransformation(pITRF97, pETRF93, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pITRF972ETRF93->setTransformId(kITRF972ETRF93);
 		fTransformList.push_back(pITRF972ETRF93);
 		//Inverse
-		TTrf2TrfTransformation *pETRF932ITRF97 = new TTrf2TrfTransformation(pETRF93, pITRF97, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pETRF932ITRF97 = new TTrf2TrfTransformation(pETRF93, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pETRF932ITRF97->setTransformId(kETRF932ITRF97);
 		fTransformList.push_back(pETRF932ITRF97);
 
 		// Transformation between ITRF97 (ep1998.5) and RGF93
-		TTrf2TrfTransformation *pITRF972RGF93 = new TTrf2TrfTransformation(pITRF97, pRGF93, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pITRF972RGF93 = new TTrf2TrfTransformation(pITRF97, pRGF93, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pITRF972RGF93->setTransformId(kITRF972RGF93);
 		fTransformList.push_back(pITRF972RGF93);
 		// Inverse
-		TTrf2TrfTransformation *pRGF932ITRF97 = new TTrf2TrfTransformation(pRGF93, pITRF97, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pRGF932ITRF97 = new TTrf2TrfTransformation(pRGF93, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pRGF932ITRF97->setTransformId(kRGF932ITRF97);
 		fTransformList.push_back(pRGF932ITRF97);
 
 		// Transformation between ITRF97 (ep1998.5) and CHTRF95
-		TTrf2TrfTransformation *pITRF972CHTRF95 = new TTrf2TrfTransformation(pITRF97, pCHTRF95, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pITRF972CHTRF95 = new TTrf2TrfTransformation(pITRF97, pCHTRF95, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pITRF972CHTRF95->setTransformId(kITRF972CHTRF95);
 		fTransformList.push_back(pITRF972CHTRF95);
 		// Inverse
-		TTrf2TrfTransformation *pCHTRF952ITRF97 = new TTrf2TrfTransformation(pCHTRF95, pITRF97, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pCHTRF952ITRF97 = new TTrf2TrfTransformation(pCHTRF95, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pCHTRF952ITRF97->setTransformId(kCHTRF952ITRF97);
 		fTransformList.push_back(pCHTRF952ITRF97);
 
 		// Transformation between ITRF97 (ep1998.5) and WGS84 (G2139)
-		TTrf2TrfTransformation *pITRF972WGS84 = new TTrf2TrfTransformation(pITRF97, pWGS84_G2139, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pITRF972WGS84 = new TTrf2TrfTransformation(pITRF97, pWGS84_G2139, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pITRF972WGS84->setTransformId(kITRF972WGS84);
 		fTransformList.push_back(pITRF972WGS84);
 		// Inverse
-		TTrf2TrfTransformation *pWGS842ITRF97 = new TTrf2TrfTransformation(pWGS84_G2139, pITRF97, itrf2020_toPastITRF, itrfyy_toETRFyy);
+		TTrf2TrfTransformation *pWGS842ITRF97 = new TTrf2TrfTransformation(pWGS84_G2139, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		pWGS842ITRF97->setTransformId(kWGS842ITRF97);
 		fTransformList.push_back(pWGS842ITRF97);
 
