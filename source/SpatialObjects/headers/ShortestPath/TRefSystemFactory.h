@@ -265,6 +265,26 @@ private:
 		list.push_back(new T(std::forward<Args>(args)...));
 	}
 
+	/*! Set Id and add to the list */
+	template<typename ListT, typename T, typename IdT>
+	void setIdAndAddToList(T *obj, IdT id, ListT &list)
+	{
+		obj->setId(id);
+		list.push_back(obj);
+	}
+
+	/*! Add a transformation and its inverse to the list, setting their Ids */
+	template<typename T, typename ListT, typename IdT>
+	TARefFrameTransformation *addTransformationAndInverse(T *forward, IdT forwardId, IdT inverseId, ListT &list)
+	{
+		setIdAndAddToList(forward, forwardId, list);
+
+		auto *inverse = forward->inverse();
+		setIdAndAddToList(inverse, inverseId, list);
+
+		return inverse;
+	}
+
 	/*! Matrix creation helper*/
 	template<size_t R, size_t C>
 	std::unique_ptr<TMatrix> makeMatrix(const std::array<std::array<TReal, C>, R> &src)

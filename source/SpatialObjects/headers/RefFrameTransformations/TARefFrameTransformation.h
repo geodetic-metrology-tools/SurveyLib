@@ -83,8 +83,7 @@ public:
 		virtual TRefSystemFactory::ERefFrameTransform	getTransformId() const { return fTransformationId; }
 
 		/*! set the transformation identifier */
-		virtual void		setTransformId( TRefSystemFactory::ERefFrameTransform id) { fTransformationId = id; return; }
-
+		virtual void		setId( TRefSystemFactory::ERefFrameTransform id) { fTransformationId = id; return; }
 
 		/*! set default transformation of a position vector to false */
 		virtual  bool		transform( TPositionVector& ) const { return false; }

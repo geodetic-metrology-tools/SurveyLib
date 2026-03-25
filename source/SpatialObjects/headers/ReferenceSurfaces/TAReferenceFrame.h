@@ -71,7 +71,7 @@ public:
 		virtual TRefSystemFactory::ERefFrame  getRefFrameId() const;
 
 		//! Set the identifier for the reference frame
-		virtual void						setRefFrameId(TRefSystemFactory::ERefFrame id) { fRefFrameId = id; return; }
+		virtual void						setId(TRefSystemFactory::ERefFrame id) { fRefFrameId = id; return; }
 
 		//! test if the reference frame is in graph or not
 		bool								isInRFFactory() const;
