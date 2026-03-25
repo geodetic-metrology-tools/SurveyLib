@@ -265,7 +265,7 @@ private:
 		list.push_back(new T(std::forward<Args>(args)...));
 	}
 
-	/*! Geoid matrix creation helper*/
+	/*! Matrix creation helper*/
 	template<size_t R, size_t C>
 	std::unique_ptr<TMatrix> makeMatrix(const std::array<std::array<TReal, C>, R> &src)
 	{
