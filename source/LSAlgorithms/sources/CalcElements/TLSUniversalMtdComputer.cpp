@@ -5,7 +5,6 @@
 #include "TLSUniversalMtdComputer.h"
 
 #include <vector>
-#include <cmath>
 
 #include <Eigen/Dense>
 #include <Logger.hpp>
@@ -222,48 +221,23 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	TVector QvvDiag(nbObs);
 	TVector ZReliability(nbObs);
 
-	// prepare the extra infos for the inversion
+	// prepare the extra infos for the inversion (used only in constrained fallback path)
 	TSparseUtils::InverseExtras inversionExtras;
-	// in any case we only need the Qxx part
 	inversionExtras.topLeftSize = nbUnk;
-	// only store a band around the diagonal in the big File version
-	inversionExtras.bandWidth = 7;
 
 	if (PvIsDiag)
 	{
-		// during the Qxx computation we want also the diagonal of M Qxx MT
 		TSparseMatrix M = S * A;
-		inversionExtras.M = &M;
-		// prepare the resulting diagonal
 		TVector diagMQxxMT = TVector::Zero(nbObs);
+		inversionExtras.M = &M;
 		inversionExtras.diag_MinvMT = &diagMQxxMT;
-		// do the inversion: reuse stored LDLT if available (unconstrained), otherwise factorize anew
+
 		if (nbCnstr == 0 && storedLDLT)
 		{
-			// Takahashi selected inversion: compute Qxx and diag(M*Qxx*M^T) in one pass
 			TSparseMatrix augPattern = TSparseUtils::symbolicMtM(M);
-			TSparseUtils::TakahashiResult takResult = TSparseUtils::takahashiSelectedInverse(*storedLDLT, storedScaling, &augPattern);
+			Qxx = TSparseUtils::takahashiSelectedInverse(*storedLDLT, storedScaling, &augPattern);
 			storedLDLT.reset();
-
-			// Extract Qxx in band-limited format from the selected inverse
-			const int bw = inversionExtras.bandWidth;
-			std::vector<TTriplet> triplets;
-			for (int col = 0; col < takResult.Q.outerSize(); ++col)
-			{
-				for (TSparseMatrix::InnerIterator it(takResult.Q, col); it; ++it)
-				{
-					int r = static_cast<int>(it.row());
-					int c = static_cast<int>(it.col());
-					if (std::abs(r - c) <= bw)
-						triplets.emplace_back(r, c, it.value());
-				}
-			}
-			Qxx.resize(nbUnk, nbUnk);
-			Qxx.setFromTriplets(triplets.begin(), triplets.end());
-			Qxx.makeCompressed();
-
-			// Compute diag(M*Qxx*M^T) from the selected inverse
-			diagMQxxMT = TSparseUtils::diagMQMt(M, takResult.Q);
+			diagMQxxMT = TSparseUtils::diagMQMt(M, Qxx);
 		}
 		else
 		{
@@ -273,43 +247,21 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 				return false;
 			}
 		}
-		// set the diagonal of Qvv
 		if (im->getSecondDgnBlockDiagStatus())
-		{
 			QvvDiag = InvPv.diagonal() - diagMQxxMT;
-		}
 		else
 		{
-			TSparseMatrix SBInvPv = (S * B * InvPv);
-			QvvDiag = (SBInvPv).diagonal() - diagMQxxMT;
+			TSparseMatrix SBInvPv = S * B * InvPv;
+			QvvDiag = SBInvPv.diagonal() - diagMQxxMT;
 		}
-		// we can set the ZReliability cheaply here because Pv is diagonbal and Z=diag(Qvv * Pv)=diag(Qvv)*diag(Pv) holds
 		ZReliability = QvvDiag.cwiseProduct(Pv.diagonal());
 	}
 	else
 	{
-		// compute Qxx without extra requests beside the topleft dimension
 		if (nbCnstr == 0 && storedLDLT)
 		{
-			// Takahashi selected inversion (no augmented pattern needed, just Qxx)
-			TSparseUtils::TakahashiResult takResult = TSparseUtils::takahashiSelectedInverse(*storedLDLT, storedScaling);
+			Qxx = TSparseUtils::takahashiSelectedInverse(*storedLDLT, storedScaling);
 			storedLDLT.reset();
-
-			const int bw = inversionExtras.bandWidth;
-			std::vector<TTriplet> triplets;
-			for (int col = 0; col < takResult.Q.outerSize(); ++col)
-			{
-				for (TSparseMatrix::InnerIterator it(takResult.Q, col); it; ++it)
-				{
-					int r = static_cast<int>(it.row());
-					int c = static_cast<int>(it.col());
-					if (std::abs(r - c) <= bw)
-						triplets.emplace_back(r, c, it.value());
-				}
-			}
-			Qxx.resize(nbUnk, nbUnk);
-			Qxx.setFromTriplets(triplets.begin(), triplets.end());
-			Qxx.makeCompressed();
 		}
 		else
 		{
@@ -321,10 +273,8 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 		}
 		if (im->getSecondDgnBlockDiagStatus())
 		{
-			// general formula, because we need the full Qvv for the ZReliability vector computation (expensive because of big matrix multiplication with dense Qxx)
 			TSparseMatrix Qvv = -S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose();
 			QvvDiag = Qvv.diagonal();
-			// because Pv is not diagonal, we have to do the full matrix multiplication here to get the the ZReliability vector
 			TSparseMatrix QvvPv = Qvv * Pv;
 			ZReliability = QvvPv.diagonal();
 		}

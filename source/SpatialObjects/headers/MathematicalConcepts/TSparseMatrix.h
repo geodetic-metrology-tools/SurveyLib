@@ -108,31 +108,19 @@ double &checkedCoeffRef(TVector &mat, int row);
 bool isPositiveDefinite(const Eigen::MatrixXd &mat);
 void saveToMatrixMarket(const std::string &filename, const Eigen::SparseMatrix<double> &matrix);
 
-struct TakahashiResult
-{
-	TSparseMatrix Q;  // selected elements of Q = A^{-1}, in the sparsity pattern of L + L^T + diagonal
-	TVector diagonal; // diagonal of Q (always computed, also present in Q)
-};
-
 // Takahashi (Erisman-Tinney) selected inversion from an existing SimplicialLDLT factorization.
-// Computes elements of Q = A^{-1} within the sparsity pattern of the Cholesky factor L.
+// Returns selected elements of Q = A^{-1} in the sparsity pattern of L + L^T + diagonal.
 // scalingVector: the diagonal scaling D_s such that the factorization was performed on D_s * A * D_s.
-//                Pass a ones-vector if no scaling was used.
-// augmentedPattern: if non-null, its sparsity pattern is merged into L's pattern before the
-//                   selected inversion. Use this to ensure that all entries needed for
-//                   diag(M * Q * M^T) are computed (pass the symbolic sparsity of M^T * M).
-TakahashiResult takahashiSelectedInverse(
+// augmentedPattern: optional extra sparsity to merge into L's pattern (e.g. symbolic M^T*M for Qvv).
+TSparseMatrix takahashiSelectedInverse(
 	const Eigen::SimplicialLDLT<TSparseMatrix> &ldlt,
 	const TVector &scalingVector,
 	const TSparseMatrix *augmentedPattern = nullptr);
 
-// Compute the symbolic sparsity pattern of M^T * M (no numeric values, just structure).
-// Useful for building the augmented pattern for Takahashi when diag(M * Q * M^T) is needed.
+// Compute the symbolic sparsity pattern of M^T * M (structure only, no numeric values).
 TSparseMatrix symbolicMtM(const TSparseMatrix &M);
 
 // Compute diag(M * Q * M^T) using only the selected elements stored in Q (sparse).
-// M must be sparse; Q is a sparse matrix containing the selected inverse elements.
-// Precondition: all entries Q_{jk} needed (where M_{ij} != 0 and M_{ik} != 0) must be present in Q.
 TVector diagMQMt(const TSparseMatrix &M, const TSparseMatrix &Q);
 
 } // namespace TSparseUtils
