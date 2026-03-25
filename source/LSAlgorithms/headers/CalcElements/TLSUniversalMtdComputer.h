@@ -16,10 +16,15 @@
 // Forward declarations
 /////////////////////////////////////////////////////
 #include <string>
+#include <memory>
+
+#include <Eigen/Sparse>
+#include <Eigen/SparseCholesky>
 
 #include <UEOIndices.h>
 
 #include "TALSComputer.h"
+#include "TSparseMatrix.h"
 
 class TLSInputMatrices;
 class TLSResultsMatrices;
@@ -48,6 +53,12 @@ public:
 
 private:
 	int count;
+
+	// Stored LDLT factorization of N2 (unconstrained case only),
+	// reused across solve and covariance steps
+	std::unique_ptr<Eigen::SimplicialLDLT<TSparseMatrix>> storedLDLT;
+	TVector storedScaling;
+	int storedNbUnk = 0;
 };
 
 #endif

@@ -10,6 +10,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <set>
 
 #include <Eigen/Dense>
 
@@ -500,6 +501,315 @@ bool isPositiveDefinite(const TDenseMatrix &mat)
 	Eigen::Vector3d eigenvalues = solver.eigenvalues();
 	bool isPositiveDefinite = (eigenvalues.array() > 0).all();
 	return isPositiveDefinite;
+}
+
+TSparseMatrix symbolicMtM(const TSparseMatrix &M)
+{
+	// Compute the sparsity pattern of M^T * M without numeric values.
+	// For each column j of M^T (= row j of M), find all nonzero column indices.
+	// The pattern of M^T * M has entry (j,k) if columns j and k of M^T share a nonzero row,
+	// i.e., if there exists some row i where both M(i,j) != 0 and M(i,k) != 0.
+	const int n = static_cast<int>(M.cols());
+	std::vector<TTriplet> triplets;
+
+	// M is column-major. Build a row-to-columns map.
+	std::vector<std::vector<int>> rowCols(M.rows());
+	for (int col = 0; col < M.outerSize(); ++col)
+	{
+		for (TSparseMatrix::InnerIterator it(M, col); it; ++it)
+		{
+			rowCols[it.row()].push_back(col);
+		}
+	}
+
+	// For each row, all pairs of column indices contribute to the pattern
+	std::vector<std::set<int>> colSets(n);
+	for (int i = 0; i < static_cast<int>(rowCols.size()); ++i)
+	{
+		const auto &cols = rowCols[i];
+		for (size_t a = 0; a < cols.size(); ++a)
+		{
+			for (size_t b = a; b < cols.size(); ++b)
+			{
+				colSets[cols[a]].insert(cols[b]);
+				colSets[cols[b]].insert(cols[a]);
+			}
+		}
+	}
+
+	for (int j = 0; j < n; ++j)
+	{
+		for (int k : colSets[j])
+		{
+			triplets.emplace_back(j, k, 1.0); // value doesn't matter, just structure
+		}
+	}
+
+	TSparseMatrix result(n, n);
+	result.setFromTriplets(triplets.begin(), triplets.end());
+	result.makeCompressed();
+	return result;
+}
+
+TVector diagMQMt(const TSparseMatrix &M, const TSparseMatrix &Q)
+{
+	// Compute diag(M * Q * M^T) using sparse Q.
+	// Element i = sum_{j,k} M_{ij} * Q_{jk} * M_{ik}
+	// We iterate over nonzero pairs (i,j) in M, and for each such j,
+	// iterate over nonzero entries Q_{j,k}, and accumulate M_{ik} * Q_{jk} * M_{ij}.
+	const int nRows = static_cast<int>(M.rows());
+	TVector result = TVector::Zero(nRows);
+
+	// Build row-wise access to M (M is column-major)
+	// For each row i: list of (col, value) pairs
+	std::vector<std::vector<std::pair<int, double>>> Mrows(nRows);
+	for (int col = 0; col < M.outerSize(); ++col)
+	{
+		for (TSparseMatrix::InnerIterator it(M, col); it; ++it)
+		{
+			Mrows[it.row()].emplace_back(col, it.value());
+		}
+	}
+
+	// For each row i of M
+	for (int i = 0; i < nRows; ++i)
+	{
+		const auto &row = Mrows[i];
+		double sum = 0.0;
+		for (size_t a = 0; a < row.size(); ++a)
+		{
+			int j = row[a].first;
+			double Mij = row[a].second;
+			for (size_t b = 0; b < row.size(); ++b)
+			{
+				int k = row[b].first;
+				double Mik = row[b].second;
+				// Q is symmetric, so Q(j,k) == Q(k,j). Look up whichever is stored.
+				double Qjk = Q.coeff(j, k);
+				sum += Mij * Qjk * Mik;
+			}
+		}
+		result[i] = sum;
+	}
+	return result;
+}
+
+TakahashiResult takahashiSelectedInverse(
+	const Eigen::SimplicialLDLT<TSparseMatrix> &ldlt,
+	const TVector &scalingVector,
+	const TSparseMatrix *augmentedPattern)
+{
+	// Extract factors from the LDLT decomposition: A_perm = L * D * L^T
+	// where A_perm = P * A_scaled * P^T, so A_scaled = P^T * L * D * L^T * P
+	// and A_original = D_s^{-1} * A_scaled * D_s^{-1}
+	// => Q_original = D_s * P^T * Q_perm * P * D_s
+
+	const auto &L = ldlt.matrixL(); // unit lower triangular (in permuted space)
+	const TVector D = ldlt.vectorD(); // diagonal
+	const auto &P = ldlt.permutationP();
+	const auto &Pinv = ldlt.permutationPinv();
+
+	const int n = static_cast<int>(D.size());
+	TakahashiResult result;
+	result.diagonal.resize(n);
+
+	// Build the working sparsity pattern for the selected inverse.
+	// Start from L's pattern. We need a mutable column-compressed structure.
+	// Extract L as a plain sparse matrix (unit lower triangular, stored below diagonal + diagonal=1).
+	TSparseMatrix Lmat = ldlt.matrixL();
+
+	// If an augmented pattern is provided, permute it and merge into Lmat's pattern.
+	// The augmented pattern is given in the original (unpermuted, unscaled) space,
+	// so we need to permute it: augPerm = P * augPattern * P^T
+	TSparseMatrix Laug; // the working L with augmented pattern
+	if (augmentedPattern != nullptr)
+	{
+		// Permute the augmented pattern into the factorization's ordering
+		TSparseMatrix augPerm;
+		augPerm = (*augmentedPattern).twistedBy(P);
+
+		// Merge: for each nonzero (i,j) in augPerm with i > j (lower triangle),
+		// ensure Laug has a structural entry there.
+		// We do this by adding both patterns as triplets and rebuilding.
+		std::vector<TTriplet> triplets;
+		triplets.reserve(Lmat.nonZeros() + augPerm.nonZeros());
+
+		// Add all entries from Lmat
+		for (int col = 0; col < Lmat.outerSize(); ++col)
+		{
+			for (TSparseMatrix::InnerIterator it(Lmat, col); it; ++it)
+			{
+				triplets.emplace_back(it.row(), it.col(), it.value());
+			}
+		}
+
+		// Add lower-triangular entries from augPerm (with zero values — just structure)
+		for (int col = 0; col < augPerm.outerSize(); ++col)
+		{
+			for (TSparseMatrix::InnerIterator it(augPerm, col); it; ++it)
+			{
+				if (it.row() > it.col())
+				{
+					// Only add if not already present in Lmat
+					triplets.emplace_back(it.row(), it.col(), 0.0);
+				}
+			}
+		}
+
+		Laug.resize(n, n);
+		Laug.setFromTriplets(triplets.begin(), triplets.end());
+		Laug.makeCompressed();
+	}
+	else
+	{
+		Laug = Lmat;
+	}
+
+	// Build column-wise access to Laug: for each column j, the row indices with i > j.
+	// Laug is lower triangular (column-major), so column j has entries at rows >= j.
+	// We also need row-wise access for the recursion.
+	// Build a dense-ish working matrix for Q in the selected pattern.
+	// We'll store Q values in a map indexed by (row, col) for the lower triangle.
+	// For efficiency, use the same sparse structure as Laug.
+
+	// We'll work directly with a dense vector for Q values aligned with Laug's nonzero structure.
+	// Since Laug is column-major compressed, we can use its inner/outer index arrays.
+
+	// Allocate Q as a copy of Laug's structure (values will be overwritten).
+	// Note: we must NOT use setZero() here because Eigen's setZero() destroys
+	// the structural pattern. Instead, zero all values while keeping structure.
+	TSparseMatrix Qperm = Laug;
+	for (int col = 0; col < Qperm.outerSize(); ++col)
+		for (TSparseMatrix::InnerIterator it(Qperm, col); it; ++it)
+			it.valueRef() = 0.0;
+
+	// Takahashi recursion: process columns from right to left (j = n-1 down to 0).
+	// For LDL^T with unit lower triangular L:
+	//
+	// Q_{jj} = 1/D_j - sum_{k in children(j)} L_{kj} * Q_{kj}
+	// For i > j where (i,j) in pattern:
+	//   Q_{ij} = - sum_{k >= j, (k,j) in pattern(L), k != i} L_{kj} * Q_{max(i,k), min(i,k)}
+	//          but more precisely:
+	//   Q_{ij} = - sum_{k : k > j, L_{kj} != 0} L_{kj} * Z_{ik}
+	//   where Z_{ik} = Q_{ik} if i != k, and Z_{ii} = Q_{ii}
+	//
+	// The standard formulation (Erisman-Tinney):
+	// Define the set S_j = {k > j : L_{kj} != 0} (rows below diagonal in column j of L)
+	//
+	// Q_{jj} = 1/D_j - sum_{k in S_j} L_{kj} * Q_{jk}
+	// For i in S_j:
+	//   Q_{ij} = - sum_{k in S_j, k >= i} L_{kj} * Q_{ik}   [using Q_{ii} for k=i]
+	//            - sum_{k in S_j, k < i}  L_{kj} * Q_{ki}   [symmetry: Q_{ki} = Q_{ik}]
+	//
+	// But since Q is symmetric, Q_{jk} = Q_{kj} for the diagonal formula.
+	// We store only the lower triangle and use symmetry.
+
+	// For efficient access, build row-indexed lookup into Laug
+	// colIndicesForRow[i] = sorted list of column indices j < i where Laug(i,j) != 0 structurally
+	std::vector<std::vector<int>> colIndicesForRow(n);
+	for (int col = 0; col < n; ++col)
+	{
+		for (TSparseMatrix::InnerIterator it(Laug, col); it; ++it)
+		{
+			if (it.row() > it.col())
+			{
+				colIndicesForRow[static_cast<int>(it.row())].push_back(static_cast<int>(it.col()));
+			}
+		}
+	}
+
+	// Helper lambda: get/set Q value in the lower triangle.
+	// Q is symmetric; we store lower triangle (row >= col).
+	// Access via Qperm.coeffRef which works on the structural pattern.
+	auto getQ = [&](int i, int j) -> double
+	{
+		if (i >= j)
+			return Qperm.coeff(i, j);
+		else
+			return Qperm.coeff(j, i);
+	};
+
+	auto setQ = [&](int i, int j, double val)
+	{
+		if (i >= j)
+			Qperm.coeffRef(i, j) = val;
+		else
+			Qperm.coeffRef(j, i) = val;
+	};
+
+	// Process columns from right to left
+	for (int j = n - 1; j >= 0; --j)
+	{
+		// Collect S_j: set of rows k > j in column j of L (the original L, not augmented,
+		// since the recursion multiplies by L_{kj} which is 0 for augmented entries)
+		std::vector<std::pair<int, double>> Sj; // (row_index, L_value)
+		for (TSparseMatrix::InnerIterator it(Lmat, j); it; ++it)
+		{
+			if (it.row() > j)
+			{
+				Sj.emplace_back(it.row(), it.value());
+			}
+		}
+
+		// Off-diagonal FIRST: for each i in the augmented pattern where i > j and (i,j) is in Laug
+		// Q_{ij} = - sum_{k in S_j} L_{kj} * Q_{ik}
+		// These must be computed BEFORE the diagonal because the diagonal formula uses Q_{kj} for k > j,
+		// which are off-diagonal entries in this same column j.
+		// From L^T * Q = D^{-1} * L^{-1}:
+		// Q_{ij} + sum_{k in S_j} L_{kj} Q_{ik} = 0  for i > j (since U_{ji} = 0)
+		// => Q_{ij} = - sum_{k in S_j} L_{kj} Q_{ik}
+		for (TSparseMatrix::InnerIterator it(Laug, j); it; ++it)
+		{
+			int i = static_cast<int>(it.row());
+			if (i <= j)
+				continue;
+
+			double qij = 0.0;
+			for (const auto &[k, Lkj] : Sj)
+			{
+				qij -= Lkj * getQ(i, k);
+			}
+			setQ(i, j, qij);
+		}
+
+		// Diagonal AFTER off-diagonals: Q_{jj} = 1/D_j - sum_{k in S_j} L_{kj} * Q_{kj}
+		// Now Q_{kj} for k > j have been computed above.
+		double qjj = 1.0 / D[j];
+		for (const auto &[k, Lkj] : Sj)
+		{
+			qjj -= Lkj * getQ(k, j);
+		}
+		setQ(j, j, qjj);
+	}
+
+	// Make Qperm symmetric by copying lower triangle to upper
+	// (we stored lower triangle only, but TSparseMatrix is column-major)
+	// Actually, for the output we want the full symmetric matrix.
+	TSparseMatrix QpermFull = Qperm + TSparseMatrix(Qperm.transpose());
+	// The diagonal was double-counted, fix it
+	for (int i = 0; i < n; ++i)
+	{
+		QpermFull.coeffRef(i, i) = Qperm.coeff(i, i);
+	}
+
+	// Un-permute: Q_scaled = P^T * Q_perm * P
+	// Since P * A_scaled * P^T = L D L^T, we have A_scaled^{-1} = P^T * Q_perm * P
+	TSparseMatrix Qscaled;
+	Qscaled = QpermFull.twistedBy(Pinv);
+
+	// Un-scale: Q_original = D_s * Q_scaled * D_s
+	// Apply scaling: multiply row i and column i by scalingVector[i]
+	const Eigen::DiagonalMatrix<double, Eigen::Dynamic> Ds(scalingVector);
+	result.Q = Ds * Qscaled * Ds;
+	result.Q.makeCompressed();
+
+	// Extract diagonal
+	for (int i = 0; i < n; ++i)
+	{
+		result.diagonal[i] = result.Q.coeff(i, i);
+	}
+
+	return result;
 }
 
 } // namespace TSparseUtils

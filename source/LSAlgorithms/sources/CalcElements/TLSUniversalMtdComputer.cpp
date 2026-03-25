@@ -5,7 +5,9 @@
 #include "TLSUniversalMtdComputer.h"
 
 #include <vector>
+#include <cmath>
 
+#include <Eigen/Dense>
 #include <Logger.hpp>
 
 #include "TLSInputMatrices.h"
@@ -74,64 +76,86 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	}
 
 	// Calculate Normal matrix N2 = At * inv( B * inv(P) * Bt ) * A , matrix dimensions (u,u)
-	// and re-sets this new matrix to the main TLSResultsMatrices object.
 	TSparseMatrix N2(nbUnk, nbUnk);
 	N2 = A.transpose() * invN1 * A;
 
-	// construct NBig = (N2, A2t
-	//                   A2, 0  )
-	TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
-	std::vector<TTriplet> coeffs;
-	coeffs.reserve(N2.nonZeros() + 2 * A2.nonZeros());
-
-	// Fill in the N2 part
-	// regularize the primal part only
+	// Regularize N2 diagonal
 	double regTerm = 1e-6;
 	for (int k = 0; k < N2.outerSize(); ++k)
 	{
 		for (TSparseMatrix::InnerIterator it(N2, k); it; ++it)
 		{
 			if (it.row() == it.col())
-			{
-				coeffs.push_back(TTriplet(it.row(), it.col(), it.value() + regTerm));
-			}
-			else
-				coeffs.push_back(TTriplet(it.row(), it.col(), it.value()));
+				it.valueRef() += regTerm;
 		}
 	}
 
-	// Fill the A2 and A2T
-	for (int k = 0; k < A2.outerSize(); ++k)
+	if (nbCnstr == 0)
 	{
-		for (TSparseMatrix::InnerIterator it(A2, k); it; ++it)
+		// Unconstrained: factorize N2 via LDLT, store for reuse in Takahashi covariance step
+		storedLDLT = std::make_unique<Eigen::SimplicialLDLT<TSparseMatrix>>();
+		TSparseMatrix N2scaled = TSparseUtils::createSymmetricScaling(N2, storedScaling);
+		storedLDLT->compute(N2scaled);
+		if (storedLDLT->info() != Eigen::Success)
 		{
-			coeffs.push_back(TTriplet(it.row() + N2.rows(), it.col(), it.value())); // A2
-			coeffs.push_back(TTriplet(it.col(), it.row() + N2.cols(), it.value())); // A2T
+			logCritical() << "LDLT factorization of N2 failed!";
+			storedLDLT.reset();
+			return false;
 		}
+		storedNbUnk = nbUnk;
+
+		TVector n = A.transpose() * invN1 * W;
+		TVector nScaled = storedScaling.asDiagonal() * n;
+		TVector y0 = storedLDLT->solve(-nScaled);
+		if (storedLDLT->info() != Eigen::Success)
+		{
+			logCritical() << "LDLT solve for unconstrained solution failed!";
+			storedLDLT.reset();
+			return false;
+		}
+		TVector solution = storedScaling.asDiagonal() * y0;
+
+		rm->setNormalMatrix(N2);
+		rm->setSolutionVect(solution);
 	}
-	NBig.setFromTriplets(coeffs.begin(), coeffs.end());
-
-	// Extended vector: appends W2 (constraints misclosures) to the calculated At*inv(N1)*W  vector
-	TVector VBig(nbUnk + nbCnstr);
-	VBig << A.transpose() * invN1 * W, W2;
-
-	// Calculates solution NBig * X = -VBig and keeps only the part corresponding to adjusted parameters
-	TVector solutionExt(nbUnk + nbCnstr);
-
-	// use Cholesky decomposition if nbCnstr=0, otherwise SparseLU as positive definiteness of NBig may be violated
-	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt, (nbCnstr == 0)))
+	else
 	{
-		logCritical() << "No solution could be found when solving equation system: Nbig * dX = -VBig (extended matrices with conditions)";
-		return false;
+		// Constrained: assemble NBig = (N2, A2^T; A2, 0) and solve via SparseLU
+		storedLDLT.reset();
+
+		TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
+		std::vector<TTriplet> coeffs;
+		coeffs.reserve(N2.nonZeros() + 2 * A2.nonZeros());
+
+		for (int k = 0; k < N2.outerSize(); ++k)
+			for (TSparseMatrix::InnerIterator it(N2, k); it; ++it)
+				coeffs.push_back(TTriplet(it.row(), it.col(), it.value()));
+
+		for (int k = 0; k < A2.outerSize(); ++k)
+		{
+			for (TSparseMatrix::InnerIterator it(A2, k); it; ++it)
+			{
+				coeffs.push_back(TTriplet(it.row() + N2.rows(), it.col(), it.value())); // A2
+				coeffs.push_back(TTriplet(it.col(), it.row() + N2.cols(), it.value())); // A2T
+			}
+		}
+		NBig.setFromTriplets(coeffs.begin(), coeffs.end());
+
+		TVector VBig(nbUnk + nbCnstr);
+		VBig << A.transpose() * invN1 * W, W2;
+
+		TVector solutionExt(nbUnk + nbCnstr);
+		if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt, false))
+		{
+			logCritical() << "No solution could be found when solving equation system: Nbig * dX = -VBig (extended matrices with conditions)";
+			return false;
+		}
+
+		TVector solution = solutionExt.head(nbUnk);
+
+		rm->setNormalMatrix(NBig);
+		rm->setSolutionVect(solution);
 	}
-
-	TVector solution(nbUnk);
-	// we do not need the Lagrange multipliers
-	solution = solutionExt.head(nbUnk);
-
-	// Copies the matrices into the members of the TResultsMatrices object
-	rm->setNormalMatrix(NBig);
-	rm->setSolutionVect(solution);
 
 	return true;
 }
@@ -213,11 +237,41 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 		// prepare the resulting diagonal
 		TVector diagMQxxMT = TVector::Zero(nbObs);
 		inversionExtras.diag_MinvMT = &diagMQxxMT;
-		// do the inversion
-		if (!TSparseUtils::inverse(NBig, Qxx, (nbCnstr == 0), inversionExtras))
+		// do the inversion: reuse stored LDLT if available (unconstrained), otherwise factorize anew
+		if (nbCnstr == 0 && storedLDLT)
 		{
-			logCritical() << "The normal matrix NBig could not be inverted!";
-			return false;
+			// Takahashi selected inversion: compute Qxx and diag(M*Qxx*M^T) in one pass
+			TSparseMatrix augPattern = TSparseUtils::symbolicMtM(M);
+			TSparseUtils::TakahashiResult takResult = TSparseUtils::takahashiSelectedInverse(*storedLDLT, storedScaling, &augPattern);
+			storedLDLT.reset();
+
+			// Extract Qxx in band-limited format from the selected inverse
+			const int bw = inversionExtras.bandWidth;
+			std::vector<TTriplet> triplets;
+			for (int col = 0; col < takResult.Q.outerSize(); ++col)
+			{
+				for (TSparseMatrix::InnerIterator it(takResult.Q, col); it; ++it)
+				{
+					int r = static_cast<int>(it.row());
+					int c = static_cast<int>(it.col());
+					if (std::abs(r - c) <= bw)
+						triplets.emplace_back(r, c, it.value());
+				}
+			}
+			Qxx.resize(nbUnk, nbUnk);
+			Qxx.setFromTriplets(triplets.begin(), triplets.end());
+			Qxx.makeCompressed();
+
+			// Compute diag(M*Qxx*M^T) from the selected inverse
+			diagMQxxMT = TSparseUtils::diagMQMt(M, takResult.Q);
+		}
+		else
+		{
+			if (!TSparseUtils::inverse(NBig, Qxx, (nbCnstr == 0), inversionExtras))
+			{
+				logCritical() << "The normal matrix NBig could not be inverted!";
+				return false;
+			}
 		}
 		// set the diagonal of Qvv
 		if (im->getSecondDgnBlockDiagStatus())
@@ -235,10 +289,35 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	else
 	{
 		// compute Qxx without extra requests beside the topleft dimension
-		if (!TSparseUtils::inverse(NBig, Qxx, (nbCnstr == 0), inversionExtras))
+		if (nbCnstr == 0 && storedLDLT)
 		{
-			logCritical() << "The normal matrix NBig could not be inverted!";
-			return false;
+			// Takahashi selected inversion (no augmented pattern needed, just Qxx)
+			TSparseUtils::TakahashiResult takResult = TSparseUtils::takahashiSelectedInverse(*storedLDLT, storedScaling);
+			storedLDLT.reset();
+
+			const int bw = inversionExtras.bandWidth;
+			std::vector<TTriplet> triplets;
+			for (int col = 0; col < takResult.Q.outerSize(); ++col)
+			{
+				for (TSparseMatrix::InnerIterator it(takResult.Q, col); it; ++it)
+				{
+					int r = static_cast<int>(it.row());
+					int c = static_cast<int>(it.col());
+					if (std::abs(r - c) <= bw)
+						triplets.emplace_back(r, c, it.value());
+				}
+			}
+			Qxx.resize(nbUnk, nbUnk);
+			Qxx.setFromTriplets(triplets.begin(), triplets.end());
+			Qxx.makeCompressed();
+		}
+		else
+		{
+			if (!TSparseUtils::inverse(NBig, Qxx, (nbCnstr == 0), inversionExtras))
+			{
+				logCritical() << "The normal matrix NBig could not be inverted!";
+				return false;
+			}
 		}
 		if (im->getSecondDgnBlockDiagStatus())
 		{
