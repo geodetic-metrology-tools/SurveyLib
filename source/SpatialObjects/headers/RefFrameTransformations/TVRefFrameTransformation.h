@@ -77,7 +77,7 @@ public:
 		virtual TRefSystemFactory::ERefFrameTransform getTransformId() const = 0;
 
 		//! set the transformation identifier
-		virtual void setTransformId( TRefSystemFactory::ERefFrameTransform id) = 0;
+		virtual void setId( TRefSystemFactory::ERefFrameTransform id) = 0;
 	//@}
 
 
