@@ -13,6 +13,8 @@
 #include <iomanip>
 #include <limits>
 
+#include "GeodeticConstants.h"
+
 #include <TReferenceEllipsoid.h>
 #include <TGeodeticRefFrame.h>
 #include <TTerrestrialReferenceFrame.h>
@@ -148,11 +150,9 @@ void TRefSystemFactory::init()
 	setIdAndAddToList(pWGS84_G2139, kWGS84_G2139, fRefFrameList);
 
 		// Local Geodesique at CERN: origin = principal point of the system = P0 
-	TAngle phi, lambda;
-	TLength H;
-	phi.setGonsValue(LITERAL(51.3692));
-	lambda.setGonsValue(LITERAL(6.72124));
-	H.setMetresValue(LITERAL(433.65921));
+	TAngle phi(LITERAL(PHIP0), TAngle::kGons);
+	TAngle lambda(LITERAL(LambdaP0), TAngle::kGons);
+	TLength H(LITERAL(HP0));
 
 	TModifiedLocalGeodeticRF *pLGp0 = createModifiedLocalGeodeticRF(fCGRF, "LG PO", phi, lambda, H);
 	setIdAndAddToList(pLGp0, kLGp0, fRefFrameList);
@@ -162,18 +162,15 @@ void TRefSystemFactory::init()
 	setIdAndAddToList(pLAp0, kLAp0, fRefFrameList);
 	
 		// CCS : CERN Modified Local Astronomical system : principal point = P0 defined as false origin
-	TFreeVector falseOrigin(2000, LITERAL(2097.79265), LITERAL(2433.66000), TCoordSysFactory::k3DCartesian);
-	TAngle omega(0), phi2(0), kappa;
-	kappa.setGonsValue(LITERAL(37.77864));
+	TFreeVector falseOrigin(XP0, LITERAL(YP0), LITERAL(ZP0), TCoordSysFactory::k3DCartesian);
+	TAngle omega(0), phi2(0), kappa(LITERAL(AzimuthCCSYaxis), TAngle::kGons);
 
 	TAModifiedLocalAstronomicalRF* pCCS = new TGraphMLARF(ccs, falseOrigin,
 		pLAp0, omega, phi2, kappa);
 	setIdAndAddToList(pCCS, kCCS, fRefFrameList);
 
 	//new P0 coordinates
-	TAngle phi_new, lambda_new;
-	phi_new.setGonsValue(LITERAL(51.36734));
-	lambda_new.setGonsValue(LITERAL(6.722515));
+	TAngle phi_new(LITERAL(51.36734),TAngle::kGons), lambda_new (LITERAL(6.722515), TAngle::kGons);
 
 	TModifiedLocalGeodeticRF *pLGp0_new = createModifiedLocalGeodeticRF(fCGRF2, "LG P0_new", phi_new, lambda_new, H);
 	setIdAndAddToList(pLGp0_new, kLGp0_new, fRefFrameList);
@@ -261,17 +258,14 @@ void TRefSystemFactory::init()
 	// Transformation between CCS and CGRFSphere
 	//rotation pour diriger les axes du CGRFs parallele a ceux du CGRF
 	{
-		TAngle rx, ry, rz;
-		rx.setGonsValue(-LITERAL(42.726243230216));
-		ry.setGonsValue(-LITERAL(25.285434244947));
-		rz.setGonsValue(-LITERAL(77.864346765085));
-		TRotation rs(TRotationMatrix::kRzyx, rx.getRadiansValue(), ry.getRadiansValue(), rz.getRadiansValue());
+		TAngle rx(-LITERAL(42.726243230216), TAngle::kGons);
+		TAngle ry(-LITERAL(25.285434244947), TAngle::kGons);
+		TAngle rz(-LITERAL(77.864346765085), TAngle::kGons);
 		//translation pour situer le centre de la sphere
 		TLength txs(LITERAL(4381882.331989)), tys(LITERAL(461505.530464)), tzs(LITERAL(4598944.364158));
-		TTranslation transls(txs, tys, tzs);
 		//facteur d echelle
 		TScaleFactor ks(LITERAL(1.0));
-		THelmertRefFrameTransform* pCCS2CGRFs = new THelmertRefFrameTransform(pCCS, fCGRFSphere, ks, rs, transls);
+		THelmertRefFrameTransform* pCCS2CGRFs = createHelmertRefFrameTransform(pCCS, fCGRFSphere, rx, ry, rz, txs, tys, tzs, ks);
 		addTransformationAndInverse(pCCS2CGRFs, kCCS2CGRFSphere, kCGRFSphere2CCS, fTransformList);
 	}
 
@@ -289,24 +283,19 @@ void TRefSystemFactory::init()
 
 	// Helmert Transformation between LAp0 and CCS
 	{
-		TRotation r(TRotationMatrix::kRzyx, 0, 0, -(kappa.getRadiansValue()));
-		TTranslation transl(falseOrigin.getX(), falseOrigin.getY(), (falseOrigin.getZ()));
 		TScaleFactor enl(LITERAL(1.0));
-		THelmertRefFrameTransform* pLAp02CCS = new THelmertRefFrameTransform(pLAp0, pCCS, enl, r, transl);
+		THelmertRefFrameTransform *pLAp02CCS = createHelmertRefFrameTransform(pLAp0, pCCS, omega, phi, -1.0 * kappa, falseOrigin.getX(), falseOrigin.getY(), falseOrigin.getZ(), enl);
 		addTransformationAndInverse(pLAp02CCS, kLAp02CCS, kCCS2LAp0, fTransformList);
 	}
 	
 		// Helmert Transformation between ITRF97 (ep1998.5) and CGRF
 	{
-		TAngle om3, p3, k3;
-		om3.setGonsValue(LITERAL(399.999533213524));
-		p3.setGonsValue(LITERAL(0.001825157943));
-		k3.setGonsValue(LITERAL(0.000991054274));
-		TRotation r3(TRotationMatrix::kRzyx, om3.getRadiansValue(), p3.getRadiansValue(), k3.getRadiansValue());
+		TAngle om3(LITERAL(399.999533213524), TAngle::kGons);
+		TAngle p3(LITERAL(0.001825157943), TAngle::kGons);
+		TAngle k3(LITERAL(0.000991054274), TAngle::kGons);
 		TLength Tx3(LITERAL(76.3768280)), Ty3(LITERAL(131.9389844)), Tz3(-LITERAL(156.1229775));
-		TTranslation transl3(Tx3, Ty3, Tz3);
 		TScaleFactor enl3(LITERAL(1.000000000000000));
-		THelmertRefFrameTransform* pITRF972CGRF = new THelmertRefFrameTransform(pITRF97, fCGRF, enl3, r3, transl3);
+		THelmertRefFrameTransform* pITRF972CGRF = createHelmertRefFrameTransform(pITRF97, fCGRF, om3, p3, k3, Tx3, Ty3, Tz3, enl3);
 		addTransformationAndInverse(pITRF972CGRF, kITRF972CGRF, kCGRF2ITRF97, fTransformList);
 	}
 
@@ -372,13 +361,11 @@ void TRefSystemFactory::init()
         ////////////////////////////////////////////////////////////////
 	{
 		// There is no rotation:
-		TRotation r3(TRotationMatrix::kRzyx, 0, 0, 0);
 		// Total translation resulting from epoch changes and Reference Frame changes:
 		TLength Tx3(LITERAL(-674.374)), Ty3(LITERAL(-15.056)), Tz3(LITERAL(-405.346));
-		TTranslation transl3(Tx3, Ty3, Tz3);
 		// There is no scaling:
 		TScaleFactor enl3(LITERAL(1.000000000000000));
-		THelmertRefFrameTransform* pETRF932CH1903plus = new THelmertRefFrameTransform(pETRF93, pCH1903plus, enl3, r3, transl3);
+		THelmertRefFrameTransform* pETRF932CH1903plus = createHelmertRefFrameTransform(pETRF93, pCH1903plus, TAngle(0), TAngle(0), TAngle(0), Tx3, Ty3, Tz3, enl3);
 		addTransformationAndInverse(pETRF932CH1903plus, kETRF932CH1903plus, kCH1903plus2ETRF93, fTransformList);
 	}
 
@@ -672,6 +659,23 @@ TModifiedLocalGeodeticRF* TRefSystemFactory::createModifiedLocalGeodeticRF(TGeod
 	TModifiedLocalGeodeticRF *pLG = new TModifiedLocalGeodeticRF(frameName, origin, fCGRF);
 
 	return pLG;
+}
+
+THelmertRefFrameTransform *TRefSystemFactory::createHelmertRefFrameTransform(TAReferenceFrame *from,
+	TAReferenceFrame *to,
+	const TAngle &rX,
+	const TAngle &rY,
+	const TAngle &rZ,
+	const TLength &tX,
+	const TLength &tY,
+	const TLength &tZ,
+	const TScaleFactor &scaleFactor)
+{
+	TRotation rs(TRotationMatrix::kRzyx, rX.getRadiansValue(), rY.getRadiansValue(), rZ.getRadiansValue());
+	TTranslation transls(tX, tY, tZ);
+
+	THelmertRefFrameTransform *helmertRFtransform = new THelmertRefFrameTransform(from, to, scaleFactor, rs, transls);
+	return helmertRFtransform;
 }
 
 
