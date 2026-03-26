@@ -87,8 +87,8 @@ public:
 		virtual  TLength  getN( const TSpatialPosition& ) const;
 		
 		/// Returns the deflection of the vertical in the prime vertical at the given Point's position	
-		virtual  TAngle  getEta( const TSpatialPosition& ) const;
-		
+		virtual TAngle getEta(const TSpatialPosition &) const;
+	
 		/// Returns the deflection of the vertical in the meridian at the given Point's position	
 		virtual  TAngle  getXi( const TSpatialPosition& ) const;
 		
@@ -96,7 +96,7 @@ public:
 		virtual  TAngle  getDAlpha( const TSpatialPosition& ) const;
 
 		/// Returns the Laplace correction at the given Point's position	
-		virtual  TAngle  getDAlpha( const TSpatialPosition&, const TAngle& ) const;
+		virtual TAngle getDAlpha(const TSpatialPosition &, const TAngle &) const;
 
 		/// Returns the name of the geoid
 		virtual  std::string	 getName()  const { return fName; }
@@ -116,6 +116,8 @@ public:
 	//@}
 
 private:
+		// member functions
+	bool computeLocalParaboloidCoordinates(const TSpatialPosition &sp, TReal &xp, TReal &yp) const;
 
 	//constants
 	static const TReal scaleFactor;
