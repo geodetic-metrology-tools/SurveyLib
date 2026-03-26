@@ -254,6 +254,14 @@ private:
 	void	init();
 	void initEllipsoidList();
 	void initGeoidList();
+	void addGeodeticRefFrames();
+	void addGenericETRFandITRF();
+	void addFrenchProjections();
+	void addSwissProjections();
+	void addTerrestrialRefFramesTransformations();
+	void addFrenchTransformations();
+	void addSwissTransformations();
+	void addLocalRefFrameTransformations();
 
 	/*! Copy Assigment Operator */
 	TRefSystemFactory& operator=( const TRefSystemFactory& );
