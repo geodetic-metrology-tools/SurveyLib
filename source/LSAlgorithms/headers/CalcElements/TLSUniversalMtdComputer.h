@@ -54,11 +54,14 @@ public:
 private:
 	int count;
 
-	// Stored LDLT factorization of N2 (unconstrained case only),
-	// reused across solve and covariance steps
+	// Stored LDLT factorization of N2, reused across solve and covariance steps
 	std::unique_ptr<Eigen::SimplicialLDLT<TSparseMatrix>> storedLDLT;
 	TVector storedScaling;
 	int storedNbUnk = 0;
+
+	// Schur complement data for constrained case (stored between solve and covariance steps)
+	Eigen::MatrixXd storedX;      // N2^{-1} * A2^T, dense (nbUnk x nbCnstr)
+	Eigen::MatrixXd storedScInv;  // S_c^{-1} = (A2 * X)^{-1}, dense (nbCnstr x nbCnstr)
 };
 
 #endif

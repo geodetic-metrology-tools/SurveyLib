@@ -89,70 +89,57 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 		}
 	}
 
+	// For constrained problems, augment N2 to ensure SPD even for rank-deficient networks.
+	// A2^T*A2 lifts zero eigenvalues in the datum-deficient directions.
+	// The constrained solution and covariance are unaffected (A2^T*A2 is constant on the constraint manifold).
+	if (nbCnstr > 0)
+		N2 += A2.transpose() * A2;
+
+	// Factorize N2 via LDLT (both constrained and unconstrained)
+	storedLDLT = std::make_unique<Eigen::SimplicialLDLT<TSparseMatrix>>();
+	TSparseMatrix N2scaled = TSparseUtils::createSymmetricScaling(N2, storedScaling);
+	storedLDLT->compute(N2scaled);
+	if (storedLDLT->info() != Eigen::Success)
+	{
+		logCritical() << "LDLT factorization of N2 failed!";
+		storedLDLT.reset();
+		return false;
+	}
+	storedNbUnk = nbUnk;
+
+	// Helper: solve N2 * x = rhs using the scaled LDLT factorization
+	auto solveN2 = [&](const TVector &rhs) -> TVector
+	{
+		TVector rhsScaled = storedScaling.asDiagonal() * rhs;
+		TVector yScaled = storedLDLT->solve(rhsScaled);
+		return storedScaling.asDiagonal() * yScaled;
+	};
+
+	TVector n = A.transpose() * invN1 * W;
+	TVector x0 = solveN2(-n); // unconstrained solution
+
 	if (nbCnstr == 0)
 	{
-		// Unconstrained: factorize N2 via LDLT, store for reuse in Takahashi covariance step
-		storedLDLT = std::make_unique<Eigen::SimplicialLDLT<TSparseMatrix>>();
-		TSparseMatrix N2scaled = TSparseUtils::createSymmetricScaling(N2, storedScaling);
-		storedLDLT->compute(N2scaled);
-		if (storedLDLT->info() != Eigen::Success)
-		{
-			logCritical() << "LDLT factorization of N2 failed!";
-			storedLDLT.reset();
-			return false;
-		}
-		storedNbUnk = nbUnk;
-
-		TVector n = A.transpose() * invN1 * W;
-		TVector nScaled = storedScaling.asDiagonal() * n;
-		TVector y0 = storedLDLT->solve(-nScaled);
-		if (storedLDLT->info() != Eigen::Success)
-		{
-			logCritical() << "LDLT solve for unconstrained solution failed!";
-			storedLDLT.reset();
-			return false;
-		}
-		TVector solution = storedScaling.asDiagonal() * y0;
-
 		rm->setNormalMatrix(N2);
-		rm->setSolutionVect(solution);
+		rm->setSolutionVect(x0);
 	}
 	else
 	{
-		// Constrained: assemble NBig = (N2, A2^T; A2, 0) and solve via SparseLU
-		storedLDLT.reset();
+		// Schur complement: solve N2 * X = A2^T (one column per constraint)
+		Eigen::MatrixXd A2dense(A2);
+		storedX.resize(nbUnk, nbCnstr);
+		for (int c = 0; c < nbCnstr; ++c)
+			storedX.col(c) = solveN2(A2dense.row(c).transpose());
 
-		TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
-		std::vector<TTriplet> coeffs;
-		coeffs.reserve(N2.nonZeros() + 2 * A2.nonZeros());
+		// Schur complement: Sc = A2 * X (small nbCnstr x nbCnstr dense matrix)
+		Eigen::MatrixXd Sc = A2dense * storedX;
+		// Lagrange multipliers: lambda = Sc^{-1} * (A2 * x0 + W2)
+		storedScInv = Sc.inverse();
+		TVector lambda = storedScInv * (A2dense * x0 + W2);
+		// Corrected solution
+		TVector solution = x0 - storedX * lambda;
 
-		for (int k = 0; k < N2.outerSize(); ++k)
-			for (TSparseMatrix::InnerIterator it(N2, k); it; ++it)
-				coeffs.push_back(TTriplet(it.row(), it.col(), it.value()));
-
-		for (int k = 0; k < A2.outerSize(); ++k)
-		{
-			for (TSparseMatrix::InnerIterator it(A2, k); it; ++it)
-			{
-				coeffs.push_back(TTriplet(it.row() + N2.rows(), it.col(), it.value())); // A2
-				coeffs.push_back(TTriplet(it.col(), it.row() + N2.cols(), it.value())); // A2T
-			}
-		}
-		NBig.setFromTriplets(coeffs.begin(), coeffs.end());
-
-		TVector VBig(nbUnk + nbCnstr);
-		VBig << A.transpose() * invN1 * W, W2;
-
-		TVector solutionExt(nbUnk + nbCnstr);
-		if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt, false))
-		{
-			logCritical() << "No solution could be found when solving equation system: Nbig * dX = -VBig (extended matrices with conditions)";
-			return false;
-		}
-
-		TVector solution = solutionExt.head(nbUnk);
-
-		rm->setNormalMatrix(NBig);
+		rm->setNormalMatrix(N2);
 		rm->setSolutionVect(solution);
 	}
 
@@ -194,20 +181,16 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	}
 	const TSparseMatrix &Pv = im->getWeightMtrx();
 	const TVector &W = im->getMisclosureVctr();
-	const TVector &solution = *rm->getSolutionVectByConst(); // NB: Solution vector will NOT be recalculated here (just taken from previous results!)
-	const TSparseMatrix &NBig = *rm->getNormalMatrixByConst(); // NB: Normal matrix will NOT be recalculated here (just taken from previous results!)
+	const TVector &solution = *rm->getSolutionVectByConst();
 
 	//--------------- Residuals ---------------//
-	// Calculate intermediate matrix
-	// S = - inv(P) * Bt *inv( B * inv(P) * Bt )
-	// Residuals vector V
 	TVector V(nbObs);
 	V = S * (A * solution + W);
 
 	//--------------- Sigma 0 a posteriri ---------------//
 	sigmaZero2Aposteriori = V.transpose() * Pv * V;
 	if (nbEq + nbCnstr != nbUnk)
-		sigmaZero2Aposteriori /= (nbEq - nbUnk + nbCnstr); // NB Redundancy: Takes into account the number of constraints!
+		sigmaZero2Aposteriori /= (nbEq - nbUnk + nbCnstr);
 	else
 		fError += "Number of equations + constraints equals number of unknowns, causes zero division!";
 	rm->setSigmaZero2(sigmaZero2Aposteriori);
@@ -215,38 +198,55 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	rm->setSigmaZeroLimits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
 
 	// ----------Covariance Matrices-----------//
-	// test if Pv is diagonal. Exploiting that we know it is already block diagonal and invertible.
 	bool PvIsDiag = (Pv.nonZeros() == Pv.rows());
 	TSparseMatrix Qxx(nbUnk, nbUnk);
 	TVector QvvDiag(nbObs);
 	TVector ZReliability(nbObs);
 
-	// prepare the extra infos for the inversion (used only in constrained fallback path)
-	TSparseUtils::InverseExtras inversionExtras;
-	inversionExtras.topLeftSize = nbUnk;
+	if (!storedLDLT)
+	{
+		// Zero unknowns or factorization was never performed — set trivial empty results
+		rm->setResCovarDiag(QvvDiag);
+		rm->setZReliabilityVect(ZReliability);
+		rm->setUnkCovarMtrx(Qxx);
+		rm->setResidualsVect(V);
+		return true;
+	}
 
 	if (PvIsDiag)
 	{
 		TSparseMatrix M = S * A;
-		TVector diagMQxxMT = TVector::Zero(nbObs);
-		inversionExtras.M = &M;
-		inversionExtras.diag_MinvMT = &diagMQxxMT;
+		TSparseMatrix augPattern = TSparseUtils::symbolicMtM(M);
+		TSparseMatrix Qfree = TSparseUtils::takahashiSelectedInverse(*storedLDLT, storedScaling, &augPattern);
+		storedLDLT.reset();
 
-		if (nbCnstr == 0 && storedLDLT)
+		TVector diagMQxxMT;
+		if (nbCnstr == 0)
 		{
-			TSparseMatrix augPattern = TSparseUtils::symbolicMtM(M);
-			Qxx = TSparseUtils::takahashiSelectedInverse(*storedLDLT, storedScaling, &augPattern);
-			storedLDLT.reset();
+			Qxx = Qfree;
 			diagMQxxMT = TSparseUtils::diagMQMt(M, Qxx);
 		}
 		else
 		{
-			if (!TSparseUtils::inverse(NBig, Qxx, (nbCnstr == 0), inversionExtras))
-			{
-				logCritical() << "The normal matrix NBig could not be inverted!";
-				return false;
-			}
+			// Rank-c correction: Qxx = Q_free - X * Sc^{-1} * X^T
+			// As a sparse matrix, apply correction to all elements in Q_free's pattern
+			Eigen::MatrixXd XScInv = storedX * storedScInv; // (nbUnk x nbCnstr)
+			Qxx = Qfree;
+			for (int col = 0; col < Qxx.outerSize(); ++col)
+				for (TSparseMatrix::InnerIterator it(Qxx, col); it; ++it)
+					it.valueRef() -= XScInv.row(it.row()).dot(storedX.row(it.col()));
+
+			// diag(M*Qxx*M^T) = diag(M*Qfree*M^T) - diag((M*X)*Sc^{-1}*(M*X)^T)
+			TVector diagMQfreeMT = TSparseUtils::diagMQMt(M, Qfree);
+			Eigen::MatrixXd MX = Eigen::MatrixXd(M) * storedX; // (nbObs x nbCnstr)
+			Eigen::MatrixXd MXScInv = MX * storedScInv;
+			// diag of MXScInv * MX^T = row-wise dot products
+			TVector diagCorrection(nbObs);
+			for (int i = 0; i < nbObs; ++i)
+				diagCorrection[i] = MXScInv.row(i).dot(MX.row(i));
+			diagMQxxMT = diagMQfreeMT - diagCorrection;
 		}
+
 		if (im->getSecondDgnBlockDiagStatus())
 			QvvDiag = InvPv.diagonal() - diagMQxxMT;
 		else
@@ -258,19 +258,20 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(const TLSInputMatrices 
 	}
 	else
 	{
-		if (nbCnstr == 0 && storedLDLT)
-		{
-			Qxx = TSparseUtils::takahashiSelectedInverse(*storedLDLT, storedScaling);
-			storedLDLT.reset();
-		}
+		TSparseMatrix Qfree = TSparseUtils::takahashiSelectedInverse(*storedLDLT, storedScaling);
+		storedLDLT.reset();
+
+		if (nbCnstr == 0)
+			Qxx = Qfree;
 		else
 		{
-			if (!TSparseUtils::inverse(NBig, Qxx, (nbCnstr == 0), inversionExtras))
-			{
-				logCritical() << "The normal matrix NBig could not be inverted!";
-				return false;
-			}
+			Eigen::MatrixXd XScInv = storedX * storedScInv;
+			Qxx = Qfree;
+			for (int col = 0; col < Qxx.outerSize(); ++col)
+				for (TSparseMatrix::InnerIterator it(Qxx, col); it; ++it)
+					it.valueRef() -= XScInv.row(it.row()).dot(storedX.row(it.col()));
 		}
+
 		if (im->getSecondDgnBlockDiagStatus())
 		{
 			TSparseMatrix Qvv = -S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose();
