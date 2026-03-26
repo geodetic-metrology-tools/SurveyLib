@@ -125,8 +125,14 @@ private:
 
 	/**@name Private Functions */
 	//@{
-		/*!used to interpolate N*/
-		TReal splineInterpolation(const TMatrix& mat, const TSpatialPosition& spos) const;
+		/*!used to interpolate Eta and Xi*/
+		TAngle interpolateDoV(const TMatrix &dovMatrix, const TSpatialPosition &sp, const std::string &functionCalled) const;
+
+		/*!used to interpolate*/
+		TReal splineInterpolation(const TMatrix &mat, const TSpatialPosition &spos) const;
+	
+		/*!Generate message for the NotInLepGridException*/
+		std::stringstream generateNotInLepGridMessage(const std::string &functionCalled, const TSpatialPosition &position) const;
 	//@}
 	
 	/**@name Member Attributes */
