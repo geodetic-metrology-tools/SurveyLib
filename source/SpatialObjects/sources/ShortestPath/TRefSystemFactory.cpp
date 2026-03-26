@@ -13,6 +13,8 @@
 #include <iomanip>
 #include <limits>
 
+#include "GeodeticConstants.h"
+
 #include <TReferenceEllipsoid.h>
 #include <TGeodeticRefFrame.h>
 #include <TTerrestrialReferenceFrame.h>
@@ -148,9 +150,9 @@ void TRefSystemFactory::init()
 	setIdAndAddToList(pWGS84_G2139, kWGS84_G2139, fRefFrameList);
 
 		// Local Geodesique at CERN: origin = principal point of the system = P0 
-	TAngle phi(LITERAL(51.3692), TAngle::kGons);
-	TAngle lambda(LITERAL(6.72124), TAngle::kGons);
-	TLength H(LITERAL(433.65921));
+	TAngle phi(LITERAL(PHIP0), TAngle::kGons);
+	TAngle lambda(LITERAL(LambdaP0), TAngle::kGons);
+	TLength H(LITERAL(HP0));
 
 	TModifiedLocalGeodeticRF *pLGp0 = createModifiedLocalGeodeticRF(fCGRF, "LG PO", phi, lambda, H);
 	setIdAndAddToList(pLGp0, kLGp0, fRefFrameList);
@@ -160,8 +162,8 @@ void TRefSystemFactory::init()
 	setIdAndAddToList(pLAp0, kLAp0, fRefFrameList);
 	
 		// CCS : CERN Modified Local Astronomical system : principal point = P0 defined as false origin
-	TFreeVector falseOrigin(2000, LITERAL(2097.79265), LITERAL(2433.66000), TCoordSysFactory::k3DCartesian);
-	TAngle omega(0), phi2(0), kappa (LITERAL(37.77864), TAngle::kGons);
+	TFreeVector falseOrigin(XP0, LITERAL(YP0), LITERAL(ZP0), TCoordSysFactory::k3DCartesian);
+	TAngle omega(0), phi2(0), kappa(LITERAL(AzimuthCCSYaxis), TAngle::kGons);
 
 	TAModifiedLocalAstronomicalRF* pCCS = new TGraphMLARF(ccs, falseOrigin,
 		pLAp0, omega, phi2, kappa);

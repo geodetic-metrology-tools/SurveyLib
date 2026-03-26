@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////
 //forward declarations
 
+#include	"GeodeticConstants.h"
 #include	"TGraph.h"
 #include	"TSpatialPosition.h"
 #include	"TAReferenceFrame.h"
@@ -154,7 +155,7 @@ TLength	TCernParabolicGeoid::getN( const TSpatialPosition& position ) const
 	TReal dx, dy, xp, yp;
 	//TSpatialPosition position( point.getPosition( modelSystem ) );
 	//GeoidValue fNValue;
-	TReal falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
+	TReal falseOriginX(XP0), falseOriginY(LITERAL(YP0));
 
 	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
 	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
@@ -192,7 +193,7 @@ TAngle	TCernParabolicGeoid::getXi( const TSpatialPosition& sp ) const
 
 	TReal x, y;
 	TReal dx, dy, xp, yp;
-	TReal falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
+	TReal falseOriginX(XP0), falseOriginY(LITERAL(YP0));
 	//TSpatialPosition position( modelSystem );
 	TAngle fXiValue;
 
@@ -228,7 +229,7 @@ TAngle	TCernParabolicGeoid::getEta( const TSpatialPosition& sp ) const
 
 	TReal x, y;
 	TReal dx, dy, xp, yp;
-	TReal falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
+	TReal falseOriginX(XP0), falseOriginY(LITERAL(YP0));
 	TAngle fEtaValue;
 
 	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
