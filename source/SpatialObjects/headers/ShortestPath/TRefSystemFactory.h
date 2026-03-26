@@ -42,6 +42,7 @@ class TAReferenceFrame;
 class TGeodeticRefFrame;
 class TTerrestrialReferenceFrame;
 class TModifiedLocalAstronomicalRF;
+class TModifiedLocalGeodeticRF;
 class TCernGridGeoid;
 class TARefFrameTransformation;
 class TSpatialPosition;
@@ -262,6 +263,8 @@ private:
 	void addFrenchTransformations();
 	void addSwissTransformations();
 	void addLocalRefFrameTransformations();
+
+	TModifiedLocalGeodeticRF* createModifiedLocalGeodeticRF(TGeodeticRefFrame* refFrame, const std::string &frameName, const TAngle &phi_origine, const TAngle &lambda_origin, const TLength &h_origin);
 
 	/*! Copy Assigment Operator */
 	TRefSystemFactory& operator=( const TRefSystemFactory& );

@@ -148,23 +148,14 @@ void TRefSystemFactory::init()
 	setIdAndAddToList(pWGS84_G2139, kWGS84_G2139, fRefFrameList);
 
 		// Local Geodesique at CERN: origin = principal point of the system = P0 
-	TSpatialPosition origin(fCGRF);
 	TAngle phi, lambda;
 	TLength H;
 	phi.setGonsValue(LITERAL(51.3692));
 	lambda.setGonsValue(LITERAL(6.72124));
 	H.setMetresValue(LITERAL(433.65921));
-	TPositionVector pos(TCoordSysFactory::kGeodetic);
-	pos.setPhiEllipsoid(phi);
-	pos.setLambdaEllipsoid(lambda);
-	pos.setH(H);
 
-	origin.setCoordinates( pos );
-	origin.setObjectStatus( TSpatialStatus::kCala );
-
-	TModifiedLocalGeodeticRF* pLGp0 = new TModifiedLocalGeodeticRF( "LG P0", origin, fCGRF);
+	TModifiedLocalGeodeticRF *pLGp0 = createModifiedLocalGeodeticRF(fCGRF, "LG PO", phi, lambda, H);
 	setIdAndAddToList(pLGp0, kLGp0, fRefFrameList);
-
 		// Local Astronomic at CERN: origin = principal point of the system = P0
 	TAngle etaP0(0), xsiP0(0), dAlphaP0(0);
 	TGraphLocalAstronomicalRF* pLAp0 = new TGraphLocalAstronomicalRF( "LA P0", etaP0, xsiP0, dAlphaP0, pLGp0 );
@@ -180,21 +171,11 @@ void TRefSystemFactory::init()
 	setIdAndAddToList(pCCS, kCCS, fRefFrameList);
 
 	//new P0 coordinates
-	TSpatialPosition origin_new(fCGRF2);
 	TAngle phi_new, lambda_new;
 	phi_new.setGonsValue(LITERAL(51.36734));
 	lambda_new.setGonsValue(LITERAL(6.722515));
 
-	TPositionVector pos_new(TCoordSysFactory::kGeodetic);
-	pos_new.setPhiEllipsoid(phi_new);
-	pos_new.setLambdaEllipsoid(lambda_new);
-	pos_new.setH(H);
-
-	origin_new.setCoordinates(pos_new);
-	origin_new.setObjectStatus(TSpatialStatus::kCala);
-
-	// Local Geodetic at P0_new
-	TModifiedLocalGeodeticRF* pLGp0_new = new TModifiedLocalGeodeticRF("LG P0_new", origin_new, fCGRF2);
+	TModifiedLocalGeodeticRF *pLGp0_new = createModifiedLocalGeodeticRF(fCGRF2, "LG P0_new", phi_new, lambda_new, H);
 	setIdAndAddToList(pLGp0_new, kLGp0_new, fRefFrameList);
 
 	// Local Astronomic at P0_new
@@ -673,7 +654,25 @@ void TRefSystemFactory::addLocalRefFrameTransformations()
 	setIdAndAddToList(pCCS2LocalRFout, kCCS2LocalRFout, fTransformList);
 }
 
+TModifiedLocalGeodeticRF* TRefSystemFactory::createModifiedLocalGeodeticRF(TGeodeticRefFrame* refFrame,
+	const std::string &frameName,
+	const TAngle &phi_origine,
+	const TAngle &lambda_origin,
+	const TLength &h_origin)
+{
+	TSpatialPosition origin(refFrame);
+	TPositionVector pos(TCoordSysFactory::kGeodetic);
+	pos.setPhiEllipsoid(phi_origine);
+	pos.setLambdaEllipsoid(lambda_origin);
+	pos.setH(h_origin);
 
+	origin.setCoordinates(pos);
+	origin.setObjectStatus(TSpatialStatus::kCala);
+
+	TModifiedLocalGeodeticRF *pLG = new TModifiedLocalGeodeticRF(frameName, origin, fCGRF);
+
+	return pLG;
+}
 
 
 //////////////////////////////////////////////////////////////////////
