@@ -43,9 +43,11 @@ class TGeodeticRefFrame;
 class TTerrestrialReferenceFrame;
 class TModifiedLocalAstronomicalRF;
 class TModifiedLocalGeodeticRF;
+class THelmertRefFrameTransform;
 class TCernGridGeoid;
 class TARefFrameTransformation;
 class TSpatialPosition;
+class TScaleFactor;
 
 #include <TLocalSystemOrigin.h>
 //
@@ -265,7 +267,7 @@ private:
 	void addLocalRefFrameTransformations();
 
 	TModifiedLocalGeodeticRF* createModifiedLocalGeodeticRF(TGeodeticRefFrame* refFrame, const std::string &frameName, const TAngle &phi_origine, const TAngle &lambda_origin, const TLength &h_origin);
-
+	THelmertRefFrameTransform* createHelmertRefFrameTransform(TAReferenceFrame *from, TAReferenceFrame *to, const TAngle &rX, const TAngle &rY, const TAngle &rZ, const TLength &tX, const TLength &tY, const TLength &tZ, const TScaleFactor &scaleFactor);
 	/*! Copy Assigment Operator */
 	TRefSystemFactory& operator=( const TRefSystemFactory& );
 
