@@ -254,6 +254,14 @@ private:
 	void	init();
 	void initEllipsoidList();
 	void initGeoidList();
+	void addGeodeticRefFrames();
+	void addGenericETRFandITRF();
+	void addFrenchProjections();
+	void addSwissProjections();
+	void addTerrestrialRefFramesTransformations();
+	void addFrenchTransformations();
+	void addSwissTransformations();
+	void addLocalRefFrameTransformations();
 
 	/*! Copy Assigment Operator */
 	TRefSystemFactory& operator=( const TRefSystemFactory& );
@@ -318,6 +326,17 @@ private:
 		return g;
 	}
 
+		template<typename T>
+	T* getRefFrame(ERefFrame id)
+	{
+		TAReferenceFrame *base = getRefFrame(id); // existing function
+		T *typed = dynamic_cast<T *>(base);
+
+		if (!typed)
+			throw std::bad_cast();
+
+		return typed;
+	}
 	
 private:
 	static TRefSystemFactory* fRefSystemFactory; /*!< static member that contains a pointer to the unique instance of TRefSystemFactory */

@@ -98,28 +98,11 @@ void TRefSystemFactory::init()
 	initEllipsoidList();
 
 	// Definition of the reference frame list
-	std::string cgrf("CGRF"), cgrfs("CGRFSphere"), itrf97("ITRF97"), wgs("WGS84 (G2139)");
+	std::string itrf97("ITRF97"), wgs("WGS84 (G2139)");
 	std::string ccs("CCS"), etrf93("ETRF93");
-	std::string cgrf2("new_CGRF");
-	std::string itrfIn("ITRFin");
-	std::string itrfOut("ITRFout");
-	std::string etrfIn("ETRFin");
-	std::string etrfOut("ETRFout");
-	
-		//new CGRF (coordinate of P0 have been changed)
-	TGeodeticRefFrame* pCGRF2 = new TGeodeticRefFrame(cgrf2, getEllipsoid(TRefSystemFactory::kGRS80));
-	setIdAndAddToList(pCGRF2, kCGRF_new, fRefFrameList);
-	fCGRF2 = pCGRF2;
 
-		// CGRF
-	TGeodeticRefFrame* pCGRF = new TGeodeticRefFrame(cgrf, getEllipsoid(TRefSystemFactory::kGRS80));
-	setIdAndAddToList(pCGRF, kCGRF, fRefFrameList);
-	fCGRF = pCGRF;
-	
-		// CGRF sphere
-	TGeodeticRefFrame* pCGRFs = new TGeodeticRefFrame(cgrfs, getEllipsoid(TRefSystemFactory::kSphere));
-	setIdAndAddToList(pCGRFs, kCGRFSphere, fRefFrameList);
-	fCGRFSphere = pCGRFs;
+	addGeodeticRefFrames();
+
 
 		// CGRF Transverse Mercator Projection
 	TAReferenceFrame *pCGRFtm_eh = new TTransverseMercatorProjection("CGRFtm_eh");
@@ -131,42 +114,8 @@ void TRefSystemFactory::init()
 	TTerrestrialReferenceFrame* pITRF97 = new TTerrestrialReferenceFrame(itrf97, getEllipsoid(TRefSystemFactory::kGRS80), epoch, solution);
 	setIdAndAddToList(pITRF97, kITRF97, fRefFrameList);
 	
-	//Generic ITRF solution at specified epoch (input)
-	TReal initEpochITRF = NO_VALf;
-	std::string initSolution = "noSolution";
-	TTerrestrialReferenceFrame* pITRFin = new TTerrestrialReferenceFrame(itrfIn, getEllipsoid(TRefSystemFactory::kGRS80), initEpochITRF, initSolution);
-	setIdAndAddToList(pITRFin, kITRFin, fRefFrameList);
-	fITRFin = pITRFin;
-
-	//Generic ITRF solution at specified epoch (output)
-	TTerrestrialReferenceFrame* pITRFout = new TTerrestrialReferenceFrame(itrfOut, getEllipsoid(TRefSystemFactory::kGRS80), initEpochITRF, initSolution);
-	setIdAndAddToList(pITRFout, kITRFout, fRefFrameList);
-	fITRFout = pITRFout;
-
-	//Generic ETRF solution at specified epoch (input)
-	TReal initEpochETRF = NO_VALf;
-	TTerrestrialReferenceFrame* pETRFin = new TTerrestrialReferenceFrame(etrfIn, getEllipsoid(TRefSystemFactory::kGRS80), initEpochETRF, initSolution);
-	setIdAndAddToList(pETRFin, kETRFin, fRefFrameList);
-	fETRFin = pETRFin;
-
-	//Generic ETRF solution at specified epoch (output)
-	TTerrestrialReferenceFrame* pETRFout = new TTerrestrialReferenceFrame(etrfOut, getEllipsoid(TRefSystemFactory::kGRS80), initEpochETRF, initSolution);
-	setIdAndAddToList(pETRFout, kETRFout, fRefFrameList);
-	fETRFout = pETRFout;
-
-		// FrenchRGF93 zone 5 (CC46)
-    TAReferenceFrame* pFrenchRGF93_CC46_eh = new TRGF93CC46Projection("FrenchRGF93_CC46_eh");
-	setIdAndAddToList(pFrenchRGF93_CC46_eh, kFrenchRGF93_CC46_eh, fRefFrameList);
-
-	TAReferenceFrame *pFrenchRGF93_CC46_raf = new TRGF93CC46Projection("FrenchRGF93_CC46_ign69");
-	setIdAndAddToList(pFrenchRGF93_CC46_raf, kFrenchRGF93_CC46_ign69, fRefFrameList);
-	
-	// Lambert93
-	TAReferenceFrame* pLambert93_eh = new TLambert93Projection("Lambert93_eh");
-	setIdAndAddToList(pLambert93_eh, kLambert93_eh, fRefFrameList);
-	
-	TAReferenceFrame *pLambert93_raf = new TLambert93Projection("Lambert93_ign69");
-	setIdAndAddToList(pLambert93_raf, kLambert93_ign69, fRefFrameList);
+	addGenericETRFandITRF();
+	addFrenchProjections();
 
     // ETRF93
 	epoch = 1993;
@@ -190,27 +139,7 @@ void TRefSystemFactory::init()
 	TGeodeticRefFrame* pCH1903plus = new TGeodeticRefFrame("CH1903plus", getEllipsoid(TRefSystemFactory::kBessel1841));
 	setIdAndAddToList(pCH1903plus, kCH1903plus, fRefFrameList);
 
-#ifdef USE_SWISSTOPO
-        // Swiss LV95
-    TAReferenceFrame* pLV95_eh = new TLV95Projection("LV95_eh");
-	setIdAndAddToList(pLV95_eh, kSwissLV95_eh, fRefFrameList);
-
-	TAReferenceFrame *pLV95_lhn95 = new TLV95Projection("LV95_lhn95");
-	setIdAndAddToList(pLV95_lhn95, kSwissLV95_lhn95, fRefFrameList);
-
-	TAReferenceFrame *pLV95_ln02 = new TLV95Projection("LV95_ln02");
-	setIdAndAddToList(pLV95_ln02, kSwissLV95_ln02, fRefFrameList);
-
-        // Swiss LV03
-    TAReferenceFrame* pLV03_eh = new TLV03Projection("LV03_eh");
-	setIdAndAddToList(pLV03_eh, kSwissLV03_eh, fRefFrameList);
-
-	TAReferenceFrame *pLV03_ln02 = new TLV03Projection("LV03_ln02");
-	setIdAndAddToList(pLV03_ln02, kSwissLV03_ln02, fRefFrameList);
-	
-	TAReferenceFrame *pLV03_lhn95 = new TLV03Projection("LV03_lhn95");
-	setIdAndAddToList(pLV03_lhn95, kSwissLV03_lhn95, fRefFrameList);
-#endif
+	addSwissProjections();
 
 		// WGS84 (G2139)
 	epoch = 2016;
@@ -219,7 +148,7 @@ void TRefSystemFactory::init()
 	setIdAndAddToList(pWGS84_G2139, kWGS84_G2139, fRefFrameList);
 
 		// Local Geodesique at CERN: origin = principal point of the system = P0 
-	TSpatialPosition origin(pCGRF);
+	TSpatialPosition origin(fCGRF);
 	TAngle phi, lambda;
 	TLength H;
 	phi.setGonsValue(LITERAL(51.3692));
@@ -233,7 +162,7 @@ void TRefSystemFactory::init()
 	origin.setCoordinates( pos );
 	origin.setObjectStatus( TSpatialStatus::kCala );
 
-	TModifiedLocalGeodeticRF* pLGp0 = new TModifiedLocalGeodeticRF( "LG P0", origin, pCGRF);
+	TModifiedLocalGeodeticRF* pLGp0 = new TModifiedLocalGeodeticRF( "LG P0", origin, fCGRF);
 	setIdAndAddToList(pLGp0, kLGp0, fRefFrameList);
 
 		// Local Astronomic at CERN: origin = principal point of the system = P0
@@ -251,7 +180,7 @@ void TRefSystemFactory::init()
 	setIdAndAddToList(pCCS, kCCS, fRefFrameList);
 
 	//new P0 coordinates
-	TSpatialPosition origin_new(pCGRF2);
+	TSpatialPosition origin_new(fCGRF2);
 	TAngle phi_new, lambda_new;
 	phi_new.setGonsValue(LITERAL(51.36734));
 	lambda_new.setGonsValue(LITERAL(6.722515));
@@ -265,7 +194,7 @@ void TRefSystemFactory::init()
 	origin_new.setObjectStatus(TSpatialStatus::kCala);
 
 	// Local Geodetic at P0_new
-	TModifiedLocalGeodeticRF* pLGp0_new = new TModifiedLocalGeodeticRF("LG P0_new", origin_new, pCGRF2);
+	TModifiedLocalGeodeticRF* pLGp0_new = new TModifiedLocalGeodeticRF("LG P0_new", origin_new, fCGRF2);
 	setIdAndAddToList(pLGp0_new, kLGp0_new, fRefFrameList);
 
 	// Local Astronomic at P0_new
@@ -361,7 +290,7 @@ void TRefSystemFactory::init()
 		TTranslation transls(txs, tys, tzs);
 		//facteur d echelle
 		TScaleFactor ks(LITERAL(1.0));
-		THelmertRefFrameTransform* pCCS2CGRFs = new THelmertRefFrameTransform(pCCS, pCGRFs, ks, rs, transls);
+		THelmertRefFrameTransform* pCCS2CGRFs = new THelmertRefFrameTransform(pCCS, fCGRFSphere, ks, rs, transls);
 		addTransformationAndInverse(pCCS2CGRFs, kCCS2CGRFSphere, kCGRFSphere2CCS, fTransformList);
 	}
 
@@ -396,25 +325,23 @@ void TRefSystemFactory::init()
 		TLength Tx3(LITERAL(76.3768280)), Ty3(LITERAL(131.9389844)), Tz3(-LITERAL(156.1229775));
 		TTranslation transl3(Tx3, Ty3, Tz3);
 		TScaleFactor enl3(LITERAL(1.000000000000000));
-		THelmertRefFrameTransform* pITRF972CGRF = new THelmertRefFrameTransform(pITRF97, pCGRF, enl3, r3, transl3);
+		THelmertRefFrameTransform* pITRF972CGRF = new THelmertRefFrameTransform(pITRF97, fCGRF, enl3, r3, transl3);
 		addTransformationAndInverse(pITRF972CGRF, kITRF972CGRF, kCGRF2ITRF97, fTransformList);
 	}
 
 		////////////////////////////////////////////////////////////////
 		// Transformation ITRF-ETRF, ETRF-ITRF
 		////////////////////////////////////////////////////////////////
+	
 	{
 		auto itrf2020_toPastITRF = makeMatrix(TrfTransformationCoefficients::coeffITRF2020_toPastITRF);
 		auto itrfyy_toETRFyy = makeMatrix(TrfTransformationCoefficients::coeffITRFyy_toETRFyy);
 
+		auto pITRFin = getTerrRefFrame(kITRFin);
+		auto pITRFout = getTerrRefFrame(kITRFout);
+		auto pETRFout = getTerrRefFrame(kETRFout);
+		auto pETRFin = getTerrRefFrame(kETRFin);
 
-		// Transformtion between ITRF and ETRF
-		TTrf2TrfTransformation *pITRFin2ETRFout = new TTrf2TrfTransformation(pITRFin, pETRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pITRFin2ETRFout, kITRFin2ETRFout, fTransformList);
-		// Inverse
-		TTrf2TrfTransformation *pETRFin2ITRFout = new TTrf2TrfTransformation(pETRFin, pITRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pETRFin2ITRFout, kETRFin2ITRFout, fTransformList);
-	
 		// Transformation between any ITRF an ITRF97 (ep 1998.5)
 		TTrf2TrfTransformation *pITRFin2ITRF97 = new TTrf2TrfTransformation(pITRFin, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		setIdAndAddToList(pITRFin2ITRF97, kITRFin2ITRF97, fTransformList);
@@ -429,14 +356,6 @@ void TRefSystemFactory::init()
 		TTrf2TrfTransformation *pETRFin2ITRF97 = new TTrf2TrfTransformation(pETRFin, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		setIdAndAddToList(pETRFin2ITRF97, kETRFin2ITRF97, fTransformList);
 
-		// Transformation between 2 ITRF
-		TTrf2TrfTransformation *pITRFin2ITRFout = new TTrf2TrfTransformation(pITRFin, pITRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pITRFin2ITRFout, kITRFin2ITRFout, fTransformList);
-
-		// Transformation between 2 ETRF
-		TTrf2TrfTransformation *pETRFin2ETRFout = new TTrf2TrfTransformation(pETRFin, pETRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pETRFin2ETRFout, kETRFin2ETRFout, fTransformList);
-		
 		// Transformation between ITRF97 (ep1998.5) and ETRF93 (ep 1993.0)
 		TTrf2TrfTransformation *pITRF972ETRF93 = new TTrf2TrfTransformation(pITRF97, pETRF93, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		setIdAndAddToList(pITRF972ETRF93, kITRF972ETRF93, fTransformList);
@@ -450,22 +369,23 @@ void TRefSystemFactory::init()
 		// Inverse
 		TTrf2TrfTransformation *pRGF932ITRF97 = new TTrf2TrfTransformation(pRGF93, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		setIdAndAddToList(pRGF932ITRF97, kRGF932ITRF97, fTransformList);
-	
+
 		// Transformation between ITRF97 (ep1998.5) and CHTRF95
 		TTrf2TrfTransformation *pITRF972CHTRF95 = new TTrf2TrfTransformation(pITRF97, pCHTRF95, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		setIdAndAddToList(pITRF972CHTRF95, kITRF972CHTRF95, fTransformList);
 		// Inverse
 		TTrf2TrfTransformation *pCHTRF952ITRF97 = new TTrf2TrfTransformation(pCHTRF95, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		setIdAndAddToList(pCHTRF952ITRF97, kCHTRF952ITRF97, fTransformList);
-		
+
 		// Transformation between ITRF97 (ep1998.5) and WGS84 (G2139)
 		TTrf2TrfTransformation *pITRF972WGS84 = new TTrf2TrfTransformation(pITRF97, pWGS84_G2139, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		setIdAndAddToList(pITRF972WGS84, kITRF972WGS84, fTransformList);
 		// Inverse
 		TTrf2TrfTransformation *pWGS842ITRF97 = new TTrf2TrfTransformation(pWGS84_G2139, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
 		setIdAndAddToList(pWGS842ITRF97, kWGS842ITRF97, fTransformList);
+
+		addTerrestrialRefFramesTransformations();
 	}
-    
         ////////////////////////////////////////////////////////////////
 		// Helmert Transformation between ETRF93 (ep1993) and CH1903plus
         ////////////////////////////////////////////////////////////////
@@ -480,79 +400,9 @@ void TRefSystemFactory::init()
 		THelmertRefFrameTransform* pETRF932CH1903plus = new THelmertRefFrameTransform(pETRF93, pCH1903plus, enl3, r3, transl3);
 		addTransformationAndInverse(pETRF932CH1903plus, kETRF932CH1903plus, kCH1903plus2ETRF93, fTransformList);
 	}
-#ifdef USE_SWISSTOPO
-    {
-        ////////////////////////////////////////////////////////////////
-		// Transformation between CH1903plus and LV95 (ellipsoidal height)
-        ////////////////////////////////////////////////////////////////
-        TLV95Transformation * pTrans = new TLV95Transformation(true, "eh");
-		addTransformationAndInverse(pTrans, kCH1903plus2SwissLV95eh, kSwissLV95eh2CH1903plus, fTransformList);
-  	}
-	{
-		////////////////////////////////////////////////////////////////
-		// Transformation between CH1903plus and LV95 (orthometric height)
-		////////////////////////////////////////////////////////////////
-		TLV95Transformation *pTrans = new TLV95Transformation(true, "lhn95");
-		addTransformationAndInverse(pTrans, kCH1903plus2SwissLV95lhn95, kSwissLV95lhn952CH1903plus, fTransformList);
-	}
-	{
-		////////////////////////////////////////////////////////////////
-		// Transformation between CH1903plus and LV95 (leveled height)
-		////////////////////////////////////////////////////////////////
-		TLV95Transformation *pTrans = new TLV95Transformation(true, "ln02");
-		addTransformationAndInverse(pTrans, kCH1903plus2SwissLV95ln02, kSwissLV95ln022CH1903plus, fTransformList);
-	}
-    {
-        ////////////////////////////////////////////////////////////////
-		// Transformation between LV95 and LV03 (ellipsoidal height)
-        ////////////////////////////////////////////////////////////////
-        TLV03Transformation * pTrans = new TLV03Transformation(true, "eh");
-		addTransformationAndInverse(pTrans, kSwissLV95eh2SwissLV03eh, kSwissLV03eh2SwissLV95eh, fTransformList);
-	}
 
-	{
-		////////////////////////////////////////////////////////////////
-		// Transformation between LV95 (ellipsoidal height) and LV03 (leveled height)
-		////////////////////////////////////////////////////////////////
-		TLV03Transformation *pTrans = new TLV03Transformation(true, "ln02");
-		addTransformationAndInverse(pTrans, kSwissLV95eh2SwissLV03ln02, kSwissLV03ln022SwissLV95eh, fTransformList);
-	}
-
-	{
-		////////////////////////////////////////////////////////////////
-		// Transformation between LV95 (ellipsoidal height) and LV03 (orthometric height)
-		////////////////////////////////////////////////////////////////
-		TLV03Transformation *pTrans = new TLV03Transformation(true, "lhn95");
-		addTransformationAndInverse(pTrans, kSwissLV95eh2SwissLV03lhn95, kSwissLV03lhn952SwissLV95eh, fTransformList);
-	}
-#endif
-    
-        ////////////////////////////////////////////////////////////////
-		// Transformation between projected CC46 and RGF93
-        ////////////////////////////////////////////////////////////////
-	{
-		//Ellipsoidal height
-		TRGF93ZoneTransformation * pRGF932CC46eh = new TRGF93ZoneTransformation(true, true);
-		addTransformationAndInverse(pRGF932CC46eh, kRGF932CC46eh, kCC46eh2RGF93, fTransformList);
-
-		//Altitude NGF-IGN69
-		TRGF93ZoneTransformation *pRGF932CC46raf = new TRGF93ZoneTransformation(true, false);
-		addTransformationAndInverse(pRGF932CC46raf, kRGF932CC46ign69, kCC46raf2RGF93, fTransformList);
-	}
-
-	
-        ////////////////////////////////////////////////////////////////
-		// Transformation between RGF93v2b and Lambert93
-        ////////////////////////////////////////////////////////////////
-	{
-		//Ellipsoidal height
-		TLambert93Transformation *pRGF932Lambert93eh = new TLambert93Transformation(true, true);
-		addTransformationAndInverse(pRGF932Lambert93eh, kRGF932Lambert93eh, kLambert93eh2RGF93, fTransformList);
-
-		//Altiude NGF-IGN69
-		TLambert93Transformation *pRGF932Lambert93ign69 = new TLambert93Transformation(true, false);
-		addTransformationAndInverse(pRGF932Lambert93ign69, kRGF932Lambert93ign69, kLambert93ign692RGF93, fTransformList);
-	}
+	addSwissTransformations();  
+	addFrenchTransformations();
             
 	// Transformation between CERN projection XYHe and CCS
 	TXYHe2MLATransformation* pXYHe2CCS = new TXYHe2MLATransformation(pCernXYHe);
@@ -582,12 +432,7 @@ void TRefSystemFactory::init()
 	TXYHg2XYHeTransformation* pXYHg2XYHe85Machine = new TXYHg2XYHeTransformation(pCernXYHg85Machine) ;
 	addTransformationAndInverse(pXYHg2XYHe85Machine, kXYHg2XYHe85Machine, kXYHe85Machine2XYHg, fTransformList);
 
-	// Empty transformation between local RF and CCS (transformation are updated with a transformation file)
-	TLocal2CCSTransformation *pLocalRFin2CCS = new TLocal2CCSTransformation(pLocalRFin, pCCS, TScaleFactor(), TRotationMatrix(), TTranslation());
-	setIdAndAddToList(pLocalRFin2CCS, kLocalRFin2CCS, fTransformList);
-	// Inverse
-	TLocal2CCSTransformation *pCCS2LocalRFout = new TLocal2CCSTransformation(pCCS, pLocalRFout, TScaleFactor(), TRotationMatrix(), TTranslation());
-	setIdAndAddToList(pCCS2LocalRFout, kCCS2LocalRFout, fTransformList);
+	addLocalRefFrameTransformations();
 }
 
 void TRefSystemFactory::initEllipsoidList()
@@ -657,6 +502,175 @@ void TRefSystemFactory::initGeoidList()
 	TReal aLEP(LITERAL(0.614)), bLEP(-LITERAL(0.106)), thLEP(angLEP.getRadiansValue());
 	TCernParabolicGeoid *pCG1985Machine = new TCernParabolicGeoid(cg85Machine, kCG1985Machine, aLEP, bLEP, thLEP, pCGRF, pGRS80, pCCS);
 	fGeoidList.push_back(pCG1985Machine);
+}
+
+void TRefSystemFactory::addGeodeticRefFrames()
+{
+	// new CGRF (coordinate of P0 have been changed) (not used)
+	createObjectSetIdAndAddToList<TGeodeticRefFrame>(kCGRF_new, fRefFrameList, "new_CGRF", getEllipsoid(TRefSystemFactory::kGRS80));
+	fCGRF2 = getRefFrame<TGeodeticRefFrame>(kCGRF_new);
+
+	// CGRF
+	createObjectSetIdAndAddToList<TGeodeticRefFrame>(kCGRF, fRefFrameList, "CGRF", getEllipsoid(TRefSystemFactory::kGRS80));
+	fCGRF = getRefFrame<TGeodeticRefFrame>(kCGRF);
+
+	// CGRF sphere
+	createObjectSetIdAndAddToList<TGeodeticRefFrame>(kCGRFSphere, fRefFrameList, "CGRFSphere", getEllipsoid(TRefSystemFactory::kSphere));
+	fCGRFSphere = getRefFrame<TGeodeticRefFrame>(kCGRFSphere);
+}
+
+void TRefSystemFactory::addGenericETRFandITRF()
+{
+	std::string itrfIn("ITRFin"), itrfOut("ITRFout"), etrfIn("ETRFin"), etrfOut("ETRFout");
+	TReal initEpoch = NO_VALf;
+	std::string initSolution = "noSolution";
+
+	// Generic ITRF solution at specified epoch (input)
+	createObjectSetIdAndAddToList<TTerrestrialReferenceFrame>(kITRFin, fRefFrameList, itrfIn, getEllipsoid(TRefSystemFactory::kGRS80), initEpoch, initSolution);
+	fITRFin = getRefFrame<TTerrestrialReferenceFrame>(kITRFin);
+
+	// Generic ITRF solution at specified epoch (output)
+	createObjectSetIdAndAddToList<TTerrestrialReferenceFrame>(kITRFout, fRefFrameList, itrfOut, getEllipsoid(TRefSystemFactory::kGRS80), initEpoch, initSolution);
+	fITRFout = getRefFrame<TTerrestrialReferenceFrame>(kITRFout);
+
+	// Generic ETRF solution at specified epoch (input)
+	createObjectSetIdAndAddToList<TTerrestrialReferenceFrame>(kETRFin, fRefFrameList, etrfIn, getEllipsoid(TRefSystemFactory::kGRS80), initEpoch, initSolution);
+	fETRFin = getRefFrame<TTerrestrialReferenceFrame>(kETRFin);
+
+	// Generic ETRF solution at specified epoch (output)
+	createObjectSetIdAndAddToList<TTerrestrialReferenceFrame>(kETRFout, fRefFrameList, etrfOut, getEllipsoid(TRefSystemFactory::kGRS80), initEpoch, initSolution);
+	fETRFout = getRefFrame<TTerrestrialReferenceFrame>(kETRFout);
+}
+
+void TRefSystemFactory::addFrenchProjections()
+{
+	// FrenchRGF93 zone 5 (CC46)
+	TAReferenceFrame *pFrenchRGF93_CC46_eh = new TRGF93CC46Projection("FrenchRGF93_CC46_eh");
+	setIdAndAddToList(pFrenchRGF93_CC46_eh, kFrenchRGF93_CC46_eh, fRefFrameList);
+
+	TAReferenceFrame *pFrenchRGF93_CC46_raf = new TRGF93CC46Projection("FrenchRGF93_CC46_ign69");
+	setIdAndAddToList(pFrenchRGF93_CC46_raf, kFrenchRGF93_CC46_ign69, fRefFrameList);
+
+	// Lambert93
+	TAReferenceFrame *pLambert93_eh = new TLambert93Projection("Lambert93_eh");
+	setIdAndAddToList(pLambert93_eh, kLambert93_eh, fRefFrameList);
+
+	TAReferenceFrame *pLambert93_raf = new TLambert93Projection("Lambert93_ign69");
+	setIdAndAddToList(pLambert93_raf, kLambert93_ign69, fRefFrameList);
+}
+
+void TRefSystemFactory::addSwissProjections()
+{
+#ifdef USE_SWISSTOPO
+	// Swiss LV95
+	TAReferenceFrame *pLV95_eh = new TLV95Projection("LV95_eh");
+	setIdAndAddToList(pLV95_eh, kSwissLV95_eh, fRefFrameList);
+
+	TAReferenceFrame *pLV95_lhn95 = new TLV95Projection("LV95_lhn95");
+	setIdAndAddToList(pLV95_lhn95, kSwissLV95_lhn95, fRefFrameList);
+
+	TAReferenceFrame *pLV95_ln02 = new TLV95Projection("LV95_ln02");
+	setIdAndAddToList(pLV95_ln02, kSwissLV95_ln02, fRefFrameList);
+
+	// Swiss LV03
+	TAReferenceFrame *pLV03_eh = new TLV03Projection("LV03_eh");
+	setIdAndAddToList(pLV03_eh, kSwissLV03_eh, fRefFrameList);
+
+	TAReferenceFrame *pLV03_ln02 = new TLV03Projection("LV03_ln02");
+	setIdAndAddToList(pLV03_ln02, kSwissLV03_ln02, fRefFrameList);
+
+	TAReferenceFrame *pLV03_lhn95 = new TLV03Projection("LV03_lhn95");
+	setIdAndAddToList(pLV03_lhn95, kSwissLV03_lhn95, fRefFrameList);
+#endif
+}
+
+void TRefSystemFactory::addTerrestrialRefFramesTransformations()
+{
+	// Transformation ITRF-ETRF, ETRF-ITRF
+	auto itrf2020_toPastITRF = makeMatrix(TrfTransformationCoefficients::coeffITRF2020_toPastITRF);
+	auto itrfyy_toETRFyy = makeMatrix(TrfTransformationCoefficients::coeffITRFyy_toETRFyy);
+
+	auto pITRFin = getTerrRefFrame(kITRFin);
+	auto pITRFout = getTerrRefFrame(kITRFout);
+	auto pETRFin = getTerrRefFrame(kETRFin);
+	auto pETRFout = getTerrRefFrame(kETRFout);
+
+	// Transformtion between ITRF and ETRF
+	TTrf2TrfTransformation *pITRFin2ETRFout = new TTrf2TrfTransformation(pITRFin, pETRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
+	setIdAndAddToList(pITRFin2ETRFout, kITRFin2ETRFout, fTransformList);
+	// Inverse
+	TTrf2TrfTransformation *pETRFin2ITRFout = new TTrf2TrfTransformation(pETRFin, pITRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
+	setIdAndAddToList(pETRFin2ITRFout, kETRFin2ITRFout, fTransformList);
+
+	// Transformation between 2 ITRF
+	TTrf2TrfTransformation *pITRFin2ITRFout = new TTrf2TrfTransformation(pITRFin, pITRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
+	setIdAndAddToList(pITRFin2ITRFout, kITRFin2ITRFout, fTransformList);
+
+	// Transformation between 2 ETRF
+	TTrf2TrfTransformation *pETRFin2ETRFout = new TTrf2TrfTransformation(pETRFin, pETRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
+	setIdAndAddToList(pETRFin2ETRFout, kETRFin2ETRFout, fTransformList);	
+}
+
+void TRefSystemFactory::addFrenchTransformations()
+{
+	// Transformation between projected CC46 and RGF93
+
+	// Ellipsoidal height
+	TRGF93ZoneTransformation *pRGF932CC46eh = new TRGF93ZoneTransformation(true, true);
+	addTransformationAndInverse(pRGF932CC46eh, kRGF932CC46eh, kCC46eh2RGF93, fTransformList);
+
+	// Altitude NGF-IGN69
+	TRGF93ZoneTransformation *pRGF932CC46raf = new TRGF93ZoneTransformation(true, false);
+	addTransformationAndInverse(pRGF932CC46raf, kRGF932CC46ign69, kCC46raf2RGF93, fTransformList);
+	
+
+	// Transformation between RGF93v2b and Lambert93
+	// Ellipsoidal height
+	TLambert93Transformation *pRGF932Lambert93eh = new TLambert93Transformation(true, true);
+	addTransformationAndInverse(pRGF932Lambert93eh, kRGF932Lambert93eh, kLambert93eh2RGF93, fTransformList);
+
+	// Altiude NGF-IGN69
+	TLambert93Transformation *pRGF932Lambert93ign69 = new TLambert93Transformation(true, false);
+	addTransformationAndInverse(pRGF932Lambert93ign69, kRGF932Lambert93ign69, kLambert93ign692RGF93, fTransformList);
+}
+
+void TRefSystemFactory::addSwissTransformations()
+{
+#ifdef USE_SWISSTOPO
+	// Transformation between CH1903plus and LV95 (ellipsoidal height)
+	TLV95Transformation *pLV95eh = new TLV95Transformation(true, "eh");
+	addTransformationAndInverse(pLV95eh, kCH1903plus2SwissLV95eh, kSwissLV95eh2CH1903plus, fTransformList);
+
+	// Transformation between CH1903plus and LV95 (orthometric height)
+	TLV95Transformation *pLV95lh95 = new TLV95Transformation(true, "lhn95");
+	addTransformationAndInverse(pLV95lh95, kCH1903plus2SwissLV95lhn95, kSwissLV95lhn952CH1903plus, fTransformList);
+
+	// Transformation between CH1903plus and LV95 (leveled height)
+	TLV95Transformation *pLV95ln02 = new TLV95Transformation(true, "ln02");
+	addTransformationAndInverse(pLV95ln02, kCH1903plus2SwissLV95ln02, kSwissLV95ln022CH1903plus, fTransformList);
+	
+	// Transformation between LV95 and LV03 (ellipsoidal height)
+	TLV03Transformation *pLV03eh = new TLV03Transformation(true, "eh");
+	addTransformationAndInverse(pLV03eh, kSwissLV95eh2SwissLV03eh, kSwissLV03eh2SwissLV95eh, fTransformList);
+
+	// Transformation between LV95 (ellipsoidal height) and LV03 (leveled height)
+	TLV03Transformation *pLV03ln02 = new TLV03Transformation(true, "ln02");
+	addTransformationAndInverse(pLV03ln02, kSwissLV95eh2SwissLV03ln02, kSwissLV03ln022SwissLV95eh, fTransformList);
+
+	// Transformation between LV95 (ellipsoidal height) and LV03 (orthometric height)
+	TLV03Transformation *pLV03lhn95 = new TLV03Transformation(true, "lhn95");
+	addTransformationAndInverse(pLV03lhn95, kSwissLV95eh2SwissLV03lhn95, kSwissLV03lhn952SwissLV95eh, fTransformList);
+#endif
+}
+
+void TRefSystemFactory::addLocalRefFrameTransformations()
+{
+	// Empty transformation between local RF and CCS (transformation are updated with a transformation file)
+	TLocal2CCSTransformation *pLocalRFin2CCS = new TLocal2CCSTransformation(getRefFrame(kLocalRFin), getRefFrame(kCCS), TScaleFactor(), TRotationMatrix(), TTranslation());
+	setIdAndAddToList(pLocalRFin2CCS, kLocalRFin2CCS, fTransformList);
+	// Inverse
+	TLocal2CCSTransformation *pCCS2LocalRFout = new TLocal2CCSTransformation(getRefFrame(kCCS), getRefFrame(kLocalRFout), TScaleFactor(), TRotationMatrix(), TTranslation());
+	setIdAndAddToList(pCCS2LocalRFout, kCCS2LocalRFout, fTransformList);
 }
 
 
