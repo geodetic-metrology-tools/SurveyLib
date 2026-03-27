@@ -42,6 +42,9 @@ public:
 		/// default constructor
 		TAGeoidModel();
 
+		/// constructor taking the name, the definition reference frame and ellipsoid, and the calculation reference frame
+		TAGeoidModel(const std::string &name, const TRefSystemFactory::EGeoid &geoidId, TAReferenceFrame *def, TReferenceEllipsoid *ell, TAReferenceFrame *calc);
+
 		/// Destructor
 		virtual  ~TAGeoidModel();
 	//@}
@@ -49,15 +52,15 @@ public:
 	//!@name Member functions
 	//@{
 		/*! \Returns the geoidal undulation (geoidal height) at the given Point's position*/
-		virtual TLength getN(const TSpatialPosition&) const {TLength null; return null;}
+		virtual TLength getN(const TSpatialPosition &) const = 0;
 		
 		/*! \Returns the deflection of the vertical in the prime vertical
 		at the given Point's position*/
-		virtual TAngle getEta(const TSpatialPosition&) const {TAngle null; return null;}
+		virtual TAngle getEta(const TSpatialPosition &) const = 0;
 
 		/*!\Returns the deflection of the vertical in the meridian
 		at the given Point's position*/	
-		virtual TAngle getXi(const TSpatialPosition&) const {TAngle null; return null;}
+		virtual TAngle getXi(const TSpatialPosition &) const = 0;
 		
 		/*! \Returns the Laplace correction at the given Point's position*/	
 		virtual TAngle getDAlpha(const TSpatialPosition&) const {TAngle null; return null;}
@@ -67,16 +70,16 @@ public:
 		virtual TAngle getDAlpha(const TSpatialPosition&, const TAngle&) const {TAngle null; return null;}
 
 		/*! \Returns the name of the geoid*/
-		virtual std::string	getName() const = 0;
+		std::string getName() const { return fName; }
 
 		/*! \Returns the definition reference frame*/
-		virtual TAReferenceFrame* getDefRefFrame() const {return 0;}
+		TAReferenceFrame *getDefRefFrame() const { return fDefRFPtr; }
 
 		/*! \Returns the definition reference ellipsoid*/
-		virtual TReferenceEllipsoid* getDefRefEll() const {return 0;}
+		TReferenceEllipsoid *getDefRefEll() const { return fDefEllPtr; }
 
 		/*! \Returns the calculation reference frame*/
-		virtual TAReferenceFrame* getCalcRefFrame() const {return 0;}
+		TAReferenceFrame *getCalcRefFrame() const { return fCalcRFPtr; }
 
 		/*! \Returns the geoid identifier*/
 		TRefSystemFactory::EGeoid getId() const { return fGeoidId; }

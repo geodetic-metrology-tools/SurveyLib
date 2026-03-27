@@ -19,21 +19,14 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-TCernSphereGeoid::TCernSphereGeoid() : fName("")
+TCernSphereGeoid::TCernSphereGeoid() : TAGeoidModel()
 {//Default constructor
-	fDefRFPtr = 0;
-	fDefEllPtr = 0;
-	fCalcRFPtr = 0;
 }
 
 
 TCernSphereGeoid::TCernSphereGeoid(const std::string &name, const TRefSystemFactory::EGeoid &geoidId, TAReferenceFrame *def, TReferenceEllipsoid *ell, TAReferenceFrame *calc) :
-	fName(name), fGeoidId(geoidId)
-
+	TAGeoidModel(name, geoidId, def, ell, calc)
 { // Constructor
-	fDefRFPtr = def;
-	fDefEllPtr = ell;
-	fCalcRFPtr = calc;
 }
 
 

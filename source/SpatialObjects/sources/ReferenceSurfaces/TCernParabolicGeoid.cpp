@@ -38,8 +38,7 @@ const TReal TCernParabolicGeoid::scaleFactorM = LITERAL(0.01);
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-TCernParabolicGeoid::TCernParabolicGeoid() :fName(""), fDefRFPtr(0),
-fCalcRFPtr(0), fDefEllPtr(0)
+TCernParabolicGeoid::TCernParabolicGeoid() : TAGeoidModel()
 {
 	fA = 0;
 	fB = 0;
@@ -97,7 +96,7 @@ TCernParabolicGeoid::TCernParabolicGeoid(const std::string &name,
 	TAReferenceFrame *def,
 	TReferenceEllipsoid *ell,
 	TAReferenceFrame *calc) :
-	fName(name), fGeoidId(geoidId), fA(a), fB(b), fThs(ths), fDefRFPtr(def), fDefEllPtr(ell), fCalcRFPtr(calc)
+	TAGeoidModel(name, geoidId, def, ell, calc), fA(a), fB(b), fThs(ths)
 {
 	// set the derived parameters of the paraboloid
 	TReal thc, azp;

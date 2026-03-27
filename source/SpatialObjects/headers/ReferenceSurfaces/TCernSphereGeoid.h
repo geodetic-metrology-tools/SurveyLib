@@ -76,52 +76,10 @@ public:
 		/// Returns the deflection of the vertical in the meridian at the given Point's position	
 		virtual  TAngle  getXi( const TSpatialPosition& ) const;
 		
-		/// Returns the Laplace correction at the given Point's position	
-		virtual  TAngle  getDAlpha( const TSpatialPosition& ) const;
-
 		/// Returns the Laplace correction at the given Point's position (phi is given)	
 		virtual  TAngle  getDAlpha( const TSpatialPosition&, const TAngle& ) const;
-		
-		/// Returns the name of the geoid
-		virtual  std::string	 getName()  const { return fName; }
-
-		/// Set the definiton reference frame
-		void setDefRefFrame(TAReferenceFrame* def) { fDefRFPtr = def; return; }
-
-		/// Set the definition reference ellipsoid
-		void setRefEll(TReferenceEllipsoid* ell) { fDefEllPtr = ell; return; }
-
-		/// Set the Calculation Reference Frame
-		void setCalcRefFrame(TAReferenceFrame* calc) { fCalcRFPtr = calc; return; }
-
-		/// Get the definition reference frame
-		virtual TAReferenceFrame* getDefRefFrame() const { return fDefRFPtr; }
-
-		/// Get the definition reference ellipsoid
-		virtual TReferenceEllipsoid* getDefRefEll() const { return fDefEllPtr; }
-
-		/// Get the calculation reference frame
-		virtual TAReferenceFrame* getCalcRefFrame() const { return fCalcRFPtr; }
-
-		/// Return the geoid identifier
-		virtual TRefSystemFactory::EGeoid getGeoidId() const { return fGeoidId; }
-
 	//@}
 
-private:
-
-	// member attributes
-	std::string						fName; /*!< name  */
-		
-	TAReferenceFrame*			fDefRFPtr; /*!< pointer to the def. reference frame  */
-	TReferenceEllipsoid*		fDefEllPtr; /*!< pointer to the reference ellispoid  */
-	TAReferenceFrame*			fCalcRFPtr; /*!< pointer to the  calc. reference frame */
-
-
-	TRefSystemFactory::EGeoid		fGeoidId; /*!< geoid indentifier */
-
-
-	//ClassDef(TCernSphereGeoid, 1)
 };
 /*@}*/
 
