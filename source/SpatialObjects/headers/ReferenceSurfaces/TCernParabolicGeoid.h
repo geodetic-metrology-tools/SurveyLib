@@ -98,21 +98,6 @@ public:
 		/// Returns the Laplace correction at the given Point's position	
 		virtual TAngle getDAlpha(const TSpatialPosition &, const TAngle &) const;
 
-		/// Returns the name of the geoid
-		virtual  std::string	 getName()  const { return fName; }
-
-		/// Get the definition reference frame
-		virtual TAReferenceFrame* getDefRefFrame() const { return fDefRFPtr; }
-
-		/// Get the definition reference ellipsoid
-		virtual TReferenceEllipsoid* getDefRefEll() const { return fDefEllPtr; }
-
-		/// Get the calculation reference frame
-		virtual TAReferenceFrame* getCalcRefFrame() const { return fCalcRFPtr; }
-
-		/// return the geoid identifier
-		virtual  TRefSystemFactory::EGeoid  getGeoidId()  const { return fGeoidId; }
-
 	//@}
 
 private:
@@ -125,19 +110,10 @@ private:
 	
 	
 	// member attributes
-	std::string  fName;
 	TReal  fA;
 	TReal  fB;
 	TReal  fThs;
 	TReal  costhc, cosazp, sinthc, sinazp;
-
-	TAReferenceFrame*			fDefRFPtr;
-	TReferenceEllipsoid*		fDefEllPtr;
-	TAReferenceFrame*			fCalcRFPtr;
-
-
-	TRefSystemFactory::EGeoid		fGeoidId;
-	
 
 	//ClassDef(TCernParabolicGeoid, 1)
 };

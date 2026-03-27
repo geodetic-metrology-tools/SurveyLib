@@ -4,17 +4,16 @@
 
 #include "TAGeoidModel.h"
 
-
-
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////////
-TAGeoidModel::TAGeoidModel() 
+TAGeoidModel::TAGeoidModel() : fName(""), fDefRFPtr(nullptr), fDefEllPtr(nullptr), fCalcRFPtr(nullptr), fGeoidId(TRefSystemFactory::EGeoid::kNoGeoid)
 {//Default constructor
+}
+
+TAGeoidModel::TAGeoidModel(const std::string &name, const TRefSystemFactory::EGeoid &geoidId, TAReferenceFrame *def, TReferenceEllipsoid *ell, TAReferenceFrame *calc):
+	fName(name), fDefRFPtr(def), fDefEllPtr(ell), fCalcRFPtr(calc), fGeoidId(geoidId)
+{
 }
 
 TAGeoidModel::~TAGeoidModel()

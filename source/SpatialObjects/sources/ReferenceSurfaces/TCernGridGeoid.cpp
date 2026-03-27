@@ -18,16 +18,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////////
-TCernGridGeoid::TCernGridGeoid() : fName(""), fDownLeft(0,0,0,TCoordSysFactory::k3DCartesian),
- fUpRight(0,0,0,TCoordSysFactory::k3DCartesian)
+TCernGridGeoid::TCernGridGeoid() : TAGeoidModel(), fDownLeft(0,0,0,TCoordSysFactory::k3DCartesian), fUpRight(0, 0, 0, TCoordSysFactory::k3DCartesian), fNMatrix(0), fEtaMatrix(0), fXiMatrix(0)
 {//Default constructor
-	fNMatrix = 0;
-	fEtaMatrix = 0;
-	fXiMatrix = 0;
-
-	fDefRFPtr = 0;
-	fDefEllPtr = 0;
-	fCalcRFPtr = 0;
 }
 
 
@@ -41,7 +33,7 @@ TCernGridGeoid::TCernGridGeoid(const std::string &name,
 	TAReferenceFrame *def,
 	TReferenceEllipsoid *ell,
 	TAReferenceFrame *calc) :
-	fName(name), fGeoidId(geoidId), fDownLeft(downLeft), fUpRight(upRight)
+	TAGeoidModel(name, geoidId, def, ell, calc), fDownLeft(downLeft), fUpRight(upRight)
 { // Constructor
 
 	fNMatrix.setDimensions(N->numRows(), N->numCols());
@@ -51,10 +43,6 @@ TCernGridGeoid::TCernGridGeoid(const std::string &name,
 	fNMatrix = *N;
 	fEtaMatrix = *Eta;
 	fXiMatrix = *Xsi;
-
-	fDefRFPtr = def;
-	fDefEllPtr = ell;
-	fCalcRFPtr = calc;
 }
 
 
