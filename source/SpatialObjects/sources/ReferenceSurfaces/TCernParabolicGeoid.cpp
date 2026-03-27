@@ -205,38 +205,15 @@ bool TCernParabolicGeoid::computeLocalParaboloidCoordinates(const TSpatialPositi
 	return true;
 }
 
-
-TAngle	TCernParabolicGeoid::getDAlpha( const TSpatialPosition& sp ) const
+TAngle TCernParabolicGeoid::getDAlpha(const TSpatialPosition &sp, const TAngle &latitude) const
 {
-	// deep copy of TSpatialPosition transformed in same reference frame as the geoid DefinitionRF
-	TSpatialPosition position = getSpatialPositionInRefFrame(sp, fDefRFPtr);
+	// deep copy of TSpatialPosition and check the reference frame is the same as the geoid CalculationRF
+	TSpatialPosition position = getSpatialPositionInRefFrame(sp, fCalcRFPtr); 
 
-	TAngle latitude;
-	TAngle fDAlphaValue;
-	
-	latitude = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();
-
-	fDAlphaValue = computeDAlpha(position, latitude);
-	return fDAlphaValue;
-}
-
-TAngle	TCernParabolicGeoid::getDAlpha( const TSpatialPosition& sp, const TAngle& latitude ) const
-{
-	TAngle fDAlphaValue;
-	
-	fDAlphaValue = computeDAlpha(sp, latitude);
-	return fDAlphaValue;
-}
-
-TAngle TCernParabolicGeoid::computeDAlpha(const TSpatialPosition &sp, const TAngle &latitude) const
-{
+	TReal phi = latitude.getRadiansValue();
 	TAngle eta, fDAlphaValue;
-
-	// deep copy of TSpatialPosition transformed in same reference frame as the geoid CalculationRF
-	TSpatialPosition position = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
-	
 	eta = getEta(position);
-	fDAlphaValue = eta * tanq(latitude.getRadiansValue());
+	fDAlphaValue = eta * tanq(phi);
 	return fDAlphaValue;
 }
 

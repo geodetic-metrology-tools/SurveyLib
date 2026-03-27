@@ -64,15 +64,6 @@ TAngle TCernSphereGeoid::getXi ( const TSpatialPosition& sp) const
 	return xsi;
 }
 
-
-TAngle	TCernSphereGeoid::getDAlpha ( const TSpatialPosition& sp ) const
-{
-	ignoring(sp);
-	TAngle alpha (LITERAL(0.0));
-	return alpha;
-}
-
-
 TAngle	TCernSphereGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& latitude ) const
 {
 	ignoring(sp);

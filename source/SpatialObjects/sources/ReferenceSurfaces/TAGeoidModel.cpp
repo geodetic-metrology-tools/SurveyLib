@@ -19,6 +19,17 @@ TAGeoidModel::TAGeoidModel(const std::string &name, const TRefSystemFactory::EGe
 TAGeoidModel::~TAGeoidModel()
 {//Destructor
 }
+
+TAngle TAGeoidModel::getDAlpha(const TSpatialPosition& sp) const
+{
+	// deep copy of TSpatialPosition and ensure the reference frame is the same as the geoid DefinitionRF
+	TSpatialPosition position = getSpatialPositionInRefFrame(sp, fDefRFPtr);
+	TAngle latitude = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();
+
+	return getDAlpha(position, latitude);
+
+}
+
 TSpatialPosition TAGeoidModel::getSpatialPositionInRefFrame(const TSpatialPosition &sp, TAReferenceFrame* refFrame) const
 {
 	// deep copy of TSpatialPosition
@@ -31,6 +42,15 @@ TSpatialPosition TAGeoidModel::getSpatialPositionInRefFrame(const TSpatialPositi
 	}
 
 	return position;
+}
+
+TAngle TAGeoidModel::computeLaplaceCorrection(const TSpatialPosition &position, const TAngle &latitude) const
+{
+	TReal phi = latitude.getRadiansValue();
+	TAngle eta, fDAlphaValue;
+	eta = getEta(position);
+	fDAlphaValue = eta * tanq(phi);
+	return fDAlphaValue;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 //END

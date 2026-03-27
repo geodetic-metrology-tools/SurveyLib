@@ -102,75 +102,21 @@ TAngle TCernGridGeoid::getXi ( const TSpatialPosition& sp) const
 	return xsi;
 }
 
-
-TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp ) const
-{
-	// deep copy of TSpatialPosition
-	TSpatialPosition position(sp);
-
-	// RF of TSpatialPosition must be the same as the geoid CalculationRF
-	if (position.getRefFrame() != fDefRFPtr)
-	{
-		position.transform(fDefRFPtr);
-	}
-
-	
-	// computation of phi (latitude for the spatial position)
-	TAngle latitude;
-	TReal phi;
-	TAngle eta, fDAlphaValue;
-	
-	latitude = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();
-	phi = latitude.getRadiansValue();
-
-
-	// transformation in the calculation RF 
-	position.transform(fCalcRFPtr);
-
-
-	// the spatial position must be in the LEP grid
-	fDAlphaValue.setRadiansValue(std::numeric_limits<TReal>::quiet_NaN());
-	if (isInGrid(position))
-	{
-		eta = getEta(position); // / (LITERAL(6.366) * 100000);
-		fDAlphaValue = eta * tanq(phi);
-	}
-	if (isnan(fDAlphaValue.getRadiansValue()))
-	{
-		std::stringstream ss = generateNotInLepGridMessage("getDAlpha", position);
-		throw TNotInLepGridException(ss.str());
-	}
-	return fDAlphaValue;
-}
-
 TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& latitude ) const
 {
-	// deep copy of TSpatialPosition
-	TSpatialPosition position(sp);
+	// deep copy of TSpatialPosition transformed in the calculation RF
+	TSpatialPosition position = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
 
-	TReal phi;
-	TAngle eta, fDAlphaValue;
-	
-	phi = latitude.getRadiansValue();
-
-
-	// RF of TSpatialPosition must be the same as the geoid CalculationRF
-	if (position.getRefFrame() != fCalcRFPtr)
-	{
-		position.transform(fCalcRFPtr);
-	}
-
-	// the spatial position must be in the LEP grid
-	fDAlphaValue.setRadiansValue(std::numeric_limits<TReal>::quiet_NaN());
+	TAngle fDAlphaValue;
 	if (isInGrid(position))
 	{
-		eta = getEta(position); // / (LITERAL(6.366) * 100000);
-		fDAlphaValue = eta * tanq(phi);
-	}
-	if (isnan(fDAlphaValue.getRadiansValue()))
-	{
-		std::stringstream ss = generateNotInLepGridMessage("getDApha", position);
-		throw TNotInLepGridException(ss.str());
+		fDAlphaValue.setRadiansValue(std::numeric_limits<TReal>::quiet_NaN());
+		fDAlphaValue = computeLaplaceCorrection(position, latitude);
+		if (isnan(fDAlphaValue.getRadiansValue()))
+		{
+			std::stringstream ss = generateNotInLepGridMessage("getDAlpha", position);
+			throw TNotInLepGridException(ss.str());
+		}
 	}
 	return fDAlphaValue;
 }
