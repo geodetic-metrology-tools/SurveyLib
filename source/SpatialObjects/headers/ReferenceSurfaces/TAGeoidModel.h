@@ -63,7 +63,7 @@ public:
 		virtual TAngle getXi(const TSpatialPosition &) const = 0;
 		
 		/*! \Returns the Laplace correction at the given Point's position*/	
-		virtual TAngle getDAlpha(const TSpatialPosition&) const {TAngle null; return null;}
+		TAngle getDAlpha(const TSpatialPosition &sp) const;
 
 		/*! \Returns the Laplace correction at the given Point's position
 		(phi is given)*/

@@ -91,9 +91,6 @@ public:
 	
 		/// Returns the deflection of the vertical in the meridian at the given Point's position	
 		virtual  TAngle  getXi( const TSpatialPosition& ) const;
-		
-		/// Returns the Laplace correction at the given Point's position	
-		virtual  TAngle  getDAlpha( const TSpatialPosition& ) const;
 
 		/// Returns the Laplace correction at the given Point's position	
 		virtual TAngle getDAlpha(const TSpatialPosition &, const TAngle &) const;
