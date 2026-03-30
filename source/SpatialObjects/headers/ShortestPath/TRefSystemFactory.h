@@ -286,6 +286,17 @@ private:
 		list.push_back(obj);
 	}
 
+	/*! Create and add a transformation and its inverse to the list, setting their Ids */
+	template<typename TTransfomation, typename... Args>
+	void addTransformationPair(ERefFrameTransform forwardId, ERefFrameTransform inverseId, Args &&...args)
+	{
+		auto *forwardTransformation = new TTransfomation(std::forward<Args>(args)...);
+		setIdAndAddToList(forwardTransformation, forwardId, fTransformList);
+
+		auto *inverseTransformation = forwardTransformation->inverse();
+		setIdAndAddToList(inverseTransformation, inverseId, fTransformList);
+	}
+
 	/*! Add a transformation and its inverse to the list, setting their Ids */
 	template<typename T, typename ListT, typename IdT>
 	TARefFrameTransformation *addTransformationAndInverse(T *forward, IdT forwardId, IdT inverseId, ListT &list)
