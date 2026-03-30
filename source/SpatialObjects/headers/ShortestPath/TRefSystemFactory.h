@@ -278,6 +278,14 @@ private:
 		list.push_back(new T(std::forward<Args>(args)...));
 	}
 
+	/*! Create object, set Id and add to list*/
+	template<typename T, typename ListT, typename IdT, typename... Args>
+	void createObjectSetIdAndAddToList(IdT id, ListT &list, Args &&...args)
+	{
+		T *obj = new T(std::forward<Args>(args)...);
+		setIdAndAddToList(obj, id, list);
+	}
+
 	/*! Set Id and add to the list */
 	template<typename ListT, typename T, typename IdT>
 	void setIdAndAddToList(T *obj, IdT id, ListT &list)
