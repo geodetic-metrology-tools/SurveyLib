@@ -107,8 +107,7 @@ void TRefSystemFactory::init()
 
 
 		// CGRF Transverse Mercator Projection
-	TAReferenceFrame *pCGRFtm_eh = new TTransverseMercatorProjection("CGRFtm_eh");
-	setIdAndAddToList(pCGRFtm_eh, kCGRFMercator_eh, fRefFrameList);
+	createObjectSetIdAndAddToList<TTransverseMercatorProjection>(kCGRFMercator_eh, fRefFrameList, "CGRFtm_eh");
 
 		// ITRF97 at epoch 1998.5.Link between global and local frames
 	TReal epoch = 1998.5;
@@ -491,42 +490,26 @@ void TRefSystemFactory::addGenericETRFandITRF()
 void TRefSystemFactory::addFrenchProjections()
 {
 	// FrenchRGF93 zone 5 (CC46)
-	TAReferenceFrame *pFrenchRGF93_CC46_eh = new TRGF93CC46Projection("FrenchRGF93_CC46_eh");
-	setIdAndAddToList(pFrenchRGF93_CC46_eh, kFrenchRGF93_CC46_eh, fRefFrameList);
-
-	TAReferenceFrame *pFrenchRGF93_CC46_raf = new TRGF93CC46Projection("FrenchRGF93_CC46_ign69");
-	setIdAndAddToList(pFrenchRGF93_CC46_raf, kFrenchRGF93_CC46_ign69, fRefFrameList);
+	createObjectSetIdAndAddToList<TRGF93CC46Projection>(kFrenchRGF93_CC46_eh, fRefFrameList, "FrenchRGF93_CC46_eh");
+	createObjectSetIdAndAddToList<TRGF93CC46Projection>(kFrenchRGF93_CC46_ign69, fRefFrameList, "FrenchRGF93_CC46_ign69");
 
 	// Lambert93
-	TAReferenceFrame *pLambert93_eh = new TLambert93Projection("Lambert93_eh");
-	setIdAndAddToList(pLambert93_eh, kLambert93_eh, fRefFrameList);
-
-	TAReferenceFrame *pLambert93_raf = new TLambert93Projection("Lambert93_ign69");
-	setIdAndAddToList(pLambert93_raf, kLambert93_ign69, fRefFrameList);
+	createObjectSetIdAndAddToList<TLambert93Projection>(kLambert93_eh, fRefFrameList, "Lambert93_eh");
+	createObjectSetIdAndAddToList<TLambert93Projection>(kLambert93_ign69, fRefFrameList, "Lambert93_ign69");
 }
 
 void TRefSystemFactory::addSwissProjections()
 {
 #ifdef USE_SWISSTOPO
 	// Swiss LV95
-	TAReferenceFrame *pLV95_eh = new TLV95Projection("LV95_eh");
-	setIdAndAddToList(pLV95_eh, kSwissLV95_eh, fRefFrameList);
-
-	TAReferenceFrame *pLV95_lhn95 = new TLV95Projection("LV95_lhn95");
-	setIdAndAddToList(pLV95_lhn95, kSwissLV95_lhn95, fRefFrameList);
-
-	TAReferenceFrame *pLV95_ln02 = new TLV95Projection("LV95_ln02");
-	setIdAndAddToList(pLV95_ln02, kSwissLV95_ln02, fRefFrameList);
+	createObjectSetIdAndAddToList<TLV95Projection>(kSwissLV95_eh, fRefFrameList, "LV95_eh");
+	createObjectSetIdAndAddToList<TLV95Projection>(kSwissLV95_lhn95, fRefFrameList, "LV95_lhn95");
+	createObjectSetIdAndAddToList<TLV95Projection>(kSwissLV95_ln02, fRefFrameList, "LV95_ln02");
 
 	// Swiss LV03
-	TAReferenceFrame *pLV03_eh = new TLV03Projection("LV03_eh");
-	setIdAndAddToList(pLV03_eh, kSwissLV03_eh, fRefFrameList);
-
-	TAReferenceFrame *pLV03_ln02 = new TLV03Projection("LV03_ln02");
-	setIdAndAddToList(pLV03_ln02, kSwissLV03_ln02, fRefFrameList);
-
-	TAReferenceFrame *pLV03_lhn95 = new TLV03Projection("LV03_lhn95");
-	setIdAndAddToList(pLV03_lhn95, kSwissLV03_lhn95, fRefFrameList);
+	createObjectSetIdAndAddToList<TLV03Projection>(kSwissLV03_eh, fRefFrameList, "LV03_eh");
+	createObjectSetIdAndAddToList<TLV03Projection>(kSwissLV03_ln02, fRefFrameList, "LV03_ln02");
+	createObjectSetIdAndAddToList<TLV03Projection>(kSwissLV03_lhn95, fRefFrameList, "LV03_lhn95");
 #endif
 }
 
