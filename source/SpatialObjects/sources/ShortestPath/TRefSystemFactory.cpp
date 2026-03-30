@@ -235,26 +235,17 @@ void TRefSystemFactory::init()
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// Definition of the CERN's ref. frames transformations
 
-		// Transformation between CERN projection XYHs and CCS
-	{
-		TXYHs2MLATransformation* pXYHs2CCS = new TXYHs2MLATransformation(pCernXYHs);
-		addTransformationAndInverse(pXYHs2CCS, kXYHsSphereSPS2CCS, kCCS2XYHsSphereSPS, fTransformList);
-		}
+	// Transformation between CERN projection XYHs and CCS
+	addTransformationPair<TXYHs2MLATransformation>(kXYHsSphereSPS2CCS, kCCS2XYHsSphereSPS, pCernXYHs);
 
 	// Transformation between CCS and CGRF
 	/*Il est equivalent de mettre CG2000 ou CG1985 car les parametres du geoide au niveau de P0,
 	servant a definir la transformation sont equivalent*/
-	{
-		TMLA2GCTransformation *pCCS2CGRF = new TMLA2GCTransformation(pCCS, getGeoid(kCG1985Machine));
-		addTransformationAndInverse(pCCS2CGRF, kCCS2CGRF, kCGRF2CCS, fTransformList);
-	}
+	addTransformationPair<TMLA2GCTransformation>(kCCS2CGRF, kCGRF2CCS, pCCS, getGeoid(kCG1985Machine));
 
 	//Conversion between CGRF (ellipsoid) and CGRF (Transverse Mercator projection)
-	{
-		TGeodetic2Mercator *pCGRF2CGRFMercator = new TGeodetic2Mercator(true);
-		addTransformationAndInverse(pCGRF2CGRFMercator, kCGRF2CGRFMercator, kCGRFMercator2CGRF, fTransformList);
-	}
-
+	addTransformationPair<TGeodetic2Mercator>(kCGRF2CGRFMercator, kCGRFMercator2CGRF, true);
+		
 	// Transformation between CCS and CGRFSphere
 	//rotation pour diriger les axes du CGRFs parallele a ceux du CGRF
 	{
@@ -270,16 +261,10 @@ void TRefSystemFactory::init()
 	}
 
 	// Transformation between LAp0 and LGp0
-	{
-		TLA2LGTransformation* pLAp02LGp0 = new TLA2LGTransformation(pLAp0);
-		addTransformationAndInverse(pLAp02LGp0, kLAp02LGp0, kLGp02LAp0, fTransformList);
-	}
+	addTransformationPair<TLA2LGTransformation>(kLAp02LGp0, kLGp02LAp0, pLAp0);
 
 	//Transformation between LGp0 and CGRF
-	{
-		TLG2GCTransformation* pLGp02CGRF = new TLG2GCTransformation(pLGp0);
-		addTransformationAndInverse(pLGp02CGRF, kLGp02CGRF, kCGRF2LGp0, fTransformList);
-	}
+	addTransformationPair<TLG2GCTransformation>(kLGp02CGRF, kCGRF2LGp0, pLGp0);
 
 	// Helmert Transformation between LAp0 and CCS
 	{
@@ -373,32 +358,25 @@ void TRefSystemFactory::init()
 	addFrenchTransformations();
             
 	// Transformation between CERN projection XYHe and CCS
-	TXYHe2MLATransformation* pXYHe2CCS = new TXYHe2MLATransformation(pCernXYHe);
-	addTransformationAndInverse(pXYHe2CCS, kXYHe2CCS, kCCS2XYHe, fTransformList);
+	addTransformationPair<TXYHe2MLATransformation>(kXYHe2CCS, kCCS2XYHe, pCernXYHe);
 
 	// Transformation between CERN projection X0Y0He and CERN projection XYHe
-	TX0Y0He2XYHeTransformation* pX0Y0He2XYHe =  new TX0Y0He2XYHeTransformation(pCernX0Y0He);
-	addTransformationAndInverse(pX0Y0He2XYHe, kX0Y0He2XYHe, kXYHe2X0Y0He, fTransformList);
+	addTransformationPair<TX0Y0He2XYHeTransformation>(kX0Y0He2XYHe, kXYHe2X0Y0He, pCernX0Y0He);
 
 	// Transformation between CERN projection XYHg (Geoid 2000) and XYHe
-	TXYHg2XYHeTransformation* pXYHg2XYHe = new TXYHg2XYHeTransformation(pCernXYHg00) ;
-	addTransformationAndInverse(pXYHg2XYHe, kXYHg2XYHe, kXYHe2XYHg, fTransformList);
+	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe, kXYHe2XYHg, pCernXYHg00);
 
 	// Transformation between CERN projection XYHg (Geoid 2000Topo) and XYHe
-	TXYHg2XYHeTransformation* pXYHg2XYHe00Topo = new TXYHg2XYHeTransformation(pCernXYHg00Topo) ;
-	addTransformationAndInverse(pXYHg2XYHe00Topo, kXYHg2XYHe00Topo, kXYHe00Topo2XYHg, fTransformList);
+	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe00Topo, kXYHe00Topo2XYHg, pCernXYHg00Topo);
 
-	// Transformation between CERN projection XYHg (Geoid 2000Machine) and XYHe 
-	TXYHg2XYHeTransformation* pXYHg2XYHe00Machine = new TXYHg2XYHeTransformation(pCernXYHg00Machine) ;
-	addTransformationAndInverse(pXYHg2XYHe00Machine, kXYHg2XYHe00Machine, kXYHe00Machine2XYHg, fTransformList);
+	// Transformation between CERN projection XYHg (Geoid 2000Machine) and XYHe
+	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe00Machine, kXYHe00Machine2XYHg, pCernXYHg00Machine);
 
 	// Transformation between CERN projection XYHg (Geoid 1985) and XYHe
-	TXYHg2XYHeTransformation* pXYHg2XYHe85 = new TXYHg2XYHeTransformation(pCernXYHg85) ;
-	addTransformationAndInverse(pXYHg2XYHe85, kXYHg2XYHe85, kXYHe852XYHg, fTransformList);
+	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe85, kXYHe852XYHg, pCernXYHg85);
 
 	// Transformation between CERN projection XYHg (Geoid 1985Machine) and XYHe
-	TXYHg2XYHeTransformation* pXYHg2XYHe85Machine = new TXYHg2XYHeTransformation(pCernXYHg85Machine) ;
-	addTransformationAndInverse(pXYHg2XYHe85Machine, kXYHg2XYHe85Machine, kXYHe85Machine2XYHg, fTransformList);
+	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe85Machine, kXYHe85Machine2XYHg, pCernXYHg85Machine);
 
 	addLocalRefFrameTransformations();
 }
@@ -582,52 +560,40 @@ void TRefSystemFactory::addTerrestrialRefFramesTransformations()
 void TRefSystemFactory::addFrenchTransformations()
 {
 	// Transformation between projected CC46 and RGF93
-
 	// Ellipsoidal height
-	TRGF93ZoneTransformation *pRGF932CC46eh = new TRGF93ZoneTransformation(true, true);
-	addTransformationAndInverse(pRGF932CC46eh, kRGF932CC46eh, kCC46eh2RGF93, fTransformList);
+	addTransformationPair<TRGF93ZoneTransformation>(kRGF932CC46eh, kCC46eh2RGF93, true, true);
 
 	// Altitude NGF-IGN69
-	TRGF93ZoneTransformation *pRGF932CC46raf = new TRGF93ZoneTransformation(true, false);
-	addTransformationAndInverse(pRGF932CC46raf, kRGF932CC46ign69, kCC46raf2RGF93, fTransformList);
-	
+	addTransformationPair<TRGF93ZoneTransformation>(kRGF932CC46ign69, kCC46raf2RGF93, true, false);
 
 	// Transformation between RGF93v2b and Lambert93
 	// Ellipsoidal height
-	TLambert93Transformation *pRGF932Lambert93eh = new TLambert93Transformation(true, true);
-	addTransformationAndInverse(pRGF932Lambert93eh, kRGF932Lambert93eh, kLambert93eh2RGF93, fTransformList);
+	addTransformationPair<TLambert93Transformation>(kRGF932Lambert93eh, kLambert93eh2RGF93, true, true);
 
 	// Altiude NGF-IGN69
-	TLambert93Transformation *pRGF932Lambert93ign69 = new TLambert93Transformation(true, false);
-	addTransformationAndInverse(pRGF932Lambert93ign69, kRGF932Lambert93ign69, kLambert93ign692RGF93, fTransformList);
+	addTransformationPair<TLambert93Transformation>(kRGF932Lambert93ign69, kLambert93ign692RGF93, true, false);
 }
 
 void TRefSystemFactory::addSwissTransformations()
 {
 #ifdef USE_SWISSTOPO
 	// Transformation between CH1903plus and LV95 (ellipsoidal height)
-	TLV95Transformation *pLV95eh = new TLV95Transformation(true, "eh");
-	addTransformationAndInverse(pLV95eh, kCH1903plus2SwissLV95eh, kSwissLV95eh2CH1903plus, fTransformList);
+	addTransformationPair<TLV95Transformation>(kCH1903plus2SwissLV95eh, kSwissLV95eh2CH1903plus, true, "eh");
 
 	// Transformation between CH1903plus and LV95 (orthometric height)
-	TLV95Transformation *pLV95lh95 = new TLV95Transformation(true, "lhn95");
-	addTransformationAndInverse(pLV95lh95, kCH1903plus2SwissLV95lhn95, kSwissLV95lhn952CH1903plus, fTransformList);
+	addTransformationPair<TLV95Transformation>(kCH1903plus2SwissLV95lhn95, kSwissLV95lhn952CH1903plus, true, "lhn95");
 
 	// Transformation between CH1903plus and LV95 (leveled height)
-	TLV95Transformation *pLV95ln02 = new TLV95Transformation(true, "ln02");
-	addTransformationAndInverse(pLV95ln02, kCH1903plus2SwissLV95ln02, kSwissLV95ln022CH1903plus, fTransformList);
+	addTransformationPair<TLV95Transformation>(kCH1903plus2SwissLV95ln02, kSwissLV95ln022CH1903plus, true, "ln02");
 	
 	// Transformation between LV95 and LV03 (ellipsoidal height)
-	TLV03Transformation *pLV03eh = new TLV03Transformation(true, "eh");
-	addTransformationAndInverse(pLV03eh, kSwissLV95eh2SwissLV03eh, kSwissLV03eh2SwissLV95eh, fTransformList);
+	addTransformationPair<TLV03Transformation>(kSwissLV95eh2SwissLV03eh, kSwissLV03eh2SwissLV95eh, true, "eh");
 
 	// Transformation between LV95 (ellipsoidal height) and LV03 (leveled height)
-	TLV03Transformation *pLV03ln02 = new TLV03Transformation(true, "ln02");
-	addTransformationAndInverse(pLV03ln02, kSwissLV95eh2SwissLV03ln02, kSwissLV03ln022SwissLV95eh, fTransformList);
+	addTransformationPair<TLV03Transformation>(kSwissLV95eh2SwissLV03ln02, kSwissLV03ln022SwissLV95eh, true, "ln02");
 
 	// Transformation between LV95 (ellipsoidal height) and LV03 (orthometric height)
-	TLV03Transformation *pLV03lhn95 = new TLV03Transformation(true, "lhn95");
-	addTransformationAndInverse(pLV03lhn95, kSwissLV95eh2SwissLV03lhn95, kSwissLV03lhn952SwissLV95eh, fTransformList);
+	addTransformationPair<TLV03Transformation>(kSwissLV95eh2SwissLV03lhn95, kSwissLV03lhn952SwissLV95eh, true, "lhn95");
 #endif
 }
 
