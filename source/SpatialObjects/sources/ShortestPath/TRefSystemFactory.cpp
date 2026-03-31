@@ -99,8 +99,7 @@ void TRefSystemFactory::init()
 	initEllipsoidList();
 
 	// Definition of the reference frame list
-	std::string itrf97("ITRF97"), wgs("WGS84 (G2139)");
-	std::string ccs("CCS"), etrf93("ETRF93");
+	std::string ccs("CCS");
 
 	addGeodeticRefFrames();
 
@@ -108,44 +107,13 @@ void TRefSystemFactory::init()
 		// CGRF Transverse Mercator Projection
 	createObjectSetIdAndAddToList<TTransverseMercatorProjection>(kCGRFMercator_eh, fRefFrameList, "CGRFtm_eh");
 
-		// ITRF97 at epoch 1998.5.Link between global and local frames
-	TReal epoch = 1998.5;
-	std::string solution = "ITRF 97";
-	TTerrestrialReferenceFrame* pITRF97 = new TTerrestrialReferenceFrame(itrf97, getEllipsoid(TRefSystemFactory::kGRS80), epoch, solution);
-	setIdAndAddToList(pITRF97, kITRF97, fRefFrameList);
+	
 	
 	addGenericETRFandITRF();
+	addSpecificETRFandITRF();
 	addFrenchProjections();
-
-    // ETRF93
-	epoch = 1993;
-	solution = "ETRF 93";
-	TTerrestrialReferenceFrame* pETRF93 = new TTerrestrialReferenceFrame(etrf93, getEllipsoid(TRefSystemFactory::kGRS80), epoch, solution);
-	setIdAndAddToList(pETRF93, kETRF93, fRefFrameList);
-
-	// RGF93
-	epoch = 2019;
-	solution = "ETRF 2000";
-	TTerrestrialReferenceFrame* pRGF93 = new TTerrestrialReferenceFrame("RGF93", getEllipsoid(TRefSystemFactory::kGRS80), epoch, solution);
-	setIdAndAddToList(pRGF93, kRGF93, fRefFrameList);
-
-	// CHTRF95
-	epoch = 1993;
-	solution = "ETRF 93";
-	TTerrestrialReferenceFrame* pCHTRF95 = new TTerrestrialReferenceFrame("CHTRF95", getEllipsoid(TRefSystemFactory::kGRS80), epoch, solution);
-	setIdAndAddToList(pCHTRF95, kCHTRF95, fRefFrameList);
-
-        // CH1903plus
-	TGeodeticRefFrame* pCH1903plus = new TGeodeticRefFrame("CH1903plus", getEllipsoid(TRefSystemFactory::kBessel1841));
-	setIdAndAddToList(pCH1903plus, kCH1903plus, fRefFrameList);
-
 	addSwissProjections();
-
-		// WGS84 (G2139)
-	epoch = 2016;
-	solution = "ITRF 2014";
-	TTerrestrialReferenceFrame *pWGS84_G2139 = new TTerrestrialReferenceFrame(wgs, getEllipsoid(TRefSystemFactory::kWGSEll), epoch, solution);
-	setIdAndAddToList(pWGS84_G2139, kWGS84_G2139, fRefFrameList);
+  
 
 		// Local Geodesique at CERN: origin = principal point of the system = P0 
 	TAngle phi(LITERAL(PHIP0), TAngle::kGons);
@@ -278,43 +246,15 @@ void TRefSystemFactory::init()
 		TAngle k3(LITERAL(0.000991054274), TAngle::kGons);
 		TLength Tx3(LITERAL(76.3768280)), Ty3(LITERAL(131.9389844)), Tz3(-LITERAL(156.1229775));
 		TScaleFactor enl3(LITERAL(1.000000000000000));
-		THelmertRefFrameTransform* pITRF972CGRF = createHelmertRefFrameTransform(pITRF97, fCGRF, om3, p3, k3, Tx3, Ty3, Tz3, enl3);
+		THelmertRefFrameTransform* pITRF972CGRF = createHelmertRefFrameTransform(getRefFrame<TTerrestrialReferenceFrame>(kITRF97), fCGRF, om3, p3, k3, Tx3, Ty3, Tz3, enl3);
 		addTransformationAndInverse(pITRF972CGRF, kITRF972CGRF, kCGRF2ITRF97, fTransformList);
 	}
 
 		////////////////////////////////////////////////////////////////
 		// Transformation ITRF-ETRF, ETRF-ITRF
 		////////////////////////////////////////////////////////////////
-	
-	{
-		auto itrf2020_toPastITRF = makeMatrix(TrfTransformationCoefficients::coeffITRF2020_toPastITRF);
-		auto itrfyy_toETRFyy = makeMatrix(TrfTransformationCoefficients::coeffITRFyy_toETRFyy);
-
-		auto pITRFin = getTerrRefFrame(kITRFin);
-		auto pITRFout = getTerrRefFrame(kITRFout);
-		auto pETRFout = getTerrRefFrame(kETRFout);
-		auto pETRFin = getTerrRefFrame(kETRFin);
-
-		// Transformation between any ITRF an ITRF97 (ep 1998.5)
-		addTrf2TrfTransformationPair(kITRFin2ITRF97, kITRF972ITRFout, pITRFin, pITRF97);
-
-		// Transformation between any ETRF an ITRF97 (ep 1998.5)
-		addTrf2TrfTransformationPair(kITRF972ETRFout, kETRFin2ITRF97, pITRF97, pETRFout);
-
-		// Transformation between ITRF97 (ep1998.5) and ETRF93 (ep 1993.0)
-		addTrf2TrfTransformationPair(kITRF972ETRF93, kETRF932ITRF97, pITRF97, pETRF93);
-
-		// Transformation between ITRF97 (ep1998.5) and RGF93
-		addTrf2TrfTransformationPair(kITRF972RGF93, kRGF932ITRF97, pITRF97, pRGF93);
-
-		// Transformation between ITRF97 (ep1998.5) and CHTRF95
-		addTrf2TrfTransformationPair(kITRF972CHTRF95, kCHTRF952ITRF97, pITRF97, pCHTRF95);
-
-		// Transformation between ITRF97 (ep1998.5) and WGS84 (G2139)
-		addTrf2TrfTransformationPair(kITRF972WGS84, kWGS842ITRF97, pITRF97, pWGS84_G2139);
-		
 		addTerrestrialRefFramesTransformations();
-	}
+
         ////////////////////////////////////////////////////////////////
 		// Helmert Transformation between ETRF93 (ep1993) and CH1903plus
         ////////////////////////////////////////////////////////////////
@@ -324,6 +264,9 @@ void TRefSystemFactory::init()
 		TLength Tx3(LITERAL(-674.374)), Ty3(LITERAL(-15.056)), Tz3(LITERAL(-405.346));
 		// There is no scaling:
 		TScaleFactor enl3(LITERAL(1.000000000000000));
+		auto pETRF93 = getRefFrame<TTerrestrialReferenceFrame>(kETRF93);
+		auto pCH1903plus = getRefFrame<TGeodeticRefFrame>(kCH1903plus);
+
 		THelmertRefFrameTransform* pETRF932CH1903plus = createHelmertRefFrameTransform(pETRF93, pCH1903plus, TAngle(0), TAngle(0), TAngle(0), Tx3, Ty3, Tz3, enl3);
 		addTransformationAndInverse(pETRF932CH1903plus, kETRF932CH1903plus, kCH1903plus2ETRF93, fTransformList);
 	}
@@ -462,6 +405,39 @@ void TRefSystemFactory::addGenericETRFandITRF()
 	fETRFout = getRefFrame<TTerrestrialReferenceFrame>(kETRFout);
 }
 
+void TRefSystemFactory::addSpecificETRFandITRF()
+{
+	auto grs80 = getEllipsoid(TRefSystemFactory::kGRS80);
+
+	// ITRF97 at epoch 1998.5.Link between global and local frames
+	TReal epoch = 1998.5;
+	std::string solution = "ITRF 97";
+	createObjectSetIdAndAddToList<TTerrestrialReferenceFrame>(kITRF97, fRefFrameList, "ITRF97", grs80, epoch, solution);
+
+	// ETRF93
+	epoch = 1993;
+	solution = "ETRF 93";
+	createObjectSetIdAndAddToList<TTerrestrialReferenceFrame>(kETRF93, fRefFrameList, "ETRF93", grs80, epoch, solution);
+
+	// RGF93
+	epoch = 2019;
+	solution = "ETRF 2000";
+	createObjectSetIdAndAddToList<TTerrestrialReferenceFrame>(kRGF93, fRefFrameList, "RGF93", grs80, epoch, solution);
+
+	// CHTRF95
+	epoch = 1993;
+	solution = "ETRF 93";
+	createObjectSetIdAndAddToList<TTerrestrialReferenceFrame>(kCHTRF95, fRefFrameList, "CHTRF95", grs80, epoch, solution);
+
+	// CH1903plus
+	createObjectSetIdAndAddToList<TGeodeticRefFrame>(kCH1903plus, fRefFrameList, "CH1903plus", getEllipsoid(TRefSystemFactory::kBessel1841));
+
+	// WGS84 (G2139)
+	epoch = 2016;
+	solution = "ITRF 2014";
+	createObjectSetIdAndAddToList<TTerrestrialReferenceFrame>(kWGS84_G2139, fRefFrameList, "WGS84 (G2139)", getEllipsoid(TRefSystemFactory::kWGSEll), epoch, solution);
+}
+
 void TRefSystemFactory::addFrenchProjections()
 {
 	// FrenchRGF93 zone 5 (CC46)
@@ -490,14 +466,36 @@ void TRefSystemFactory::addSwissProjections()
 
 void TRefSystemFactory::addTerrestrialRefFramesTransformations()
 {
-	// Transformation ITRF-ETRF, ETRF-ITRF
 	auto itrf2020_toPastITRF = makeMatrix(TrfTransformationCoefficients::coeffITRF2020_toPastITRF);
 	auto itrfyy_toETRFyy = makeMatrix(TrfTransformationCoefficients::coeffITRFyy_toETRFyy);
 
 	auto pITRFin = getTerrRefFrame(kITRFin);
 	auto pITRFout = getTerrRefFrame(kITRFout);
-	auto pETRFin = getTerrRefFrame(kETRFin);
 	auto pETRFout = getTerrRefFrame(kETRFout);
+	auto pETRFin = getTerrRefFrame(kETRFin);
+	auto pITRF97 = getRefFrame<TTerrestrialReferenceFrame>(kITRF97);
+	auto pETRF93 = getRefFrame<TTerrestrialReferenceFrame>(kETRF93);
+	auto pRGF93 = getRefFrame<TTerrestrialReferenceFrame>(kRGF93);
+	auto pCHTRF95 = getRefFrame<TTerrestrialReferenceFrame>(kCHTRF95);
+	auto pWGS84_G2139 = getRefFrame<TTerrestrialReferenceFrame>(kWGS84_G2139);
+
+	// Transformation between any ITRF an ITRF97 (ep 1998.5)
+	addTrf2TrfTransformationPair(kITRFin2ITRF97, kITRF972ITRFout, pITRFin, pITRF97);
+
+	// Transformation between any ETRF an ITRF97 (ep 1998.5)
+	addTrf2TrfTransformationPair(kITRF972ETRFout, kETRFin2ITRF97, pITRF97, pETRFout);
+
+	// Transformation between ITRF97 (ep1998.5) and ETRF93 (ep 1993.0)
+	addTrf2TrfTransformationPair(kITRF972ETRF93, kETRF932ITRF97, pITRF97, pETRF93);
+
+	// Transformation between ITRF97 (ep1998.5) and RGF93
+	addTrf2TrfTransformationPair(kITRF972RGF93, kRGF932ITRF97, pITRF97, pRGF93);
+
+	// Transformation between ITRF97 (ep1998.5) and CHTRF95
+	addTrf2TrfTransformationPair(kITRF972CHTRF95, kCHTRF952ITRF97, pITRF97, pCHTRF95);
+
+	// Transformation between ITRF97 (ep1998.5) and WGS84 (G2139)
+	addTrf2TrfTransformationPair(kITRF972WGS84, kWGS842ITRF97, pITRF97, pWGS84_G2139);
 
 	// Transformtion between ITRF and ETRF
 	addTrf2TrfTransformationPair(kITRFin2ETRFout, kETRFin2ITRFout, pITRFin, pETRFout);
