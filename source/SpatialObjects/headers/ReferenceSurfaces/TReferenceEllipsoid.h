@@ -143,7 +143,7 @@ public:
 		virtual void setEllId(const TRefSystemFactory::ERefEll ellId);
 
 
-		virtual TRefSystemFactory::ERefEll getEllId() const;
+		virtual TRefSystemFactory::ERefEll getId() const;
 	//@}
 
 

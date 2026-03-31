@@ -80,7 +80,7 @@ public:
 		virtual TARefFrameTransformation*				getTransformation() { return this; } 
 
 		/*! return the transformation identifier */
-		virtual TRefSystemFactory::ERefFrameTransform	getTransformId() const { return fTransformationId; }
+		virtual TRefSystemFactory::ERefFrameTransform	getId() const { return fTransformationId; }
 
 		/*! set the transformation identifier */
 		virtual void		setId( TRefSystemFactory::ERefFrameTransform id) { fTransformationId = id; return; }

@@ -74,7 +74,7 @@ public:
 		virtual  TAReferenceFrame*  getDestinationFrame()  const = 0;
 
 		//! return the transformation identifier
-		virtual TRefSystemFactory::ERefFrameTransform getTransformId() const = 0;
+		virtual TRefSystemFactory::ERefFrameTransform getId() const = 0;
 
 		//! set the transformation identifier
 		virtual void setId( TRefSystemFactory::ERefFrameTransform id) = 0;
