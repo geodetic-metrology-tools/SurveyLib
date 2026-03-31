@@ -370,6 +370,18 @@ private:
 		std::cerr << "Error : Id. not in " + listname << std::endl;
 		throw TNotInGraphException("TNotInGraphException");
 	}
+
+	template<typename T>
+	T* getRefFrame(ERefFrame id)
+	{
+		TAReferenceFrame *base = getRefFrame(id); // existing function
+		T *typed = dynamic_cast<T *>(base);
+
+		if (!typed)
+			throw std::bad_cast();
+
+		return typed;
+	}
 	
 private:
 	static TRefSystemFactory* fRefSystemFactory; /*!< static member that contains a pointer to the unique instance of TRefSystemFactory */
