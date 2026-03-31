@@ -267,6 +267,10 @@ private:
 	void addFrenchTransformations();
 	void addSwissTransformations();
 	void addLocalRefFrameTransformations();
+	void addTrf2TrfTransformationPair(const ERefFrameTransform &in2out,
+		const ERefFrameTransform &out2in,
+		TTerrestrialReferenceFrame *from,
+		TTerrestrialReferenceFrame *to);
 
 	TModifiedLocalGeodeticRF* createModifiedLocalGeodeticRF(TGeodeticRefFrame* refFrame, const std::string &frameName, const TAngle &phi_origine, const TAngle &lambda_origin, const TLength &h_origin);
 	THelmertRefFrameTransform* createHelmertRefFrameTransform(TAReferenceFrame *from, TAReferenceFrame *to, const TAngle &rX, const TAngle &rY, const TAngle &rZ, const TLength &tX, const TLength &tY, const TLength &tZ, const TScaleFactor &scaleFactor);
