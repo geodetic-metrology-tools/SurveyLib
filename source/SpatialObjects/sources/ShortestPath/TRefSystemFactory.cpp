@@ -296,47 +296,23 @@ void TRefSystemFactory::init()
 		auto pETRFin = getTerrRefFrame(kETRFin);
 
 		// Transformation between any ITRF an ITRF97 (ep 1998.5)
-		TTrf2TrfTransformation *pITRFin2ITRF97 = new TTrf2TrfTransformation(pITRFin, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pITRFin2ITRF97, kITRFin2ITRF97, fTransformList);
-		// Inverse
-		TTrf2TrfTransformation *pITRF972ITRFout = new TTrf2TrfTransformation(pITRF97, pITRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pITRF972ITRFout, kITRF972ITRFout, fTransformList);
+		addTrf2TrfTransformationPair(kITRFin2ITRF97, kITRF972ITRFout, pITRFin, pITRF97);
 
 		// Transformation between any ETRF an ITRF97 (ep 1998.5)
-		TTrf2TrfTransformation *pITRF972ETRFout = new TTrf2TrfTransformation(pITRF97, pETRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pITRF972ETRFout, kITRF972ETRFout, fTransformList);
-		// Inverse
-		TTrf2TrfTransformation *pETRFin2ITRF97 = new TTrf2TrfTransformation(pETRFin, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pETRFin2ITRF97, kETRFin2ITRF97, fTransformList);
+		addTrf2TrfTransformationPair(kITRF972ETRFout, kETRFin2ITRF97, pITRF97, pETRFout);
 
 		// Transformation between ITRF97 (ep1998.5) and ETRF93 (ep 1993.0)
-		TTrf2TrfTransformation *pITRF972ETRF93 = new TTrf2TrfTransformation(pITRF97, pETRF93, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pITRF972ETRF93, kITRF972ETRF93, fTransformList);
-		// Inverse
-		TTrf2TrfTransformation *pETRF932ITRF97 = new TTrf2TrfTransformation(pETRF93, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pETRF932ITRF97, kETRF932ITRF97, fTransformList);
+		addTrf2TrfTransformationPair(kITRF972ETRF93, kETRF932ITRF97, pITRF97, pETRF93);
 
 		// Transformation between ITRF97 (ep1998.5) and RGF93
-		TTrf2TrfTransformation *pITRF972RGF93 = new TTrf2TrfTransformation(pITRF97, pRGF93, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pITRF972RGF93, kITRF972RGF93, fTransformList);
-		// Inverse
-		TTrf2TrfTransformation *pRGF932ITRF97 = new TTrf2TrfTransformation(pRGF93, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pRGF932ITRF97, kRGF932ITRF97, fTransformList);
+		addTrf2TrfTransformationPair(kITRF972RGF93, kRGF932ITRF97, pITRF97, pRGF93);
 
 		// Transformation between ITRF97 (ep1998.5) and CHTRF95
-		TTrf2TrfTransformation *pITRF972CHTRF95 = new TTrf2TrfTransformation(pITRF97, pCHTRF95, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pITRF972CHTRF95, kITRF972CHTRF95, fTransformList);
-		// Inverse
-		TTrf2TrfTransformation *pCHTRF952ITRF97 = new TTrf2TrfTransformation(pCHTRF95, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pCHTRF952ITRF97, kCHTRF952ITRF97, fTransformList);
+		addTrf2TrfTransformationPair(kITRF972CHTRF95, kCHTRF952ITRF97, pITRF97, pCHTRF95);
 
 		// Transformation between ITRF97 (ep1998.5) and WGS84 (G2139)
-		TTrf2TrfTransformation *pITRF972WGS84 = new TTrf2TrfTransformation(pITRF97, pWGS84_G2139, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pITRF972WGS84, kITRF972WGS84, fTransformList);
-		// Inverse
-		TTrf2TrfTransformation *pWGS842ITRF97 = new TTrf2TrfTransformation(pWGS84_G2139, pITRF97, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-		setIdAndAddToList(pWGS842ITRF97, kWGS842ITRF97, fTransformList);
-
+		addTrf2TrfTransformationPair(kITRF972WGS84, kWGS842ITRF97, pITRF97, pWGS84_G2139);
+		
 		addTerrestrialRefFramesTransformations();
 	}
         ////////////////////////////////////////////////////////////////
@@ -524,11 +500,7 @@ void TRefSystemFactory::addTerrestrialRefFramesTransformations()
 	auto pETRFout = getTerrRefFrame(kETRFout);
 
 	// Transformtion between ITRF and ETRF
-	TTrf2TrfTransformation *pITRFin2ETRFout = new TTrf2TrfTransformation(pITRFin, pETRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-	setIdAndAddToList(pITRFin2ETRFout, kITRFin2ETRFout, fTransformList);
-	// Inverse
-	TTrf2TrfTransformation *pETRFin2ITRFout = new TTrf2TrfTransformation(pETRFin, pITRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
-	setIdAndAddToList(pETRFin2ITRFout, kETRFin2ITRFout, fTransformList);
+	addTrf2TrfTransformationPair(kITRFin2ETRFout, kETRFin2ITRFout, pITRFin, pETRFout);
 
 	// Transformation between 2 ITRF
 	TTrf2TrfTransformation *pITRFin2ITRFout = new TTrf2TrfTransformation(pITRFin, pITRFout, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
@@ -587,6 +559,21 @@ void TRefSystemFactory::addLocalRefFrameTransformations()
 	// Inverse
 	TLocal2CCSTransformation *pCCS2LocalRFout = new TLocal2CCSTransformation(getRefFrame(kCCS), getRefFrame(kLocalRFout), TScaleFactor(), TRotationMatrix(), TTranslation());
 	setIdAndAddToList(pCCS2LocalRFout, kCCS2LocalRFout, fTransformList);
+}
+
+void TRefSystemFactory::addTrf2TrfTransformationPair(const ERefFrameTransform &in2out,
+	const ERefFrameTransform &out2in, TTerrestrialReferenceFrame *from,
+	TTerrestrialReferenceFrame *to)
+{
+	auto itrf2020_toPastITRF = makeMatrix(TrfTransformationCoefficients::coeffITRF2020_toPastITRF);
+	auto itrfyy_toETRFyy = makeMatrix(TrfTransformationCoefficients::coeffITRFyy_toETRFyy);
+
+	// Forward transformation
+	TTrf2TrfTransformation *forward = new TTrf2TrfTransformation(from, to, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
+	setIdAndAddToList(forward, in2out, fTransformList);
+	// Inverse
+	TTrf2TrfTransformation *inverse = new TTrf2TrfTransformation(to, from, itrf2020_toPastITRF.get(), itrfyy_toETRFyy.get());
+	setIdAndAddToList(inverse, out2in, fTransformList);
 }
 
 TModifiedLocalGeodeticRF* TRefSystemFactory::createModifiedLocalGeodeticRF(TGeodeticRefFrame* refFrame,
