@@ -68,7 +68,7 @@ public:
 		virtual std::string  getName() const;
 
 		/// return the reference frame id
-		virtual TRefSystemFactory::ERefFrame  getRefFrameId() const;
+		virtual TRefSystemFactory::ERefFrame  getId() const;
 
 		//! Set the identifier for the reference frame
 		virtual void						setId(TRefSystemFactory::ERefFrame id) { fRefFrameId = id; return; }

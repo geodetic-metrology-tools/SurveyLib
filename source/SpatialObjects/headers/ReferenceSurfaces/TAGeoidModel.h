@@ -79,8 +79,33 @@ public:
 		virtual TAReferenceFrame* getCalcRefFrame() const {return 0;}
 
 		/*! \Returns the geoid identifier*/
-		virtual TRefSystemFactory::EGeoid  getGeoidId() const{return TRefSystemFactory::kNoGeoid;}
+		TRefSystemFactory::EGeoid getId() const { return fGeoidId; }
+
+		/// Set the definiton reference frame
+		void setDefRefFrame(TAReferenceFrame *def) { fDefRFPtr = def;}
+
+		/// Set the definition reference ellipsoid
+		void setRefEll(TReferenceEllipsoid *ell) { fDefEllPtr = ell;}
+
+		/// Set the Calculation Reference Frame
+		void setCalcRefFrame(TAReferenceFrame *calc) { fCalcRFPtr = calc;}
 	//@}
+
+protected:
+		TSpatialPosition getSpatialPositionInRefFrame(const TSpatialPosition &sp, TAReferenceFrame *refFrame) const;
+		TAngle computeLaplaceCorrection(const TSpatialPosition &position, const TAngle &latitude) const;
+
+		/**@name Member Attributes */
+		//@{
+		std::string fName; /*!< name  */
+
+		TAReferenceFrame *fDefRFPtr; /*!< pointer to the def. reference frame  */
+		TReferenceEllipsoid *fDefEllPtr; /*!< pointer to the reference ellispoid  */
+		TAReferenceFrame *fCalcRFPtr; /*!< pointer to the  calc. reference frame */
+
+		TRefSystemFactory::EGeoid fGeoidId; /*!< geoid indentifier */
+
+		//@}
 };
 
 /*@}*/

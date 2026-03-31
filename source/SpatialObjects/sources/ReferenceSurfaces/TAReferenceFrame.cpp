@@ -71,7 +71,7 @@ std::string  TAReferenceFrame::getName() const
 ////////////////////////////////
 // return the reference frame id
 ////////////////////////////////
-TRefSystemFactory::ERefFrame  TAReferenceFrame::getRefFrameId() const
+TRefSystemFactory::ERefFrame  TAReferenceFrame::getId() const
 {
 	return fRefFrameId;
 }

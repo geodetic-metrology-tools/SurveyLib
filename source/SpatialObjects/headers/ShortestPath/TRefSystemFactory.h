@@ -50,6 +50,8 @@ class TSpatialPosition;
 class TScaleFactor;
 
 #include <TLocalSystemOrigin.h>
+#include <TNotInGraphException.h>
+
 //
 //
 ////////////////////////////////////////////////////////////////
@@ -350,7 +352,22 @@ private:
 		return g;
 	}
 
-		template<typename T>
+	/*! Retrieve element from a list*/
+	template<typename T, typename IdT>
+	T* getElementFromList(const std::vector<T*>& list, const IdT id, const std::string& listname)
+	{ // return a pointer to the element asked for
+
+		for (T* elem : list)
+		{
+			if (elem->getId() == id)
+				return elem;
+		}
+
+		std::cerr << "Error : Id. not in " + listname << std::endl;
+		throw TNotInGraphException("TNotInGraphException");
+	}
+
+	template<typename T>
 	T* getRefFrame(ERefFrame id)
 	{
 		TAReferenceFrame *base = getRefFrame(id); // existing function

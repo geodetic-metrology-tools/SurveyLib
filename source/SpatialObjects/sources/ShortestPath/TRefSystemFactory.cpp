@@ -64,7 +64,6 @@
 
 
 #include "TRefSystemFactory.h"
-#include "TNotInGraphException.h"
 #include <TLocal2CCSTransformation.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -644,77 +643,18 @@ TRefSystemFactory* TRefSystemFactory::getRefSystemFactory()
 
 TAGeoidModel*  TRefSystemFactory::getGeoid(const EGeoid geoidId)
 {//return a pointer to the geoid asked for
-
-	std::vector<TAGeoidModel*>::iterator iter = fGeoidList.begin();
-	std::vector<TAGeoidModel*>::iterator iterEnd = fGeoidList.end();
-
-	while (iter != iterEnd)
-	{
-		if( (*iter)->getGeoidId() == geoidId )
-			return *iter;
-
-		iter++;
-	}
-
-	std::cerr << "Error : Id. not in GeoidList" << std::endl;
-	throw TNotInGraphException("TNotInGraphException");
-	///
-	//TODO@*@
-	///
-	//exit(EXIT_FAILURE);
-
-	
-
+	return getElementFromList(fGeoidList, geoidId, "GeoidList");
 }
-
 
 TReferenceEllipsoid* TRefSystemFactory::getEllipsoid(const ERefEll ellId)
 {//return a pointer to the ellipsoid asked for
-	std::vector<TReferenceEllipsoid*>::iterator iter, iterEnd;
-	iter = fRefEllList.begin();
-	iterEnd = fRefEllList.end();
-
-	while (iter != iterEnd)
-	{
-		if((*iter)->getEllId() == ellId)
-			return *iter;
-
-		iter++;
-	}
-
-	std::cerr << "Error : Id. not in RefEllList" << std::endl;
-	throw TNotInGraphException("TNotInGraphException");
-
-	//cerr << "Error : Id. not in RefEllList";
-	///
-	//TODO@*@
-	///
-	//exit(EXIT_FAILURE);
+	return getElementFromList(fRefEllList, ellId, "RefEllList");
 }
 
 TAReferenceFrame* TRefSystemFactory::getRefFrame(const ERefFrame refFrameId)
 {//return a pointer to the ref frame askes for
-	std::vector<TAReferenceFrame*>::iterator iter = fRefFrameList.begin();
-	std::vector<TAReferenceFrame*>::iterator iterEnd = fRefFrameList.end();
-
-	while (iter != iterEnd)
-	{
-		if((*iter)->getRefFrameId() == refFrameId)
-			return *iter;
-
-		iter++;
-	}
-
-	std::cerr << "Error : Id. not in RefFrameList" << std::endl;
-	throw TNotInGraphException("TNotInGraphException");
-
-	//cerr << "Error : Id. not in RefFrameList";
-	///
-	//TODO@*@
-	///
-	//exit(EXIT_FAILURE);
+	return getElementFromList(fRefFrameList, refFrameId, "RefFrameList");
 }
-
 
 TGeodeticRefFrame* TRefSystemFactory::getGeoRefFrame(const ERefFrame refFrameId)
 {
@@ -755,26 +695,7 @@ TTerrestrialReferenceFrame* TRefSystemFactory::getTerrRefFrame(const ERefFrame r
 
 TARefFrameTransformation* TRefSystemFactory::getTransformation(const ERefFrameTransform id)
 {//return a pointer to the ref frame transformation asked for
-	std::vector<TARefFrameTransformation*>::iterator iter = fTransformList.begin();
-	std::vector<TARefFrameTransformation*>::iterator iterEnd = fTransformList.end();
-
-	while (iter != iterEnd)
-	{
-		if((*iter)->getTransformId() == id)
-			return *iter;
-
-		iter++;
-	}
-
-	std::cerr << "Error : Id. not in TransformationList" << std::endl;
-	throw TNotInGraphException("TNotInGraphException");
- 
-
-	//cerr << "Error : Id. not in TransformationList";
-	///
-	//TODO@*@
-	///
-	//exit(EXIT_FAILURE);
+	return getElementFromList(fTransformList, id, "TransformationList");
 }
 
 

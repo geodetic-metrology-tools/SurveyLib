@@ -146,7 +146,7 @@ void TReferenceEllipsoid::setEllId(const TRefSystemFactory::ERefEll ellId)
 }
 
 
-TRefSystemFactory::ERefEll TReferenceEllipsoid::getEllId() const
+TRefSystemFactory::ERefEll TReferenceEllipsoid::getId() const
 {
 	return fEllId; 
 }

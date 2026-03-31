@@ -77,7 +77,7 @@ public:
 		virtual std::string  getName() const = 0;
 
 		//! returns identifier of the reference frame in the graph
-	    virtual TRefSystemFactory::ERefFrame  getRefFrameId() const = 0;
+	    virtual TRefSystemFactory::ERefFrame  getId() const = 0;
 
 		//! test if the reference frame is in graph or not
 		virtual bool isInRFFactory() const = 0;
