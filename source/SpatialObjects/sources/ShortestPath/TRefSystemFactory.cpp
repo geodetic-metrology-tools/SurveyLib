@@ -102,13 +102,6 @@ void TRefSystemFactory::init()
 	std::string ccs("CCS");
 
 	addGeodeticRefFrames();
-
-
-		// CGRF Transverse Mercator Projection
-	createObjectSetIdAndAddToList<TTransverseMercatorProjection>(kCGRFMercator_eh, fRefFrameList, "CGRFtm_eh");
-
-	
-	
 	addGenericETRFandITRF();
 	addSpecificETRFandITRF();
 	addFrenchProjections();
@@ -158,39 +151,8 @@ void TRefSystemFactory::init()
 	
 	/////////////////////////////////////////////////////////////////////
 	// Definition of the CERN projection list (included in ref frame list)
-
-	// CERN XYHs projection: XY system = CCS, Hs = height above SPS sphere (projection of the xy point on the sphere)
-	TXYHeProjection* pCernXYHs = new TXYHeProjection( "CERN_XYHs", getEllipsoid(TRefSystemFactory::kSphere), pCCS);
-	setIdAndAddToList(pCernXYHs, kCERNXYHsSphereSPS, fRefFrameList);
-
-	// CERN XYHe projection: XY system = CCS, He = height above ellipsoid (projection of the xy point on the ellipsoid)
-	TXYHeProjection* pCernXYHe = new TXYHeProjection( "CERN_XYHe", getEllipsoid(TRefSystemFactory::kGRS80), pCCS);
-	setIdAndAddToList(pCernXYHe, kCernXYHe, fRefFrameList);
-
-	// CERN X0Y0He projection: X0Y0 = projection of XY on the ellipsoid's level (h=0)
-	TX0Y0HeProjection* pCernX0Y0He = new TX0Y0HeProjection( "CERN_X0Y0He", pCernXYHe);
-	setIdAndAddToList(pCernX0Y0He, kCernX0Y0He, fRefFrameList);
-
-	// CERN XYHg projection CG2000: XY system = CCS, Hg = height above geoid CG2000 (projection of the xy point on the geoid)
-	TXYHgProjection *pCernXYHg00 = new TXYHgProjection("CERN_XYHg2000", getGeoid(kCG2000), pCernXYHe);
-	setIdAndAddToList(pCernXYHg00, kCernXYHg00, fRefFrameList);
-
-	// CERN XYHg projection CG2000Topo :XY system = CCS, Hg = height above geoid CG2000Topo (projection of the xy point on the geoid)
-	TXYHgProjection *pCernXYHg00Topo = new TXYHgProjection("CERN_XYHg2000Topo", getGeoid(kCG2000topo), pCernXYHe);
-	setIdAndAddToList(pCernXYHg00Topo, kCernXYHg00Topo, fRefFrameList);
+	addCERNprojections();
 	
-	// CERN XYHg projection CG2000Machine: XY system = CCS, Hg = height above geoid CG2000Machine (projection of the xy point on the geoid)
-	TXYHgProjection *pCernXYHg00Machine = new TXYHgProjection("CERN_XYHg2000Machine", getGeoid(kCG2000Machine), pCernXYHe);
-	setIdAndAddToList(pCernXYHg00Machine, kCernXYHg00Machine, fRefFrameList);
-
-	// CERN XYHg projection CG1985: XY system = CCS, Hg = height above geoid CG1985 (projection of the xy point on the geoid)
-	TXYHgProjection *pCernXYHg85 = new TXYHgProjection("CERN_XYHg1985", getGeoid(kCG1985), pCernXYHe);
-	setIdAndAddToList(pCernXYHg85, kCernXYHg85, fRefFrameList);
-	
-	// CERN XYHg projection CG1985Machine: XY system = CCS, Hg = height above geoid CG1985Machine (projection of the xy point on the geoid)
-	TXYHgProjection *pCernXYHg85Machine = new TXYHgProjection("CERN_XYHg1985Machine", getGeoid(kCG1985Machine), pCernXYHe);
-	setIdAndAddToList(pCernXYHg85Machine, kCernXYHg85Machine, fRefFrameList);
-
 	// CAD Systems
 	TLocalRFWithTransformationMatrix *pLocalRFin = new TLocalRFWithTransformationMatrix("LocalRF_Input", "");
 	setIdAndAddToList(pLocalRFin, kLocalRFin, fRefFrameList);
@@ -365,6 +327,39 @@ void TRefSystemFactory::initGeoidList()
 	TReal aLEP(LITERAL(0.614)), bLEP(-LITERAL(0.106)), thLEP(angLEP.getRadiansValue());
 	TCernParabolicGeoid *pCG1985Machine = new TCernParabolicGeoid(cg85Machine, kCG1985Machine, aLEP, bLEP, thLEP, pCGRF, pGRS80, pCCS);
 	fGeoidList.push_back(pCG1985Machine);
+}
+
+void TRefSystemFactory::addCERNprojections()
+{
+	auto pCCS = getRefFrame<TAModifiedLocalAstronomicalRF>(kCCS);
+
+	// CERN XYHs projection: XY system = CCS, Hs = height above SPS sphere (projection of the xy point on the sphere)
+	createObjectSetIdAndAddToList<TXYHeProjection>(kCERNXYHsSphereSPS, fRefFrameList, "CERN_XYHs", getEllipsoid(TRefSystemFactory::kSphere), pCCS);
+
+	// CERN XYHe projection: XY system = CCS, He = height above ellipsoid (projection of the xy point on the ellipsoid)
+	createObjectSetIdAndAddToList<TXYHeProjection>(kCernXYHe, fRefFrameList, "CERN_XYHe", getEllipsoid(TRefSystemFactory::kGRS80), pCCS);
+	auto pCernXYHe = getRefFrame<TXYHeProjection>(kCernXYHe);
+
+	// CERN X0Y0He projection: X0Y0 = projection of XY on the ellipsoid's level (h=0)
+	createObjectSetIdAndAddToList<TX0Y0HeProjection>(kCernX0Y0He, fRefFrameList, "CERN_X0Y0He", pCernXYHe);
+
+	// CERN XYHg projection CG2000: XY system = CCS, Hg = height above geoid CG2000 (projection of the xy point on the geoid)
+	createObjectSetIdAndAddToList<TXYHgProjection>(kCernXYHg00, fRefFrameList, "CERN_XYHg2000", getGeoid(kCG2000), pCernXYHe);
+
+	// CERN XYHg projection CG2000Topo :XY system = CCS, Hg = height above geoid CG2000Topo (projection of the xy point on the geoid)
+	createObjectSetIdAndAddToList<TXYHgProjection>(kCernXYHg00Topo, fRefFrameList, "CERN_XYHg2000Topo", getGeoid(kCG2000topo), pCernXYHe);
+
+	// CERN XYHg projection CG2000Machine: XY system = CCS, Hg = height above geoid CG2000Machine (projection of the xy point on the geoid)
+	createObjectSetIdAndAddToList<TXYHgProjection>(kCernXYHg00Machine, fRefFrameList, "CERN_XYHg2000Machine", getGeoid(kCG2000Machine), pCernXYHe);
+
+	// CERN XYHg projection CG1985: XY system = CCS, Hg = height above geoid CG1985 (projection of the xy point on the geoid)
+	createObjectSetIdAndAddToList<TXYHgProjection>(kCernXYHg85, fRefFrameList, "CERN_XYHg1985", getGeoid(kCG1985), pCernXYHe);
+
+	// CERN XYHg projection CG1985Machine: XY system = CCS, Hg = height above geoid CG1985Machine (projection of the xy point on the geoid)
+	createObjectSetIdAndAddToList<TXYHgProjection>(kCernXYHg85Machine, fRefFrameList, "CERN_XYHg1985Machine", getGeoid(kCG1985Machine), pCernXYHe);
+
+	// CGRF Transverse Mercator Projection
+	createObjectSetIdAndAddToList<TTransverseMercatorProjection>(kCGRFMercator_eh, fRefFrameList, "CGRFtm_eh");
 }
 
 void TRefSystemFactory::addGeodeticRefFrames()
