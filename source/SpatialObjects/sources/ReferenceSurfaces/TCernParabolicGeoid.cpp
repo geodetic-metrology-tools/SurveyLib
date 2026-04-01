@@ -22,17 +22,18 @@
 #include	"TLength.h"
 #include	"TAngle.h"
 
-////////////////////////////////////////////////////////////////
-
-//ClassImp(TCernParabolicGeoid)
-
-
 
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
 const TReal TCernParabolicGeoid::scaleFactor = LITERAL(0.001);
 const TReal TCernParabolicGeoid::scaleFactorM = LITERAL(0.01);
+const TAngle TCernParabolicGeoid::ang_h0 = TAngle(LITERAL(48.772), TAngle::kGons);
+const TReal TCernParabolicGeoid::a_h0 = LITERAL(0.535);
+const TReal TCernParabolicGeoid::b_h0 = -LITERAL(0.096);
+const TAngle TCernParabolicGeoid::ang_LEP = TAngle(LITERAL(48.219), TAngle::kGons);
+const TReal TCernParabolicGeoid::a_LEP = LITERAL(0.614);
+const TReal TCernParabolicGeoid::b_LEP = -LITERAL(0.106);
 
 
 //////////////////////////////////////////////////////////////////////
@@ -50,7 +51,6 @@ TCernParabolicGeoid::TCernParabolicGeoid() : TAGeoidModel()
 
 }
 
-
 /* Constructor taking the geoid model name and the parameters of the 
  *	paraboloid as arguments.
  *	
@@ -61,60 +61,23 @@ TCernParabolicGeoid::TCernParabolicGeoid() : TAGeoidModel()
  *						2                 2
  */
 
-/*TCernParabolicGeoid::TCernParabolicGeoid( const string& name, const TReal a,
-										 const TReal b, const TReal ths)
-		:  fName( name ), fA( a ), fB( b ), fThs( ths ),
-		fDefinitionRF(TRefSurfServer::kCGRF), fDefinitionEllipsoid(TRefSurfServer::kGRS80), fCalculationRF(TRefSurfServer::kCCS)
-{		
-		// set the derived parameters of the paraboloid
-		TReal thc, azp;
-		TReal azxs = -LITERAL(1.12878) * GON2RAD;
-		TReal gsc = LITERAL(38.90742) * GON2RAD;
-
-		thc = fThs - gsc;
-		azp = fThs + azxs;
-		costhc = cosq(thc);
-		sinthc = sinq(thc);
-		cosazp = cosq(azp);
-		sinazp = sinq(azp);
-
-
-	
-	
-}
-*/
-
-
-
-
-
 TCernParabolicGeoid::TCernParabolicGeoid(const std::string &name,
 	const TRefSystemFactory::EGeoid &geoidId,
 	const TReal a,
 	const TReal b,
-	const TReal ths,
+	const TAngle ths,
 	TAReferenceFrame *def,
 	TReferenceEllipsoid *ell,
 	TAReferenceFrame *calc) :
-	TAGeoidModel(name, geoidId, def, ell, calc), fA(a), fB(b), fThs(ths)
+	TAGeoidModel(name, geoidId, def, ell, calc), fA(a), fB(b), fThs(ths.getRadiansValue())
 {
-	// set the derived parameters of the paraboloid
+	// set the derived parameters of the paraboloid (see EDMS doc 308419 85_ballPart2.pdf page 99)
 	TReal thc, azp;
-	TReal azxs = -LITERAL(1.12878) * GON2RAD;
-	TReal gsc = LITERAL(38.90742) * GON2RAD;
+	TReal azxs = -LITERAL(1.12878) * GON2RAD; // Azimuth of the X axis of the swiss system at P0 (Xswiss), computed as the difference between gsc (38.90742) and AzimuthCCSYaxis (37.77864) 
+	TReal gsc = LITERAL(38.90742) * GON2RAD; // Bearing of Yccs with respect to Xswiss 
 
-	/*	//modif du 25/07/03 pour representer le niv5 utiliser dans LGC
-		if(fThs* TAngle::radsToGonsFactor() == LITERAL(48.219))
-		{
-			thc = LITERAL(9.31158177001953) * GON2RAD;
-		//	azp = thc;
-		}
-		else
-		{
-			thc = fThs - gsc;
-		}*/
-	thc = fThs - gsc;
-	azp = fThs + azxs;
+	thc = fThs - gsc; // Bearing between Xswiss and Yp (Yp = Y axis of the paraboloid)
+	azp = fThs + azxs; // Azimuth of Yp with respect to Xswiss
 	costhc = cosq(thc);
 	sinthc = sinq(thc);
 	cosazp = cosq(azp);
