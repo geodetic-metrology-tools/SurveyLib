@@ -259,11 +259,17 @@ private:
 	void	init();
 	void initEllipsoidList();
 	void initGeoidList();
+	void addCERNprojections();
 	void addGeodeticRefFrames();
 	void addGenericETRFandITRF();
+	void addSpecificETRFandITRF();
 	void addFrenchProjections();
 	void addSwissProjections();
+	void addLocalGeodeticAndLocalAstronomic();
+	void addLocalCADRefFrames();
+	void addCERNrefFrameTransformation();
 	void addTerrestrialRefFramesTransformations();
+	void addCERNprojectionsTransformations();
 	void addFrenchTransformations();
 	void addSwissTransformations();
 	void addLocalRefFrameTransformations();

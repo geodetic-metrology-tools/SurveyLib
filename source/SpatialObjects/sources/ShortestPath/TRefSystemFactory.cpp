@@ -93,170 +93,30 @@ TRefSystemFactory::~TRefSystemFactory()
 void TRefSystemFactory::init()
 {// Build the unique instance of TRefSystemFactory
 	
-	///////////////////////////////////////////////////////////////////
 	// Definition of the ellipsoid list
-
 	initEllipsoidList();
 
 	// Definition of the reference frame list
-	std::string ccs("CCS");
-
 	addGeodeticRefFrames();
 	addGenericETRFandITRF();
 	addSpecificETRFandITRF();
-	addFrenchProjections();
-	addSwissProjections();
-  
+	addLocalGeodeticAndLocalAstronomic();
+	addLocalCADRefFrames();
 
-		// Local Geodesique at CERN: origin = principal point of the system = P0 
-	TAngle phi(LITERAL(PHIP0), TAngle::kGons);
-	TAngle lambda(LITERAL(LambdaP0), TAngle::kGons);
-	TLength H(LITERAL(HP0));
-
-	TModifiedLocalGeodeticRF *pLGp0 = createModifiedLocalGeodeticRF(fCGRF, "LG PO", phi, lambda, H);
-	setIdAndAddToList(pLGp0, kLGp0, fRefFrameList);
-		// Local Astronomic at CERN: origin = principal point of the system = P0
-	TAngle etaP0(0), xsiP0(0), dAlphaP0(0);
-	TGraphLocalAstronomicalRF* pLAp0 = new TGraphLocalAstronomicalRF( "LA P0", etaP0, xsiP0, dAlphaP0, pLGp0 );
-	setIdAndAddToList(pLAp0, kLAp0, fRefFrameList);
-	
-		// CCS : CERN Modified Local Astronomical system : principal point = P0 defined as false origin
-	TFreeVector falseOrigin(XP0, LITERAL(YP0), LITERAL(ZP0), TCoordSysFactory::k3DCartesian);
-	TAngle omega(0), phi2(0), kappa(LITERAL(AzimuthCCSYaxis), TAngle::kGons);
-
-	TAModifiedLocalAstronomicalRF* pCCS = new TGraphMLARF(ccs, falseOrigin,
-		pLAp0, omega, phi2, kappa);
-	setIdAndAddToList(pCCS, kCCS, fRefFrameList);
-
-	//new P0 coordinates
-	TAngle phi_new(LITERAL(51.36734),TAngle::kGons), lambda_new (LITERAL(6.722515), TAngle::kGons);
-
-	TModifiedLocalGeodeticRF *pLGp0_new = createModifiedLocalGeodeticRF(fCGRF2, "LG P0_new", phi_new, lambda_new, H);
-	setIdAndAddToList(pLGp0_new, kLGp0_new, fRefFrameList);
-
-	// Local Astronomic at P0_new
-	TGraphLocalAstronomicalRF* pLAp0_new = new TGraphLocalAstronomicalRF("LA P0_new", etaP0, xsiP0, dAlphaP0, pLGp0_new);
-	setIdAndAddToList(pLAp0_new, kLAp0_new, fRefFrameList);
-
-	// CCS at P0_new
-	TAngle kappa_new(LITERAL(37.779033), TAngle::EUnits::kGons);
-	TAModifiedLocalAstronomicalRF* pCCS_new = new TGraphMLARF("CCS_new", falseOrigin,
-		pLAp0_new, omega, phi2, kappa_new);
-	setIdAndAddToList(pCCS_new, kCCS_new, fRefFrameList);
-	
-
-	///////////////////////////////////////////////////////////////////////////////	
 	// Definition of the geoid list
 	initGeoidList();
-	
-	/////////////////////////////////////////////////////////////////////
-	// Definition of the CERN projection list (included in ref frame list)
+
+	// Definition of the projection (included in the reference frame list)
+	addFrenchProjections();
+	addSwissProjections();
 	addCERNprojections();
-	
-	// CAD Systems
-	TLocalRFWithTransformationMatrix *pLocalRFin = new TLocalRFWithTransformationMatrix("LocalRF_Input", "");
-	setIdAndAddToList(pLocalRFin, kLocalRFin, fRefFrameList);
 
-	TLocalRFWithTransformationMatrix *pLocalRFout = new TLocalRFWithTransformationMatrix("LocalRF_Output", "");
-	setIdAndAddToList(pLocalRFout, kLocalRFout, fRefFrameList);
-
-	/////////////////////////////////////////////////////////////////////////////////////////////
 	// Definition of the CERN's ref. frames transformations
-
-	// Transformation between CERN projection XYHs and CCS
-	addTransformationPair<TXYHs2MLATransformation>(kXYHsSphereSPS2CCS, kCCS2XYHsSphereSPS, pCernXYHs);
-
-	// Transformation between CCS and CGRF
-	/*Il est equivalent de mettre CG2000 ou CG1985 car les parametres du geoide au niveau de P0,
-	servant a definir la transformation sont equivalent*/
-	addTransformationPair<TMLA2GCTransformation>(kCCS2CGRF, kCGRF2CCS, pCCS, getGeoid(kCG1985Machine));
-
-	//Conversion between CGRF (ellipsoid) and CGRF (Transverse Mercator projection)
-	addTransformationPair<TGeodetic2Mercator>(kCGRF2CGRFMercator, kCGRFMercator2CGRF, true);
-		
-	// Transformation between CCS and CGRFSphere
-	//rotation pour diriger les axes du CGRFs parallele a ceux du CGRF
-	{
-		TAngle rx(-LITERAL(42.726243230216), TAngle::kGons);
-		TAngle ry(-LITERAL(25.285434244947), TAngle::kGons);
-		TAngle rz(-LITERAL(77.864346765085), TAngle::kGons);
-		//translation pour situer le centre de la sphere
-		TLength txs(LITERAL(4381882.331989)), tys(LITERAL(461505.530464)), tzs(LITERAL(4598944.364158));
-		//facteur d echelle
-		TScaleFactor ks(LITERAL(1.0));
-		THelmertRefFrameTransform* pCCS2CGRFs = createHelmertRefFrameTransform(pCCS, fCGRFSphere, rx, ry, rz, txs, tys, tzs, ks);
-		addTransformationAndInverse(pCCS2CGRFs, kCCS2CGRFSphere, kCGRFSphere2CCS, fTransformList);
-	}
-
-	// Transformation between LAp0 and LGp0
-	addTransformationPair<TLA2LGTransformation>(kLAp02LGp0, kLGp02LAp0, pLAp0);
-
-	//Transformation between LGp0 and CGRF
-	addTransformationPair<TLG2GCTransformation>(kLGp02CGRF, kCGRF2LGp0, pLGp0);
-
-	// Helmert Transformation between LAp0 and CCS
-	{
-		TScaleFactor enl(LITERAL(1.0));
-		THelmertRefFrameTransform *pLAp02CCS = createHelmertRefFrameTransform(pLAp0, pCCS, omega, phi, -1.0 * kappa, falseOrigin.getX(), falseOrigin.getY(), falseOrigin.getZ(), enl);
-		addTransformationAndInverse(pLAp02CCS, kLAp02CCS, kCCS2LAp0, fTransformList);
-	}
-	
-		// Helmert Transformation between ITRF97 (ep1998.5) and CGRF
-	{
-		TAngle om3(LITERAL(399.999533213524), TAngle::kGons);
-		TAngle p3(LITERAL(0.001825157943), TAngle::kGons);
-		TAngle k3(LITERAL(0.000991054274), TAngle::kGons);
-		TLength Tx3(LITERAL(76.3768280)), Ty3(LITERAL(131.9389844)), Tz3(-LITERAL(156.1229775));
-		TScaleFactor enl3(LITERAL(1.000000000000000));
-		THelmertRefFrameTransform* pITRF972CGRF = createHelmertRefFrameTransform(getRefFrame<TTerrestrialReferenceFrame>(kITRF97), fCGRF, om3, p3, k3, Tx3, Ty3, Tz3, enl3);
-		addTransformationAndInverse(pITRF972CGRF, kITRF972CGRF, kCGRF2ITRF97, fTransformList);
-	}
-
-		////////////////////////////////////////////////////////////////
-		// Transformation ITRF-ETRF, ETRF-ITRF
-		////////////////////////////////////////////////////////////////
-		addTerrestrialRefFramesTransformations();
-
-        ////////////////////////////////////////////////////////////////
-		// Helmert Transformation between ETRF93 (ep1993) and CH1903plus
-        ////////////////////////////////////////////////////////////////
-	{
-		// There is no rotation:
-		// Total translation resulting from epoch changes and Reference Frame changes:
-		TLength Tx3(LITERAL(-674.374)), Ty3(LITERAL(-15.056)), Tz3(LITERAL(-405.346));
-		// There is no scaling:
-		TScaleFactor enl3(LITERAL(1.000000000000000));
-		auto pETRF93 = getRefFrame<TTerrestrialReferenceFrame>(kETRF93);
-		auto pCH1903plus = getRefFrame<TGeodeticRefFrame>(kCH1903plus);
-
-		THelmertRefFrameTransform* pETRF932CH1903plus = createHelmertRefFrameTransform(pETRF93, pCH1903plus, TAngle(0), TAngle(0), TAngle(0), Tx3, Ty3, Tz3, enl3);
-		addTransformationAndInverse(pETRF932CH1903plus, kETRF932CH1903plus, kCH1903plus2ETRF93, fTransformList);
-	}
-
+	addCERNrefFrameTransformation();
+	addTerrestrialRefFramesTransformations();
 	addSwissTransformations();  
 	addFrenchTransformations();
-            
-	// Transformation between CERN projection XYHe and CCS
-	addTransformationPair<TXYHe2MLATransformation>(kXYHe2CCS, kCCS2XYHe, pCernXYHe);
-
-	// Transformation between CERN projection X0Y0He and CERN projection XYHe
-	addTransformationPair<TX0Y0He2XYHeTransformation>(kX0Y0He2XYHe, kXYHe2X0Y0He, pCernX0Y0He);
-
-	// Transformation between CERN projection XYHg (Geoid 2000) and XYHe
-	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe, kXYHe2XYHg, pCernXYHg00);
-
-	// Transformation between CERN projection XYHg (Geoid 2000Topo) and XYHe
-	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe00Topo, kXYHe00Topo2XYHg, pCernXYHg00Topo);
-
-	// Transformation between CERN projection XYHg (Geoid 2000Machine) and XYHe
-	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe00Machine, kXYHe00Machine2XYHg, pCernXYHg00Machine);
-
-	// Transformation between CERN projection XYHg (Geoid 1985) and XYHe
-	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe85, kXYHe852XYHg, pCernXYHg85);
-
-	// Transformation between CERN projection XYHg (Geoid 1985Machine) and XYHe
-	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe85Machine, kXYHe85Machine2XYHg, pCernXYHg85Machine);
-
+	addCERNprojectionsTransformations();        
 	addLocalRefFrameTransformations();
 }
 
@@ -375,6 +235,9 @@ void TRefSystemFactory::addGeodeticRefFrames()
 	// CGRF sphere
 	createObjectSetIdAndAddToList<TGeodeticRefFrame>(kCGRFSphere, fRefFrameList, "CGRFSphere", getEllipsoid(TRefSystemFactory::kSphere));
 	fCGRFSphere = getRefFrame<TGeodeticRefFrame>(kCGRFSphere);
+
+	// CH1903plus
+	createObjectSetIdAndAddToList<TGeodeticRefFrame>(kCH1903plus, fRefFrameList, "CH1903plus", getEllipsoid(TRefSystemFactory::kBessel1841));
 }
 
 void TRefSystemFactory::addGenericETRFandITRF()
@@ -424,9 +287,6 @@ void TRefSystemFactory::addSpecificETRFandITRF()
 	solution = "ETRF 93";
 	createObjectSetIdAndAddToList<TTerrestrialReferenceFrame>(kCHTRF95, fRefFrameList, "CHTRF95", grs80, epoch, solution);
 
-	// CH1903plus
-	createObjectSetIdAndAddToList<TGeodeticRefFrame>(kCH1903plus, fRefFrameList, "CH1903plus", getEllipsoid(TRefSystemFactory::kBessel1841));
-
 	// WGS84 (G2139)
 	epoch = 2016;
 	solution = "ITRF 2014";
@@ -457,6 +317,104 @@ void TRefSystemFactory::addSwissProjections()
 	createObjectSetIdAndAddToList<TLV03Projection>(kSwissLV03_ln02, fRefFrameList, "LV03_ln02");
 	createObjectSetIdAndAddToList<TLV03Projection>(kSwissLV03_lhn95, fRefFrameList, "LV03_lhn95");
 #endif
+}
+
+void TRefSystemFactory::addLocalGeodeticAndLocalAstronomic()
+{
+	// Local Geodesique at CERN: origin = principal point of the system = P0
+	TAngle phi(LITERAL(PHIP0), TAngle::kGons);
+	TAngle lambda(LITERAL(LambdaP0), TAngle::kGons);
+	TLength H(LITERAL(HP0));
+
+	TModifiedLocalGeodeticRF *pLGp0 = createModifiedLocalGeodeticRF(fCGRF, "LG PO", phi, lambda, H);
+	setIdAndAddToList(pLGp0, kLGp0, fRefFrameList);
+	// Local Astronomic at CERN: origin = principal point of the system = P0
+	TAngle etaP0(0), xsiP0(0), dAlphaP0(0);
+	TGraphLocalAstronomicalRF *pLAp0 = new TGraphLocalAstronomicalRF("LA P0", etaP0, xsiP0, dAlphaP0, pLGp0);
+	setIdAndAddToList(pLAp0, kLAp0, fRefFrameList);
+
+	// CCS : CERN Modified Local Astronomical system : principal point = P0 defined as false origin
+	TFreeVector falseOrigin(XP0, LITERAL(YP0), LITERAL(ZP0), TCoordSysFactory::k3DCartesian);
+	TAngle omega(0), phi2(0), kappa(LITERAL(AzimuthCCSYaxis), TAngle::kGons);
+
+	TAModifiedLocalAstronomicalRF *pCCS = new TGraphMLARF("CCS", falseOrigin, pLAp0, omega, phi2, kappa);
+	setIdAndAddToList(pCCS, kCCS, fRefFrameList);
+
+	// new P0 coordinates
+	TAngle phi_new(LITERAL(51.36734), TAngle::kGons), lambda_new(LITERAL(6.722515), TAngle::kGons);
+
+	TModifiedLocalGeodeticRF *pLGp0_new = createModifiedLocalGeodeticRF(fCGRF2, "LG P0_new", phi_new, lambda_new, H);
+	setIdAndAddToList(pLGp0_new, kLGp0_new, fRefFrameList);
+
+	// Local Astronomic at P0_new
+	TGraphLocalAstronomicalRF *pLAp0_new = new TGraphLocalAstronomicalRF("LA P0_new", etaP0, xsiP0, dAlphaP0, pLGp0_new);
+	setIdAndAddToList(pLAp0_new, kLAp0_new, fRefFrameList);
+
+	// CCS at P0_new
+	TAngle kappa_new(LITERAL(37.779033), TAngle::EUnits::kGons);
+	TAModifiedLocalAstronomicalRF *pCCS_new = new TGraphMLARF("CCS_new", falseOrigin, pLAp0_new, omega, phi2, kappa_new);
+	setIdAndAddToList(pCCS_new, kCCS_new, fRefFrameList);
+}
+
+void TRefSystemFactory::addLocalCADRefFrames()
+{
+	createObjectSetIdAndAddToList<TLocalRFWithTransformationMatrix>(kLocalRFin, fRefFrameList, "LocalRF_Input", "");
+	createObjectSetIdAndAddToList<TLocalRFWithTransformationMatrix>(kLocalRFout, fRefFrameList, "LocalRF_Output", "");
+}
+
+void TRefSystemFactory::addCERNrefFrameTransformation()
+{
+	auto pCernXYHs = getRefFrame<TXYHeProjection>(kCERNXYHsSphereSPS);
+	auto pCCS = getRefFrame<TAModifiedLocalAstronomicalRF>(kCCS);
+	auto pLAp0 = getRefFrame<TGraphLocalAstronomicalRF>(kLAp0);
+	auto pLGp0 = getRefFrame<TModifiedLocalGeodeticRF>(kLGp0);
+
+	// Transformation between CERN projection XYHs and CCS
+	addTransformationPair<TXYHs2MLATransformation>(kXYHsSphereSPS2CCS, kCCS2XYHsSphereSPS, pCernXYHs);
+
+	// Transformation between CCS and CGRF
+	/*Il est equivalent de mettre CG2000 ou CG1985 car les parametres du geoide au niveau de P0,
+	servant a definir la transformation sont equivalent*/
+	addTransformationPair<TMLA2GCTransformation>(kCCS2CGRF, kCGRF2CCS, pCCS, getGeoid(kCG1985Machine));
+
+	// Conversion between CGRF (ellipsoid) and CGRF (Transverse Mercator projection)
+	addTransformationPair<TGeodetic2Mercator>(kCGRF2CGRFMercator, kCGRFMercator2CGRF, true);
+
+	// Transformation between CCS and CGRFSphere
+	// rotation pour diriger les axes du CGRFs parallele a ceux du CGRF
+	TAngle rx(-LITERAL(42.726243230216), TAngle::kGons);
+	TAngle ry(-LITERAL(25.285434244947), TAngle::kGons);
+	TAngle rz(-LITERAL(77.864346765085), TAngle::kGons);
+	// translation pour situer le centre de la sphere
+	TLength txs(LITERAL(4381882.331989)), tys(LITERAL(461505.530464)), tzs(LITERAL(4598944.364158));
+	// facteur d echelle
+	TScaleFactor ks(LITERAL(1.0));
+	THelmertRefFrameTransform *pCCS2CGRFs = createHelmertRefFrameTransform(pCCS, fCGRFSphere, rx, ry, rz, txs, tys, tzs, ks);
+	addTransformationAndInverse(pCCS2CGRFs, kCCS2CGRFSphere, kCGRFSphere2CCS, fTransformList);
+
+	// Transformation between LAp0 and LGp0
+	addTransformationPair<TLA2LGTransformation>(kLAp02LGp0, kLGp02LAp0, pLAp0);
+
+	// Transformation between LGp0 and CGRF
+	addTransformationPair<TLG2GCTransformation>(kLGp02CGRF, kCGRF2LGp0, pLGp0);
+
+	// Helmert Transformation between LAp0 and CCS
+	TAngle omega = pCCS->getOrientation().getElements(TCoordSysFactory::ECoordSys::k3DCartesian).getAngles(TRotationMatrix::kRzyx).omega;
+	TAngle phi = pCCS->getOrientation().getElements(TCoordSysFactory::ECoordSys::k3DCartesian).getAngles(TRotationMatrix::kRzyx).phi;
+	TAngle kappa = pCCS->getOrientation().getElements(TCoordSysFactory::ECoordSys::k3DCartesian).getAngles(TRotationMatrix::kRzyx).kappa;
+	TFreeVector falseOrigin = pCCS->getFalseOrigin();
+	TScaleFactor enl(LITERAL(1.0));
+	THelmertRefFrameTransform *pLAp02CCS = createHelmertRefFrameTransform(pLAp0, pCCS, omega, phi, -1.0 * kappa, falseOrigin.getX(), falseOrigin.getY(), falseOrigin.getZ(), enl);
+	addTransformationAndInverse(pLAp02CCS, kLAp02CCS, kCCS2LAp0, fTransformList);
+
+	// Helmert Transformation between ITRF97 (ep1998.5) and CGRF
+	TAngle om3(LITERAL(399.999533213524), TAngle::kGons);
+	TAngle p3(LITERAL(0.001825157943), TAngle::kGons);
+	TAngle k3(LITERAL(0.000991054274), TAngle::kGons);
+	TLength Tx3(LITERAL(76.3768280)), Ty3(LITERAL(131.9389844)), Tz3(-LITERAL(156.1229775));
+	TScaleFactor enl3(LITERAL(1.000000000000000));
+	THelmertRefFrameTransform *pITRF972CGRF = createHelmertRefFrameTransform(getRefFrame<TTerrestrialReferenceFrame>(kITRF97), fCGRF, om3, p3, k3, Tx3, Ty3, Tz3, enl3);
+	addTransformationAndInverse(pITRF972CGRF, kITRF972CGRF, kCGRF2ITRF97, fTransformList);
 }
 
 void TRefSystemFactory::addTerrestrialRefFramesTransformations()
@@ -504,6 +462,37 @@ void TRefSystemFactory::addTerrestrialRefFramesTransformations()
 	setIdAndAddToList(pETRFin2ETRFout, kETRFin2ETRFout, fTransformList);	
 }
 
+void TRefSystemFactory::addCERNprojectionsTransformations()
+{
+	// Transformation between CERN projection XYHe and CCS
+	auto pCernXYHe = getRefFrame<TXYHeProjection>(kCernXYHe);
+	addTransformationPair<TXYHe2MLATransformation>(kXYHe2CCS, kCCS2XYHe, pCernXYHe);
+
+	// Transformation between CERN projection X0Y0He and CERN projection XYHe
+	auto pCernX0Y0He = getRefFrame<TX0Y0HeProjection>(kCernX0Y0He);
+	addTransformationPair<TX0Y0He2XYHeTransformation>(kX0Y0He2XYHe, kXYHe2X0Y0He, pCernX0Y0He);
+
+	// Transformation between CERN projection XYHg (Geoid 2000) and XYHe
+	auto pCernXYHg00 = getRefFrame<TXYHgProjection>(kCernXYHg00);
+	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe, kXYHe2XYHg, pCernXYHg00);
+
+	// Transformation between CERN projection XYHg (Geoid 2000Topo) and XYHe
+	auto pCernXYHg00Topo = getRefFrame<TXYHgProjection>(kCernXYHg00Topo);
+	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe00Topo, kXYHe00Topo2XYHg, pCernXYHg00Topo);
+
+	// Transformation between CERN projection XYHg (Geoid 2000Machine) and XYHe
+	auto pCernXYHg00Machine = getRefFrame<TXYHgProjection>(kCernXYHg00Machine);
+	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe00Machine, kXYHe00Machine2XYHg, pCernXYHg00Machine);
+
+	// Transformation between CERN projection XYHg (Geoid 1985) and XYHe
+	auto pCernXYHg85 = getRefFrame<TXYHgProjection>(kCernXYHg85);
+	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe85, kXYHe852XYHg, pCernXYHg85);
+
+	// Transformation between CERN projection XYHg (Geoid 1985Machine) and XYHe
+	auto pCernXYHg85Machine = getRefFrame<TXYHgProjection>(kCernXYHg85Machine);
+	addTransformationPair<TXYHg2XYHeTransformation>(kXYHg2XYHe85Machine, kXYHe85Machine2XYHg, pCernXYHg85Machine);
+}
+
 void TRefSystemFactory::addFrenchTransformations()
 {
 	// Transformation between projected CC46 and RGF93
@@ -523,6 +512,21 @@ void TRefSystemFactory::addFrenchTransformations()
 
 void TRefSystemFactory::addSwissTransformations()
 {
+	////////////////////////////////////////////////////////////////
+	// Helmert Transformation between ETRF93 (ep1993) and CH1903plus
+	////////////////////////////////////////////////////////////////
+	
+	// There is no rotation:
+	// Total translation resulting from epoch changes and Reference Frame changes:
+	TLength Tx3(LITERAL(-674.374)), Ty3(LITERAL(-15.056)), Tz3(LITERAL(-405.346));
+	// There is no scaling:
+	TScaleFactor enl3(LITERAL(1.000000000000000));
+	auto pETRF93 = getRefFrame<TTerrestrialReferenceFrame>(kETRF93);
+	auto pCH1903plus = getRefFrame<TGeodeticRefFrame>(kCH1903plus);
+
+	THelmertRefFrameTransform *pETRF932CH1903plus = createHelmertRefFrameTransform(pETRF93, pCH1903plus, TAngle(0), TAngle(0), TAngle(0), Tx3, Ty3, Tz3, enl3);
+	addTransformationAndInverse(pETRF932CH1903plus, kETRF932CH1903plus, kCH1903plus2ETRF93, fTransformList);
+	
 #ifdef USE_SWISSTOPO
 	// Transformation between CH1903plus and LV95 (ellipsoidal height)
 	addTransformationPair<TLV95Transformation>(kCH1903plus2SwissLV95eh, kSwissLV95eh2CH1903plus, true, "eh");
