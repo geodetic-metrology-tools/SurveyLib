@@ -235,6 +235,9 @@ void TRefSystemFactory::addGeodeticRefFrames()
 	// CGRF sphere
 	createObjectSetIdAndAddToList<TGeodeticRefFrame>(kCGRFSphere, fRefFrameList, "CGRFSphere", getEllipsoid(TRefSystemFactory::kSphere));
 	fCGRFSphere = getRefFrame<TGeodeticRefFrame>(kCGRFSphere);
+
+	// CH1903plus
+	createObjectSetIdAndAddToList<TGeodeticRefFrame>(kCH1903plus, fRefFrameList, "CH1903plus", getEllipsoid(TRefSystemFactory::kBessel1841));
 }
 
 void TRefSystemFactory::addGenericETRFandITRF()
@@ -283,9 +286,6 @@ void TRefSystemFactory::addSpecificETRFandITRF()
 	epoch = 1993;
 	solution = "ETRF 93";
 	createObjectSetIdAndAddToList<TTerrestrialReferenceFrame>(kCHTRF95, fRefFrameList, "CHTRF95", grs80, epoch, solution);
-
-	// CH1903plus
-	createObjectSetIdAndAddToList<TGeodeticRefFrame>(kCH1903plus, fRefFrameList, "CH1903plus", getEllipsoid(TRefSystemFactory::kBessel1841));
 
 	// WGS84 (G2139)
 	epoch = 2016;
