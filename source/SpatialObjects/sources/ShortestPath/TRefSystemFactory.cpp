@@ -152,7 +152,8 @@ void TRefSystemFactory::initGeoidList()
 
 	std::string cg00("CG2000 h=0"), cg00topo("CG2000 h=surface"), cg00Machine("CG2000 h=Machine"), cg85("CG1985 h=0"), cg85Machine("CG1985 h=Machine"), cgSphere("Sphere");
 
-	TPositionVector dl(-5000, 0, 0, TCoordSysFactory::k3DCartesian), ur(6000, 15000, 0, TCoordSysFactory::k3DCartesian);
+	TPositionVector dl(-5000, 0, 0, TCoordSysFactory::k3DCartesian); // Down Left (South West) corner of the grid
+	TPositionVector ur(6000, 15000, 0, TCoordSysFactory::k3DCartesian); // Up Right (North East) corner of the grid
 
 	// CG2000 h=0
 	TCernGridGeoid *pCG2000 = createCernGridGeoid(cg00, CernGridGeoidData::nCG2000h0, CernGridGeoidData::etaCG2000h0, CernGridGeoidData::xsiCG2000h0, dl, ur, kCG2000);
@@ -173,17 +174,12 @@ void TRefSystemFactory::initGeoidList()
 	fGeoidList.push_back(pCGSphere);
 
 	// CG1985 h=0
-	TAngle ang;
-	ang.setGonsValue(LITERAL(48.772));
-	TReal a(LITERAL(0.535)), b(-LITERAL(0.096)), th(ang.getRadiansValue());
-	TCernParabolicGeoid *pCG1985 = new TCernParabolicGeoid(cg85, kCG1985, a, b, th, pCGRF, pGRS80, pCCS);
+	TCernParabolicGeoid *pCG1985 = new TCernParabolicGeoid(cg85, kCG1985, TCernParabolicGeoid::a_h0, TCernParabolicGeoid::b_h0, TCernParabolicGeoid::ang_h0, pCGRF, pGRS80, pCCS);
 	fGeoidList.push_back(pCG1985);
 
 	// CG1985 h=Machine
-	TAngle angLEP;
-	angLEP.setGonsValue(LITERAL(48.219));
-	TReal aLEP(LITERAL(0.614)), bLEP(-LITERAL(0.106)), thLEP(angLEP.getRadiansValue());
-	TCernParabolicGeoid *pCG1985Machine = new TCernParabolicGeoid(cg85Machine, kCG1985Machine, aLEP, bLEP, thLEP, pCGRF, pGRS80, pCCS);
+	TCernParabolicGeoid *pCG1985Machine = new TCernParabolicGeoid(
+		cg85Machine, kCG1985Machine, TCernParabolicGeoid::a_LEP, TCernParabolicGeoid::b_LEP, TCernParabolicGeoid::ang_LEP, pCGRF, pGRS80, pCCS);
 	fGeoidList.push_back(pCG1985Machine);
 }
 
