@@ -122,7 +122,6 @@ void TRefSystemFactory::init()
 
 void TRefSystemFactory::initEllipsoidList()
 {
-	///////////////////////////////////////////////////////////////////
 	// Definition of the ellipsoid list
 
 	// Sphere SPS
@@ -143,7 +142,6 @@ void TRefSystemFactory::initEllipsoidList()
 
 void TRefSystemFactory::initGeoidList()
 {
-	///////////////////////////////////////////////////////////////////////////////
 	// Definition of the geoid list
 
 	auto pCCS = getRefFrame(kCCS);
