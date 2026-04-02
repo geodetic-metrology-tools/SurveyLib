@@ -271,6 +271,22 @@ namespace tut
 		ensure_equals("CH1903+ Z", position.getZ().getMetresValue(), static_cast<TReal>(4600671.934), static_cast<TReal>(0.001));
 	}
 
+	template<>
+	template<>
+	void object::test<18>()
+	{
+		set_test_name("Transforming a TSpatialPosition from CCS to LV95 (ortho)");
+
+		TAReferenceFrame *CCS(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+		TAReferenceFrame *lv95_ortho(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kSwissLV95_lhn95));
+		TSpatialPosition point = TSpatialPosition(CCS, 1000.356, 540.1654, 142.023, TCoordSysFactory::k3DCartesian);
+
+		ensure("Transform returns true", point.transform(lv95_ortho));
+		ensure_equals("LV95 X", point.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(2491061.9103335), static_cast<TReal>(1e-7));
+		ensure_equals("LV95 Y", point.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(1120328.9280417), static_cast<TReal>(1e-7));
+		ensure_equals("LHN95 Z", point.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<TReal>(-1857.7002211), static_cast<TReal>(1e-7));
+	}
+
 	}
 
 #endif
