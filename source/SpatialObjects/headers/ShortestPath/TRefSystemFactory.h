@@ -399,8 +399,6 @@ private:
 	std::vector<TAReferenceFrame*> fLocalRefFrameList; /*!< list of pointers to the local Ref.Frames */
 
 	std::vector<TARefFrameTransformation*> fTransformList; /*!< list of pointers to the to-be-defined Ref.Frame transformations */
-	//il est important que ce soit une classe TA plutot que TV pour avoir acces au destructeur
-
 
 	TGeodeticRefFrame *fCGRF = nullptr;
 	TGeodeticRefFrame *fCGRFSphere = nullptr;
