@@ -282,9 +282,9 @@ namespace tut
 		TSpatialPosition point = TSpatialPosition(CCS, 1000.356, 540.1654, 142.023, TCoordSysFactory::k3DCartesian);
 
 		ensure("Transform returns true", point.transform(lv95_ortho));
-		ensure_equals("LV95 X", point.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(2491061.9103335), static_cast<TReal>(1e-7));
-		ensure_equals("LV95 Y", point.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(1120328.9280455), static_cast<TReal>(1e-7));
-		ensure_equals("LHN95 Z", point.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<TReal>(-1857.7002191), static_cast<TReal>(1e-7));
+		ensure_equals("LV95 X", point.getCoordinates(TCoordSysFactory::k2DPlusH).getX().getMetresValue(), static_cast<TReal>(2491061.91033355), static_cast<TReal>(1e-7));
+		ensure_equals("LV95 Y", point.getCoordinates(TCoordSysFactory::k2DPlusH).getY().getMetresValue(), static_cast<TReal>(1120328.92804549), static_cast<TReal>(1e-7));
+		ensure_equals("LHN95 Z", point.getCoordinates(TCoordSysFactory::k2DPlusH).getH().getMetresValue(), static_cast<TReal>(-1857.70021907), static_cast<TReal>(1e-7));
 	}
 
 	}
