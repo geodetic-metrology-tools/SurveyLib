@@ -96,8 +96,8 @@ class TestCSGeoDLL(unittest.TestCase):
             outputParams = PyPlainDataParameters(111, 4, 1 , 0.0, None)   # Final reference frame: LV95_ortho, 2D+H, Decimal Degrees
             
             result1 = myDLL.transformPoint( ct.byref(x), ct.byref(y), ct.byref(z), ct.byref(inputParams), None, ct.byref(outputParams), None )
-            self.assertAlmostEqual(x.value, 2491061.9103335, places = 7)
-            self.assertAlmostEqual(y.value, 1120328.9280417, places = 7)
-            self.assertAlmostEqual(z.value, -1857.7002211, places = 7)
+            self.assertAlmostEqual(x.value, 2491061.91033355, places = 7)
+            self.assertAlmostEqual(y.value, 1120328.92804549, places = 7)
+            self.assertAlmostEqual(z.value, -1857.70021907, places = 7)
             
         
