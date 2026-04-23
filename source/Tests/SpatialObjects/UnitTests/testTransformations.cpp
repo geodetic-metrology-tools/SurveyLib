@@ -401,4 +401,29 @@ namespace tut
 		ensure_distance("CCS Y", position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue(), static_cast<TReal>(2077.57), static_cast<TReal>(0.01));
 		ensure_distance("CCS Z", position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue(), static_cast<TReal>(2481.52), static_cast<TReal>(0.01));   
 	}
-}
+
+	template<>
+	template<>
+	void object::test<15>()
+	{
+		set_test_name("Transforming geodetic to geocentric coordinates");
+
+		TAngle latitude(46.25695113844469, TAngle::kDeciDegs);
+		TAngle longitude(6.06056092735124, TAngle::kDeciDegs);
+
+		TPositionVector pvGeodetic(latitude.getRadiansValue(), longitude.getRadiansValue(), 525.932, TCoordSysFactory::kGeodetic);
+
+		TAReferenceFrame *rgf93(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kRGF93));
+		TSpatialPosition *position = new TSpatialPosition(rgf93);
+		ensure("Setting the coordinates of TSpatialPosition", position->setCoordinates(pvGeodetic));
+		TSpatialPoint spPoint("Point");
+		spPoint.setPosition(position);
+		TPositionVector pvCartesian = spPoint.getPosition().getCoordinates(TCoordSysFactory::k3DCartesian);
+
+		// Comparison with the PROJ command: "6.06056092735124 46.25695113844469 525.932" | cct - d 10 + proj = cart + ellps = GRS80
+		// That gives: 4393400.8200132158  466460.6261707481  4585421.5726383748
+		ensure_equals("RGF93 X", pvCartesian.getX().getMetresValue(), static_cast<TReal>(4393400.8200132158), static_cast<TReal>(1e-9));
+		ensure_equals("RGF93 Y", pvCartesian.getY().getMetresValue(), static_cast<TReal>(466460.6261707481), static_cast<TReal>(1e-9));
+		ensure_equals("RGF93 Z", pvCartesian.getZ().getMetresValue(), static_cast<TReal>(4585421.5726383748), static_cast<TReal>(1e-9));
+	}
+	}
