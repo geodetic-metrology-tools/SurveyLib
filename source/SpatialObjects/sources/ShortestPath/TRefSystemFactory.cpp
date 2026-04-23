@@ -9,9 +9,7 @@
    
 */
 
-#include <array>
 #include <iomanip>
-#include <limits>
 
 #include "GeodeticConstants.h"
 
@@ -38,22 +36,15 @@
 
 
 #include <TMLA2GCTransformation.h>
-#include <TGC2MLATransformation.h>
 #include <TXYHs2MLATransformation.h>
-#include <TMLA2XYHsTransformation.h>
 #include <TLA2LGTransformation.h>
-#include <TLG2LATransformation.h>
 #include <TLG2GCTransformation.h>
-#include <TGC2LGTransformation.h>
 #include <TGeodetic2Mercator.h>
 #include <THelmertTransformation.h>
 #include <THelmertRefFrameTransform.h>
 #include <TXYHe2MLATransformation.h>
-#include <TMLA2XYHeTransformation.h>
 #include <TX0Y0He2XYHeTransformation.h>
-#include <TXYHe2X0Y0HeTransformation.h>
 #include <TXYHg2XYHeTransformation.h>
-#include <TXYHe2XYHgTransformation.h>
 #ifdef USE_SWISSTOPO
 	#include <TLV95Transformation.h>
 	#include <TLV03Transformation.h>
