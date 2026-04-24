@@ -392,7 +392,7 @@ void TRefSystemFactory::addCERNrefFrameTransformation()
 	THelmertRefFrameTransform *pLAp02CCS = createHelmertRefFrameTransform(pLAp0, pCCS, omega, phi, -1.0 * kappa, falseOrigin.getX(), falseOrigin.getY(), falseOrigin.getZ(), enl);
 	addTransformationAndInverse(pLAp02CCS, kLAp02CCS, kCCS2LAp0, fTransformList);
 
-	// Helmert Transformation between ITRF97 (ep1998.5) and CGRF
+	// Helmert Transformation between ITRF97 (ep1998.5) and CGRF (see EDMS document 324131)
 	TAngle om3(LITERAL(399.999533213524), TAngle::kGons);
 	TAngle p3(LITERAL(0.001825157943), TAngle::kGons);
 	TAngle k3(LITERAL(0.000991054274), TAngle::kGons);
