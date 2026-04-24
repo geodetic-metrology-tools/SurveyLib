@@ -28,8 +28,6 @@
 // Forward declarations
 //
 #include  <string>
-#include  <set>
-#include  <vector>
 
 #include  "TSpatialPosition.h"
 #include  "TSpatialVector.h"

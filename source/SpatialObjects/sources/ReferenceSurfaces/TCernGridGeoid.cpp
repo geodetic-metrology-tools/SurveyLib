@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "TSpatialPosition.h"
-#include "TGraph.h"
 #include "TAReferenceFrame.h"
 #include "TCernGridGeoid.h"
 
@@ -13,7 +12,6 @@
 #include <valarray>
 #include <vector>
 #include <sstream>
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR

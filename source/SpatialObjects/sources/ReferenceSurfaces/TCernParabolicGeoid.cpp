@@ -14,7 +14,6 @@
 //forward declarations
 
 #include	"GeodeticConstants.h"
-#include	"TGraph.h"
 #include	"TSpatialPosition.h"
 #include	"TAReferenceFrame.h"
 #include	"TCernParabolicGeoid.h"

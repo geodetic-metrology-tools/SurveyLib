@@ -3,18 +3,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "TSpatialPosition.h"
-#include "TGraph.h"
 #include "TAReferenceFrame.h"
-
-
 #include "TCernSphereGeoid.h"
-
-#include <vector>
-#include <math.h>
-
-
-
-
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
