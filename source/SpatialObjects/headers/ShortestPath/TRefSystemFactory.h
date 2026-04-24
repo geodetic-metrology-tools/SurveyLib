@@ -52,14 +52,10 @@ class TScaleFactor;
 #include <TLocalSystemOrigin.h>
 #include <TNotInGraphException.h>
 
-//
-//
 ////////////////////////////////////////////////////////////////
 
 /*!\ingroup spatialobjects
 	@{*/
-
-//#define PHIP0 LITERAL(51.3692);
 
 //! Singleton class: produce one unique instance listing ref. surfaces, ref.frames and transformations
 class TRefSystemFactory

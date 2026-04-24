@@ -26,16 +26,11 @@
 
 ////////////////////////////////////////////////////////////////
 // Forward declarations
-//
-//#include	<float.h>
-#include    <math.h>
-//#include	<assert.h>
 #include    <string>
-//
+
 class  TAngle;
 #include "TRefSystemFactory.h"
-//#include  "TVReferenceEllipsoid.h"
-//
+
 // typedefs
 typedef TReal EllipseParameter;
 

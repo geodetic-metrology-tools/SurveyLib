@@ -20,16 +20,11 @@
 #include	"TCompositeAffTransform.h"
 
 #include	"TGeodeticRefFrame.h"
-#include	"TModifiedLocalGeodeticRF.h"
-#include	"TModifiedLocalAstronomicalRF.h"
 
-#include    "TVRefFrameTransformation.h"
 #include    <TARefFrameTransformation.h>
 #include    <THelmertRefFrameTransform.h>
 
 #include	"TAReferenceFrame.h"
-
-#include	"TReferenceEllipsoid.h"
 
 //////////////////////////////////////////////////////////////////////
 // Initialisation
@@ -40,13 +35,11 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-
 TAReferenceFrame::TAReferenceFrame( const std::string& name )
 	: fName( name )/*, fRefFrameId(0)*/
 {	// default constructor 
 	fRefFrameId = TRefSystemFactory::kNotInGraph;
 }
-
 
 //TAReferenceFrame::TAReferenceFrame(const TAReferenceFrame& trf)
 //{	// copy constructor 
@@ -56,7 +49,6 @@ TAReferenceFrame::TAReferenceFrame( const std::string& name )
 TAReferenceFrame::~TAReferenceFrame()
 {
 }
-
 
 //////////////////////////////////////////////////////////////////////
 // Member Functions
@@ -105,8 +97,6 @@ TPositionVector TAReferenceFrame::getPositionVector(const TSpatialPosition* sp) 
 	return sp->getPositionVector();
 }
 
-
-
 //Access to the free vector of a spatial vector
 //using private function of TSpatialVector
 TFreeVector TAReferenceFrame::getVector(const TSpatialVector* sv) const
@@ -114,14 +104,12 @@ TFreeVector TAReferenceFrame::getVector(const TSpatialVector* sv) const
 	return sv->getVector();
 }
 
-
 //Access to the rotation matrix of a spatial orientation
 //using private function of TSpatialOrientation
 TRotationMatrix TAReferenceFrame::getOrientation(const TSpatialOrientation* so) const
 {
 	return so->getOrientation();
 }
-
 
 //////////////////
 //Settings methods
@@ -133,8 +121,6 @@ bool TAReferenceFrame::setPositionVector(TSpatialPosition* sp, const TPositionVe
 	
 }
 
-
-
 bool TAReferenceFrame::setVector(TSpatialVector* sv, const TFreeVector& fv)
 {//Setting of the free vector for a spatial vector
 //using private function of TSpatialVector
@@ -142,8 +128,6 @@ bool TAReferenceFrame::setVector(TSpatialVector* sv, const TFreeVector& fv)
 	result = sv->setVector(fv);
 	return result;
 }
-
-
 
 bool TAReferenceFrame::setOrientation(TSpatialOrientation* so, const TRotationMatrix& rm)
 {//Setting of the rotation matrix for a spatial orientation
