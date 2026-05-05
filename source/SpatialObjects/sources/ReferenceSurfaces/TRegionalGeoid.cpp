@@ -48,7 +48,18 @@ TLength TRegionalGeoid::getN(const TSpatialPosition &sp) const
 		throw std::invalid_argument("Impossible to extract geoid height: Inconsistent coordinate systems");
 	}
 
-	dataset->GetRasterBand(1)->InterpolateAtGeolocation(y, x, geoidSRS, GRIORA_Bilinear, &geoidHeight);
+	// The axis order of the geoid grid is determined by the axis mapping strategy of the geoid SRS.
+	// If it is OAMS_TRADITIONAL_GIS_ORDER, the order is (longitude, latitude) or (x, y).
+	// If it is OAMS_AUTHORITY_COMPLIANT, the order is determined by the authority and can be (latitude, longitude) or (y, x)
+	if (geoidSRS->GetAxisMappingStrategy() == OAMS_TRADITIONAL_GIS_ORDER)
+	{
+		y -= 360.0;
+		dataset->GetRasterBand(1)->InterpolateAtGeolocation(x, y, geoidSRS, GRIORA_Bilinear, &geoidHeight);
+	}
+	else
+	{
+		dataset->GetRasterBand(1)->InterpolateAtGeolocation(y, x, geoidSRS, GRIORA_Bilinear, &geoidHeight);
+	}
 
 	GDALClose(dataset);
 
@@ -125,9 +136,6 @@ bool TRegionalGeoid::prepareXiAndEtaComputation(const TSpatialPosition &sp, TRea
 	
 	double gt[6];
 	dataset->GetGeoTransform(gt);
-
-	// TReal xPixel, yPixel = 0.0;
-	// dataset->GeolocationToPixelLine(lambda.getDeciDegsValue(), phi.getDeciDegsValue(), dataset->GetSpatialRef(), &xPixel, &yPixel);
 
 	TReal n_XBefore_Y, n_XAfter_Y, n_X_YBefore, n_X_YAfter = 0.0;
 	getNatCornerAroundPoint(lambda.getDeciDegsValue(), phi.getDeciDegsValue(), dataset, abs(gt[1]), abs(gt[5]), n_XBefore_Y, n_XAfter_Y, n_X_YBefore, n_X_YAfter);
