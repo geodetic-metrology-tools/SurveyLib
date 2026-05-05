@@ -45,7 +45,8 @@ public:
 		TReferenceEllipsoid *ell,
 		TAReferenceFrame *calc,
 		const std::string &pathToFile,
-		const int &epsgCode = 4345);
+		const int &epsgCode = 4345,
+		const GDALRIOResampleAlg &interpolationMethod = GRIORA_Bilinear);
 
 	/// Destructor
 	virtual ~TRegionalGeoid();
@@ -75,6 +76,8 @@ private:
 
 	GDALDataset *openGDALDataset() const;
 
+	bool getXAndYFromSpatialPosition(const TSpatialPosition &sp, TReal &x, TReal &y, const OGRSpatialReference &geoidSRS) const;
+
 	bool prepareXiAndEtaComputation(const TSpatialPosition &sp, TReal &deltaN, TAngle &lambdaOrPhi, TAngle &gridSpacing, const std::string &xiOrEta) const;
 
 	bool getNatCornerAroundPoint(const TReal &xPoint,
@@ -94,9 +97,10 @@ private:
 
 	/**@name Member Attributes */
 	//@{
-	std::string fPathToFile; /*!< path to the geoid grid file */
+	std::string fPathToFile; /*! path to the geoid grid file */
 
-	int fEPSGCode = 4345; /*!< EPSG code of the geoid grid. 4345 (ETRS89 3D geographic) is default value  */
+	int fEPSGCode = 4345; /*! EPSG code of the geoid grid. 4345 (ETRS89 3D geographic) is default value  */
+	GDALRIOResampleAlg fInterpolationMethod = GRIORA_Bilinear; /*! Prefered interpolation method*/
 	//@}
 };
 
