@@ -57,7 +57,7 @@ void object::test<1>()
 	auto *ct = OGRCreateCoordinateTransformation(&src, &dst);
 
 	double x = 140.333;
-	double y = 360-31.6989;
+	double y = -31.6989;
 
 	//ct->Transform(1, &x, &y);
 
@@ -232,18 +232,95 @@ template<>
 void object::test<7>()
 {
 	set_test_name("Test with australian geoid");
-	const double tol = 1e-3;
+	const double tolHeight = 1e-3;
+	const double tolDoV = 1e-2;
+	std::string pathToFile("C:\\Users\\bweyer\\Downloads\\AUSGeoid2020_20180201.gsb");
 	// Initialize geoid model once
-	TAReferenceFrame *ITRF(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kITRFin));
-	TRegionalGeoid *AUSGeoid2020 = new TRegionalGeoid("AUSGeoid2020", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, ITRF,
-		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), ITRF, "C:\\Users\\bweyer\\Downloads\\AUSGeoid2020_20180201.gsb", 7843);
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kITRFin));
+	TRegionalGeoid *AUSGeoid2020 = new TRegionalGeoid("AUSGeoid2020", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, pathToFile, 4326, GRIORA_Cubic);
 
-	// Coordinate of a point in Australia
+	// Coordinate of a point in Australia S28 26  0.000 E122 57  0.000 h200 xi = -5.64    eta = -2.65
 	TLength x(-3053053.09282), y(4710283.39541), z(-3018916.88305);
-				TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
-						TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFin), p);
+	TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFin), p);
 
-	ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), -14.714, tol);
+	ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), -14.714, tolHeight); // this value is at a grid node, so no interpolation error expected
+	ensure_equals("Eta", AUSGeoid2020->getEta(position).getSecondsValue(), -2.65, tolDoV); // this value is at a grid node, so no interpolation error expected
+	ensure_equals("Xi", AUSGeoid2020->getXi(position).getSecondsValue(), -5.64, tolDoV); // this value is at a grid node, so no interpolation error expected
 }
+
+template<>
+template<>
+void object::test<8>()
+{
+	set_test_name("Test with australian geoid");
+	const double tolHeight = 1e-3;
+	const double tolDoV = 1e-2;
+	std::string pathToFile("C:\\Users\\bweyer\\Downloads\\AUSGeoid2020_20180201.gsb");
+	// Initialize geoid model once
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kITRFin));
+	TRegionalGeoid *AUSGeoid2020 = new TRegionalGeoid("AUSGeoid2020", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, pathToFile, 4326, GRIORA_Cubic);
+
+	// Coordinate of a point in Australia 336.5544321470 (23.445567853S)    134.4456785300E    250.00000 ellipsoidalHeight
+	// comparison with results given by the online tool https://geodesyapps.ga.gov.au/ausgeoid2020
+	TLength x(-4099779.11805), y(4179885.17336), z(-2522166.01923);
+	TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
+
+	ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), 19.727, tolHeight);
+	ensure_equals("Eta", AUSGeoid2020->getEta(position).getSecondsValue(), -6.07, tolDoV);
+	ensure_equals("Xi", AUSGeoid2020->getXi(position).getSecondsValue(), -20.21, tolDoV);
+}
+
+template<>
+template<>
+void object::test<9>()
+{
+	set_test_name("Test with australian quasigeoid AGQ2017");
+	const double tolHeight = 1e-3;
+	const double tolDoV = 1e-2;
+	std::string pathToFile("C:\\Users\\bweyer\\Downloads\\AGQG_20201120.gsb");
+	// Initialize geoid model once
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kITRFin));
+	TRegionalGeoid *AGQ2017 = new TRegionalGeoid("AGQ2017", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, pathToFile, 4326, GRIORA_Cubic);
+
+	// Coordinate of a point in Australia 336.5544321470 (23.445567853S)    134.4456785300E    250.00000 ellipsoidalHeight
+	// comparison with results given by the online tool https://geodesyapps.ga.gov.au/ausgeoid2020
+	TLength x(-4099779.11805), y(4179885.17336), z(-2522166.01923);
+	TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
+
+	//ensure_equals("N", AGQ2017->getN(position).getMetresValue(), 19.727, tolHeight);
+	//ensure_equals("Eta", AGQ2017->getEta(position).getSecondsValue(), -6.07, tolDoV);
+	ensure_equals("Xi", AGQ2017->getXi(position).getSecondsValue(), -20.21, tolDoV);
+}
+
+template<>
+template<>
+void object::test<10>()
+{
+	set_test_name("Test with American Geoid18");
+	const double tolHeight = 1e-3;
+	const double tolDoV = 1e-2;
+	std::string pathToFile("C:\\Users\\bweyer\\Downloads\\g2018u0.bin");
+	// Initialize geoid model once
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
+	TRegionalGeoid *GEOID18 = new TRegionalGeoid("GEOID18", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, pathToFile, 4326, GRIORA_Cubic);
+
+	// Coordinate of a point in the US 35.9320N     97.2W    250.00000 ellipsoidalHeight
+	// comparison with results given by the online tool https://www.ngs.noaa.gov/GEOID/DEFLEC18/computation.html
+	TLength x(-648052.09354), y(-5129860.54005), z(3722231.58159);
+	TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
+
+	//ensure_equals("N", GEOID18->getN(position).getMetresValue(), 19.727, tolHeight);
+	ensure_equals("Eta", GEOID18->getEta(position).getSecondsValue(), 1.32, tolDoV);
+	ensure_equals("Xi", GEOID18->getXi(position).getSecondsValue(), 2.88, tolDoV);
+}
+
 
 } // namespace tut
