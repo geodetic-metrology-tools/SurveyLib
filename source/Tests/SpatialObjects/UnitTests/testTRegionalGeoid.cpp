@@ -8,6 +8,7 @@
 #include <TSpatialPosition.h>
 #include <TRefFrameInfo.h>
 #include <TRegionalGeoid.h>
+#include <TReferenceEllipsoid.h>
 #include <fstream>
 
 
@@ -182,8 +183,12 @@ void object::test<6>()
 	outfile << "Point\tEta\tXi\tEtaModel\tXiModel\tDeltaEta\tDeltaXi\n";
 	outfile << std::fixed << std::setprecision(6);
 
-	// Initialize geoid model once (important!)
-	TAGeoidModel *geoidModel = TRefSystemFactory::getRefSystemFactory()->getGeoid(TRefSystemFactory::kCHGeo2004_ETRS);
+	// Initialize geoid model once
+	TAReferenceFrame *CHTRF95(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCHTRF95));
+	TRegionalGeoid *FCC_G2025 = new TRegionalGeoid("CHGeo2004_ETRS", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, CHTRF95,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80),
+		CHTRF95, "C:\\Users\\bweyer\\cernbox\\Documents\\FCC\\Geoid\\JuliaComparison\\Julia\\FCC-G2025_V1.0.tif");
+
 
 	while (std::getline(infile, line))
 	{
@@ -205,8 +210,8 @@ void object::test<6>()
 		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95), p);
 
 		// Compute model values
-		double EtaModel = geoidModel->getEta(position).getSecondsValue();
-		double XiModel = geoidModel->getXi(position).getSecondsValue();
+		double EtaModel = FCC_G2025->getEta(position).getSecondsValue();
+		double XiModel = FCC_G2025->getXi(position).getSecondsValue();
 
 		// Differences
 		double deltaEta = EtaModel - Eta;
