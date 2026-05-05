@@ -327,6 +327,10 @@ target_include_directories(SpatialObjects SYSTEM PUBLIC
 	${EIGEN_INCLUDE_PATH}
 )
 
+# GDAL
+find_package(GDAL CONFIG REQUIRED)
+target_link_libraries(SpatialObjects PRIVATE GDAL::GDAL)
+
 # needed for linux compilation
 set_target_properties(SpatialObjects PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
