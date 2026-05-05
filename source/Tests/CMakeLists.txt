@@ -81,7 +81,11 @@ target_include_directories(UnitTests PRIVATE
 	${SURVEYLIB_ROOT}/source/Tools/headers
 	${SURVEYLIB_ROOT}/source/CSGeoDLL/headers
 )
-target_link_libraries (UnitTests
+
+# GDAL
+find_package(GDAL CONFIG REQUIRED)
+
+target_link_libraries (UnitTests PRIVATE
 	SpatialObjects
 	LSAlgorithms
 	SpatialObjDLL
@@ -90,6 +94,7 @@ target_link_libraries (UnitTests
 	Logs
 	Tools
 	CSGeoDLL
+	GDAL::GDAL
 )
 
 add_test(
