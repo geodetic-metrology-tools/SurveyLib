@@ -4,20 +4,9 @@
 
 #include "TReferenceEllipsoid.h"
 
-TRegionalGeoid::TRegionalGeoid(const std::string &name, const TRefSystemFactory::EGeoid &geoidId, TAReferenceFrame *def, TReferenceEllipsoid *ell, TAReferenceFrame *calc, const std::string &pathToFile) :
-	TAGeoidModel(name, geoidId, def, ell, calc), fPathToFile(pathToFile)
+TRegionalGeoid::TRegionalGeoid(const std::string &name, const TRefSystemFactory::EGeoid &geoidId, TAReferenceFrame *def, TReferenceEllipsoid *ell, TAReferenceFrame *calc, const std::string &pathToFile, const int &epsgCode) :
+	TAGeoidModel(name, geoidId, def, ell, calc), fPathToFile(pathToFile), fEPSGCode(epsgCode)
 {
-	GDALAllRegister();
-
-	GDALDataset *dataset = static_cast<GDALDataset *>(GDALOpen(fPathToFile.c_str(), GA_ReadOnly));
-
-	if (!dataset)
-	{
-		std::cerr << "Failed to open file\n";
-		return;
-	}
-
-	GDALClose(dataset);
 }
 
 TRegionalGeoid::~TRegionalGeoid()
@@ -32,11 +21,8 @@ TLength TRegionalGeoid::getN(const TSpatialPosition &sp) const
 	GDALDataset *dataset = openGDALDataset();
 
 	double x, y, geoidHeight = 0.0;
-	OGRSpatialReference *geoidSRS = new OGRSpatialReference();
-	geoidSRS->importFromEPSG(4258);
-	dataset->SetSpatialRef(geoidSRS);
-	// const OGRSpatialReference* geoidSRS = dataset->GetSpatialRef();
-
+	const OGRSpatialReference *geoidSRS = dataset->GetSpatialRef();
+	
 	if (geoidSRS->IsGeographic())
 	{
 		x = spos.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getDeciDegsValue();
@@ -119,9 +105,9 @@ GDALDataset *TRegionalGeoid::openGDALDataset() const
 	}
 	else
 	{
-		// OGRSpatialReference *geoidSRS = new OGRSpatialReference();
-		// geoidSRS->importFromEPSG(4258);
-		// dataset->SetSpatialRef(geoidSRS);
+		OGRSpatialReference *geoidSRS = new OGRSpatialReference();
+		geoidSRS->importFromEPSG(fEPSGCode);
+		dataset->SetSpatialRef(geoidSRS);
 		return dataset;
 	}
 }
@@ -135,10 +121,8 @@ bool TRegionalGeoid::prepareXiAndEtaComputation(const TSpatialPosition &sp, TRea
 	const TAngle phi(spos.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid());
 
 	GDALDataset *dataset = openGDALDataset();
-	OGRSpatialReference *geoidSRS = new OGRSpatialReference();
-	geoidSRS->importFromEPSG(4258);
-	dataset->SetSpatialRef(geoidSRS);
-
+	const OGRSpatialReference *geoidSRS = dataset->GetSpatialRef();
+	
 	double gt[6];
 	dataset->GetGeoTransform(gt);
 
