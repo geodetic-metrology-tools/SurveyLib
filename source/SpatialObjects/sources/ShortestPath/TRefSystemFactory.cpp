@@ -56,6 +56,7 @@
 
 #include "TRefSystemFactory.h"
 #include <TLocal2CCSTransformation.h>
+#include <TRegionalGeoid.h>
 
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
@@ -172,6 +173,12 @@ void TRefSystemFactory::initGeoidList()
 	TCernParabolicGeoid *pCG1985Machine = new TCernParabolicGeoid(
 		cg85Machine, kCG1985Machine, TCernParabolicGeoid::a_LEP, TCernParabolicGeoid::b_LEP, TCernParabolicGeoid::ang_LEP, pCGRF, pGRS80, pCCS);
 	fGeoidList.push_back(pCG1985Machine);
+
+	// Swiss geoid
+	TRegionalGeoid *pCHGeo2004_ETRS = new TRegionalGeoid("CHGeo2004_ETRS", kCHGeo2004_ETRS, getRefFrame<TTerrestrialReferenceFrame>(kCHTRF95), getEllipsoid(kGRS80),
+		//getRefFrame<TTerrestrialReferenceFrame>(kCHTRF95), "C:\\Users\\bweyer\\Downloads\\Geoid_OGD\\chgeo2004_ETRS.agr");
+		getRefFrame<TTerrestrialReferenceFrame>(kCHTRF95), "C:\\Users\\bweyer\\cernbox\\Documents\\FCC\\Geoid\\JuliaComparison\\Julia\\FCC-G2025_V1.0.tif");
+	fGeoidList.push_back(pCHGeo2004_ETRS);
 }
 
 void TRefSystemFactory::addCERNprojections()
