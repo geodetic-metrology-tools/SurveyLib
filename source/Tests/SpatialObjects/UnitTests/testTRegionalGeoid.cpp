@@ -57,7 +57,7 @@ void object::test<1>()
 	auto *ct = OGRCreateCoordinateTransformation(&src, &dst);
 
 	double x = 140.333;
-	double y = -31.6989;
+	double y = 360-31.6989;
 
 	//ct->Transform(1, &x, &y);
 
@@ -225,6 +225,25 @@ void object::test<6>()
 	outfile.close();
 
 	std::cout << "Processing completed.\n";
+}
+
+template<>
+template<>
+void object::test<7>()
+{
+	set_test_name("Test with australian geoid");
+	const double tol = 1e-3;
+	// Initialize geoid model once
+	TAReferenceFrame *ITRF(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kITRFin));
+	TRegionalGeoid *AUSGeoid2020 = new TRegionalGeoid("AUSGeoid2020", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, ITRF,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), ITRF, "C:\\Users\\bweyer\\Downloads\\AUSGeoid2020_20180201.gsb", 7843);
+
+	// Coordinate of a point in Australia
+	TLength x(-3053053.09282), y(4710283.39541), z(-3018916.88305);
+				TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
+						TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFin), p);
+
+	ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), -14.714, tol);
 }
 
 } // namespace tut
