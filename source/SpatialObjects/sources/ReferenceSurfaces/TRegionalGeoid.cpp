@@ -147,7 +147,6 @@ bool TRegionalGeoid::prepareXiAndEtaComputation(const TSpatialPosition &sp, TRea
 	// deep copy of TSpatialPosition transformed in same reference frame as the geoid CalculationRF
 	TSpatialPosition spos = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
 
-	auto temp = spos.getCoordinates(TCoordSysFactory::kGeodetic);
 	const TAngle lambda(spos.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid());
 	const TAngle phi(spos.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid());
 
