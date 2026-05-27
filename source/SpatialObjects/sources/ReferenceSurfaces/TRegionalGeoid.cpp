@@ -59,6 +59,8 @@ TAngle TRegionalGeoid::getEta(const TSpatialPosition &sp) const
 	TAngle gridSpacingY;
 	if (prepareXiAndEtaComputation(sp, deltaN, phi, gridSpacingY, "Eta"))
 	{
+		// Featherstone, W. E. (1999, November). The use and abuse of vertical deflections. In Sixth South East Asian Surveyors’ Congress Fremantle (Vol. 6, pp. 1-12).
+		// equation 4
 		TReal eta_rad = deltaN / (fDefEllPtr->getNu(phi) * gridSpacingY.getRadiansValue() * cos(phi.getRadiansValue()));
 		return TAngle(eta_rad, TAngle::kRadians);
 	}
@@ -76,7 +78,16 @@ TAngle TRegionalGeoid::getXi(const TSpatialPosition &sp) const
 	TAngle gridSpacingX;
 	if (prepareXiAndEtaComputation(sp, deltaN, lambda, gridSpacingX, "Xi"))
 	{
+		TAngle phi(sp.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid());
+		TLength h(sp.getCoordinates(TCoordSysFactory::kGeodetic).getH());
+
+		// Featherstone, W. E. (1999, November). The use and abuse of vertical deflections. In Sixth South East Asian Surveyors’ Congress Fremantle (Vol. 6, pp. 1-12).
+		// equation 3
 		TReal xiRad = deltaN / (fDefEllPtr->getRho(lambda) * gridSpacingX.getRadiansValue());
+		//std::cout << xiRad * 180.0 / PI * 3600 << std::endl;
+		xiRad -= normalPlumbLineCurvature(phi, h).getRadiansValue();
+		//std::cout << xiRad * 180.0 / PI * 3600 << std::endl;
+
 		return TAngle(xiRad, TAngle::kRadians);
 	}
 	else
@@ -136,6 +147,7 @@ bool TRegionalGeoid::prepareXiAndEtaComputation(const TSpatialPosition &sp, TRea
 	// deep copy of TSpatialPosition transformed in same reference frame as the geoid CalculationRF
 	TSpatialPosition spos = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
 
+	auto temp = spos.getCoordinates(TCoordSysFactory::kGeodetic);
 	const TAngle lambda(spos.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid());
 	const TAngle phi(spos.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid());
 
@@ -152,7 +164,10 @@ bool TRegionalGeoid::prepareXiAndEtaComputation(const TSpatialPosition &sp, TRea
 	dataset->GetGeoTransform(gt);
 
 	TReal n_XBefore_Y, n_XAfter_Y, n_X_YBefore, n_X_YAfter = 0.0;
-	getNatCornerAroundPoint(x, y, dataset, abs(gt[1]), abs(gt[5]), n_XBefore_Y, n_XAfter_Y, n_X_YBefore, n_X_YAfter);
+	if (!getNatCornerAroundPoint(x, y, dataset, abs(gt[1]), abs(gt[5]), n_XBefore_Y, n_XAfter_Y, n_X_YBefore, n_X_YAfter))
+	{
+		throw std::invalid_argument("Error occurred while interpolating geoid values");
+	}
 
 	GDALClose(dataset);
 
@@ -245,6 +260,15 @@ bool TRegionalGeoid::getNatCornerAroundPoint(const TReal &xPoint,
 		n_X_YBefore = temp;
 	}
 	return true;
+}
+
+TAngle TRegionalGeoid::normalPlumbLineCurvature(const TAngle &phi, const TLength h) const
+{
+	// See Heiskanen, W. A., & Moritz, H. (1967). Physical geodesy. Bulletin Géodésique (1946-1975), 86(1), 491-492. equation 5-34
+	TReal deltaPhiNormal_arcSeconds = 0.17 * h.getKMetresValue() * sin(2 * phi.getRadiansValue());
+	std::cout << "Normal curvature: " << deltaPhiNormal_arcSeconds << std::endl;
+	TAngle deltaPhiNormal = TAngle(deltaPhiNormal_arcSeconds / 3600, TAngle::kDeciDegs);
+	return deltaPhiNormal;
 }
 
 std::stringstream TRegionalGeoid::generateNotInGeoidGridMessage(const std::string &functionCalled, const TSpatialPosition &position) const
