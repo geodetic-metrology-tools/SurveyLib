@@ -266,9 +266,19 @@ void object::test<8>()
 
 	// Coordinate of a point in Australia 336.5544321470 (23.445567853S)    134.4456785300E    250.00000 ellipsoidalHeight
 	// comparison with results given by the online tool https://geodesyapps.ga.gov.au/ausgeoid2020
-	TLength x(-4099779.11805), y(4179885.17336), z(-2522166.01923);
-	TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
-	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
+	TAngle lambda(134.4456785300, TAngle::kDeciDegs);
+	TAngle phi(336.5544321470, TAngle::kDeciDegs);
+	TLength h(250.00000);
+	TPositionVector pv(TCoordSysFactory::kGeodetic);
+	pv.setPhiEllipsoid(phi);
+	pv.setLambdaEllipsoid(lambda);
+	pv.setH(h);
+
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95));
+	position.setCoordinates(pv);
+	//TLength x(-4099779.11805), y(4179885.17336), z(-2522166.01923);
+	//TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
+	//TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
 
 	std::cout << "N: " << AUSGeoid2020->getN(position).getMetresValue() << "\n";
 	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
