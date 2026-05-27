@@ -45,7 +45,7 @@ public:
 		TReferenceEllipsoid *ell,
 		TAReferenceFrame *calc,
 		const std::string &pathToFile,
-		const int &epsgCode = 4345,
+		const int &epsgCode = 4345, //ETRS89
 		const GDALRIOResampleAlg &interpolationMethod = GRIORA_Bilinear);
 
 	/// Destructor
@@ -60,7 +60,7 @@ public:
 	/// Returns the deflection of the vertical in the prime vertical at the given Point's position
 	virtual TAngle getEta(const TSpatialPosition &) const;
 
-	/// Returns the deflection of the vertical in the meridian at the given Point's position
+	/// Returns the deflection of the vertical in the meridian at the given Point's position 
 	virtual TAngle getXi(const TSpatialPosition &) const;
 
 	/// Returns the Laplace correction at the given Point's position (phi is given)
@@ -89,6 +89,9 @@ private:
 		TReal &n_XAfter_Y,
 		TReal &n_X_YBefore,
 		TReal &n_X_YAfter) const;
+
+	// Compute the normal curvature of the plumb line
+	TAngle normalPlumbLineCurvature(const TAngle &phi, const TLength h_km) const;
 
 	/*!Generate message for the NotInGeoidGridException*/
 	std::stringstream generateNotInGeoidGridMessage(const std::string &functionCalled, const TSpatialPosition &position) const;
