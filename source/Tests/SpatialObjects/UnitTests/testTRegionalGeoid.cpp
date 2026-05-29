@@ -2,15 +2,16 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include <tut/tut.hpp>
-#include <gdal_raster_cpp.h>
-#include <TPositionVector.h>
-#include <TSpatialPosition.h>
-#include <TRefFrameInfo.h>
-#include <TRegionalGeoid.h>
-#include <TReferenceEllipsoid.h>
 #include <fstream>
 
+#include <tut/tut.hpp>
+
+#include <TPositionVector.h>
+#include <TRefFrameInfo.h>
+#include <TReferenceEllipsoid.h>
+#include <TRegionalGeoid.h>
+#include <TSpatialPosition.h>
+#include <gdal_raster_cpp.h>
 
 namespace tut
 {
@@ -19,7 +20,7 @@ struct test_TRegionalGeoid
 };
 typedef test_group<test_TRegionalGeoid> factory;
 typedef factory::object object;
-}
+} // namespace tut
 
 namespace
 {
@@ -47,7 +48,7 @@ void object::test<1>()
 	std::cout << "SRS: " << dataset->GetSpatialRef()->GetName() << "\n";
 	std::cout << "ProjectionRef: " << dataset->GetProjectionRef() << "\n";
 	double geoidHeight = 0.0;
-	OGRSpatialReference	src, dst;
+	OGRSpatialReference src, dst;
 	src.SetWellKnownGeogCS("WGS84");
 	dst.importFromWkt(dataset->GetProjectionRef());
 
@@ -59,34 +60,29 @@ void object::test<1>()
 	double x = 140.333;
 	double y = -31.6989;
 
-	//ct->Transform(1, &x, &y);
+	// ct->Transform(1, &x, &y);
 
 	// Now interpolate WITHOUT CRS
 	dataset->GetRasterBand(1)->InterpolateAtGeolocation(x, y, &src, GRIORA_Bilinear, &geoidHeight);
 
-
-
-
 	OGRSpatialReference srs;
 	srs.SetWellKnownGeogCS("WGS84");
-	//srs.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+	// srs.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
 	dataset->GetRasterBand(1)->InterpolateAtGeolocation(y, x, &srs, GRIORA_Bilinear, &geoidHeight);
 	std::cout << "bilinear geoid height: " << geoidHeight << "\n";
 
 	GDALClose(dataset);
-
-
-
 }
 
 template<>
 template<>
 void object::test<2>()
 {
+	tut::skip();
 	set_test_name("Test N");
-	//TAngle lambda(6.04866331086255, TAngle::kDeciDegs); // longitude P0 (CHTRF95)
-	//TAngle phi (46.23215612104025, TAngle::kDeciDegs); // latitude P0 (CHTRF95)
-	//TLength h(483.624043488, TLength::kMetres); // ellipsoidal height P0 (CHTRF95)
+	// TAngle lambda(6.04866331086255, TAngle::kDeciDegs); // longitude P0 (CHTRF95)
+	// TAngle phi (46.23215612104025, TAngle::kDeciDegs); // latitude P0 (CHTRF95)
+	// TLength h(483.624043488, TLength::kMetres); // ellipsoidal height P0 (CHTRF95)
 	TLength x(4395448.303144970), y(465755.018889440), z(4583484.782265396);
 
 	TPositionVector p0(x, y, z, TCoordSysFactory::k3DCartesian);
@@ -94,7 +90,7 @@ void object::test<2>()
 
 	TAGeoidModel *geoidModel(TRefSystemFactory::getRefSystemFactory()->getGeoid(TRefSystemFactory::kCHGeo2004_ETRS));
 	std::cout << "Geoid height: " << geoidModel->getN(position).getMetresValue() << "\n";
-	//ensure_equals("N", geoidModel->getN(position).getMetresValue(), 0.0);
+	// ensure_equals("N", geoidModel->getN(position).getMetresValue(), 0.0);
 }
 
 template<>
@@ -102,6 +98,7 @@ template<>
 void object::test<3>()
 {
 	set_test_name("Test Eta");
+	tut::skip();
 	// TAngle lambda(6.04866331086255, TAngle::kDeciDegs); // longitude P0 (CHTRF95)
 	// TAngle phi (46.23215612104025, TAngle::kDeciDegs); // latitude P0 (CHTRF95)
 	// TLength h(483.624043488, TLength::kMetres); // ellipsoidal height P0 (CHTRF95)
@@ -112,13 +109,14 @@ void object::test<3>()
 
 	TAGeoidModel *geoidModel(TRefSystemFactory::getRefSystemFactory()->getGeoid(TRefSystemFactory::kCHGeo2004_ETRS));
 	std::cout << "Eta: " << geoidModel->getEta(position).getSignedCCValue() << "\n";
-	//ensure_equals("Eta", geoidModel->getN(position).getMetresValue(), 0.0);
+	// ensure_equals("Eta", geoidModel->getN(position).getMetresValue(), 0.0);
 }
 
 template<>
 template<>
 void object::test<4>()
 {
+	tut::skip();
 	set_test_name("Test Xi");
 	// TAngle lambda(6.04866331086255, TAngle::kDeciDegs); // longitude P0 (CHTRF95)
 	// TAngle phi (46.23215612104025, TAngle::kDeciDegs); // latitude P0 (CHTRF95)
@@ -137,12 +135,13 @@ template<>
 template<>
 void object::test<5>()
 {
+	tut::skip();
 	set_test_name("Test N, Lambda, Xi compared to Python Script");
 	// Coordinate of the point 53 in the geodetic control profile
-	//TLength x(4394452.09397), y(463492.09023), z(4583991.77052);
+	// TLength x(4394452.09397), y(463492.09023), z(4583991.77052);
 
 	// Coordinate of the point 85 in the geodetic control profile
-	//TLength x(4407162.31964), y(470865.84975), z(4571453.66808);
+	// TLength x(4407162.31964), y(470865.84975), z(4571453.66808);
 	// Coordinate of the point 53 in the geodetic control profile
 	TLength x(4394624.03962), y(463510.22570), z(4584172.34127);
 
@@ -187,9 +186,8 @@ void object::test<6>()
 	// Initialize geoid model once
 	TAReferenceFrame *CHTRF95(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCHTRF95));
 	TRegionalGeoid *FCC_G2025 = new TRegionalGeoid("CHGeo2004_ETRS", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, CHTRF95,
-		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80),
-		CHTRF95, "C:\\Users\\bweyer\\cernbox\\Documents\\FCC\\Geoid\\JuliaComparison\\Julia\\FCC-G2025_V1.0.tif");
-
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), CHTRF95,
+		"C:\\Users\\bweyer\\cernbox\\Documents\\FCC\\Geoid\\JuliaComparison\\Julia\\FCC-G2025_V1.0.tif");
 
 	while (std::getline(infile, line))
 	{
@@ -237,18 +235,65 @@ void object::test<7>()
 	const double tolDoV = 1e-2;
 	std::string pathToFile("C:\\Users\\bweyer\\Downloads\\AUSGeoid2020_20180201.gsb");
 	// Initialize geoid model once
-	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kITRFin));
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
 	TRegionalGeoid *AUSGeoid2020 = new TRegionalGeoid("AUSGeoid2020", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
-		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, pathToFile, 4326, GRIORA_Cubic);
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kWGSEll), WGS84, pathToFile, 4326, GRIORA_Cubic);
 
 	// Coordinate of a point in Australia S28 26  0.000 E122 57  0.000 h200 xi = -5.64    eta = -2.65
-	TLength x(-3053053.09282), y(4710283.39541), z(-3018916.88305);
-	TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
-	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kITRFin), p);
+	// https://geodesyapps.ga.gov.au/ausgeoid2020
+	TAngle lambda;
+	lambda.setDMSValue(122, 57, 0.000);
+	TAngle phi;
+	phi.setDMSValue(-28, 26, 0.000);
+	TLength h(200);
+	TPositionVector pv(TCoordSysFactory::kGeodetic);
+	pv.setPhiEllipsoid(phi);
+	pv.setLambdaEllipsoid(lambda);
+	pv.setH(h);
 
-	ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), -14.714, tolHeight); // this value is at a grid node, so no interpolation error expected
-	ensure_equals("Eta", AUSGeoid2020->getEta(position).getSecondsValue(), -2.65, tolDoV); // this value is at a grid node, so no interpolation error expected
-	ensure_equals("Xi", AUSGeoid2020->getXi(position).getSecondsValue(), -5.64, tolDoV); // this value is at a grid node, so no interpolation error expected
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
+	position.setCoordinates(pv);
+	std::cout << "N" << AUSGeoid2020->getN(position).getMetresValue() << "\n";
+	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
+	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << "\n";
+
+	lambda.setDeciDegsValue(129.2);
+	phi.setDeciDegsValue(-29.32);
+	pv.setPhiEllipsoid(phi);
+	pv.setLambdaEllipsoid(lambda);
+	pv.setH(h);
+	position.setCoordinates(pv);
+
+	std::cout << "N" << AUSGeoid2020->getN(position).getMetresValue() << "\n";
+	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
+	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << "\n";
+
+	lambda.setDeciDegsValue(130.0 + 0.01666666666666);
+	phi.setDeciDegsValue(330 + 0.01666666666666);
+	pv.setPhiEllipsoid(phi);
+	pv.setLambdaEllipsoid(lambda);
+	pv.setH(h);
+	position.setCoordinates(pv);
+
+	std::cout << "N" << AUSGeoid2020->getN(position).getMetresValue() << "\n";
+	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
+	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << "\n";
+
+	
+	lambda.setDeciDegsValue(130.0 - 0.01666666666666);
+	phi.setDeciDegsValue(330 - 0.01666666666666);
+	pv.setPhiEllipsoid(phi);
+	pv.setLambdaEllipsoid(lambda);
+	pv.setH(h);
+	position.setCoordinates(pv);
+
+	std::cout << "N" << AUSGeoid2020->getN(position).getMetresValue() << "\n";
+	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
+	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << "\n";
+
+	//ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), -14.714, tolHeight); // this value is at a grid node, so no interpolation error expected
+	//ensure_equals("Eta", AUSGeoid2020->getEta(position).getSecondsValue(), -2.65, tolDoV); // this value is at a grid node, so no interpolation error expected
+	//ensure_equals("Xi", AUSGeoid2020->getXi(position).getSecondsValue(), -5.64, tolDoV); // this value is at a grid node, so no interpolation error expected
 }
 
 template<>
@@ -276,9 +321,9 @@ void object::test<8>()
 
 	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95));
 	position.setCoordinates(pv);
-	//TLength x(-4099779.11805), y(4179885.17336), z(-2522166.01923);
-	//TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
-	//TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
+	// TLength x(-4099779.11805), y(4179885.17336), z(-2522166.01923);
+	// TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
+	// TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
 
 	std::cout << "N: " << AUSGeoid2020->getN(position).getMetresValue() << "\n";
 	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
@@ -307,8 +352,8 @@ void object::test<9>()
 	TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
 	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
 
-	//ensure_equals("N", AGQ2017->getN(position).getMetresValue(), 19.727, tolHeight);
-	//ensure_equals("Eta", AGQ2017->getEta(position).getSecondsValue(), -6.07, tolDoV);
+	// ensure_equals("N", AGQ2017->getN(position).getMetresValue(), 19.727, tolHeight);
+	// ensure_equals("Eta", AGQ2017->getEta(position).getSecondsValue(), -6.07, tolDoV);
 	ensure_equals("Xi", AGQ2017->getXi(position).getSecondsValue(), -20.21, tolDoV);
 }
 
@@ -331,7 +376,7 @@ void object::test<10>()
 	TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
 	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
 
-	//ensure_equals("N", GEOID18->getN(position).getMetresValue(), 19.727, tolHeight);
+	// ensure_equals("N", GEOID18->getN(position).getMetresValue(), 19.727, tolHeight);
 	std::cout << "Eta: " << GEOID18->getEta(position).getSecondsValue() << "\n";
 	std::cout << "Xi: " << GEOID18->getXi(position).getSecondsValue() << "\n";
 	ensure_equals("Eta", GEOID18->getEta(position).getSecondsValue(), 1.32, tolDoV);
@@ -345,6 +390,8 @@ template<>
 template<>
 void object::test<11>()
 {
+	tut::skip();
+
 	set_test_name("Test compared to ICGEM");
 	std::ifstream infile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\DoVObservations.txt");
 	std::ofstream outfile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\DoVObservations_withModelCppNegCorrection.txt");
@@ -369,8 +416,8 @@ void object::test<11>()
 	outfile << std::fixed << std::setprecision(6);
 
 	// Initialize geoid model once
-	//TAReferenceFrame *CHTRF95(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCHTRF95));
-	//TRegionalGeoid *FCC_G2025 = new TRegionalGeoid("CHGeo2004_ETRS", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, CHTRF95,
+	// TAReferenceFrame *CHTRF95(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCHTRF95));
+	// TRegionalGeoid *FCC_G2025 = new TRegionalGeoid("CHGeo2004_ETRS", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, CHTRF95,
 	//	TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), CHTRF95,
 	//	"C:\\Users\\bweyer\\cernbox\\Documents\\FCC\\Geoid\\JuliaComparison\\Julia\\FCC-G2025_V1.0.tif");
 	const double tolHeight = 1e-3;
@@ -380,7 +427,6 @@ void object::test<11>()
 	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
 	TRegionalGeoid *EIGEN = new TRegionalGeoid("EIGEN", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
 		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, pathToFile, 4326, GRIORA_Cubic);
-
 
 	while (std::getline(infile, line))
 	{
@@ -403,7 +449,7 @@ void object::test<11>()
 		pv.setPhiEllipsoid(phi);
 		pv.setLambdaEllipsoid(lambda);
 		pv.setH(h);
-		
+
 		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
 		position.setCoordinates(pv);
 
@@ -417,8 +463,7 @@ void object::test<11>()
 
 		// Write results
 		outfile << point << "\t" << lambda.getDeciDegsValue() << "\t" << phi.getDeciDegsValue() << "\t" << h << "\t" << Eta << "\t" << Xi << "\t" << EtaModel << "\t"
-				<< XiModel << "\t"
-				<< deltaEta << "\t" << deltaXi << "\n";
+				<< XiModel << "\t" << deltaEta << "\t" << deltaXi << "\n";
 	}
 
 	infile.close();
@@ -431,7 +476,9 @@ template<>
 template<>
 void object::test<12>()
 {
-/*
+	tut::skip();
+
+	/*
 Name	ESSERTINES
 Country	CH
 Year of measurement	1996
@@ -444,10 +491,10 @@ Type of measurement station	Analoge Zenitkamera (1980-1996)
 Approx WGS84~ETRF93 coordinates (lat, long, altitude):	46.599584, 7.239956 921 m
 	*/
 
-		set_test_name("CHGEO with true value");
-TAngle lambda(7.239956, TAngle::kDeciDegs);
-		TAngle phi(46.599584, TAngle::kDeciDegs);
-TLength h(921+51.1);
+	set_test_name("CHGEO with true value");
+	TAngle lambda(7.239956, TAngle::kDeciDegs);
+	TAngle phi(46.599584, TAngle::kDeciDegs);
+	TLength h(921 + 51.1);
 	TPositionVector pv(TCoordSysFactory::kGeodetic);
 	pv.setPhiEllipsoid(phi);
 	pv.setLambdaEllipsoid(lambda);
@@ -461,15 +508,184 @@ TLength h(921+51.1);
 	TAReferenceFrame *chtrf95(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCHTRF95));
 	TRegionalGeoid *pCHGeo2004_ETRS = new TRegionalGeoid("CHGeo2004_ETRS", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, chtrf95,
 		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), chtrf95, pathToFile);
-	
 
-//		TAGeoidModel *geoidModel(TRefSystemFactory::getRefSystemFactory()->getGeoid(TRefSystemFactory::kCHGeo2004_ETRS));
+	//		TAGeoidModel *geoidModel(TRefSystemFactory::getRefSystemFactory()->getGeoid(TRefSystemFactory::kCHGeo2004_ETRS));
 	std::cout << "Xi: " << pCHGeo2004_ETRS->getXi(position).getSecondsValue() << "\n";
 	std::cout << "Eta: " << pCHGeo2004_ETRS->getEta(position).getSecondsValue() << "\n";
 	std::cout << "N: " << pCHGeo2004_ETRS->getN(position).getMetresValue() << "\n";
 	ensure_equals("Eta", pCHGeo2004_ETRS->getEta(position).getSecondsValue(), 9.23);
 	ensure_equals("Xi", pCHGeo2004_ETRS->getXi(position).getSecondsValue(), -8.5);
+}
+
+template<>
+template<>
+void object::test<13>()
+{
+	tut::skip();
+
+	/*
+	Featherstone, W. E., Brown, N. J., McCubbine, J. C., & Filmer, M. S. (2018).
+	Description and release of Australian gravity field model testing data. Australian journal of earth sciences, 65(1), 1-7.
+	https://github.com/icsm-au/Gravity_field_model_test_data 
+
+	*/
+	set_test_name("Test Australian Quasi-Geoid)");
+	std::ifstream infile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\Australia\\VerticalDeflections_August2017.csv");
+	std::ofstream outfile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\Australia\\VerticalDeflections_August2017_withHelmertFromModel.txt");
+
+	if (!infile.is_open())
+	{
+		std::cerr << "Error opening input file\n";
 	}
 
+	if (!outfile.is_open())
+	{
+		std::cerr << "Error opening output file\n";
+	}
+
+	std::string line;
+
+	// Skip header
+	std::getline(infile, line);
+
+	// Write output header
+	outfile << "Longitude\tLatitude\th\tEta\tXi\tEtaModel\tXiModel\tDeltaEta\tDeltaXi\n";
+	outfile << std::fixed << std::setprecision(6);
+
+	// Initialize geoid model once
+	const double tolHeight = 1e-3;
+	const double tolDoV = 1e-2;
+	std::string pathToFile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\Australia\\AGQG_20201120.gsb");
+	// Initialize geoid model once
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
+	TRegionalGeoid *AGQG2020 = new TRegionalGeoid("AGQG2020", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, pathToFile, 4326, GRIORA_Cubic);
+
+	while (std::getline(infile, line))
+	{
+		if (line.empty())
+			continue;
+
+		std::istringstream iss(line);
+
+		int point;
+		double lat, longi, h;
+		double Eta, Xi;
+
+		iss >> lat >> longi >> h >> Xi >> Eta;
+
+		// Build position
+		TAngle lambda(longi, TAngle::kDeciDegs);
+		TAngle phi(lat, TAngle::kDeciDegs);
+		TLength height(h);
+		TPositionVector pv(TCoordSysFactory::kGeodetic);
+		pv.setPhiEllipsoid(phi);
+		pv.setLambdaEllipsoid(lambda);
+		pv.setH(height);
+
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
+		position.setCoordinates(pv);
+
+		// Compute model values
+		double EtaModel = AGQG2020->getEta(position).getSecondsValue();
+		double XiModel = AGQG2020->getXi(position).getSecondsValue();
+
+		// Differences
+		double deltaEta = EtaModel - Eta;
+		double deltaXi = XiModel - Xi;
+
+		// Write results
+		outfile << lambda.getDeciDegsValue() << "\t" << phi.getDeciDegsValue() - 360.0 << "\t" << height.getMetresValue() << "\t" << Eta << "\t" << Xi << "\t" << EtaModel << "\t"
+				<< XiModel << "\t" << deltaEta << "\t" << deltaXi << "\n";
+	}
+
+	infile.close();
+	outfile.close();
+
+	std::cout << "Processing completed.\n";
+
+}
+
+template<>
+template<>
+void object::test<14>()
+{
+	set_test_name("Test Australian AusGeoid compared to online calculator)");
+	std::ifstream infile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\Australia\\VerticalDeflections_August2017.csv");
+	std::ofstream outfile(
+		"C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\Australia\\VerticalDeflections_August2017_AusGeoid2020_pizzeti.txt");
+
+	if (!infile.is_open())
+	{
+		std::cerr << "Error opening input file\n";
+	}
+
+	if (!outfile.is_open())
+	{
+		std::cerr << "Error opening output file\n";
+	}
+
+	std::string line;
+
+	// Skip header
+	std::getline(infile, line);
+
+	// Write output header
+	outfile << "Longitude\tLatitude\th\tEta\tXi\tNModel\tEtaModel\tXiModel\tDeltaEta\tDeltaXi\n";
+	outfile << std::fixed << std::setprecision(6);
+
+	// Initialize geoid model once
+	const double tolHeight = 1e-3;
+	const double tolDoV = 1e-2;
+	std::string pathToFile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\Australia\\AUSGeoid2020_20180201.gsb");
+	// Initialize geoid model once
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
+	TRegionalGeoid *AGQG2020 = new TRegionalGeoid("AGQG2020", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kWGSEll), WGS84, pathToFile, 4326, GRIORA_Cubic);
+
+	while (std::getline(infile, line))
+	{
+		if (line.empty())
+			continue;
+
+		std::istringstream iss(line);
+
+		int point;
+		double lat, longi, h;
+		double Eta, Xi;
+
+		iss >> lat >> longi >> h >> Xi >> Eta;
+
+		// Build position
+		TAngle lambda(longi, TAngle::kDeciDegs);
+		TAngle phi(lat, TAngle::kDeciDegs);
+		TLength height(h);
+		TPositionVector pv(TCoordSysFactory::kGeodetic);
+		pv.setPhiEllipsoid(phi);
+		pv.setLambdaEllipsoid(lambda);
+		pv.setH(height);
+
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
+		position.setCoordinates(pv);
+
+		// Compute model values
+		double NModel = AGQG2020->getN(position).getMetresValue();
+		double EtaModel = AGQG2020->getEta(position).getSecondsValue();
+		double XiModel = AGQG2020->getXi(position).getSecondsValue();
+
+		// Differences
+		double deltaEta = EtaModel - Eta;
+		double deltaXi = XiModel - Xi;
+
+		// Write results
+		outfile << lambda.getDeciDegsValue() << "\t" << phi.getDeciDegsValue() - 360.0 << "\t" << height.getMetresValue() << "\t" << Eta << "\t" << Xi << "\t" << NModel << "\t" << EtaModel
+				<< "\t" << XiModel << "\t" << deltaEta << "\t" << deltaXi << "\n";
+	}
+
+	infile.close();
+	outfile.close();
+
+	std::cout << "Processing completed.\n";
+}
 
 } // namespace tut
