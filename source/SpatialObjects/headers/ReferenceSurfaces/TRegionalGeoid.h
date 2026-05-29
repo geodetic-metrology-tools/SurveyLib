@@ -57,10 +57,10 @@ public:
 	/// Returns the geoidal undulation (geoidal height) at the given Point's position
 	virtual TLength getN(const TSpatialPosition &) const;
 
-	/// Returns the deflection of the vertical in the prime vertical at the given Point's position
+	/// Returns the deflection of the vertical in the prime vertical at the given Point's position (Pizzeti correction, i.e. at the geoid level)
 	virtual TAngle getEta(const TSpatialPosition &) const;
 
-	/// Returns the deflection of the vertical in the meridian at the given Point's position 
+	/// Returns the deflection of the vertical in the meridian at the given Point's position (Pizzeti correction, i.e. at the geoid level)
 	virtual TAngle getXi(const TSpatialPosition &) const;
 
 	/// Returns the Laplace correction at the given Point's position (phi is given)

@@ -85,7 +85,7 @@ TAngle TRegionalGeoid::getXi(const TSpatialPosition &sp) const
 		// equation 3
 		TReal xiRad = deltaN / (fDefEllPtr->getRho(lambda) * gridSpacingX.getRadiansValue());
 		//std::cout << xiRad * 180.0 / PI * 3600 << std::endl;
-		xiRad -= normalPlumbLineCurvature(phi, h).getRadiansValue();
+		//xiRad += normalPlumbLineCurvature(phi, h).getRadiansValue();
 		//std::cout << xiRad * 180.0 / PI * 3600 << std::endl;
 
 		return TAngle(xiRad, TAngle::kRadians);
@@ -203,33 +203,34 @@ bool TRegionalGeoid::getNatCornerAroundPoint(const TReal &xPoint,
 	TReal xBefore =0.0, xAfter =0.0 , yBefore = 0.0, yAfter = 0.0;
 	if (xPoint >= 0)
 	{
-		xBefore = std::floor((xPoint / gridSpacingX)) * gridSpacingX + gridSpacingX / 2;
-		xAfter = std::ceil((xPoint / gridSpacingX)) * gridSpacingX + gridSpacingX / 2;
+		xBefore = std::floor((xPoint / gridSpacingX)) * gridSpacingX;//	+gridSpacingX / 2;
+		xAfter = std::ceil((xPoint / gridSpacingX)) * gridSpacingX;//+gridSpacingX / 2;
 	}
 	else
 	{
-		xAfter = std::floor((xPoint / gridSpacingX)) * gridSpacingX - gridSpacingX / 2;
-		xBefore = std::ceil((xPoint / gridSpacingX)) * gridSpacingX - gridSpacingX / 2;
+		xAfter = std::floor((xPoint / gridSpacingX)) * gridSpacingX;// - gridSpacingX / 2;
+		xBefore = std::ceil((xPoint / gridSpacingX)) * gridSpacingX;// - gridSpacingX / 2;
 	}
 
 	if (yPoint >= 0)
 	{
-		yBefore = std::floor((yPoint / gridSpacingY)) * gridSpacingY + gridSpacingY / 2;
-		yAfter = std::ceil((yPoint / gridSpacingY)) * gridSpacingY + gridSpacingY / 2;
+	yBefore = std::floor((yPoint / gridSpacingY)) * gridSpacingY; // + gridSpacingY / 2;
+	yAfter = std::ceil((yPoint / gridSpacingY)) * gridSpacingY; // + gridSpacingY / 2;
 	}
 	else
 	{
-		yAfter = std::floor((yPoint / gridSpacingY)) * gridSpacingY - gridSpacingY / 2;
-		yBefore = std::ceil((yPoint / gridSpacingY)) * gridSpacingY - gridSpacingY / 2;
+		yAfter = std::floor((yPoint / gridSpacingY)) * gridSpacingY;// - gridSpacingY / 2;
+		yBefore = std::ceil((yPoint / gridSpacingY)) * gridSpacingY;// - gridSpacingY / 2;
 	}
 
-	CPLErr err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xBefore, yPoint, dataset->GetSpatialRef(), fInterpolationMethod, &n_XBefore_Y);
+	//CPLErr err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xBefore, yPoint, dataset->GetSpatialRef(), fInterpolationMethod, &n_XBefore_Y);
+	CPLErr err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xPoint, yPoint, dataset->GetSpatialRef(), fInterpolationMethod, &n_XBefore_Y);
 	if (err != CE_None)
 	{
 		return false;
 	}
 
-	err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xAfter, yPoint, dataset->GetSpatialRef(), fInterpolationMethod, &n_XAfter_Y);
+	err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xPoint + gridSpacingX, yPoint, dataset->GetSpatialRef(), fInterpolationMethod, &n_XAfter_Y);
 	if (err != CE_None)
 	{
 		return false;
@@ -241,13 +242,13 @@ bool TRegionalGeoid::getNatCornerAroundPoint(const TReal &xPoint,
 		n_XBefore_Y = temp;
 	}
 
-	err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xPoint, yBefore, dataset->GetSpatialRef(), fInterpolationMethod, &n_X_YBefore);
+	err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xPoint, yPoint , dataset->GetSpatialRef(), fInterpolationMethod, &n_X_YBefore);
 	if (err != CE_None)
 	{
 		return false;
 	}
 
-	err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xPoint, yAfter, dataset->GetSpatialRef(), fInterpolationMethod, &n_X_YAfter);
+	err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xPoint, yPoint - gridSpacingY, dataset->GetSpatialRef(), fInterpolationMethod, &n_X_YAfter);
 	if (err != CE_None)
 	{
 		return false;
