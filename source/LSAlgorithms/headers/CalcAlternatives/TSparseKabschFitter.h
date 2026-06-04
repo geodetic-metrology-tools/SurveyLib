@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef SU_TALTSvd
-#define SU_TALTSvd
+#ifndef SU_TSparseKabschFitter
+#define SU_TSparseKabschFitter
 
 #include <UEOIndices.h>
 #include "Quad.h"
@@ -15,15 +15,18 @@
 
 /*!
 	\ingroup CalcAlternatives
-	\brief Class to solve Svd decomposition, Used to get starting values for a LS equation in point fitting. Minimal implementation of the solution for CHABA Purposes.
+	\brief Sparse-matrix front end to the Kabsch best-fit rotation. Assembles the
+	active/passive point coordinates into sparse matrices, forms the cross-covariance
+	and delegates the rotation solve to bestFitRotation(). Used to get starting values
+	for a LS equation in point fitting. Minimal implementation for CHABA purposes.
 */
-class TALTSvd
+class TSparseKabschFitter
 {
 public:
 	/*!@name Constructors / Destructor*/
 	//@{
 		//! Constructor
-		TALTSvd();
+		TSparseKabschFitter();
 
 		//! Destructor --> Default
 	//@}
@@ -51,7 +54,7 @@ public:
 		bool setPassiveMtrxElement(MatrixIndex row, MatrixIndex column, TReal coefficient);
 
 		/*!	\brief Set the Rotation Matrix elements */
-		bool setRotationMtrxElement(TDenseMatrix RotationMatrix);
+		bool setRotationMatrix(TDenseMatrix RotationMatrix);
 
 		/*!	\Verify the number of unknowns and run the calculation */
 		bool computeRotMatrx();

@@ -21,6 +21,10 @@ set(SpatialObjects_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/testTransformationWithCADmatrix.cpp
 )
 
+set(LSAlgorithms_SOURCES
+	${CMAKE_CURRENT_LIST_DIR}/LSAlgorithms/UnitTests/testBestFitRotation.cpp
+)
+
 set(SurveyLibDLLTests_SOURCES
 	${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/SurveyLibDllTest/testSurveyLibDLL.cpp
 )
@@ -49,6 +53,7 @@ set( CSGeoDLLTests_SOURCES
 add_executable(UnitTests
 	${SurveyMain_Tests}
 	${SpatialObjects_SOURCES}
+	${LSAlgorithms_SOURCES}
 	${SurveyLibDLLTests_SOURCES}
 	${ProjectFrameworkTests_SOURCES}
 	${PluginsTests_SOURCES}
@@ -65,6 +70,7 @@ target_include_directories(UnitTests PRIVATE
 	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/SpatialObj
 	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/ReferenceSurfaces
 	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/AffineTransformations
+	${SURVEYLIB_ROOT}/source/LSAlgorithms/headers/CalcAlternatives
 	${SURVEYLIB_ROOT}/source/SpatialObjects/headers/RefFrameTransformations
 	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/Converters
 	${SURVEYLIB_ROOT}/source/ProjectFramework/headers/StreamFormatters
@@ -76,6 +82,7 @@ target_include_directories(UnitTests PRIVATE
 )
 target_link_libraries (UnitTests
 	SpatialObjects
+	LSAlgorithms
 	SpatialObjDLL
 	ProjectFramework
 	Plugins
@@ -91,6 +98,7 @@ add_test(
 )
 
 source_group("SpatialObjects" FILES ${SpatialObjects_SOURCES})
+source_group("LSAlgorithms" FILES ${LSAlgorithms_SOURCES})
 source_group("SurveyLibDLL" FILES ${SurveyLibDLLTests_SOURCES})
 source_group("ProjectFramework" FILES ${ProjectFrameworkTests_SOURCES})
 source_group("Plugins" FILES ${PluginsTests_SOURCES})
