@@ -36,7 +36,7 @@ void TSparseKabschFitter::initMatrices(int equations, int dimension)
 	fNbEqn = equations;
 
 	clearMatrices();
-	
+
 	ActiveMatrix = std::make_unique<TSparseMatrix>(equations, dimension);
 	PassiveMatrix = std::make_unique<TSparseMatrix>(equations, dimension);
 	ResultRotMatrix = std::make_unique<TRotationMatrix>();
