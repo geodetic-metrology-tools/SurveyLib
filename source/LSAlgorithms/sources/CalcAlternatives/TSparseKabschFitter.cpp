@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-// TALTSvd.h : implementation file
+// TSparseKabschFitter.cpp : implementation file
 // class making an approximative best fit between points
 // the class is the minimal required for chaba
 
-#include "TALTSvd.h"
+#include "TSparseKabschFitter.h"
 
 #include <fstream>
 #include <iomanip>
@@ -14,14 +14,14 @@
 #include <sstream>
 
 #include <Eigen/Dense>
-#include <Eigen/SVD>
 
+#include "BestFitRotationFns.h"
 #include "Logger.hpp"
 
 /////////////////////////////////////////////////////////////////////////////////
 // CONSTRUCTOR / DESTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////
-TALTSvd::TALTSvd()
+TSparseKabschFitter::TSparseKabschFitter()
 { // Constructor
 }
 
@@ -29,27 +29,27 @@ TALTSvd::TALTSvd()
 // MEMBER FUNCTIONS
 /////////////////////////////////////////////////////////////////////////////////
 
-void TALTSvd::initMatrices(int equations, int dimension)
+void TSparseKabschFitter::initMatrices(int equations, int dimension)
 { // sets the dimensions of the matrices
 
 	fNbDim = dimension;
 	fNbEqn = equations;
 
 	clearMatrices();
-	
+
 	ActiveMatrix = std::make_unique<TSparseMatrix>(equations, dimension);
 	PassiveMatrix = std::make_unique<TSparseMatrix>(equations, dimension);
 	ResultRotMatrix = std::make_unique<TRotationMatrix>();
 }
 
-void TALTSvd::clearMatrices()
+void TSparseKabschFitter::clearMatrices()
 {
 	ActiveMatrix.reset();
 	PassiveMatrix.reset();
 	ResultRotMatrix.reset();
 }
 
-bool TALTSvd::setActiveMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
+bool TSparseKabschFitter::setActiveMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try
 	{
@@ -63,7 +63,7 @@ bool TALTSvd::setActiveMtrxElement(MatrixIndex row, MatrixIndex column, TReal co
 	return true;
 }
 
-bool TALTSvd::setPassiveMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
+bool TSparseKabschFitter::setPassiveMtrxElement(MatrixIndex row, MatrixIndex column, TReal coeff)
 {
 	try
 	{
@@ -77,7 +77,7 @@ bool TALTSvd::setPassiveMtrxElement(MatrixIndex row, MatrixIndex column, TReal c
 	return true;
 }
 
-bool TALTSvd::setRotationMtrxElement(TDenseMatrix RotationMatrix)
+bool TSparseKabschFitter::setRotationMatrix(TDenseMatrix RotationMatrix)
 {
 	try
 	{
@@ -96,36 +96,20 @@ bool TALTSvd::setRotationMtrxElement(TDenseMatrix RotationMatrix)
 	return true;
 }
 
-bool TALTSvd::computeRotMatrx()
+bool TSparseKabschFitter::computeRotMatrx()
 {
-	try
-	{
-		// Make a SVD decomposition and extract the U and V matrices
-		Eigen::JacobiSVD<TDenseMatrix> svd(PassiveMatrix->toDense().transpose() * ActiveMatrix->toDense(), Eigen::ComputeFullU | Eigen::ComputeFullV);
-
-		TDenseMatrix u = svd.matrixU();
-		TDenseMatrix v = svd.matrixV();
-
-		// Compute R = V * U'
-
-		// if det(U) * det(V) <0 the third column should be *-1
-		if (u.determinant() * v.determinant() < 0)
-		{
-			for (int row = 0; row < 3; row++)
-			{
-				v(row, 2) *= -1;
-			}
-		}
-		setRotationMtrxElement(v * u.transpose());
-	}
-	catch (...)
-	{
+	if (!PassiveMatrix || !ActiveMatrix)
 		return false;
-	}
-	return true;
+
+	const Eigen::Matrix3d H = PassiveMatrix->toDense().transpose() * ActiveMatrix->toDense();
+	bool ok = false;
+	const Eigen::Matrix3d R = bestFitRotation(H, ok);
+	if (!ok)
+		return false;
+	return setRotationMatrix(R);
 }
 
-Angles TALTSvd::getAngles(TRotationMatrix::ERotationType kR)
+Angles TSparseKabschFitter::getAngles(TRotationMatrix::ERotationType kR)
 { // calculate the angles from the matrix with the specified rotation order
 
 	Angles xyz;

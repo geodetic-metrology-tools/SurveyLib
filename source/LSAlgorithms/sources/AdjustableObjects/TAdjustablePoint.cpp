@@ -444,6 +444,7 @@ void TAdjustablePoint::serialize(ObjectSerializer &obj) const
 	obj.addProperty("fName", fName);
 	obj.addProperty("fProvisionalValue", fProvisionalValue);
 	obj.addProperty("fReferential", fReferential);
+	obj.addProperty("fSpatialStatus", getSpatialStatus());
 	obj.addProperty("fXValueSet", fXValueSet);
 	obj.addProperty("fYValueSet", fYValueSet);
 	obj.addProperty("hdrcomment", hdrcomment);

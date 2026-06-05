@@ -37,7 +37,8 @@ set(ALGO_HEADERS
 	headers/CalcParams/TLSCalcPosVectorParam.h
 	headers/CalcParams/TLSCalcScalarParam.h
 	headers/CalcParams/TLSCalcWorkingPosVec.h
-	headers/CalcAlternatives/TALTSvd.h
+	headers/CalcAlternatives/TSparseKabschFitter.h
+	headers/CalcAlternatives/BestFitRotationFns.h
 )
 
 set(ALGO_SOURCES
@@ -58,7 +59,8 @@ set(ALGO_SOURCES
 	sources/CalcParams/TLSCalcPosVectorParam.cpp
 	sources/CalcParams/TLSCalcScalarParam.cpp
 	sources/CalcParams/TLSCalcWorkingPosVec.cpp
-	sources/CalcAlternatives/TALTSvd.cpp
+	sources/CalcAlternatives/TSparseKabschFitter.cpp
+	sources/CalcAlternatives/BestFitRotationFns.cpp
 )
 
 #Create a static library from the object files
