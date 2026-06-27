@@ -51,7 +51,7 @@ public:
 	virtual bool computeResultsMatrices(TLSInputMatrices *, TLSResultsMatrices *) = 0;
 
 	//! Computes the residual vector and the varaiance covariance matrices
-	virtual bool calcResidusAndVarCovMatrix(const TLSInputMatrices *inputMtr, TLSResultsMatrices *rm) = 0;
+	virtual bool calcResidusAndVarCovMatrix(TLSInputMatrices *inputMtr, TLSResultsMatrices *rm, bool computeObsCovar = true) = 0;
 
 	//! Calculate the hypothesis testing limits for the sigma zero a posteriori, default value for number of constraints is zero
 	struct limits calcSigmaZeroLimits(const int nbObs, const int nbUnk, const int nbCnstr = 0);

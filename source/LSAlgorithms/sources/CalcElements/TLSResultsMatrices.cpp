@@ -29,10 +29,55 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 	fResidualsVctr = std::make_unique<TVector>(ueoi.OIndex);
 	fResCovarianceMtrx = std::make_unique<TSparseMatrix>(ueoi.OIndex, ueoi.OIndex);
 	fUnkCovarianceMtrx = std::make_unique<TSparseMatrix>(ueoi.UIndex, ueoi.UIndex);
-	fNormalMatrix = std::make_unique<TSparseMatrix>(ueoi.UIndex + ueoi.CIndex, ueoi.UIndex + ueoi.CIndex);
-	fInvN1Matrix = std::make_unique<TSparseMatrix>(ueoi.EIndex, ueoi.EIndex);
 
+	fUeoi = ueoi;
 	fSigmaZero2 = NO_VALf;
+}
+
+TSparseMatrix TLSResultsMatrices::blowUpParCovarianceMatrix(const TSparseMatrix& reducedCovar, std::vector<int> activeIndices)
+{
+	int nbUnk = fUeoi.UIndex;
+	// No parameters masked: active indices already span the full space (identity mapping), so the
+	// reduced matrix is already the full matrix - skip the rebuild.
+	if (static_cast<int>(activeIndices.size()) == nbUnk)
+		return reducedCovar;
+	TSparseMatrixWithTriplets result(nbUnk, nbUnk);
+	int nActIndices = activeIndices.size();
+	for (int k = 0; k < reducedCovar.outerSize(); k++)
+	{
+		for (TSparseMatrix::InnerIterator it(reducedCovar, k); it; ++it)
+		{
+			int i = activeIndices[it.row()];
+			int j = activeIndices[it.col()];
+			double val = it.value();
+			result.addTriplet(i, j, val);
+		}
+	}
+	result.finalize();
+	return result.getMatrix();
+}
+
+TSparseMatrix TLSResultsMatrices::blowUpObsCovarianceMatrix(const TSparseMatrix& reducedCovar, std::vector<int> activeIndices)
+{
+	int nbObs = fUeoi.OIndex;
+	// No observations masked: active indices already span the full space (identity mapping), so the
+	// reduced matrix is already the full matrix - skip the rebuild.
+	if (static_cast<int>(activeIndices.size()) == nbObs)
+		return reducedCovar;
+	TSparseMatrixWithTriplets result(nbObs, nbObs);
+	int nActIndices = activeIndices.size();
+	for (int k = 0; k < reducedCovar.outerSize(); k++)
+	{
+		for (TSparseMatrix::InnerIterator it(reducedCovar, k); it; ++it)
+		{
+			int i = activeIndices[it.row()];
+			int j = activeIndices[it.col()];
+			double val = it.value();
+			result.addTriplet(i, j, val);
+		}
+	}
+	result.finalize();
+	return result.getMatrix();
 }
 
 
