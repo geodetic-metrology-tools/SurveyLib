@@ -439,21 +439,30 @@ const TSparseMatrix TLSInputMatrices::getEqnMask()
 
 const TSparseMatrix TLSInputMatrices::maskEqnRows(const TSparseMatrix &mat)
 {
+	// Nothing masked: the equation mask is the identity, so skip building it and the product.
+	if (fMaskData.EIndices.empty())
+		return mat;
 	return getEqnMask() * (mat);
 }
 
 const TSparseMatrix TLSInputMatrices::maskObsCols(const TSparseMatrix &mat)
 {
+	if (fMaskData.OIndices.empty())
+		return mat;
 	return (mat) * getObsMask();
 }
 
 const TSparseMatrix TLSInputMatrices::maskParCols(const TSparseMatrix &mat)
 {
+	if (fMaskData.PIndices.empty())
+		return mat;
 	return (mat) * getParMask();
 }
 
 const TSparseMatrix TLSInputMatrices::maskObsColsAndRows(const TSparseMatrix &mat)
 {
+	if (fMaskData.OIndices.empty())
+		return mat;
 	return getObsMask().transpose() * (mat) * getObsMask();
 }
 
