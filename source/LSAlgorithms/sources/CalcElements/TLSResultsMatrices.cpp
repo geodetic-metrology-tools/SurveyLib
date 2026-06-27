@@ -39,6 +39,10 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 TSparseMatrix TLSResultsMatrices::blowUpParCovarianceMatrix(const TSparseMatrix& reducedCovar, std::vector<int> activeIndices)
 {
 	int nbUnk = fUeoi.UIndex;
+	// No parameters masked: active indices already span the full space (identity mapping), so the
+	// reduced matrix is already the full matrix - skip the rebuild.
+	if (static_cast<int>(activeIndices.size()) == nbUnk)
+		return reducedCovar;
 	TSparseMatrixWithTriplets result(nbUnk, nbUnk);
 	int nActIndices = activeIndices.size();
 	for (int k = 0; k < reducedCovar.outerSize(); k++)
@@ -58,6 +62,10 @@ TSparseMatrix TLSResultsMatrices::blowUpParCovarianceMatrix(const TSparseMatrix&
 TSparseMatrix TLSResultsMatrices::blowUpObsCovarianceMatrix(const TSparseMatrix& reducedCovar, std::vector<int> activeIndices)
 {
 	int nbObs = fUeoi.OIndex;
+	// No observations masked: active indices already span the full space (identity mapping), so the
+	// reduced matrix is already the full matrix - skip the rebuild.
+	if (static_cast<int>(activeIndices.size()) == nbObs)
+		return reducedCovar;
 	TSparseMatrixWithTriplets result(nbObs, nbObs);
 	int nActIndices = activeIndices.size();
 	for (int k = 0; k < reducedCovar.outerSize(); k++)

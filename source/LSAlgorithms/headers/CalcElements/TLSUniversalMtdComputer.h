@@ -44,7 +44,7 @@ public:
 	bool computeResultsMatrices(TLSInputMatrices *, TLSResultsMatrices *) override;
 
 	//! Computes the residual vector and the varaiance covariance matrices for a free calculation
-	bool calcResidusAndVarCovMatrix(TLSInputMatrices *inputMtr, TLSResultsMatrices *rm) override;
+	bool calcResidusAndVarCovMatrix(TLSInputMatrices *inputMtr, TLSResultsMatrices *rm, bool computeObsCovar = true) override;
 
 private:
 	int count;

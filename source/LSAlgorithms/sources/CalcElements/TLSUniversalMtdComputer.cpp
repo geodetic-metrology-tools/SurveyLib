@@ -152,7 +152,7 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	return true;
 }
 
-bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, TLSResultsMatrices *rm)
+bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, TLSResultsMatrices *rm, bool computeObsCovar)
 {
 	if (!fError.empty())
 		return false;
@@ -238,38 +238,41 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, T
 		return false;
 	}
 	Qxx = Qxx_big.topLeftCorner(nbUnkReduced, nbUnkReduced);
-	//--------------- Residual covariance matrix: ---------------//
-	TSparseMatrix Qvv(nbObsReduced, nbObsReduced);
-	if (im->getSecondDgnBlockDiagStatus())
-	{ // formula with simplifications if B is invertible Qvv = inv(P) - invB*A*Qxx*At*invBT
-		TDenseMatrix QxxATinvBT(nbUnkReduced, nbObs);
-		TSparseMatrix invBA(nbObs, nbUnkReduced);
-		//if (!(im->getSecondDgnBlockDiagInvMtrx()))
-		//{
-		//	throw std::runtime_error("The matrix invB is not initialized!");
-		//}
-		const TSparseMatrix &invB = im->maskObsColsAndRows(im->getSecondDgnBlockDiagInvMtrx());
-		invBA = invB * A;
-		QxxATinvBT = Qxx * invBA.transpose();
-		Qvv = InvPv - invBA * QxxATinvBT;
-	}
-	else
-	{
-		// general formula
-		Qvv = -S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose();
-	}
-	// the full covariance matrix
+
+	// the full parameter covariance matrix (always needed)
 	TSparseMatrix QxxFull = rm->blowUpParCovarianceMatrix(Qxx, im->getActiveParIndices());
-	// the full residual covar matrix
-	TSparseMatrix QvvFull = rm->blowUpObsCovarianceMatrix(Qvv, im->getActiveObsIndices());
-	// full residuals, masked obs will have residual 0 per definition
+	rm->setUnkCovarMtrx(QxxFull);
+
+	//--------------- Residual covariance matrix (optional) ---------------//
+	// Qvv and its blow-up are the dominant cost of this routine and are only needed for the
+	// reliability statistics. Callers that only require parameter precisions (e.g. the monitoring
+	// API) pass computeObsCovar = false to skip it.
+	if (computeObsCovar)
+	{
+		TSparseMatrix Qvv(nbObsReduced, nbObsReduced);
+		if (im->getSecondDgnBlockDiagStatus())
+		{ // formula with simplifications if B is invertible Qvv = inv(P) - invB*A*Qxx*At*invBT
+			TDenseMatrix QxxATinvBT(nbUnkReduced, nbObs);
+			TSparseMatrix invBA(nbObs, nbUnkReduced);
+			const TSparseMatrix &invB = im->maskObsColsAndRows(im->getSecondDgnBlockDiagInvMtrx());
+			invBA = invB * A;
+			QxxATinvBT = Qxx * invBA.transpose();
+			Qvv = InvPv - invBA * QxxATinvBT;
+		}
+		else
+		{
+			// general formula
+			Qvv = -S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose();
+		}
+		// the full residual covar matrix
+		TSparseMatrix QvvFull = rm->blowUpObsCovarianceMatrix(Qvv, im->getActiveObsIndices());
+		rm->setResCovarMtrx(QvvFull);
+	}
+
+	// full residuals, masked obs will have residual 0 per definition (always needed)
 	TVector VFull(nbObs);
 	VFull.setZero();
 	VFull(im->getActiveObsIndices()) = V;
-
-	// Copies the matrices into the members of the TResultsMatrices object
-	rm->setUnkCovarMtrx(QxxFull);
-	rm->setResCovarMtrx(QvvFull);
 	rm->setResidualsVect(VFull);
 	return true;
 }
