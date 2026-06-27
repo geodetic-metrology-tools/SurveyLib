@@ -266,6 +266,8 @@ public:
 	virtual TReal getValue(int idx) const override;
 	// set the value corresponding to an index
 	virtual void setValue(int idx, TReal value) override;
+	// set the estimated value by coordinate index
+	void setEstVal(int idx, TReal value);
 
 	/*!@name Settings */
 	//@{

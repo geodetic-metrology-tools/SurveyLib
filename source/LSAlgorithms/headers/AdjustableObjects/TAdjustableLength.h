@@ -119,6 +119,8 @@ public:
 	virtual TReal getValue(int idx) const override;
 	// set the value corresponding to an index
 	virtual void setValue(int idx, TReal value) override;
+	//set the estimated value
+	void setEstValue(TReal value) { fEstimatedValue.setMetresValue(value); };
 
 	/*! Sets the estimated precision after calculation in radians.*/
 	void setEstimatedPrecision(int idx, TReal ep);

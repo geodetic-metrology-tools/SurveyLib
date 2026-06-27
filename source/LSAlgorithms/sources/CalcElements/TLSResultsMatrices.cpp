@@ -32,7 +32,46 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 	fNormalMatrix = std::make_unique<TSparseMatrix>(ueoi.UIndex + ueoi.CIndex, ueoi.UIndex + ueoi.CIndex);
 	fInvN1Matrix = std::make_unique<TSparseMatrix>(ueoi.EIndex, ueoi.EIndex);
 
+	fUeoi = ueoi;
 	fSigmaZero2 = NO_VALf;
+}
+
+TSparseMatrix TLSResultsMatrices::blowUpParCovarianceMatrix(const TSparseMatrix& reducedCovar, std::vector<int> activeIndices)
+{
+	int nbUnk = fUeoi.UIndex;
+	TSparseMatrixWithTriplets result(nbUnk, nbUnk);
+	int nActIndices = activeIndices.size();
+	for (int k = 0; k < reducedCovar.outerSize(); k++)
+	{
+		for (TSparseMatrix::InnerIterator it(reducedCovar, k); it; ++it)
+		{
+			int i = activeIndices[it.row()];
+			int j = activeIndices[it.col()];
+			double val = it.value();
+			result.addTriplet(i, j, val);
+		}
+	}
+	result.finalize();
+	return result.getMatrix();
+}
+
+TSparseMatrix TLSResultsMatrices::blowUpObsCovarianceMatrix(const TSparseMatrix& reducedCovar, std::vector<int> activeIndices)
+{
+	int nbObs = fUeoi.OIndex;
+	TSparseMatrixWithTriplets result(nbObs, nbObs);
+	int nActIndices = activeIndices.size();
+	for (int k = 0; k < reducedCovar.outerSize(); k++)
+	{
+		for (TSparseMatrix::InnerIterator it(reducedCovar, k); it; ++it)
+		{
+			int i = activeIndices[it.row()];
+			int j = activeIndices[it.col()];
+			double val = it.value();
+			result.addTriplet(i, j, val);
+		}
+	}
+	result.finalize();
+	return result.getMatrix();
 }
 
 
