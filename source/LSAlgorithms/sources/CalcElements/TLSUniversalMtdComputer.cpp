@@ -44,62 +44,54 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 //		return false;
 //	}
 
-	auto& tempMatrix = im->maskEqnRows(im->getFirstDgnMtrx());
-	const TSparseMatrix &A = im->maskParCols(tempMatrix);
-	const TVector &W = im->getEqnMask() * im->getMisclosureVctr(); // W : Misclosures vector ("fermetures")
-	const TSparseMatrix &A2 = im->maskParCols(im->getCnstrFirstDgnMtrx()); // A2 : First design matrix part related to constraints only
+	// Discard any normal-equations intermediate from a previous solve; this pass repopulates it.
+	fNormalMatrix.reset();
+	fInvN1Matrix.reset();
+
+	// When nothing is deactivated the getters return the full matrices by reference exactly as on
+	// master; with a mask present they return the reduced (active-only) views. All masking now lives
+	// inside TLSInputMatrices, so the algebra below stays identical to the unmasked master version.
+	const bool masked = im->hasMask();
+
+	const TSparseMatrix &A = im->getFirstDgnMtrx(masked);
+	const TVector &W = im->getMisclosureVctr(masked); // W : Misclosures vector ("fermetures")
+	const TSparseMatrix &A2 = im->getCnstrFirstDgnMtrx(masked); // A2 : First design matrix part related to constraints only
 	const TVector &W2 = im->getCnstrMisclosureVctr(); // W2 : Misclosures vector part related to constraints only
 
-
-	int nbUnk = im->getNbrUnknowns();
-	int nbMaskedPar = im->fMaskData.PIndices.size();
-	int nbUnkReduced = nbUnk - nbMaskedPar;
-	int nbEq = im->getNbrEquations();
+	int nbUnk = im->getNbrUnknowns(masked);
+	int nbEq = im->getNbrEquations(masked);
 	int nbCnstr = im->getNbrConstraints();
-	int nbMasked = im->fMaskData.EIndices.size();
-	int nbEqReduced = nbEq - nbMasked;
-
 
 	// set invN1
-	TSparseMatrix invN1(nbEqReduced, nbEqReduced);
+	TSparseMatrix invN1(nbEq, nbEq);
 	if (im->getSecondDgnBlockDiagStatus())
 	{
-		//if (!(im->getWeightMtrx()) || !(im->getSecondDgnBlockDiagInvMtrx()))
-		//{
-		//	throw std::runtime_error("Some of the design matrices are not initialized!");
-		//}
-		const TSparseMatrix &Pv = im->maskObsColsAndRows(im->getWeightMtrx());
-		const TSparseMatrix &invB = im->maskObsColsAndRows(im->getSecondDgnBlockDiagInvMtrx());
+		const TSparseMatrix &Pv = im->getWeightMtrx(masked);
+		const TSparseMatrix &invB = im->getSecondDgnBlockDiagInvMtrx(masked);
 		invN1 = invB.transpose() * Pv * invB;
 	}
 	else
 	{ // if B is not block diagonal, invN1 needs to be computed via an explicit inversion
 	  // B*invPv*BT is symmetric and positive definite so LDLT can be used
-		//if (!(im->getWeightInvMtrx()) || !(im->getSecondDgnMtrx()))
-		//{
-		//	throw std::runtime_error("Some of the design matrices are not initialized!");
-		//}
-		const TSparseMatrix &B = im->getSecondDgnMtrx();
-		const TSparseMatrix &InvPv = im->getWeightInvMtrx();
-		TSparseMatrix BMasked = im->getEqnMask() * B * im->getObsMask();
-		TSparseMatrix InvPvMasked = im->maskObsColsAndRows(InvPv);
-		if (!TSparseUtils::inverse(BMasked * InvPvMasked * BMasked.transpose(), invN1, true))
+		const TSparseMatrix &B = im->getSecondDgnMtrx(masked);
+		const TSparseMatrix &InvPv = im->getWeightInvMtrx(masked);
+		if (!TSparseUtils::inverse(B * InvPv * B.transpose(), invN1, true))
 		{
 			logCritical() << "Matrix B*inv(Pv)*transpose(B) could not be inverted!";
 			return false;
 		}
-		// copy invN1 to resultmatrices only if B is not block diagonal, otherwise it is not needed in the calcRes method
-		rm->setInvN1Matrix(invN1);
+		// keep invN1 for the residual pass only if B is not block diagonal, otherwise it is not needed there
+		fInvN1Matrix = invN1;
 	}
 
 	// Calculate Normal matrix N2 = At * inv( B * inv(P) * Bt ) * A , matrix dimensions (u,u)
 	// and re-sets this new matrix to the main TLSResultsMatrices object.
-	TSparseMatrix N2(nbUnkReduced, nbUnkReduced);
+	TSparseMatrix N2(nbUnk, nbUnk);
 	N2 = A.transpose() * invN1 * A;
 
 	// construct NBig = (N2, A2t
 	//                   A2, 0  )
-	TSparseMatrix NBigReduced(nbUnkReduced + nbCnstr, nbUnkReduced+ nbCnstr);
+	TSparseMatrix NBig(nbUnk + nbCnstr, nbUnk + nbCnstr);
 	std::vector<TTriplet> coeffs;
 	coeffs.reserve(N2.nonZeros() + 2 * A2.nonZeros());
 
@@ -119,35 +111,32 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 			coeffs.push_back(TTriplet(it.col(), it.row() + N2.cols(), it.value())); // A2T
 		}
 	}
-	NBigReduced.setFromTriplets(coeffs.begin(), coeffs.end());
+	NBig.setFromTriplets(coeffs.begin(), coeffs.end());
 
 	// Extended vector: appends W2 (constraints misclosures) to the calculated At*inv(N1)*W  vector
-	TVector VBig(nbUnkReduced + nbCnstr);
+	TVector VBig(nbUnk + nbCnstr);
 	VBig << A.transpose() * invN1 * W, W2;
 
 	// Calculates solution NBig * X = -VBig and keeps only the part corresponding to adjusted parameters
-	TVector solutionExt(nbUnkReduced + nbCnstr);
+	TVector solutionExt(nbUnk + nbCnstr);
 
 	// use Cholesky decomposition if nbCnstr=0, otherwise SparseLU as positive definiteness of NBig may be violated
-	if (!TSparseUtils::solveUnique(NBigReduced, -VBig, solutionExt, (nbCnstr == 0)))
+	if (!TSparseUtils::solveUnique(NBig, -VBig, solutionExt, (nbCnstr == 0)))
 	{
 		logCritical() << "No solution could be found when solving equation system: Nbig * dX = -VBig (extended matrices with conditions)";
 		return false;
 	}
 
-	TVector solutionReduced(nbUnkReduced);
+	TVector solution(nbUnk);
 	// we do not need the Lagrange multipliers
-	solutionReduced = solutionExt.head(nbUnkReduced);
+	solution = solutionExt.head(nbUnk);
 
-	// Copies the matrices into the members of the TResultsMatrices object
-	rm->setNormalMatrix(NBigReduced);
+	// Keep the reduced normal matrix for the residual/var-covar pass (computer-internal handoff).
+	fNormalMatrix = NBig;
 
-	// solution needs to be "blown up" to include zeros at the places of the masked parameters
-	TVector blowUpSolution(nbUnk);
-	blowUpSolution.setZero();
-	
-	blowUpSolution(im->getActiveParIndices()) = solutionReduced;
-	rm->setSolutionVect(blowUpSolution);
+	// blow the solution back up to the full parameter set (inserts zeros at masked parameters;
+	// a no-op when nothing is masked)
+	rm->setSolutionVect(im->blowUpParameters(solution));
 
 	return true;
 }
@@ -157,79 +146,81 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, T
 	if (!fError.empty())
 		return false;
 
-	int nbUnk = im->getNbrUnknowns();
-	int nbObs = im->getNbrObservations();
-	int nbObsMasked = im->fMaskData.OIndices.size();
-	int nbObsReduced = nbObs - nbObsMasked;
-	int nbEq = im->getNbrEquations();
-	int nbEqReduced = nbEq - nbObsMasked;
+	// With no unknowns there is nothing to estimate: computeResults skips computeResultsMatrices in
+	// that case (no normal matrix is produced) and still reports success. Mirror that here.
+	const TVector *solutionVct = rm->getSolutionVectByConst();
+	if (solutionVct == nullptr || solutionVct->size() == 0)
+		return true;
+
+	// Precondition: for a non-trivial system computeResultsMatrices must have run first - it produces
+	// the reduced normal-equations system (fNormalMatrix, and fInvN1Matrix in the non-block-diagonal
+	// case) that this pass consumes.
+	if (!fNormalMatrix)
+	{
+		logCritical() << "calcResidusAndVarCovMatrix called before computeResultsMatrices: normal matrix not available.";
+		return false;
+	}
+
+	// With a mask present the getters/dimensions return the reduced (active-only) system; without a
+	// mask they behave exactly as on master. Masking lives entirely in TLSInputMatrices.
+	const bool masked = im->hasMask();
+
+	int nbUnk = im->getNbrUnknowns(masked);
+	int nbObs = im->getNbrObservations(masked);
+	int nbEq = im->getNbrEquations(masked);
 	int nbCnstr = im->getNbrConstraints();
-	int nbMaskedPar = im->fMaskData.PIndices.size();
-	int nbUnkReduced = nbUnk - nbMaskedPar;
 	TReal sigmaZero2Aposteriori = LITERAL(0.0);
 
-//	if (!(im->getFirstDgnMtrx()) || !(im->getSecondDgnMtrx()) || !(im->getWeightInvMtrx()) || !(rm->getSolutionVectByConst()) || !(rm->getResidualsVectByConst())
-//		|| !(rm->getResCovarMtrxByConst()))
-//		throw std::runtime_error("Some of the design matrices are not initialized!");
+	// NB: the residual covariance matrix is optional (computeObsCovar), so it may legitimately be
+	// uninitialised in the monitoring path - do not assert on it here.
 
+	const TSparseMatrix &A = im->getFirstDgnMtrx(masked);
+	const TSparseMatrix &B = im->getSecondDgnMtrx(masked);
+	const TSparseMatrix &InvPv = im->getWeightInvMtrx(masked);
 
-	const TVector &W = im->getEqnMask() * im->getMisclosureVctr(); // W : Misclosures vector ("fermetures")
-	const TSparseMatrix &A2 = im->maskParCols(im->getCnstrFirstDgnMtrx()); // A2 : First design matrix part related to constraints only
-	const TVector &W2 = im->getCnstrMisclosureVctr(); // W2 : Misclosures vector part related to constraints only
-
-
-	auto tempMatrix = im->maskEqnRows(im->getFirstDgnMtrx());
-	const TSparseMatrix &A = im->maskParCols(tempMatrix);
-	const TSparseMatrix &B = im->maskObsColsAndRows(im->getSecondDgnMtrx());
-	const TSparseMatrix &InvPv = im->maskObsColsAndRows(im->getWeightInvMtrx());
-
-	TSparseMatrix S(nbObsReduced, nbEqReduced);
+	TSparseMatrix S(nbObs, nbEq);
 	if (im->getSecondDgnBlockDiagStatus())
 	{
-		//if (!(im->getSecondDgnBlockDiagInvMtrx()))
-		//{
-		//	throw std::runtime_error("The matrix invB is not initialized!");
-		//}
 		// if B is block-diagonal, the S formula simplifies to -invB
-		S = -(im->maskObsColsAndRows(im->getSecondDgnBlockDiagInvMtrx()));
+		S = -(im->getSecondDgnBlockDiagInvMtrx(masked));
 	}
 	else
 	{
-		if (!(rm->getInvN1MatrixByConst()))
+		if (!fInvN1Matrix)
 		{
 			throw std::runtime_error("The matrix invN1 is not initialized!");
 		}
-		const TSparseMatrix &invN1 = *rm->getInvN1MatrixByConst(); // NB: invN1 will NOT be recalculated here (just taken from previous results!)
+		const TSparseMatrix &invN1 = *fInvN1Matrix; // NB: invN1 will NOT be recalculated here (just taken from the previous pass!)
 		S = -InvPv * B.transpose() * invN1;
 	}
-	const TSparseMatrix &Pv =  im->maskObsColsAndRows(im->getWeightMtrx());
-	const TVector &fullSolution = *rm->getSolutionVectByConst(); // NB: Solution vector will NOT be recalculated here (just taken from previous results!)
-	TVector solution = fullSolution(im->getActiveParIndices());
-	const TSparseMatrix &NBig = *rm->getNormalMatrixByConst(); // NB: Normal matrix will NOT be recalculated here (just taken from previous results!)
+	const TSparseMatrix &Pv = im->getWeightMtrx(masked);
+	const TVector &W = im->getMisclosureVctr(masked); // W : Misclosures vector ("fermetures")
+	// the stored solution is blown up to the full parameter set; reduce it back to the active
+	// parameters so it matches the (masked) design matrix A
+	TVector solution = (*rm->getSolutionVectByConst())(im->getActiveParIndices()); // NB: Solution vector will NOT be recalculated here (just taken from previous results!)
+	const TSparseMatrix &NBig = *fNormalMatrix; // NB: Normal matrix will NOT be recalculated here (just taken from the previous pass!)
 
 	//--------------- Residuals ---------------//
 	// Calculate intermediate matrix
 	// S = - inv(P) * Bt *inv( B * inv(P) * Bt )
 	// Residuals vector V
-	TVector V(nbObsReduced);
+	TVector V(nbObs);
 	V = S * (A * solution + W);
 
 	//--------------- Sigma 0 a posteriri ---------------//
-
 	sigmaZero2Aposteriori = V.transpose() * Pv * V;
-	if (nbEqReduced + nbCnstr != nbUnkReduced)
-		sigmaZero2Aposteriori /= (nbEqReduced - nbUnkReduced + nbCnstr); // NB Redundancy: Takes into account the number of constraints!
+	if (nbEq + nbCnstr != nbUnk)
+		sigmaZero2Aposteriori /= (nbEq - nbUnk + nbCnstr); // NB Redundancy: Takes into account the number of constraints!
 	else
 		fError += "Number of equations + constraints equals number of unknowns, causes zero division!";
 	rm->setSigmaZero2(sigmaZero2Aposteriori);
-	struct limits fisherLim = calcSigmaZeroLimits(nbObsReduced, nbUnkReduced, nbCnstr);
+	struct limits fisherLim = calcSigmaZeroLimits(nbObs, nbUnk, nbCnstr);
 	rm->setSigmaZeroLimits(fisherLim.s0PostLoLimit, fisherLim.s0PostUpLimit);
 
 	// ----------Covariance Matrices-----------//
 
-	TSparseMatrix Qxx_big(nbUnkReduced + nbCnstr, nbUnkReduced + nbCnstr);
-	// the reduced covar mat, only active indices
-	TSparseMatrix Qxx(nbUnkReduced, nbUnkReduced);
+	TSparseMatrix Qxx_big(nbUnk + nbCnstr, nbUnk + nbCnstr);
+	TSparseMatrix Qxx(nbUnk, nbUnk);
 
 	// use Cholesky decomposition if nbCnstr=0, otherwise use LU as positive definiteness may be violated
 	if (!TSparseUtils::inverse(NBig, Qxx_big, (nbCnstr == 0)))
@@ -237,11 +228,10 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, T
 		logCritical() << "The normal matrix NBig could not be inverted!";
 		return false;
 	}
-	Qxx = Qxx_big.topLeftCorner(nbUnkReduced, nbUnkReduced);
+	Qxx = Qxx_big.topLeftCorner(nbUnk, nbUnk);
 
-	// the full parameter covariance matrix (always needed)
-	TSparseMatrix QxxFull = rm->blowUpParCovarianceMatrix(Qxx, im->getActiveParIndices());
-	rm->setUnkCovarMtrx(QxxFull);
+	// the full parameter covariance matrix, blown up to the full parameter set (always needed)
+	rm->setUnkCovarMtrx(rm->blowUpParCovarianceMatrix(Qxx, im->getActiveParIndices()));
 
 	//--------------- Residual covariance matrix (optional) ---------------//
 	// Qvv and its blow-up are the dominant cost of this routine and are only needed for the
@@ -249,12 +239,12 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, T
 	// API) pass computeObsCovar = false to skip it.
 	if (computeObsCovar)
 	{
-		TSparseMatrix Qvv(nbObsReduced, nbObsReduced);
+		TSparseMatrix Qvv(nbObs, nbObs);
 		if (im->getSecondDgnBlockDiagStatus())
 		{ // formula with simplifications if B is invertible Qvv = inv(P) - invB*A*Qxx*At*invBT
-			TDenseMatrix QxxATinvBT(nbUnkReduced, nbObs);
-			TSparseMatrix invBA(nbObs, nbUnkReduced);
-			const TSparseMatrix &invB = im->maskObsColsAndRows(im->getSecondDgnBlockDiagInvMtrx());
+			TDenseMatrix QxxATinvBT(nbUnk, nbObs);
+			TSparseMatrix invBA(nbObs, nbUnk);
+			const TSparseMatrix &invB = im->getSecondDgnBlockDiagInvMtrx(masked);
 			invBA = invB * A;
 			QxxATinvBT = Qxx * invBA.transpose();
 			Qvv = InvPv - invBA * QxxATinvBT;
@@ -265,14 +255,10 @@ bool TLSUniversalMtdComputer::calcResidusAndVarCovMatrix(TLSInputMatrices *im, T
 			Qvv = -S * B * InvPv - S * A * Qxx * A.transpose() * S.transpose();
 		}
 		// the full residual covar matrix
-		TSparseMatrix QvvFull = rm->blowUpObsCovarianceMatrix(Qvv, im->getActiveObsIndices());
-		rm->setResCovarMtrx(QvvFull);
+		rm->setResCovarMtrx(rm->blowUpObsCovarianceMatrix(Qvv, im->getActiveObsIndices()));
 	}
 
 	// full residuals, masked obs will have residual 0 per definition (always needed)
-	TVector VFull(nbObs);
-	VFull.setZero();
-	VFull(im->getActiveObsIndices()) = V;
-	rm->setResidualsVect(VFull);
+	rm->setResidualsVect(im->blowUpResiduals(V));
 	return true;
 }

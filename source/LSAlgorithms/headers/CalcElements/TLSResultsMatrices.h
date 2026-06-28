@@ -77,12 +77,6 @@ public:
 	/*! \brief Returns a pointer to the unknowns covariance matrix	(matrix content can be changed)*/
 	TSparseMatrix *getUnkCovarMtrx() const noexcept { return fUnkCovarianceMtrx.get(); }
 
-	/*! \brief Returns a pointer to the inverse of N1 (matrix content cannot be changed when receiving this pointer) */
-	const TSparseMatrix *getInvN1MatrixByConst() const noexcept { return fInvN1Matrix.get(); }
-
-	/*! \brief Returns a pointer to the normal matrix (matrix content cannot be changed when receiving this pointer) */
-	const TSparseMatrix *getNormalMatrixByConst() const noexcept { return fNormalMatrix.get(); }
-
 	/*! \brief Returns the squared sigma zero 	*/
 	TReal getSigmaZero2() const { return fSigmaZero2; }
 
@@ -104,12 +98,6 @@ public:
 
 	/*! \brief Sets (by matrix copy, i.e. operator =) the unknowns covariance matrix */
 	void setUnkCovarMtrx(TSparseMatrix &matrix) { *fUnkCovarianceMtrx = matrix; }
-
-	/*!	\brief Sets (by matrix copy, i.e. operator =) the normal matrix, which is used to calculate the covariance matrices */
-	void setInvN1Matrix(TSparseMatrix &matrix) { *fInvN1Matrix = matrix; }
-
-	/*!	\brief Sets (by matrix copy, i.e. operator =) the normal matrix, which is used to calculate the covariance matrices */
-	void setNormalMatrix(TSparseMatrix &matrix) { *fNormalMatrix = matrix; }
 
 	/*!	\brief Sets (by vector copy, i.e. operator =) the solution vector 	*/
 	void setSolutionVect(TVector &vect) { *fSolutionVctr = vect; }
@@ -146,8 +134,6 @@ private:
 	std::unique_ptr<TVector> fResidualsVctr; /*!< vector (o x 1) containing the calculated residues on observations */
 	std::unique_ptr<TSparseMatrix> fResCovarianceMtrx; /*!< Qvv matrix (o x o) containing the variances and covariances for residuals */
 	std::unique_ptr<TSparseMatrix> fUnkCovarianceMtrx; /*!< Qxx matrix (u x u) containing the variances and covariances for unknowns */
-	std::unique_ptr<TSparseMatrix> fInvN1Matrix; /*!< invN1 matrix (eq x eq) is the inverse of the matrix N1 = B*Pv^-1*BT */
-	std::unique_ptr<TSparseMatrix> fNormalMatrix; /*!< N matrix (u+nConstr x u+nConstr) is the normal matrix (extended with the constraints if there are some) */
 
 	TReal fSigmaZero2; /*!< calculated "average variance" on residues */
 	TReal fSigmaZeroLowLimit;

@@ -29,8 +29,6 @@ TLSResultsMatrices::TLSResultsMatrices(UEOIndices ueoi)
 	fResidualsVctr = std::make_unique<TVector>(ueoi.OIndex);
 	fResCovarianceMtrx = std::make_unique<TSparseMatrix>(ueoi.OIndex, ueoi.OIndex);
 	fUnkCovarianceMtrx = std::make_unique<TSparseMatrix>(ueoi.UIndex, ueoi.UIndex);
-	fNormalMatrix = std::make_unique<TSparseMatrix>(ueoi.UIndex + ueoi.CIndex, ueoi.UIndex + ueoi.CIndex);
-	fInvN1Matrix = std::make_unique<TSparseMatrix>(ueoi.EIndex, ueoi.EIndex);
 
 	fUeoi = ueoi;
 	fSigmaZero2 = NO_VALf;

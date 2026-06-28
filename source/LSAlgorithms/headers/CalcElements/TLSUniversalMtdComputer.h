@@ -15,11 +15,13 @@
 /////////////////////////////////////////////////////
 // Forward declarations
 /////////////////////////////////////////////////////
+#include <optional>
 #include <string>
 
 #include <UEOIndices.h>
 
 #include "TALSComputer.h"
+#include "TSparseMatrix.h"
 
 class TLSInputMatrices;
 class TLSResultsMatrices;
@@ -48,6 +50,14 @@ public:
 
 private:
 	int count;
+
+	// Reduced normal-equations system: produced by computeResultsMatrices and consumed by
+	// calcResidusAndVarCovMatrix. This is intermediate working state of the computer - it depends only
+	// on the inputs (and the mask), not on any result - so it lives here rather than in
+	// TLSResultsMatrices, which now holds only true results. Engaged only after a successful
+	// computeResultsMatrices(); calcResidusAndVarCovMatrix checks that before using it.
+	std::optional<TSparseMatrix> fNormalMatrix; ///< NBig (u+c x u+c), reduced to the active set
+	std::optional<TSparseMatrix> fInvN1Matrix;  ///< invN1 (e x e), set only in the non-block-diagonal case
 };
 
 #endif

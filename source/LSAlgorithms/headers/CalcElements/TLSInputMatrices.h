@@ -166,49 +166,68 @@ public:
 
 	//@}
 
-	/*!@name Getting methods*/
+	/*!@name Getting methods
+
+		The matrix/vector and dimension getters optionally return the value reduced to the active
+		(non-masked) entries. With \c masked == false (the default) they behave exactly as on master:
+		a reference to the stored member, no copy. With \c masked == true they return the masked
+		view: equation rows / observation rows+cols / parameter cols are dropped according to
+		\c fMaskData. The masked result is cached per matrix and a reference to that cache is
+		returned (valid until the next masked call on the same getter). See \ref hasMask.
+	*/
 	//@{
-	/*!	\brief Returns the number of unknowns */
-	int getNbrUnknowns() const;
+	/*!	\brief Returns the number of unknowns (reduced by the masked parameters if \c masked) */
+	int getNbrUnknowns(bool masked = false) const;
 
-	/*!	\brief Returns the number of observations */
-	int getNbrObservations() const;
+	/*!	\brief Returns the number of observations (reduced by the masked observations if \c masked) */
+	int getNbrObservations(bool masked = false) const;
 
-	/*!	\brief Returns the number of equations */
-	int getNbrEquations() const;
+	/*!	\brief Returns the number of equations (reduced by the masked equations if \c masked) */
+	int getNbrEquations(bool masked = false) const;
 
 	/*!	\brief Returns the number of parameters constraints */
 	int getNbrConstraints() const;
 
+	/*!	\brief Returns true if any equation, observation or parameter is currently masked. */
+	bool hasMask() const;
+
 	/*!	\brief Returns a const reference to the first design matrix allocated here*/
-	const TSparseMatrix &getFirstDgnMtrx() const;
+	const TSparseMatrix &getFirstDgnMtrx(bool masked = false) const;
 
 	/*!	\brief Returns a const reference to the second design matrix allocated here*/
-	const TSparseMatrix &getSecondDgnMtrx() const;
+	const TSparseMatrix &getSecondDgnMtrx(bool masked = false) const;
 
 	/*!	\brief Returns the private member secondDesignMatrixIsBlockDiag which indicates that B is block diagonal*/
 	bool getSecondDgnBlockDiagStatus() const;
 
 	/*!	\brief Returns a const reference to the inverse second design matrix allocated here, if B is block diagonal*/
-	const TSparseMatrix &getSecondDgnBlockDiagInvMtrx() const;
+	const TSparseMatrix &getSecondDgnBlockDiagInvMtrx(bool masked = false) const;
 
 	/*!	\brief Returns a const reference to the weight matrix allocated here*/
-	const TSparseMatrix &getWeightMtrx() const;
+	const TSparseMatrix &getWeightMtrx(bool masked = false) const;
 
 	/*!	\brief Returns a const reference to the inverted weight matrix allocated here*/
-	const TSparseMatrix &getWeightInvMtrx() const;
+	const TSparseMatrix &getWeightInvMtrx(bool masked = false) const;
 
 	/*!	\brief Returns a const reference to the parameters-weight matrix allocated here*/
 	const TSparseMatrix &getWeightUnkMtrx() const;
 
 	/*!	\brief Returns a const reference to the misclosure vector allocated here*/
-	const TVector &getMisclosureVctr() const noexcept;
+	const TVector &getMisclosureVctr(bool masked = false) const;
 
 	/*!	\brief Returns a const reference to the constraints first design submatrix allocated here*/
-	const TSparseMatrix &getCnstrFirstDgnMtrx() const;
+	const TSparseMatrix &getCnstrFirstDgnMtrx(bool masked = false) const;
 
 	/*!	\brief Returns a const reference to the constraints misclosure subvector allocated here*/
 	const TVector &getCnstrMisclosureVctr() const noexcept;
+
+	/*!	\brief Expands a solution vector defined on the active parameters back to the full size,
+		inserting zeros at the masked parameters. Returns \c reduced unchanged if nothing is masked. */
+	TVector blowUpParameters(const TVector &reduced) const;
+
+	/*!	\brief Expands a residual vector defined on the active observations back to the full size,
+		inserting zeros at the masked observations. Returns \c reduced unchanged if nothing is masked. */
+	TVector blowUpResiduals(const TVector &reduced) const;
 
 	//@}
 	// check if there are constraints that do not depend on any variable
@@ -224,25 +243,36 @@ public:
 		// can be used to mask rows of the A matrix during adjustment
 	maskData fMaskData;
 
-	// mult from right to mask columns
-	const TSparseMatrix getObsMask();
-	// mult from right to mask parameters
-	const TSparseMatrix getParMask();
-	// mult from left to mask rows
-	const TSparseMatrix getEqnMask();
-	// cannot reuse the pointers for masked matrices
-	const TSparseMatrix maskEqnRows(const TSparseMatrix &mat);
-	const TSparseMatrix maskObsCols(const TSparseMatrix &mat);
-	const TSparseMatrix maskParCols(const TSparseMatrix &mat);
-	// used for weight matrix
-	const TSparseMatrix maskObsColsAndRows(const TSparseMatrix &mat);
-
-	std::vector<int> getActiveEqnIndices();
-	std::vector<int> getActiveObsIndices();
-	std::vector<int> getActiveParIndices();
+	std::vector<int> getActiveEqnIndices() const;
+	std::vector<int> getActiveObsIndices() const;
+	std::vector<int> getActiveParIndices() const;
 
 
 private:
+	// Selection matrices for the active (non-masked) entries.
+	// mult from right to mask columns
+	TSparseMatrix getObsMask() const;
+	// mult from right to mask parameters
+	TSparseMatrix getParMask() const;
+	// mult from left to mask rows
+	TSparseMatrix getEqnMask() const;
+	// cannot reuse the pointers for masked matrices
+	TSparseMatrix maskEqnRows(const TSparseMatrix &mat) const;
+	TSparseMatrix maskObsCols(const TSparseMatrix &mat) const;
+	TSparseMatrix maskParCols(const TSparseMatrix &mat) const;
+	// used for weight matrix
+	TSparseMatrix maskObsColsAndRows(const TSparseMatrix &mat) const;
+
+	// Caches holding the masked views returned by reference from the getters above.
+	// Filled on demand when a getter is called with masked == true.
+	mutable TSparseMatrix fMaskedFirstDgn;
+	mutable TSparseMatrix fMaskedSecondDgn;
+	mutable TSparseMatrix fMaskedSecondDgnInv;
+	mutable TSparseMatrix fMaskedWeight;
+	mutable TSparseMatrix fMaskedWeightInv;
+	mutable TSparseMatrix fMaskedCnstrFirstDgn;
+	mutable TVector fMaskedMisclosure;
+
 	UEOIndices fUEOIndices; /*!< number of unknowns, equations, observations and constraints */
 	std::unique_ptr<TSparseMatrixWithTriplets> fCnstrFirstDesignMtrx; /*!< matrix A2 (c x u) for constraints first design submatrix*/
 	std::unique_ptr<TSparseMatrixWithTriplets> firstDesignMatrix;

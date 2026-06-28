@@ -303,33 +303,48 @@ bool TLSInputMatrices::setCnstrMisclosureVectorElement(MatrixIndex row, TReal co
 ////////////////////////////////////////////////////////////////////////////////
 // ACCESS METHOD FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
-const TSparseMatrix &TLSInputMatrices::getFirstDgnMtrx() const
-{ // returns a reference to the first dgn matrix
-	return firstDesignMatrix->getMatrix();
+const TSparseMatrix &TLSInputMatrices::getFirstDgnMtrx(bool masked) const
+{ // first design matrix A (e x u): mask equation rows and parameter columns
+	if (!masked)
+		return firstDesignMatrix->getMatrix();
+	fMaskedFirstDgn = maskParCols(maskEqnRows(firstDesignMatrix->getMatrix()));
+	return fMaskedFirstDgn;
 }
 
-const TSparseMatrix &TLSInputMatrices::getSecondDgnMtrx() const
-{ // returns a reference to the first dgn matrix
-	return secondDesignMatrix->getMatrix();
+const TSparseMatrix &TLSInputMatrices::getSecondDgnMtrx(bool masked) const
+{ // second design matrix B (e x o): mask equation rows and observation columns
+	if (!masked)
+		return secondDesignMatrix->getMatrix();
+	fMaskedSecondDgn = maskObsCols(maskEqnRows(secondDesignMatrix->getMatrix()));
+	return fMaskedSecondDgn;
 }
 
 bool TLSInputMatrices::getSecondDgnBlockDiagStatus() const
 { // returns the private member secondDesignMatrixIsBlockDiag which indicates that B is block diagonal
 	return secondDesignMatrixIsBlockDiag;
 }
-const TSparseMatrix &TLSInputMatrices::getSecondDgnBlockDiagInvMtrx() const
-{ // returns a reference to the inverse of the second dgn matrix
-	return secondDesignBlockDiagInvMatrix->getMatrix();
+const TSparseMatrix &TLSInputMatrices::getSecondDgnBlockDiagInvMtrx(bool masked) const
+{ // inverse second design matrix invB: mask observation rows and columns
+	if (!masked)
+		return secondDesignBlockDiagInvMatrix->getMatrix();
+	fMaskedSecondDgnInv = maskObsColsAndRows(secondDesignBlockDiagInvMatrix->getMatrix());
+	return fMaskedSecondDgnInv;
 }
 
-const TSparseMatrix &TLSInputMatrices::getWeightMtrx() const
-{
-	return weightMatrix->getMatrix();
+const TSparseMatrix &TLSInputMatrices::getWeightMtrx(bool masked) const
+{ // observation weight matrix P (o x o): mask observation rows and columns
+	if (!masked)
+		return weightMatrix->getMatrix();
+	fMaskedWeight = maskObsColsAndRows(weightMatrix->getMatrix());
+	return fMaskedWeight;
 }
 
-const TSparseMatrix &TLSInputMatrices::getWeightInvMtrx() const
-{
-	return weightInvMatrix->getMatrix();
+const TSparseMatrix &TLSInputMatrices::getWeightInvMtrx(bool masked) const
+{ // inverse observation weight matrix invP (o x o): mask observation rows and columns
+	if (!masked)
+		return weightInvMatrix->getMatrix();
+	fMaskedWeightInv = maskObsColsAndRows(weightInvMatrix->getMatrix());
+	return fMaskedWeightInv;
 }
 
 const TSparseMatrix &TLSInputMatrices::getWeightUnkMtrx() const
@@ -337,14 +352,20 @@ const TSparseMatrix &TLSInputMatrices::getWeightUnkMtrx() const
 	return weightUnkMatrix->getMatrix();
 }
 
-const TVector &TLSInputMatrices::getMisclosureVctr() const noexcept
-{ // returns a reference to the misclosure vector
-	return *fMisclosureVector.get();
+const TVector &TLSInputMatrices::getMisclosureVctr(bool masked) const
+{ // misclosure vector W (e): mask equation rows
+	if (!masked)
+		return *fMisclosureVector.get();
+	fMaskedMisclosure = getEqnMask() * (*fMisclosureVector.get());
+	return fMaskedMisclosure;
 }
 
-const TSparseMatrix &TLSInputMatrices::getCnstrFirstDgnMtrx() const
-{ // returns a reference to the constraint first dgn matrix
-	return fCnstrFirstDesignMtrx->getMatrix();
+const TSparseMatrix &TLSInputMatrices::getCnstrFirstDgnMtrx(bool masked) const
+{ // constraint first design matrix A2 (c x u): mask parameter columns
+	if (!masked)
+		return fCnstrFirstDesignMtrx->getMatrix();
+	fMaskedCnstrFirstDgn = maskParCols(fCnstrFirstDesignMtrx->getMatrix());
+	return fMaskedCnstrFirstDgn;
 }
 
 const TVector &TLSInputMatrices::getCnstrMisclosureVctr() const noexcept
@@ -368,19 +389,19 @@ void TLSInputMatrices::finalizeMatrices()
 	weightUnkMatrix->finalize();
 }
 
-int TLSInputMatrices::getNbrUnknowns() const
+int TLSInputMatrices::getNbrUnknowns(bool masked) const
 {
-	return fUEOIndices.UIndex;
+	return fUEOIndices.UIndex - (masked ? static_cast<int>(fMaskData.PIndices.size()) : 0);
 }
 
-int TLSInputMatrices::getNbrEquations() const
+int TLSInputMatrices::getNbrEquations(bool masked) const
 {
-	return fUEOIndices.EIndex;
+	return fUEOIndices.EIndex - (masked ? static_cast<int>(fMaskData.EIndices.size()) : 0);
 }
 
-int TLSInputMatrices::getNbrObservations() const
+int TLSInputMatrices::getNbrObservations(bool masked) const
 {
-	return fUEOIndices.OIndex;
+	return fUEOIndices.OIndex - (masked ? static_cast<int>(fMaskData.OIndices.size()) : 0);
 }
 
 int TLSInputMatrices::getNbrConstraints() const
@@ -388,7 +409,12 @@ int TLSInputMatrices::getNbrConstraints() const
 	return fUEOIndices.CIndex;
 }
 
-const TSparseMatrix TLSInputMatrices::getObsMask()
+bool TLSInputMatrices::hasMask() const
+{
+	return !fMaskData.EIndices.empty() || !fMaskData.OIndices.empty() || !fMaskData.PIndices.empty();
+}
+
+TSparseMatrix TLSInputMatrices::getObsMask() const
 {
 	std::vector<int> actInd = getActiveObsIndices();
 	int nActive = actInd.size();
@@ -404,7 +430,7 @@ const TSparseMatrix TLSInputMatrices::getObsMask()
 	return rightFactor;
 }
 
-const TSparseMatrix TLSInputMatrices::getParMask()
+TSparseMatrix TLSInputMatrices::getParMask() const
 {
 	std::vector<int> actInd = getActiveParIndices();
 	int nActive = actInd.size();
@@ -420,7 +446,7 @@ const TSparseMatrix TLSInputMatrices::getParMask()
 	return rightFactor;
 }
 
-const TSparseMatrix TLSInputMatrices::getEqnMask()
+TSparseMatrix TLSInputMatrices::getEqnMask() const
 {
 	std::vector<int> actInd = getActiveEqnIndices();
 	int nActive = actInd.size();
@@ -437,7 +463,7 @@ const TSparseMatrix TLSInputMatrices::getEqnMask()
 	return leftFactor;
 }
 
-const TSparseMatrix TLSInputMatrices::maskEqnRows(const TSparseMatrix &mat)
+TSparseMatrix TLSInputMatrices::maskEqnRows(const TSparseMatrix &mat) const
 {
 	// Nothing masked: the equation mask is the identity, so skip building it and the product.
 	if (fMaskData.EIndices.empty())
@@ -445,28 +471,28 @@ const TSparseMatrix TLSInputMatrices::maskEqnRows(const TSparseMatrix &mat)
 	return getEqnMask() * (mat);
 }
 
-const TSparseMatrix TLSInputMatrices::maskObsCols(const TSparseMatrix &mat)
+TSparseMatrix TLSInputMatrices::maskObsCols(const TSparseMatrix &mat) const
 {
 	if (fMaskData.OIndices.empty())
 		return mat;
 	return (mat) * getObsMask();
 }
 
-const TSparseMatrix TLSInputMatrices::maskParCols(const TSparseMatrix &mat)
+TSparseMatrix TLSInputMatrices::maskParCols(const TSparseMatrix &mat) const
 {
 	if (fMaskData.PIndices.empty())
 		return mat;
 	return (mat) * getParMask();
 }
 
-const TSparseMatrix TLSInputMatrices::maskObsColsAndRows(const TSparseMatrix &mat)
+TSparseMatrix TLSInputMatrices::maskObsColsAndRows(const TSparseMatrix &mat) const
 {
 	if (fMaskData.OIndices.empty())
 		return mat;
 	return getObsMask().transpose() * (mat) * getObsMask();
 }
 
-std::vector<int> TLSInputMatrices::getActiveEqnIndices()
+std::vector<int> TLSInputMatrices::getActiveEqnIndices() const
 {
 	std::vector<int> ind;
 	for (int j = 0; j < fUEOIndices.EIndex; j++)
@@ -484,7 +510,7 @@ std::vector<int> TLSInputMatrices::getActiveEqnIndices()
 
 	return ind;
 }
-std::vector<int> TLSInputMatrices::getActiveObsIndices()
+std::vector<int> TLSInputMatrices::getActiveObsIndices() const
 {
 	std::vector<int> ind;
 	for (int j = 0; j < fUEOIndices.OIndex; j++)
@@ -503,7 +529,7 @@ std::vector<int> TLSInputMatrices::getActiveObsIndices()
 	return ind;
 }
 
-std::vector<int> TLSInputMatrices::getActiveParIndices()
+std::vector<int> TLSInputMatrices::getActiveParIndices() const
 {
 	std::vector<int> ind;
 	for (int j = 0; j < fUEOIndices.UIndex; j++)
@@ -520,6 +546,29 @@ std::vector<int> TLSInputMatrices::getActiveParIndices()
 	}
 
 	return ind;
+}
+
+TVector TLSInputMatrices::blowUpParameters(const TVector &reduced) const
+{
+	if (fMaskData.PIndices.empty())
+		return reduced;
+	// reduced is defined on the active parameters; scatter it back to the full size,
+	// leaving zeros at the masked parameters.
+	TVector full(fUEOIndices.UIndex);
+	full.setZero();
+	full(getActiveParIndices()) = reduced;
+	return full;
+}
+
+TVector TLSInputMatrices::blowUpResiduals(const TVector &reduced) const
+{
+	if (fMaskData.OIndices.empty())
+		return reduced;
+	// reduced is defined on the active observations; masked observations get residual 0.
+	TVector full(fUEOIndices.OIndex);
+	full.setZero();
+	full(getActiveObsIndices()) = reduced;
+	return full;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
