@@ -94,16 +94,16 @@ public:
 	void setSigmaZero2(TReal s) { fSigmaZero2 = s; }
 
 	/*! \brief Sets (by matrix copy, i.e. operator =) the residuals covariance matrix  	*/
-	void setResCovarMtrx(TSparseMatrix &matrix) { *fResCovarianceMtrx = matrix; }
+	void setResCovarMtrx(const TSparseMatrix &matrix) { *fResCovarianceMtrx = matrix; }
 
 	/*! \brief Sets (by matrix copy, i.e. operator =) the unknowns covariance matrix */
-	void setUnkCovarMtrx(TSparseMatrix &matrix) { *fUnkCovarianceMtrx = matrix; }
+	void setUnkCovarMtrx(const TSparseMatrix &matrix) { *fUnkCovarianceMtrx = matrix; }
 
 	/*!	\brief Sets (by vector copy, i.e. operator =) the solution vector 	*/
-	void setSolutionVect(TVector &vect) { *fSolutionVctr = vect; }
+	void setSolutionVect(const TVector &vect) { *fSolutionVctr = vect; }
 
 	/*!	\brief Sets (by vector copy, i.e. operator =) the residues vector 	*/
-	void setResidualsVect(TVector &vect) { *fResidualsVctr = vect; }
+	void setResidualsVect(const TVector &vect) { *fResidualsVctr = vect; }
 
 	/*!	\brief Sets the sigma zero statistical upper and lower limits 	*/
 	void setSigmaZeroLimits(TReal loLimit, TReal upLimit)
