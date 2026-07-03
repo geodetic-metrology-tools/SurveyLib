@@ -74,16 +74,15 @@ TAngle TRegionalGeoid::getEta(const TSpatialPosition &sp) const
 TAngle TRegionalGeoid::getXi(const TSpatialPosition &sp) const
 {
 	TReal deltaN = 0.0;
-	TAngle lambda;
+	TAngle phi;
 	TAngle gridSpacingX;
-	if (prepareXiAndEtaComputation(sp, deltaN, lambda, gridSpacingX, "Xi"))
+	if (prepareXiAndEtaComputation(sp, deltaN, phi, gridSpacingX, "Xi"))
 	{
-		TAngle phi(sp.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid());
 		TLength h(sp.getCoordinates(TCoordSysFactory::kGeodetic).getH());
 
 		// Featherstone, W. E. (1999, November). The use and abuse of vertical deflections. In Sixth South East Asian Surveyors’ Congress Fremantle (Vol. 6, pp. 1-12).
 		// equation 3
-		TReal xiRad = deltaN / (fDefEllPtr->getRho(lambda) * gridSpacingX.getRadiansValue());
+		TReal xiRad = deltaN / (fDefEllPtr->getRho(phi) * gridSpacingX.getRadiansValue());
 		//std::cout << xiRad * 180.0 / PI * 3600 << std::endl;
 		//xiRad += normalPlumbLineCurvature(phi, h).getRadiansValue();
 		//std::cout << xiRad * 180.0 / PI * 3600 << std::endl;
@@ -174,14 +173,14 @@ bool TRegionalGeoid::prepareXiAndEtaComputation(const TSpatialPosition &sp, TRea
 	{
 		deltaN = n_X_YBefore - n_X_YAfter;
 		lambdaOrPhi = lambda;
-		gridSpacing = TAngle(abs(gt[1]), TAngle::kDeciDegs); // gt[1] is the x grid spacing
+		gridSpacing = TAngle(abs(gt[5]), TAngle::kDeciDegs); // gt[5] is the Y grid spacing (often negative)
 		return true;
 	}
 	else if (xiOrEta == "Eta")
 	{
 		deltaN = n_XBefore_Y - n_XAfter_Y;
 		lambdaOrPhi = phi;
-		gridSpacing = TAngle(abs(gt[5]), TAngle::kDeciDegs); // gt[5] is the y grid spacing (often negative)
+		gridSpacing = TAngle(abs(gt[1]), TAngle::kDeciDegs); // gt[1] is the X grid spacing 
 		return true;
 	}
 	else
