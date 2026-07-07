@@ -54,17 +54,42 @@ TLength TRegionalGeoid::getN(const TSpatialPosition &sp) const
 
 TAngle TRegionalGeoid::getEta(const TSpatialPosition &sp) const
 {
+	TAngle phiSp = sp.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();
+	TAngle lambdaSp = sp.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid();
+	TLength hSp = sp.getCoordinates(TCoordSysFactory::kGeodetic).getH();
+
 	TReal deltaN = 0.0;
-	TAngle phi;
-	TAngle gridSpacingY;
-	if (prepareXiAndEtaComputation(sp, deltaN, phi, gridSpacingY, "Eta"))
+	TAngle delta(0.0001, TAngle::kDeciDegs);
+
+	// deep copy of TSpatialPosition transformed in same reference frame as the geoid CalculationRF
+	// used to interpolate the slope
+	TSpatialPosition sposEast = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
+	TSpatialPosition sposWest = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
+
+	TPositionVector pv(TCoordSysFactory::kGeodetic);
+	pv.setPhiEllipsoid(phiSp);
+	pv.setLambdaEllipsoid(lambdaSp + delta);
+	pv.setH(hSp);
+	sposEast.setCoordinates(pv);
+
+	pv.setLambdaEllipsoid(lambdaSp - delta);
+	sposWest.setCoordinates(pv);
+	try
 	{
+		TReal nEast = getN(sposEast);
+		TReal nWest = getN(sposWest);
+
+		// 2 * delta converted to radians
+		double dLonRad = 2.0 * delta.getRadiansValue();
+		double dNdLambda = (nEast - nWest) / dLonRad;
+
+		// Calculate Eta in radians
 		// Featherstone, W. E. (1999, November). The use and abuse of vertical deflections. In Sixth South East Asian Surveyors’ Congress Fremantle (Vol. 6, pp. 1-12).
 		// equation 4
-		TReal eta_rad = deltaN / (fDefEllPtr->getNu(phi) * gridSpacingY.getRadiansValue() * cos(phi.getRadiansValue()));
+		double eta_rad = -dNdLambda / (fDefEllPtr->getNu(phiSp) * cos(phiSp.getRadiansValue()));
 		return TAngle(eta_rad, TAngle::kRadians);
 	}
-	else
+	catch (const std::exception &)
 	{
 		std::stringstream ss = generateNotInGeoidGridMessage("getEta", sp);
 		throw TNotInGeoidGridException(ss.str());
@@ -73,23 +98,42 @@ TAngle TRegionalGeoid::getEta(const TSpatialPosition &sp) const
 
 TAngle TRegionalGeoid::getXi(const TSpatialPosition &sp) const
 {
-	TReal deltaN = 0.0;
-	TAngle phi;
-	TAngle gridSpacingX;
-	if (prepareXiAndEtaComputation(sp, deltaN, phi, gridSpacingX, "Xi"))
-	{
-		TLength h(sp.getCoordinates(TCoordSysFactory::kGeodetic).getH());
+	TAngle phiSp = sp.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();
+	TAngle lambdaSp = sp.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid();
+	TLength hSp = sp.getCoordinates(TCoordSysFactory::kGeodetic).getH();
 
+	TReal deltaN = 0.0;
+	TAngle delta(0.0001, TAngle::kDeciDegs);
+
+	TSpatialPosition sposNorth = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
+	TSpatialPosition sposSouth = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
+
+	TPositionVector pv(TCoordSysFactory::kGeodetic);
+	pv.setPhiEllipsoid(phiSp + delta);
+	pv.setLambdaEllipsoid(lambdaSp);
+	pv.setH(hSp);
+	sposNorth.setCoordinates(pv);
+
+	pv.setPhiEllipsoid(phiSp - delta);
+	sposSouth.setCoordinates(pv);
+
+	try
+	{
+		// Central difference for dN/dPhi
+		TReal nNorth = getN(sposNorth);
+		TReal nSouth = getN(sposSouth);
+
+		// 2 * delta converted to radians
+		double dLatRad = 2.0 * delta.getRadiansValue();
+		double dNdPhi = (nNorth - nSouth) / dLatRad;	
+
+		// Calculate Xi in radians
 		// Featherstone, W. E. (1999, November). The use and abuse of vertical deflections. In Sixth South East Asian Surveyors’ Congress Fremantle (Vol. 6, pp. 1-12).
 		// equation 3
-		TReal xiRad = deltaN / (fDefEllPtr->getRho(phi) * gridSpacingX.getRadiansValue());
-		//std::cout << xiRad * 180.0 / PI * 3600 << std::endl;
-		//xiRad += normalPlumbLineCurvature(phi, h).getRadiansValue();
-		//std::cout << xiRad * 180.0 / PI * 3600 << std::endl;
-
+		double xiRad = -dNdPhi / fDefEllPtr->getRho(phiSp);
 		return TAngle(xiRad, TAngle::kRadians);
 	}
-	else
+	catch (const std::exception &)
 	{
 		std::stringstream ss = generateNotInGeoidGridMessage("getXi", sp);
 		throw TNotInGeoidGridException(ss.str());
@@ -139,126 +183,6 @@ bool TRegionalGeoid::getXAndYFromSpatialPosition(const TSpatialPosition &sp, TRe
 	{
 		return false;
 	}
-}
-
-bool TRegionalGeoid::prepareXiAndEtaComputation(const TSpatialPosition &sp, TReal &deltaN, TAngle &lambdaOrPhi, TAngle &gridSpacing, const std::string &xiOrEta) const
-{
-	// deep copy of TSpatialPosition transformed in same reference frame as the geoid CalculationRF
-	TSpatialPosition spos = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
-
-	const TAngle lambda(spos.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid());
-	const TAngle phi(spos.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid());
-
-	GDALDataset *dataset = openGDALDataset();
-	const OGRSpatialReference *geoidSRS = dataset->GetSpatialRef();
-
-	double x = 0, y = 0;
-	if (!getXAndYFromSpatialPosition(spos, x, y, *geoidSRS))
-	{
-		throw std::invalid_argument("Impossible to extract deflection of the vertical: Be sure to work with geographic coordinates");
-	}
-
-	double gt[6];
-	dataset->GetGeoTransform(gt);
-
-	TReal n_XBefore_Y, n_XAfter_Y, n_X_YBefore, n_X_YAfter = 0.0;
-	if (!getNatCornerAroundPoint(x, y, dataset, abs(gt[1]), abs(gt[5]), n_XBefore_Y, n_XAfter_Y, n_X_YBefore, n_X_YAfter))
-	{
-		throw std::invalid_argument("Error occurred while interpolating geoid values");
-	}
-
-	GDALClose(dataset);
-
-	if (xiOrEta == "Xi")
-	{
-		deltaN = n_X_YBefore - n_X_YAfter;
-		lambdaOrPhi = lambda;
-		gridSpacing = TAngle(abs(gt[5]), TAngle::kDeciDegs); // gt[5] is the Y grid spacing (often negative)
-		return true;
-	}
-	else if (xiOrEta == "Eta")
-	{
-		deltaN = n_XBefore_Y - n_XAfter_Y;
-		lambdaOrPhi = phi;
-		gridSpacing = TAngle(abs(gt[1]), TAngle::kDeciDegs); // gt[1] is the X grid spacing 
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-bool TRegionalGeoid::getNatCornerAroundPoint(const TReal &xPoint,
-	const TReal &yPoint,
-	const GDALDataset *dataset,
-	const TReal &gridSpacingX,
-	const TReal &gridSpacingY,
-	TReal &n_XBefore_Y,
-	TReal &n_XAfter_Y,
-	TReal &n_X_YBefore,
-	TReal &n_X_YAfter) const
-{
-	TReal xBefore =0.0, xAfter =0.0 , yBefore = 0.0, yAfter = 0.0;
-	if (xPoint >= 0)
-	{
-		xBefore = std::floor((xPoint / gridSpacingX)) * gridSpacingX;//	+gridSpacingX / 2;
-		xAfter = std::ceil((xPoint / gridSpacingX)) * gridSpacingX;//+gridSpacingX / 2;
-	}
-	else
-	{
-		xAfter = std::floor((xPoint / gridSpacingX)) * gridSpacingX;// - gridSpacingX / 2;
-		xBefore = std::ceil((xPoint / gridSpacingX)) * gridSpacingX;// - gridSpacingX / 2;
-	}
-
-	if (yPoint >= 0)
-	{
-	yBefore = std::floor((yPoint / gridSpacingY)) * gridSpacingY; // + gridSpacingY / 2;
-	yAfter = std::ceil((yPoint / gridSpacingY)) * gridSpacingY; // + gridSpacingY / 2;
-	}
-	else
-	{
-		yAfter = std::floor((yPoint / gridSpacingY)) * gridSpacingY;// - gridSpacingY / 2;
-		yBefore = std::ceil((yPoint / gridSpacingY)) * gridSpacingY;// - gridSpacingY / 2;
-	}
-
-	//CPLErr err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xBefore, yPoint, dataset->GetSpatialRef(), fInterpolationMethod, &n_XBefore_Y);
-	CPLErr err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xPoint, yPoint, dataset->GetSpatialRef(), fInterpolationMethod, &n_XBefore_Y);
-	if (err != CE_None)
-	{
-		return false;
-	}
-
-	err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xPoint + gridSpacingX, yPoint, dataset->GetSpatialRef(), fInterpolationMethod, &n_XAfter_Y);
-	if (err != CE_None)
-	{
-		return false;
-	}
-	if (xPoint<0)
-	{
-		TReal temp = n_XAfter_Y;
-		n_XAfter_Y = n_XBefore_Y;
-		n_XBefore_Y = temp;
-	}
-
-	err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xPoint, yPoint , dataset->GetSpatialRef(), fInterpolationMethod, &n_X_YBefore);
-	if (err != CE_None)
-	{
-		return false;
-	}
-
-	err = dataset->GetRasterBand(1)->InterpolateAtGeolocation(xPoint, yPoint - gridSpacingY, dataset->GetSpatialRef(), fInterpolationMethod, &n_X_YAfter);
-	if (err != CE_None)
-	{
-		return false;
-	}
-	if (yPoint < 0)
-	{
-		TReal temp = n_X_YAfter;
-		n_X_YAfter = n_X_YBefore;
-		n_X_YBefore = temp;
-	}
-	return true;
 }
 
 TAngle TRegionalGeoid::normalPlumbLineCurvature(const TAngle &phi, const TLength h) const
