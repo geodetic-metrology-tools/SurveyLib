@@ -78,18 +78,6 @@ private:
 
 	bool getXAndYFromSpatialPosition(const TSpatialPosition &sp, TReal &x, TReal &y, const OGRSpatialReference &geoidSRS) const;
 
-	bool prepareXiAndEtaComputation(const TSpatialPosition &sp, TReal &deltaN, TAngle &lambdaOrPhi, TAngle &gridSpacing, const std::string &xiOrEta) const;
-
-	bool getNatCornerAroundPoint(const TReal &xPoint,
-		const TReal &yPoint,
-		const GDALDataset *dataset,
-		const TReal &gridSpacingX,
-		const TReal &gridSpacingY,
-		TReal &n_XBefore_Y,
-		TReal &n_XAfter_Y,
-		TReal &n_X_YBefore,
-		TReal &n_X_YAfter) const;
-
 	// Compute the normal curvature of the plumb line
 	TAngle normalPlumbLineCurvature(const TAngle &phi, const TLength h_km) const;
 
