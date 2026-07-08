@@ -76,87 +76,6 @@ void object::test<1>()
 
 template<>
 template<>
-void object::test<2>()
-{
-	tut::skip();
-	set_test_name("Test N");
-	// TAngle lambda(6.04866331086255, TAngle::kDeciDegs); // longitude P0 (CHTRF95)
-	// TAngle phi (46.23215612104025, TAngle::kDeciDegs); // latitude P0 (CHTRF95)
-	// TLength h(483.624043488, TLength::kMetres); // ellipsoidal height P0 (CHTRF95)
-	TLength x(4395448.303144970), y(465755.018889440), z(4583484.782265396);
-
-	TPositionVector p0(x, y, z, TCoordSysFactory::k3DCartesian);
-	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95), p0);
-
-	TAGeoidModel *geoidModel(TRefSystemFactory::getRefSystemFactory()->getGeoid(TRefSystemFactory::kCHGeo2004_ETRS));
-	std::cout << "Geoid height: " << geoidModel->getN(position).getMetresValue() << "\n";
-	// ensure_equals("N", geoidModel->getN(position).getMetresValue(), 0.0);
-}
-
-template<>
-template<>
-void object::test<3>()
-{
-	set_test_name("Test Eta");
-	tut::skip();
-	// TAngle lambda(6.04866331086255, TAngle::kDeciDegs); // longitude P0 (CHTRF95)
-	// TAngle phi (46.23215612104025, TAngle::kDeciDegs); // latitude P0 (CHTRF95)
-	// TLength h(483.624043488, TLength::kMetres); // ellipsoidal height P0 (CHTRF95)
-	TLength x(4395448.303144970), y(465755.018889440), z(4583484.782265396);
-
-	TPositionVector p0(x, y, z, TCoordSysFactory::k3DCartesian);
-	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95), p0);
-
-	TAGeoidModel *geoidModel(TRefSystemFactory::getRefSystemFactory()->getGeoid(TRefSystemFactory::kCHGeo2004_ETRS));
-	std::cout << "Eta: " << geoidModel->getEta(position).getSignedCCValue() << "\n";
-	// ensure_equals("Eta", geoidModel->getN(position).getMetresValue(), 0.0);
-}
-
-template<>
-template<>
-void object::test<4>()
-{
-	tut::skip();
-	set_test_name("Test Xi");
-	// TAngle lambda(6.04866331086255, TAngle::kDeciDegs); // longitude P0 (CHTRF95)
-	// TAngle phi (46.23215612104025, TAngle::kDeciDegs); // latitude P0 (CHTRF95)
-	// TLength h(483.624043488, TLength::kMetres); // ellipsoidal height P0 (CHTRF95)
-	TLength x(4395448.303144970), y(465755.018889440), z(4583484.782265396);
-
-	TPositionVector p0(x, y, z, TCoordSysFactory::k3DCartesian);
-	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95), p0);
-
-	TAGeoidModel *geoidModel(TRefSystemFactory::getRefSystemFactory()->getGeoid(TRefSystemFactory::kCHGeo2004_ETRS));
-	std::cout << "Xi: " << geoidModel->getXi(position).getSignedCCValue() << "\n";
-	// ensure_equals("Eta", geoidModel->getN(position).getMetresValue(), 0.0);
-}
-
-template<>
-template<>
-void object::test<5>()
-{
-	tut::skip();
-	set_test_name("Test N, Lambda, Xi compared to Python Script");
-	// Coordinate of the point 53 in the geodetic control profile
-	// TLength x(4394452.09397), y(463492.09023), z(4583991.77052);
-
-	// Coordinate of the point 85 in the geodetic control profile
-	// TLength x(4407162.31964), y(470865.84975), z(4571453.66808);
-	// Coordinate of the point 53 in the geodetic control profile
-	TLength x(4394624.03962), y(463510.22570), z(4584172.34127);
-
-	TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
-	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95), p);
-
-	TAGeoidModel *geoidModel(TRefSystemFactory::getRefSystemFactory()->getGeoid(TRefSystemFactory::kCHGeo2004_ETRS));
-	std::cout << "N: " << geoidModel->getN(position).getMetresValue() << "\n";
-	std::cout << "Eta: " << geoidModel->getEta(position).getSecondsValue() << "\n";
-	std::cout << "Xi: " << geoidModel->getXi(position).getSecondsValue() << "\n";
-	// ensure_equals("Eta", geoidModel->getN(position).getMetresValue(), 0.0);
-}
-
-template<>
-template<>
 void object::test<6>()
 {
 	tut::skip();
@@ -291,9 +210,9 @@ void object::test<7>()
 	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
 	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << "\n";
 
-	//ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), -14.714, tolHeight); // this value is at a grid node, so no interpolation error expected
-	//ensure_equals("Eta", AUSGeoid2020->getEta(position).getSecondsValue(), -2.65, tolDoV); // this value is at a grid node, so no interpolation error expected
-	//ensure_equals("Xi", AUSGeoid2020->getXi(position).getSecondsValue(), -5.64, tolDoV); // this value is at a grid node, so no interpolation error expected
+	ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), -14.714, tolHeight); // this value is at a grid node, so no interpolation error expected
+	ensure_equals("Eta", AUSGeoid2020->getEta(position).getSecondsValue(), -2.65, tolDoV); // this value is at a grid node, so no interpolation error expected
+	ensure_equals("Xi", AUSGeoid2020->getXi(position).getSecondsValue(), -5.64, tolDoV); // this value is at a grid node, so no interpolation error expected
 }
 
 template<>
@@ -337,6 +256,7 @@ template<>
 template<>
 void object::test<9>()
 {
+	tut::skip();
 	set_test_name("Test with australian quasigeoid AGQ2017");
 	const double tolHeight = 1e-3;
 	const double tolDoV = 1e-2;
