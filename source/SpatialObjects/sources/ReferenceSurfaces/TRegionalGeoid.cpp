@@ -131,6 +131,9 @@ TAngle TRegionalGeoid::getXi(const TSpatialPosition &sp) const
 		// Featherstone, W. E. (1999, November). The use and abuse of vertical deflections. In Sixth South East Asian Surveyors’ Congress Fremantle (Vol. 6, pp. 1-12).
 		// equation 3
 		double xiRad = -dNdPhi / fDefEllPtr->getRho(phiSp);
+
+		// We don't apply the normal curvature of the plumb line because the sign is unclear. No evidence of improvement (using AusGeoid control dataset) when substracting it
+		//xiRad -= normalPlumbLineCurvature(phiSp, hSp).getRadiansValue(); // Add the normal curvature of the plumb line) 
 		return TAngle(xiRad, TAngle::kRadians);
 	}
 	catch (const std::exception &)
