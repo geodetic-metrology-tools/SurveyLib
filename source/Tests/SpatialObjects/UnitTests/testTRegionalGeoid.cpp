@@ -76,12 +76,45 @@ void object::test<1>()
 
 template<>
 template<>
+void object::test<2>()
+{
+	set_test_name("Test with australian geoid");
+	const double tolHeight = 1e-3;
+	const double tolDoV = 1e-2;
+	std::string pathToFile("C:\\Users\\bweyer\\Downloads\\AUSGeoid2020_20180201.gsb");
+	// Initialize geoid model once
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kITRFin));
+	TRegionalGeoid *AUSGeoid2020 = new TRegionalGeoid("AUSGeoid2020", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, pathToFile, 4326, GRIORA_Cubic);
+
+	// Coordinate of a point in Australia 325.02592363760 (34.97407636240S)    138.70887100110E    727.2197 ellipsoidalHeight
+	// comparison with results given by the online tool https://geodesyapps.ga.gov.au/ausgeoid2020
+	TAngle lambda(138.70887100110, TAngle::kDeciDegs);
+	TAngle phi(325.02592363760, TAngle::kDeciDegs);
+	TLength h(727.2197);
+	TPositionVector pv(TCoordSysFactory::kGeodetic);
+	pv.setPhiEllipsoid(phi);
+	pv.setLambdaEllipsoid(lambda);
+	pv.setH(h);
+
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95));
+	position.setCoordinates(pv);
+
+	std::cout << "N: " << AUSGeoid2020->getN(position).getMetresValue() << "\n";
+	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
+	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << "\n";
+	ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), 0.419, tolHeight);
+	ensure_equals("Eta", AUSGeoid2020->getEta(position).getSecondsValue(), -10.22, tolDoV);
+	ensure_equals("Xi", AUSGeoid2020->getXi(position).getSecondsValue(), -2.97, tolDoV);
+}
+
+template<>
+template<>
 void object::test<6>()
 {
-	tut::skip();
 	set_test_name("Test for the whole dataset");
-	std::ifstream infile("C:\\Users\\bweyer\\Downloads\\GeocentricDoVControl.txt");
-	std::ofstream outfile("C:\\Users\\bweyer\\Downloads\\GeocentricDoVControl_withModel.txt");
+	std::ifstream infile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\CERN\\Codiac_dovObservations.txt");
+	std::ofstream outfile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\CERN\\Codiac_dovObservations_FCC-G2025.txt");
 
 	if (!infile.is_open())
 	{
@@ -99,14 +132,17 @@ void object::test<6>()
 	std::getline(infile, line);
 
 	// Write output header
-	outfile << "Point\tEta\tXi\tEtaModel\tXiModel\tDeltaEta\tDeltaXi\n";
+	outfile << "Latitude_deg\tLongitude_deg\tEllipsoidalHeight_m\tSurfaceEta_arcsec\tSurfaceXi_arcsec\tSurfaceDoV_arcsec\tEtaModel_arcsec\tXiModel_arcsec\tDoVModel_"
+			   "arcsec\tDeltaEta_arcsec\tDeltaXi_arcsec\tDeltaDoV_arcsec\n";
 	outfile << std::fixed << std::setprecision(6);
 
 	// Initialize geoid model once
-	TAReferenceFrame *CHTRF95(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCHTRF95));
-	TRegionalGeoid *FCC_G2025 = new TRegionalGeoid("CHGeo2004_ETRS", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, CHTRF95,
-		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), CHTRF95,
-		"C:\\Users\\bweyer\\cernbox\\Documents\\FCC\\Geoid\\JuliaComparison\\Julia\\FCC-G2025_V1.0.tif");
+
+	std::string pathToFile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\CERN\\FCC-G2025_V1.0.tif");
+	// Initialize geoid model once
+	TAReferenceFrame *ETRF93(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kETRF93));
+	TRegionalGeoid *FCC_G2025 = new TRegionalGeoid("FCC-G2025", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, ETRF93,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), ETRF93, pathToFile, 4326, GRIORA_Cubic);
 
 	while (std::getline(infile, line))
 	{
@@ -116,27 +152,36 @@ void object::test<6>()
 		std::istringstream iss(line);
 
 		int point;
-		double X, Y, Z;
+		double lat, longi, h;
 		double Eta, Xi;
-
-		iss >> point >> X >> Y >> Z >> Eta >> Xi;
+		iss >> lat >> longi >> h >> Eta >> Xi;
+		double doV = sqrt(Eta * Eta + Xi * Xi);
 
 		// Build position
-		TLength x(X), y(Y), z(Z);
-		TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
+		TAngle lambda(longi, TAngle::kDeciDegs);
+		TAngle phi(lat, TAngle::kDeciDegs);
+		TLength height(h);
+		TPositionVector pv(TCoordSysFactory::kGeodetic);
+		pv.setPhiEllipsoid(phi);
+		pv.setLambdaEllipsoid(lambda);
+		pv.setH(height);
 
-		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95), p);
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
+		position.setCoordinates(pv);
 
 		// Compute model values
 		double EtaModel = FCC_G2025->getEta(position).getSecondsValue();
 		double XiModel = FCC_G2025->getXi(position).getSecondsValue();
+		double dovModel = sqrt(EtaModel * EtaModel + XiModel * XiModel);
 
 		// Differences
 		double deltaEta = EtaModel - Eta;
 		double deltaXi = XiModel - Xi;
+		double deltaDoV = dovModel - doV;
 
 		// Write results
-		outfile << point << "\t" << Eta << "\t" << Xi << "\t" << EtaModel << "\t" << XiModel << "\t" << deltaEta << "\t" << deltaXi << "\n";
+		outfile << phi.getDeciDegsValue() << "\t" << lambda.getDeciDegsValue() << "\t" << height.getMetresValue() << "\t" << Eta << "\t" << Xi << "\t" << doV << "\t"
+				<< EtaModel << "\t" << XiModel << "\t" << dovModel << "\t" << deltaEta << "\t" << deltaXi << "\t" << deltaDoV << "\n";
 	}
 
 	infile.close();
@@ -149,6 +194,7 @@ template<>
 template<>
 void object::test<7>()
 {
+	tut::skip();
 	set_test_name("Test with australian geoid");
 	const double tolHeight = 1e-3;
 	const double tolDoV = 1e-2;
@@ -219,6 +265,7 @@ template<>
 template<>
 void object::test<8>()
 {
+	tut::skip();
 	set_test_name("Test with australian geoid");
 	const double tolHeight = 1e-3;
 	const double tolDoV = 1e-2;
@@ -284,7 +331,7 @@ void object::test<10>()
 	set_test_name("Test with American Geoid18");
 	const double tolHeight = 1e-3;
 	const double tolDoV = 1e-2;
-	std::string pathToFile("C:\\Users\\bweyer\\Downloads\\g2018u0.bin");
+	std::string pathToFile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\USA\\g2018u0.bin");
 	// Initialize geoid model once
 	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
 	TRegionalGeoid *GEOID18 = new TRegionalGeoid("GEOID18", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
@@ -439,97 +486,9 @@ Approx WGS84~ETRF93 coordinates (lat, long, altitude):	46.599584, 7.239956 921 m
 
 template<>
 template<>
-void object::test<13>()
-{
-	tut::skip();
-
-	/*
-	Featherstone, W. E., Brown, N. J., McCubbine, J. C., & Filmer, M. S. (2018).
-	Description and release of Australian gravity field model testing data. Australian journal of earth sciences, 65(1), 1-7.
-	https://github.com/icsm-au/Gravity_field_model_test_data 
-
-	*/
-	set_test_name("Test Australian Quasi-Geoid)");
-	std::ifstream infile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\Australia\\VerticalDeflections_August2017.csv");
-	std::ofstream outfile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\Australia\\VerticalDeflections_August2017_withHelmertFromModel.txt");
-
-	if (!infile.is_open())
-	{
-		std::cerr << "Error opening input file\n";
-	}
-
-	if (!outfile.is_open())
-	{
-		std::cerr << "Error opening output file\n";
-	}
-
-	std::string line;
-
-	// Skip header
-	std::getline(infile, line);
-
-	// Write output header
-	outfile << "Longitude\tLatitude\th\tEta\tXi\tEtaModel\tXiModel\tDeltaEta\tDeltaXi\n";
-	outfile << std::fixed << std::setprecision(6);
-
-	// Initialize geoid model once
-	const double tolHeight = 1e-3;
-	const double tolDoV = 1e-2;
-	std::string pathToFile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\Australia\\AGQG_20201120.gsb");
-	// Initialize geoid model once
-	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
-	TRegionalGeoid *AGQG2020 = new TRegionalGeoid("AGQG2020", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
-		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, pathToFile, 4326, GRIORA_Cubic);
-
-	while (std::getline(infile, line))
-	{
-		if (line.empty())
-			continue;
-
-		std::istringstream iss(line);
-
-		int point;
-		double lat, longi, h;
-		double Eta, Xi;
-
-		iss >> lat >> longi >> h >> Xi >> Eta;
-
-		// Build position
-		TAngle lambda(longi, TAngle::kDeciDegs);
-		TAngle phi(lat, TAngle::kDeciDegs);
-		TLength height(h);
-		TPositionVector pv(TCoordSysFactory::kGeodetic);
-		pv.setPhiEllipsoid(phi);
-		pv.setLambdaEllipsoid(lambda);
-		pv.setH(height);
-
-		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
-		position.setCoordinates(pv);
-
-		// Compute model values
-		double EtaModel = AGQG2020->getEta(position).getSecondsValue();
-		double XiModel = AGQG2020->getXi(position).getSecondsValue();
-
-		// Differences
-		double deltaEta = EtaModel - Eta;
-		double deltaXi = XiModel - Xi;
-
-		// Write results
-		outfile << lambda.getDeciDegsValue() << "\t" << phi.getDeciDegsValue() - 360.0 << "\t" << height.getMetresValue() << "\t" << Eta << "\t" << Xi << "\t" << EtaModel << "\t"
-				<< XiModel << "\t" << deltaEta << "\t" << deltaXi << "\n";
-	}
-
-	infile.close();
-	outfile.close();
-
-	std::cout << "Processing completed.\n";
-
-}
-
-template<>
-template<>
 void object::test<14>()
 {
+	tut::skip();
 	set_test_name("Test Australian AusGeoid compared to online calculator)");
 	std::ifstream infile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\Australia\\VerticalDeflections_August2017.csv");
 	std::ofstream outfile(
@@ -600,6 +559,170 @@ void object::test<14>()
 		// Write results
 		outfile << lambda.getDeciDegsValue() << "\t" << phi.getDeciDegsValue() - 360.0 << "\t" << height.getMetresValue() << "\t" << Eta << "\t" << Xi << "\t" << NModel << "\t" << EtaModel
 				<< "\t" << XiModel << "\t" << deltaEta << "\t" << deltaXi << "\n";
+	}
+
+	infile.close();
+	outfile.close();
+
+	std::cout << "Processing completed.\n";
+}
+
+template<>
+template<>
+void object::test<15>()
+{
+	set_test_name("Test USA g2018 compared to online calculator)");
+	std::ifstream infile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\USA\\GSV17_dovObservations.txt");
+	std::ofstream outfile(
+		"C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\USA\\GSV17_dovObservations_G2018dov.txt");
+
+	if (!infile.is_open())
+	{
+		std::cerr << "Error opening input file\n";
+	}
+
+	if (!outfile.is_open())
+	{
+		std::cerr << "Error opening output file\n";
+	}
+
+	std::string line;
+
+	// Skip header
+	std::getline(infile, line);
+
+	// Write output header
+	outfile << "Latitude_deg\tLongitude_deg\tEllipsoidalHeight_m\tSurfaceEta_arcsec\tSurfaceXi_arcsec\tSurfaceDoV_arcsec\tEtaModel_arcsec\tXiModel_arcsec\tDoVModel_arcsec\tDeltaEta_arcsec\tDeltaXi_arcsec\tDeltaDoV_arcsec\n";
+	outfile << std::fixed << std::setprecision(6);
+
+	// Initialize geoid model once
+
+	std::string pathToFile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\USA\\g2018u0.bin");
+	// Initialize geoid model once
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
+	TRegionalGeoid *G2018 = new TRegionalGeoid("G2018", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kWGSEll), WGS84, pathToFile, 4326, GRIORA_Cubic);
+
+	while (std::getline(infile, line))
+	{
+		if (line.empty())
+			continue;
+
+		std::istringstream iss(line);
+
+		int point;
+		double lat, longi, h;
+		double Eta, Xi;
+		iss >> lat >> longi >> h >> Eta >> Xi;
+		double doV = sqrt(Eta * Eta + Xi * Xi);
+
+		// Build position
+		TAngle lambda(longi, TAngle::kDeciDegs);
+		TAngle phi(lat, TAngle::kDeciDegs);
+		TLength height(h);
+		TPositionVector pv(TCoordSysFactory::kGeodetic);
+		pv.setPhiEllipsoid(phi);
+		pv.setLambdaEllipsoid(lambda);
+		pv.setH(height);
+
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
+		position.setCoordinates(pv);
+
+		// Compute model values
+		double EtaModel = G2018->getEta(position).getSecondsValue();
+		double XiModel = G2018->getXi(position).getSecondsValue();
+		double dovModel = sqrt(EtaModel * EtaModel + XiModel * XiModel);
+
+		// Differences
+		double deltaEta = EtaModel - Eta;
+		double deltaXi = XiModel - Xi;
+		double deltaDoV = dovModel - doV;
+
+		// Write results
+		outfile << phi.getDeciDegsValue() << "\t" << lambda.getDeciDegsValue() << "\t" << height.getMetresValue() << "\t" << Eta << "\t" << Xi << "\t" << doV
+				<< "\t" << EtaModel << "\t" << XiModel << "\t" << dovModel << "\t" << deltaEta << "\t" << deltaXi << "\t" << deltaDoV << "\n";
+	}
+
+	infile.close();
+	outfile.close();
+
+	std::cout << "Processing completed.\n";
+}
+
+template<>
+template<>
+void object::test<16>()
+{
+	set_test_name("Test USA g2018 compared to online calculator)");
+	std::ifstream infile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\USA\\GSV11_dovObservations.txt");
+	std::ofstream outfile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\USA\\GSV11_dovObservations_G2018dov.txt");
+
+	if (!infile.is_open())
+	{
+		std::cerr << "Error opening input file\n";
+	}
+
+	if (!outfile.is_open())
+	{
+		std::cerr << "Error opening output file\n";
+	}
+
+	std::string line;
+
+	// Skip header
+	std::getline(infile, line);
+
+	// Write output header
+	outfile << "Latitude_deg\tLongitude_deg\tEllipsoidalHeight_m\tSurfaceEta_arcsec\tSurfaceXi_arcsec\tSurfaceDoV_arcsec\tEtaModel_arcsec\tXiModel_arcsec\tDoVModel_"
+			   "arcsec\tDeltaEta_arcsec\tDeltaXi_arcsec\tDeltaDoV_arcsec\n";
+	outfile << std::fixed << std::setprecision(6);
+
+	// Initialize geoid model once
+
+	std::string pathToFile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\USA\\g2018u0.bin");
+	// Initialize geoid model once
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
+	TRegionalGeoid *G2018 = new TRegionalGeoid("G2018", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kWGSEll), WGS84, pathToFile, 4326, GRIORA_Cubic);
+
+	while (std::getline(infile, line))
+	{
+		if (line.empty())
+			continue;
+
+		std::istringstream iss(line);
+
+		int point;
+		double lat, longi, h;
+		double Eta, Xi;
+		iss >> lat >> longi >> h >> Eta >> Xi;
+		double doV = sqrt(Eta * Eta + Xi * Xi);
+
+		// Build position
+		TAngle lambda(longi, TAngle::kDeciDegs);
+		TAngle phi(lat, TAngle::kDeciDegs);
+		TLength height(h);
+		TPositionVector pv(TCoordSysFactory::kGeodetic);
+		pv.setPhiEllipsoid(phi);
+		pv.setLambdaEllipsoid(lambda);
+		pv.setH(height);
+
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
+		position.setCoordinates(pv);
+
+		// Compute model values
+		double EtaModel = G2018->getEta(position).getSecondsValue();
+		double XiModel = G2018->getXi(position).getSecondsValue();
+		double dovModel = sqrt(EtaModel * EtaModel + XiModel * XiModel);
+
+		// Differences
+		double deltaEta = EtaModel - Eta;
+		double deltaXi = XiModel - Xi;
+		double deltaDoV = dovModel - doV;
+
+		// Write results
+		outfile << phi.getDeciDegsValue() << "\t" << lambda.getDeciDegsValue() << "\t" << height.getMetresValue() << "\t" << Eta << "\t" << Xi << "\t" << doV << "\t"
+				<< EtaModel << "\t" << XiModel << "\t" << dovModel << "\t" << deltaEta << "\t" << deltaXi << "\t" << deltaDoV << "\n";
 	}
 
 	infile.close();
