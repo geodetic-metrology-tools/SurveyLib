@@ -79,7 +79,6 @@ TAngle TRegionalGeoid::getEta(const TSpatialPosition &sp) const
 		TReal nEast = getN(sposEast);
 		TReal nWest = getN(sposWest);
 
-		// 2 * delta converted to radians
 		double dLonRad = 2.0 * delta.getRadiansValue();
 		double dNdLambda = (nEast - nWest) / dLonRad;
 
@@ -123,7 +122,6 @@ TAngle TRegionalGeoid::getXi(const TSpatialPosition &sp) const
 		TReal nNorth = getN(sposNorth);
 		TReal nSouth = getN(sposSouth);
 
-		// 2 * delta converted to radians
 		double dLatRad = 2.0 * delta.getRadiansValue();
 		double dNdPhi = (nNorth - nSouth) / dLatRad;	
 
