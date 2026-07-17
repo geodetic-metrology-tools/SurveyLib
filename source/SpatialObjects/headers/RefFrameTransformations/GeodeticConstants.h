@@ -18,7 +18,9 @@
 	static const double YP0 = 2097.79265;
 	/// in [m]
 	static const double ZP0 = 2433.66000;
-//@}
+	/// in [m]
+	static const double Zoffset = 2000.00079;
+	//@}
 
 /*!@name Geodetic ellipsoidal coordinates of P0 and azimuth. */
 //@{

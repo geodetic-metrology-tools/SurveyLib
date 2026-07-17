@@ -116,7 +116,7 @@ void TRefSystemFactory::initEllipsoidList()
 	// Definition of the ellipsoid list
 
 	// Sphere SPS
-	addObject(fRefEllList, "SphereSPS", LITERAL(6371000.0), LITERAL(0.0), kSphere);
+	addObject(fRefEllList, "SphereSPS", LITERAL(sphereRadius), LITERAL(0.0), kSphere);
 
 	// GRS80
 	addObject(fRefEllList, "GRS80", LITERAL(6378137.0), LITERAL(298.257222101), kGRS80);
