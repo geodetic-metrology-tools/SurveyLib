@@ -30,6 +30,7 @@
 #include  "TMLA2XYHsTransformation.h"
 #include  "TXYHs2MLATransformation.h"
 #include  "TCoordSysFactory.h"
+#include  "GeodeticConstants.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -105,7 +106,7 @@ bool  TMLA2XYHsTransformation::transform(TPositionVector& pv) const
 	TReal dx, dy, dz, d;
 	TReal d0, omega;
 	// radius of the sphere
-	TReal R = 6371000;	
+	TReal R = sphereRadius;	
 	// transform TPositionVector
 	TReal H;
 
