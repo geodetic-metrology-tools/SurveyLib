@@ -11,7 +11,7 @@
 
 #include "TRefSystemFactory.h"
 
-// TRefSystemFactory is used for transformation between XYHg and XYHe systems, using Geoid model defined in it. 
+// TRefSystemFactory is used for transformation between XYHg and XYHe systems, using Geoid model defined in it.
 
 /*!
 	\ingroup RefFrameTransformations
@@ -19,32 +19,29 @@
 
 	\note For the transformation between XYHg and XYHe systems a Geoif model is used, which is defined in TRefSystemFactory.
 */
-class  TXYH2CCS
+class TXYH2CCS
 {
 public:
-		static bool						XYHs2CCS( TPositionVector& pv );
+	static bool XYHs2CCS(TPositionVector &pv);
 
-		static bool						CCS2XYHs(TPositionVector& pv);
+	static bool CCS2XYHs(TPositionVector &pv);
 
-		static bool						XYHg2000Machine2CCS( TPositionVector& pv );
+	static bool XYHg2000Machine2CCS(TPositionVector &pv);
 
-		static bool						CCS2XYHg2000Machine( TPositionVector& pv );
+	static bool CCS2XYHg2000Machine(TPositionVector &pv);
 
-		static bool						XYHg1985Machine2CCS(TPositionVector& pv);
+	static bool XYHg1985Machine2CCS(TPositionVector &pv);
 
-		static bool						CCS2XYHg1985Machine(TPositionVector& pv);
-
-
+	static bool CCS2XYHg1985Machine(TPositionVector &pv);
 
 private:
-		static bool						XYHe2CCS( TPositionVector& pv );
+	static bool XYHe2CCS(TPositionVector &pv);
 
-		static bool						CCS2XYHe( TPositionVector& pv );
+	static bool CCS2XYHe(TPositionVector &pv);
 
-		static bool						XYHg2XYHe( TPositionVector& pv, TRefSystemFactory::EGeoid geoid);
+	static bool XYHg2XYHe(TPositionVector &pv, TRefSystemFactory::EGeoid geoid);
 
-		static bool						XYHe2XYHg( TPositionVector& pv , TRefSystemFactory::EGeoid geoid);
-
+	static bool XYHe2XYHg(TPositionVector &pv, TRefSystemFactory::EGeoid geoid);
 };
 
 #endif // TXYHs2CCS.h
