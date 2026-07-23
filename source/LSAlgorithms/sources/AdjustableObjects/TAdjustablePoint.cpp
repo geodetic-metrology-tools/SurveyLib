@@ -19,7 +19,8 @@ TAdjustablePoint::TAdjustablePoint(const std::string &name) :
 	fProvisionalValue(NO_VALf, NO_VALf, NO_VALf, TCoordSysFactory::k3DCartesian),
 	fEstimatedValue(fProvisionalValue),
 	fHfixed(false),
-	fReferential(TRefSystemFactory::ERefFrame::kNotInGraph)
+	fReferential(TRefSystemFactory::ERefFrame::kNotInGraph),
+	fGeoid(TRefSystemFactory::EGeoid::kNoGeoid)
 {
 	setDefaults(true, true, true);
 }
@@ -29,23 +30,21 @@ TAdjustablePoint::TAdjustablePoint() :
 	fProvisionalValue(NO_VALf, NO_VALf, NO_VALf, TCoordSysFactory::k3DCartesian),
 	fEstimatedValue(fProvisionalValue),
 	fHfixed(false),
-	fReferential(TRefSystemFactory::ERefFrame::kNotInGraph)
+	fReferential(TRefSystemFactory::ERefFrame::kNotInGraph),
+	fGeoid(TRefSystemFactory::EGeoid::kNoGeoid)
 {
 	setDefaults(true, true, true);
 }
 
-TAdjustablePoint::TAdjustablePoint(const TPositionVector &pos, bool isXfixed, bool isYfixed, bool isZHfixed, const std::string &name, TRefSystemFactory::ERefFrame referential) :
-	fName(name), fProvisionalValue(pos), fEstimatedValue(fProvisionalValue), fReferential(referential), fHfixed(false)
+TAdjustablePoint::TAdjustablePoint(const TPositionVector &pos, bool isXfixed, bool isYfixed, bool isZHfixed, const std::string &name, TRefSystemFactory::ERefFrame referential, TRefSystemFactory::EGeoid geoid) :
+	fName(name), fProvisionalValue(pos), fEstimatedValue(fProvisionalValue), fReferential(referential), fGeoid(geoid), fHfixed(false)
 {
 	if (pos.getCoordSys() == TCoordSysFactory::k2DPlusH)
-	{ // If position is given in 2D + H system
-		if (fReferential == TRefSystemFactory::ERefFrame::kCERNXYHsSphereSPS)
-			TXYH2CCS::XYHs2CCS(fEstimatedValue);
-		else if (fReferential == TRefSystemFactory::ERefFrame::kCernXYHg00Machine)
-			TXYH2CCS::XYHg2000Machine2CCS(fEstimatedValue);
-		else if (fReferential == TRefSystemFactory::ERefFrame::kCernXYHg85Machine)
-			TXYH2CCS::XYHg1985Machine2CCS(fEstimatedValue);
-
+	{
+		if (fReferential != TRefSystemFactory::ERefFrame::kNotInGraph && fGeoid != TRefSystemFactory::EGeoid::kNoGeoid)
+		{
+			TXYH2CCS::XYH2CCS(fEstimatedValue, fGeoid);
+		}
 		// If referential is a 2D+H system and H is fixed, than set fHfixed to TRUE, because we need to resetting original H when setting contributions
 		if (isZHfixed == true)
 			fHfixed = true;
@@ -60,6 +59,7 @@ TAdjustablePoint::TAdjustablePoint(const TAdjustablePoint &pos) :
 	fProvisionalValue(pos.fProvisionalValue),
 	fEstimatedValue(pos.fEstimatedValue),
 	fReferential(pos.fReferential),
+	fGeoid(pos.fGeoid),
 	fHfixed(pos.fHfixed),
 	fCovarianceMatrix(pos.fCovarianceMatrix),
 	fCovarianceMatrixIsSet(pos.fCovarianceMatrixIsSet),
@@ -261,12 +261,7 @@ void TAdjustablePoint::reInitialise()
 	/*If the provisional value was in XYH, transform the estimated value into XYZ*/
 	if (fProvisionalValue.getCoordSys() == TCoordSysFactory::k2DPlusH)
 	{ // If position is given in 2D + H system
-		if (fReferential == TRefSystemFactory::ERefFrame::kCERNXYHsSphereSPS)
-			TXYH2CCS::XYHs2CCS(fEstimatedValue);
-		else if (fReferential == TRefSystemFactory::ERefFrame::kCernXYHg00Machine)
-			TXYH2CCS::XYHg2000Machine2CCS(fEstimatedValue);
-		else if (fReferential == TRefSystemFactory::ERefFrame::kCernXYHg85Machine)
-			TXYH2CCS::XYHg1985Machine2CCS(fEstimatedValue);
+		TXYH2CCS::XYH2CCS(fEstimatedValue, fGeoid);
 	}
 
 	fCovarianceMatrix.setZero();
@@ -349,12 +344,8 @@ void TAdjustablePoint::transformEstimatedValue()
 	// Set original H value and calculate Z0star for next iteration.
 	fEstimatedValue.setCoordSys(TCoordSysFactory::ECoordSys::k2DPlusH);
 	fEstimatedValue.setH(fProvisionalValue.getH());
-	if (fReferential == TRefSystemFactory::ERefFrame::kCERNXYHsSphereSPS)
-		TXYH2CCS::XYHs2CCS(fEstimatedValue);
-	else if (fReferential == TRefSystemFactory::ERefFrame::kCernXYHg00Machine)
-		TXYH2CCS::XYHg2000Machine2CCS(fEstimatedValue);
-	else if (fReferential == TRefSystemFactory::ERefFrame::kCernXYHg85Machine)
-		TXYH2CCS::XYHg1985Machine2CCS(fEstimatedValue);
+	TXYH2CCS::XYH2CCS(fEstimatedValue, fGeoid);
+
 }
 
 TReal TAdjustablePoint::getHEstValue() const
@@ -363,12 +354,7 @@ TReal TAdjustablePoint::getHEstValue() const
 		throw std::runtime_error("Point is defined in local system, no geoid assigned. Point " + getName());
 
 	TPositionVector pvEst = fEstimatedValue;
-	if (fReferential == TRefSystemFactory::ERefFrame::kCERNXYHsSphereSPS)
-		TXYH2CCS::CCS2XYHs(pvEst);
-	else if (fReferential == TRefSystemFactory::ERefFrame::kCernXYHg00Machine)
-		TXYH2CCS::CCS2XYHg2000Machine(pvEst);
-	else if (fReferential == TRefSystemFactory::ERefFrame::kCernXYHg85Machine)
-		TXYH2CCS::CCS2XYHg1985Machine(pvEst);
+	TXYH2CCS::CCS2XYH(pvEst, fGeoid);
 
 	return pvEst.getH().getMetresValue();
 }
@@ -444,6 +430,7 @@ void TAdjustablePoint::serialize(ObjectSerializer &obj) const
 	obj.addProperty("fName", fName);
 	obj.addProperty("fProvisionalValue", fProvisionalValue);
 	obj.addProperty("fReferential", fReferential);
+	obj.addProperty("fGeoid", fGeoid);
 	obj.addProperty("fSpatialStatus", getSpatialStatus());
 	obj.addProperty("fXValueSet", fXValueSet);
 	obj.addProperty("fYValueSet", fYValueSet);
