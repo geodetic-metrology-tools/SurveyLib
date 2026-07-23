@@ -41,10 +41,10 @@ public:
 		\param[in] isYfixed The Y component of the point, fixed (not adjusted) if set to TRUE.
 		\param[in] isZHfixed The Z component of the point, fixed (not adjusted) if set to TRUE.
 		\param[in] name Name of the adjustable point.
-		\param[in] referential Reference frame used (OLOC, RS2K, LEP, SPHE).
+		\param[in] geoid used (OLOC, RS2K, LEP, SPHE).
 		\param[in] positionInTree iterator on the local object reference frame in which the point is defined.
 	*/
-	TAdjustablePoint(const TPositionVector &pos, bool isXfixed, bool isYfixed, bool isZHfixed, const std::string &name, TRefSystemFactory::ERefFrame referential);
+	TAdjustablePoint(const TPositionVector &pos, bool isXfixed, bool isYfixed, bool isZHfixed, const std::string &name, TRefSystemFactory::ERefFrame referential, TRefSystemFactory::EGeoid geoid);
 
 	/// Copy constructor
 	TAdjustablePoint(const TAdjustablePoint &pos);
@@ -249,6 +249,9 @@ public:
 
 	/// Returns reference frame of the point
 	inline TRefSystemFactory::ERefFrame getReferenceFrame() const { return fReferential; }
+	
+	/// Returns geoid of the point
+	inline TRefSystemFactory::EGeoid getGeoid() const { return fGeoid; }
 
 	/// \see TAdjustableObject::isInitialized
 	inline virtual bool isInitialized() const { return !isnotanumber(fProvisionalValue.getX().getMetresValue()); }
@@ -297,6 +300,7 @@ protected:
 	bool fCovarianceMatrixIsSet{false};
 
 	TRefSystemFactory::ERefFrame fReferential; /*!< Reference frame of the point */
+	TRefSystemFactory::EGeoid fGeoid; /*!< Geoid of the point */
 
 	std::string fName; /*!< Name of the adjustable point. */
 
