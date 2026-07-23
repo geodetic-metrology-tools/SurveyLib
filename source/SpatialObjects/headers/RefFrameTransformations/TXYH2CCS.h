@@ -22,6 +22,10 @@
 class TXYH2CCS
 {
 public:
+	static bool XYH2CCS(TPositionVector &pv, const TRefSystemFactory::EGeoid &geoid);
+
+	static bool CCS2XYH(TPositionVector &pv, const TRefSystemFactory::EGeoid &geoid);
+
 	static bool XYHs2CCS(TPositionVector &pv);
 
 	static bool CCS2XYHs(TPositionVector &pv);

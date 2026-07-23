@@ -10,6 +10,42 @@
 #include "TSpatialPosition.h"
 #include "TXYHe2MLATransformation.h"
 
+bool TXYH2CCS::XYH2CCS(TPositionVector &pv, const TRefSystemFactory::EGeoid &geoid)
+{
+	/*Must be in the 2D+H system*/
+	if (pv.getCoordSys() != TCoordSysFactory::k2DPlusH)
+		return false;
+
+	if (geoid != TRefSystemFactory::EGeoid::kNoGeoid)
+	{
+		if (geoid == TRefSystemFactory::EGeoid::kCGSphere)
+			return XYHs2CCS(pv);
+		else if (geoid == TRefSystemFactory::EGeoid::kCG2000Machine)
+			return XYHg2000Machine2CCS(pv);
+		else if (geoid == TRefSystemFactory::EGeoid::kCG1985Machine)
+			return XYHg1985Machine2CCS(pv);
+	}
+	return false;
+}
+
+bool TXYH2CCS::CCS2XYH(TPositionVector &pv, const TRefSystemFactory::EGeoid &geoid)
+{
+	/*Must be in the 3D cartesian coordinate system*/
+	if (pv.getCoordSys() != TCoordSysFactory::k3DCartesian)
+		return false;
+
+	if (geoid != TRefSystemFactory::EGeoid::kNoGeoid)
+	{
+		if (geoid == TRefSystemFactory::EGeoid::kCGSphere)
+			return CCS2XYHs(pv);
+		else if (geoid == TRefSystemFactory::EGeoid::kCG2000Machine)
+			return CCS2XYHg2000Machine(pv);
+		else if (geoid == TRefSystemFactory::EGeoid::kCG1985Machine)
+			return CCS2XYHg1985Machine(pv);
+	}
+	return false;
+}
+
 bool TXYH2CCS::XYHs2CCS(TPositionVector &pv)
 { // Transformation of a position vector using the parameters of the two reference frames
 	/*Must be in the 2D+H system*/
