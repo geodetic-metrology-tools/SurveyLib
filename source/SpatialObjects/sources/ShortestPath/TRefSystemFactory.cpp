@@ -179,6 +179,11 @@ void TRefSystemFactory::initGeoidList()
 		//getRefFrame<TTerrestrialReferenceFrame>(kCHTRF95), "C:\\Users\\bweyer\\Downloads\\Geoid_OGD\\chgeo2004_ETRS.agr");
 		getRefFrame<TTerrestrialReferenceFrame>(kCHTRF95), "C:\\Users\\bweyer\\cernbox\\Documents\\FCC\\Geoid\\JuliaComparison\\Julia\\FCC-G2025_V1.0.tif");
 	fGeoidList.push_back(pCHGeo2004_ETRS);
+
+	// Generic custom geoid
+	TRegionalGeoid *pCustomGeoid = new TRegionalGeoid(
+		"CustomGeoid", kCUSTOMgeoid, getRefFrame<TGeodeticRefFrame>(kCGRF), getEllipsoid(kGRS80), getRefFrame<TGeodeticRefFrame>(kCGRF), "");
+	fGeoidList.push_back(pCustomGeoid);
 }
 
 void TRefSystemFactory::addCERNprojections()

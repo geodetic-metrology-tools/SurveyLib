@@ -41,7 +41,7 @@ public:
 		\param[in] isYfixed The Y component of the point, fixed (not adjusted) if set to TRUE.
 		\param[in] isZHfixed The Z component of the point, fixed (not adjusted) if set to TRUE.
 		\param[in] name Name of the adjustable point.
-		\param[in] geoid used (OLOC, RS2K, LEP, SPHE).
+		\param[in] geoid used (OLOC, RS2K, LEP, SPHE, CUSTOMG).
 		\param[in] positionInTree iterator on the local object reference frame in which the point is defined.
 	*/
 	TAdjustablePoint(const TPositionVector &pos, bool isXfixed, bool isYfixed, bool isZHfixed, const std::string &name, TRefSystemFactory::ERefFrame referential, TRefSystemFactory::EGeoid geoid);
