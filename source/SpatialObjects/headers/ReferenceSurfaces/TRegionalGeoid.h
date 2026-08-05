@@ -68,6 +68,9 @@ public:
 
 	/// Return true if the point is in the grid
 	bool isInGrid(const TSpatialPosition &point) const;
+
+	/// Set the path to the geoid grid file
+	void setPathToFile(const std::string &pathToFile);
 	//@}
 
 private:

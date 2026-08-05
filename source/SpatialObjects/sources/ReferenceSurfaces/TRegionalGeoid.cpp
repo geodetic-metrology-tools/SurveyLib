@@ -204,3 +204,10 @@ std::stringstream TRegionalGeoid::generateNotInGeoidGridMessage(const std::strin
 	   << position.getCoordinates(TCoordSysFactory::k3DCartesian).getZ().getMetresValue() << ").";
 	return ss;
 }
+
+void TRegionalGeoid::setPathToFile(const std::string &pathToFile)
+{
+	fPathToFile = pathToFile;
+
+
+}
