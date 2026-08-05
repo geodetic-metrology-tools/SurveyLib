@@ -627,6 +627,17 @@ TAGeoidModel*  TRefSystemFactory::getGeoid(const EGeoid geoidId)
 	return getElementFromList(fGeoidList, geoidId, "GeoidList");
 }
 
+bool TRefSystemFactory::updateCustomGeoid(const std::string &geoidFile)
+{ // update the custom geoid with the current file path. Return true if the update was successful, false otherwise.
+
+	TRegionalGeoid *pCustomGeoid = dynamic_cast<TRegionalGeoid*>(getGeoid(kCUSTOMgeoid));
+	if (!pCustomGeoid)
+		return false;
+
+	pCustomGeoid->setPathToFile(geoidFile);
+	return true;
+}
+
 TReferenceEllipsoid* TRefSystemFactory::getEllipsoid(const ERefEll ellId)
 {//return a pointer to the ellipsoid asked for
 	return getElementFromList(fRefEllList, ellId, "RefEllList");
