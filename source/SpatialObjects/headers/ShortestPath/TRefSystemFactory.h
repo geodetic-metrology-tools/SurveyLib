@@ -192,6 +192,7 @@ public:
 		/*! Return a pointer to the geoid asked for 
 		\param geoidId an element of the existing geoid enumeration */
 		TAGeoidModel* getGeoid(const EGeoid geoidId);
+		bool updateCustomGeoid(const std::string &geoidFile);
 
 		/*! Return a pointer to the reference ellipsoid asked for 
 		\param ellId an element of the existing ellipsoid enumeration */
