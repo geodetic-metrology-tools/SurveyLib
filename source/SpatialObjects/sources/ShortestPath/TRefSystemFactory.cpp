@@ -182,7 +182,7 @@ void TRefSystemFactory::initGeoidList()
 
 	// Generic custom geoid
 	TRegionalGeoid *pCustomGeoid = new TRegionalGeoid(
-		"CustomGeoid", kCUSTOMgeoid, getRefFrame<TGeodeticRefFrame>(kCGRF), getEllipsoid(kGRS80), getRefFrame<TGeodeticRefFrame>(kCGRF), "");
+		"CustomGeoid", kCUSTOMgeoid, getRefFrame<TTerrestrialReferenceFrame>(kETRF93), getEllipsoid(kGRS80), getRefFrame<TTerrestrialReferenceFrame>(kETRF93), "");
 	fGeoidList.push_back(pCustomGeoid);
 }
 
