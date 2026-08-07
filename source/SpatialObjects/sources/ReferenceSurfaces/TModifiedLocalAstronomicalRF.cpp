@@ -28,50 +28,36 @@
 //////////////////////////////////////////////////////////////////////
 TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::EGeoid geoid,
 								   TSpatialPosition origin, TFreeVector falseOrigin, 
-								   const TAngle gis, const TAngle slope)
-	: TAModifiedLocalAstronomicalRF(name),fOrigin(fGeodeticSys), fOrientationMatrix(fGeodeticSys), 
-	fGeodeticSys(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
-	fGis(gis), fSlope(slope)
+								   const TAngle gis, const TAngle slope) :
+	TAModifiedLocalAstronomicalRF(name), fOrientationMatrix(fGeoidRefFrame), 
+	fGis(gis), fSlope(slope), fGeoid(geoid)
 {
-	//identify geodetic system 
-	if( geoid == TRefSystemFactory::kCGSphere)
+	// get geoid model and the associated reference frame
+	TAGeoidModel *geoidModel = TRefSystemFactory::getRefSystemFactory()->getGeoid(geoid);
+	fGeoidRefFrame = static_cast<TGeodeticRefFrame*>(geoidModel->getDefRefFrame());
+	if (!fGeoidRefFrame)
 	{
-		fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getGeoRefFrame(TRefSystemFactory::kCGRFSphere);
-	}
-	else
-	{
-		fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getGeoRefFrame(TRefSystemFactory::kCGRF);
+		throw std::runtime_error("TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF: Geoid model must be referenced in a geodetic reference frame");
 	}
 
 	//Transformation of the origin (principal point) to a Geodetic Cartesian Reference frame
-	if(origin.getRefFrame() != fGeodeticSys)
+	if (origin.getRefFrame() != fGeoidRefFrame)
 	{
-		origin.transform(fGeodeticSys);
-		origin.changeRefFrameTo(fGeodeticSys);
+		origin.transform(fGeoidRefFrame);
+		origin.changeRefFrameTo(fGeoidRefFrame);
 	}
 	fOrigin = origin;
 	fOriginDefined = true;
 
-
 	// false origin
 	setFalseOrigin(falseOrigin);
-
-	//get geoid model
-	fGeoid = geoid;
-	TAGeoidModel* geoidModel = TRefSystemFactory::getRefSystemFactory()->getGeoid(geoid);
-
-	//create a spatial position for origin
-	TSpatialPosition sp(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-	TPositionVector pos(falseOrigin.getX().getMetresValue(), falseOrigin.getY().getMetresValue(),
-		falseOrigin.getZ().getMetresValue(), falseOrigin.getCoordSys());
-	sp.setCoordinates(pos);
 
 	//get deviation of vertical values at principal point
 	setEta( geoidModel->getEta(origin) );
 	setXsi( geoidModel->getXi(origin) );
 	setDAlpha( geoidModel->getDAlpha(origin) );
 
-	//set refernec Ellipsoid
+	//set reference Ellipsoid
 	TReferenceEllipsoid* ell = geoidModel->getDefRefEll();
 
 
@@ -86,14 +72,12 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& n
 	unitVector.setElements(vector);
 
 	//transform orientation vector into GRF
-	unitVector.transform(fGeodeticSys);
+	unitVector.transform(fGeoidRefFrame);
 
 	//set rotation matrix for GC to LG system
 	TRotation r(TRotationMatrix::kRzyx,LITERAL(0.0),
-		//TAngle::piBy2().getRadiansValue() - origin.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid().getRadiansValue(),
-		//TAngle::pi().getRadiansValue() - origin.getCoordinates(TCoordSysFactory::kGeodetic).getLambdaEllipsoid().getRadiansValue());
-		TAngle::piBy2().getRadiansValue() - fGeodeticSys->getGeodeticCoords( &origin, ell).getPhiEllipsoid().getRadiansValue(),
-		TAngle::pi().getRadiansValue() - fGeodeticSys->getGeodeticCoords( &origin, ell).getLambdaEllipsoid().getRadiansValue());
+		TAngle::piBy2().getRadiansValue() - fGeoidRefFrame->getGeodeticCoords( &origin, ell).getPhiEllipsoid().getRadiansValue(),
+		TAngle::pi().getRadiansValue() - fGeoidRefFrame->getGeodeticCoords(&origin, ell).getLambdaEllipsoid().getRadiansValue());
 	r.invert();
 
 	// between local geodetic and local astronomical systems
@@ -131,17 +115,15 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& n
 
 TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::EGeoid geoid)
     : TAModifiedLocalAstronomicalRF(name),
-	fOrigin (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS), 0, 0, 0, TCoordSysFactory::k3DCartesian), fGeodeticSys(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
-	fOrientationMatrix(fGeodeticSys), fGis(0), fSlope(0)
+	fOrigin (TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS), 0, 0, 0, TCoordSysFactory::k3DCartesian),
+	fOrientationMatrix(fGeoidRefFrame), fGis(0), fSlope(0), fGeoid(geoid)
 {	
-	//identify geodetic system 
-	if( geoid == TRefSystemFactory::kCGSphere)
+	// get geoid model and the associated reference frame
+	TAGeoidModel *geoidModel = TRefSystemFactory::getRefSystemFactory()->getGeoid(geoid);
+	fGeoidRefFrame = static_cast<TGeodeticRefFrame *>(geoidModel->getDefRefFrame());
+	if (!fGeoidRefFrame)
 	{
-		fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getGeoRefFrame(TRefSystemFactory::kCGRFSphere);
-	}
-	else
-	{
-		fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getGeoRefFrame(TRefSystemFactory::kCGRF);
+		throw std::runtime_error("TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF: Geoid model must be referenced in a geodetic reference frame");
 	}
 	fOriginDefined = false;
 
@@ -150,7 +132,6 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& n
 	setFalseOrigin( vector );
 
 	// geoid parameters
-	TAGeoidModel* geoidModel = TRefSystemFactory::getRefSystemFactory()->getGeoid(geoid);
 	setEta( geoidModel->getEta(fOrigin) );
 	setXsi( geoidModel->getXi(fOrigin) );
 	setDAlpha( geoidModel->getDAlpha(fOrigin) );
@@ -161,24 +142,17 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& n
 
 TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::EGeoid geoid,
 								   TSpatialPosition origin)
-    : TAModifiedLocalAstronomicalRF(name),
-	fGeodeticSys(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
-	fOrigin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()), 
-	fOrientationMatrix(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
-	fGis(0), fSlope(0)
+    : TAModifiedLocalAstronomicalRF(name), fOrigin(origin), fOrientationMatrix(fGeoidRefFrame), fGis(0), fSlope(0), fGeoid(geoid)
 {	
-	//identify geodetic system 
-	if( geoid == TRefSystemFactory::kCGSphere)
+	// get geoid model and the associated reference frame
+	TAGeoidModel *geoidModel = TRefSystemFactory::getRefSystemFactory()->getGeoid(geoid);
+	fGeoidRefFrame = static_cast<TGeodeticRefFrame *>(geoidModel->getDefRefFrame());
+	if (!fGeoidRefFrame)
 	{
-		fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getGeoRefFrame(TRefSystemFactory::kCGRFSphere);
-	}
-	else
-	{
-		fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getGeoRefFrame(TRefSystemFactory::kCGRF);
+		throw std::runtime_error("TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF: Geoid model must be referenced in a geodetic reference frame");
 	}
 
 	// origin
-	fOrigin = origin;
 	fOriginDefined = true;
 
 	// false origin
@@ -192,12 +166,6 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& n
 		TCoordSysFactory::k3DCartesian);
 	fOrientationMatrix = orientation;
 
-	// geodetic reference frame
-	//fGeodeticSys = TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF();
-
-	// geoid parameters
-	fGeoid = geoid;
-	TAGeoidModel* geoidModel = TRefSystemFactory::getRefSystemFactory()->getGeoid(geoid);
 	setEta( geoidModel->getEta(origin) );
 	setXsi( geoidModel->getXi(origin) );
 	setDAlpha( geoidModel->getDAlpha(origin) );
@@ -209,14 +177,12 @@ TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& n
 TModifiedLocalAstronomicalRF::TModifiedLocalAstronomicalRF( const std::string& name, TRefSystemFactory::ERefEll ell,
 								   TSpatialPosition origin)
     : TAModifiedLocalAstronomicalRF(name),
-	fGeodeticSys(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
-	fOrigin(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()), 
-	fOrientationMatrix(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS)->getGeodeticRF()),
+	fOrigin(origin), 
+	fOrientationMatrix(fGeoidRefFrame),
 	fGis(0), fSlope(0)
 {
 	ignoring(ell);
 	// origin
-	fOrigin = origin;
 	fOriginDefined = true;
 
 	// false origin
@@ -259,137 +225,14 @@ TPositionVector TModifiedLocalAstronomicalRF::getCoordinates(const TSpatialPosit
 	if (coordsys == TCoordSysFactory::k3DCartesian)
 		return getPositionVector(sp);
 	if (coordsys == TCoordSysFactory::kGeodetic || coordsys == TCoordSysFactory::kGeodeticSphere)
-		return fGeodeticSys->getCoordinates(sp, coordsys);
+		return fGeoidRefFrame->getCoordinates(sp, coordsys);
 
 	return TPositionVector(TCoordSysFactory::k3DCartesian);
 }
 
-void	TModifiedLocalAstronomicalRF::initialiseMLA(TSpatialPosition origin)
-{
-	//Transformation of the origin (principal point) to a Geodetic Cartesian Reference frame
-	if(origin.getRefFrame() != fGeodeticSys)
-	{
-		origin.transform(fGeodeticSys);
-		origin.changeRefFrameTo(fGeodeticSys);
-	}
-	setOrigin(origin);
-
-	// false origin
-	TFreeVector falseOrigin = getFalseOrigin();
-
-	//get geoid model
-	TAGeoidModel* geoidModel = TRefSystemFactory::getRefSystemFactory()->getGeoid(fGeoid);
-
-	//create a spatial position for origin
-	TSpatialPosition sp(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-	TPositionVector pos(falseOrigin.getX().getMetresValue(), falseOrigin.getY().getMetresValue(),
-		falseOrigin.getZ().getMetresValue(), falseOrigin.getCoordSys());
-	sp.setCoordinates(pos);
-
-	//get deviation of vertical values at principal point
-	setEta( geoidModel->getEta(origin) );
-	setXsi( geoidModel->getXi(origin) );
-	setDAlpha( geoidModel->getDAlpha(origin) );
-
-	//set refernec Ellipsoid
-	TReferenceEllipsoid* ell = geoidModel->getDefRefEll();
-
-	// orientation angles
-	//set orientation vector in CCS
-	TSpatialVector unitVector(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
-	TAngle alpha(fSlope), beta(fGis);
-	TFreeVector vector( alpha.cosine()*beta.sine(),
-						alpha.cosine()*beta.cosine(),
-						alpha.sine(),
-						TCoordSysFactory::k3DCartesian);
-	unitVector.setElements(vector);
-
-	//transform orientation vector into GRF
-	unitVector.transform(fGeodeticSys);
-
-	//set rotation matrix for GC to LG system
-	TRotation r(TRotationMatrix::kRzyx,LITERAL(0.0),
-				TAngle::piBy2().getRadiansValue() - fGeodeticSys->getGeodeticCoords( &origin, ell).getPhiEllipsoid().getRadiansValue(),
-				TAngle::pi().getRadiansValue() - fGeodeticSys->getGeodeticCoords( &origin, ell).getLambdaEllipsoid().getRadiansValue());
-	r.invert();
-
-	// between local geodetic and local astronomical systems
-	TRotation r2(TRotationMatrix::kRzyx, getEta().getRadiansValue(),
-				-(getXsi().getRadiansValue()),
-				getDAlpha().getRadiansValue());
-	r2.invert();
-
-	// reflections
-	TReflection  p( TReflection::kYEqual0 );
-
-
-	TCompositeAffTransform* comp = new TCompositeAffTransform( r2( p( r ) ) );
-
-	//transform orientation vector to LA
-	vector = unitVector.getElements(TCoordSysFactory::k3DCartesian);
-	comp->transform(vector);
-
-	delete comp;
-
-	//set spatial orientation
-	// azimut of the vector projection on the xy-plane
-	TReal x(vector.getX().getMetresValue()), y(vector.getY().getMetresValue());
-	TAngle az, zero(LITERAL(0.0));
-	az.setRadiansValue((TAngle::aTan2(y,x).getRadiansValue()));
-	// construction of the orientation matrix
-	TSpatialOrientation spatialOrientation(TRotationMatrix::kRzyx, zero, zero, az,
-		TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kLAp0),
-		TCoordSysFactory::k3DCartesian);
-	fOrientationMatrix = spatialOrientation;
-}
-
-
-
-
-
-
-
-
-
-void	TModifiedLocalAstronomicalRF::initialiseLA(TSpatialPosition origin)
-{
-	//Transformation of the origin (principal point) to a Geodetic Cartesian Reference frame
-/*	if(origin.getRefFrame() != fGeodeticSys)
-	{
-		origin.transform(fGeodeticSys);
-		origin.changeRefFrameTo(fGeodeticSys);
-	}*/
-	setOrigin(origin);
-
-	// orientation matrix
-	TReal zero(0);
-	TSpatialOrientation orientation(TRotationMatrix::kRzyx,zero,zero,zero,
-		TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kLAp0),
-		TCoordSysFactory::k3DCartesian);
-	fOrientationMatrix = orientation;
-
-
-	// geoid parameters
-	TAGeoidModel* geoidModel = TRefSystemFactory::getRefSystemFactory()->getGeoid(fGeoid);
-	setEta( geoidModel->getEta(origin) );
-	setXsi( geoidModel->getXi(origin) );
-	setDAlpha( geoidModel->getDAlpha(origin) );
-
-}
-
-
-
-
-
-
-
-
-
-
-
 TGeodeticRefFrame* TModifiedLocalAstronomicalRF::getGeodeticRF() const 
 { 
-	return fGeodeticSys; 
+	return fGeoidRefFrame; 
 }
 
 
@@ -426,122 +269,3 @@ bool	TModifiedLocalAstronomicalRF::isOriginSet() const
 {//!return true if the origin is set
 	return fOriginDefined;
 }
-
-
-
-bool	TModifiedLocalAstronomicalRF::transform(TSpatialPosition* sp, TAReferenceFrame* rf)
-{//! transform a position from a reference frame to another
-	
-	TPositionVector position(sp->getCoordinates(sp->getCoordSys()));
-	TRefFrameWrapper from(this);
-	TRefFrameWrapper to(rf);
-	TARefFrameTransformation *postGraphTrafo(0);
-
-
-	if(fGeoid == TRefSystemFactory::kCGSphere)
-	{
-		from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
-		to.setFrame(rf);
-	}
-	else
-	{
-		from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
-		to.setFrame(rf);
-	}
-
-	if (! this->isInGraph()) {
-		// transform to CGRF manually
-		TARefFrameTransformation* toGRF = this->getRFTransfo2CGRF();
-		toGRF->transform(position);
-
-		sp->changeRefFrameTo(this);
-		sp->setCoordinates(position);
-
-		from.setFrame(this->getGeodeticRF());
-	}
-
-	if (! rf->isInGraph()) {
-		// destination system is a local system
-		// transform from CGRF manually
-		postGraphTrafo = rf->getRFTransfo2CGRF()->inverse();
-
-		to.setFrame(rf->getGeodeticRF());
-	}
-
-	if (! (from == to)) {
-		std::vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
-		
-		if (transfo[0] == 0)
-		{return false;}
-
-		// application of the successive transformations
-		for (std::vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
-			 iter != transfo.end(); 
-			 iter++)
-			(*iter)->transform(position);
-		
-		sp->changeRefFrameTo(to.getFrame());
-		sp->setCoordinates(position);
-	}
-
-	if (postGraphTrafo != 0) {
-		// The destination system is not in the graph
-		postGraphTrafo->transform(position);
-		sp->changeRefFrameTo(rf);
-		sp->setCoordinates(position);
-	}
-	
-	return true;
-}
-
-
-bool	TModifiedLocalAstronomicalRF::transform(TSpatialVector* sv, TAReferenceFrame* rf)
-{//! transform a position from a reference frame to another
-
-	TFreeVector vec(sv->getElements(sv->getCoordSys()));
-	TRefFrameWrapper from, to;
-
-	//MLA to CGRF
-	getRFTransfo2CGRF()->transform(vec);
-	sv->changeRefFrameTo(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
-	sv->setElements(vec);
-
-
-	if(fGeoid == TRefSystemFactory::kCGSphere)
-	{
-		from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRFSphere));
-		to.setFrame(rf);
-	}
-	else
-	{
-		from.setFrame(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCGRF));
-		to.setFrame(rf);
-	}
-
-
-	if (from.getFrame() != to.getFrame() )
-	{
-		std::vector<TARefFrameTransformation*> transfo = TGraph::getGraph()->getTransform(from, to);
-	
-		if (transfo[0] == 0)
-		{return false;}
-
-		// application of the successive transformations
-		std::vector<TARefFrameTransformation*>::iterator iter = transfo.begin();
-		std::vector<TARefFrameTransformation*>::iterator iterEnd = transfo.end();
-
-		while (iter != iterEnd )
-		{
-			(*iter)->transform(vec);
-			iter++;
-		}
-
-		sv->changeRefFrameTo(to.getFrame());
-		sv->setElements(vec);
-	}
-
-	return true;
-}
-
-
-

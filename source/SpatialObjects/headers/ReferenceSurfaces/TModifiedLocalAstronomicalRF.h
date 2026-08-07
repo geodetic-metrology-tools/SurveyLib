@@ -117,20 +117,10 @@ public:
 		//!return true if the origin is set
 		bool	isOriginSet() const;
 
-		//! transform a position from a reference frame to another
-		bool	transform(TSpatialPosition* sp, TAReferenceFrame* rf);
-		
-		//! transform a position from a reference frame to another
-		bool	transform(TSpatialVector* sv, TAReferenceFrame* rf);
-
 		/*!return true if the refernec frame is in graph,
 		so return false only for MLA*/
 		virtual bool isInGraph() const {return false; };
 
-
-		void initialiseMLA(TSpatialPosition origin);
-
-		void initialiseLA(TSpatialPosition origin);
 	//@}
 
 private:
@@ -150,7 +140,7 @@ private:
 	TRefSystemFactory::EGeoid	fGeoid;
 	TSpatialOrientation			fOrientationMatrix;
 	
-	TGeodeticRefFrame*			fGeodeticSys;
+	TGeodeticRefFrame*			fGeoidRefFrame;
 
 	TAngle						fEta;
 	TAngle						fXsi;
