@@ -173,18 +173,16 @@ bool TAReferenceFrame::transform(TSpatialPosition *sp, TAReferenceFrame* rf)
 			 iter != transfo.end(); 
 			 iter++)
 			(*iter)->transform(position);
-		
-		sp->changeRefFrameTo(to.getFrame());
-		sp->setCoordinates(position);
 	}
 
 	if (postGraphTrafo != 0) {
 		// The destination system is not in the graph
 		postGraphTrafo->transform(position);
-		sp->changeRefFrameTo(rf);
-		sp->setCoordinates(position);
-	}
 		
+	}
+	sp->changeRefFrameTo(rf);
+	sp->setCoordinates(position);
+
 	return true;
 }
 
@@ -229,17 +227,14 @@ bool TAReferenceFrame::transform( TSpatialVector* sv, TAReferenceFrame* rf )
 			 iter != transfo.end(); 
 			 iter++)
 			(*iter)->transform(freeVector);
-		
-		sv->changeRefFrameTo(to.getFrame());
-		sv->setElements(freeVector);
 	}
 
 	if (postGraphTrafo != 0) {
 		// The destination system is not in the graph
 		postGraphTrafo->transform(freeVector);
-		sv->changeRefFrameTo(rf);
-		sv->setElements(freeVector);
 	}
+	sv->changeRefFrameTo(rf);
+	sv->setElements(freeVector);
 		
 	return true;
 }
