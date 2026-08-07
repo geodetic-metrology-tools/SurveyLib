@@ -726,21 +726,13 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 	TAngle gis = LSO.gisement();
 	TAngle slope = LSO.slope();
 
-	// transform the origin to the correct CGRF system
-	if (frame == kLASphere || frame == kMLASphere || 
-		frame == kLGSphere || frame == kMLGSphere)
-		lsoCG.transform(getRefFrame(kCGRFSphere));
-
-	else if (frame == kLA1985Machine || frame == kLA2000Machine ||
-			frame == kMLA1985Machine || frame == kMLA2000Machine ||
-			frame == kLGGRS80 || frame == kMLGGRS80 ||
-			frame == kLA2000Topo || frame == kMLA2000Topo ||
-			frame == kLA2000H0 || frame == kMLA2000H0 ||
-			frame == kLA1985H0 || frame == kMLA1985H0)
-		lsoCG.transform(getRefFrame(kCGRF));
-		
-	//lsoCG.setStatus(TVNumericValue::kKnown);
-
+	// transform the origin to the geoid reference frame
+	if (geoid != EGeoid::kNoGeoid)
+	{
+		TAReferenceFrame *geoidRefFrame = getGeoid(geoid)->getDefRefFrame();
+		lsoCG.transform(geoidRefFrame);
+	}
+	
 	switch (frame) {
 		case kLASphere:
 		case kLA1985Machine:
@@ -756,6 +748,7 @@ TAReferenceFrame* TRefSystemFactory::getNewLocalRefFrame(const TLocalSystemOrigi
 		case kMLA2000Machine:
 		case kMLA2000Topo:
 		case kMLA2000H0:
+		case kMLACustomGeoid:
 			pRF = new TModifiedLocalAstronomicalRF("mla", geoid, lsoCG, falseOrigin, gis, slope);
 			break;
 		case kLGSphere:
