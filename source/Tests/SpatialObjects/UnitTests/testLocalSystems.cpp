@@ -388,6 +388,11 @@ namespace tut
 		tut::ensure_equals("Y coordinate of p0 in MLA1985", p0.getCoordinates(k3D).getY().getMetresValue(), ctrlPointP0.getCoordinates(k3D).getY().getMetresValue(), 1e-9);
 		tut::ensure_equals("Z coordinate of p0 in MLA1985", p0.getCoordinates(k3D).getZ().getMetresValue(), ctrlPointP0.getCoordinates(k3D).getZ().getMetresValue(), 1e-9);
 
+		p0.transform(CCS);
+		tut::ensure_equals("X coordinate of p0 in CCS", p0.getCoordinates(k3D).getX().getMetresValue(), 2000, 1e-9);
+		tut::ensure_equals("Y coordinate of p0 in CCS", p0.getCoordinates(k3D).getY().getMetresValue(), 2097.79265, 1e-9);
+		tut::ensure_equals("Z coordinate of p0 in CCS", p0.getCoordinates(k3D).getZ().getMetresValue(), 2433.66, 1e-9);
+
 		p1.transform(MLA1985);
 		tut::ensure_equals("X coordinate of p1 in MLA1985", p1.getCoordinates(k3D).getX().getMetresValue(), ctrlPointP1.getCoordinates(k3D).getX().getMetresValue(), 1e-9);
 		tut::ensure_equals("Y coordinate of p1 in MLA1985", p1.getCoordinates(k3D).getY().getMetresValue(), ctrlPointP1.getCoordinates(k3D).getY().getMetresValue(), 1e-9);
@@ -418,5 +423,52 @@ namespace tut
 		tut::ensure_equals("X coordinate of p3 in MLASphere", p3.getCoordinates(k3D).getX().getMetresValue(), ctrlPointP3.getCoordinates(k3D).getX().getMetresValue(), 1e-9);
 		tut::ensure_equals("Y coordinate of p3 in MLASphere", p3.getCoordinates(k3D).getY().getMetresValue(), ctrlPointP3.getCoordinates(k3D).getY().getMetresValue(), 1e-9);
 		tut::ensure_equals("Z coordinate of p3 in MLASphere", p3.getCoordinates(k3D).getZ().getMetresValue(), ctrlPointP3.getCoordinates(k3D).getZ().getMetresValue(), 1e-9);
+
 	}
+
+
+// Test of MLA with regional geoid
+template<>
+template<>
+void object::test<6>()
+{
+	set_test_name("Modified Local Astronomic System using Regional geoid");
+
+	TAReferenceFrame* ETRF93(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kETRF93));
+
+	// Coordinate of p0 in ETRF93 (transformed using CSGeo)
+	TReal xOrigin = 4395448.30314;
+	TReal yOrigin = 465755.01889;
+	TReal zOrigin = 4583484.78227;
+	TSpatialPosition p0 = TSpatialPosition(ETRF93, xOrigin, yOrigin, zOrigin, TCoordSysFactory::k3DCartesian);
+
+	TLocalSystemOrigin lso(p0, TAngle(0), TAngle(0), "P0_ETRF93");
+	TAReferenceFrame* MLA(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso, TRefSystemFactory::kCUSTOMgeoid, TRefSystemFactory::kMLACustomGeoid));
+
+	TReal xPoint = 10.1;
+	TReal yPoint = 2.23;
+	TReal zPoint = 5.67;
+	TSpatialPosition point(MLA, xPoint, yPoint, zPoint, k3D);
+	p0.transform(MLA);
+	tut::ensure_equals("MLA X coordinate of MLA origin is 0", p0.getCoordinates(k3D).getX().getMetresValue(), 0.0, 1e-9);
+	tut::ensure_equals("MLA Y coordinate of MLA origin is 0", p0.getCoordinates(k3D).getY().getMetresValue(), 0.0, 1e-9);
+	tut::ensure_equals("MLA Z coordinate of MLA origin is 0", p0.getCoordinates(k3D).getZ().getMetresValue(), 0.0, 1e-9);
+	
+	std::cout << p0.getCoordinates(k3D).getH() << std::endl;
+
+	p0.transform(ETRF93);
+	tut::ensure_equals("Geocentric X coordinate of MLA origin is 4395448.30314", p0.getCoordinates(k3D).getX().getMetresValue(), xOrigin, 1e-9);
+	tut::ensure_equals("Geocentric Y coordinate of MLA origin is 465755.01889", p0.getCoordinates(k3D).getY().getMetresValue(), yOrigin, 1e-9);
+	tut::ensure_equals("Geocentric Z coordinate of MLA origin is 4583484.78227", p0.getCoordinates(k3D).getZ().getMetresValue(), zOrigin, 1e-9);
+
+	std::cout << p0.getCoordinates(k3D).getH() << std::endl;
+
+	point.transform(ETRF93);
+	tut::ensure_equals("Distance between origin and Point hasn't changed", point.getCoordinates(k3D).dist(p0.getCoordinates(k3D)).getMetresValue(), sqrt(xPoint*xPoint + yPoint*yPoint + zPoint*zPoint), 1e-9);
+	
+	point.transform(MLA);
+	tut::ensure_equals("MLA X coordinate of Point is 10.1", point.getCoordinates(k3D).getX().getMetresValue(), xPoint, 1e-9);
+	tut::ensure_equals("MLA Y coordinate of Point is 2.23", point.getCoordinates(k3D).getY().getMetresValue(), yPoint, 1e-9);
+	tut::ensure_equals("MLA Z coordinate of Point is 5.67", point.getCoordinates(k3D).getZ().getMetresValue(), zPoint, 1e-9);
+}
 }

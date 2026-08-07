@@ -121,6 +121,7 @@ public:
 			kMLA2000Topo         = 1003,
 			kMLA2000H0           = 1004,
 			kMLA1985H0           = 1005,
+			kMLACustomGeoid      = 1006,
 
 			kLA1985Machine       = 1010,
 			kLA2000Machine       = 1011,
