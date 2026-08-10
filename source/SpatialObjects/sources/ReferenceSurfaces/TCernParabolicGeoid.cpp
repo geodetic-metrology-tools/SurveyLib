@@ -169,14 +169,7 @@ bool TCernParabolicGeoid::computeLocalParaboloidCoordinates(const TSpatialPositi
 
 TAngle TCernParabolicGeoid::getDAlpha(const TSpatialPosition &sp, const TAngle &latitude) const
 {
-	// deep copy of TSpatialPosition and check the reference frame is the same as the geoid CalculationRF
-	TSpatialPosition position = getSpatialPositionInRefFrame(sp, fCalcRFPtr); 
-
-	TReal phi = latitude.getRadiansValue();
-	TAngle eta, fDAlphaValue;
-	eta = getEta(position);
-	fDAlphaValue = eta * tanq(phi);
-	return fDAlphaValue;
+	return computeLaplaceCorrection(sp, latitude);
 }
 
 
