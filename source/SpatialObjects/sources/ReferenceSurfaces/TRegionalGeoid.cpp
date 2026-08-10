@@ -141,6 +141,23 @@ TAngle TRegionalGeoid::getXi(const TSpatialPosition &sp) const
 	}
 }
 
+TAngle TRegionalGeoid::getDAlpha(const TSpatialPosition &sp, const TAngle &latitude) const
+{
+	// deep copy of TSpatialPosition transformed in the calculation RF
+	TSpatialPosition position = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
+
+	TAngle fDAlphaValue;
+
+	fDAlphaValue.setRadiansValue(std::numeric_limits<TReal>::quiet_NaN());
+	fDAlphaValue = computeLaplaceCorrection(position, latitude);
+	if (isnan(fDAlphaValue.getRadiansValue()))
+	{
+		std::stringstream ss = generateNotInGeoidGridMessage("getDAlpha", position);
+		throw TNotInGeoidGridException(ss.str());
+	}
+	return fDAlphaValue;
+}
+
 bool TRegionalGeoid::isInGrid(const TSpatialPosition &point) const
 {
 	return false;

@@ -67,7 +67,7 @@ public:
 
 		/*! \Returns the Laplace correction at the given Point's position
 		(phi is given)*/
-		virtual TAngle getDAlpha(const TSpatialPosition&, const TAngle&) const {TAngle null; return null;}
+		virtual TAngle getDAlpha(const TSpatialPosition &, const TAngle &) const = 0;
 
 		/*! \Returns the name of the geoid*/
 		std::string getName() const { return fName; }
