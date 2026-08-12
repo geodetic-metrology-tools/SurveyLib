@@ -18,14 +18,20 @@ IF(CMAKE_PROJECT_NAME STREQUAL "SurveyLib")
 	# Includes for all subprojects
 	# In-tree build
 	FOREACH(lib ${SURVEYLIB_LIBRARIES})
-		ADD_SUBDIRECTORY(${lib})
+		# A sublibrary may already have been added by one that depends on it:
+		# SpatialObjects supplies Serialization, appended to the list after it.
+		IF(NOT TARGET ${lib})
+			ADD_SUBDIRECTORY(${lib})
+		ENDIF()
 	ENDFOREACH(lib)
 ELSE()
 	# out of tree build, needs seperate bin directories
 	FOREACH(sublib ${SURVEYLIB_LIBRARIES})
 		SET(add_bindir "${CMAKE_CURRENT_BINARY_DIR}/svl${sublib}")
 		SET(add_srcdir "${SURVEYLIB_ROOT}/source/${sublib}")
-		ADD_SUBDIRECTORY("${add_srcdir}" "${add_bindir}")
+		IF(NOT TARGET ${sublib})
+			ADD_SUBDIRECTORY("${add_srcdir}" "${add_bindir}")
+		ENDIF()
 		LINK_DIRECTORIES ("${add_bindir}")
-	ENDFOREACH(sublib) 
+	ENDFOREACH(sublib)
 ENDIF()

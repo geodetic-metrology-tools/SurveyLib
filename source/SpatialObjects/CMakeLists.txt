@@ -309,7 +309,16 @@ if(OpenMP_CXX_FOUND)
 endif()
 
 IF(USE_SERIALIZER)
+	# Supply the dependency here: consumers pull SpatialObjects in transitively and
+	# have no reason to know Serialization exists.
+	if(NOT TARGET Serialization)
+		add_subdirectory("${SURVEYLIB_ROOT}/source/Serialization" "${CMAKE_BINARY_DIR}/svlSerialization")
+	endif()
 	target_link_libraries(SpatialObjects PUBLIC Serialization)
+	# PUBLIC because the flag is ABI, not a feature toggle -- it adds a virtual
+	# serialize() to these vtables, so consumers must compile the headers with the
+	# same value. Carrying it on the target is what makes disagreement impossible.
+	target_compile_definitions(SpatialObjects PUBLIC USE_SERIALIZER=${USE_SERIALIZER})
 ENDIF(USE_SERIALIZER)
 
 # link directories
