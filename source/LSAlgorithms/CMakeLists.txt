@@ -69,7 +69,11 @@ ADD_LIBRARY(LSAlgorithms STATIC ${ALGO_HEADERS} ${ALGO_SOURCES} )
 # Specify the libraries to link against
 target_link_libraries(LSAlgorithms PRIVATE Tools Logs SpatialObjects)
 IF(USE_SERIALIZER)
+	# Our own public headers are ABI-guarded on this flag: UEOIndices and
+	# TransformParameters derive from Serializable and include <Serializer.hpp>,
+	# so consumers need both the definition and Serialization's include dirs.
 	target_link_libraries(LSAlgorithms PUBLIC Serialization)
+	target_compile_definitions(LSAlgorithms PUBLIC USE_SERIALIZER=${USE_SERIALIZER})
 ENDIF(USE_SERIALIZER)
 
 # Define VS folders:
