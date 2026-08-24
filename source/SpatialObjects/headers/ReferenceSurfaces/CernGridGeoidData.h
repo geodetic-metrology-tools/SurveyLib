@@ -15,10 +15,7 @@ constexpr size_t rows = 18;
 constexpr size_t cols = 14;
 
 /** Generate a TReal quiet NaN. */
-TReal trnan()
-{
-	return std::numeric_limits<TReal>::quiet_NaN();
-}
+inline TReal trnan() { return std::numeric_limits<TReal>::quiet_NaN();}
 
 static const std::array<std::array<TReal, cols>, rows> nCG2000h0 = {
 	{{LITERAL(0.16748), LITERAL(0.13360), LITERAL(0.09381), LITERAL(0.05738), LITERAL(0.02980), LITERAL(0.01181), LITERAL(0.00240), -LITERAL(0.00096), -LITERAL(0.00140), LITERAL(0.00180), LITERAL(0.01058), LITERAL(0.02504), LITERAL(0.04444), LITERAL(0.06777)},

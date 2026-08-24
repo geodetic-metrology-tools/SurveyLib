@@ -48,14 +48,14 @@ class  TRefSystemFactory;
 class  TCernParabolicGeoid : public TAGeoidModel  
 {
 public:
-	// Constants for the paraboloid as given in A SIMULATION OF THE GRAVITY FIELD AROUND LEP, p. 49
+	// Constants for the paraboloid as given in A SIMULATION OF THE GRAVITY FIELD AROUND LEP, p. 53 (part 2)
 	// EDMS document 308419 
-	static const TAngle ang_h0;
-	static const TReal a_h0;
-	static const TReal b_h0;
-	static const TAngle ang_LEP;
-	static const TReal a_LEP;
-	static const TReal b_LEP;
+	static const TAngle angH0;
+	static const TReal aH0;
+	static const TReal bH0;
+	static const TAngle angLEP;
+	static const TReal aLEP;
+	static const TReal bLEP;
 
 	/**@name Constructors and Destructors */
 	//@{
@@ -105,7 +105,7 @@ public:
 
 private:
 		// member functions
-	bool computeLocalParaboloidCoordinates(const TSpatialPosition &sp, TReal &xp, TReal &yp) const;
+	void computeLocalParaboloidCoordinates(const TSpatialPosition &sp, TReal &xp, TReal &yp) const;
 
 	//constants
 	static const TReal scaleFactor;

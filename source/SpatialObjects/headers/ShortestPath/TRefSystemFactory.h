@@ -326,24 +326,24 @@ private:
 	}
 
 	/*! Matrix creation helper*/
-	template<size_t R, size_t C>
-	std::unique_ptr<TMatrix> makeMatrix(const std::array<std::array<TReal, C>, R> &src)
+	template<size_t row, size_t col>
+	std::unique_ptr<TMatrix> makeMatrix(const std::array<std::array<TReal, col>, row> &src)
 	{
-		auto m = std::make_unique<TMatrix>(R, C);
+		auto m = std::make_unique<TMatrix>(row, col);
 
-		for (size_t i = 0; i < R; ++i)
-			for (size_t j = 0; j < C; ++j)
+		for (size_t i = 0; i < row; ++i)
+			for (size_t j = 0; j < col; ++j)
 				(*m)(static_cast<int>(i), static_cast<int>(j)) = src[i][j];
 
 		return m;
 	}
 
 	/*! Geoid grid creation helper*/
-	template<size_t R, size_t C>
+	template<size_t row, size_t col>
 	TCernGridGeoid *createCernGridGeoid(const std::string &name,
-		const std::array<std::array<TReal, C>, R> &n,
-		const std::array<std::array<TReal, C>, R> &eta,
-		const std::array<std::array<TReal, C>, R> &xsi,
+		const std::array<std::array<TReal, col>, row> &n,
+		const std::array<std::array<TReal, col>, row> &eta,
+		const std::array<std::array<TReal, col>, row> &xsi,
 		const TPositionVector &dl,
 		const TPositionVector &ur,
 		const TRefSystemFactory::EGeoid geoidId)

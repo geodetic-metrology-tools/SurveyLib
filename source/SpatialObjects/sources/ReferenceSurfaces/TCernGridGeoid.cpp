@@ -110,11 +110,11 @@ TAngle	TCernGridGeoid::getDAlpha ( const TSpatialPosition& sp, const TAngle& lat
 	{
 		fDAlphaValue.setRadiansValue(std::numeric_limits<TReal>::quiet_NaN());
 		fDAlphaValue = computeLaplaceCorrection(position, latitude);
-		if (isnan(fDAlphaValue.getRadiansValue()))
-		{
-			std::stringstream ss = generateNotInLepGridMessage("getDAlpha", position);
-			throw TNotInLepGridException(ss.str());
-		}
+	}
+	if (isnan(fDAlphaValue.getRadiansValue()))
+	{
+		std::stringstream ss = generateNotInLepGridMessage("getDAlpha", position);
+		throw TNotInLepGridException(ss.str());
 	}
 	return fDAlphaValue;
 }

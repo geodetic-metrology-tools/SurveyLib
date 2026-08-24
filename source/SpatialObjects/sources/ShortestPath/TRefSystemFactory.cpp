@@ -165,12 +165,12 @@ void TRefSystemFactory::initGeoidList()
 	fGeoidList.push_back(pCGSphere);
 
 	// CG1985 h=0
-	TCernParabolicGeoid *pCG1985 = new TCernParabolicGeoid(cg85, kCG1985, TCernParabolicGeoid::a_h0, TCernParabolicGeoid::b_h0, TCernParabolicGeoid::ang_h0, pCGRF, pGRS80, pCCS);
+	TCernParabolicGeoid *pCG1985 = new TCernParabolicGeoid(cg85, kCG1985, TCernParabolicGeoid::aH0, TCernParabolicGeoid::bH0, TCernParabolicGeoid::angH0, pCGRF, pGRS80, pCCS);
 	fGeoidList.push_back(pCG1985);
 
 	// CG1985 h=Machine
 	TCernParabolicGeoid *pCG1985Machine = new TCernParabolicGeoid(
-		cg85Machine, kCG1985Machine, TCernParabolicGeoid::a_LEP, TCernParabolicGeoid::b_LEP, TCernParabolicGeoid::ang_LEP, pCGRF, pGRS80, pCCS);
+		cg85Machine, kCG1985Machine, TCernParabolicGeoid::aLEP, TCernParabolicGeoid::bLEP, TCernParabolicGeoid::angLEP, pCGRF, pGRS80, pCCS);
 	fGeoidList.push_back(pCG1985Machine);
 }
 
@@ -393,12 +393,12 @@ void TRefSystemFactory::addCERNrefFrameTransformation()
 	addTransformationAndInverse(pLAp02CCS, kLAp02CCS, kCCS2LAp0, fTransformList);
 
 	// Helmert Transformation between ITRF97 (ep1998.5) and CGRF (see EDMS document 324131)
-	TAngle om3(LITERAL(399.999533213524), TAngle::kGons);
-	TAngle p3(LITERAL(0.001825157943), TAngle::kGons);
-	TAngle k3(LITERAL(0.000991054274), TAngle::kGons);
-	TLength Tx3(LITERAL(76.3768280)), Ty3(LITERAL(131.9389844)), Tz3(-LITERAL(156.1229775));
+	TAngle om(LITERAL(399.999533213524), TAngle::kGons);
+	TAngle p(LITERAL(0.001825157943), TAngle::kGons);
+	TAngle k(LITERAL(0.000991054274), TAngle::kGons);
+	TLength Tx(LITERAL(76.3768280)), Ty(LITERAL(131.9389844)), Tz(-LITERAL(156.1229775));
 	TScaleFactor enl3(LITERAL(1.000000000000000));
-	THelmertRefFrameTransform *pITRF972CGRF = createHelmertRefFrameTransform(getRefFrame<TTerrestrialReferenceFrame>(kITRF97), fCGRF, om3, p3, k3, Tx3, Ty3, Tz3, enl3);
+	THelmertRefFrameTransform *pITRF972CGRF = createHelmertRefFrameTransform(getRefFrame<TTerrestrialReferenceFrame>(kITRF97), fCGRF, om, p, k, Tx, Ty, Tz, enl3);
 	addTransformationAndInverse(pITRF972CGRF, kITRF972CGRF, kCGRF2ITRF97, fTransformList);
 }
 
@@ -503,13 +503,13 @@ void TRefSystemFactory::addSwissTransformations()
 	
 	// There is no rotation:
 	// Total translation resulting from epoch changes and Reference Frame changes:
-	TLength Tx3(LITERAL(-674.374)), Ty3(LITERAL(-15.056)), Tz3(LITERAL(-405.346));
+	TLength Tx(LITERAL(-674.374)), Ty(LITERAL(-15.056)), Tz(LITERAL(-405.346));
 	// There is no scaling:
-	TScaleFactor enl3(LITERAL(1.000000000000000));
+	TScaleFactor enl(LITERAL(1.000000000000000));
 	auto pETRF93 = getRefFrame<TTerrestrialReferenceFrame>(kETRF93);
 	auto pCH1903plus = getRefFrame<TGeodeticRefFrame>(kCH1903plus);
 
-	THelmertRefFrameTransform *pETRF932CH1903plus = createHelmertRefFrameTransform(pETRF93, pCH1903plus, TAngle(0), TAngle(0), TAngle(0), Tx3, Ty3, Tz3, enl3);
+	THelmertRefFrameTransform *pETRF932CH1903plus = createHelmertRefFrameTransform(pETRF93, pCH1903plus, TAngle(0), TAngle(0), TAngle(0), Tx, Ty, Tz, enl);
 	addTransformationAndInverse(pETRF932CH1903plus, kETRF932CH1903plus, kCH1903plus2ETRF93, fTransformList);
 	
 #ifdef USE_SWISSTOPO

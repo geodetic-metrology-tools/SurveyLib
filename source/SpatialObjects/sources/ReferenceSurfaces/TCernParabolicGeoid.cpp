@@ -27,12 +27,12 @@
 //////////////////////////////////////////////////////////////////////
 const TReal TCernParabolicGeoid::scaleFactor = LITERAL(0.001);
 const TReal TCernParabolicGeoid::scaleFactorM = LITERAL(0.01);
-const TAngle TCernParabolicGeoid::ang_h0 = TAngle(LITERAL(48.772), TAngle::kGons);
-const TReal TCernParabolicGeoid::a_h0 = LITERAL(0.535);
-const TReal TCernParabolicGeoid::b_h0 = -LITERAL(0.096);
-const TAngle TCernParabolicGeoid::ang_LEP = TAngle(LITERAL(48.219), TAngle::kGons);
-const TReal TCernParabolicGeoid::a_LEP = LITERAL(0.614);
-const TReal TCernParabolicGeoid::b_LEP = -LITERAL(0.106);
+const TAngle TCernParabolicGeoid::angH0 = TAngle(LITERAL(48.772), TAngle::kGons);
+const TReal TCernParabolicGeoid::aH0 = LITERAL(0.535);
+const TReal TCernParabolicGeoid::bH0 = -LITERAL(0.096);
+const TAngle TCernParabolicGeoid::angLEP = TAngle(LITERAL(48.219), TAngle::kGons);
+const TReal TCernParabolicGeoid::aLEP = LITERAL(0.614);
+const TReal TCernParabolicGeoid::bLEP = -LITERAL(0.106);
 
 
 //////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ TAngle	TCernParabolicGeoid::getEta( const TSpatialPosition& sp ) const
 
 }
 
-bool TCernParabolicGeoid::computeLocalParaboloidCoordinates(const TSpatialPosition &sp, TReal &xp, TReal &yp) const
+void TCernParabolicGeoid::computeLocalParaboloidCoordinates(const TSpatialPosition &sp, TReal &xp, TReal &yp) const
 {
 	// deep copy of TSpatialPosition transformed in same reference frame as the geoid CalculationRF
 	TSpatialPosition position = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
@@ -163,8 +163,6 @@ bool TCernParabolicGeoid::computeLocalParaboloidCoordinates(const TSpatialPositi
 
 	xp = dx * costhc - dy * sinthc;
 	yp = dx * sinthc + dy * costhc;
-
-	return true;
 }
 
 TAngle TCernParabolicGeoid::getDAlpha(const TSpatialPosition &sp, const TAngle &latitude) const
