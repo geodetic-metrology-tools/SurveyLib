@@ -13,25 +13,25 @@
 /*!@name P0 false coordinates*/
 //@{
 	/// in [m]
-	static const double XP0 = 2000.00000;
+	static const double XP0 = 00.00000;
 	/// in [m]
-	static const double YP0 = 2097.79265;
+	static const double YP0 = 0.0;
 	/// in [m]
-	static const double ZP0 = 2433.66000;
+	static const double ZP0 = 0.000;
 	/// in [m]
-	static const double Zoffset = 2000.00079;
+	static const double Zoffset = 0.0;
 	//@}
 
 /*!@name Geodetic ellipsoidal coordinates of P0 and azimuth. */
 //@{
 	/// in [gon]
-	static const double PHIP0 = 51.3692;
+	static const double PHIP0 = 51.3999292503;
 	/// in [gon]
-	static const double LambdaP0 = 6.72124;
+	static const double LambdaP0 = 6.7285948569;
 	/// in [m]
-	static const double HP0 = 433.65921;
+	static const double HP0 = 509.58316;
 	/// in [gon]
-	static const double AzimuthCCSYaxis = 37.77864; 
+	static const double AzimuthCCSYaxis = 0.0; 
 //@}
 
 /*!@name GRS80 ellipsoid definition. */
