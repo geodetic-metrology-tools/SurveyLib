@@ -41,7 +41,12 @@ TAdjustablePoint::TAdjustablePoint(const TPositionVector &pos, bool isXfixed, bo
 {
 	if (pos.getCoordSys() == TCoordSysFactory::k2DPlusH)
 	{
-		if (fReferential != TRefSystemFactory::ERefFrame::kNotInGraph && fGeoid != TRefSystemFactory::EGeoid::kNoGeoid)
+		if (fGeoid == TRefSystemFactory::EGeoid::kCUSTOMgeoid || fGeoid == TRefSystemFactory::EGeoid::kCGSphere)
+		{
+			fEstimatedValue.setCoordSys(TCoordSysFactory::ECoordSys::k3DCartesian);
+		}
+
+		else if (fReferential != TRefSystemFactory::ERefFrame::kNotInGraph && fGeoid != TRefSystemFactory::EGeoid::kNoGeoid)
 		{
 			TXYH2CCS::XYH2CCS(fEstimatedValue, fGeoid);
 		}

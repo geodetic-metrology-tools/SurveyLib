@@ -327,12 +327,14 @@ void TRefSystemFactory::addLocalGeodeticAndLocalAstronomic()
 	setIdAndAddToList(pLGp0, kLGp0, fRefFrameList);
 	// Local Astronomic at CERN: origin = principal point of the system = P0
 	TAngle etaP0(0), xsiP0(0), dAlphaP0(0);
+	//TAngle etaP0(5.1677924147745724, TAngle::kCCs), xsiP0(-6.4860348123969347, TAngle::kCCs), dAlphaP0(5.4002208865518355, TAngle::kCCs);
 	TGraphLocalAstronomicalRF *pLAp0 = new TGraphLocalAstronomicalRF("LA P0", etaP0, xsiP0, dAlphaP0, pLGp0);
 	setIdAndAddToList(pLAp0, kLAp0, fRefFrameList);
 
 	// CCS : CERN Modified Local Astronomical system : principal point = P0 defined as false origin
 	TFreeVector falseOrigin(XP0, LITERAL(YP0), LITERAL(ZP0), TCoordSysFactory::k3DCartesian);
-	TAngle omega(0), phi2(0), kappa(LITERAL(AzimuthCCSYaxis), TAngle::kGons);
+	TReal azimuth = 0.0;
+	TAngle omega(0), phi2(0), kappa(LITERAL(azimuth), TAngle::kGons);
 
 	TAModifiedLocalAstronomicalRF *pCCS = new TGraphMLARF("CCS", falseOrigin, pLAp0, omega, phi2, kappa);
 	setIdAndAddToList(pCCS, kCCS, fRefFrameList);
@@ -405,10 +407,10 @@ void TRefSystemFactory::addCERNrefFrameTransformation()
 	addTransformationAndInverse(pLAp02CCS, kLAp02CCS, kCCS2LAp0, fTransformList);
 
 	// Helmert Transformation between ITRF97 (ep1998.5) and CGRF (see EDMS document 324131)
-	TAngle om3(LITERAL(399.999533213524), TAngle::kGons);
-	TAngle p3(LITERAL(0.001825157943), TAngle::kGons);
-	TAngle k3(LITERAL(0.000991054274), TAngle::kGons);
-	TLength Tx3(LITERAL(76.3768280)), Ty3(LITERAL(131.9389844)), Tz3(-LITERAL(156.1229775));
+	TAngle om3(LITERAL(0), TAngle::kGons);
+	TAngle p3(LITERAL(0), TAngle::kGons);
+	TAngle k3(LITERAL(0), TAngle::kGons);
+	TLength Tx3(LITERAL(0)), Ty3(LITERAL(0)), Tz3(LITERAL(0));
 	TScaleFactor enl3(LITERAL(1.000000000000000));
 	THelmertRefFrameTransform *pITRF972CGRF = createHelmertRefFrameTransform(getRefFrame<TTerrestrialReferenceFrame>(kITRF97), fCGRF, om3, p3, k3, Tx3, Ty3, Tz3, enl3);
 	addTransformationAndInverse(pITRF972CGRF, kITRF972CGRF, kCGRF2ITRF97, fTransformList);
