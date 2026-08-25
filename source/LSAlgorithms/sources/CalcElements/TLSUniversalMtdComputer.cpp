@@ -11,6 +11,7 @@
 #include "TLSInputMatrices.h"
 #include "TLSResultsMatrices.h"
 #include "TSparseMatrix.h"
+#include <iostream>
 
 TLSUniversalMtdComputer::TLSUniversalMtdComputer() : count(1)
 { // default constructor
@@ -123,6 +124,11 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	// Copies the matrices into the members of the TResultsMatrices object
 	rm->setNormalMatrix(NBig);
 	rm->setSolutionVect(solution);
+
+	//std::cout << "A matrix: \n" << A.toDense() << "\n\n" << std::endl;
+	std::cout << "W (Misclosure) vector: \n" << W << "\n\n" << std::endl;
+	std::cout << "Solution vector: \n" << solution << "\n\n" << std::endl;
+
 
 	return true;
 }
