@@ -25,11 +25,14 @@
 /*!@name Geodetic ellipsoidal coordinates of P0 and azimuth. */
 //@{
 	/// in [gon]
-	static const double PHIP0 = 51.3999292503;
+	//static const double PHIP0 = 51.3999292503;
+	static const double PHIP0 = 51.3940662456;
 	/// in [gon]
-	static const double LambdaP0 = 6.7285948569;
+	//static const double LambdaP0 = 6.7285948569;
+	static const double LambdaP0 = 6.6865098047;
 	/// in [m]
-	static const double HP0 = 509.58316;
+	//static const double HP0 = 509.58316;
+	static const double HP0 = 460.54006;
 	/// in [gon]
 	static const double AzimuthCCSYaxis = 0.0; 
 //@}

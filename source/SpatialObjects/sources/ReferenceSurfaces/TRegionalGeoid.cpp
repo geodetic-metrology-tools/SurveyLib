@@ -83,6 +83,7 @@ TAngle TRegionalGeoid::getEta(const TSpatialPosition &sp) const
 		// Featherstone, W. E. (1999, November). The use and abuse of vertical deflections. In Sixth South East Asian Surveyors’ Congress Fremantle (Vol. 6, pp. 1-12).
 		// equation 4
 		double eta_rad = -dNdLambda / (fDefEllPtr->getNu(phiSp) * cos(phiSp.getRadiansValue()));
+		//std::cout << "Eta [sec] = " << eta_rad * 180 / PI * 3600 << std::endl;
 		return TAngle(eta_rad, TAngle::kRadians);
 	}
 	catch (const std::exception &)

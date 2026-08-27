@@ -326,15 +326,15 @@ void TRefSystemFactory::addLocalGeodeticAndLocalAstronomic()
 	TModifiedLocalGeodeticRF *pLGp0 = createModifiedLocalGeodeticRF(fCGRF, "LG PO", phi, lambda, H);
 	setIdAndAddToList(pLGp0, kLGp0, fRefFrameList);
 	// Local Astronomic at CERN: origin = principal point of the system = P0
-	TAngle etaP0(0), xsiP0(0), dAlphaP0(0);
-	//TAngle etaP0(5.1677924147745724, TAngle::kCCs), xsiP0(-6.4860348123969347, TAngle::kCCs), dAlphaP0(5.4002208865518355, TAngle::kCCs);
+	//TAngle etaP0(0), xsiP0(0), dAlphaP0(0);
+	//TAngle etaP0(5.1677924147745724 / 3600.0, TAngle::kDeciDegs), xsiP0(-6.4860348123969347 / 3600.0, TAngle::kDeciDegs), dAlphaP0(5.4002208865518355 / 3600.0, TAngle::kDeciDegs);
+	TAngle etaP0(7.1931465705409616 / 3600.0, TAngle::kDeciDegs), xsiP0(-8.2600207597687998 / 3600.0, TAngle::kDeciDegs), dAlphaP0(7.5152823772319852 / 3600.0, TAngle::kDeciDegs);
 	TGraphLocalAstronomicalRF *pLAp0 = new TGraphLocalAstronomicalRF("LA P0", etaP0, xsiP0, dAlphaP0, pLGp0);
 	setIdAndAddToList(pLAp0, kLAp0, fRefFrameList);
 
 	// CCS : CERN Modified Local Astronomical system : principal point = P0 defined as false origin
 	TFreeVector falseOrigin(XP0, LITERAL(YP0), LITERAL(ZP0), TCoordSysFactory::k3DCartesian);
-	TReal azimuth = 0.0;
-	TAngle omega(0), phi2(0), kappa(LITERAL(azimuth), TAngle::kGons);
+	TAngle omega(0), phi2(0), kappa(LITERAL(AzimuthCCSYaxis), TAngle::kGons);
 
 	TAModifiedLocalAstronomicalRF *pCCS = new TGraphMLARF("CCS", falseOrigin, pLAp0, omega, phi2, kappa);
 	setIdAndAddToList(pCCS, kCCS, fRefFrameList);
