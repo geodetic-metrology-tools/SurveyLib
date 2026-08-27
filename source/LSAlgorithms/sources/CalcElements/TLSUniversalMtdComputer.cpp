@@ -126,8 +126,8 @@ bool TLSUniversalMtdComputer::computeResultsMatrices(TLSInputMatrices *im, TLSRe
 	rm->setSolutionVect(solution);
 
 	//std::cout << "A matrix: \n" << A.toDense() << "\n\n" << std::endl;
-	std::cout << "W (Misclosure) vector: \n" << W << "\n\n" << std::endl;
-	std::cout << "Solution vector: \n" << solution << "\n\n" << std::endl;
+	// std::cout << "W (Misclosure) vector: \n" << W << "\n\n" << std::endl;
+	//std::cout << "Solution vector: \n" << solution << "\n\n" << std::endl;
 
 
 	return true;
