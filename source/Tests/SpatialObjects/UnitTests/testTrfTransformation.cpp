@@ -13,7 +13,7 @@ namespace tut
 struct test_TTrfTransformation
 {
 };
-typedef test_group<test_TTrfTransformation, 500> factory;
+typedef test_group<test_TTrfTransformation, 50> factory;
 typedef factory::object object;
 } // namespace tut
 
