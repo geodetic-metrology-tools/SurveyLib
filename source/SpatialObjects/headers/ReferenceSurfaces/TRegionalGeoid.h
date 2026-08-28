@@ -77,7 +77,7 @@ private:
 	/**@name Private Functions */
 	//@{
 
-	GDALDataset *openGDALDataset() const;
+	GDALDatasetUniquePtr openGDALDataset() const;
 
 	bool getXAndYFromSpatialPosition(const TSpatialPosition &sp, TReal &x, TReal &y, const OGRSpatialReference &geoidSRS) const;
 
@@ -92,6 +92,7 @@ private:
 	/**@name Member Attributes */
 	//@{
 	std::string fPathToFile; /*! path to the geoid grid file */
+	GDALDatasetUniquePtr fGDALDataset = nullptr; /*! GDAL dataset for the geoid grid */
 
 	int fEPSGCode = 4345; /*! EPSG code of the geoid grid. 4345 (ETRS89 3D geographic) is default value  */
 	GDALRIOResampleAlg fInterpolationMethod = GRIORA_Bilinear; /*! Prefered interpolation method*/

@@ -14,6 +14,7 @@ TRegionalGeoid::TRegionalGeoid(const std::string &name,
 	const GDALRIOResampleAlg &interpolationMethod) :
 	TAGeoidModel(name, geoidId, def, ell, calc), fPathToFile(pathToFile), fEPSGCode(epsgCode), fInterpolationMethod(interpolationMethod)
 {
+	fGDALDataset = openGDALDataset();
 }
 
 TRegionalGeoid::~TRegionalGeoid()
@@ -25,10 +26,8 @@ TLength TRegionalGeoid::getN(const TSpatialPosition &sp) const
 	// deep copy of TSpatialPosition transformed in same reference frame as the geoid CalculationRF
 	TSpatialPosition spos = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
 
-	GDALDataset *dataset = openGDALDataset();
-
 	double x, y, geoidHeight = 0.0;
-	const OGRSpatialReference *geoidSRS = dataset->GetSpatialRef();
+	const OGRSpatialReference *geoidSRS = fGDALDataset->GetSpatialRef();
 
 	if (!getXAndYFromSpatialPosition(spos, x, y, *geoidSRS))
 	{
@@ -40,14 +39,12 @@ TLength TRegionalGeoid::getN(const TSpatialPosition &sp) const
 	// If it is OAMS_AUTHORITY_COMPLIANT, the order is determined by the authority and can be (latitude, longitude) or (y, x)
 	if (geoidSRS->GetAxisMappingStrategy() == OAMS_TRADITIONAL_GIS_ORDER)
 	{
-		dataset->GetRasterBand(1)->InterpolateAtGeolocation(x, y, geoidSRS, fInterpolationMethod, &geoidHeight);
+		fGDALDataset->GetRasterBand(1)->InterpolateAtGeolocation(x, y, geoidSRS, fInterpolationMethod, &geoidHeight);
 	}
 	else
 	{
-		dataset->GetRasterBand(1)->InterpolateAtGeolocation(y, x, geoidSRS, fInterpolationMethod, &geoidHeight);
+		fGDALDataset->GetRasterBand(1)->InterpolateAtGeolocation(y, x, geoidSRS, fInterpolationMethod, &geoidHeight);
 	}
-
-	GDALClose(dataset);
 
 	return TLength(geoidHeight);
 }
@@ -163,10 +160,10 @@ bool TRegionalGeoid::isInGrid(const TSpatialPosition &point) const
 	return false;
 }
 
-GDALDataset *TRegionalGeoid::openGDALDataset() const
+GDALDatasetUniquePtr TRegionalGeoid::openGDALDataset() const
 {
 	GDALAllRegister();
-	GDALDataset *dataset = static_cast<GDALDataset *>(GDALOpen(fPathToFile.c_str(), GA_ReadOnly));
+	GDALDatasetUniquePtr dataset(GDALDataset::Open(fPathToFile.c_str(), GA_ReadOnly));
 
 	if (!dataset)
 	{
@@ -226,5 +223,5 @@ void TRegionalGeoid::setPathToFile(const std::string &pathToFile)
 {
 	fPathToFile = pathToFile;
 
-
+	fGDALDataset = openGDALDataset();
 }
