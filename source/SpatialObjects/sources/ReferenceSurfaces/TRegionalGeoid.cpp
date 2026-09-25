@@ -1,7 +1,7 @@
 #include "TRegionalGeoid.h"
 
 #include <TNotInGeoidGridException.h>
-
+#include <random>
 #include "TReferenceEllipsoid.h"
 
 TRegionalGeoid::TRegionalGeoid(const std::string &name,
@@ -163,20 +163,108 @@ bool TRegionalGeoid::isInGrid(const TSpatialPosition &point) const
 
 GDALDatasetUniquePtr TRegionalGeoid::openGDALDataset() const
 {
+	//GDALAllRegister();
+	//GDALDatasetUniquePtr dataset(GDALDataset::Open(fPathToFile.c_str(), GA_ReadOnly));
+	//
+	//if (!dataset)
+	//{
+	//	throw std::invalid_argument("GDAL error: Unable to open geoid file : " + fPathToFile);
+	//}
+	//else
+	//{
+	//	OGRSpatialReference *geoidSRS = new OGRSpatialReference();
+	//	geoidSRS->importFromEPSG(fEPSGCode);
+	//	dataset->SetSpatialRef(geoidSRS);
+	//	return dataset;
+	//}
+	
 	GDALAllRegister();
-	GDALDatasetUniquePtr dataset(GDALDataset::Open(fPathToFile.c_str(), GA_ReadOnly));
 
-	if (!dataset)
+	// 1. Open the original dataset in Read-Only mode
+	GDALDatasetUniquePtr srcDataset(GDALDataset::Open(fPathToFile.c_str(), GA_ReadOnly));
+	if (!srcDataset)
 	{
 		throw std::invalid_argument("GDAL error: Unable to open geoid file : " + fPathToFile);
 	}
-	else
+
+	// 2. Generate a unique virtual file path in RAM
+	// Using the object's memory address to ensure uniqueness in case of multithreading/multiple instances
+	std::string vsiPath = std::string("/vsimem/temp_geoid_") + std::to_string(reinterpret_cast<uintptr_t>(this)) + ".tif";
+
+	// 3. Clone the dataset into the virtual RAM file using the GTiff driver
+	GDALDriver *driver = GetGDALDriverManager()->GetDriverByName("GTiff");
+	if (!driver)
 	{
-		OGRSpatialReference *geoidSRS = new OGRSpatialReference();
-		geoidSRS->importFromEPSG(fEPSGCode);
-		dataset->SetSpatialRef(geoidSRS);
-		return dataset;
+		throw std::runtime_error("GDAL error: GTiff driver not available.");
 	}
+
+	GDALDataset *rawVsiDataset = driver->CreateCopy(vsiPath.c_str(), srcDataset.get(), FALSE, nullptr, nullptr, nullptr);
+	if (!rawVsiDataset)
+	{
+		throw std::runtime_error("GDAL error: Failed to create virtual dataset copy.");
+	}
+	GDALDatasetUniquePtr vsiDataset(rawVsiDataset);
+
+	// 4. Mark the virtual file for deletion upon closing (Supported in GDAL 2.2+)
+	// This prevents memory leaks. The file remains accessible until vsiDataset is destroyed.
+	VSIUnlink(vsiPath.c_str());
+
+	// 5. Apply the Spatial Reference just like your original code
+	OGRSpatialReference *geoidSRS = new OGRSpatialReference();
+	geoidSRS->importFromEPSG(fEPSGCode);
+	vsiDataset->SetSpatialRef(geoidSRS);
+
+	// 6. Access the copied raster band
+	GDALRasterBand *band = vsiDataset->GetRasterBand(1);
+	const int nXSize = band->GetXSize();
+	const int nYSize = band->GetYSize();
+
+	// 7. Read the entire grid into memory
+	std::vector<double> buffer(static_cast<size_t>(nXSize) * nYSize);
+	CPLErr err = band->RasterIO(GF_Read, 0, 0, nXSize, nYSize, buffer.data(), nXSize, nYSize, GDT_Float64, 0, 0);
+	if (err != CE_None)
+	{
+		throw std::runtime_error("GDAL error: Failed to read raster band data.");
+	}
+
+	// 8. Handle NoData and Scale properties
+	int hasNoData = 0;
+	const double noDataVal = band->GetNoDataValue(&hasNoData);
+
+	// If the geoid file uses Int16 data with a scale factor (e.g. 0.001) to save space,
+	// we must divide the physical noise by this scale before adding it to the raw cell values.
+	int hasScale = 0;
+	double scale = band->GetScale(&hasScale);
+	if (!hasScale || scale == 0.0)
+		scale = 1.0;
+
+	// 9. Setup Random Generator (-0.03 to +0.03 physical units)
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<double> dist(-0.01 / scale, 0.01/ scale);
+
+	// 10. Add noise to valid cells
+	for (double &cell : buffer)
+	{
+		if (hasNoData && cell == noDataVal)
+		{
+			continue; // Preserve NoData background
+		}
+		if (!std::isnan(cell))
+		{
+			cell += dist(gen); // If you change this to cell += 0; you will get your exact original values back
+		}
+	}
+
+	// 11. Write the modified buffer back into the virtual dataset
+	band->RasterIO(GF_Write, 0, 0, nXSize, nYSize, buffer.data(), nXSize, nYSize, GDT_Float64, 0, 0);
+
+	// 12. Flush caches to guarantee InterpolateAtGeolocation uses the modified values immediately
+	band->FlushCache();
+	vsiDataset->FlushCache();
+
+	return vsiDataset;
+	
 }
 
 bool TRegionalGeoid::getXAndYFromSpatialPosition(const TSpatialPosition &sp, TReal &x, TReal &y, const OGRSpatialReference &geoidSRS) const
