@@ -187,6 +187,25 @@ void object::test<6>()
 	infile.close();
 	outfile.close();
 
+	//TAngle lambda(LITERAL(6.7285948569), TAngle::kGons);
+	//TAngle phi(LITERAL(51.3999292503), TAngle::kGons);
+	//TLength height(LITERAL(509.58316));
+	TAngle lambda(LITERAL(6.6865098047), TAngle::kGons);
+	TAngle phi(LITERAL(51.3940662456), TAngle::kGons);
+	TLength height(LITERAL(460.54006));
+
+	TPositionVector pv(TCoordSysFactory::kGeodetic);
+	pv.setPhiEllipsoid(phi);
+	pv.setLambdaEllipsoid(lambda);
+	pv.setH(height);
+
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kETRF93));
+	position.setCoordinates(pv);
+
+	// Compute model values
+	double EtaModel = FCC_G2025->getEta(position).getSecondsValue();
+	double XiModel = FCC_G2025->getXi(position).getSecondsValue();
+	double AlphaModel = FCC_G2025->getDAlpha(position, phi).getSecondsValue();
 	std::cout << "Processing completed.\n";
 }
 
