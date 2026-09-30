@@ -3,7 +3,7 @@ include(FetchContent)
 FetchContent_Declare(
 	rapidjson
 	GIT_REPOSITORY "https://github.com/Tencent/rapidjson.git"
-	GIT_TAG 973dc9c06dcd3d035ebd039cfb9ea457721ec213 # Commit on May 10, 2023
+	GIT_TAG 24b5e7a8b27f42fa16b96fc70aade9106cf7102f # Commit on Feb 5, 2025; requires CMake 3.5
 	GIT_SHALLOW	OFF
 )
 
