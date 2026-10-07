@@ -51,7 +51,7 @@ class  TSpatialPosition;
 
 
 //! Classe de base purement abstraite pour une transformation d'objets d'un referentiel dans un autre
-class  TVRefFrameTransformation : public TVTransformation //: public TObject  
+class  TVRefFrameTransformation : public TVTransformation  
 {
 public:
 
@@ -74,10 +74,10 @@ public:
 		virtual  TAReferenceFrame*  getDestinationFrame()  const = 0;
 
 		//! return the transformation identifier
-		virtual TRefSystemFactory::ERefFrameTransform getTransformId() const = 0;
+		virtual TRefSystemFactory::ERefFrameTransform getId() const = 0;
 
 		//! set the transformation identifier
-		virtual void setTransformId( TRefSystemFactory::ERefFrameTransform id) = 0;
+		virtual void setId( TRefSystemFactory::ERefFrameTransform id) = 0;
 	//@}
 
 

@@ -30,7 +30,7 @@
 	@{*/
 
 //! Class for explain vector in a geodetic coordinate system
-class	TGeodeticCoordSys : public  TACoordinateSystem //: public TObject
+class	TGeodeticCoordSys : public  TACoordinateSystem
 {
 
 public:

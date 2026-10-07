@@ -43,7 +43,7 @@
 	@{*/
 
 //! Class for the CCS definition  
-class  TGraphMLARF : public TAModifiedLocalAstronomicalRF //: public TObject  
+class  TGraphMLARF : public TAModifiedLocalAstronomicalRF  
 {
 public:
 	

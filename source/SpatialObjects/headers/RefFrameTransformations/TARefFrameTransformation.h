@@ -46,7 +46,7 @@ class		TAReferenceFrame;
 	@{*/
 
 //! Classe de base abstraite pour une transformation d'objets d'un referentiel dans un autre
-class  TARefFrameTransformation : public TVRefFrameTransformation //: public TObject  
+class  TARefFrameTransformation : public TVRefFrameTransformation  
 {
 public:
 	/**@name Constructors and Destructors */
@@ -80,11 +80,10 @@ public:
 		virtual TARefFrameTransformation*				getTransformation() { return this; } 
 
 		/*! return the transformation identifier */
-		virtual TRefSystemFactory::ERefFrameTransform	getTransformId() const { return fTransformationId; }
+		virtual TRefSystemFactory::ERefFrameTransform	getId() const { return fTransformationId; }
 
 		/*! set the transformation identifier */
-		virtual void		setTransformId( TRefSystemFactory::ERefFrameTransform id) { fTransformationId = id; return; }
-
+		virtual void		setId( TRefSystemFactory::ERefFrameTransform id) { fTransformationId = id; return; }
 
 		/*! set default transformation of a position vector to false */
 		virtual  bool		transform( TPositionVector& ) const { return false; }

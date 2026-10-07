@@ -45,7 +45,7 @@ class  TAModifiedLocalAstronomicalRF;
 	@{*/
 
 //! A projection on XY plane with ellipsoidal height
-class  TXYHeProjection : public TA2DPlus1MapProjection //: public TObject  
+class  TXYHeProjection : public TA2DPlus1MapProjection  
 {
 public:
 	

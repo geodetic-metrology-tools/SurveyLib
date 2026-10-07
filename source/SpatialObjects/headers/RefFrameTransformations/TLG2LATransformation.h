@@ -48,7 +48,7 @@
 	@{*/
 
 //! The transformation from a local geodetic reference frame to a local astronomical reference frame
-class  TLG2LATransformation : public TARefFrameTransformation //: public TObject  
+class  TLG2LATransformation : public TARefFrameTransformation  
 {
 public:
 

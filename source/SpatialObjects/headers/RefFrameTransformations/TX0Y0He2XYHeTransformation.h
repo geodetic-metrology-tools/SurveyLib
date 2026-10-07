@@ -41,7 +41,7 @@
 	@{*/
 
 //! The transformation from a XYHe projection to XYHe projection
-class TX0Y0He2XYHeTransformation : public TARefFrameTransformation //: public TObject
+class TX0Y0He2XYHeTransformation : public TARefFrameTransformation
 {
 public:
 	/**@name Constructors and Destructors */

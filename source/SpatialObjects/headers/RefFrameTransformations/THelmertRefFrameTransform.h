@@ -43,7 +43,7 @@ class  TTranslation;
 	@{*/
 
 //! A Helmert transformation between two reference frames
-class  THelmertRefFrameTransform : public TARefFrameTransformation //: public TObject  
+class  THelmertRefFrameTransform : public TARefFrameTransformation  
 {
 public:
 	/**@name Constants */

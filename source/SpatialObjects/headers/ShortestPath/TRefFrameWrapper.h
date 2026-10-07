@@ -48,7 +48,7 @@ class  TAReferenceFrame;
 	@{*/
 
 //! A Wrapper around a reference frame
-class  TRefFrameWrapper //: public TObject  
+class  TRefFrameWrapper  
 {
 
 public:

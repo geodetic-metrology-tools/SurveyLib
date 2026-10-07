@@ -40,7 +40,7 @@ namespace
     const double N0 = (zoneNumber * 1000000) + 200000;
 
     //Parameters of the elipsoide GRS80 from Wikipedia
-    const double a = 6378137.0;
+	const double a = 6378137.0;
     const double e2 =  0.006694380022903415749574948586289306212443890;
     const double e = sqrt(e2);
     

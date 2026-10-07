@@ -26,7 +26,7 @@
 /*! \ingroup MathematicalConcepts 
 	@{*/
 //! Abstract class for Coordinate System
-class TACoordinateSystem : public TVCoordinateSystem //: public TObject
+class TACoordinateSystem : public TVCoordinateSystem
 {
 public:
 	virtual ~TACoordinateSystem() override = default;

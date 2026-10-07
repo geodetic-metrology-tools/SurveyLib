@@ -41,7 +41,7 @@ class  TSpatialOrientation;
 	@{*/
 
 //! Classe de base purement abstraite pour une transformation affine
-class  TVAffineTransformation : public TVTransformation//, public TObject  
+class  TVAffineTransformation : public TVTransformation  
 {
 public:
 	/**@name Member Functions */

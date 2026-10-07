@@ -38,7 +38,7 @@
 	@{*/
 
 //! Class for explain vector in a 2D+H cartesian coordinate system
-class	T2DCartesianPlusHSys : public  TACoordinateSystem //: public TObject
+class	T2DCartesianPlusHSys : public  TACoordinateSystem
 {
 
 public:

@@ -45,7 +45,7 @@ class  TAAffineTransformation;
 	@{*/
 
 //! Class for the matrices of rotation used for points transformations
-class  TSpatialOrientation : public TASpatialAttribute //: public TObject  
+class  TSpatialOrientation : public TASpatialAttribute  
 {
 public:
 

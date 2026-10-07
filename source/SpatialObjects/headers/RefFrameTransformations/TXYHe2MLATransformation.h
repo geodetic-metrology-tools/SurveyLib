@@ -42,7 +42,7 @@
 	@{*/
 
 //! The transformation from a XYHe projection to a modified local astronomical reference frame
-class TXYHe2MLATransformation : public TARefFrameTransformation //: public TObject
+class TXYHe2MLATransformation : public TARefFrameTransformation
 {
 public:
 	/**@name Constructors and Destructors */
