@@ -55,7 +55,6 @@ set(SpatialObject_SOURCES
 	sources/ReferenceSurfaces/TCernParabolicGeoid.cpp
 	sources/ReferenceSurfaces/TCernSphereGeoid.cpp
 	sources/ReferenceSurfaces/TGeodeticRefFrame.cpp
-	sources/ReferenceSurfaces/TGeoidValues.cpp
 	sources/ReferenceSurfaces/TGraphLocalAstronomicalRF.cpp
 	sources/ReferenceSurfaces/TGraphMLARF.cpp
 	sources/ReferenceSurfaces/TModifiedLocalAstronomicalRF.cpp
@@ -146,6 +145,7 @@ set(SpatialObject_HEADERS
 	headers/MathematicalConcepts/TScalar.h
 	headers/MathematicalConcepts/TSparseMatrix.h
 	headers/MathematicalConcepts/TVCoordinateSystem.h
+	headers/ReferenceSurfaces/CernGridGeoidData.h
 	headers/ReferenceSurfaces/FrenchRAF20.h
 	headers/ReferenceSurfaces/T3DLocalRefFrame.h
 	headers/ReferenceSurfaces/TA2DPlus1MapProjection.h
@@ -158,7 +158,6 @@ set(SpatialObject_HEADERS
 	headers/ReferenceSurfaces/TCernParabolicGeoid.h
 	headers/ReferenceSurfaces/TCernSphereGeoid.h
 	headers/ReferenceSurfaces/TGeodeticRefFrame.h
-	headers/ReferenceSurfaces/TGeoidValues.h
 	headers/ReferenceSurfaces/TGraphLocalAstronomicalRF.h
 	headers/ReferenceSurfaces/TGraphMLARF.h
 	headers/ReferenceSurfaces/TLambert93Projection.h
@@ -169,11 +168,9 @@ set(SpatialObject_HEADERS
 	headers/ReferenceSurfaces/TNotInGeoidGridException.h
 	headers/ReferenceSurfaces/TNotInLepGridException.h
 	headers/ReferenceSurfaces/TReferenceEllipsoid.h
-	headers/ReferenceSurfaces/TReferenceFrameServer.h
 	headers/ReferenceSurfaces/TRGF93CC46Projection.h
 	headers/ReferenceSurfaces/TTerrestrialReferenceFrame.h
 	headers/ReferenceSurfaces/TTransverseMercatorProjection.h
-	headers/ReferenceSurfaces/TVGeoidModel.h
 	headers/ReferenceSurfaces/TVReferenceFrame.h
 	headers/ReferenceSurfaces/TX0Y0HeProjection.h
 	headers/ReferenceSurfaces/TXYHeProjection.h

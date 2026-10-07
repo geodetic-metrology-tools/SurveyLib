@@ -37,7 +37,7 @@
 	@{*/
 
 //! A Geocentric terrestrial Reference Frame
-class TTerrestrialReferenceFrame : public TGeodeticRefFrame //: public TObject  
+class TTerrestrialReferenceFrame : public TGeodeticRefFrame  
 {
 
 public:

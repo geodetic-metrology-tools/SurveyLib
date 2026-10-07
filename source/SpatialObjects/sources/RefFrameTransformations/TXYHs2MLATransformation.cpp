@@ -25,6 +25,7 @@
 #include  "TReferenceEllipsoid.h"
 #include  "TXYHs2MLATransformation.h"
 #include  "TMLA2XYHsTransformation.h"
+#include  "GeodeticConstants.h"
 ////////////////////////////////////////////////////////////////
 
 
@@ -110,7 +111,7 @@ bool  TXYHs2MLATransformation::transform(TPositionVector& pv) const
 	TReal dx, dy, hs, d;
 	TReal d0, omega;
 	// radius of the sphere
-	TReal R = LITERAL(6371000.0);
+	TReal R = LITERAL(sphereRadius);
 	// transform TPositionVector
 	TReal Z;
 
@@ -123,7 +124,7 @@ bool  TXYHs2MLATransformation::transform(TPositionVector& pv) const
 	//Z = sqrtq( (powq((R+hs),2) - (powq(d,2))) )-  R + LITERAL(2000.00079);
 	d0 = d * R / (R + hs);
 	omega = asinq(d0 / R);
-	Z = LITERAL(2000.00079) + (hs * cosq(omega)) - (d0 * tanq(omega/LITERAL(2.0)));
+	Z = LITERAL(Zoffset) + (hs * cosq(omega)) - (d0 * tanq(omega / LITERAL(2.0)));
 
 	TLength newZ (Z);
 

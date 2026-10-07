@@ -41,7 +41,7 @@ Patterns:
 @{*/
 
 //! The transformation from a modified local astronomical reference frame to a XYHs projection
-class TMLA2XYHsTransformation : public TARefFrameTransformation //: public TObject
+class TMLA2XYHsTransformation : public TARefFrameTransformation
 {
 public:
 	/*!@name Constructors and Destructors */

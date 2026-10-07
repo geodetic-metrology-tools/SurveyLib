@@ -8,7 +8,7 @@
 
 /** Geoid in CERN's area interpolated trought a grid of values
 
-	Concrete Class derived from TVGeoid.
+	Concrete Class derived from TAGeoidModel.
 
 
     Patterns:
@@ -46,8 +46,8 @@ class	TRefSystemFactory;
 /*! \ingroup spatialobjects
 	@{*/
 
-//! Concrete Class derived from TVGeoid
-class  TCernGridGeoid : public TAGeoidModel //: public TObject  
+//! Concrete Class derived from TAGeoidModel
+class  TCernGridGeoid : public TAGeoidModel  
 {
 public:
 
@@ -59,10 +59,16 @@ public:
 		TCernGridGeoid();
 		
 		/// constructor taking the name, the definition reference frame and ellipsoid, and the calculation reference frame
-		TCernGridGeoid( const std::string& name,
-			const TMatrix* N, const TMatrix* Eta, const TMatrix* Xsi,
-			const TPositionVector downLeft, const TPositionVector upRight,
-			TAReferenceFrame* def, TReferenceEllipsoid* ell, TAReferenceFrame* calc);
+		TCernGridGeoid(const std::string &name,
+			const TRefSystemFactory::EGeoid &geoidId,
+			const TMatrix *N,
+			const TMatrix *Eta,
+			const TMatrix *Xsi,
+			const TPositionVector downLeft,
+			const TPositionVector upRight,
+			TAReferenceFrame *def,
+			TReferenceEllipsoid *ell,
+			TAReferenceFrame *calc);
 		
 		/// Destructor
 		virtual  ~TCernGridGeoid();
@@ -80,38 +86,8 @@ public:
 		/// Returns the deflection of the vertical in the meridian at the given Point's position	
 		virtual  TAngle  getXi( const TSpatialPosition& ) const;
 		
-		/// Returns the Laplace correction at the given Point's position	
-		virtual  TAngle  getDAlpha( const TSpatialPosition& ) const;
-
 		/// Returns the Laplace correction at the given Point's position (phi is given)	
 		virtual  TAngle  getDAlpha( const TSpatialPosition&, const TAngle& ) const;
-
-		/// Returns the name of the geoid
-		virtual  std::string	 getName()  const { return fName; }
-
-		/// Set the definiton reference frame
-		void setDefRefFrame(TAReferenceFrame* def) { fDefRFPtr = def; return; }
-
-		/// Set the definition reference ellipsoid
-		void setRefEll(TReferenceEllipsoid* ell) { fDefEllPtr = ell; return; }
-
-		/// Set the Calculation Reference Frame
-		void setCalcRefFrame(TAReferenceFrame* calc) { fCalcRFPtr = calc; return; }
-
-		/// Get the definition reference frame
-		virtual TAReferenceFrame* getDefRefFrame() const { return fDefRFPtr; }
-
-		/// Get the definition reference ellipsoid
-		virtual TReferenceEllipsoid* getDefRefEll() const { return fDefEllPtr; }
-
-		/// Get the calculation reference frame
-		virtual TAReferenceFrame* getCalcRefFrame() const { return fCalcRFPtr; }
-
-		/// Set the geoid identifier as an enum type
-		void setGeoidId(const TRefSystemFactory::EGeoid);
-
-		/// Return the geoid identifier
-		virtual TRefSystemFactory::EGeoid getGeoidId() const { return fGeoidId; }
 
 		/// Return true if the point is in the grid
 		bool isInGrid(const TSpatialPosition& point) const;
@@ -122,13 +98,18 @@ private:
 
 	/**@name Private Functions */
 	//@{
-		/*!used to interpolate N*/
-		TReal splineInterpolation(const TMatrix& mat, const TSpatialPosition& spos) const;
+		/*!used to interpolate Eta and Xi*/
+		TAngle interpolateDoV(const TMatrix &dovMatrix, const TSpatialPosition &sp, const std::string &functionCalled) const;
+
+		/*!used to interpolate*/
+		TReal splineInterpolation(const TMatrix &mat, const TSpatialPosition &spos) const;
+	
+		/*!Generate message for the NotInLepGridException*/
+		std::stringstream generateNotInLepGridMessage(const std::string &functionCalled, const TSpatialPosition &position) const;
 	//@}
 	
 	/**@name Member Attributes */
 	//@{
-		std::string						fName; /*!< name  */
 			
 		TMatrix						fNMatrix; /*!< N-matrix */
 		TMatrix						fEtaMatrix; /*!< Eta-matrix */
@@ -137,12 +118,6 @@ private:
 		TPositionVector				fDownLeft; /*!< position vector  */
 		TPositionVector				fUpRight; /*!< position vector  */
 		
-		TAReferenceFrame*			fDefRFPtr; /*!< pointer to the def. reference frame  */
-		TReferenceEllipsoid*		fDefEllPtr; /*!< pointer to the reference ellispoid  */
-		TAReferenceFrame*			fCalcRFPtr; /*!< pointer to the  calc. reference frame */
-
-
-		TRefSystemFactory::EGeoid		fGeoidId; /*!< geoid indentifier */
 	//@}
 
 

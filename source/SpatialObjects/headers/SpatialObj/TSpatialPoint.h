@@ -31,7 +31,7 @@ class  TAReferenceFrame;
 	@{*/
 
 //! Class for a spatial point. The current pointed-to spatial position will be deleted
-class	TSpatialPoint //: public TObject
+class	TSpatialPoint
 {
 
 public:	

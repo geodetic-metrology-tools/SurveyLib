@@ -47,7 +47,7 @@ class  TARefFrameTransformation;
 	@{*/
 
 //! A Wrapper around a spatial transformation
-class  TTransformWrapper //: public TObject  
+class  TTransformWrapper  
 {
 public:
 	/**@name Constructors and Destructors */

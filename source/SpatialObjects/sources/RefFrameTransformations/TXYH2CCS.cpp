@@ -27,7 +27,7 @@ bool  TXYH2CCS::XYHs2CCS(TPositionVector& pv)
 
 	TReal d0 = d * R / (R + hs);
 	TReal omega = asinq(d0 / R);
-	TReal Z = LITERAL(2000.00079) + (hs * cosq(omega)) - (d0 * tanq(omega/LITERAL(2.0)));
+	TReal Z = LITERAL(Zoffset) + (hs * cosq(omega)) - (d0 * tanq(omega / LITERAL(2.0)));
 
 	// change the coordinate system of the position vector
 	pv.setCoordSys(TCoordSysFactory::k3DCartesian);
@@ -42,14 +42,14 @@ bool  TXYH2CCS::CCS2XYHs(TPositionVector& pv)
 	TReal dx, dy, dz, d;
 	TReal d0, omega;
 	// radius of the sphere
-	TReal R = 6371000;	
+	TReal R = sphereRadius;	
 	// transform TPositionVector
 	TReal H;
 
 	//distance from P0 in XY-plane
    dx = pv.getX().getMetresValue() - XP0;
    dy = pv.getY().getMetresValue() - YP0;
-   dz = pv.getZ().getMetresValue() - ZP0 + HP0;
+   dz = pv.getZ().getMetresValue() - Zoffset;
 	d=sqrtq( (powq(dx,2)) + (powq(dy,2)) );
 
 	omega = atanq(d / (R+dz));

@@ -8,7 +8,7 @@
 
 /** Paraboloid defined to model the geoid in CERN's area
 
-	Concrete Class derived from TVGeoid.
+	Concrete Class derived from TAGeoidModel.
 
 
     Patterns:
@@ -45,9 +45,17 @@ class  TRefSystemFactory;
 	@{*/
 
 //! Paraboloid defined to model the geoid in CERN's area
-class  TCernParabolicGeoid : public TAGeoidModel //: public TObject  
+class  TCernParabolicGeoid : public TAGeoidModel  
 {
 public:
+	// Constants for the paraboloid as given in A SIMULATION OF THE GRAVITY FIELD AROUND LEP, p. 53 (part 2)
+	// EDMS document 308419 
+	static const TAngle angH0;
+	static const TReal aH0;
+	static const TReal bH0;
+	static const TAngle angLEP;
+	static const TReal aLEP;
+	static const TReal bLEP;
 
 	/**@name Constructors and Destructors */
 	//@{
@@ -71,10 +79,8 @@ public:
 
 		TCernParabolicGeoid();
 
-		//TCernParabolicGeoid( const string& name, const TReal a, const TReal b, const TReal ths);
+		TCernParabolicGeoid(const std::string &name, const TRefSystemFactory::EGeoid &geoidId, const TReal a, const TReal b, const TAngle ths, TAReferenceFrame *def, TReferenceEllipsoid *ell, TAReferenceFrame *calc);
 
-		TCernParabolicGeoid( const std::string& name, const TReal a, const TReal b, const TReal ths,
-			TAReferenceFrame* def, TReferenceEllipsoid* ell, TAReferenceFrame* calc);
 
 		/// Destructor
 		virtual  ~TCernParabolicGeoid();
@@ -87,60 +93,29 @@ public:
 		virtual  TLength  getN( const TSpatialPosition& ) const;
 		
 		/// Returns the deflection of the vertical in the prime vertical at the given Point's position	
-		virtual  TAngle  getEta( const TSpatialPosition& ) const;
-		
+		virtual TAngle getEta(const TSpatialPosition &) const;
+	
 		/// Returns the deflection of the vertical in the meridian at the given Point's position	
 		virtual  TAngle  getXi( const TSpatialPosition& ) const;
-		
-		/// Returns the Laplace correction at the given Point's position	
-		virtual  TAngle  getDAlpha( const TSpatialPosition& ) const;
 
 		/// Returns the Laplace correction at the given Point's position	
-		virtual  TAngle  getDAlpha( const TSpatialPosition&, const TAngle& ) const;
-
-		/// Returns the name of the geoid
-		virtual  std::string	 getName()  const { return fName; }
-
-		/// Get the definition reference frame
-		virtual TAReferenceFrame* getDefRefFrame() const { return fDefRFPtr; }
-
-		/// Get the definition reference ellipsoid
-		virtual TReferenceEllipsoid* getDefRefEll() const { return fDefEllPtr; }
-
-		/// Get the calculation reference frame
-		virtual TAReferenceFrame* getCalcRefFrame() const { return fCalcRFPtr; }
-
-		/// return the geoid identifier
-		virtual  TRefSystemFactory::EGeoid  getGeoidId()  const { return fGeoidId; }
-
-		/// set the geoid identifier as an enum type
-		virtual  void  setGeoidId( const TRefSystemFactory::EGeoid geoidId ) { fGeoidId = geoidId; return; }
+		virtual TAngle getDAlpha(const TSpatialPosition &, const TAngle &) const;
 
 	//@}
 
 private:
+		// member functions
+	void computeLocalParaboloidCoordinates(const TSpatialPosition &sp, TReal &xp, TReal &yp) const;
 
 	//constants
 	static const TReal scaleFactor;
 	static const TReal scaleFactorM;
-	
-	
+
 	// member attributes
-	std::string  fName;
 	TReal  fA;
 	TReal  fB;
 	TReal  fThs;
 	TReal  costhc, cosazp, sinthc, sinazp;
-
-	TAReferenceFrame*			fDefRFPtr;
-	TReferenceEllipsoid*		fDefEllPtr;
-	TAReferenceFrame*			fCalcRFPtr;
-
-
-	TRefSystemFactory::EGeoid		fGeoidId;
-	
-
-	//ClassDef(TCernParabolicGeoid, 1)
 };
 /*@}*/
 

@@ -48,7 +48,7 @@ class	TGraph;
 
 
 //Class definition
-class  TAModifiedLocalAstronomicalRF : public TA3DEuclideanRefFrame //: public TObject  
+class  TAModifiedLocalAstronomicalRF : public TA3DEuclideanRefFrame  
 {
 public:
 	

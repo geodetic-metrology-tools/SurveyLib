@@ -25,7 +25,7 @@
 	@{*/
 
 //! The definition of the transformation between a local (usually CAD) system and the CCS
-class TLocal2CCSTransformation : public THelmertRefFrameTransform //: public TObject
+class TLocal2CCSTransformation : public THelmertRefFrameTransform
 {
 public:
 	/**@name Constructors and Destructors */

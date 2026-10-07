@@ -30,7 +30,7 @@
 #include  "TRotation.h"
 #include  "TGC2LGTransformation.h"
 #include  "TLG2GCTransformation.h"
-
+#include  "GeodeticConstants.h"
 
 
 //////////////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ TModifiedLocalGeodeticRF::TModifiedLocalGeodeticRF( const std::string& name,
 		alpha.sine(), TCoordSysFactory::k3DCartesian);
 	//unitVector.setElements(vector);
 
-	TAngle azcern(LITERAL(37.77864) * GON2RAD);
+	TAngle azcern(LITERAL(AzimuthCCSYaxis) * GON2RAD);
 	TAngle phiP0, lambdaP0;
 	TVReferenceFrame* rf = TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS);
 	phiP0 = rf->getOrigin().getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();

@@ -33,6 +33,7 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <memory>
 #include <stddef.h>
 
 class TAGeoidModel;
@@ -41,19 +42,20 @@ class TAReferenceFrame;
 class TGeodeticRefFrame;
 class TTerrestrialReferenceFrame;
 class TModifiedLocalAstronomicalRF;
-
+class TModifiedLocalGeodeticRF;
+class THelmertRefFrameTransform;
+class TCernGridGeoid;
 class TARefFrameTransformation;
 class TSpatialPosition;
+class TScaleFactor;
 
 #include <TLocalSystemOrigin.h>
-//
-//
+#include <TNotInGraphException.h>
+
 ////////////////////////////////////////////////////////////////
 
 /*!\ingroup spatialobjects
 	@{*/
-
-//#define PHIP0 LITERAL(51.3692);
 
 //! Singleton class: produce one unique instance listing ref. surfaces, ref.frames and transformations
 class TRefSystemFactory
@@ -187,8 +189,6 @@ public:
 		/*! Instance method to obtain a pointer to the TRefSystemFactory instance */
 		static TRefSystemFactory* getRefSystemFactory();	
 		
-		void	deleteRefSystemFactory();
-
 		/*! Return a pointer to the geoid asked for 
 		\param geoidId an element of the existing geoid enumeration */
 		TAGeoidModel* getGeoid(const EGeoid geoidId);
@@ -253,10 +253,137 @@ private:
 	//@}
 
 	void	init();
+	void initEllipsoidList();
+	void initGeoidList();
+	void addCERNprojections();
+	void addGeodeticRefFrames();
+	void addGenericETRFandITRF();
+	void addSpecificETRFandITRF();
+	void addFrenchProjections();
+	void addSwissProjections();
+	void addLocalGeodeticAndLocalAstronomic();
+	void addLocalCADRefFrames();
+	void addCERNrefFrameTransformation();
+	void addTerrestrialRefFramesTransformations();
+	void addCERNprojectionsTransformations();
+	void addFrenchTransformations();
+	void addSwissTransformations();
+	void addLocalRefFrameTransformations();
+	void addTrf2TrfTransformationPair(const ERefFrameTransform &in2out,
+		const ERefFrameTransform &out2in,
+		TTerrestrialReferenceFrame *from,
+		TTerrestrialReferenceFrame *to);
 
+	TModifiedLocalGeodeticRF* createModifiedLocalGeodeticRF(TGeodeticRefFrame* refFrame, const std::string &frameName, const TAngle &phi_origine, const TAngle &lambda_origin, const TLength &h_origin);
+	THelmertRefFrameTransform* createHelmertRefFrameTransform(TAReferenceFrame *from, TAReferenceFrame *to, const TAngle &rX, const TAngle &rY, const TAngle &rZ, const TLength &tX, const TLength &tY, const TLength &tZ, const TScaleFactor &scaleFactor);
 	/*! Copy Assigment Operator */
 	TRefSystemFactory& operator=( const TRefSystemFactory& );
 
+	/*! Add an object to a list of unique pointers, forwarding the arguments to the constructor of the object */
+	template<typename T, typename... Args>
+	void addObject(std::vector<T*> &list, Args &&...args)
+	{
+		list.push_back(new T(std::forward<Args>(args)...));
+	}
+
+	/*! Create object, set Id and add to list*/
+	template<typename T, typename ListT, typename IdT, typename... Args>
+	void createObjectSetIdAndAddToList(IdT id, ListT &list, Args &&...args)
+	{
+		T *obj = new T(std::forward<Args>(args)...);
+		setIdAndAddToList(obj, id, list);
+	}
+
+	/*! Set Id and add to the list */
+	template<typename ListT, typename T, typename IdT>
+	void setIdAndAddToList(T *obj, IdT id, ListT &list)
+	{
+		obj->setId(id);
+		list.push_back(obj);
+	}
+
+	/*! Create and add a transformation and its inverse to the list, setting their Ids */
+	template<typename TTransfomation, typename... Args>
+	void addTransformationPair(ERefFrameTransform forwardId, ERefFrameTransform inverseId, Args &&...args)
+	{
+		auto *forwardTransformation = new TTransfomation(std::forward<Args>(args)...);
+		setIdAndAddToList(forwardTransformation, forwardId, fTransformList);
+
+		auto *inverseTransformation = forwardTransformation->inverse();
+		setIdAndAddToList(inverseTransformation, inverseId, fTransformList);
+	}
+
+	/*! Add a transformation and its inverse to the list, setting their Ids */
+	template<typename T, typename ListT, typename IdT>
+	TARefFrameTransformation *addTransformationAndInverse(T *forward, IdT forwardId, IdT inverseId, ListT &list)
+	{
+		setIdAndAddToList(forward, forwardId, list);
+
+		auto *inverse = forward->inverse();
+		setIdAndAddToList(inverse, inverseId, list);
+
+		return inverse;
+	}
+
+	/*! Matrix creation helper*/
+	template<size_t row, size_t col>
+	std::unique_ptr<TMatrix> makeMatrix(const std::array<std::array<TReal, col>, row> &src)
+	{
+		auto m = std::make_unique<TMatrix>(row, col);
+
+		for (size_t i = 0; i < row; ++i)
+			for (size_t j = 0; j < col; ++j)
+				(*m)(static_cast<int>(i), static_cast<int>(j)) = src[i][j];
+
+		return m;
+	}
+
+	/*! Geoid grid creation helper*/
+	template<size_t row, size_t col>
+	TCernGridGeoid *createCernGridGeoid(const std::string &name,
+		const std::array<std::array<TReal, col>, row> &n,
+		const std::array<std::array<TReal, col>, row> &eta,
+		const std::array<std::array<TReal, col>, row> &xsi,
+		const TPositionVector &dl,
+		const TPositionVector &ur,
+		const TRefSystemFactory::EGeoid geoidId)
+	{
+		auto N = makeMatrix(n);
+		auto Eta = makeMatrix(eta);
+		auto Xsi = makeMatrix(xsi);
+
+		TCernGridGeoid *g = new TCernGridGeoid(name, geoidId, N.release(), Eta.release(), Xsi.release(), dl, ur, getRefFrame(TRefSystemFactory::kCGRF),
+			getEllipsoid(TRefSystemFactory::kGRS80), getRefFrame(TRefSystemFactory::kCCS));
+
+		return g;
+	}
+
+	/*! Retrieve element from a list*/
+	template<typename T, typename IdT>
+	T* getElementFromList(const std::vector<T*>& list, const IdT id, const std::string& listname)
+	{ // return a pointer to the element asked for
+
+		for (T* elem : list)
+		{
+			if (elem->getId() == id)
+				return elem;
+		}
+
+		std::cerr << "Error : Id. not in " + listname << std::endl;
+		throw TNotInGraphException("TNotInGraphException");
+	}
+
+	template<typename T>
+	T* getRefFrame(ERefFrame id)
+	{
+		TAReferenceFrame *base = getRefFrame(id); // existing function
+		T *typed = dynamic_cast<T *>(base);
+
+		if (!typed)
+			throw std::bad_cast();
+
+		return typed;
+	}
 	
 private:
 	static TRefSystemFactory* fRefSystemFactory; /*!< static member that contains a pointer to the unique instance of TRefSystemFactory */
@@ -268,8 +395,6 @@ private:
 	std::vector<TAReferenceFrame*> fLocalRefFrameList; /*!< list of pointers to the local Ref.Frames */
 
 	std::vector<TARefFrameTransformation*> fTransformList; /*!< list of pointers to the to-be-defined Ref.Frame transformations */
-	//il est important que ce soit une classe TA plutot que TV pour avoir acces au destructeur
-
 
 	TGeodeticRefFrame *fCGRF = nullptr;
 	TGeodeticRefFrame *fCGRFSphere = nullptr;

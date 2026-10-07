@@ -104,12 +104,12 @@ bool TLocal2CCSTransformation::transform(TPositionVector &pv) const
 
 	if (isInitialised())
 
-		if (fFrom->getRefFrameId() == TRefSystemFactory::ERefFrame::kLocalRFin && fTo->getRefFrameId() == TRefSystemFactory::ERefFrame::kCCS)
+		if (fFrom->getId() == TRefSystemFactory::ERefFrame::kLocalRFin && fTo->getId() == TRefSystemFactory::ERefFrame::kCCS)
 		{
 			auto *cad = dynamic_cast<TLocalRFWithTransformationMatrix *>(fFrom);
 			result = setMatrixFromFile(cad->getPathToTransformationMatrix(), fTranslationUnit).transform(pv);
 		}
-		else if (fFrom->getRefFrameId() == TRefSystemFactory::ERefFrame::kCCS && fTo->getRefFrameId() == TRefSystemFactory::ERefFrame::kLocalRFout)
+		else if (fFrom->getId() == TRefSystemFactory::ERefFrame::kCCS && fTo->getId() == TRefSystemFactory::ERefFrame::kLocalRFout)
 		{
 			auto *cad = dynamic_cast<TLocalRFWithTransformationMatrix *>(fTo);
 			result = setMatrixFromFile(cad->getPathToTransformationMatrix(), fTranslationUnit).transform(pv);

@@ -37,10 +37,10 @@ class  TVReferenceFrame;
 	@{*/
 #if	USE_SERIALIZER
 //! Class storing the statuses of objects related to a 3D position
-class TSpatialStatus : public Serializable //: public TObject
+class TSpatialStatus : public Serializable
 #else
 //! Class storing the statuses of objects related to a 3D position
-class TSpatialStatus //: public TObject
+class TSpatialStatus
 #endif // USE_SERIALIZER
 
 {

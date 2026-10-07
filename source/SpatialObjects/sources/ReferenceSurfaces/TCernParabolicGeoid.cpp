@@ -13,7 +13,7 @@
 ////////////////////////////////////////////////////////
 //forward declarations
 
-#include	"TGraph.h"
+#include	"GeodeticConstants.h"
 #include	"TSpatialPosition.h"
 #include	"TAReferenceFrame.h"
 #include	"TCernParabolicGeoid.h"
@@ -21,24 +21,24 @@
 #include	"TLength.h"
 #include	"TAngle.h"
 
-////////////////////////////////////////////////////////////////
-
-//ClassImp(TCernParabolicGeoid)
-
-
 
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
 //////////////////////////////////////////////////////////////////////
 const TReal TCernParabolicGeoid::scaleFactor = LITERAL(0.001);
 const TReal TCernParabolicGeoid::scaleFactorM = LITERAL(0.01);
+const TAngle TCernParabolicGeoid::angH0 = TAngle(LITERAL(48.772), TAngle::kGons);
+const TReal TCernParabolicGeoid::aH0 = LITERAL(0.535);
+const TReal TCernParabolicGeoid::bH0 = -LITERAL(0.096);
+const TAngle TCernParabolicGeoid::angLEP = TAngle(LITERAL(48.219), TAngle::kGons);
+const TReal TCernParabolicGeoid::aLEP = LITERAL(0.614);
+const TReal TCernParabolicGeoid::bLEP = -LITERAL(0.106);
 
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-TCernParabolicGeoid::TCernParabolicGeoid() :fName(""), fDefRFPtr(0),
-fCalcRFPtr(0), fDefEllPtr(0)
+TCernParabolicGeoid::TCernParabolicGeoid() : TAGeoidModel()
 {
 	fA = 0;
 	fB = 0;
@@ -50,7 +50,6 @@ fCalcRFPtr(0), fDefEllPtr(0)
 
 }
 
-
 /* Constructor taking the geoid model name and the parameters of the 
  *	paraboloid as arguments.
  *	
@@ -61,61 +60,27 @@ fCalcRFPtr(0), fDefEllPtr(0)
  *						2                 2
  */
 
-/*TCernParabolicGeoid::TCernParabolicGeoid( const string& name, const TReal a,
-										 const TReal b, const TReal ths)
-		:  fName( name ), fA( a ), fB( b ), fThs( ths ),
-		fDefinitionRF(TRefSurfServer::kCGRF), fDefinitionEllipsoid(TRefSurfServer::kGRS80), fCalculationRF(TRefSurfServer::kCCS)
-{		
-		// set the derived parameters of the paraboloid
-		TReal thc, azp;
-		TReal azxs = -LITERAL(1.12878) * GON2RAD;
-		TReal gsc = LITERAL(38.90742) * GON2RAD;
+TCernParabolicGeoid::TCernParabolicGeoid(const std::string &name,
+	const TRefSystemFactory::EGeoid &geoidId,
+	const TReal a,
+	const TReal b,
+	const TAngle ths,
+	TAReferenceFrame *def,
+	TReferenceEllipsoid *ell,
+	TAReferenceFrame *calc) :
+	TAGeoidModel(name, geoidId, def, ell, calc), fA(a), fB(b), fThs(ths.getRadiansValue())
+{
+	// set the derived parameters of the paraboloid (see EDMS doc 308419 85_ballPart2.pdf page 99)
+	TReal thc, azp;
+	TReal azxs = -LITERAL(1.12878) * GON2RAD; // Azimuth of the X axis of the swiss system at P0 (Xswiss), computed as the difference between gsc (38.90742) and AzimuthCCSYaxis (37.77864) 
+	TReal gsc = LITERAL(38.90742) * GON2RAD; // Bearing of Yccs with respect to Xswiss 
 
-		thc = fThs - gsc;
-		azp = fThs + azxs;
-		costhc = cosq(thc);
-		sinthc = sinq(thc);
-		cosazp = cosq(azp);
-		sinazp = sinq(azp);
-
-
-	
-	
-}
-*/
-
-
-
-
-
-TCernParabolicGeoid::TCernParabolicGeoid( const std::string& name, const TReal a,
-										 const TReal b, const TReal ths,
-										 TAReferenceFrame* def, TReferenceEllipsoid* ell,
-										 TAReferenceFrame* calc)
-		:  fName( name ), fA( a ), fB( b ), fThs( ths ),
-		fDefRFPtr(def), fDefEllPtr(ell), fCalcRFPtr(calc)
-{		
-		// set the derived parameters of the paraboloid
-		TReal thc, azp;
-		TReal azxs = -LITERAL(1.12878) * GON2RAD;
-		TReal gsc = LITERAL(38.90742) * GON2RAD;
-
-	/*	//modif du 25/07/03 pour representer le niv5 utiliser dans LGC
-		if(fThs* TAngle::radsToGonsFactor() == LITERAL(48.219))
-		{
-			thc = LITERAL(9.31158177001953) * GON2RAD;
-		//	azp = thc;
-		}
-		else
-		{
-			thc = fThs - gsc;
-		}*/
-		thc = fThs - gsc;
-		azp = fThs + azxs;
-		costhc = cosq(thc);
-		sinthc = sinq(thc);
-		cosazp = cosq(azp);
-		sinazp = sinq(azp);
+	thc = fThs - gsc; // Bearing between Xswiss and Yp (Yp = Y axis of the paraboloid)
+	azp = fThs + azxs; // Azimuth of Yp with respect to Xswiss
+	costhc = cosq(thc);
+	sinthc = sinq(thc);
+	cosazp = cosq(azp);
+	sinazp = sinq(azp);
 }
 
 
@@ -147,24 +112,8 @@ TCernParabolicGeoid::~TCernParabolicGeoid()
 
 TLength	TCernParabolicGeoid::getN( const TSpatialPosition& position ) const
 {//
-	TReal x, y;
-	TReal dx, dy, xp, yp;
-	//TSpatialPosition position( point.getPosition( modelSystem ) );
-	//GeoidValue fNValue;
-	TReal falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
-
-	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-
-	dx = (x-falseOriginX)*scaleFactor;
-	dy = (y-falseOriginY)*scaleFactor;
-
-	xp = dx*costhc-dy*sinthc;
-	yp = dx*sinthc+dy*costhc;
-
-	//TSpatialPosition position( point.getPosition( modelSystem ) );
-	//xp = (position.getXCoord()).getMetresValue();
-	//yp = (position.getYCoord()).getMetresValue();
+	TReal xp, yp;
+	computeLocalParaboloidCoordinates(position, xp, yp);
 
 	//Calculate N (separation between ellipsoid and geoid) in meters
 	TLength fNValue;
@@ -174,127 +123,59 @@ TLength	TCernParabolicGeoid::getN( const TSpatialPosition& position ) const
 
 
 TAngle	TCernParabolicGeoid::getXi( const TSpatialPosition& sp ) const
-{//
+{
+	TReal xp, yp;
+	computeLocalParaboloidCoordinates(sp, xp, yp);
 
-	// deep copy of TSpatialPosition
-	TSpatialPosition position(sp);
-
-	// RF of TSpatialPosition must be the same as the geoid CalculationRF
-	if (position.getRefFrame() != fCalcRFPtr)
-	{
-		position.transform(fCalcRFPtr);
-	}
-
-
-
-	TReal x, y;
-	TReal dx, dy, xp, yp;
-	TReal falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
-	//TSpatialPosition position( modelSystem );
+	// Calculate the vertical deflection in N-S direction  
 	TAngle fXiValue;
-
-	//position = point.getPosition( modelSystem );
-	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-
-	dx = (x-falseOriginX)*scaleFactor;
-	dy = (y-falseOriginY)*scaleFactor;
-
-	xp = dx*costhc-dy*sinthc;
-	yp = dx*sinthc+dy*costhc;
-
-// Calculate the vertical deflection in N-S direction  
 	fXiValue.setRadiansValue((fA*sinazp*xp -fB*cosazp*yp)/100000 ); //* LITERAL(6.366);
 	return fXiValue;
 
 }
 
 TAngle	TCernParabolicGeoid::getEta( const TSpatialPosition& sp ) const
-{//
-
-	// deep copy of TSpatialPosition
-	TSpatialPosition position(sp);
-
-	// RF of TSpatialPosition must be the same as the geoid CalculationRF
-	if (position.getRefFrame() != fCalcRFPtr)
-	{
-		position.transform(fCalcRFPtr);
-	}
-
-
-
-	TReal x, y;
-	TReal dx, dy, xp, yp;
-	TReal falseOriginX(2000), falseOriginY(LITERAL(2097.79265));
+{
+	TReal xp, yp;
+	computeLocalParaboloidCoordinates(sp, xp, yp);
+	
+	// Calculate the vertical deflection in E-W direction 
 	TAngle fEtaValue;
-
-	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
-	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
-
-	dx = (x-falseOriginX)*scaleFactor;
-	dy = (y-falseOriginY)*scaleFactor;
-
-	xp = dx*costhc-dy*sinthc;
-	yp = dx*sinthc+dy*costhc;
-
-// Calculate the vertical deflection in E-O direction 
 	fEtaValue.setRadiansValue((-fA*cosazp*xp -fB*sinazp*yp)/100000 ); // * LITERAL(6.366);
 	return fEtaValue;
 
 }
 
-
-
-TAngle	TCernParabolicGeoid::getDAlpha( const TSpatialPosition& sp ) const
+void TCernParabolicGeoid::computeLocalParaboloidCoordinates(const TSpatialPosition &sp, TReal &xp, TReal &yp) const
 {
+	// deep copy of TSpatialPosition transformed in same reference frame as the geoid CalculationRF
+	TSpatialPosition position = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
 
-	// deep copy of TSpatialPosition
-	TSpatialPosition position(sp);
+	TReal x, y;
+	TReal dx, dy;
+	TReal falseOriginX(XP0), falseOriginY(LITERAL(YP0));
 
-	// RF of TSpatialPosition must be the same as the geoid DefinitionRF
-	if (position.getRefFrame() != fDefRFPtr)
-	{
-		position.transform(fDefRFPtr);
-	}
+	x = position.getCoordinates(TCoordSysFactory::k3DCartesian).getX().getMetresValue();
+	y = position.getCoordinates(TCoordSysFactory::k3DCartesian).getY().getMetresValue();
 
+	dx = (x - falseOriginX) * scaleFactor;
+	dy = (y - falseOriginY) * scaleFactor;
 
-	TAngle latitude;
-	TReal phi;
-	TAngle eta, fDAlphaValue;
-	
-	latitude = position.getCoordinates(TCoordSysFactory::kGeodetic).getPhiEllipsoid();
-	phi = latitude.getRadiansValue();
-
-	// transformation in the calculation RF 
-	position.transform(fCalcRFPtr);
-
-	eta = getEta(position);
-	fDAlphaValue = eta*tanq(phi);
-	return fDAlphaValue;
+	xp = dx * costhc - dy * sinthc;
+	yp = dx * sinthc + dy * costhc;
 }
 
-TAngle	TCernParabolicGeoid::getDAlpha( const TSpatialPosition& sp, const TAngle& latitude ) const
+TAngle TCernParabolicGeoid::getDAlpha(const TSpatialPosition &sp, const TAngle &latitude) const
 {
-	TReal phi;
+	// deep copy of TSpatialPosition and check the reference frame is the same as the geoid CalculationRF
+	TSpatialPosition position = getSpatialPositionInRefFrame(sp, fCalcRFPtr); 
+
+	TReal phi = latitude.getRadiansValue();
 	TAngle eta, fDAlphaValue;
-	
-	phi = latitude.getRadiansValue();
-
-	// deep copy of TSpatialPosition
-	TSpatialPosition position(sp);
-
-	// RF of TSpatialPosition must be the same as the geoid CalculationRF
-	if (position.getRefFrame() != fCalcRFPtr)
-	{
-		position.transform(fCalcRFPtr);
-	}
-
-
 	eta = getEta(position);
-	fDAlphaValue = eta*tanq(phi);
+	fDAlphaValue = eta * tanq(phi);
 	return fDAlphaValue;
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////////

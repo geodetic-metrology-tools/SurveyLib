@@ -363,4 +363,60 @@ namespace tut
 		}
 		
 	}
+
+	// Test of MLA with CG58 and CG2000
+	// Comparison with the results given by CSGeo plugin
+	template<>
+	template<>
+	void object::test<5>()
+	{
+		set_test_name("Test Modified Local Astronomic System");
+
+		TAReferenceFrame *CCS(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+
+		// Test MLA with CG1985
+		TSpatialPosition p0 = TSpatialPosition(CCS, 2000, 2097.79265, 2433.66, k3D); 		// Coordinate of p0 in CCS
+		TSpatialPosition p1 = TSpatialPosition(CCS, 2010, 2097.79265, 2433.66, k3D);
+
+		TLocalSystemOrigin lso(p0, TAngle(100, TAngle::kGons), TAngle(0), "P0_CCS");
+		TAReferenceFrame *MLA1985(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso, TRefSystemFactory::kCG1985Machine, TRefSystemFactory::kMLA1985Machine));
+		TSpatialPosition ctrlPointP0(MLA1985, 0, 0, 0, k3D);
+		TSpatialPosition ctrlPointP1(MLA1985, 0, 10, 0, k3D);
+
+		p0.transform(MLA1985);
+		tut::ensure_equals("X coordinate of p0 in MLA1985", p0.getCoordinates(k3D).getX().getMetresValue(), ctrlPointP0.getCoordinates(k3D).getX().getMetresValue(), 1e-9);
+		tut::ensure_equals("Y coordinate of p0 in MLA1985", p0.getCoordinates(k3D).getY().getMetresValue(), ctrlPointP0.getCoordinates(k3D).getY().getMetresValue(), 1e-9);
+		tut::ensure_equals("Z coordinate of p0 in MLA1985", p0.getCoordinates(k3D).getZ().getMetresValue(), ctrlPointP0.getCoordinates(k3D).getZ().getMetresValue(), 1e-9);
+
+		p1.transform(MLA1985);
+		tut::ensure_equals("X coordinate of p1 in MLA1985", p1.getCoordinates(k3D).getX().getMetresValue(), ctrlPointP1.getCoordinates(k3D).getX().getMetresValue(), 1e-9);
+		tut::ensure_equals("Y coordinate of p1 in MLA1985", p1.getCoordinates(k3D).getY().getMetresValue(), ctrlPointP1.getCoordinates(k3D).getY().getMetresValue(), 1e-9);
+		tut::ensure_equals("Z coordinate of p1 in MLA1985", p1.getCoordinates(k3D).getZ().getMetresValue(), ctrlPointP1.getCoordinates(k3D).getZ().getMetresValue(), 1e-9);
+
+		// Test MLA with CG2000
+		TSpatialPosition origin = TSpatialPosition(CCS, 2400, 4097.79265, 2533.66, k3D);
+		TLocalSystemOrigin lsoCG200(origin, TAngle(110, TAngle::kGons), TAngle(0.1, TAngle::kRadians), "Origin");
+		TAReferenceFrame *MLA2000(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lsoCG200, TRefSystemFactory::kCG2000Machine, TRefSystemFactory::kMLA2000Machine));
+
+		TSpatialPosition p2 = TSpatialPosition(CCS, 2398.43595, 4087.91895, 2543.66319, k3D);
+		TSpatialPosition ctrlPointP2(MLA2000, 10.000002246, 0.000000678, 9.999998468, k3D);
+
+		p2.transform(MLA2000);
+		tut::ensure_equals("X coordinate of p2 in MLA2000", p2.getCoordinates(k3D).getX().getMetresValue(), ctrlPointP2.getCoordinates(k3D).getX().getMetresValue(), 1e-9);
+		tut::ensure_equals("Y coordinate of p2 in MLA2000", p2.getCoordinates(k3D).getY().getMetresValue(), ctrlPointP2.getCoordinates(k3D).getY().getMetresValue(), 1e-9);
+		tut::ensure_equals("Z coordinate of p2 in MLA2000", p2.getCoordinates(k3D).getZ().getMetresValue(), ctrlPointP2.getCoordinates(k3D).getZ().getMetresValue(), 1e-9);
+
+		// Test MLA with Sphere
+		TSpatialPosition originSphere = TSpatialPosition(CCS, 2400, 5297.792650000, 2233.660000000, k3D);
+		TLocalSystemOrigin lsoSphere(originSphere, TAngle(310, TAngle::kGons), TAngle(-0.1, TAngle::kRadians), "OriginSphere");
+		TAReferenceFrame *MLASphere(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lsoSphere, TRefSystemFactory::kCGSphere, TRefSystemFactory::kMLASphere));
+
+		TSpatialPosition p3 = TSpatialPosition(CCS, 2409.87744, 4096.23112, 2543.65989, k3D);
+		TSpatialPosition ctrlPointP3(MLASphere, -1185.369779534, -197.786759605, 309.396977181, k3D);
+
+		p3.transform(MLASphere);
+		tut::ensure_equals("X coordinate of p3 in MLASphere", p3.getCoordinates(k3D).getX().getMetresValue(), ctrlPointP3.getCoordinates(k3D).getX().getMetresValue(), 1e-9);
+		tut::ensure_equals("Y coordinate of p3 in MLASphere", p3.getCoordinates(k3D).getY().getMetresValue(), ctrlPointP3.getCoordinates(k3D).getY().getMetresValue(), 1e-9);
+		tut::ensure_equals("Z coordinate of p3 in MLASphere", p3.getCoordinates(k3D).getZ().getMetresValue(), ctrlPointP3.getCoordinates(k3D).getZ().getMetresValue(), 1e-9);
+	}
 }

@@ -25,7 +25,6 @@
 
 class  TSpatialPosition;
 
-#include "TGeoidValues.h"
 #include "TLength.h"
 #include <TAngle.h>
 #include "TRefSystemFactory.h"
@@ -35,13 +34,16 @@ class  TSpatialPosition;
 	@{*/
 
 //! Purely Abstract Base Class (Interface) for a TGeoid
-class TAGeoidModel //: public TObject  
+class TAGeoidModel  
 {
 public:
 	/**@name Constructors and Destructors */
 	//@{
 		/// default constructor
 		TAGeoidModel();
+
+		/// constructor taking the name, the definition reference frame and ellipsoid, and the calculation reference frame
+		TAGeoidModel(const std::string &name, const TRefSystemFactory::EGeoid &geoidId, TAReferenceFrame *def, TReferenceEllipsoid *ell, TAReferenceFrame *calc);
 
 		/// Destructor
 		virtual  ~TAGeoidModel();
@@ -50,41 +52,63 @@ public:
 	//!@name Member functions
 	//@{
 		/*! \Returns the geoidal undulation (geoidal height) at the given Point's position*/
-		virtual TLength getN(const TSpatialPosition&) const {TLength null; return null;}
+		virtual TLength getN(const TSpatialPosition &) const = 0;
 		
 		/*! \Returns the deflection of the vertical in the prime vertical
 		at the given Point's position*/
-		virtual TAngle getEta(const TSpatialPosition&) const {TAngle null; return null;}
+		virtual TAngle getEta(const TSpatialPosition &) const = 0;
 
 		/*!\Returns the deflection of the vertical in the meridian
 		at the given Point's position*/	
-		virtual TAngle getXi(const TSpatialPosition&) const {TAngle null; return null;}
+		virtual TAngle getXi(const TSpatialPosition &) const = 0;
 		
 		/*! \Returns the Laplace correction at the given Point's position*/	
-		virtual TAngle getDAlpha(const TSpatialPosition&) const {TAngle null; return null;}
+		TAngle getDAlpha(const TSpatialPosition &sp) const;
 
 		/*! \Returns the Laplace correction at the given Point's position
 		(phi is given)*/
 		virtual TAngle getDAlpha(const TSpatialPosition&, const TAngle&) const {TAngle null; return null;}
 
 		/*! \Returns the name of the geoid*/
-		virtual std::string	getName() const = 0;
+		std::string getName() const { return fName; }
 
 		/*! \Returns the definition reference frame*/
-		virtual TAReferenceFrame* getDefRefFrame() const {return 0;}
+		TAReferenceFrame *getDefRefFrame() const { return fDefRFPtr; }
 
 		/*! \Returns the definition reference ellipsoid*/
-		virtual TReferenceEllipsoid* getDefRefEll() const {return 0;}
+		TReferenceEllipsoid *getDefRefEll() const { return fDefEllPtr; }
 
 		/*! \Returns the calculation reference frame*/
-		virtual TAReferenceFrame* getCalcRefFrame() const {return 0;}
-
-		/*! Set the geoid identifier as an enum type*/
-		virtual void setGeoidId(const TRefSystemFactory::EGeoid geoidId) = 0;
+		TAReferenceFrame *getCalcRefFrame() const { return fCalcRFPtr; }
 
 		/*! \Returns the geoid identifier*/
-		virtual TRefSystemFactory::EGeoid  getGeoidId() const{return TRefSystemFactory::kNoGeoid;}
+		TRefSystemFactory::EGeoid getId() const { return fGeoidId; }
+
+		/// Set the definiton reference frame
+		void setDefRefFrame(TAReferenceFrame *def) { fDefRFPtr = def;}
+
+		/// Set the definition reference ellipsoid
+		void setRefEll(TReferenceEllipsoid *ell) { fDefEllPtr = ell;}
+
+		/// Set the Calculation Reference Frame
+		void setCalcRefFrame(TAReferenceFrame *calc) { fCalcRFPtr = calc;}
 	//@}
+
+protected:
+		TSpatialPosition getSpatialPositionInRefFrame(const TSpatialPosition &sp, TAReferenceFrame *refFrame) const;
+		TAngle computeLaplaceCorrection(const TSpatialPosition &position, const TAngle &latitude) const;
+
+		/**@name Member Attributes */
+		//@{
+		std::string fName; /*!< name  */
+
+		TAReferenceFrame *fDefRFPtr; /*!< pointer to the def. reference frame  */
+		TReferenceEllipsoid *fDefEllPtr; /*!< pointer to the reference ellispoid  */
+		TAReferenceFrame *fCalcRFPtr; /*!< pointer to the  calc. reference frame */
+
+		TRefSystemFactory::EGeoid fGeoidId; /*!< geoid indentifier */
+
+		//@}
 };
 
 /*@}*/

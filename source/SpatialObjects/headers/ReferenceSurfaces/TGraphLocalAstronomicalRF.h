@@ -43,7 +43,7 @@
 	@{*/
 
 //! Class for the definition of the LA intermediate system of CCSClass definition
-class  TGraphLocalAstronomicalRF : public TAModifiedLocalAstronomicalRF //: public TObject  
+class  TGraphLocalAstronomicalRF : public TAModifiedLocalAstronomicalRF  
 {
 public:
 	
