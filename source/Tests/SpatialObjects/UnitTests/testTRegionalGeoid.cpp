@@ -190,9 +190,9 @@ void object::test<6>()
 	//TAngle lambda(LITERAL(6.7285948569), TAngle::kGons);
 	//TAngle phi(LITERAL(51.3999292503), TAngle::kGons);
 	//TLength height(LITERAL(509.58316));
-	TAngle lambda(LITERAL(6.6865098047), TAngle::kGons);
-	TAngle phi(LITERAL(51.3940662456), TAngle::kGons);
-	TLength height(LITERAL(460.54006));
+	TAngle lambda(LITERAL(6.7207369070), TAngle::kGons);
+	TAngle phi(LITERAL(51.3690623476), TAngle::kGons);
+	TLength height(LITERAL(483.61856));
 
 	TPositionVector pv(TCoordSysFactory::kGeodetic);
 	pv.setPhiEllipsoid(phi);
@@ -741,6 +741,89 @@ void object::test<16>()
 
 		// Write results
 		outfile << phi.getDeciDegsValue() << "\t" << lambda.getDeciDegsValue() << "\t" << height.getMetresValue() << "\t" << Eta << "\t" << Xi << "\t" << doV << "\t"
+				<< EtaModel << "\t" << XiModel << "\t" << dovModel << "\t" << deltaEta << "\t" << deltaXi << "\t" << deltaDoV << "\n";
+	}
+
+	infile.close();
+	outfile.close();
+
+	std::cout << "Processing completed.\n";
+}
+
+template<>
+template<>
+void object::test<17>()
+{
+	set_test_name("Get Dov on CG2000 grid");
+	std::ifstream infile("Z:\\GravityField\\Geoid\\StudyExistingGeoid\\cg2000h0.txt");
+	std::ofstream outfile("Z:\\GravityField\\Geoid\\StudyExistingGeoid\\cg2000grid_FCC-geoid.txt");
+
+	if (!infile.is_open())
+	{
+		std::cerr << "Error opening input file\n";
+	}
+
+	if (!outfile.is_open())
+	{
+		std::cerr << "Error opening output file\n";
+	}
+
+	std::string line;
+
+	// Skip header
+	std::getline(infile, line);
+
+	// Write output header
+	outfile << "Point\tLatitude_ETRF93\tLongitude_ETRF93\tEllipsoidalHeight_ETRF93\tEtaCG2000h0_arcsec\tXiCG2000h0_arcsec\tCG2000h0DoV_arcsec\tEtaFCCgeoid_arcsec\tXiFCCgeoid_arcsec\tDoVFCCgeoid_"
+			   "arcsec\tDeltaEta_arcsec\tDeltaXi_arcsec\tDeltaDoV_arcsec\n";
+	outfile << std::fixed << std::setprecision(6);
+
+	// Initialize geoid model once
+
+	std::string pathToFile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\CERN\\FCC-G2025_V1.0.tif");
+	// Initialize geoid model once
+	TAReferenceFrame *ETRF93(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kETRF93));
+	TRegionalGeoid *FCC_G2025 = new TRegionalGeoid("FCC-G2025", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, ETRF93,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), ETRF93, pathToFile, 4326, GRIORA_Cubic);
+
+	while (std::getline(infile, line))
+	{
+		if (line.empty())
+			continue;
+
+		std::istringstream iss(line);
+
+		int point;
+		std::string pointID;
+		double lat, longi, h;
+		double Eta, Xi;
+		iss >> pointID >> lat >> longi >> h >> Eta >> Xi;
+		double doV = sqrt(Eta * Eta + Xi * Xi);
+
+		// Build position
+		TAngle lambda(longi, TAngle::kDeciDegs);
+		TAngle phi(lat, TAngle::kDeciDegs);
+		TLength height(h);
+		TPositionVector pv(TCoordSysFactory::kGeodetic);
+		pv.setPhiEllipsoid(phi);
+		pv.setLambdaEllipsoid(lambda);
+		pv.setH(height);
+
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
+		position.setCoordinates(pv);
+
+		// Compute model values
+		double EtaModel = FCC_G2025->getEta(position).getSecondsValue();
+		double XiModel = FCC_G2025->getXi(position).getSecondsValue();
+		double dovModel = sqrt(EtaModel * EtaModel + XiModel * XiModel);
+
+		// Differences
+		double deltaEta = EtaModel - Eta;
+		double deltaXi = XiModel - Xi;
+		double deltaDoV = dovModel - doV;
+
+		// Write results
+		outfile << pointID << "\t" << phi.getDeciDegsValue() << "\t" << lambda.getDeciDegsValue() << "\t" << height.getMetresValue() << "\t" << Eta << "\t" << Xi << "\t" << doV << "\t"
 				<< EtaModel << "\t" << XiModel << "\t" << dovModel << "\t" << deltaEta << "\t" << deltaXi << "\t" << deltaDoV << "\n";
 	}
 

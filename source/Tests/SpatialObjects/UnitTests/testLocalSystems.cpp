@@ -5,6 +5,7 @@
 #include <TAngle.h>
 #include <TLocalSystemOrigin.h>
 #include <TRefSystemFactory.h>
+#include <GeodeticConstants.h>
 
 #include <tut/tut.hpp>
 
@@ -471,4 +472,47 @@ void object::test<6>()
 	tut::ensure_equals("MLA Y coordinate of Point is 2.23", point.getCoordinates(k3D).getY().getMetresValue(), yPoint, 1e-9);
 	tut::ensure_equals("MLA Z coordinate of Point is 5.67", point.getCoordinates(k3D).getZ().getMetresValue(), zPoint, 1e-9);
 }
+
+// Test of MLA with regional geoid
+template<>
+template<>
+void object::test<7>()
+{
+	set_test_name("Modified Local Astronomic System using Regional geoid");
+
+	TAReferenceFrame *LocalRF(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+
+	// Coordinate of p0
+	TReal xOrigin = XP0;
+	TReal yOrigin = YP0;
+	TReal zOrigin = ZP0;
+	TSpatialPosition p0 = TSpatialPosition(LocalRF, xOrigin, yOrigin, zOrigin, TCoordSysFactory::k3DCartesian);
+
+	TLocalSystemOrigin lso(p0, TAngle(0), TAngle(0), "P0_CCS");
+	TAReferenceFrame *MLA(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso, TRefSystemFactory::kCUSTOMgeoid, TRefSystemFactory::kMLACustomGeoid));
+
+	TReal xPoint = 0.0;
+	TReal yPoint = 0.0;
+	TReal zPoint = 0.0;
+	TSpatialPosition point(MLA, xPoint, yPoint, zPoint, k3D);
+	point.transform(LocalRF);
+	std::cout << "Point coordinates in LocalRF: " << point.getCoordinates(k3D).getX().getMetresValue() << ", " << point.getCoordinates(k3D).getY().getMetresValue()
+			  << ", " << point.getCoordinates(k3D).getZ().getMetresValue() << std::endl;
+	tut::ensure_equals("Local X coordinate of point is 0", point.getCoordinates(k3D).getX().getMetresValue(), XP0, 1e-9);
+	tut::ensure_equals("Local Y coordinate of point is 0", point.getCoordinates(k3D).getY().getMetresValue(), YP0, 1e-9);
+	tut::ensure_equals("Local Z coordinate of point is 0", point.getCoordinates(k3D).getZ().getMetresValue(), ZP0, 1e-9);
+
+	TReal xPoint2 = 100.0;
+	TReal yPoint2 = 0.0;
+	TReal zPoint2 = 0.0;
+	TSpatialPosition point2(MLA, xPoint2, yPoint2, zPoint2, k3D);
+	point2.transform(LocalRF);
+	tut::ensure_equals("Local X coordinate of point2 is 100", point2.getCoordinates(k3D).getX().getMetresValue(), XP0 + xPoint2, 1e-9);
+	tut::ensure_equals("Local Y coordinate of point2 is 0", point2.getCoordinates(k3D).getY().getMetresValue(), YP0+yPoint2, 1e-9);
+	tut::ensure_equals("Local Z coordinate of point2 is 0", point2.getCoordinates(k3D).getZ().getMetresValue(), ZP0+zPoint2, 1e-9);
+
+
+
+}
+
 }
