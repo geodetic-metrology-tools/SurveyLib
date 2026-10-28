@@ -33,9 +33,9 @@ private:
 
 	static bool CCS2XYHs(TPositionVector &pv);
 
-	static bool XYHe2CCS(TPositionVector &pv, const	TReferenceEllipsoid* refEllipsoid);
+	static bool XYHe2CCS(TPositionVector &pv, const TReferenceEllipsoid *refEllipsoid);
 
-	static bool CCS2XYHe(TPositionVector &pv, const TReferenceEllipsoid* refEllipsoid);
+	static bool CCS2XYHe(TPositionVector &pv, const TReferenceEllipsoid *refEllipsoid);
 
 	static bool XYHg2XYHe(TPositionVector &pv, TRefSystemFactory::EGeoid geoid);
 

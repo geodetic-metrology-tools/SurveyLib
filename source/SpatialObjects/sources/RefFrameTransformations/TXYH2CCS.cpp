@@ -80,7 +80,7 @@ bool TXYH2CCS::CCS2XYHs(TPositionVector &pv)
 	TReal dx, dy, dz, d;
 	TReal d0, omega;
 	// radius of the sphere
-	TReal R = sphereRadius;	
+	TReal R = sphereRadius;
 	// transform TPositionVector
 	TReal H;
 
@@ -88,7 +88,7 @@ bool TXYH2CCS::CCS2XYHs(TPositionVector &pv)
 	dx = pv.getX().getMetresValue() - XP0;
 	dy = pv.getY().getMetresValue() - YP0;
 	dz = pv.getZ().getMetresValue() - Zoffset;
-	d = sqrtq( (powq(dx, 2)) + (powq(dy, 2)) );
+	d = sqrtq((powq(dx, 2)) + (powq(dy, 2)));
 
 	omega = atanq(d / (R + dz));
 	d0 = d * R * cosq(omega) / (R + dz);
@@ -102,7 +102,7 @@ bool TXYH2CCS::CCS2XYHs(TPositionVector &pv)
 	return true;
 }
 
-bool TXYH2CCS::XYHe2CCS(TPositionVector &pv, const TReferenceEllipsoid* refEllipsoid)
+bool TXYH2CCS::XYHe2CCS(TPositionVector &pv, const TReferenceEllipsoid *refEllipsoid)
 {
 	TReal dx, dy, he, d, d0, Dzh;
 
@@ -132,7 +132,7 @@ bool TXYH2CCS::XYHe2CCS(TPositionVector &pv, const TReferenceEllipsoid* refEllip
 	return true;
 }
 
-bool TXYH2CCS::CCS2XYHe(TPositionVector &pv, const TReferenceEllipsoid* refEllipsoid)
+bool TXYH2CCS::CCS2XYHe(TPositionVector &pv, const TReferenceEllipsoid *refEllipsoid)
 {
 	TReal dx, dy, dz, d, d0;
 
@@ -142,7 +142,7 @@ bool TXYH2CCS::CCS2XYHe(TPositionVector &pv, const TReferenceEllipsoid* refEllip
 	dz = pv.getZ().getMetresValue() - ZP0 + HP0;
 	d = sqrtq((powq(dx, 2)) + (powq(dy, 2)));
 
-	//radius of the ellipsoid at azimuth and at phiP0
+	// radius of the ellipsoid at azimuth and at phiP0
 	TReal rhoalpha = calculateRhoAlpha(dx, dy, refEllipsoid);
 
 	// angle between point and z-axis
@@ -177,7 +177,7 @@ bool TXYH2CCS::XYHe2XYHg(TPositionVector &pv, TRefSystemFactory::EGeoid geoid)
 	return true;
 }
 
-TReal TXYH2CCS::calculateRhoAlpha(const	TReal &dx, const TReal &dy, const TReferenceEllipsoid* refEllipsoid)
+TReal TXYH2CCS::calculateRhoAlpha(const TReal &dx, const TReal &dy, const TReferenceEllipsoid *refEllipsoid)
 {
 	// bearing from P0 in the XY-plane
 	TReal beta = atan2q(dx, dy);
