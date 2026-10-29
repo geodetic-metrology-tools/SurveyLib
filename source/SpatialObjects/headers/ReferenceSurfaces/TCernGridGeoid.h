@@ -87,7 +87,7 @@ public:
 		virtual  TAngle  getXi( const TSpatialPosition& ) const;
 		
 		/// Returns the Laplace correction at the given Point's position (phi is given)	
-		virtual  TAngle  getDAlpha( const TSpatialPosition&, const TAngle& ) const;
+		virtual  TAngle  getDAlpha( const TSpatialPosition&, const TAngle& ) const override;
 
 		/// Return true if the point is in the grid
 		bool isInGrid(const TSpatialPosition& point) const;
