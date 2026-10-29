@@ -99,7 +99,7 @@ public:
 		virtual  TAngle  getXi( const TSpatialPosition& ) const;
 
 		/// Returns the Laplace correction at the given Point's position	
-		virtual TAngle getDAlpha(const TSpatialPosition &, const TAngle &) const;
+		virtual TAngle getDAlpha(const TSpatialPosition &, const TAngle &) const override;
 
 	//@}
 
