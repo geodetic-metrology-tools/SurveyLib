@@ -9,7 +9,7 @@
 #include "TReferenceEllipsoid.h"
 #include "TSpatialPosition.h"
 
-bool TXYH2CCS::XYH2CCS(TPositionVector &pv, const TRefSystemFactory::EGeoid &geoid)
+bool TXYH2CCS::XYH2CCS(TPositionVector &pv, const TRefSystemFactory::EGeoid geoid)
 {
 	/*Must be in the 2D+H system*/
 	if (pv.getCoordSys() != TCoordSysFactory::k2DPlusH)
@@ -28,7 +28,7 @@ bool TXYH2CCS::XYH2CCS(TPositionVector &pv, const TRefSystemFactory::EGeoid &geo
 	return false;
 }
 
-bool TXYH2CCS::CCS2XYH(TPositionVector &pv, const TRefSystemFactory::EGeoid &geoid)
+bool TXYH2CCS::CCS2XYH(TPositionVector &pv, const TRefSystemFactory::EGeoid geoid)
 {
 	/*Must be in the 3D cartesian coordinate system*/
 	if (pv.getCoordSys() != TCoordSysFactory::k3DCartesian)
@@ -161,7 +161,7 @@ bool TXYH2CCS::CCS2XYHe(TPositionVector &pv, const TReferenceEllipsoid *refEllip
 	return true;
 }
 
-bool TXYH2CCS::XYHg2XYHe(TPositionVector &pv, TRefSystemFactory::EGeoid geoid)
+bool TXYH2CCS::XYHg2XYHe(TPositionVector &pv, const TRefSystemFactory::EGeoid geoid)
 { // Transformation of a position vector using N (height above geoid)
 	TLength h = pv.getH();
 
@@ -169,7 +169,7 @@ bool TXYH2CCS::XYHg2XYHe(TPositionVector &pv, TRefSystemFactory::EGeoid geoid)
 	return true;
 }
 
-bool TXYH2CCS::XYHe2XYHg(TPositionVector &pv, TRefSystemFactory::EGeoid geoid)
+bool TXYH2CCS::XYHe2XYHg(TPositionVector &pv, const TRefSystemFactory::EGeoid geoid)
 {
 	TLength h = pv.getH();
 
@@ -190,7 +190,7 @@ TReal TXYH2CCS::calculateRhoAlpha(const TReal &dx, const TReal &dy, const TRefer
 	return refEllipsoid->getEuler(PhiP0RAD, azimuth);
 }
 
-TLength TXYH2CCS::getN(const TPositionVector &pv, TRefSystemFactory::EGeoid geoid)
+TLength TXYH2CCS::getN(const TPositionVector &pv, const TRefSystemFactory::EGeoid geoid)
 {
 	// extraction of N using a tspatialposition of coordinates = pv, and reference frame = CCS
 	TSpatialPosition spaPos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS), pv);

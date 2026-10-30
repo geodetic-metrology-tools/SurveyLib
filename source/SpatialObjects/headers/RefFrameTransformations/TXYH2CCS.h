@@ -24,9 +24,9 @@ class TReferenceEllipsoid;
 class TXYH2CCS
 {
 public:
-	static bool XYH2CCS(TPositionVector &pv, const TRefSystemFactory::EGeoid &geoid);
+	static bool XYH2CCS(TPositionVector &pv, const TRefSystemFactory::EGeoid geoid);
 
-	static bool CCS2XYH(TPositionVector &pv, const TRefSystemFactory::EGeoid &geoid);
+	static bool CCS2XYH(TPositionVector &pv, const TRefSystemFactory::EGeoid geoid);
 
 private:
 	static bool XYHs2CCS(TPositionVector &pv);
@@ -37,13 +37,13 @@ private:
 
 	static bool CCS2XYHe(TPositionVector &pv, const TReferenceEllipsoid *refEllipsoid);
 
-	static bool XYHg2XYHe(TPositionVector &pv, TRefSystemFactory::EGeoid geoid);
+	static bool XYHg2XYHe(TPositionVector &pv, const TRefSystemFactory::EGeoid geoid);
 
-	static bool XYHe2XYHg(TPositionVector &pv, TRefSystemFactory::EGeoid geoid);
+	static bool XYHe2XYHg(TPositionVector &pv, const TRefSystemFactory::EGeoid geoid);
 
 	static TReal calculateRhoAlpha(const TReal &dx, const TReal &dy, const TReferenceEllipsoid *refEllipsoid);
 
-	static TLength getN(const TPositionVector &pv, TRefSystemFactory::EGeoid geoid);
+	static TLength getN(const TPositionVector &pv, const TRefSystemFactory::EGeoid geoid);
 };
 
 #endif // TXYHs2CCS.h

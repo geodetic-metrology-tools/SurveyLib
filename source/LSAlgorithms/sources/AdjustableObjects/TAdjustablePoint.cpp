@@ -41,10 +41,8 @@ TAdjustablePoint::TAdjustablePoint(const TPositionVector &pos, bool isXfixed, bo
 {
 	if (pos.getCoordSys() == TCoordSysFactory::k2DPlusH)
 	{
-		if (fReferential != TRefSystemFactory::ERefFrame::kNotInGraph && fGeoid != TRefSystemFactory::EGeoid::kNoGeoid)
-		{
-			TXYH2CCS::XYH2CCS(fEstimatedValue, fGeoid);
-		}
+		TXYH2CCS::XYH2CCS(fEstimatedValue, fGeoid);
+
 		// If referential is a 2D+H system and H is fixed, than set fHfixed to TRUE, because we need to resetting original H when setting contributions
 		if (isZHfixed == true)
 			fHfixed = true;
