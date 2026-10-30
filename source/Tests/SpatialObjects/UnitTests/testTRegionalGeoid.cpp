@@ -33,51 +33,6 @@ template<>
 template<>
 void object::test<1>()
 {
-	const std::string filename("C:\\Users\\bweyer\\Downloads\\AUSGeoid2020_20180201.gsb");
-	GDALAllRegister();
-
-	GDALDataset *dataset = static_cast<GDALDataset *>(GDALOpen(filename.c_str(), GA_ReadOnly));
-
-	if (!dataset)
-	{
-		std::cerr << "Failed to open file\n";
-		return;
-	}
-
-	std::cout << "Size: " << dataset->GetRasterXSize() << " x " << dataset->GetRasterYSize() << "\n";
-	std::cout << "SRS: " << dataset->GetSpatialRef()->GetName() << "\n";
-	std::cout << "ProjectionRef: " << dataset->GetProjectionRef() << "\n";
-	double geoidHeight = 0.0;
-	OGRSpatialReference src, dst;
-	src.SetWellKnownGeogCS("WGS84");
-	dst.importFromWkt(dataset->GetProjectionRef());
-
-	src.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-	dst.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-
-	auto *ct = OGRCreateCoordinateTransformation(&src, &dst);
-
-	double x = 140.333;
-	double y = -31.6989;
-
-	// ct->Transform(1, &x, &y);
-
-	// Now interpolate WITHOUT CRS
-	dataset->GetRasterBand(1)->InterpolateAtGeolocation(x, y, &src, GRIORA_Bilinear, &geoidHeight);
-
-	OGRSpatialReference srs;
-	srs.SetWellKnownGeogCS("WGS84");
-	// srs.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-	dataset->GetRasterBand(1)->InterpolateAtGeolocation(y, x, &srs, GRIORA_Bilinear, &geoidHeight);
-	std::cout << "bilinear geoid height: " << geoidHeight << "\n";
-
-	GDALClose(dataset);
-}
-
-template<>
-template<>
-void object::test<2>()
-{
 	set_test_name("Test with australian geoid");
 	const double tolHeight = 1e-3;
 	const double tolDoV = 1e-2;
@@ -100,9 +55,6 @@ void object::test<2>()
 	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95));
 	position.setCoordinates(pv);
 
-	std::cout << "N: " << AUSGeoid2020->getN(position).getMetresValue() << "\n";
-	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
-	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << "\n";
 	ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), 0.419, tolHeight);
 	ensure_equals("Eta", AUSGeoid2020->getEta(position).getSecondsValue(), -10.22, tolDoV);
 	ensure_equals("Xi", AUSGeoid2020->getXi(position).getSecondsValue(), -2.97, tolDoV);
@@ -213,7 +165,6 @@ template<>
 template<>
 void object::test<7>()
 {
-	tut::skip();
 	set_test_name("Test with australian geoid");
 	const double tolHeight = 1e-3;
 	const double tolDoV = 1e-2;
