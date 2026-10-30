@@ -38,9 +38,9 @@ void object::test<1>()
 	const double tolDoV = 1e-2;
 	std::string pathToFile("C:\\Users\\bweyer\\Downloads\\AUSGeoid2020_20180201.gsb");
 	// Initialize geoid model once
-	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kITRFin));
-	TRegionalGeoid *AUSGeoid2020 = new TRegionalGeoid("AUSGeoid2020", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
-		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, pathToFile, 4326, GRIORA_Cubic);
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
+	TRegionalGeoid *AUSGeoid2020 = new TRegionalGeoid("AUSGeoid2020", TRefSystemFactory::EGeoid::kCUSTOMgeoid, WGS84,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kWGSEll), WGS84, pathToFile, 4326, GRIORA_Cubic);
 
 	// Coordinate of a point in Australia 325.02592363760 (34.97407636240S)    138.70887100110E    727.2197 ellipsoidalHeight
 	// comparison with results given by the online tool https://geodesyapps.ga.gov.au/ausgeoid2020
@@ -52,8 +52,16 @@ void object::test<1>()
 	pv.setLambdaEllipsoid(lambda);
 	pv.setH(h);
 
-	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95));
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
 	position.setCoordinates(pv);
+
+	std::cout << "N: " << AUSGeoid2020->getN(position).getMetresValue() << std::endl;
+	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << std::endl;
+	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << std::endl;
+	std::cout << "DoV: "
+			  << sqrt(AUSGeoid2020->getEta(position).getSecondsValue() * AUSGeoid2020->getEta(position).getSecondsValue()
+					 + AUSGeoid2020->getXi(position).getSecondsValue() * AUSGeoid2020->getXi(position).getSecondsValue())
+			  << std::endl;
 
 	ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), 0.419, tolHeight);
 	ensure_equals("Eta", AUSGeoid2020->getEta(position).getSecondsValue(), -10.22, tolDoV);
@@ -191,41 +199,6 @@ void object::test<7>()
 	std::cout << "N" << AUSGeoid2020->getN(position).getMetresValue() << "\n";
 	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
 	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << "\n";
-
-	lambda.setDeciDegsValue(129.2);
-	phi.setDeciDegsValue(-29.32);
-	pv.setPhiEllipsoid(phi);
-	pv.setLambdaEllipsoid(lambda);
-	pv.setH(h);
-	position.setCoordinates(pv);
-
-	std::cout << "N" << AUSGeoid2020->getN(position).getMetresValue() << "\n";
-	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
-	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << "\n";
-
-	lambda.setDeciDegsValue(130.0 + 0.01666666666666);
-	phi.setDeciDegsValue(330 + 0.01666666666666);
-	pv.setPhiEllipsoid(phi);
-	pv.setLambdaEllipsoid(lambda);
-	pv.setH(h);
-	position.setCoordinates(pv);
-
-	std::cout << "N" << AUSGeoid2020->getN(position).getMetresValue() << "\n";
-	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
-	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << "\n";
-
-	
-	lambda.setDeciDegsValue(130.0 - 0.01666666666666);
-	phi.setDeciDegsValue(330 - 0.01666666666666);
-	pv.setPhiEllipsoid(phi);
-	pv.setLambdaEllipsoid(lambda);
-	pv.setH(h);
-	position.setCoordinates(pv);
-
-	std::cout << "N" << AUSGeoid2020->getN(position).getMetresValue() << "\n";
-	std::cout << "Eta: " << AUSGeoid2020->getEta(position).getSecondsValue() << "\n";
-	std::cout << "Xi: " << AUSGeoid2020->getXi(position).getSecondsValue() << "\n";
-
 	ensure_equals("N", AUSGeoid2020->getN(position).getMetresValue(), -14.714, tolHeight); // this value is at a grid node, so no interpolation error expected
 	ensure_equals("Eta", AUSGeoid2020->getEta(position).getSecondsValue(), -2.65, tolDoV); // this value is at a grid node, so no interpolation error expected
 	ensure_equals("Xi", AUSGeoid2020->getXi(position).getSecondsValue(), -5.64, tolDoV); // this value is at a grid node, so no interpolation error expected
@@ -309,13 +282,28 @@ void object::test<10>()
 
 	// Coordinate of a point in the US 35.9320N     97.2W    250.00000 ellipsoidalHeight
 	// comparison with results given by the online tool https://www.ngs.noaa.gov/GEOID/DEFLEC18/computation.html
-	TLength x(-648052.09354), y(-5129860.54005), z(3722231.58159);
-	TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
-	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
+	// and https://geodesy.noaa.gov/GEOID/GEOID18/computation.html
+	TAngle lambda(-97.2, TAngle::kDeciDegs);
+	TAngle phi(35.932, TAngle::kDeciDegs);
+	TLength h(250.00000);
+	TPositionVector pv(TCoordSysFactory::kGeodetic);
+	pv.setPhiEllipsoid(phi);
+	pv.setLambdaEllipsoid(lambda);
+	pv.setH(h);
 
-	// ensure_equals("N", GEOID18->getN(position).getMetresValue(), 19.727, tolHeight);
+	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
+	position.setCoordinates(pv);
+
+
+	//TLength x(-648052.09354), y(-5129860.54005), z(3722231.58159);
+	//TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
+	//TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
+
+	std::cout << "N" << GEOID18->getN(position).getMetresValue() << "\n";
 	std::cout << "Eta: " << GEOID18->getEta(position).getSecondsValue() << "\n";
 	std::cout << "Xi: " << GEOID18->getXi(position).getSecondsValue() << "\n";
+
+	ensure_equals("N", GEOID18->getN(position).getMetresValue(), -27.929, tolHeight);
 	ensure_equals("Eta", GEOID18->getEta(position).getSecondsValue(), 1.32, tolDoV);
 	ensure_equals("Xi", GEOID18->getXi(position).getSecondsValue(), 2.88, tolDoV);
 
