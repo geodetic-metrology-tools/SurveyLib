@@ -18,6 +18,7 @@ public:
 	/// to the double values
 	static int  getCG2000N0(double x, double y, double* N);
 	static int  getCG2000NMachine(double x, double y, double* N);
+	static int  getCG2000NTopo(double x, double y, double* N);
 	
 	static int getCG1985N0(double x, double y, double* N);
 	static int getCG1985NMachine(double x, double y, double* N);

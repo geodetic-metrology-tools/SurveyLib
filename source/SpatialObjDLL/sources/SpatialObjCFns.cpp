@@ -26,6 +26,12 @@ int DLLAPI  getCG2000NMachine( double_t  x, double_t  y, double_t* N)
 	return SpatialObjFns::getCG2000NMachine(x,y,N);
 }
 
+// N value for CG2000 at Topo-level
+int DLLAPI getCG2000NTopo(double_t x, double_t y, double_t *N)
+{
+	return SpatialObjFns::getCG2000NTopo(x, y, N);
+}
+
 // N value for CG1985 at 0-level
 int DLLAPI getCG1985N0( double_t  x, double_t  y, double_t* N)
 {
