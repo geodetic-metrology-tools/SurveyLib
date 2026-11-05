@@ -9,13 +9,56 @@
 #include  "TLength.h"
 #include  "TVReferenceFrame.h"
 #include  "TModifiedLocalAstronomicalRF.h"
-
+#include "TAGeoidModel.h"
 //#include  "TTLength.h"
 
 SpatialObjFns::SpatialObjFns()
 {
 
 }
+
+int SpatialObjFns::getXiGon(double x, double y, double *xi_gon, const char* geoid)
+{
+	// get the CCS spatial position corresponding to the double values
+	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+	TPositionVector vector(x, y, 0.0, TCoordSysFactory::k3DCartesian);
+	spos.setCoordinates(vector);
+
+	TAGeoidModel *geoidModel = getGeoidFromString(geoid);
+
+	// get the xi value
+	*xi_gon = geoidModel->getXi(spos) * RAD2GON;
+	return 1;
+}
+
+int SpatialObjFns::getEtaGon(double x, double y, double *eta_gon, const char* geoid)
+{
+	// get the CCS spatial position corresponding to the double values
+	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+	TPositionVector vector(x, y, 0.0, TCoordSysFactory::k3DCartesian);
+	spos.setCoordinates(vector);
+
+	TAGeoidModel *geoidModel = getGeoidFromString(geoid);
+
+	// get the eta value
+	*eta_gon = geoidModel->getEta(spos) * RAD2GON;
+	return 1;
+}
+
+int SpatialObjFns::getDAlphaGon(double x, double y, double *dAlpha_gon, const char* geoid)
+{
+	// get the CCS spatial position corresponding to the double values
+	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+	TPositionVector vector(x, y, 0.0, TCoordSysFactory::k3DCartesian);
+	spos.setCoordinates(vector);
+
+	TAGeoidModel *geoidModel = getGeoidFromString(geoid);
+
+	// get the dAlpha value
+	*dAlpha_gon = geoidModel->getDAlpha(spos) * RAD2GON;
+	return 1;
+}
+
 // N value for CG2000 at 0-level
 int SpatialObjFns::getCG2000N0( double  x, double  y, double* N)
 {
@@ -253,5 +296,22 @@ int SpatialObjFns::descenteVert(double x, double y, double h, double deltaH, dou
 	//{
 		//return 0;
 	//}
+}
+
+TAGeoidModel* SpatialObjFns::getGeoidFromString(const char *geoid)
+{
+	TRefSystemFactory::EGeoid pGeoid;
+	std::string cg00_Machine("CG2000_Machine"), cg00_Topo("CG2000_Topo"), cg85("CG1985_Machine"), cgs("Sphere");
+	if (geoid == cg00_Machine)
+		pGeoid = TRefSystemFactory::kCG2000Machine;
+	else if (geoid == cg00_Topo)
+		pGeoid = TRefSystemFactory::kCG2000topo;
+	else if (geoid == cg85)
+		pGeoid = TRefSystemFactory::kCG1985Machine;
+	else if (geoid == cgs)
+		pGeoid = TRefSystemFactory::kCGSphere;
+	else
+		return 0;
+	return TRefSystemFactory::getRefSystemFactory()->getGeoid(pGeoid);
 }
 
