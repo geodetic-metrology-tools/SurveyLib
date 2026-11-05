@@ -27,6 +27,196 @@ namespace
 tut::factory tf("Test TRegionalGeoid class");
 }
 
+namespace
+{
+const std::string kGeoidDir("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\USA\\ScriptGetDoV\\");
+
+struct TGeoidRefPoint
+{
+	std::string id;
+	double lat, lon, h; // deg, deg (negative west), m
+	double N, xi, eta; // m, arcsec, arcsec
+};
+
+std::vector<TGeoidRefPoint> readGeoidReference(const std::string &path)
+{
+	std::ifstream in(path);
+	if (!in)
+	{
+		throw std::runtime_error("Cannot open reference file " + path);
+	}
+
+	std::vector<TGeoidRefPoint> pts;
+	std::string line;
+	std::getline(in, line); // header: id,lat,lon,h,N,xi,eta
+	while (std::getline(in, line))
+	{
+		if (!line.empty() && line.back() == '\r')
+		{
+			line.pop_back();
+		}
+		if (line.empty() || line[0] == '#')
+		{
+			continue;
+		}
+
+		std::vector<std::string> f;
+		std::stringstream ss(line);
+		std::string tok;
+		while (std::getline(ss, tok, ','))
+		{
+			f.push_back(tok);
+		}
+		if (f.size() != 7)
+		{
+			throw std::runtime_error("Malformed line in " + path + ": " + line);
+		}
+
+		try
+		{
+			TGeoidRefPoint p;
+			p.id = f[0];
+			p.lat = std::stod(f[1]);
+			p.lon = std::stod(f[2]);
+			p.h = std::stod(f[3]);
+			p.N = std::stod(f[4]); // an empty field throws: all references must be filled
+			p.xi = std::stod(f[5]);
+			p.eta = std::stod(f[6]);
+			pts.push_back(p);
+		}
+		catch (const std::exception &)
+		{
+			throw std::runtime_error("Missing or invalid value in " + path + ": " + line);
+		}
+	}
+	return pts;
+}
+
+struct TDiffStats
+{
+	std::string name;
+	std::string unit;
+	double tol;
+	double maxAbs = 0.0;
+	double sumSq = 0.0;
+	std::string worstId;
+	int n = 0;
+	int fails = 0;
+
+	TDiffStats(const std::string &nm, const std::string &u, double t) : name(nm), unit(u), tol(t) {}
+
+	void add(const std::string &id, double diff, std::ostream &log)
+	{
+		++n;
+		sumSq += diff * diff;
+		if (std::fabs(diff) > maxAbs)
+		{
+			maxAbs = std::fabs(diff);
+			worstId = id;
+		}
+		if (!(std::fabs(diff) <= tol)) // also catches NaN
+		{
+			++fails;
+			log << "  " << id << "  " << name << " diff = " << diff << " " << unit << " (tol " << tol << ")\n";
+		}
+	}
+
+	void error(const std::string &id, const std::string &what, std::ostream &log)
+	{
+		++fails;
+		log << "  " << id << "  " << name << " exception: " << what << "\n";
+	}
+
+	void check(const std::string &id, double ref, const std::function<double()> &compute, std::ostream &log)
+	{
+		try
+		{
+			add(id, compute() - ref, log);
+		}
+		catch (const std::exception &e)
+		{
+			error(id, e.what(), log);
+		}
+	}
+
+	std::string summary() const
+	{
+		std::ostringstream os;
+		os << std::setw(4) << name << ": " << n << " pts, RMS " << (n ? std::sqrt(sumSq / n) : 0.0) << " " << unit << ", max |diff| " << maxAbs << " " << unit << " at "
+		   << worstId << ", " << fails << " outside tol " << tol;
+		return os.str();
+	}
+};
+
+struct TGeoidComparison
+{
+	TDiffStats sN, sXi, sEta;
+	std::string report;
+	TGeoidComparison(double tolN, double tolDoV) : sN("N", "m", tolN), sXi("Xi", "\"", tolDoV), sEta("Eta", "\"", tolDoV) {}
+};
+
+// Compares the geoid with every reference point. If calcCsv is not empty,
+// writes id,lat,lon,N,xi,eta as computed by the geoid (for plotting).
+TGeoidComparison
+	compareWithReference(const TRegionalGeoid &geoid, const std::vector<TGeoidRefPoint> &pts, double tolN, double tolDoV, const std::string &title, const std::string &calcCsv = "", bool verbose = false)
+{
+	TGeoidComparison c(tolN, tolDoV);
+	std::ostringstream log;
+	std::ofstream out;
+	if (!calcCsv.empty())
+	{
+		out.open(calcCsv);
+		if (!out)
+		{
+			throw std::runtime_error("Cannot write " + calcCsv);
+		}
+		out << "id,lat,lon,N,xi,eta\n" << std::setprecision(10);
+	}
+	if (verbose)
+	{
+		std::cout << "\n id                          N_calc     N_ref   Xi_calc  Xi_ref  Eta_calc Eta_ref\n";
+	}
+
+	for (const TGeoidRefPoint &p : pts)
+	{
+		TPositionVector pv(TCoordSysFactory::kGeodetic);
+		pv.setPhiEllipsoid(TAngle(p.lat, TAngle::kDeciDegs));
+		pv.setLambdaEllipsoid(TAngle(p.lon, TAngle::kDeciDegs));
+		pv.setH(TLength(p.h));
+
+		TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
+		position.setCoordinates(pv);
+
+		double n = NAN, xi = NAN, eta = NAN;
+		c.sN.check(p.id, p.N, [&]() { return n = geoid.getN(position).getMetresValue(); }, log);
+		c.sXi.check(p.id, p.xi, [&]() { return xi = geoid.getXi(position).getSecondsValue(); }, log);
+		c.sEta.check(p.id, p.eta, [&]() { return eta = geoid.getEta(position).getSecondsValue(); }, log);
+
+		if (out.is_open())
+		{
+			out << p.id << "," << p.lat << "," << p.lon << "," << n << "," << xi << "," << eta << "\n";
+		}
+		if (verbose)
+		{
+			std::cout << std::fixed << " " << std::left << std::setw(26) << p.id << std::right << std::setprecision(3) << std::setw(10) << n << std::setw(10) << p.N
+					  << std::setprecision(2) << std::setw(9) << xi << std::setw(8) << p.xi << std::setw(9) << eta << std::setw(8) << p.eta << "\n";
+			std::cout.unsetf(std::ios::fixed);
+		}
+	}
+
+	c.report = "\n" + title + "\n" + c.sN.summary() + "\n" + c.sXi.summary() + "\n" + c.sEta.summary() + "\n" + log.str();
+	return c;
+}
+
+std::unique_ptr<TRegionalGeoid> makeGeoid18()
+{
+	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
+	// NB: use the GEOID18 enum value of TRefSystemFactory::EGeoid here (the single-point test passes kCHGeo2004_ETRS)
+	return std::unique_ptr<TRegionalGeoid>(new TRegionalGeoid("GEOID18", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
+		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, kGeoidDir + "g2018u0.bin", 4326, GRIORA_Cubic));
+}
+} // namespace
+
 namespace tut
 {
 template<>
@@ -67,6 +257,47 @@ void object::test<1>()
 	ensure_equals("Eta", AUSGeoid2020->getEta(position).getSecondsValue(), -10.22, tolDoV);
 	ensure_equals("Xi", AUSGeoid2020->getXi(position).getSecondsValue(), -2.97, tolDoV);
 }
+
+template<>
+template<>
+void object::test<2>()
+{
+	set_test_name("GEOID18: 50 points over CONUS vs NGS GEOID18 / DEFLEC18");
+
+	const double tolHeight = 1e-3; // m
+	const double tolDoV = 1e-2; // arcsec (DEFLEC18 online output is rounded to 0.01")
+
+	std::unique_ptr<TRegionalGeoid> GEOID18 = makeGeoid18();
+	const std::vector<TGeoidRefPoint> pts = readGeoidReference(kGeoidDir + "geoid18_reference_geoid.csv");
+	ensure_equals("number of reference points", pts.size(), static_cast<size_t>(50));
+
+	TGeoidComparison c = compareWithReference(*GEOID18, pts, tolHeight, tolDoV, "GEOID18 vs NGS over CONUS", kGeoidDir + "geoid18_calc_conus.csv");
+	std::cout << c.report << std::endl;
+	ensure(c.report.c_str(), c.sN.fails == 0 && c.sXi.fails == 0 && c.sEta.fails == 0);
+}
+
+template<>
+template<>
+void object::test<3>()
+{
+	set_test_name("GEOID18: local point set around N34W110");
+
+	// N is asserted: most points lie between grid nodes, so this checks the
+	// interpolation, not only the node values. The deflections are reported
+	// only: this test is a diagnostic of how local the anomaly is.
+	const double tolHeight = 1e-3; // m
+	const double tolDoV = 1e-2; // arcsec, only used to list the points in the report
+
+	std::unique_ptr<TRegionalGeoid> GEOID18 = makeGeoid18();
+	// surface values: geoid18_local_N34W110.csv; projected to the geoid: geoid18_local_N34W110_geoid.csv
+	const std::vector<TGeoidRefPoint> pts = readGeoidReference(kGeoidDir + "geoid18_local_N34W110_geoid.csv");
+	ensure("local reference set is empty", !pts.empty());
+
+	TGeoidComparison c = compareWithReference(*GEOID18, pts, tolHeight, tolDoV, "GEOID18 vs NGS around N34W110", kGeoidDir + "geoid18_calc_local_N34W110.csv", true);
+	std::cout << c.report << std::endl;
+	ensure(c.report.c_str(), c.sN.fails == 0);
+}
+
 
 template<>
 template<>
@@ -277,7 +508,7 @@ void object::test<10>()
 	std::string pathToFile("C:\\Users\\bweyer\\cernbox\\Documents\\Development\\SurveyLib\\ImplementationGeoid\\USA\\g2018u0.bin");
 	// Initialize geoid model once
 	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
-	TRegionalGeoid *GEOID18 = new TRegionalGeoid("GEOID18", TRefSystemFactory::EGeoid::kCHGeo2004_ETRS, WGS84,
+	TRegionalGeoid *GEOID18 = new TRegionalGeoid("GEOID18", TRefSystemFactory::EGeoid::kCUSTOMgeoid, WGS84,
 		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), WGS84, pathToFile, 4326, GRIORA_Cubic);
 
 	// Coordinate of a point in the US 35.9320N     97.2W    250.00000 ellipsoidalHeight
@@ -293,11 +524,6 @@ void object::test<10>()
 
 	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139));
 	position.setCoordinates(pv);
-
-
-	//TLength x(-648052.09354), y(-5129860.54005), z(3722231.58159);
-	//TPositionVector p(x, y, z, TCoordSysFactory::k3DCartesian);
-	//TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kWGS84_G2139), p);
 
 	std::cout << "N" << GEOID18->getN(position).getMetresValue() << "\n";
 	std::cout << "Eta: " << GEOID18->getEta(position).getSecondsValue() << "\n";
