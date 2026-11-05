@@ -92,6 +92,20 @@ int SpatialObjFns::getCG2000NMachine( double  x, double  y, double* N)
 	
 }
 
+// N value for CG2000 at Topo-level
+int SpatialObjFns::getCG2000NTopo(double x, double y, double *N)
+{
+	// get the CCS spatial position corresponding to the double values
+	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
+	TPositionVector vector(x, y, 0.0, TCoordSysFactory::k3DCartesian);
+	spos.setCoordinates(vector);
+
+	// return the N value in CG2000
+	*N = TRefSystemFactory::getRefSystemFactory()->getGeoid(TRefSystemFactory::kCG2000topo)->getN(spos).getMetresValue();
+
+	return 1;
+}
+
 // N value for CG1985 at 0-level
 int SpatialObjFns::getCG1985N0( double  x, double  y, double* N)
 {

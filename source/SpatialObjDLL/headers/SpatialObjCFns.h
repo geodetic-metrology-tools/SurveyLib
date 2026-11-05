@@ -21,6 +21,7 @@ extern "C" {  // only need to export C interface if
 	/// to the double values
 	SU_DECLSPEC int DLLAPI getCG2000N0(double x, double y, double* N);
 	SU_DECLSPEC int DLLAPI getCG2000NMachine(double x, double y, double* N);
+	SU_DECLSPEC int DLLAPI getCG2000NTopo(double x, double y, double* N);
 	
 	SU_DECLSPEC int DLLAPI getCG1985N0(double x, double y, double* N);
 	SU_DECLSPEC int DLLAPI getCG1985NMachine(double x, double y, double* N);
