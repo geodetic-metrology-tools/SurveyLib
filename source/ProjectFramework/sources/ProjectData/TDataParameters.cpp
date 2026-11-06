@@ -52,6 +52,7 @@ TDataParameters::TDataParameters()
 	fCoordEpoch = NO_VALf;
 	fSolution = "noSolution";
 	fMatrixPath = "";
+	fGeoidPath = "";
 	fPointNameWidth=7;
 	fObsIdWidth = 0;
 }
@@ -71,6 +72,7 @@ TDataParameters::TDataParameters(const TDataParameters& original )
 , fCoordEpoch(original.fCoordEpoch)
 , fSolution(original.fSolution)
 , fMatrixPath(original.fMatrixPath)
+, fGeoidPath(original.fGeoidPath)
 , fPointNameWidth(original.fPointNameWidth)
 , fObsIdWidth(original.fObsIdWidth)
 {
@@ -108,6 +110,7 @@ void TDataParameters::swap(TDataParameters & other) noexcept
 	std::swap(fCoordEpoch, other.fCoordEpoch);
 	std::swap(fSolution, other.fSolution);
 	std::swap(fMatrixPath, other.fMatrixPath);
+	std::swap(fGeoidPath, other.fGeoidPath);
     std::swap(fPointNameWidth,other.fPointNameWidth);
 	std::swap(fObsIdWidth, other.fObsIdWidth);
 }
@@ -458,6 +461,12 @@ void TDataParameters::setMatrixPath(std::string matrixPath)
 	fMatrixPath = p.generic_string();
 }
 
+void TDataParameters::setGeoidPath(std::string geoidPath)
+{
+	std::filesystem::path p(geoidPath);
+	fGeoidPath = p.generic_string();
+}
+
 
 //////////////////////////////////////////////////////////////////////
 //get Functions
@@ -470,7 +479,7 @@ TAReferenceFrame*  TDataParameters::getRefFrame() const
 	}
 	else
 	{
-		return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fLSO, fCoordEpoch, fSolution);
+		return TRefFrameInfo::getReferenceFrame(fRefFrameEnum, fLSO, fCoordEpoch, fSolution, fGeoidPath);
 	}
 }
 
@@ -553,6 +562,11 @@ std::string TDataParameters::getSolution() const
 std::string TDataParameters::getMatrixPath() const
 {
 	return fMatrixPath;
+}
+
+std::string TDataParameters::getGeoidPath() const
+{
+	return fGeoidPath;
 }
 
 /////////////////////////////////////////////////////////////////////////////

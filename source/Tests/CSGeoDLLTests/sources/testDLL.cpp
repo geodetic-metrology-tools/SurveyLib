@@ -441,4 +441,38 @@ namespace tut
 
     }
 #endif
-}
+
+	/*! Testing valid options for ETRF */
+	template<>
+	template<>
+	void object::test<8>()
+	{
+		set_test_name("Transformation between CCS and CHTRF, calling CHGeo2004 geoid");
+
+		// transformation between CCS and CHTRF
+
+		inputParams.fRefFrame = TRefSystemFactory::kCCS;
+		inputParams.fCoordSys = TCoordSysFactory::k3DCartesian;
+		inputParams.fAngUnits = TAngle::kGons;
+
+		double x = -884.485040000;
+		double y = 2643.742930000;
+		double z = 2402.509740000;
+
+		outputParams.fRefFrame = TRefSystemFactory::ERefFrame::kCHTRF95;
+		outputParams.fCoordSys = 2;
+		outputParams.fAngUnits = TAngle::kGons;
+		outputParams.fGeoidPath = "C:/Users/bweyer/cernbox/Documents/Geodesy/GeoidGrid/Geoid_OGD_suisse";
+		const int result_step1 = transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL);
+		ensure_equals("Step 1 result code", result_step1, 0);
+
+		std::cout << "Transformed coordinates: Longitude=" << x << ", Latitude=" << y << ", ALtitude=" << z << std::endl;
+
+		const int result_step2 = transformPoint(&x, &y, &z, &outputParams, NULL, &inputParams, NULL);
+		ensure_equals("Step 2 result code", result_step2, 0);
+
+		ensure_distance("X", x, -884.485040000, 0.000001);
+		ensure_distance("Y", y, 2643.742930000, 0.000001);
+		ensure_distance("Z", z, 2402.509740000, 0.000001);
+	}
+	}

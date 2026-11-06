@@ -135,6 +135,9 @@ public:
 		/// set the path to the transformation matrix file
 		void	setMatrixPath(std::string matrixPath);
 
+		/// set the path to the geoid
+		void setGeoidPath(std::string geoidPath);
+
 		/// get the reference system identifier
 		TAReferenceFrame*	getRefFrame() const;
 
@@ -176,6 +179,9 @@ public:
 
 		// get the path to the transformation matrix
 		std::string								getMatrixPath() const;
+
+		// get the path to the geoid
+		std::string								getGeoidPath() const;
 		std::string getRFName() const;
 	//@}
 
@@ -200,6 +206,7 @@ private:
 	TReal										fCoordEpoch;
 	std::string									fSolution;
 	std::string									fMatrixPath;
+	std::string									fGeoidPath;
 
 	TAStreamFormatter::ETextFormat punchFileFormat;
 	TAStreamFormatter::ETextFormat resultsFileFormat;

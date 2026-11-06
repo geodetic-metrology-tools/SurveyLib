@@ -162,6 +162,11 @@ namespace
                 else
 					errorMessage("ETRF solution " + std::string(plainParams.fSolution) + " not supported", kCannotSetupTDataParameters);
             }      
-        }           
+        }
+		// Populate path to geoid grid if available
+		if (!std::string(plainParams.fGeoidPath).empty())
+		{
+			dp.setGeoidPath(plainParams.fGeoidPath);
+		}
     }
 }
