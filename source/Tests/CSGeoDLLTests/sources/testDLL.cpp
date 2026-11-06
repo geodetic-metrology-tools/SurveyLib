@@ -462,7 +462,7 @@ namespace tut
 		outputParams.fRefFrame = TRefSystemFactory::ERefFrame::kCHTRF95;
 		outputParams.fCoordSys = 2;
 		outputParams.fAngUnits = TAngle::kGons;
-		outputParams.fGeoidPath = "C:/Users/bweyer/cernbox/Documents/Geodesy/GeoidGrid/Geoid_OGD_suisse";
+		outputParams.fGeoidPath = "C:/Users/bweyer/cernbox/Documents/Geodesy/GeoidGrid/Geoid_OGD_suisse/chgeo2004_ETRS.agr";
 		const int result_step1 = transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL);
 		ensure_equals("Step 1 result code", result_step1, 0);
 
