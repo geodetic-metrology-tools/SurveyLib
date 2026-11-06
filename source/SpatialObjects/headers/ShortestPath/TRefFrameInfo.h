@@ -125,7 +125,7 @@ public:
    static bool isTerrestrialRefFrame(int frame);
    static bool isLocalRFWithMatrix(int frame);
 
-   static TAReferenceFrame* getReferenceFrame(int frame, const TLocalSystemOrigin* lso = NULL, TReal epoch = NO_VALf, std::string solution = "noSolution");
+   static TAReferenceFrame* getReferenceFrame(int frame, const TLocalSystemOrigin* lso = NULL, TReal epoch = NO_VALf, std::string solution = "noSolution", std::string geoidPath = "");
    static TAReferenceFrame* getReferenceFrame(int frame, const std::string &pathToTransformationMatrix);
 };
 

@@ -41,6 +41,7 @@ struct TPlainDataParameters
     int fAngUnits; /*!< Check TAngle::EUnits for valid values */
     double fEpoch = NO_VALf; /*!< Epoch of the coordinates in decimal years */
 	const char *fSolution = ""; /*!< Specific solution for terrestrial reference frame */
+	const char *fGeoidPath = ""; /*!< path to external geoid grid */
 };
 
 #endif

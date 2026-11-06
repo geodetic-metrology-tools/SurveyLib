@@ -309,7 +309,7 @@ bool TRefFrameInfo::isLocalRFWithMatrix(int frame)
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
 
-TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso, TReal epoch, std::string solution)
+TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso, TReal epoch, std::string solution, std::string geoidPath)
 {
 	bool isdefinedlocal = false;
 	TRefSystemFactory::EGeoid localgeoid = TRefSystemFactory::kNoGeoid;
@@ -362,6 +362,10 @@ TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSyste
 			break;
 	}
 
+	if (geoidPath != "")
+	{
+		TRefSystemFactory::getRefSystemFactory()->updateCustomGeoid(geoidPath);
+	}
 
 	// return an appropriate instance
 	if (isdefinedlocal)
