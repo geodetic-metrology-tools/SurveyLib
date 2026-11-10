@@ -26,9 +26,23 @@ int SpatialObjFns::getXiGon(double x, double y, double *xi_gon, const char* geoi
 
 	TAGeoidModel *geoidModel = getGeoidFromString(geoid);
 
-	// get the xi value
-	*xi_gon = geoidModel->getXi(spos) * RAD2GON;
-	return 1;
+	if (geoidModel)
+	{
+		try
+		{
+		// get the xi value
+			*xi_gon = geoidModel->getXi(spos) * RAD2GON;
+			return 1;
+		}
+		catch (const std::exception &)
+		{
+			return 0;
+		}
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 int SpatialObjFns::getEtaGon(double x, double y, double *eta_gon, const char* geoid)
@@ -40,9 +54,23 @@ int SpatialObjFns::getEtaGon(double x, double y, double *eta_gon, const char* ge
 
 	TAGeoidModel *geoidModel = getGeoidFromString(geoid);
 
-	// get the eta value
-	*eta_gon = geoidModel->getEta(spos) * RAD2GON;
-	return 1;
+	if (geoidModel)
+	{
+		try
+		{
+			// get the eta value
+			*eta_gon = geoidModel->getEta(spos) * RAD2GON;
+			return 1;
+		}
+		catch (const std::exception &)
+		{
+			return 0;
+		}
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 int SpatialObjFns::getDAlphaGon(double x, double y, double *dAlpha_gon, const char* geoid)
@@ -54,9 +82,23 @@ int SpatialObjFns::getDAlphaGon(double x, double y, double *dAlpha_gon, const ch
 
 	TAGeoidModel *geoidModel = getGeoidFromString(geoid);
 
-	// get the dAlpha value
-	*dAlpha_gon = geoidModel->getDAlpha(spos) * RAD2GON;
-	return 1;
+	if (geoidModel)
+	{
+		try
+		{
+			// get the dAlpha value
+			*dAlpha_gon = geoidModel->getDAlpha(spos) * RAD2GON;
+			return 1;
+		}
+		catch (const std::exception &)
+		{
+			return 0;
+		}
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 // N value for CG2000 at 0-level
