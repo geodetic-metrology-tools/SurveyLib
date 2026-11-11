@@ -17,6 +17,8 @@
 #include <tut/tut_macros.hpp>
 #include <stdexcept>
 
+#include "../../SpatialObjects/UnitTests/GeoidTestGrid.h"
+
 #include <string>
 #include <map>
 
@@ -447,32 +449,87 @@ namespace tut
 	template<>
 	void object::test<8>()
 	{
-		set_test_name("Transformation between CCS and CHTRF, calling CHGeo2004 geoid");
+		set_test_name("Transformation between CCS and CHTRF95 with heights above a custom geoid");
 
-		// transformation between CCS and CHTRF
+		const std::string grid = geoidtestgrid::createGrid("surveylib_test_geoid_A_v1.tif");
 
 		inputParams.fRefFrame = TRefSystemFactory::kCCS;
 		inputParams.fCoordSys = TCoordSysFactory::k3DCartesian;
 		inputParams.fAngUnits = TAngle::kGons;
+		inputParams.fGeoidPath = "";
 
-		double x = -884.485040000;
-		double y = 2643.742930000;
-		double z = 2402.509740000;
+		const double x_th = -884.485040000;
+		const double y_th = 2643.742930000;
+		const double z_th = 2402.509740000;
 
 		outputParams.fRefFrame = TRefSystemFactory::ERefFrame::kCHTRF95;
-		outputParams.fCoordSys = 2;
+		outputParams.fCoordSys = TCoordSysFactory::kGeodetic;
+		outputParams.fAngUnits = TAngle::kDeciDegs;
+
+		// Reference: ellipsoidal height
+		double xh = x_th, yh = y_th, zh = z_th;
+		outputParams.fGeoidPath = "";
+		ensure_equals("Ellipsoidal result code", transformPoint(&xh, &yh, &zh, &inputParams, NULL, &outputParams, NULL), 0);
+
+		// Height above the custom geoid
+		double x = x_th, y = y_th, z = z_th;
+		outputParams.fGeoidPath = grid.c_str();
+		ensure_equals("Step 1 result code", transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL), 0);
+
+		ensure_distance("Longitude unchanged", x, xh, 1e-10);
+		ensure_distance("Latitude unchanged", y, yh, 1e-10);
+		// the geoid is defined in ETRF93: tolerance covers the (sub-millimetric) CHTRF95 / ETRF93 difference
+		ensure_distance("H = h - N", z, zh - geoidtestgrid::expectedN(x, y), 1e-3);
+
+		// Back to CCS
+		ensure_equals("Step 2 result code", transformPoint(&x, &y, &z, &outputParams, NULL, &inputParams, NULL), 0);
+		ensure_distance("X", x, x_th, 0.000001);
+		ensure_distance("Y", y, y_th, 0.000001);
+		ensure_distance("Z", z, z_th, 0.000001);
+
+		outputParams.fGeoidPath = "";
+	}
+
+	/*! Testing invalid geoid options */
+	template<>
+	template<>
+	void object::test<9>()
+	{
+		set_test_name("Invalid custom geoid options");
+
+		const std::string grid = geoidtestgrid::createGrid("surveylib_test_geoid_A_v1.tif");
+
+		inputParams.fRefFrame = TRefSystemFactory::kCCS;
+		inputParams.fCoordSys = TCoordSysFactory::k3DCartesian;
+		inputParams.fAngUnits = TAngle::kGons;
+		inputParams.fGeoidPath = "";
+
+		double x = -884.485040000, y = 2643.742930000, z = 2402.509740000;
+
+		// 3D cartesian coordinates have no height
+		outputParams.fRefFrame = TRefSystemFactory::ERefFrame::kCHTRF95;
+		outputParams.fCoordSys = TCoordSysFactory::k3DCartesian;
 		outputParams.fAngUnits = TAngle::kGons;
-		outputParams.fGeoidPath = "C:/Users/bweyer/cernbox/Documents/Geodesy/GeoidGrid/Geoid_OGD_suisse/chgeo2004_ETRS.agr";
-		const int result_step1 = transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL);
-		ensure_equals("Step 1 result code", result_step1, 0);
+		outputParams.fGeoidPath = grid.c_str();
+		ensure_equals("3D cartesian", transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL), static_cast<int>(kInvalidOutputGeoid));
 
-		std::cout << "Transformed coordinates: Longitude=" << x << ", Latitude=" << y << ", ALtitude=" << z << std::endl;
+		// Frame already using a vertical datum
+		outputParams.fRefFrame = TRefSystemFactory::ERefFrame::kLambert93_ign69;
+		outputParams.fCoordSys = TCoordSysFactory::k2DPlusH;
+		ensure_equals("vertical datum", transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL), static_cast<int>(kInvalidOutputGeoid));
 
-		const int result_step2 = transformPoint(&x, &y, &z, &outputParams, NULL, &inputParams, NULL);
-		ensure_equals("Step 2 result code", result_step2, 0);
+		// Missing file
+		outputParams.fRefFrame = TRefSystemFactory::ERefFrame::kCHTRF95;
+		outputParams.fCoordSys = TCoordSysFactory::kGeodetic;
+		outputParams.fGeoidPath = "this/file/does/not/exist.tif";
+		ensure_equals("missing file", transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL), static_cast<int>(kInvalidOutputGeoid));
 
-		ensure_distance("X", x, -884.485040000, 0.000001);
-		ensure_distance("Y", y, 2643.742930000, 0.000001);
-		ensure_distance("Z", z, 2402.509740000, 0.000001);
+		// Geoid on a CCS input
+		inputParams.fGeoidPath = grid.c_str();
+		outputParams.fGeoidPath = "";
+		ensure_equals("geoid on CCS", transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL), static_cast<int>(kInvalidInputGeoid));
+
+		inputParams.fGeoidPath = "";
+		outputParams.fGeoidPath = "";
 	}
 	}

@@ -106,8 +106,30 @@ extern "C"
 		const TDataParameters &inputDp = options->getInputDataParameters();
 		const TDataParameters &outputDp = options->getOutputDataParameters();
 
+		// Get the reference frames: may fail if a geoid file is given but cannot be opened
+		TAReferenceFrame *inputRF = nullptr;
+		TAReferenceFrame *outputRF = nullptr;
+		try
+		{
+			inputRF = inputDp.getRefFrame();
+		}
+		catch (const std::exception &e)
+		{
+			std::cerr << "CSGEODLL: Could not create the input reference frame: " << e.what() << std::endl;
+			return inputDp.getGeoidPath().empty() ? kInvalidInputRefFrame : kInvalidInputGeoid;
+		}
+		try
+		{
+			outputRF = outputDp.getRefFrame();
+		}
+		catch (const std::exception &e)
+		{
+			std::cerr << "CSGEODLL: Could not create the output reference frame: " << e.what() << std::endl;
+			return outputDp.getGeoidPath().empty() ? kInvalidOutputRefFrame : kInvalidOutputGeoid;
+		}
+
 		// Create a spatial position in the input reference frame
-		TSpatialPosition position(inputDp.getRefFrame());
+		TSpatialPosition position(inputRF);
 
 		// Populate the spatial position with the input coordinates
 		try
@@ -123,7 +145,11 @@ extern "C"
 		// Transform the position to output reference frame
 		try
 		{
-			position.transform(outputDp.getRefFrame());
+			if (!position.transform(outputRF))
+			{
+				std::cerr << "CSGEODLL: Transformation error: no transformation found between " << inputRF->getName() << " and " << outputRF->getName() << std::endl;
+				return kTransformError;
+			}
 		}
 		catch (const std::exception &e)
 		{

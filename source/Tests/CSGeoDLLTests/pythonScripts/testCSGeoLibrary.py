@@ -17,7 +17,8 @@ class PyPlainDataParameters(ct.Structure):
                 ("coordSys", ct.c_int),
                 ("angUnits", ct.c_int),
                 ("epoch", ct.c_double),
-                ("solution", ct.c_char_p)]
+                ("solution", ct.c_char_p),
+                ("geoidPath", ct.c_char_p)]  # path to a geoid grid file (None: ellipsoidal heights)
                   
 # Definition of the structure containing ORIGIN point info            
 class PyPlainLocalSystemOrigin(ct.Structure):

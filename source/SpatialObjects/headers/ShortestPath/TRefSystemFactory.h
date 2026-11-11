@@ -33,8 +33,10 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <map>
 #include <memory>
 #include <stddef.h>
+#include <utility>
 
 class TAGeoidModel;
 class TReferenceEllipsoid;
@@ -45,6 +47,8 @@ class TModifiedLocalAstronomicalRF;
 class TModifiedLocalGeodeticRF;
 class THelmertRefFrameTransform;
 class TCernGridGeoid;
+class TRegionalGeoid;
+class TGeoidHeightRefFrame;
 class TARefFrameTransformation;
 class TSpatialPosition;
 class TScaleFactor;
@@ -193,7 +197,20 @@ public:
 		/*! Return a pointer to the geoid asked for 
 		\param geoidId an element of the existing geoid enumeration */
 		TAGeoidModel* getGeoid(const EGeoid geoidId);
+
+		/*! Update the grid file of the kCUSTOMgeoid geoid (used by kMLACustomGeoid)
+		eturn true if the update was successful */
 		bool updateCustomGeoid(const std::string &geoidFile);
+
+		/*! Return the regional geoid defined by the given grid file (ETRF93 / GRS80).
+		One instance is created per file and owned by the factory.
+			hrow std::invalid_argument if the file cannot be opened */
+		TRegionalGeoid* getRegionalGeoid(const std::string &geoidFile);
+
+		/*! Return the frame identical to base, with heights above the given geoid instead of ellipsoidal heights.
+		One instance is created per (base, geoid) pair and owned by the factory.
+			hrow std::invalid_argument if base is neither a geodetic frame nor a 2D+1 projection */
+		TGeoidHeightRefFrame* getGeoidHeightRefFrame(TAReferenceFrame *base, TAGeoidModel *geoid);
 
 		/*! Return a pointer to the reference ellipsoid asked for 
 		\param ellId an element of the existing ellipsoid enumeration */
@@ -397,6 +414,9 @@ private:
 	std::vector<TAReferenceFrame*> fLocalRefFrameList; /*!< list of pointers to the local Ref.Frames */
 
 	std::vector<TARefFrameTransformation*> fTransformList; /*!< list of pointers to the to-be-defined Ref.Frame transformations */
+
+	std::map<std::string, TRegionalGeoid*> fRegionalGeoids; /*!< regional geoids indexed by their grid file */
+	std::map<std::pair<const TAReferenceFrame*, const TAGeoidModel*>, TGeoidHeightRefFrame*> fGeoidHeightRefFrames; /*!< geoid height frames indexed by (base frame, geoid) */
 
 	TGeodeticRefFrame *fCGRF = nullptr;
 	TGeodeticRefFrame *fCGRFSphere = nullptr;

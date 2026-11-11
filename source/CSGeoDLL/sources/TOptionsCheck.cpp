@@ -12,6 +12,8 @@
 namespace
 {
     void errorMessage(const std::string & msg, EStatusCode code);
+    bool hasGeoidPath(const TPlainDataParameters & plainParams);
+    void checkGeoid(const TPlainDataParameters & plainParams, EStatusCode code, const std::string & side);
     void setDataParameters(
         TDataParameters & dp,
         const TPlainDataParameters & plainParams,
@@ -91,6 +93,9 @@ TOptionsCheck::TOptionsCheck(const TPlainDataParameters & inputParams,
 	if (TRefFrameInfo::isTerrestrialRefFrame((outputParams.fRefFrame)) && outputParams.fRefFrame == TRefSystemFactory::ERefFrame::kETRFin)
 		errorMessage("Wrong output terrestrial reference frame, use 16 (kETRFout) instead", kBadOutputTRF);
 
+	// A geoid can only be applied to frames with ellipsoidal heights (or to the custom geoid MLA)
+	checkGeoid(inputParams, kInvalidInputGeoid, "input");
+	checkGeoid(outputParams, kInvalidOutputGeoid, "output");
 
     setDataParameters(fInputDataParameters, inputParams, inputLSO);
     setDataParameters(fOutputDataParameters, outputParams, outputLSO);
@@ -116,6 +121,32 @@ namespace
         std::cerr << std::endl << "CSGEODLL: " << msg << std::endl;
         //if (code != kSuperfluousInputLSO && code != kSuperfluousOutputLSO)
 			throw code;
+    }
+
+    bool hasGeoidPath(const TPlainDataParameters & plainParams)
+    {
+        // fGeoidPath may be left to NULL by C or Python callers
+        return plainParams.fGeoidPath != nullptr && plainParams.fGeoidPath[0] != '\0';
+    }
+
+    void checkGeoid(const TPlainDataParameters & plainParams, EStatusCode code, const std::string & side)
+    {
+        if (plainParams.fRefFrame == TRefSystemFactory::ERefFrame::kMLACustomGeoid)
+        {
+            if (!hasGeoidPath(plainParams))
+                errorMessage("A geoid file is required for the " + side + " reference frame kMLACustomGeoid", code);
+            return;
+        }
+
+        if (!hasGeoidPath(plainParams))
+            return;
+
+        if (!TRefFrameInfo::hasEllipsoidalHeight(plainParams.fRefFrame))
+            errorMessage("A geoid file can only be applied to a reference frame with ellipsoidal heights (" + side + " frame: "
+                + TRefFrameInfo::getName(plainParams.fRefFrame) + ")", code);
+
+        if (plainParams.fCoordSys != TCoordSysFactory::kGeodetic && plainParams.fCoordSys != TCoordSysFactory::k2DPlusH)
+            errorMessage("A geoid file can only be applied to " + side + " coordinates with a height (kGeodetic or k2DPlusH)", code);
     }
     void setDataParameters(
         TDataParameters & dp,
@@ -164,7 +195,7 @@ namespace
             }      
         }
 		// Populate path to geoid grid if available
-		if (!std::string(plainParams.fGeoidPath).empty())
+		if (hasGeoidPath(plainParams))
 		{
 			dp.setGeoidPath(plainParams.fGeoidPath);
 		}

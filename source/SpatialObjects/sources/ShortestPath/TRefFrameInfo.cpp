@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <TRefFrameInfo.h>
+#include <TGeoidHeightRefFrame.h>
+#include <TRegionalGeoid.h>
 
 #include <memory> // for std::auto_ptr
 #include <stdexcept>
@@ -115,9 +117,11 @@ const TRefFrameInfo::MappingType & TRefFrameInfo::getMapping()
 			TDetails("kMLA2000Topo", "MLATopo (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kMLA2000H0,
 			TDetails("kMLA2000H0", "MLAH0 (2000)", TCoordSysFactory::k3DCartesian, 0, true)));
-        tmp->insert(std::make_pair(TRefSystemFactory::kMLASphere, 
+        tmp->insert(std::make_pair(TRefSystemFactory::kMLASphere,
             TDetails("kMLASphere","MLA (Sphere)", TCoordSysFactory::k3DCartesian, 0, true)));
-        
+		tmp->insert(std::make_pair(TRefSystemFactory::kMLACustomGeoid,
+			TDetails("kMLACustomGeoid", "MLA (custom geoid)", TCoordSysFactory::k3DCartesian, 0, true)));
+
 		tmp->insert(std::make_pair(TRefSystemFactory::kLA1985Machine, 
 			TDetails("kLA1985Machine", "LAMachine (1985)", TCoordSysFactory::k3DCartesian, 0, true)));
 		tmp->insert(std::make_pair(TRefSystemFactory::kLA1985H0,
@@ -309,6 +313,39 @@ bool TRefFrameInfo::isLocalRFWithMatrix(int frame)
 	throw std::invalid_argument("Unknown ERefFrame value");
 }
 
+bool TRefFrameInfo::hasEllipsoidalHeight(int frame)
+{
+	switch (fromNumber(frame))
+	{
+		// geodetic reference frames (kGeodetic: phi, lambda, h)
+		case TRefSystemFactory::kCGRF:
+		case TRefSystemFactory::kCGRF_new:
+		case TRefSystemFactory::kITRF97:
+		case TRefSystemFactory::kWGS84_G2139:
+		case TRefSystemFactory::kETRF93:
+		case TRefSystemFactory::kCH1903plus:
+		case TRefSystemFactory::kITRFin:
+		case TRefSystemFactory::kITRFout:
+		case TRefSystemFactory::kETRFin:
+		case TRefSystemFactory::kETRFout:
+		case TRefSystemFactory::kRGF93:
+		case TRefSystemFactory::kCHTRF95:
+		// projections with ellipsoidal heights (k2DPlusH: E, N, h)
+		case TRefSystemFactory::kCernXYHe:
+		case TRefSystemFactory::kCernX0Y0He:
+		case TRefSystemFactory::kCGRFMercator_eh:
+		case TRefSystemFactory::kFrenchRGF93_CC46_eh:
+		case TRefSystemFactory::kLambert93_eh:
+#ifdef USE_SWISSTOPO
+		case TRefSystemFactory::kSwissLV95_eh:
+		case TRefSystemFactory::kSwissLV03_eh:
+#endif
+			return true;
+		default:
+			return false;
+	}
+}
+
 TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSystemOrigin *lso, TReal epoch, std::string solution, std::string geoidPath)
 {
 	bool isdefinedlocal = false;
@@ -360,20 +397,43 @@ TAReferenceFrame * TRefFrameInfo::getReferenceFrame(int frame, const TLocalSyste
 		case TRefSystemFactory::kLGSphere:
 			localgeoid = TRefSystemFactory::kCGSphere;
 			break;
+		case TRefSystemFactory::kMLACustomGeoid:
+			localgeoid = TRefSystemFactory::kCUSTOMgeoid;
+			break;
 	}
 
-	if (geoidPath != "")
+	TRefSystemFactory *factory = TRefSystemFactory::getRefSystemFactory();
+
+	// local astronomical frame based on the custom geoid
+	if (refFrame == TRefSystemFactory::kMLACustomGeoid)
 	{
-		TRefSystemFactory::getRefSystemFactory()->updateCustomGeoid(geoidPath);
+		if (geoidPath.empty())
+			throw std::invalid_argument("A geoid file is required for the kMLACustomGeoid reference frame!");
+		factory->updateCustomGeoid(geoidPath);
+		return factory->getNewLocalRefFrame(*lso, localgeoid, refFrame);
 	}
 
 	// return an appropriate instance
 	if (isdefinedlocal)
-		return TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(*lso, localgeoid, refFrame);
+	{
+		if (!geoidPath.empty())
+			throw std::invalid_argument("A geoid file can not be applied to the local reference frame " + getName(frame) + "!");
+		return factory->getNewLocalRefFrame(*lso, localgeoid, refFrame);
+	}
 	else if(refFrame==TRefSystemFactory::kLocalRefFrame)
-        return TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame();
-	else
-		return TRefSystemFactory::getRefSystemFactory()->getRefFrame(refFrame);
+        return factory->getNewLocalRefFrame();
+
+	TAReferenceFrame *rf = factory->getRefFrame(refFrame);
+
+	// heights above the given geoid instead of ellipsoidal heights
+	if (!geoidPath.empty())
+	{
+		if (!hasEllipsoidalHeight(frame))
+			throw std::invalid_argument("A geoid file can only be applied to a reference frame with ellipsoidal heights, not to " + getName(frame) + "!");
+		return factory->getGeoidHeightRefFrame(rf, factory->getRegionalGeoid(geoidPath));
+	}
+
+	return rf;
 }
 
 TAReferenceFrame *TRefFrameInfo::getReferenceFrame(int frame, const std::string &pathToTransformationMatrix)

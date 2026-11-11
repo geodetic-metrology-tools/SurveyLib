@@ -62,6 +62,7 @@ set(SpatialObject_SOURCES
 	sources/ReferenceSurfaces/TTerrestrialReferenceFrame.cpp
 	sources/ReferenceSurfaces/TReferenceEllipsoid.cpp
 	sources/ReferenceSurfaces/TRegionalGeoid.cpp
+	sources/ReferenceSurfaces/TGeoidHeightRefFrame.cpp
 	sources/ReferenceSurfaces/TX0Y0HeProjection.cpp
 	sources/ReferenceSurfaces/TXYHeProjection.cpp
 	sources/ReferenceSurfaces/TXYHgProjection.cpp
@@ -85,6 +86,7 @@ set(SpatialObject_SOURCES
 	sources/RefFrameTransformations/TXYHe2X0Y0HeTransformation.cpp
 	sources/RefFrameTransformations/TXYHe2XYHgTransformation.cpp
 	sources/RefFrameTransformations/TXYHg2XYHeTransformation.cpp
+	sources/RefFrameTransformations/TGeoidHeightTransformation.cpp
 	sources/RefFrameTransformations/TXYHs2MLATransformation.cpp
 	sources/RefFrameTransformations/TXYH2CCS.cpp
 	sources/ShortestPath/TGraph.cpp
@@ -174,6 +176,7 @@ set(SpatialObject_HEADERS
 	headers/ReferenceSurfaces/TTransverseMercatorProjection.h
 	headers/ReferenceSurfaces/TVReferenceFrame.h
 	headers/ReferenceSurfaces/TRegionalGeoid.h
+	headers/ReferenceSurfaces/TGeoidHeightRefFrame.h
 	headers/ReferenceSurfaces/TX0Y0HeProjection.h
 	headers/ReferenceSurfaces/TXYHeProjection.h
 	headers/ReferenceSurfaces/TXYHgProjection.h
@@ -200,6 +203,7 @@ set(SpatialObject_HEADERS
 	headers/RefFrameTransformations/TXYHe2X0Y0HeTransformation.h
 	headers/RefFrameTransformations/TXYHe2XYHgTransformation.h
 	headers/RefFrameTransformations/TXYHg2XYHeTransformation.h
+	headers/RefFrameTransformations/TGeoidHeightTransformation.h
 	headers/RefFrameTransformations/TXYHs2MLATransformation.h
 	headers/RefFrameTransformations/TXYH2CCS.h
 	headers/RefFrameTransformations/GeodeticConstants.h

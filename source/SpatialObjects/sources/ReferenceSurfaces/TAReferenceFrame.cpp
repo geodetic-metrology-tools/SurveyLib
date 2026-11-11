@@ -26,6 +26,8 @@
 
 #include	"TAReferenceFrame.h"
 
+#include    <memory>
+
 //////////////////////////////////////////////////////////////////////
 // Initialisation
 //////////////////////////////////////////////////////////////////////
@@ -86,6 +88,11 @@ TGeodeticRefFrame* TAReferenceFrame::getGeodeticRF() const
 	return TGeodeticRefFrame::instance();
 }
 
+TAReferenceFrame* TAReferenceFrame::getGraphAnchorRF() const
+{
+	return getGeodeticRF();
+}
+
 /////////////////////////
 //Data extraction methods
 /////////////////////////
@@ -141,25 +148,22 @@ bool TAReferenceFrame::transform(TSpatialPosition *sp, TAReferenceFrame* rf)
 	TPositionVector position(sp->getCoordinates(sp->getCoordSys()));
 	TRefFrameWrapper from(this);
 	TRefFrameWrapper to(rf);
-	TARefFrameTransformation *postGraphTrafo(0);
+	std::unique_ptr<TARefFrameTransformation> postGraphTrafo;
 
 	if (! this->isInGraph()) {
-		// transform to CGRF manually
+		// transform to the graph anchor frame manually
 		TARefFrameTransformation* toGRF = this->getRFTransfo2CGRF();
 		toGRF->transform(position);
 
-		sp->changeRefFrameTo(this);
-		sp->setCoordinates(position);
-
-		from.setFrame(this->getGeodeticRF());
+		from.setFrame(this->getGraphAnchorRF());
 	}
 
 	if (! rf->isInGraph()) {
-		// destination system is a local system
-		// transform from CGRF manually
-		postGraphTrafo = rf->getRFTransfo2CGRF()->inverse();
+		// destination system is not in the graph (local system, geoid height frame...)
+		// transform from the graph anchor frame manually
+		postGraphTrafo.reset(rf->getRFTransfo2CGRF()->inverse());
 
-		to.setFrame(rf->getGeodeticRF());
+		to.setFrame(rf->getGraphAnchorRF());
 	}
 
 	if (! (from == to)) {
@@ -175,7 +179,7 @@ bool TAReferenceFrame::transform(TSpatialPosition *sp, TAReferenceFrame* rf)
 			(*iter)->transform(position);
 	}
 
-	if (postGraphTrafo != 0) {
+	if (postGraphTrafo) {
 		// The destination system is not in the graph
 		postGraphTrafo->transform(position);
 		
@@ -195,25 +199,22 @@ bool TAReferenceFrame::transform( TSpatialVector* sv, TAReferenceFrame* rf )
 
 	TRefFrameWrapper from(this);
 	TRefFrameWrapper to(rf);
-	TARefFrameTransformation *postGraphTrafo(0);
+	std::unique_ptr<TARefFrameTransformation> postGraphTrafo;
 
 	if (! this->isInGraph()) {
-		// transform to CGRF manually
+		// transform to the graph anchor frame manually
 		TARefFrameTransformation* toGRF = this->getRFTransfo2CGRF();
 		toGRF->transform(freeVector);
 
-		sv->changeRefFrameTo(this);
-		sv->setElements(freeVector);
-		
-		from.setFrame(this->getGeodeticRF());
+		from.setFrame(this->getGraphAnchorRF());
 	}
 
 	if (! rf->isInGraph()) {
-		// destination system is a local system
-		// transform from CGRF manually
-		postGraphTrafo = rf->getRFTransfo2CGRF()->inverse();
-		
-		to.setFrame(rf->getGeodeticRF());
+		// destination system is not in the graph (local system, geoid height frame...)
+		// transform from the graph anchor frame manually
+		postGraphTrafo.reset(rf->getRFTransfo2CGRF()->inverse());
+
+		to.setFrame(rf->getGraphAnchorRF());
 	}
 
 	if (! (from == to)) {
@@ -229,7 +230,7 @@ bool TAReferenceFrame::transform( TSpatialVector* sv, TAReferenceFrame* rf )
 			(*iter)->transform(freeVector);
 	}
 
-	if (postGraphTrafo != 0) {
+	if (postGraphTrafo) {
 		// The destination system is not in the graph
 		postGraphTrafo->transform(freeVector);
 	}

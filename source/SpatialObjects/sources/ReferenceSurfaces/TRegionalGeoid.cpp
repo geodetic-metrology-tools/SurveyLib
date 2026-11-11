@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: CERN
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "TRegionalGeoid.h"
 
 #include <TNotInGeoidGridException.h>
@@ -14,7 +18,9 @@ TRegionalGeoid::TRegionalGeoid(const std::string &name,
 	const GDALRIOResampleAlg &interpolationMethod) :
 	TAGeoidModel(name, geoidId, def, ell, calc), fPathToFile(pathToFile), fEPSGCode(epsgCode), fInterpolationMethod(interpolationMethod)
 {
-	fGDALDataset = openGDALDataset();
+	// The grid file may be provided later through setPathToFile (e.g. custom geoid registered in the factory)
+	if (!fPathToFile.empty())
+		fGDALDataset = openGDALDataset();
 }
 
 TRegionalGeoid::~TRegionalGeoid()
@@ -23,6 +29,11 @@ TRegionalGeoid::~TRegionalGeoid()
 
 TLength TRegionalGeoid::getN(const TSpatialPosition &sp) const
 {
+	if (!fGDALDataset)
+	{
+		throw std::invalid_argument("No grid file defined for geoid " + fName);
+	}
+
 	// deep copy of TSpatialPosition transformed in same reference frame as the geoid CalculationRF
 	TSpatialPosition spos = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
 

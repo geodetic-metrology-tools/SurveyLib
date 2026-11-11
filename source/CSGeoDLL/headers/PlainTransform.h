@@ -63,7 +63,9 @@ enum EStatusCode
     kMissingOutputEpoch = 15,
     kMissingOutputSolution = 16,
 	kBadInputTRF = 17,
-	kBadOutputTRF = 18
+	kBadOutputTRF = 18,
+	kInvalidInputGeoid = 19, /*!< geoid file cannot be applied to the input frame / coordinate system, or cannot be opened */
+	kInvalidOutputGeoid = 20 /*!< geoid file cannot be applied to the output frame / coordinate system, or cannot be opened */
 };
 
 #endif

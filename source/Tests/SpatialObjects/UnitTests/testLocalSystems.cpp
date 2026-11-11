@@ -6,6 +6,8 @@
 #include <TLocalSystemOrigin.h>
 #include <TRefSystemFactory.h>
 
+#include "GeoidTestGrid.h"
+
 #include <tut/tut.hpp>
 
 namespace tut
@@ -443,6 +445,8 @@ void object::test<6>()
 	TSpatialPosition p0 = TSpatialPosition(ETRF93, xOrigin, yOrigin, zOrigin, TCoordSysFactory::k3DCartesian);
 
 	TLocalSystemOrigin lso(p0, TAngle(0), TAngle(0), "P0_ETRF93");
+	// synthetic grid covering CERN (see GeoidTestGrid.h)
+	tut::ensure("custom geoid updated", TRefSystemFactory::getRefSystemFactory()->updateCustomGeoid(geoidtestgrid::createGrid("surveylib_test_geoid_A_v1.tif")));
 	TAReferenceFrame* MLA(TRefSystemFactory::getRefSystemFactory()->getNewLocalRefFrame(lso, TRefSystemFactory::kCUSTOMgeoid, TRefSystemFactory::kMLACustomGeoid));
 
 	TReal xPoint = 10.1;

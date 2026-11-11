@@ -125,6 +125,13 @@ public:
    static bool isTerrestrialRefFrame(int frame);
    static bool isLocalRFWithMatrix(int frame);
 
+	/**
+	 *  Tell if the third coordinate of the reference frame is an ellipsoidal height,
+	 *  i.e. if a geoid can be applied to obtain heights above the geoid (see TGeoidHeightRefFrame).
+	 *  Frames already using a vertical datum (LN02, LHN95, IGN69, CERN XYHg, local astronomical frames...) return false.
+	 */
+	static bool hasEllipsoidalHeight(int frame);
+
    static TAReferenceFrame* getReferenceFrame(int frame, const TLocalSystemOrigin* lso = NULL, TReal epoch = NO_VALf, std::string solution = "noSolution", std::string geoidPath = "");
    static TAReferenceFrame* getReferenceFrame(int frame, const std::string &pathToTransformationMatrix);
 };

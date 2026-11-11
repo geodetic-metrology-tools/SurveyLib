@@ -57,6 +57,7 @@
 #include "TRefSystemFactory.h"
 #include <TLocal2CCSTransformation.h>
 #include <TRegionalGeoid.h>
+#include <TGeoidHeightRefFrame.h>
 
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
@@ -76,6 +77,10 @@ TRefSystemFactory::TRefSystemFactory()
 
 TRefSystemFactory::~TRefSystemFactory()
 {// destructor
+	for (auto &frame : fGeoidHeightRefFrames)
+		delete frame.second;
+	for (auto &geoid : fRegionalGeoids)
+		delete geoid.second;
 }
 
 
@@ -174,15 +179,14 @@ void TRefSystemFactory::initGeoidList()
 		cg85Machine, kCG1985Machine, TCernParabolicGeoid::aLEP, TCernParabolicGeoid::bLEP, TCernParabolicGeoid::angLEP, pCGRF, pGRS80, pCCS);
 	fGeoidList.push_back(pCG1985Machine);
 
-	// Swiss geoid
+	// Swiss geoid: the grid file must be set with TRegionalGeoid::setPathToFile before use
 	TRegionalGeoid *pCHGeo2004_ETRS = new TRegionalGeoid("CHGeo2004_ETRS", kCHGeo2004_ETRS, getRefFrame<TTerrestrialReferenceFrame>(kCHTRF95), getEllipsoid(kGRS80),
-		//getRefFrame<TTerrestrialReferenceFrame>(kCHTRF95), "C:\\Users\\bweyer\\Downloads\\Geoid_OGD\\chgeo2004_ETRS.agr");
-		getRefFrame<TTerrestrialReferenceFrame>(kCHTRF95), "C:\\Users\\bweyer\\cernbox\\Documents\\FCC\\Geoid\\JuliaComparison\\Julia\\FCC-G2025_V1.0.tif");
+		getRefFrame<TTerrestrialReferenceFrame>(kCHTRF95), "");
 	fGeoidList.push_back(pCHGeo2004_ETRS);
 
-	// Generic custom geoid
+	// Generic custom geoid: the grid file is set with updateCustomGeoid before use
 	TRegionalGeoid *pCustomGeoid = new TRegionalGeoid("CustomGeoid", kCUSTOMgeoid, getRefFrame<TTerrestrialReferenceFrame>(kETRF93), getEllipsoid(kGRS80),
-		getRefFrame<TTerrestrialReferenceFrame>(kETRF93), "C:\\Users\\bweyer\\cernbox\\Documents\\FCC\\Geoid\\JuliaComparison\\Julia\\FCC-G2025_V1.0.tif");
+		getRefFrame<TTerrestrialReferenceFrame>(kETRF93), "");
 	fGeoidList.push_back(pCustomGeoid);
 }
 
@@ -636,6 +640,31 @@ bool TRefSystemFactory::updateCustomGeoid(const std::string &geoidFile)
 
 	pCustomGeoid->setPathToFile(geoidFile);
 	return true;
+}
+
+TRegionalGeoid* TRefSystemFactory::getRegionalGeoid(const std::string &geoidFile)
+{ // return the regional geoid defined by the given grid file, create it the first time
+	auto iter = fRegionalGeoids.find(geoidFile);
+	if (iter != fRegionalGeoids.end())
+		return iter->second;
+
+	// throws if the file cannot be opened: nothing is cached in that case
+	TRegionalGeoid *geoid = new TRegionalGeoid(geoidFile, kCUSTOMgeoid, getRefFrame<TTerrestrialReferenceFrame>(kETRF93), getEllipsoid(kGRS80),
+		getRefFrame<TTerrestrialReferenceFrame>(kETRF93), geoidFile);
+	fRegionalGeoids[geoidFile] = geoid;
+	return geoid;
+}
+
+TGeoidHeightRefFrame* TRefSystemFactory::getGeoidHeightRefFrame(TAReferenceFrame *base, TAGeoidModel *geoid)
+{ // return the frame with heights above the geoid built on base, create it the first time
+	const auto key = std::make_pair(static_cast<const TAReferenceFrame*>(base), static_cast<const TAGeoidModel*>(geoid));
+	auto iter = fGeoidHeightRefFrames.find(key);
+	if (iter != fGeoidHeightRefFrames.end())
+		return iter->second;
+
+	TGeoidHeightRefFrame *frame = new TGeoidHeightRefFrame(base, geoid);
+	fGeoidHeightRefFrames[key] = frame;
+	return frame;
 }
 
 TReferenceEllipsoid* TRefSystemFactory::getEllipsoid(const ERefEll ellId)

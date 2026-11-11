@@ -83,6 +83,10 @@ public:
 		//! return the geodetic reference frame if there is one
 		virtual TGeodeticRefFrame*			getGeodeticRF() const;
 
+		/*! return the frame of the graph to which a frame not in the graph is connected through getRFTransfo2CGRF()
+			(by default the geodetic reference frame, see TGeoidHeightRefFrame for a frame connected to a projection)*/
+		virtual TAReferenceFrame*			getGraphAnchorRF() const;
+
 		//! return the origin of the reference frame if there is one
 		virtual TSpatialPosition			getOrigin() const { TSpatialPosition origin; return origin; }
 
