@@ -85,17 +85,24 @@ bool TGeoidHeightTransformation::transform(TPositionVector &pv) const
 		if (geoidRF == base)
 		{
 			pv.setH(TLength(H + N));
-			return true;
+		}
+		else
+		{
+			// h = H + N in the geoid definition frame, then back to the base frame to get the base ellipsoidal height
+			TPositionVector geodetic = position.getCoordinates(TCoordSysFactory::kGeodetic);
+			geodetic.setH(TLength(H + N));
+			position.setCoordinates(geodetic);
+			transformOrThrow(position, base);
+
+			// keep the horizontal coordinates given by the user, only the height is changed
+			pv.setH(position.getCoordinates(heightCoordSys).getH());
 		}
 
-		// h = H + N in the geoid definition frame, then back to the base frame to get the base ellipsoidal height
-		TPositionVector geodetic = position.getCoordinates(TCoordSysFactory::kGeodetic);
-		geodetic.setH(TLength(H + N));
-		position.setCoordinates(geodetic);
-		transformOrThrow(position, base);
-
-		// keep the horizontal coordinates given by the user, only the height is changed
-		pv.setH(position.getCoordinates(heightCoordSys).getH());
+		// The next transformations (graph) expect the coordinates in the coordinate system the base frame stores them in:
+		// 3D cartesian for a geodetic frame, 2D+H for a projection (as TAReferenceFrame::transform does for frames in the graph)
+		TSpatialPosition inBase(base);
+		inBase.setCoordinates(pv);
+		pv = inBase.getCoordinates(heightCoordSys == TCoordSysFactory::kGeodetic ? TCoordSysFactory::k3DCartesian : TCoordSysFactory::k2DPlusH);
 		return true;
 	}
 	else

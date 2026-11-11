@@ -16,6 +16,7 @@
 #include <tut/tut.hpp>
 #include <tut/tut_macros.hpp>
 #include <stdexcept>
+#include <cmath>
 
 #include "../../SpatialObjects/UnitTests/GeoidTestGrid.h"
 
@@ -476,6 +477,7 @@ namespace tut
 		outputParams.fGeoidPath = grid.c_str();
 		ensure_equals("Step 1 result code", transformPoint(&x, &y, &z, &inputParams, NULL, &outputParams, NULL), 0);
 
+		ensure("finite coordinates", std::isfinite(x) && std::isfinite(y) && std::isfinite(z));
 		ensure_distance("Longitude unchanged", x, xh, 1e-10);
 		ensure_distance("Latitude unchanged", y, yh, 1e-10);
 		// the geoid is defined in ETRF93: tolerance covers the (sub-millimetric) CHTRF95 / ETRF93 difference
@@ -483,6 +485,8 @@ namespace tut
 
 		// Back to CCS
 		ensure_equals("Step 2 result code", transformPoint(&x, &y, &z, &outputParams, NULL, &inputParams, NULL), 0);
+		// ensure_distance does not fail on NaN
+		ensure("finite coordinates", std::isfinite(x) && std::isfinite(y) && std::isfinite(z));
 		ensure_distance("X", x, x_th, 0.000001);
 		ensure_distance("Y", y, y_th, 0.000001);
 		ensure_distance("Z", z, z_th, 0.000001);

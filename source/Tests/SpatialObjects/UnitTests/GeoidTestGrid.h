@@ -14,6 +14,7 @@
 #define SU_TEST_GEOID_TEST_GRID
 
 #include <filesystem>
+#include <fstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -80,6 +81,31 @@ inline std::string createGrid(const std::string &fileName, double offset = 0.0)
 	if (err != CE_None)
 		throw std::runtime_error("Unable to write the test geoid grid " + pathStr);
 
+	return pathStr;
+}
+
+/*! Write the same synthetic grid as an ESRI ASCII grid (no SRS in the file) and return its path */
+inline std::string createAsciiGrid(const std::string &fileName, double offset = 0.0)
+{
+	const std::filesystem::path path = std::filesystem::temp_directory_path() / fileName;
+	const std::string pathStr = path.generic_string();
+
+	if (std::filesystem::exists(path))
+		return pathStr;
+
+	std::ofstream out(path);
+	if (!out)
+		throw std::runtime_error("Unable to create the test geoid grid " + pathStr);
+
+	out.precision(10);
+	out << "ncols " << kNbLon << "\nnrows " << kNbLat << "\nxllcorner " << kLonMin << "\nyllcorner " << kLatMax - kNbLat * kStep << "\ncellsize " << kStep
+		<< "\nNODATA_value -9999\n";
+	for (int row = 0; row < kNbLat; ++row)
+	{
+		const double lat = kLatMax - (row + 0.5) * kStep;
+		for (int col = 0; col < kNbLon; ++col)
+			out << expectedN(kLonMin + (col + 0.5) * kStep, lat, offset) << (col + 1 < kNbLon ? " " : "\n");
+	}
 	return pathStr;
 }
 } // namespace geoidtestgrid

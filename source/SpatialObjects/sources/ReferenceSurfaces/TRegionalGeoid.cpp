@@ -18,6 +18,10 @@ TRegionalGeoid::TRegionalGeoid(const std::string &name,
 	const GDALRIOResampleAlg &interpolationMethod) :
 	TAGeoidModel(name, geoidId, def, ell, calc), fPathToFile(pathToFile), fEPSGCode(epsgCode), fInterpolationMethod(interpolationMethod)
 {
+	// The SRS of the grid is given by the EPSG code. Traditional GIS order (longitude, latitude), as returned by the GDAL raster drivers
+	fGeoidSRS.importFromEPSG(fEPSGCode);
+	fGeoidSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+
 	// The grid file may be provided later through setPathToFile (e.g. custom geoid registered in the factory)
 	if (!fPathToFile.empty())
 		fGDALDataset = openGDALDataset();
@@ -38,7 +42,8 @@ TLength TRegionalGeoid::getN(const TSpatialPosition &sp) const
 	TSpatialPosition spos = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
 
 	double x, y, geoidHeight = 0.0;
-	const OGRSpatialReference *geoidSRS = fGDALDataset->GetSpatialRef();
+	// Do not use fGDALDataset->GetSpatialRef(): it is null for formats without SRS (e.g. ESRI ASCII grid .asc/.agr without .prj)
+	const OGRSpatialReference *geoidSRS = &fGeoidSRS;
 
 	if (!getXAndYFromSpatialPosition(spos, x, y, *geoidSRS))
 	{
@@ -180,9 +185,7 @@ GDALDatasetUniquePtr TRegionalGeoid::openGDALDataset() const
 	}
 	else
 	{
-		OGRSpatialReference *geoidSRS = new OGRSpatialReference();
-		geoidSRS->importFromEPSG(fEPSGCode);
-		dataset->SetSpatialRef(geoidSRS);
+		dataset->SetSpatialRef(&fGeoidSRS); // copied by GDAL (ignored by some drivers, see getN)
 		return dataset;
 	}
 }

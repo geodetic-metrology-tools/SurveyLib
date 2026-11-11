@@ -23,6 +23,7 @@
 #define REGIONAL_GEOID
 
 #include <gdal_raster_cpp.h>
+#include <ogr_spatialref.h>
 
 #include "TAGeoidModel.h"
 
@@ -95,6 +96,7 @@ private:
 	GDALDatasetUniquePtr fGDALDataset = nullptr; /*! GDAL dataset for the geoid grid */
 
 	int fEPSGCode = 4937; /*! EPSG code of the geoid grid. 4937 (ETRS89 3D geographic) is default value  */
+	OGRSpatialReference fGeoidSRS; /*! SRS of the geoid grid, built from fEPSGCode (not read from the file: some formats, e.g. ESRI ASCII grids, have none) */
 	GDALRIOResampleAlg fInterpolationMethod = GRIORA_Bilinear; /*! Prefered interpolation method*/
 	//@}
 };

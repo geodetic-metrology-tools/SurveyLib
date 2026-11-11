@@ -74,6 +74,13 @@ TSpatialPosition etrf93Point()
 	return position;
 }
 
+// tut::ensure_distance does not fail on NaN (all comparisons are false): check the value is finite first
+void ensureClose(const char *msg, double actual, double expected, double tolerance)
+{
+	tut::ensure(std::string(msg) + ": finite value", std::isfinite(actual));
+	tut::ensure_distance(msg, actual, expected, tolerance);
+}
+
 double heightOf(const TSpatialPosition &position, TCoordSysFactory::ECoordSys coordSys)
 {
 	return position.getCoordinates(coordSys).getH().getMetresValue();
@@ -92,9 +99,9 @@ void object::test<1>()
 	ensure("transformation succeeded", position.transform(withGeoid(TRefSystemFactory::kETRF93, gridA())));
 
 	const TPositionVector pv = position.getCoordinates(TCoordSysFactory::kGeodetic);
-	ensure_distance("H = h - N", pv.getH().getMetresValue(), kH - geoidtestgrid::expectedN(kLon, kLat), kTolMetres);
-	ensure_distance("longitude unchanged", pv.getLambdaEllipsoid().getDeciDegsValue(), kLon, kTolDegrees);
-	ensure_distance("latitude unchanged", pv.getPhiEllipsoid().getDeciDegsValue(), kLat, kTolDegrees);
+	ensureClose("H = h - N", pv.getH().getMetresValue(), kH - geoidtestgrid::expectedN(kLon, kLat), kTolMetres);
+	ensureClose("longitude unchanged", pv.getLambdaEllipsoid().getDeciDegsValue(), kLon, kTolDegrees);
+	ensureClose("latitude unchanged", pv.getPhiEllipsoid().getDeciDegsValue(), kLat, kTolDegrees);
 }
 
 template<>
@@ -108,7 +115,7 @@ void object::test<2>()
 	ensure("coordinates accepted", position.setCoordinates(geodetic(kLon, kLat, H)));
 	ensure("transformation succeeded", position.transform(etrf93()));
 
-	ensure_distance("h = H + N", heightOf(position, TCoordSysFactory::kGeodetic), H + geoidtestgrid::expectedN(kLon, kLat), kTolMetres);
+	ensureClose("h = H + N", heightOf(position, TCoordSysFactory::kGeodetic), H + geoidtestgrid::expectedN(kLon, kLat), kTolMetres);
 }
 
 template<>
@@ -126,9 +133,9 @@ void object::test<3>()
 	ensure("back to ETRF93 + geoid", position.transform(frame));
 
 	const TPositionVector pv = position.getCoordinates(TCoordSysFactory::kGeodetic);
-	ensure_distance("H", pv.getH().getMetresValue(), 450.0, kTolMetres);
-	ensure_distance("longitude", pv.getLambdaEllipsoid().getDeciDegsValue(), kLon, kTolDegrees);
-	ensure_distance("latitude", pv.getPhiEllipsoid().getDeciDegsValue(), kLat, kTolDegrees);
+	ensureClose("H", pv.getH().getMetresValue(), 450.0, kTolMetres);
+	ensureClose("longitude", pv.getLambdaEllipsoid().getDeciDegsValue(), kLon, kTolDegrees);
+	ensureClose("latitude", pv.getPhiEllipsoid().getDeciDegsValue(), kLat, kTolDegrees);
 }
 
 template<>
@@ -149,11 +156,11 @@ void object::test<4>()
 	ensure(plainCH.transform(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCH1903plus)));
 	ensure("Bessel and GRS80 heights differ", std::abs(heightOf(plainCH, TCoordSysFactory::kGeodetic) - kH) > 1.0);
 
-	ensure_distance("same H in CH1903+ and ETRF93", heightOf(inCH, TCoordSysFactory::kGeodetic), heightOf(inETRF, TCoordSysFactory::kGeodetic), 1e-4);
+	ensureClose("same H in CH1903+ and ETRF93", heightOf(inCH, TCoordSysFactory::kGeodetic), heightOf(inETRF, TCoordSysFactory::kGeodetic), 1e-4);
 
 	// and back to ETRF93
 	ensure(inCH.transform(etrf93()));
-	ensure_distance("h back in ETRF93", heightOf(inCH, TCoordSysFactory::kGeodetic), kH, 1e-4);
+	ensureClose("h back in ETRF93", heightOf(inCH, TCoordSysFactory::kGeodetic), kH, 1e-4);
 }
 
 template<>
@@ -172,9 +179,9 @@ void object::test<5>()
 
 	const TPositionVector pvPlain = plain.getCoordinates(TCoordSysFactory::k2DPlusH);
 	const TPositionVector pvWithN = withN.getCoordinates(TCoordSysFactory::k2DPlusH);
-	ensure_distance("E unchanged", pvWithN.getX().getMetresValue(), pvPlain.getX().getMetresValue(), kTolMetres);
-	ensure_distance("N unchanged", pvWithN.getY().getMetresValue(), pvPlain.getY().getMetresValue(), kTolMetres);
-	ensure_distance("H = h(ETRF93) - N", pvWithN.getH().getMetresValue(), kH - geoidtestgrid::expectedN(kLon, kLat), 1e-4);
+	ensureClose("E unchanged", pvWithN.getX().getMetresValue(), pvPlain.getX().getMetresValue(), kTolMetres);
+	ensureClose("N unchanged", pvWithN.getY().getMetresValue(), pvPlain.getY().getMetresValue(), kTolMetres);
+	ensureClose("H = h(ETRF93) - N", pvWithN.getH().getMetresValue(), kH - geoidtestgrid::expectedN(kLon, kLat), 1e-4);
 }
 
 template<>
@@ -191,7 +198,7 @@ void object::test<6>()
 	ensure(position.transform(withGeoid(TRefSystemFactory::kETRF93, gridB())));
 
 	// h = HA + NA = HB + NB, with NB = NA + 10
-	ensure_distance("HB = HA - 10", heightOf(position, TCoordSysFactory::kGeodetic), HA - 10.0, kTolMetres);
+	ensureClose("HB = HA - 10", heightOf(position, TCoordSysFactory::kGeodetic), HA - 10.0, kTolMetres);
 }
 
 template<>
@@ -248,5 +255,18 @@ void object::test<8>()
 	{
 	}
 	ensure_not("3D cartesian coordinates can not be set", position.setCoordinates(TPositionVector(0.0, 0.0, 0.0, TCoordSysFactory::k3DCartesian)));
+}
+
+template<>
+template<>
+void object::test<9>()
+{
+	set_test_name("Grid file without SRS (ESRI ASCII grid): the SRS is given by the EPSG code");
+
+	const std::string grid = geoidtestgrid::createAsciiGrid("surveylib_test_geoid_ascii_v1.asc");
+
+	TSpatialPosition position = etrf93Point();
+	ensure("transformation succeeded", position.transform(withGeoid(TRefSystemFactory::kETRF93, grid)));
+	ensureClose("H = h - N", heightOf(position, TCoordSysFactory::kGeodetic), kH - geoidtestgrid::expectedN(kLon, kLat), kTolMetres);
 }
 } // namespace tut
