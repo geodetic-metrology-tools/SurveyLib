@@ -56,6 +56,7 @@
 
 #include "TRefSystemFactory.h"
 #include <TLocal2CCSTransformation.h>
+#include <TRegionalGeoid.h>
 
 //////////////////////////////////////////////////////////////////////
 // Definitions and Initialisations
@@ -172,6 +173,11 @@ void TRefSystemFactory::initGeoidList()
 	TCernParabolicGeoid *pCG1985Machine = new TCernParabolicGeoid(
 		cg85Machine, kCG1985Machine, TCernParabolicGeoid::aLEP, TCernParabolicGeoid::bLEP, TCernParabolicGeoid::angLEP, pCGRF, pGRS80, pCCS);
 	fGeoidList.push_back(pCG1985Machine);
+
+	// Generic custom geoid
+	TRegionalGeoid *pCustomGeoid = new TRegionalGeoid("CustomGeoid", kCUSTOMgeoid, getRefFrame<TTerrestrialReferenceFrame>(kETRF93), getEllipsoid(kGRS80),
+		getRefFrame<TTerrestrialReferenceFrame>(kETRF93), "");
+	fGeoidList.push_back(pCustomGeoid);
 }
 
 void TRefSystemFactory::addCERNprojections()
@@ -613,6 +619,17 @@ TRefSystemFactory* TRefSystemFactory::getRefSystemFactory()
 TAGeoidModel*  TRefSystemFactory::getGeoid(const EGeoid geoidId)
 {//return a pointer to the geoid asked for
 	return getElementFromList(fGeoidList, geoidId, "GeoidList");
+}
+
+bool TRefSystemFactory::updateCustomGeoid(const std::string &geoidFile)
+{ // update the custom geoid with the current file path. Return true if the update was successful, false otherwise.
+
+	TRegionalGeoid *pCustomGeoid = dynamic_cast<TRegionalGeoid*>(getGeoid(kCUSTOMgeoid));
+	if (!pCustomGeoid)
+		return false;
+
+	pCustomGeoid->setPathToFile(geoidFile);
+	return true;
 }
 
 TReferenceEllipsoid* TRefSystemFactory::getEllipsoid(const ERefEll ellId)

@@ -68,7 +68,7 @@ public:
 		enum  ERefEll {kGRS80, kWGSEll, kInternationalEll, kSphere, kNoEllipsoid, kBessel1841};
 		/*! Enumerator for geoids implemented in the factory */
 		enum  EGeoid {kCG2000, kCG2000Machine, kCG2000topo, kCG1985, 
-			          kCG1985Machine, kNoGeoid, kCGSphere};
+			          kCG1985Machine, kNoGeoid, kCGSphere, kCHGeo2004_ETRS, kCUSTOMgeoid};
 		/*! Enumerator for Reference Frames implemented in the factory */
 		enum  ERefFrame {
 			kCCS                 =  0, 
@@ -192,6 +192,9 @@ public:
 		/*! Return a pointer to the geoid asked for 
 		\param geoidId an element of the existing geoid enumeration */
 		TAGeoidModel* getGeoid(const EGeoid geoidId);
+
+		/*! Update the grid file of the kCUSTOMgeoid. Return true if the update was successful */
+		bool updateCustomGeoid(const std::string &geoidFile);
 
 		/*! Return a pointer to the reference ellipsoid asked for 
 		\param ellId an element of the existing ellipsoid enumeration */
