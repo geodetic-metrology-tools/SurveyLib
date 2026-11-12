@@ -25,13 +25,13 @@ public:
 
 	static int getCGSphereN(double x, double y, double* N);
 
-	/// return the deflection of the vertical values (in gon) depending on the geoid
+	/// return the deflection of the vertical values (in radians) depending on the geoid
 	// Returns the deflection of the vertical in the prime vertical at the given Point's position (North-South)
-	static int getXiGon(double x, double y, double *xsi_gon, const char* geoid);
+	static int getXiRadian(double x, double y, double *xsi_rad, const char* geoid);
 	// Returns the deflection of the vertical in the meridian at the given Point's position (East-West)
-	static int getEtaGon(double x, double y, double *eta_gon, const char* geoid);
+	static int getEtaRadian(double x, double y, double *eta_rad, const char* geoid);
 	// Returns the Laplace correction at the given Point's position
-	static int getDAlphaGon(double x, double y, double *alpha_gon, const char* geoid);
+	static int getDAlphaRadian(double x, double y, double *dAlpha_rad, const char* geoid);
 
 	/// return the (XYZ) position in MLA of a point from the origin of the MLA 
 	/// and the point to be transformed both in CCS (with slope and bearing equal to 0

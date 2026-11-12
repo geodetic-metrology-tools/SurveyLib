@@ -28,13 +28,13 @@ extern "C" {  // only need to export C interface if
 
 	SU_DECLSPEC int DLLAPI getCGSphereN(double x, double y, double* N);
 
-	/// return the deflection of the vertical values (in gon) depending on the geoid
+	/// return the deflection of the vertical values (in radians) depending on the geoid
 	// Returns the deflection of the vertical in the prime vertical at the given Point's position (North-South)
-	SU_DECLSPEC int DLLAPI getXiGon(double x, double y, double *xsi_gon, const char* geoid);
+	SU_DECLSPEC int DLLAPI getXiRadian(double x, double y, double *xi_rad, const char* geoid);
 	// Returns the deflection of the vertical in the meridian at the given Point's position (East-West)
-	SU_DECLSPEC int DLLAPI getEtaGon(double x, double y, double *eta_gon, const char* geoid);
+	SU_DECLSPEC int DLLAPI getEtaRadian(double x, double y, double *eta_rad, const char* geoid);
 	// Returns the Laplace correction at the given Point's position
-	SU_DECLSPEC int DLLAPI getDAlphaGon(double x, double y, double *alpha_gon, const char* geoid);
+	SU_DECLSPEC int DLLAPI getDAlphaRadian(double x, double y, double *dAlpha_rad, const char* geoid);
 
 	/// return the (XYZ) position in MLA of a point from the origin of the MLA 
 	/// and the point to be transformed both in CCS

@@ -69,20 +69,20 @@ int DLLAPI descenteVert(double_t x, double_t y, double_t h, double_t deltaH, dou
 	return SpatialObjFns::descenteVert(x,y,h,deltaH,xt,yt,ht);
 }
 
-// Xi (North-South DoV) value (in gons) at Machine level, geoid may be "CG2000_Topo", "CG2000_Machine", "CG1985_Machine" and "Sphere"
-int DLLAPI getXiGon(double_t x, double_t y, double_t *xi_gon, const char* geoid)
+// Xi (North-South DoV) value (in radians), geoid may be "CG2000_Topo", "CG2000_Machine", "CG1985_Machine" and "Sphere"
+int DLLAPI getXiRadian(double_t x, double_t y, double_t *xi_rad, const char* geoid)
 {
-	return SpatialObjFns::getXiGon(x, y, xi_gon, geoid);
+	return SpatialObjFns::getXiRadian(x, y, xi_rad, geoid);
 }
 
-// Eta (East-West DoV) value (in gons) at Machine level, geoid may be "CG2000_Topo", "CG2000_Machine", "CG1985_Machine" and "Sphere"
-int DLLAPI getEtaGon(double_t x, double_t y, double_t *eta_gon, const char* geoid)
+// Eta (East-West DoV) value (in radians), geoid may be "CG2000_Topo", "CG2000_Machine", "CG1985_Machine" and "Sphere"
+int DLLAPI getEtaRadian(double_t x, double_t y, double_t *eta_rad, const char* geoid)
 {
-	return SpatialObjFns::getEtaGon(x, y, eta_gon, geoid);
+	return SpatialObjFns::getEtaRadian(x, y, eta_rad, geoid);
 }
 
-// DAlpha (Laplace correction) value (in gons) at Machine level, geoid may be "CG2000_Topo", "CG2000_Machine", "CG1985_Machine" and "Sphere"
-int DLLAPI getDAlphaGon(double_t x, double_t y, double_t *dAlpha_gon, const char* geoid)
+// DAlpha (Laplace correction) value (in radians), geoid may be "CG2000_Topo", "CG2000_Machine", "CG1985_Machine" and "Sphere"
+int DLLAPI getDAlphaRadian(double_t x, double_t y, double_t *dAlpha_rad, const char* geoid)
 {
-	return SpatialObjFns::getDAlphaGon(x, y, dAlpha_gon, geoid);
+	return SpatialObjFns::getDAlphaRadian(x, y, dAlpha_rad, geoid);
 }

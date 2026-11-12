@@ -2,24 +2,27 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include <SpatialObjFns.h>
-#include <SpatialObjCFns.h>
-#include <GeodeticConstants.h>
 #include <tut/tut.hpp>
 
-namespace tut
-{
-    struct test_DLLMultipleTransformations{};
-    typedef test_group<test_DLLMultipleTransformations> factory;
-    typedef factory::object object;
-}
-
+#include <GeodeticConstants.h>
+#include <SpatialObjCFns.h>
+#include <SpatialObjFns.h>
+#include <TConstants.h>
 
 namespace tut
 {
-    tut::factory tf_surveyLibDLL("Test of SpatialObjDLL");
+struct test_DLLMultipleTransformations
+{
+};
+typedef test_group<test_DLLMultipleTransformations> factory;
+typedef factory::object object;
+} // namespace tut
+
+namespace tut
+{
+tut::factory tf_surveyLibDLL("Test of SpatialObjDLL");
 }
-typedef int(DLLAPI *GetXiGonFn)(double, double, double *, const char *);
+typedef int(DLLAPI *getXiRadianFn)(double, double, double *, const char *);
 
 namespace tut
 {
@@ -69,27 +72,27 @@ void object::test<3>()
 	double n = 0;
 	std::string geoid = "CG2000_Machine";
 
-	getXiGon(XP0, YP0, &xi, geoid.c_str());
-	getEtaGon(XP0, YP0, &eta, geoid.c_str());
+	getXiRadian(XP0, YP0, &xi, geoid.c_str());
+	getEtaRadian(XP0, YP0, &eta, geoid.c_str());
 	getCG2000NMachine(XP0, YP0, &n);
 	tut::ensure_equals("Xi P0 is 0", xi, 0.0);
 	tut::ensure_equals("Eta P0 is 0", eta, 0.0);
 
 	geoid = "CG2000_Topo";
-	getEtaGon(XP0, YP0, &eta, geoid.c_str());
+	getEtaRadian(XP0, YP0, &eta, geoid.c_str());
 	tut::ensure_equals("Xi P0 is 0", xi, 0.0);
 	tut::ensure_equals("Eta P0 is 0", eta, 0.0);
 
 	geoid = "CG1985_Machine";
-	getXiGon(XP0, YP0, &xi, geoid.c_str());
-	getEtaGon(XP0, YP0, &eta, geoid.c_str());
+	getXiRadian(XP0, YP0, &xi, geoid.c_str());
+	getEtaRadian(XP0, YP0, &eta, geoid.c_str());
 	getCG1985NMachine(XP0, YP0, &n);
 	tut::ensure_equals("Xi P0 is 0", xi, 0.0);
 	tut::ensure_equals("Eta P0 is 0", eta, 0.0);
 
 	geoid = "Sphere";
-	getXiGon(XP0, YP0, &xi, geoid.c_str());
-	getEtaGon(XP0, YP0, &eta, geoid.c_str());
+	getXiRadian(XP0, YP0, &xi, geoid.c_str());
+	getEtaRadian(XP0, YP0, &eta, geoid.c_str());
 	getCGSphereN(XP0, YP0, &n);
 	tut::ensure_equals("Xi P0 is 0", xi, 0.0);
 	tut::ensure_equals("Eta P0 is 0", eta, 0.0);
@@ -107,22 +110,22 @@ void object::test<4>()
 	double eta = 0.0;
 
 	std::string geoid = "CG2000_Machine";
-	getXiGon(x, y, &xi, geoid.c_str());
-	getEtaGon(x, y, &eta, geoid.c_str());
+	getXiRadian(x, y, &xi, geoid.c_str());
+	getEtaRadian(x, y, &eta, geoid.c_str());
 	getCG2000NMachine(x, y, &n);
 
 	ensure_equals("N p is 0.15771 m ", n, 0.15771);
-	ensure_equals("Eta p is 25.24 cc", eta, 25.24 / 10000); // values in the grid are in cc, but the function returns in gon, so we divide by 10000
-	ensure_equals("Xi p is -21.80 cc", xi, -21.80 / 10000);
+	ensure_equals("Eta p is 25.24 cc", eta * RAD2GON, 25.24 / 10000); // values in the grid are in cc, but the function returns in gon, so we divide by 10000
+	ensure_equals("Xi p is -21.80 cc", xi * RAD2GON, -21.80 / 10000);
 
 	geoid = "CG2000_Topo";
-	getXiGon(x, y, &xi, geoid.c_str());
-	getEtaGon(x, y, &eta, geoid.c_str());
+	getXiRadian(x, y, &xi, geoid.c_str());
+	getEtaRadian(x, y, &eta, geoid.c_str());
 	getCG2000NTopo(x, y, &n);
 
 	ensure_equals("N p is 0.16931 m ", n, 0.16931);
-	ensure_equals("Eta p is 31.07 cc", eta, 31.07 / 10000);
-	ensure_equals("Xi p is -27.21 cc", xi, -27.21 / 10000);
+	ensure_equals("Eta p is 31.07 cc", eta * RAD2GON, 31.07 / 10000);
+	ensure_equals("Xi p is -27.21 cc", xi * RAD2GON, -27.21 / 10000);
 }
 
 template<>
@@ -137,8 +140,8 @@ void object::test<5>()
 	double eta = 0.0;
 
 	std::string geoid = "NotAGoodGeoidName";
-	int resultXi = getXiGon(x, y, &xi, geoid.c_str());
-	int resultEta = getEtaGon(x, y, &eta, geoid.c_str());
+	int resultXi = getXiRadian(x, y, &xi, geoid.c_str());
+	int resultEta = getEtaRadian(x, y, &eta, geoid.c_str());
 
 	ensure_equals("Xi computation failed", resultXi, 0);
 	ensure_equals("Eta computation failed", resultEta, 0);
@@ -156,8 +159,8 @@ void object::test<6>()
 	double eta = 0.0;
 
 	std::string geoid = "CG2000_Machine";
-	int resultXi = getXiGon(x, y, &xi, geoid.c_str());
-	int resultEta = getEtaGon(x, y, &eta, geoid.c_str());
+	int resultXi = getXiRadian(x, y, &xi, geoid.c_str());
+	int resultEta = getEtaRadian(x, y, &eta, geoid.c_str());
 
 	ensure_equals("Xi computation failed", resultXi, 0);
 	ensure_equals("Eta computation failed", resultEta, 0);

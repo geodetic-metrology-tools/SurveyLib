@@ -17,7 +17,7 @@ SpatialObjFns::SpatialObjFns()
 
 }
 
-int SpatialObjFns::getXiGon(double x, double y, double *xi_gon, const char* geoid)
+int SpatialObjFns::getXiRadian(double x, double y, double *xi_rad, const char* geoid)
 {
 	// get the CCS spatial position corresponding to the double values
 	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
@@ -31,7 +31,7 @@ int SpatialObjFns::getXiGon(double x, double y, double *xi_gon, const char* geoi
 		try
 		{
 		// get the xi value
-			*xi_gon = geoidModel->getXi(spos) * RAD2GON;
+			*xi_rad = geoidModel->getXi(spos);
 			return 1;
 		}
 		catch (const std::exception &)
@@ -45,7 +45,7 @@ int SpatialObjFns::getXiGon(double x, double y, double *xi_gon, const char* geoi
 	}
 }
 
-int SpatialObjFns::getEtaGon(double x, double y, double *eta_gon, const char* geoid)
+int SpatialObjFns::getEtaRadian(double x, double y, double *eta_rad, const char* geoid)
 {
 	// get the CCS spatial position corresponding to the double values
 	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
@@ -59,7 +59,7 @@ int SpatialObjFns::getEtaGon(double x, double y, double *eta_gon, const char* ge
 		try
 		{
 			// get the eta value
-			*eta_gon = geoidModel->getEta(spos) * RAD2GON;
+			*eta_rad = geoidModel->getEta(spos);
 			return 1;
 		}
 		catch (const std::exception &)
@@ -73,7 +73,7 @@ int SpatialObjFns::getEtaGon(double x, double y, double *eta_gon, const char* ge
 	}
 }
 
-int SpatialObjFns::getDAlphaGon(double x, double y, double *dAlpha_gon, const char* geoid)
+int SpatialObjFns::getDAlphaRadian(double x, double y, double *dAlpha_rad, const char* geoid)
 {
 	// get the CCS spatial position corresponding to the double values
 	TSpatialPosition spos(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kCCS));
@@ -87,7 +87,7 @@ int SpatialObjFns::getDAlphaGon(double x, double y, double *dAlpha_gon, const ch
 		try
 		{
 			// get the dAlpha value
-			*dAlpha_gon = geoidModel->getDAlpha(spos) * RAD2GON;
+			*dAlpha_rad = geoidModel->getDAlpha(spos);
 			return 1;
 		}
 		catch (const std::exception &)
