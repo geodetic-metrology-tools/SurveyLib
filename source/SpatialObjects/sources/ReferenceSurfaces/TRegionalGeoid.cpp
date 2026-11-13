@@ -5,8 +5,23 @@
 #include "TRegionalGeoid.h"
 
 #include <TNotInGeoidGridException.h>
+#include <cmath>
+#include <cpl_error.h>
 
 #include "TReferenceEllipsoid.h"
+
+namespace
+{
+class ScopedQuietErrorHandler
+{
+public:
+	ScopedQuietErrorHandler() { CPLPushErrorHandler(CPLQuietErrorHandler); }
+	~ScopedQuietErrorHandler() { CPLPopErrorHandler(); }
+
+	ScopedQuietErrorHandler(const ScopedQuietErrorHandler &) = delete;
+	ScopedQuietErrorHandler &operator=(const ScopedQuietErrorHandler &) = delete;
+};
+} // namespace
 
 TRegionalGeoid::TRegionalGeoid(const std::string &name,
 	const TRefSystemFactory::EGeoid &geoidId,
@@ -37,26 +52,19 @@ TLength TRegionalGeoid::getN(const TSpatialPosition &sp) const
 	// deep copy of TSpatialPosition transformed in same reference frame as the geoid CalculationRF
 	TSpatialPosition spos = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
 
-	double x, y, geoidHeight = 0.0;
+	double x = 0.0, y = 0.0;
 	const OGRSpatialReference *geoidSRS = fGDALDataset->GetSpatialRef();
+	if (!geoidSRS)
+	{
+		throw std::runtime_error("No spatial reference defined for geoid dataset " + fName);
+	}
 
 	if (!getXAndYFromSpatialPosition(spos, x, y, *geoidSRS))
 	{
 		throw std::invalid_argument("Impossible to extract geoid height: Be sure to work with geographic coordinates");
 	}
 
-	// The axis order of the geoid grid is determined by the axis mapping strategy of the geoid SRS.
-	// If it is OAMS_TRADITIONAL_GIS_ORDER, the order is (longitude, latitude) or (x, y).
-	// If it is OAMS_AUTHORITY_COMPLIANT, the order is determined by the authority and can be (latitude, longitude) or (y, x)
-	if (geoidSRS->GetAxisMappingStrategy() == OAMS_TRADITIONAL_GIS_ORDER)
-	{
-		fGDALDataset->GetRasterBand(1)->InterpolateAtGeolocation(x, y, geoidSRS, fInterpolationMethod, &geoidHeight);
-	}
-	else
-	{
-		fGDALDataset->GetRasterBand(1)->InterpolateAtGeolocation(y, x, geoidSRS, fInterpolationMethod, &geoidHeight);
-	}
-
+	const TReal geoidHeight = interpolateGeoidHeight(x, y, *geoidSRS, spos);
 	return TLength(geoidHeight);
 }
 
@@ -178,6 +186,53 @@ GDALDatasetUniquePtr TRegionalGeoid::openGDALDataset() const
 		dataset->SetSpatialRef(geoidSRS);
 		return dataset;
 	}
+}
+
+TReal TRegionalGeoid::interpolateGeoidHeight(double x, double y, const OGRSpatialReference &geoidSRS, const TSpatialPosition &spos) const
+{
+	GDALRasterBand *band = fGDALDataset->GetRasterBand(1);
+	if (!band)
+	{
+		throw std::runtime_error("No raster band available in geoid dataset" + fName);
+	}
+
+	ScopedQuietErrorHandler quietGuard;
+	CPLErrorReset();
+
+	double geoidHeight = 0.0;
+	CPLErr err = CE_None;
+
+	// The axis order of the geoid grid is determined by the axis mapping strategy of the geoid SRS.
+	// If it is OAMS_TRADITIONAL_GIS_ORDER, the order is (longitude, latitude) or (x, y).
+	// If it is OAMS_AUTHORITY_COMPLIANT, the order is determined by the authority and can be (latitude, longitude) or (y, x)
+	if (geoidSRS.GetAxisMappingStrategy() == OAMS_TRADITIONAL_GIS_ORDER)
+	{
+		err = band->InterpolateAtGeolocation(x, y, &geoidSRS, fInterpolationMethod, &geoidHeight);
+	}
+	else
+	{
+		err = band->InterpolateAtGeolocation(y, x, &geoidSRS, fInterpolationMethod, &geoidHeight);
+	}
+
+	if (err != CE_None || std::isnan(geoidHeight))
+	{
+		std::stringstream ss = generateNotInGeoidGridMessage("getN", spos);
+		if (err != CE_None)
+		{
+			const char *gdalMsg = CPLGetLastErrorMsg();
+			if (gdalMsg && gdalMsg[0] != '\0')
+			{
+				ss << " GDAL error: " << gdalMsg;
+			}
+		}
+		else
+		{
+			ss << " Interpolated geoid height is NaN (NoData).";
+		}
+		throw TNotInGeoidGridException(ss.str());
+	}
+
+	return geoidHeight;
 }
 
 bool TRegionalGeoid::getXAndYFromSpatialPosition(const TSpatialPosition &sp, TReal &x, TReal &y, const OGRSpatialReference &geoidSRS) const

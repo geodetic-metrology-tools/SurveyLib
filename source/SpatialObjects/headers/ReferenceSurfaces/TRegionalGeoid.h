@@ -76,6 +76,9 @@ private:
 
 	GDALDatasetUniquePtr openGDALDataset() const;
 
+	/*! Interpolate the geoid height from the raster band and throw TNotInGeoidGridException on failure or NoData */
+	TReal interpolateGeoidHeight(double x, double y, const OGRSpatialReference &geoidSRS, const TSpatialPosition &spos) const;
+
 	bool getXAndYFromSpatialPosition(const TSpatialPosition &sp, TReal &x, TReal &y, const OGRSpatialReference &geoidSRS) const;
 
 	/*!Generate message for the NotInGeoidGridException*/
