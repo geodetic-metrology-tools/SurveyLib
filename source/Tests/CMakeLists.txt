@@ -82,6 +82,11 @@ target_include_directories(UnitTests PRIVATE
 	${SURVEYLIB_ROOT}/source/CSGeoDLL/headers
 )
 
+# Directory with test data files; resolved at configure time so tests run from any working directory
+target_compile_definitions(UnitTests PRIVATE
+	SPATIALOBJECTS_TEST_FILES_DIR="${CMAKE_CURRENT_LIST_DIR}/SpatialObjects/UnitTests/test_files"
+)
+
 # GDAL
 find_package(GDAL CONFIG REQUIRED)
 

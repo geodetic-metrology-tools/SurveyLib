@@ -26,10 +26,9 @@ template<>
 template<>
 void object::test<1>()
 {
-	set_test_name("Test with australian geoid");
+	set_test_name("Test with australian geoid ");
 	const double tolHeight = 1e-3;
-	const double tolDoV = 1e-2;
-	std::string pathToFile("C:\\Users\\bweyer\\Downloads\\AUSGeoid2020_20180201.gsb");
+	std::string pathToFile(std::string(SPATIALOBJECTS_TEST_FILES_DIR) + "/AUSGeoid2020_20180201_extract.tif");
 	// Initialize geoid model once
 	TAReferenceFrame *WGS84(TRefSystemFactory::getRefSystemFactory()->getRefFrame(TRefSystemFactory::kWGS84_G2139));
 	TRegionalGeoid *AUSGeoid2020 = new TRegionalGeoid("AUSGeoid2020", TRefSystemFactory::EGeoid::kCUSTOMgeoid, WGS84,
