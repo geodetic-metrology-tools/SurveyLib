@@ -7,6 +7,7 @@
 
 #include <TRegionalGeoid.h>
 #include <TRefFrameInfo.h>
+#include <ConsoleLogHandler.hpp>
 
 namespace tut
 {
@@ -63,7 +64,7 @@ void object::test<2>()
 	TAngle lambda(6.0486633109, TAngle::kDeciDegs);
 	TAngle phi(46.2321561210, TAngle::kDeciDegs);
 	TLength h(483.62404);
-	TLength orthometricHeight(433.67048);
+	TLength nReframe(483.62404 - 433.67048); // Geoid height given by Swisstopo Reframe (ellipsoidal height - orthometric height)
 	TPositionVector pv(TCoordSysFactory::kGeodetic);
 	pv.setPhiEllipsoid(phi);
 	pv.setLambdaEllipsoid(lambda);
@@ -72,7 +73,7 @@ void object::test<2>()
 	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCHTRF95));
 	position.setCoordinates(pv);
 
-	ensure_equals("N", CHgeoid->getN(position).getMetresValue(), h - orthometricHeight, tolHeight);
+	ensure_equals("N", CHgeoid->getN(position).getMetresValue(), nReframe, tolHeight);
 }
 
 template<>
@@ -149,7 +150,7 @@ template<>
 template<>
 void object::test<5>()
 {
-	set_test_name("Test with swiss geoid with input coordinate in a different reference frame");
+	set_test_name("Test with swiss geoid with input coordinates in a different reference frame");
 	const double tolHeight = 1e-3;
 	std::string pathToFile(std::string(SPATIALOBJECTS_TEST_FILES_DIR) + "/chgeo2004_ETRS_crop_fcc.tif");
 
@@ -157,11 +158,11 @@ void object::test<5>()
 	TRegionalGeoid *CHgeoid = new TRegionalGeoid("CHGeo2004", TRefSystemFactory::EGeoid::kCUSTOMgeoid, CHTRF95,
 		TRefSystemFactory::getRefSystemFactory()->getEllipsoid(TRefSystemFactory::kGRS80), CHTRF95, pathToFile, 4933, GRIORA_Bilinear);
 
-	// Coordinate of P0
-	TAngle lambda(6.0486633109, TAngle::kDeciDegs);
-	TAngle phi(46.2321561210, TAngle::kDeciDegs);
-	TLength h(483.62404);
-	TLength orthometricHeight(433.67048);
+	// Coordinate of P0 
+	TAngle lambda(6.049116, TAngle::kDeciDegs);
+	TAngle phi(46.23228, TAngle::kDeciDegs);
+	TLength h(433.65921);
+	TLength nReframe(483.62404 - 433.67048); // Geoid height given by Swisstopo Reframe (ellipsoidal height - orthometric height)
 	TPositionVector pv(TCoordSysFactory::kGeodetic);
 	pv.setPhiEllipsoid(phi);
 	pv.setLambdaEllipsoid(lambda);
@@ -170,7 +171,10 @@ void object::test<5>()
 	TSpatialPosition position(TRefFrameInfo::getReferenceFrame(TRefSystemFactory::kCGRF));
 	position.setCoordinates(pv);
 
-	ensure_equals("N", CHgeoid->getN(position).getMetresValue(), h - orthometricHeight, tolHeight);
+	ConsoleLogHandler *logger = new ConsoleLogHandler();
+	
+	ensure_equals("N", CHgeoid->getN(position).getMetresValue(), nReframe, tolHeight);
+
 }
 
 }
