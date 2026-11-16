@@ -35,7 +35,7 @@ TRegionalGeoid::TRegionalGeoid(const std::string &name,
 {
 	// The grid file may be provided later through setPathToFile (e.g. custom geoid registered in the factory)
 	if (!fPathToFile.empty())
-		fGDALDataset = openGDALDataset();
+		fGDALDataset = openGDALDataset(fPathToFile);
 }
 
 TRegionalGeoid::~TRegionalGeoid()
@@ -170,14 +170,14 @@ TAngle TRegionalGeoid::getDAlpha(const TSpatialPosition &sp, const TAngle &latit
 	return fDAlphaValue;
 }
 
-GDALDatasetUniquePtr TRegionalGeoid::openGDALDataset() const
+GDALDatasetUniquePtr TRegionalGeoid::openGDALDataset(const std::string &pathToFile) const
 {
 	GDALAllRegister();
-	GDALDatasetUniquePtr dataset(GDALDataset::Open(fPathToFile.c_str(), GA_ReadOnly));
+	GDALDatasetUniquePtr dataset(GDALDataset::Open(pathToFile.c_str(), GA_ReadOnly));
 
 	if (!dataset)
 	{
-		throw std::invalid_argument("GDAL error: Unable to open geoid file : " + fPathToFile);
+		throw std::invalid_argument("GDAL error: Unable to open geoid file : " + pathToFile);
 	}
 	else
 	{
@@ -269,7 +269,6 @@ std::stringstream TRegionalGeoid::generateNotInGeoidGridMessage(const std::strin
 
 void TRegionalGeoid::setPathToFile(const std::string &pathToFile)
 {
+	fGDALDataset = openGDALDataset(pathToFile);
 	fPathToFile = pathToFile;
-
-	fGDALDataset = openGDALDataset();
 }

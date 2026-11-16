@@ -74,7 +74,7 @@ private:
 	/**@name Private Functions */
 	//@{
 
-	GDALDatasetUniquePtr openGDALDataset() const;
+	GDALDatasetUniquePtr openGDALDataset(const std::string &pathToFile) const;
 
 	/*! Interpolate the geoid height from the raster band and throw TNotInGeoidGridException on failure or NoData */
 	TReal interpolateGeoidHeight(double x, double y, const OGRSpatialReference &geoidSRS, const TSpatialPosition &spos) const;
