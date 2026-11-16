@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "TAGeoidModel.h"
+#include <Logger.hpp>
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //CONSTRUCTOR / DESTRUCTOR
@@ -38,7 +39,17 @@ TSpatialPosition TAGeoidModel::getSpatialPositionInRefFrame(const TSpatialPositi
 	// RF of TSpatialPosition must be the same as the given reference frame
 	if (position.getRefFrame() != refFrame)
 	{
-		position.transform(refFrame);
+		logWarning() << "TAGeoidModel::getSpatialPositionInRefFrame: Geoid and point reference frames differ. Transforming point in geoid reference frame " << std::endl;
+		if (position.transform(refFrame))
+		{
+			return position;
+		}
+		else
+		{
+			std::stringstream ss;
+			ss << "TAGeoidModel::getSpatialPositionInRefFrame: Could not transform point in geoid reference frame " << std::endl;
+			throw std::runtime_error(ss.str());
+		}
 	}
 
 	return position;
