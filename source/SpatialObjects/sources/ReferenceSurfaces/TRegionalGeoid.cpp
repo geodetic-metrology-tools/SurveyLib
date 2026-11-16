@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "TRegionalGeoid.h"
-
 #include <TNotInGeoidGridException.h>
 #include <cmath>
 #include <cpl_error.h>
@@ -49,7 +48,7 @@ TLength TRegionalGeoid::getN(const TSpatialPosition &sp) const
 		throw std::invalid_argument("No grid file defined for geoid " + fName);
 	}
 
-	// deep copy of TSpatialPosition transformed in same reference frame as the geoid CalculationRF
+	// deep copy of TSpatialPosition transformed in same reference frame as the geoid Calculation Reference Frame
 	TSpatialPosition spos = getSpatialPositionInRefFrame(sp, fCalcRFPtr);
 
 	double x = 0.0, y = 0.0;
