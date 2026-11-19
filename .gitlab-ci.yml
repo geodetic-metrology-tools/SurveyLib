@@ -14,6 +14,25 @@ include:
     - cp ../source/SpatialObjects/headers/MathematicalConcepts/Quad.h ../headers/Quad.h
     - cp ../source/SpatialObjects/headers/MathematicalConcepts/TConstants.h ../headers/TConstants.h
     
+# vcpkg (GDAL & co. from source/vcpkg.json, static x64-linux triplet).
+# A full clone is required: builtin-baseline in vcpkg.json must be in the vcpkg history.
+# Built packages are kept in the GitLab cache (VCPKG_DEFAULT_BINARY_CACHE) so they are only compiled once.
+.vcpkgVariables: &vcpkgVariables
+    VCPKG_ROOT: "$CI_PROJECT_DIR/.vcpkg"
+    VCPKG_DEFAULT_BINARY_CACHE: "$CI_PROJECT_DIR/.vcpkg-cache"
+    VCPKG_DISABLE_METRICS: "1"
+
+.vcpkgCache: &vcpkgCache
+    key: vcpkg-alma9-x64-linux
+    paths:
+        - .vcpkg-cache/
+
+.setupVcpkg: &setupVcpkg
+    - dnf install -y zip unzip tar nasm
+    - if [ ! -d "$VCPKG_ROOT/.git" ]; then git clone https://github.com/microsoft/vcpkg.git "$VCPKG_ROOT"; fi
+    - "$VCPKG_ROOT/bootstrap-vcpkg.sh -disableMetrics"
+    - mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
+
 .buildSO: &buildSO
     - echo "Building shared object library | -j$(nproc)"
     - $CMAKEBIN --build . -j $(nproc) --config Release --target SpatialObjDLL
@@ -23,8 +42,11 @@ linux_build_and_test:
     extends: .linux_build_and_test
     tags:
         - eos
+    variables: *vcpkgVariables
+    cache: *vcpkgCache
     script:
         - echo "${SUSOFT_PASSWORD}" | kinit -f ${SUSOFT_USERNAME}@CERN.CH
+        - *setupVcpkg
         - !reference [.linux_build_and_test, script]
         - *buildSO
         - *orderLinuxArtifact
@@ -50,7 +72,10 @@ linux_build_and_test:
 linux_release:
     extends: .linux_release
     needs: ["linux_build_and_test"]
+    variables: *vcpkgVariables
+    cache: *vcpkgCache
     script:
+        - *setupVcpkg
         - !reference [.default_linux_before_scripts, script]
         - *buildSO
         - *orderLinuxArtifact

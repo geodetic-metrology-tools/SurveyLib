@@ -1,7 +1,8 @@
 {
   "name": "surveylib",
   "dependencies": [
-    { "name": "gdal", "default-features": false }
+    { "name": "gdal", "default-features": false },
+    { "name": "proj", "default-features": false, "features": [ "tiff" ] }
   ],
   "builtin-baseline": "ea49500a3353603af1190ca9a786a9015d638ea0"
 }

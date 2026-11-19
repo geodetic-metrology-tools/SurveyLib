@@ -6,7 +6,11 @@
 #   include("<path to SurveyLib>/source/SurveyLibVcpkg.cmake")
 #
 # Dependencies are listed in vcpkg.json next to this file (manifest mode).
-set(ENV{VCPKG_ROOT} "C:/vcpkg")
+# VCPKG_ROOT comes from the environment (set by the Linux CI job, see .gitlab-ci.yml).
+# On Windows, fall back to the default C:/vcpkg location if it exists.
+if(NOT DEFINED ENV{VCPKG_ROOT} AND CMAKE_HOST_WIN32 AND EXISTS "C:/vcpkg/scripts/buildsystems/vcpkg.cmake")
+	set(ENV{VCPKG_ROOT} "C:/vcpkg")
+endif()
 
 # vcpkg toolchain, unless the user passed one with -DCMAKE_TOOLCHAIN_FILE=...
 if(NOT DEFINED CMAKE_TOOLCHAIN_FILE AND DEFINED ENV{VCPKG_ROOT})
