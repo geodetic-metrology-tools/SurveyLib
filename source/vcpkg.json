@@ -1,0 +1,7 @@
+{
+  "name": "surveylib",
+  "dependencies": [
+    { "name": "gdal", "default-features": false }
+  ],
+  "builtin-baseline": "ea49500a3353603af1190ca9a786a9015d638ea0"
+}

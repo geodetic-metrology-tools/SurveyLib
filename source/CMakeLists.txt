@@ -8,6 +8,28 @@ cmake_minimum_required(VERSION 3.6)
 
 #############################################################
 #
+# VCPKG (must come before project())
+#
+# Only when SurveyLib is the top-level project: parent projects (LGC2, SurveyPad)
+# that include SourceSurveyLib.cmake provide their own toolchain.
+# Dependencies are listed in vcpkg.json next to this file (manifest mode).
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR AND NOT DEFINED CMAKE_TOOLCHAIN_FILE AND DEFINED ENV{VCPKG_ROOT})
+	set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE FILEPATH "")
+endif()
+
+# Static libraries with the dynamic MSVC runtime (/MD), so no GDAL DLLs have to be shipped
+# and the CRT stays compatible with projects that link SurveyLib's static libraries.
+if(CMAKE_HOST_WIN32 AND NOT DEFINED VCPKG_TARGET_TRIPLET)
+	if(CMAKE_GENERATOR_PLATFORM STREQUAL "Win32")
+		set(VCPKG_TARGET_TRIPLET "x86-windows-static-md" CACHE STRING "")
+	else()
+		set(VCPKG_TARGET_TRIPLET "x64-windows-static-md" CACHE STRING "")
+	endif()
+endif()
+
+#############################################################
+#
 # PROJECT NAME
 #
 

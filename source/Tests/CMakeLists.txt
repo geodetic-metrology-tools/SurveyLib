@@ -108,6 +108,23 @@ add_test(
 	WORKING_DIRECTORY $<TARGET_FILE_DIR:UnitTests>
 )
 
+# PROJ database (needed by GDAL/OGR for EPSG lookups, e.g. TRegionalGeoid): copy it next to
+# the executable and point PROJ at it when running through ctest
+find_file(PROJ_DB_FILE proj.db
+	HINTS
+		"${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/share/proj"
+		"$ENV{PROJ_DATA}"
+	PATH_SUFFIXES share/proj
+)
+if(PROJ_DB_FILE)
+	add_custom_command(TARGET UnitTests POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${PROJ_DB_FILE}" "$<TARGET_FILE_DIR:UnitTests>"
+	)
+	set_tests_properties(UnitTests PROPERTIES ENVIRONMENT "PROJ_DATA=$<TARGET_FILE_DIR:UnitTests>")
+else()
+	message(WARNING "proj.db not found: tests relying on EPSG codes (TRegionalGeoid) will fail unless PROJ_DATA is set")
+endif()
+
 source_group("SpatialObjects" FILES ${SpatialObjects_SOURCES})
 source_group("LSAlgorithms" FILES ${LSAlgorithms_SOURCES})
 source_group("SurveyLibDLL" FILES ${SurveyLibDLLTests_SOURCES})
