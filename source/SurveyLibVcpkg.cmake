@@ -6,6 +6,7 @@
 #   include("<path to SurveyLib>/source/SurveyLibVcpkg.cmake")
 #
 # Dependencies are listed in vcpkg.json next to this file (manifest mode).
+set(ENV{VCPKG_ROOT} "C:/vcpkg")
 
 # vcpkg toolchain, unless the user passed one with -DCMAKE_TOOLCHAIN_FILE=...
 if(NOT DEFINED CMAKE_TOOLCHAIN_FILE AND DEFINED ENV{VCPKG_ROOT})
